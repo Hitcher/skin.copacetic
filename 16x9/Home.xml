@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<window>
+	<!-- home -->
+	<backgroundcolor>$VAR[BackgroundColor]</backgroundcolor>
+	<defaultcontrol>9000</defaultcontrol>
+	<onload>RunScript(script.skinshortcuts,type=buildxml&amp;mainmenuID=9000&amp;levels=0)</onload>
+	<onload>Control.Move(9000,$INFO[Container(9000).CurrentItem,-])</onload>
+	<onload>Control.Move(9000,1)</onload>
+	<controls>
+		<!-- Background -->
+		<include>WindowBackgroundImage</include>
+		<!-- Fanart -->
+		<control type="multiimage">
+			<include>FullscreenDimensions</include>
+			<timeperimage>10000</timeperimage>
+			<fadetime>320</fadetime>
+			<randomize>true</randomize>
+			<colordiffuse>FanartDiffuse</colordiffuse>
+			<imagepath background="true">$INFO[Container(9000).ListItem.Property(Background)]</imagepath>
+			<animation effect="fade" start="100" end="80" condition="[Player.HasVideo + Skin.HasSetting(BackgroundVideo)] | [Player.HasAudio + Skin.HasSetting(BackgroundVisualisation) + !SubString(Window(videolibrary).Property(TvTunesIsAlive),True)]">Conditional</animation>
+		</control>
+		<!-- Main controls -->
+		<control type="group">
+			<include>WindowFadeAnimation</include>
+			<!-- Clock -->
+			<include>Clock</include>
+			<!-- Main list -->
+			<control type="fixedlist" id="9000">
+				<left>50</left>
+				<top>142</top>
+				<width>910</width>
+				<height>898</height>
+				<onup condition="!Window.IsVisible(1101)">SetProperty(BounceUp,1,Home)</onup>
+				<onup>noop</onup>
+				<ondown condition="!Window.IsVisible(1101)">SetProperty(BounceDown,1,Home)</ondown>
+				<ondown>noop</ondown>
+				<onleft>Control.Move(9001,-1)</onleft>
+				<onleft>9001</onleft>
+				<onright>9001</onright>
+				<pagecontrol>60</pagecontrol>
+				<focusposition>6</focusposition>
+				<orientation>vertical</orientation>
+				<viewtype label="535">list</viewtype>
+				<scrolltime tween="sine" easing="inout">240</scrolltime>
+				<include>HomeListAnimation</include>
+				<itemlayout height="59" width="910">
+					<control type="label">
+						<width>910</width>
+						<height>59</height>
+						<font>Thin48</font>
+						<align>right</align>
+						<textcolor>UnFocused</textcolor>
+						<label>$INFO[ListItem.Label]</label>
+					</control>
+				</itemlayout>
+				<focusedlayout height="72" width="910">
+					<control type="label">
+						<width>910</width>
+						<height>72</height>
+						<font>Light60</font>
+						<align>right</align>
+						<scroll>true</scroll>
+						<textcolor>Focused</textcolor>
+						<label>[UPPERCASE]‹ $INFO[ListItem.Label] ›[/UPPERCASE]</label>
+						<visible>!Control.HasFocus(9001) + SubString(ListItem.Property(hasSubmenu),true)</visible>
+					</control>
+					<control type="label">
+						<width>910</width>
+						<height>72</height>
+						<font>Light60</font>
+						<align>right</align>
+						<scroll>true</scroll>
+						<textcolor>Focused</textcolor>
+						<label>[UPPERCASE]$INFO[ListItem.Label][/UPPERCASE]</label>
+						<visible>!Control.HasFocus(9001) + SubString(ListItem.Property(hasSubmenu),false)</visible>
+					</control>
+				</focusedlayout>
+				<content>
+					<include>skinshortcuts-mainmenu</include>
+				</content>
+			</control>
+			<!-- Sub menu -->
+			<control type="list" id="9001">
+				<left>50</left>
+				<top>496</top>
+				<width>910</width>
+				<height>72</height>
+				<onup>9000</onup>
+				<onup>Control.Move(9001,$INFO[Container(9001).CurrentItem,-])</onup>
+				<onup>Control.Move(9001,1)</onup>
+				<onup>Control.Move(9000,-1)</onup>
+				<ondown>9000</ondown>
+				<ondown>Control.Move(9001,$INFO[Container(9001).CurrentItem,-])</ondown>
+				<ondown>Control.Move(9001,1)</ondown>
+				<ondown>Control.Move(9000,1)</ondown>
+				<onleft>Control.Move(9001,-1)</onleft>
+				<onleft>9000</onleft>
+				<onright>Control.Move(9001,1)</onright>
+				<onright>9000</onright>
+				<scrolltime>0</scrolltime>
+				<orientation>horizontal</orientation>
+				<visible allowhiddenfocus="true">Control.HasFocus(9001)</visible>
+				<itemlayout height="59" width="910">
+					<control type="label">
+						<width>910</width>
+						<height>59</height>
+						<font>Thin48</font>
+						<align>right</align>
+						<textcolor>UnFocused</textcolor>
+						<label>$INFO[ListItem.Label]</label>
+					</control>
+				</itemlayout>
+				<focusedlayout height="72" width="910">
+					<control type="label">
+						<width>910</width>
+						<height>72</height>
+						<font>Light60</font>
+						<align>right</align>
+						<scroll>true</scroll>
+						<textcolor>Focused</textcolor>
+						<label>[UPPERCASE]‹ $INFO[ListItem.Label] ›[/UPPERCASE]</label>
+					</control>
+				</focusedlayout>
+				<content>
+					<include>skinshortcuts-submenu</include>
+				</content>
+			</control>
+		</control>
+	</controls>
+</window>
