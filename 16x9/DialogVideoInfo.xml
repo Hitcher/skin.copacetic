@@ -33,17 +33,107 @@
 				<left>1132</left>
 				<include condition="StringCompare(Container.Viewmode,$LOCALIZE[31113]) | StringCompare(Container.Viewmode,$LOCALIZE[31116]) | StringCompare(Container.Viewmode,$LOCALIZE[31139]) | StringCompare(Container.Viewmode,$LOCALIZE[31117]) | StringCompare(Container.Viewmode,$LOCALIZE[31118]) | StringCompare(Container.Viewmode,$LOCALIZE[31120])">MediaInfoWidth738</include>
 				<include condition="![StringCompare(Container.Viewmode,$LOCALIZE[31113]) + StringCompare(Container.Viewmode,$LOCALIZE[31116]) + StringCompare(Container.Viewmode,$LOCALIZE[31139]) + StringCompare(Container.Viewmode,$LOCALIZE[31117]) + StringCompare(Container.Viewmode,$LOCALIZE[31118]) + StringCompare(Container.Viewmode,$LOCALIZE[31120])]">MediaInfoWidth860</include>
-				<include>MediaInfo</include>
 				<animation effect="slide" end="960,0" condition="StringCompare(Container.Viewmode,$LOCALIZE[31112]) | StringCompare(Container.Viewmode,$LOCALIZE[31114]) | StringCompare(Container.Viewmode,$LOCALIZE[31115]) | [StringCompare(Container.Viewmode,$LOCALIZE[31119]) + [StringCompare(Window(home).Property(CurrentColumn),0) | StringCompare(Window(home).Property(CurrentColumn),1)]] | [StringCompare(Container.Viewmode,$LOCALIZE[31141]) + [StringCompare(Window(home).Property(CurrentColumn),0) | StringCompare(Window(home).Property(CurrentColumn),1)]]">Conditional</animation>
 				<animation effect="slide" end="1082,0" condition="StringCompare(Container.Viewmode,$LOCALIZE[31116]) | StringCompare(Container.Viewmode,$LOCALIZE[31139]) | [StringCompare(Container.Viewmode,$LOCALIZE[31117]) + [StringCompare(Window(home).Property(CurrentColumn),0) | StringCompare(Window(home).Property(CurrentColumn),1) | StringCompare(Window(home).Property(CurrentColumn),2)]] | [StringCompare(Container.Viewmode,$LOCALIZE[31118]) + [StringCompare(Window(home).Property(CurrentColumn),0) | StringCompare(Window(home).Property(CurrentColumn),1) | StringCompare(Window(home).Property(CurrentColumn),2)]] | [StringCompare(Container.Viewmode,$LOCALIZE[31120]) + [StringCompare(Window(home).Property(CurrentColumn),0) | StringCompare(Window(home).Property(CurrentColumn),1)]] | StringCompare(Container.Viewmode,$LOCALIZE[31113])">Conditional</animation>
+				<control type="group">
+					<animation effect="fade" start="0" end="100" time="200">Visible</animation>
+					<visible>!StringCompare(Control.GetLabel(5),$LOCALIZE[207])</visible>
+					<!-- Heading -->
+					<control type="grouplist">
+						<top>50</top>
+						<height>210</height>
+						<align>right</align>
+						<orientation>vertical</orientation>
+						<visible>IsEmpty(ListItem.Art(clearlogo)) | [!IsEmpty(ListItem.Art(clearlogo)) + !Skin.HasSetting(EnableLogos)]</visible>
+						<control type="textbox">
+							<height max="210">auto</height>
+							<font>Light60Spaced</font>
+							<label>$VAR[InfoTitle]</label>
+						</control>
+					</control>
+					<control type="image">
+						<left>50</left>
+						<top>50</top>
+						<width>640</width>
+						<height>248</height>
+						<aspectratio scalediffuse="false">keep</aspectratio>
+						<texture background="true">$INFO[ListItem.Art(clearlogo)]</texture>
+						<visible>Skin.HasSetting(EnableLogos)</visible>
+					</control>
+					<!-- Details Line 1 -->
+					<control type="label">
+						<top>345</top>
+						<width>78%</width>
+						<height>36</height>
+						<font>Light36</font>
+						<label>$VAR[InfoLine1]</label>
+					</control>
+					<!-- Star Rating -->
+					<control type="image">
+						<right>0</right>
+						<top>351</top>
+						<width>147</width>
+						<height>24</height>
+						<aspectratio>keep</aspectratio>
+						<texture colordiffuse="$VAR[FocusedColor]">$VAR[StarRating]</texture>
+						<visible>!Container.Content(seasons)</visible>
+					</control>
+					<!-- Details Line 2 -->
+					<control type="label">
+						<top>388</top>
+						<height>66</height>
+						<aligny>top</aligny>
+						<font>Light33</font>
+						<textcolor>$VAR[UnFocusedColor]</textcolor>
+						<wrapmultiline>true</wrapmultiline>
+						<label>$VAR[InfoLine2]</label>
+					</control>
+					<!-- Plot -->
+					<control type="textbox">
+						<top>479</top>
+						<height>195</height>
+						<font>Light27</font>
+						<label>$VAR[Plot]</label>
+						<textcolor>$VAR[UnFocusedColor]</textcolor>
+						<autoscroll delay="10000" time="2000" repeat="12000">True</autoscroll>
+					</control>
+					<control type="grouplist">
+						<top>730</top>
+						<height>109</height>
+						<itemgap>100</itemgap>
+						<orientation>horizontal</orientation>
+						<usecontrolcoords>true</usecontrolcoords>
+						<!-- Studio Flag -->
+						<control type="image">
+							<width>120</width>
+							<height>80</height>
+							<aspectratio>keep</aspectratio>
+							<texture colordiffuse="$VAR[FocusedColor]" fallback="flags/default_studio.png">$INFO[ListItem.Studio,flags/studios/,.png]</texture>
+							<visible>!IsEmpty(ListItem.Studio)</visible>
+						</control>
+						<!-- MPAA Rating Flag -->
+						<control type="image">
+							<width>120</width>
+							<height>80</height>
+							<aspectratio>keep</aspectratio>
+							<texture colordiffuse="$VAR[FocusedColor]" fallback="flags/default_rating.png">$VAR[Info_Certificate]</texture>
+							<visible>!IsEmpty(ListItem.MPAA)</visible>
+						</control>
+						<!-- Source Flag -->
+						<control type="image">
+							<width>120</width>
+							<height>80</height>
+							<aspectratio>keep</aspectratio>
+							<texture colordiffuse="$VAR[FocusedColor]">$VAR[Video_Source]</texture>
+						</control>
+					</control>
+				</control>
 				<!-- Button grouplist -->
 				<control type="grouplist">
 					<bottom>50</bottom>
 					<height>75</height>
 					<itemgap>0</itemgap>
 					<orientation>horizontal</orientation>
-					<onleft>noop</onleft>
-					<onright>noop</onright>
 					<onup condition="StringCompare(Control.GetLabel(5),$LOCALIZE[207])">50</onup>
 					<onup condition="!StringCompare(Control.GetLabel(5),$LOCALIZE[207])">Close</onup>
 					<ondown>Close</ondown>
