@@ -1,6 +1,71 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <includes>
 	<!-- Copacetic -->
+	<variable name="InfoTitle">
+		<value condition="!Container.Content(episodes)">[UPPERCASE]$INFO[ListItem.Title][/UPPERCASE]</value>
+		<value condition="!IntegerGreaterThan(ListItem.Episode,9)">$INFO[ListItem.Season]$INFO[ListItem.Episode,x0] [UPPERCASE]$INFO[ListItem.Title][/UPPERCASE]</value>
+		<value>$INFO[ListItem.Season]$INFO[ListItem.Episode,x] [UPPERCASE]$INFO[ListItem.Title][/UPPERCASE]</value>
+	</variable>
+	<variable name="DialogVideoInfoLine1">
+		<value condition="Container.Content(movies) + !IsEmpty(ListItem.Year)">[UPPERCASE]$INFO[ListItem.Year]$INFO[ListItem.Duration, | , $LOCALIZE[31138]]$INFO[ListItem.VideoResolution, | ][/UPPERCASE]</value>
+		<value condition="Container.Content(movies) + !IsEmpty(ListItem.Duration)">[UPPERCASE]$INFO[ListItem.Duration,, $LOCALIZE[31138]]$INFO[ListItem.VideoResolution, | ][/UPPERCASE]</value>
+		<value condition="Container.Content(movies)">[UPPERCASE]$INFO[ListItem.VideoResolution][/UPPERCASE]</value>
+		<value condition="StringCompare(Container.Content,seasons)">[UPPERCASE]$INFO[ListItem.Label][/UPPERCASE]</value>
+		<value condition="Container.Content(tvshows) + !IsEmpty(ListItem.Year)">[UPPERCASE]$INFO[ListItem.Year]$INFO[ListItem.Property(WatchedEpisodes), | ,/]$INFO[ListItem.Property(NumEpisodes),, $LOCALIZE[31137]][/UPPERCASE]</value>
+		<value condition="Container.Content(tvshows)">[UPPERCASE]$INFO[ListItem.Property(WatchedEpisodes),,/]$INFO[ListItem.Property(NumEpisodes),, $LOCALIZE[31137]][/UPPERCASE]</value>
+		<value condition="Container.Content(episodes)">[UPPERCASE]$INFO[ListItem.TVShowTitle][/UPPERCASE]</value>
+	</variable>
+	<variable name="DialogVideoInfoLine2">
+		<value condition="Container.Content(movies) + !IsEmpty(ListItem.Studio)">$INFO[ListItem.Studio]$INFO[ListItem.Director, | ]</value>
+		<value condition="Container.Content(movies)">$INFO[ListItem.Director]</value>
+		<value condition="StringCompare(Container.Content,seasons) + !IsEmpty(ListItem.Studio)">$INFO[ListItem.Studio]$INFO[ListItem.Property(WatchedEpisodes), | ,/]$INFO[ListItem.Property(NumEpisodes),, $LOCALIZE[31137]]</value>
+		<value condition="StringCompare(Container.Content,seasons)">$INFO[ListItem.Property(WatchedEpisodes), | ,/]$INFO[ListItem.Property(NumEpisodes),, $LOCALIZE[31137]]</value>
+		<value condition="Container.Content(tvshows) + !IsEmpty(ListItem.Studio)">$INFO[ListItem.Studio]$INFO[Window(Home).Property(NextAired.Status), | ]$VAR[NextAiredDate]</value>
+		<value condition="Container.Content(tvshows)">$INFO[Window(Home).Property(NextAired.Status)]$VAR[NextAiredDate]</value>
+		<value condition="Container.Content(episodes) + !IsEmpty(ListItem.Studio)">$INFO[ListItem.Studio]$INFO[ListItem.Premiered, | ]$INFO[ListItem.Duration, | , $LOCALIZE[31138]]$INFO[ListItem.VideoResolution, | ]</value>
+		<value condition="Container.Content(episodes)">$INFO[ListItem.Premiered]$INFO[ListItem.Duration, | , $LOCALIZE[31138]]$INFO[ListItem.VideoResolution, | ]</value>
+	</variable>	
+	<variable name="InfoLine1">
+		<value condition="Container.Content(movies) + !IsEmpty(ListItem.Year)">[UPPERCASE]$INFO[ListItem.Year]$INFO[ListItem.Duration, | , $LOCALIZE[31138]]$INFO[ListItem.VideoResolution, | ][/UPPERCASE]</value>
+		<value condition="Container.Content(movies) + !IsEmpty(ListItem.Duration)">[UPPERCASE]$INFO[ListItem.Duration,, $LOCALIZE[31138]]$INFO[ListItem.VideoResolution, | ][/UPPERCASE]</value>
+		<value condition="Container.Content(movies)">[UPPERCASE]$INFO[ListItem.VideoResolution][/UPPERCASE]</value>
+		<value condition="Container.Content(seasons)">[UPPERCASE]$INFO[ListItem.TVShowTitle][/UPPERCASE]</value>
+		<value condition="Container.Content(tvshows) + !IsEmpty(ListItem.Year)">[UPPERCASE]$INFO[ListItem.Year]$INFO[ListItem.Property(WatchedEpisodes), | ,/]$INFO[ListItem.Property(NumEpisodes),, $LOCALIZE[31137]][/UPPERCASE]</value>
+		<value condition="Container.Content(tvshows)">[UPPERCASE]$INFO[ListItem.Property(WatchedEpisodes),,/]$INFO[ListItem.Property(NumEpisodes),, $LOCALIZE[31137]][/UPPERCASE]</value>
+		<value condition="Container.Content(episodes)">[UPPERCASE]$INFO[ListItem.TVShowTitle][/UPPERCASE]</value>
+	</variable>
+	<variable name="InfoLine2">
+		<value condition="Container.Content(movies) + !IsEmpty(ListItem.Studio)">$INFO[ListItem.Studio]$INFO[ListItem.Director, | ]</value>
+		<value condition="Container.Content(movies)">$INFO[ListItem.Director]</value>
+		<value condition="Container.Content(seasons) + !IsEmpty(ListItem.Studio)">$INFO[ListItem.Studio]$INFO[ListItem.Year, | ]$INFO[ListItem.Property(WatchedEpisodes), | ,/]$INFO[ListItem.Property(NumEpisodes),, $LOCALIZE[31137]]</value>
+		<value condition="Container.Content(seasons)">$INFO[ListItem.Year]$INFO[ListItem.Property(WatchedEpisodes), | ,/]$INFO[ListItem.Property(NumEpisodes),, $LOCALIZE[31137]]</value>
+		<value condition="Container.Content(tvshows) + !IsEmpty(ListItem.Studio)">$INFO[ListItem.Studio]$INFO[Window(Home).Property(NextAired.Status), | ]$VAR[NextAiredDate]</value>
+		<value condition="Container.Content(tvshows)">$INFO[Window(Home).Property(NextAired.Status)]$VAR[NextAiredDate]</value>
+		<value condition="Container.Content(episodes) + !IsEmpty(ListItem.Studio)">$INFO[ListItem.Studio]$INFO[ListItem.Premiered, | ]$INFO[ListItem.Duration, | , $LOCALIZE[31138]]$INFO[ListItem.VideoResolution, | ]</value>
+		<value condition="Container.Content(episodes)">$INFO[ListItem.Premiered]$INFO[ListItem.Duration, | , $LOCALIZE[31138]]$INFO[ListItem.VideoResolution, | ]</value>
+	</variable>
+	<variable name="BillboardInfo">
+		<value condition="Container.Content(movies) + !IsEmpty(ListItem.Year)">[UPPERCASE]$INFO[ListItem.Year]$INFO[ListItem.Duration, | , $LOCALIZE[31138]]$INFO[ListItem.VideoResolution, | ]$INFO[ListItem.Studio, | ,]$INFO[ListItem.Director, | ][/UPPERCASE]</value>
+		<value condition="Container.Content(movies) + !IsEmpty(ListItem.Duration)">[UPPERCASE]$INFO[ListItem.Duration,, $LOCALIZE[31138]]$INFO[ListItem.VideoResolution, | ]$INFO[ListItem.Studio, | ,]$INFO[ListItem.Director, | ][/UPPERCASE]</value>
+		<value condition="Container.Content(movies) + !IsEmpty(ListItem.VideoResolution)">[UPPERCASE]$INFO[ListItem.VideoResolution]$INFO[ListItem.Studio, | ,]$INFO[ListItem.Director, | ][/UPPERCASE]</value>
+		<value condition="Container.Content(movies) + !IsEmpty(ListItem.Studio)">[UPPERCASE]$INFO[ListItem.Studio]$INFO[ListItem.Director, | ][/UPPERCASE]</value>
+		<value condition="Container.Content(movies) + !IsEmpty(ListItem.Director)">[UPPERCASE]$INFO[ListItem.Director][/UPPERCASE]</value>
+		<value condition="Container.Content(seasons) + !IsEmpty(ListItem.TVShowTitle)">[UPPERCASE]$INFO[ListItem.TVShowTitle]$INFO[ListItem.Property(WatchedEpisodes), | ,/]$INFO[ListItem.Property(NumEpisodes),, $LOCALIZE[31137]]$INFO[ListItem.Studio, | ][/UPPERCASE]</value>
+		<value condition="Container.Content(seasons) + !IsEmpty(ListItem.WatchedEpisodes)">[UPPERCASE]$INFO[ListItem.Property(WatchedEpisodes),,/]$INFO[ListItem.Property(NumEpisodes),, $LOCALIZE[31137]]$INFO[ListItem.Studio, | ][/UPPERCASE]</value>
+		<value condition="Container.Content(seasons) + !IsEmpty(ListItem.Studio)">[UPPERCASE]$INFO[ListItem.Studio][/UPPERCASE]</value>
+		<value condition="Container.Content(episodes) + !IsEmpty(ListItem.TVShowTitle)">[UPPERCASE]$INFO[ListItem.TVShowTitle]$INFO[ListItem.Studio, | ,]$INFO[ListItem.Premiered, | ]$INFO[ListItem.Duration, | , $LOCALIZE[31138]]$INFO[ListItem.VideoResolution, | ][/UPPERCASE]</value>
+		<value condition="Container.Content(episodes) + !IsEmpty(ListItem.TVShowTitle)">[UPPERCASE]$INFO[ListItem.Studio]$INFO[ListItem.Premiered, | ]$INFO[ListItem.Duration, | , $LOCALIZE[31138]]$INFO[ListItem.VideoResolution, | ][/UPPERCASE]</value>
+		<value condition="Container.Content(episodes) + !IsEmpty(ListItem.Premiered)">[UPPERCASE]$INFO[ListItem.Premiered]$INFO[ListItem.Duration, | , $LOCALIZE[31138]]$INFO[ListItem.VideoResolution, | ][/UPPERCASE]</value>
+		<value condition="Container.Content(episodes) + !IsEmpty(ListItem.Duration)">[UPPERCASE]$INFO[ListItem.Duration,, $LOCALIZE[31138]]$INFO[ListItem.VideoResolution, | ][/UPPERCASE]</value>
+		<value condition="Container.Content(episodes) + !IsEmpty(ListItem.VideoResolution)">[UPPERCASE]$INFO[ListItem.VideoResolution][/UPPERCASE]</value>
+		<value condition="Container.Content(tvshows) + !IsEmpty(ListItem.Year)">[UPPERCASE]$INFO[ListItem.Year]$INFO[ListItem.Property(WatchedEpisodes), | ,/]$INFO[ListItem.Property(NumEpisodes),, $LOCALIZE[31137]]$INFO[ListItem.Studio, | ][/UPPERCASE]</value>
+		<value condition="Container.Content(tvshows) + !IsEmpty(ListItem.WatchedEpisodes)">[UPPERCASE]$INFO[ListItem.Property(WatchedEpisodes),,/]$INFO[ListItem.Property(NumEpisodes),, $LOCALIZE[31137]]$INFO[ListItem.Studio, | ][/UPPERCASE]</value>
+		<value condition="Container.Content(tvshows) + !IsEmpty(ListItem.Studio)">[UPPERCASE]$INFO[ListItem.Studio][/UPPERCASE]</value>
+	</variable>
+	<variable name="NextAiredDate">
+		<value condition="!IsEmpty(Window(Home).Property(NextAired.NextDate))">$INFO[Window(Home).Property(NextAired.NextDate), | $LOCALIZE[31136] ]</value>
+		<value condition="!IsEmpty(Window(Home).Property(NextAired.LatestDate))">$INFO[Window(Home).Property(NextAired.LatestDate), | $LOCALIZE[31130] ]</value>
+	</variable>	
 	<variable name="VolumeDetails">
 		<value condition="!Player.Passthrough">$INFO[Control.GetLabel(404),,%]</value>
 		<value>$LOCALIZE[29802]</value>
@@ -275,36 +340,6 @@
 	<variable name="NextAiredThumb">
 		<value condition="!IsEmpty(ListItem.Property(Art(landscape)))">$INFO[ListItem.Property(Art(landscape))]</value>
 		<value>$INFO[ListItem.Property(Fanart)]</value>
-	</variable>
-	<variable name="InfoTitle">
-		<value condition="!Container.Content(episodes)">[UPPERCASE]$INFO[ListItem.Title][/UPPERCASE]</value>
-		<value condition="!IntegerGreaterThan(ListItem.Episode,9)">$INFO[ListItem.Season]$INFO[ListItem.Episode,x0] [UPPERCASE]$INFO[ListItem.Title][/UPPERCASE]</value>
-		<value>$INFO[ListItem.Season]$INFO[ListItem.Episode,x] [UPPERCASE]$INFO[ListItem.Title][/UPPERCASE]</value>
-	</variable>
-	<variable name="InfoLine1">
-		<value condition="Container.Content(movies) + !IsEmpty(ListItem.Year)">[UPPERCASE]$INFO[ListItem.Year]$INFO[ListItem.Duration, | , $LOCALIZE[31138]]$INFO[ListItem.VideoResolution, | ][/UPPERCASE]</value>
-		<value condition="Container.Content(movies) + !IsEmpty(ListItem.Duration)">[UPPERCASE]$INFO[ListItem.Duration,, $LOCALIZE[31138]]$INFO[ListItem.VideoResolution, | ][/UPPERCASE]</value>
-		<value condition="Container.Content(movies)">[UPPERCASE]$INFO[ListItem.VideoResolution][/UPPERCASE]</value>
-		<value condition="Container.Content(movies) + !IsEmpty(ListItem.Duration)">[UPPERCASE]$INFO[ListItem.Duration,, $LOCALIZE[31138]]$VAR[WatchedStatus][/UPPERCASE]</value>
-		<value condition="Container.Content(movies) + !IsEmpty(ListItem.Year)">[UPPERCASE]$INFO[ListItem.Year]$INFO[ListItem.Duration, | , $LOCALIZE[31138]][/UPPERCASE]</value>
-		<value condition="Container.Content(movies)">[UPPERCASE]$INFO[ListItem.Duration,, $LOCALIZE[31138]][/UPPERCASE]</value>
-		<value condition="StringCompare(Container.Content,seasons) + Window.IsVisible(movieinformation)">[UPPERCASE]$INFO[ListItem.Label][/UPPERCASE]</value>
-		<value condition="StringCompare(Container.Content,seasons)">[UPPERCASE]$INFO[ListItem.TVShowTitle][/UPPERCASE]</value>
-		<value condition="Container.Content(tvshows) + !IsEmpty(ListItem.Year)">[UPPERCASE]$INFO[ListItem.Year]$INFO[ListItem.Property(WatchedEpisodes), | ,/]$INFO[ListItem.Property(NumEpisodes),, $LOCALIZE[31137]][/UPPERCASE]</value>
-		<value condition="Container.Content(tvshows)">[UPPERCASE]$INFO[ListItem.Property(WatchedEpisodes),,/]$INFO[ListItem.Property(NumEpisodes),, $LOCALIZE[31137]][/UPPERCASE]</value>
-		<value condition="Container.Content(episodes)">[UPPERCASE]$INFO[ListItem.TVShowTitle][/UPPERCASE]</value>
-	</variable>
-	<variable name="InfoLine2">
-		<value condition="Container.Content(movies) + !IsEmpty(ListItem.Studio)">$INFO[ListItem.Studio]$INFO[ListItem.Director, | ]</value>
-		<value condition="Container.Content(movies)">$INFO[ListItem.Director]</value>
-		<value condition="StringCompare(Container.Content,seasons) + !IsEmpty(ListItem.Studio) + Window.IsVisible(movieinformation)">$INFO[ListItem.Studio]$INFO[ListItem.Property(WatchedEpisodes), | ,/]$INFO[ListItem.Property(NumEpisodes),, $LOCALIZE[31137]]</value>
-		<value condition="StringCompare(Container.Content,seasons) + Window.IsVisible(movieinformation)">$INFO[ListItem.Property(WatchedEpisodes), | ,/]$INFO[ListItem.Property(NumEpisodes),, $LOCALIZE[31137]]</value>
-		<value condition="StringCompare(Container.Content,seasons) + !IsEmpty(ListItem.Studio)">$INFO[ListItem.Studio]$INFO[ListItem.Year, | ]$INFO[ListItem.Property(WatchedEpisodes), | ,/]$INFO[ListItem.Property(NumEpisodes),, $LOCALIZE[31137]]</value>
-		<value condition="StringCompare(Container.Content,seasons)">$INFO[ListItem.Year]$INFO[ListItem.Property(WatchedEpisodes), | ,/]$INFO[ListItem.Property(NumEpisodes),, $LOCALIZE[31137]]</value>
-		<value condition="Container.Content(tvshows) + !IsEmpty(ListItem.Studio)">$INFO[ListItem.Studio]$INFO[Window(Home).Property(NextAired.Status), | ]$VAR[NextAiredDate]</value>
-		<value condition="Container.Content(tvshows)">$INFO[Window(Home).Property(NextAired.Status)]$VAR[NextAiredDate]</value>
-		<value condition="Container.Content(episodes) + !IsEmpty(ListItem.Studio)">$INFO[ListItem.Studio]$INFO[ListItem.Premiered, | ]$INFO[ListItem.Duration, | , $LOCALIZE[31138]]$INFO[ListItem.VideoResolution, | ]</value>
-		<value condition="Container.Content(episodes)">$INFO[ListItem.Premiered]$INFO[ListItem.Duration, | , $LOCALIZE[31138]]$INFO[ListItem.VideoResolution, | ]</value>
 	</variable>
 	<variable name="NextAiredDate">
 		<value condition="!IsEmpty(Window(Home).Property(NextAired.NextDate))">$INFO[Window(Home).Property(NextAired.NextDate), | $LOCALIZE[31136] ]</value>
