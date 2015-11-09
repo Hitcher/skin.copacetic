@@ -159,13 +159,14 @@
 					<control type="button" id="99">
 						<include>DialogButton</include>
 						<label>31142</label>
-						<onclick>SetProperty(Dialog.NumItems,2)</onclick>
-						<onclick>SetProperty(Dialog.1.Label,Default Scraper)</onclick>
-						<onclick>SetProperty(Dialog.1.BuiltIn,SendClick(movieinformation,10))</onclick>
-						<onclick>SetProperty(Dialog.2.Label,Artwork Downloader)</onclick>
-						<onclick condition="Container.Content(tvshows)">SetProperty(Dialog.2.BuiltIn,RunScript(script.artwork.downloader, mode=gui, mediatype=tvshow, dbid=$INFO[ListItem.DBID]))</onclick>
-						<onclick condition="Container.Content(movies)">SetProperty(Dialog.2.BuiltIn,RunScript(script.artwork.downloader, mode=gui, mediatype=movie, dbid=$INFO[ListItem.DBID]))</onclick>
-						<onclick>RunScript(script.toolbox,info=selectdialog,header=Choose method)</onclick>
+						<onclick condition="System.HasAddon(script.toolbox) + System.HasAddon(script.artwork.downloader)">SetProperty(Dialog.NumItems,2)</onclick>
+						<onclick condition="System.HasAddon(script.toolbox) + System.HasAddon(script.artwork.downloader)">SetProperty(Dialog.1.Label,Default Scraper)</onclick>
+						<onclick condition="System.HasAddon(script.toolbox) + System.HasAddon(script.artwork.downloader)">SetProperty(Dialog.1.BuiltIn,SendClick(movieinformation,10))</onclick>
+						<onclick condition="System.HasAddon(script.toolbox) + System.HasAddon(script.artwork.downloader)">SetProperty(Dialog.2.Label,Artwork Downloader)</onclick>
+						<onclick condition="System.HasAddon(script.toolbox) + System.HasAddon(script.artwork.downloader) + Container.Content(tvshows)">SetProperty(Dialog.2.BuiltIn,RunScript(script.artwork.downloader, mode=gui, mediatype=tvshow, dbid=$INFO[ListItem.DBID]))</onclick>
+						<onclick condition="System.HasAddon(script.toolbox) + System.HasAddon(script.artwork.downloader) + Container.Content(movies)">SetProperty(Dialog.2.BuiltIn,RunScript(script.artwork.downloader, mode=gui, mediatype=movie, dbid=$INFO[ListItem.DBID]))</onclick>
+						<onclick condition="System.HasAddon(script.toolbox) + System.HasAddon(script.artwork.downloader)">RunScript(script.toolbox,info=selectdialog,header=Choose method)</onclick>
+						<onclick condition="!System.HasAddon(script.toolbox) | !System.HasAddon(script.artwork.downloader)]">SendClick(movieinformation,10)</onclick>
 					</control>
 					<!-- Cast Button -->
 					<control type="button" id="98">
