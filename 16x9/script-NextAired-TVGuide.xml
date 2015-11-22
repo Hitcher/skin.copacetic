@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <window>
+	<onload>ClearProperty(ShowInfo,home)</onload>
+	<onunload>ClearProperty(ShowInfo,home)</onunload>
 	<backgroundcolor>$VAR[BackgroundColor]</backgroundcolor>
 	<controls>
 		<!-- Background -->
@@ -69,12 +71,31 @@
 						<top>135</top>
 						<width>480</width>
 						<height>945</height>
-						<onup>200</onup>
-						<ondown>200</ondown>
-						<onleft>206</onleft>
-						<onright>201</onright>
+						<onup condition="IsEmpty(Window(home).Property(ShowInfo))">200</onup>
+						<ondown condition="IsEmpty(Window(home).Property(ShowInfo))">200</ondown>
+						<onleft condition="IsEmpty(Window(home).Property(ShowInfo))">206</onleft>
+						<onright condition="IsEmpty(Window(home).Property(ShowInfo))">201</onright>
+						<onup>ClearProperty(ShowInfo,home)</onup>
+						<ondown>ClearProperty(ShowInfo,home)</ondown>
+						<onleft>ClearProperty(ShowInfo,home)</onleft>
+						<onright>ClearProperty(ShowInfo,home)</onright>
+						<oninfo condition="IsEmpty(Window(home).Property(ShowInfo))">SetProperty(ShowInfo,true,home)</oninfo>
+						<oninfo condition="!IsEmpty(Window(home).Property(ShowInfo))">ClearProperty(ShowInfo,home)</oninfo>
 						<scrolltime tween="sine" easing="inout">360</scrolltime>
-						<itemlayout height="270" width="480">
+						<itemlayout condition="IsEmpty(Window(home).Property(TVGuide.PreviewThumbs)" height="720" width="480">
+							<control type="image">
+								<width>480</width>
+								<height>720</height>
+								<aspectratio>scale</aspectratio>
+								<texture background="true">$INFO[ListItem.Icon]</texture>
+							</control>
+							<control type="image">
+								<width>480</width>
+								<height>720</height>
+								<texture colordiffuse="$VAR[DiffuseColor]">views/white_50.png</texture>
+							</control>
+						</itemlayout>
+						<itemlayout condition="!IsEmpty(Window(home).Property(TVGuide.PreviewThumbs)" height="270" width="480">
 							<control type="image">
 								<width>480</width>
 								<height>270</height>
@@ -87,7 +108,7 @@
 								<width>258</width>
 								<height>100</height>
 								<aspectratio>keep</aspectratio>
-								<texture background="true">$VAR[NextAiredLogo]</texture>
+								<texture background="true">$INFO[ListItem.Property(Art(clearlogo))]</texture>
 								<visible>IsEmpty(ListItem.Property(Art(landscape)))</visible>
 							</control>
 							<control type="image">
@@ -96,7 +117,29 @@
 								<texture colordiffuse="$VAR[DiffuseColor]">views/white_50.png</texture>
 							</control>
 						</itemlayout>
-						<focusedlayout height="270" width="480">
+						<focusedlayout condition="IsEmpty(Window(home).Property(TVGuide.PreviewThumbs)" height="720" width="480">
+							<control type="image">
+								<width>480</width>
+								<height>720</height>
+								<aspectratio>scale</aspectratio>
+								<texture background="true">$INFO[ListItem.Icon]</texture>
+							</control>
+							<control type="image">
+								<width>480</width>
+								<height>720</height>
+								<texture colordiffuse="$VAR[DiffuseColor]">views/white_50.png</texture>
+								<animation center="auto" condition="Control.HasFocus(200)" easing="inout" effect="fade" end="0" start="100" time="300" tween="sine">Focus</animation>
+								<animation center="auto" condition="Control.HasFocus(200)" easing="inout" effect="fade" end="100" start="0" time="300" tween="sine">UnFocus</animation>
+							</control>
+							<control type="image">
+								<width>480</width>
+								<height>720</height>
+								<texture colordiffuse="$VAR[FocusedColor]" border="11,43,43,11">$VAR[BorderImage]</texture>
+								<animation center="auto" condition="Control.HasFocus(200)" easing="inout" effect="fade" end="100" start="0" time="300" tween="sine">Focus</animation>
+								<animation center="auto" condition="Control.HasFocus(200)" easing="inout" effect="fade" end="0" start="100" time="300" tween="sine">UnFocus</animation>
+							</control>
+						</focusedlayout>
+						<focusedlayout condition="!IsEmpty(Window(home).Property(TVGuide.PreviewThumbs)" height="270" width="480">
 							<control type="image">
 								<width>480</width>
 								<height>270</height>
@@ -109,7 +152,7 @@
 								<width>258</width>
 								<height>100</height>
 								<aspectratio>keep</aspectratio>
-								<texture background="true">$VAR[NextAiredLogo]</texture>
+								<texture background="true">$INFO[ListItem.Property(Art(clearlogo))]</texture>
 								<visible>IsEmpty(ListItem.Property(Art(landscape)))</visible>
 							</control>
 							<control type="image">
@@ -122,7 +165,7 @@
 							<control type="image">
 								<width>480</width>
 								<height>270</height>
-								<texture colordiffuse="$VAR[UnFocusedColor]" border="11">views/border.png</texture>
+								<texture colordiffuse="$VAR[FocusedColor]" border="11">views/border.png</texture>
 								<animation center="auto" condition="Control.HasFocus(200)" easing="inout" effect="fade" end="100" start="0" time="300" tween="sine">Focus</animation>
 								<animation center="auto" condition="Control.HasFocus(200)" easing="inout" effect="fade" end="0" start="100" time="300" tween="sine">UnFocus</animation>
 								<visible>Control.HasFocus(200)</visible>
@@ -157,12 +200,31 @@
 						<top>135</top>
 						<width>480</width>
 						<height>945</height>
-						<onup>201</onup>
-						<ondown>201</ondown>
-						<onleft>200</onleft>
-						<onright>202</onright>
+						<onup condition="IsEmpty(Window(home).Property(ShowInfo))">201</onup>
+						<ondown condition="IsEmpty(Window(home).Property(ShowInfo))">201</ondown>
+						<onleft condition="IsEmpty(Window(home).Property(ShowInfo))">200</onleft>
+						<onright condition="IsEmpty(Window(home).Property(ShowInfo))">202</onright>
+						<onup>ClearProperty(ShowInfo,home)</onup>
+						<ondown>ClearProperty(ShowInfo,home)</ondown>
+						<onleft>ClearProperty(ShowInfo,home)</onleft>
+						<onright>ClearProperty(ShowInfo,home)</onright>
+						<oninfo condition="IsEmpty(Window(home).Property(ShowInfo))">SetProperty(ShowInfo,true,home)</oninfo>
+						<oninfo condition="!IsEmpty(Window(home).Property(ShowInfo))">ClearProperty(ShowInfo,home)</oninfo>
 						<scrolltime tween="sine" easing="inout">360</scrolltime>
-						<itemlayout height="270" width="480">
+						<itemlayout condition="IsEmpty(Window(home).Property(TVGuide.PreviewThumbs)" height="720" width="480">
+							<control type="image">
+								<width>480</width>
+								<height>720</height>
+								<aspectratio>scale</aspectratio>
+								<texture background="true">$INFO[ListItem.Icon]</texture>
+							</control>
+							<control type="image">
+								<width>480</width>
+								<height>720</height>
+								<texture colordiffuse="$VAR[DiffuseColor]">views/white_50.png</texture>
+							</control>
+						</itemlayout>
+						<itemlayout condition="!IsEmpty(Window(home).Property(TVGuide.PreviewThumbs)" height="270" width="480">
 							<control type="image">
 								<width>480</width>
 								<height>270</height>
@@ -175,7 +237,7 @@
 								<width>258</width>
 								<height>100</height>
 								<aspectratio>keep</aspectratio>
-								<texture background="true">$VAR[NextAiredLogo]</texture>
+								<texture background="true">$INFO[ListItem.Property(Art(clearlogo))]</texture>
 								<visible>IsEmpty(ListItem.Property(Art(landscape)))</visible>
 							</control>
 							<control type="image">
@@ -184,7 +246,29 @@
 								<texture colordiffuse="$VAR[DiffuseColor]">views/white_50.png</texture>
 							</control>
 						</itemlayout>
-						<focusedlayout height="270" width="480">
+						<focusedlayout condition="IsEmpty(Window(home).Property(TVGuide.PreviewThumbs)" height="720" width="480">
+							<control type="image">
+								<width>480</width>
+								<height>720</height>
+								<aspectratio>scale</aspectratio>
+								<texture background="true">$INFO[ListItem.Icon]</texture>
+							</control>
+							<control type="image">
+								<width>480</width>
+								<height>720</height>
+								<texture colordiffuse="$VAR[DiffuseColor]">views/white_50.png</texture>
+								<animation center="auto" condition="Control.HasFocus(200)" easing="inout" effect="fade" end="0" start="100" time="300" tween="sine">Focus</animation>
+								<animation center="auto" condition="Control.HasFocus(200)" easing="inout" effect="fade" end="100" start="0" time="300" tween="sine">UnFocus</animation>
+							</control>
+							<control type="image">
+								<width>480</width>
+								<height>720</height>
+								<texture colordiffuse="$VAR[FocusedColor]" border="11,43,43,11">$VAR[BorderImage]</texture>
+								<animation center="auto" condition="Control.HasFocus(200)" easing="inout" effect="fade" end="100" start="0" time="300" tween="sine">Focus</animation>
+								<animation center="auto" condition="Control.HasFocus(200)" easing="inout" effect="fade" end="0" start="100" time="300" tween="sine">UnFocus</animation>
+							</control>
+						</focusedlayout>
+						<focusedlayout condition="!IsEmpty(Window(home).Property(TVGuide.PreviewThumbs)" height="270" width="480">
 							<control type="image">
 								<width>480</width>
 								<height>270</height>
@@ -197,7 +281,7 @@
 								<width>258</width>
 								<height>100</height>
 								<aspectratio>keep</aspectratio>
-								<texture background="true">$VAR[NextAiredLogo]</texture>
+								<texture background="true">$INFO[ListItem.Property(Art(clearlogo))]</texture>
 								<visible>IsEmpty(ListItem.Property(Art(landscape)))</visible>
 							</control>
 							<control type="image">
@@ -210,7 +294,7 @@
 							<control type="image">
 								<width>480</width>
 								<height>270</height>
-								<texture colordiffuse="$VAR[UnFocusedColor]" border="11">views/border.png</texture>
+								<texture colordiffuse="$VAR[FocusedColor]" border="11">views/border.png</texture>
 								<animation center="auto" condition="Control.HasFocus(201)" easing="inout" effect="fade" end="100" start="0" time="300" tween="sine">Focus</animation>
 								<animation center="auto" condition="Control.HasFocus(201)" easing="inout" effect="fade" end="0" start="100" time="300" tween="sine">UnFocus</animation>
 								<visible>Control.HasFocus(201)</visible>
@@ -245,12 +329,31 @@
 						<top>135</top>
 						<width>480</width>
 						<height>945</height>
-						<onup>202</onup>
-						<ondown>202</ondown>
-						<onleft>201</onleft>
-						<onright>203</onright>
+						<onup condition="IsEmpty(Window(home).Property(ShowInfo))">202</onup>
+						<ondown condition="IsEmpty(Window(home).Property(ShowInfo))">202</ondown>
+						<onleft condition="IsEmpty(Window(home).Property(ShowInfo))">201</onleft>
+						<onright condition="IsEmpty(Window(home).Property(ShowInfo))">203</onright>
+						<onup>ClearProperty(ShowInfo,home)</onup>
+						<ondown>ClearProperty(ShowInfo,home)</ondown>
+						<onleft>ClearProperty(ShowInfo,home)</onleft>
+						<onright>ClearProperty(ShowInfo,home)</onright>
+						<oninfo condition="IsEmpty(Window(home).Property(ShowInfo))">SetProperty(ShowInfo,true,home)</oninfo>
+						<oninfo condition="!IsEmpty(Window(home).Property(ShowInfo))">ClearProperty(ShowInfo,home)</oninfo>
 						<scrolltime tween="sine" easing="inout">360</scrolltime>
-						<itemlayout height="270" width="480">
+						<itemlayout condition="IsEmpty(Window(home).Property(TVGuide.PreviewThumbs)" height="720" width="480">
+							<control type="image">
+								<width>480</width>
+								<height>720</height>
+								<aspectratio>scale</aspectratio>
+								<texture background="true">$INFO[ListItem.Icon]</texture>
+							</control>
+							<control type="image">
+								<width>480</width>
+								<height>720</height>
+								<texture colordiffuse="$VAR[DiffuseColor]">views/white_50.png</texture>
+							</control>
+						</itemlayout>
+						<itemlayout condition="!IsEmpty(Window(home).Property(TVGuide.PreviewThumbs)" height="270" width="480">
 							<control type="image">
 								<width>480</width>
 								<height>270</height>
@@ -263,7 +366,7 @@
 								<width>258</width>
 								<height>100</height>
 								<aspectratio>keep</aspectratio>
-								<texture background="true">$VAR[NextAiredLogo]</texture>
+								<texture background="true">$INFO[ListItem.Property(Art(clearlogo))]</texture>
 								<visible>IsEmpty(ListItem.Property(Art(landscape)))</visible>
 							</control>
 							<control type="image">
@@ -272,7 +375,29 @@
 								<texture colordiffuse="$VAR[DiffuseColor]">views/white_50.png</texture>
 							</control>
 						</itemlayout>
-						<focusedlayout height="270" width="480">
+						<focusedlayout condition="IsEmpty(Window(home).Property(TVGuide.PreviewThumbs)" height="720" width="480">
+							<control type="image">
+								<width>480</width>
+								<height>720</height>
+								<aspectratio>scale</aspectratio>
+								<texture background="true">$INFO[ListItem.Icon]</texture>
+							</control>
+							<control type="image">
+								<width>480</width>
+								<height>720</height>
+								<texture colordiffuse="$VAR[DiffuseColor]">views/white_50.png</texture>
+								<animation center="auto" condition="Control.HasFocus(200)" easing="inout" effect="fade" end="0" start="100" time="300" tween="sine">Focus</animation>
+								<animation center="auto" condition="Control.HasFocus(200)" easing="inout" effect="fade" end="100" start="0" time="300" tween="sine">UnFocus</animation>
+							</control>
+							<control type="image">
+								<width>480</width>
+								<height>720</height>
+								<texture colordiffuse="$VAR[FocusedColor]" border="11,43,43,11">$VAR[BorderImage]</texture>
+								<animation center="auto" condition="Control.HasFocus(200)" easing="inout" effect="fade" end="100" start="0" time="300" tween="sine">Focus</animation>
+								<animation center="auto" condition="Control.HasFocus(200)" easing="inout" effect="fade" end="0" start="100" time="300" tween="sine">UnFocus</animation>
+							</control>
+						</focusedlayout>
+						<focusedlayout condition="!IsEmpty(Window(home).Property(TVGuide.PreviewThumbs)" height="270" width="480">
 							<control type="image">
 								<width>480</width>
 								<height>270</height>
@@ -285,7 +410,7 @@
 								<width>258</width>
 								<height>100</height>
 								<aspectratio>keep</aspectratio>
-								<texture background="true">$VAR[NextAiredLogo]</texture>
+								<texture background="true">$INFO[ListItem.Property(Art(clearlogo))]</texture>
 								<visible>IsEmpty(ListItem.Property(Art(landscape)))</visible>
 							</control>
 							<control type="image">
@@ -298,7 +423,7 @@
 							<control type="image">
 								<width>480</width>
 								<height>270</height>
-								<texture colordiffuse="$VAR[UnFocusedColor]" border="11">views/border.png</texture>
+								<texture colordiffuse="$VAR[FocusedColor]" border="11">views/border.png</texture>
 								<animation center="auto" condition="Control.HasFocus(202)" easing="inout" effect="fade" end="100" start="0" time="300" tween="sine">Focus</animation>
 								<animation center="auto" condition="Control.HasFocus(202)" easing="inout" effect="fade" end="0" start="100" time="300" tween="sine">UnFocus</animation>
 								<visible>Control.HasFocus(202)</visible>
@@ -333,12 +458,31 @@
 						<top>135</top>
 						<width>480</width>
 						<height>945</height>
-						<onup>203</onup>
-						<ondown>203</ondown>
-						<onleft>202</onleft>
-						<onright>204</onright>
+						<onup condition="IsEmpty(Window(home).Property(ShowInfo))">203</onup>
+						<ondown condition="IsEmpty(Window(home).Property(ShowInfo))">203</ondown>
+						<onleft condition="IsEmpty(Window(home).Property(ShowInfo))">202</onleft>
+						<onright condition="IsEmpty(Window(home).Property(ShowInfo))">204</onright>
+						<onup>ClearProperty(ShowInfo,home)</onup>
+						<ondown>ClearProperty(ShowInfo,home)</ondown>
+						<onleft>ClearProperty(ShowInfo,home)</onleft>
+						<onright>ClearProperty(ShowInfo,home)</onright>
+						<oninfo condition="IsEmpty(Window(home).Property(ShowInfo))">SetProperty(ShowInfo,true,home)</oninfo>
+						<oninfo condition="!IsEmpty(Window(home).Property(ShowInfo))">ClearProperty(ShowInfo,home)</oninfo>
 						<scrolltime tween="sine" easing="inout">360</scrolltime>
-						<itemlayout height="270" width="480">
+						<itemlayout condition="IsEmpty(Window(home).Property(TVGuide.PreviewThumbs)" height="720" width="480">
+							<control type="image">
+								<width>480</width>
+								<height>720</height>
+								<aspectratio>scale</aspectratio>
+								<texture background="true">$INFO[ListItem.Icon]</texture>
+							</control>
+							<control type="image">
+								<width>480</width>
+								<height>720</height>
+								<texture colordiffuse="$VAR[DiffuseColor]">views/white_50.png</texture>
+							</control>
+						</itemlayout>
+						<itemlayout condition="!IsEmpty(Window(home).Property(TVGuide.PreviewThumbs)" height="270" width="480">
 							<control type="image">
 								<width>480</width>
 								<height>270</height>
@@ -351,7 +495,7 @@
 								<width>258</width>
 								<height>100</height>
 								<aspectratio>keep</aspectratio>
-								<texture background="true">$VAR[NextAiredLogo]</texture>
+								<texture background="true">$INFO[ListItem.Property(Art(clearlogo))]</texture>
 								<visible>IsEmpty(ListItem.Property(Art(landscape)))</visible>
 							</control>
 							<control type="image">
@@ -360,7 +504,29 @@
 								<texture colordiffuse="$VAR[DiffuseColor]">views/white_50.png</texture>
 							</control>
 						</itemlayout>
-						<focusedlayout height="270" width="480">
+						<focusedlayout condition="IsEmpty(Window(home).Property(TVGuide.PreviewThumbs)" height="720" width="480">
+							<control type="image">
+								<width>480</width>
+								<height>720</height>
+								<aspectratio>scale</aspectratio>
+								<texture background="true">$INFO[ListItem.Icon]</texture>
+							</control>
+							<control type="image">
+								<width>480</width>
+								<height>720</height>
+								<texture colordiffuse="$VAR[DiffuseColor]">views/white_50.png</texture>
+								<animation center="auto" condition="Control.HasFocus(200)" easing="inout" effect="fade" end="0" start="100" time="300" tween="sine">Focus</animation>
+								<animation center="auto" condition="Control.HasFocus(200)" easing="inout" effect="fade" end="100" start="0" time="300" tween="sine">UnFocus</animation>
+							</control>
+							<control type="image">
+								<width>480</width>
+								<height>720</height>
+								<texture colordiffuse="$VAR[FocusedColor]" border="11,43,43,11">$VAR[BorderImage]</texture>
+								<animation center="auto" condition="Control.HasFocus(200)" easing="inout" effect="fade" end="100" start="0" time="300" tween="sine">Focus</animation>
+								<animation center="auto" condition="Control.HasFocus(200)" easing="inout" effect="fade" end="0" start="100" time="300" tween="sine">UnFocus</animation>
+							</control>
+						</focusedlayout>
+						<focusedlayout condition="!IsEmpty(Window(home).Property(TVGuide.PreviewThumbs)" height="270" width="480">
 							<control type="image">
 								<width>480</width>
 								<height>270</height>
@@ -373,7 +539,7 @@
 								<width>258</width>
 								<height>100</height>
 								<aspectratio>keep</aspectratio>
-								<texture background="true">$VAR[NextAiredLogo]</texture>
+								<texture background="true">$INFO[ListItem.Property(Art(clearlogo))]</texture>
 								<visible>IsEmpty(ListItem.Property(Art(landscape)))</visible>
 							</control>
 							<control type="image">
@@ -386,7 +552,7 @@
 							<control type="image">
 								<width>480</width>
 								<height>270</height>
-								<texture colordiffuse="$VAR[UnFocusedColor]" border="11">views/border.png</texture>
+								<texture colordiffuse="$VAR[FocusedColor]" border="11">views/border.png</texture>
 								<animation center="auto" condition="Control.HasFocus(203)" easing="inout" effect="fade" end="100" start="0" time="300" tween="sine">Focus</animation>
 								<animation center="auto" condition="Control.HasFocus(203)" easing="inout" effect="fade" end="0" start="100" time="300" tween="sine">UnFocus</animation>
 								<visible>Control.HasFocus(203)</visible>
@@ -421,12 +587,31 @@
 						<top>135</top>
 						<width>480</width>
 						<height>945</height>
-						<onup>204</onup>
-						<ondown>204</ondown>
-						<onleft>203</onleft>
-						<onright>205</onright>
+						<onup condition="IsEmpty(Window(home).Property(ShowInfo))">204</onup>
+						<ondown condition="IsEmpty(Window(home).Property(ShowInfo))">204</ondown>
+						<onleft condition="IsEmpty(Window(home).Property(ShowInfo))">203</onleft>
+						<onright condition="IsEmpty(Window(home).Property(ShowInfo))">205</onright>
+						<onup>ClearProperty(ShowInfo,home)</onup>
+						<ondown>ClearProperty(ShowInfo,home)</ondown>
+						<onleft>ClearProperty(ShowInfo,home)</onleft>
+						<onright>ClearProperty(ShowInfo,home)</onright>
+						<oninfo condition="IsEmpty(Window(home).Property(ShowInfo))">SetProperty(ShowInfo,true,home)</oninfo>
+						<oninfo condition="!IsEmpty(Window(home).Property(ShowInfo))">ClearProperty(ShowInfo,home)</oninfo>
 						<scrolltime tween="sine" easing="inout">360</scrolltime>
-						<itemlayout height="270" width="480">
+						<itemlayout condition="IsEmpty(Window(home).Property(TVGuide.PreviewThumbs)" height="720" width="480">
+							<control type="image">
+								<width>480</width>
+								<height>720</height>
+								<aspectratio>scale</aspectratio>
+								<texture background="true">$INFO[ListItem.Icon]</texture>
+							</control>
+							<control type="image">
+								<width>480</width>
+								<height>720</height>
+								<texture colordiffuse="$VAR[DiffuseColor]">views/white_50.png</texture>
+							</control>
+						</itemlayout>
+						<itemlayout condition="!IsEmpty(Window(home).Property(TVGuide.PreviewThumbs)" height="270" width="480">
 							<control type="image">
 								<width>480</width>
 								<height>270</height>
@@ -439,7 +624,7 @@
 								<width>258</width>
 								<height>100</height>
 								<aspectratio>keep</aspectratio>
-								<texture background="true">$VAR[NextAiredLogo]</texture>
+								<texture background="true">$INFO[ListItem.Property(Art(clearlogo))]</texture>
 								<visible>IsEmpty(ListItem.Property(Art(landscape)))</visible>
 							</control>
 							<control type="image">
@@ -448,7 +633,29 @@
 								<texture colordiffuse="$VAR[DiffuseColor]">views/white_50.png</texture>
 							</control>
 						</itemlayout>
-						<focusedlayout height="270" width="480">
+						<focusedlayout condition="IsEmpty(Window(home).Property(TVGuide.PreviewThumbs)" height="720" width="480">
+							<control type="image">
+								<width>480</width>
+								<height>720</height>
+								<aspectratio>scale</aspectratio>
+								<texture background="true">$INFO[ListItem.Icon]</texture>
+							</control>
+							<control type="image">
+								<width>480</width>
+								<height>720</height>
+								<texture colordiffuse="$VAR[DiffuseColor]">views/white_50.png</texture>
+								<animation center="auto" condition="Control.HasFocus(200)" easing="inout" effect="fade" end="0" start="100" time="300" tween="sine">Focus</animation>
+								<animation center="auto" condition="Control.HasFocus(200)" easing="inout" effect="fade" end="100" start="0" time="300" tween="sine">UnFocus</animation>
+							</control>
+							<control type="image">
+								<width>480</width>
+								<height>720</height>
+								<texture colordiffuse="$VAR[FocusedColor]" border="11,43,43,11">$VAR[BorderImage]</texture>
+								<animation center="auto" condition="Control.HasFocus(200)" easing="inout" effect="fade" end="100" start="0" time="300" tween="sine">Focus</animation>
+								<animation center="auto" condition="Control.HasFocus(200)" easing="inout" effect="fade" end="0" start="100" time="300" tween="sine">UnFocus</animation>
+							</control>
+						</focusedlayout>
+						<focusedlayout condition="!IsEmpty(Window(home).Property(TVGuide.PreviewThumbs)" height="270" width="480">
 							<control type="image">
 								<width>480</width>
 								<height>270</height>
@@ -461,7 +668,7 @@
 								<width>258</width>
 								<height>100</height>
 								<aspectratio>keep</aspectratio>
-								<texture background="true">$VAR[NextAiredLogo]</texture>
+								<texture background="true">$INFO[ListItem.Property(Art(clearlogo))]</texture>
 								<visible>IsEmpty(ListItem.Property(Art(landscape)))</visible>
 							</control>
 							<control type="image">
@@ -474,7 +681,7 @@
 							<control type="image">
 								<width>480</width>
 								<height>270</height>
-								<texture colordiffuse="$VAR[UnFocusedColor]" border="11">views/border.png</texture>
+								<texture colordiffuse="$VAR[FocusedColor]" border="11">views/border.png</texture>
 								<animation center="auto" condition="Control.HasFocus(204)" easing="inout" effect="fade" end="100" start="0" time="300" tween="sine">Focus</animation>
 								<animation center="auto" condition="Control.HasFocus(204)" easing="inout" effect="fade" end="0" start="100" time="300" tween="sine">UnFocus</animation>
 								<visible>Control.HasFocus(204)</visible>
@@ -509,12 +716,31 @@
 						<top>135</top>
 						<width>480</width>
 						<height>945</height>
-						<onup>205</onup>
-						<ondown>205</ondown>
-						<onleft>204</onleft>
-						<onright>206</onright>
+						<onup condition="IsEmpty(Window(home).Property(ShowInfo))">205</onup>
+						<ondown condition="IsEmpty(Window(home).Property(ShowInfo))">205</ondown>
+						<onleft condition="IsEmpty(Window(home).Property(ShowInfo))">204</onleft>
+						<onright condition="IsEmpty(Window(home).Property(ShowInfo))">206</onright>
+						<onup>ClearProperty(ShowInfo,home)</onup>
+						<ondown>ClearProperty(ShowInfo,home)</ondown>
+						<onleft>ClearProperty(ShowInfo,home)</onleft>
+						<onright>ClearProperty(ShowInfo,home)</onright>
+						<oninfo condition="IsEmpty(Window(home).Property(ShowInfo))">SetProperty(ShowInfo,true,home)</oninfo>
+						<oninfo condition="!IsEmpty(Window(home).Property(ShowInfo))">ClearProperty(ShowInfo,home)</oninfo>
 						<scrolltime tween="sine" easing="inout">360</scrolltime>
-						<itemlayout height="270" width="480">
+						<itemlayout condition="IsEmpty(Window(home).Property(TVGuide.PreviewThumbs)" height="720" width="480">
+							<control type="image">
+								<width>480</width>
+								<height>720</height>
+								<aspectratio>scale</aspectratio>
+								<texture background="true">$INFO[ListItem.Icon]</texture>
+							</control>
+							<control type="image">
+								<width>480</width>
+								<height>720</height>
+								<texture colordiffuse="$VAR[DiffuseColor]">views/white_50.png</texture>
+							</control>
+						</itemlayout>
+						<itemlayout condition="!IsEmpty(Window(home).Property(TVGuide.PreviewThumbs)" height="270" width="480">
 							<control type="image">
 								<width>480</width>
 								<height>270</height>
@@ -527,7 +753,7 @@
 								<width>258</width>
 								<height>100</height>
 								<aspectratio>keep</aspectratio>
-								<texture background="true">$VAR[NextAiredLogo]</texture>
+								<texture background="true">$INFO[ListItem.Property(Art(clearlogo))]</texture>
 								<visible>IsEmpty(ListItem.Property(Art(landscape)))</visible>
 							</control>
 							<control type="image">
@@ -536,7 +762,29 @@
 								<texture colordiffuse="$VAR[DiffuseColor]">views/white_50.png</texture>
 							</control>
 						</itemlayout>
-						<focusedlayout height="270" width="480">
+						<focusedlayout condition="IsEmpty(Window(home).Property(TVGuide.PreviewThumbs)" height="720" width="480">
+							<control type="image">
+								<width>480</width>
+								<height>720</height>
+								<aspectratio>scale</aspectratio>
+								<texture background="true">$INFO[ListItem.Icon]</texture>
+							</control>
+							<control type="image">
+								<width>480</width>
+								<height>720</height>
+								<texture colordiffuse="$VAR[DiffuseColor]">views/white_50.png</texture>
+								<animation center="auto" condition="Control.HasFocus(200)" easing="inout" effect="fade" end="0" start="100" time="300" tween="sine">Focus</animation>
+								<animation center="auto" condition="Control.HasFocus(200)" easing="inout" effect="fade" end="100" start="0" time="300" tween="sine">UnFocus</animation>
+							</control>
+							<control type="image">
+								<width>480</width>
+								<height>720</height>
+								<texture colordiffuse="$VAR[FocusedColor]" border="11,43,43,11">$VAR[BorderImage]</texture>
+								<animation center="auto" condition="Control.HasFocus(200)" easing="inout" effect="fade" end="100" start="0" time="300" tween="sine">Focus</animation>
+								<animation center="auto" condition="Control.HasFocus(200)" easing="inout" effect="fade" end="0" start="100" time="300" tween="sine">UnFocus</animation>
+							</control>
+						</focusedlayout>
+						<focusedlayout condition="!IsEmpty(Window(home).Property(TVGuide.PreviewThumbs)" height="270" width="480">
 							<control type="image">
 								<width>480</width>
 								<height>270</height>
@@ -549,7 +797,7 @@
 								<width>258</width>
 								<height>100</height>
 								<aspectratio>keep</aspectratio>
-								<texture background="true">$VAR[NextAiredLogo]</texture>
+								<texture background="true">$INFO[ListItem.Property(Art(clearlogo))]</texture>
 								<visible>IsEmpty(ListItem.Property(Art(landscape)))</visible>
 							</control>
 							<control type="image">
@@ -562,7 +810,7 @@
 							<control type="image">
 								<width>480</width>
 								<height>270</height>
-								<texture colordiffuse="$VAR[UnFocusedColor]" border="11">views/border.png</texture>
+								<texture colordiffuse="$VAR[FocusedColor]" border="11">views/border.png</texture>
 								<animation center="auto" condition="Control.HasFocus(205)" easing="inout" effect="fade" end="100" start="0" time="300" tween="sine">Focus</animation>
 								<animation center="auto" condition="Control.HasFocus(205)" easing="inout" effect="fade" end="0" start="100" time="300" tween="sine">UnFocus</animation>
 								<visible>Control.HasFocus(205)</visible>
@@ -597,12 +845,31 @@
 						<top>135</top>
 						<width>480</width>
 						<height>945</height>
-						<onup>206</onup>
-						<ondown>206</ondown>
-						<onleft>205</onleft>
-						<onright>200</onright>
+						<onup condition="IsEmpty(Window(home).Property(ShowInfo))">206</onup>
+						<ondown condition="IsEmpty(Window(home).Property(ShowInfo))">206</ondown>
+						<onleft condition="IsEmpty(Window(home).Property(ShowInfo))">205</onleft>
+						<onright condition="IsEmpty(Window(home).Property(ShowInfo))">200</onright>
+						<onup>ClearProperty(ShowInfo,home)</onup>
+						<ondown>ClearProperty(ShowInfo,home)</ondown>
+						<onleft>ClearProperty(ShowInfo,home)</onleft>
+						<onright>ClearProperty(ShowInfo,home)</onright>
+						<oninfo condition="IsEmpty(Window(home).Property(ShowInfo))">SetProperty(ShowInfo,true,home)</oninfo>
+						<oninfo condition="!IsEmpty(Window(home).Property(ShowInfo))">ClearProperty(ShowInfo,home)</oninfo>
 						<scrolltime tween="sine" easing="inout">360</scrolltime>
-						<itemlayout height="270" width="480">
+						<itemlayout condition="IsEmpty(Window(home).Property(TVGuide.PreviewThumbs)" height="720" width="480">
+							<control type="image">
+								<width>480</width>
+								<height>720</height>
+								<aspectratio>scale</aspectratio>
+								<texture background="true">$INFO[ListItem.Icon]</texture>
+							</control>
+							<control type="image">
+								<width>480</width>
+								<height>720</height>
+								<texture colordiffuse="$VAR[DiffuseColor]">views/white_50.png</texture>
+							</control>
+						</itemlayout>
+						<itemlayout condition="!IsEmpty(Window(home).Property(TVGuide.PreviewThumbs)" height="270" width="480">
 							<control type="image">
 								<width>480</width>
 								<height>270</height>
@@ -615,7 +882,7 @@
 								<width>258</width>
 								<height>100</height>
 								<aspectratio>keep</aspectratio>
-								<texture background="true">$VAR[NextAiredLogo]</texture>
+								<texture background="true">$INFO[ListItem.Property(Art(clearlogo))]</texture>
 								<visible>IsEmpty(ListItem.Property(Art(landscape)))</visible>
 							</control>
 							<control type="image">
@@ -624,7 +891,29 @@
 								<texture colordiffuse="$VAR[DiffuseColor]">views/white_50.png</texture>
 							</control>
 						</itemlayout>
-						<focusedlayout height="270" width="480">
+						<focusedlayout condition="IsEmpty(Window(home).Property(TVGuide.PreviewThumbs)" height="720" width="480">
+							<control type="image">
+								<width>480</width>
+								<height>720</height>
+								<aspectratio>scale</aspectratio>
+								<texture background="true">$INFO[ListItem.Icon]</texture>
+							</control>
+							<control type="image">
+								<width>480</width>
+								<height>720</height>
+								<texture colordiffuse="$VAR[DiffuseColor]">views/white_50.png</texture>
+								<animation center="auto" condition="Control.HasFocus(200)" easing="inout" effect="fade" end="0" start="100" time="300" tween="sine">Focus</animation>
+								<animation center="auto" condition="Control.HasFocus(200)" easing="inout" effect="fade" end="100" start="0" time="300" tween="sine">UnFocus</animation>
+							</control>
+							<control type="image">
+								<width>480</width>
+								<height>720</height>
+								<texture colordiffuse="$VAR[FocusedColor]" border="11,43,43,11">$VAR[BorderImage]</texture>
+								<animation center="auto" condition="Control.HasFocus(200)" easing="inout" effect="fade" end="100" start="0" time="300" tween="sine">Focus</animation>
+								<animation center="auto" condition="Control.HasFocus(200)" easing="inout" effect="fade" end="0" start="100" time="300" tween="sine">UnFocus</animation>
+							</control>
+						</focusedlayout>
+						<focusedlayout condition="!IsEmpty(Window(home).Property(TVGuide.PreviewThumbs)" height="270" width="480">
 							<control type="image">
 								<width>480</width>
 								<height>270</height>
@@ -637,7 +926,7 @@
 								<width>258</width>
 								<height>100</height>
 								<aspectratio>keep</aspectratio>
-								<texture background="true">$VAR[NextAiredLogo]</texture>
+								<texture background="true">$INFO[ListItem.Property(Art(clearlogo))]</texture>
 								<visible>IsEmpty(ListItem.Property(Art(landscape)))</visible>
 							</control>
 							<control type="image">
@@ -650,7 +939,7 @@
 							<control type="image">
 								<width>480</width>
 								<height>270</height>
-								<texture colordiffuse="$VAR[UnFocusedColor]" border="11">views/border.png</texture>
+								<texture colordiffuse="$VAR[FocusedColor]" border="11">views/border.png</texture>
 								<animation center="auto" condition="Control.HasFocus(206)" easing="inout" effect="fade" end="100" start="0" time="300" tween="sine">Focus</animation>
 								<animation center="auto" condition="Control.HasFocus(206)" easing="inout" effect="fade" end="0" start="100" time="300" tween="sine">UnFocus</animation>
 								<visible>Control.HasFocus(206)</visible>
@@ -662,9 +951,9 @@
 		</control>
 		<!-- Media Info -->
 		<control type="group">
-			<include>MediaInfoAnimation</include>
+			<include>VisibleFadeAnimation</include>
+			<visible>!IsEmpty(Window(home).Property(ShowInfo))</visible>
 			<control type="image">
-				<include>System.IdleTime(3)</include>
 				<include>FullscreenDimensions</include>
 				<texture colordiffuse="$VAR[DiffuseColor]">views/white_90.png</texture>
 			</control>
@@ -720,9 +1009,30 @@
 			</control>
 		</control>
 		<control type="group">
+			<visible>!IsEmpty(Window(home).Property(ShowInfo)) + IsEmpty(Window(home).Property(TVGuide.PreviewThumbs)</visible>
+			<animation effect="fade" start="100" end="100" delay="200">Hidden</animation>
 			<left>0</left>
 			<top>135</top>
-			<visible>System.IdleTime(3)</visible>
+			<animation effect="slide" end="480,0" condition="StringCompare(Container(2000).Position,1)">Conditional</animation>
+			<animation effect="slide" end="960,0" condition="StringCompare(Container(2000).Position,2)">Conditional</animation>
+			<animation effect="slide" end="1440,0" condition="StringCompare(Container(2000).Position,3)">Conditional</animation>
+			<control type="image">
+				<width>480</width>
+				<height>720</height>
+				<aspectratio>scale</aspectratio>
+				<texture background="true">$VAR[NextAiredPoster]</texture>
+			</control>
+			<control type="image">
+				<width>480</width>
+				<height>720</height>
+				<texture colordiffuse="$VAR[FocusedColor]" border="11">views/border.png</texture>
+			</control>
+		</control>
+		<control type="group">
+			<visible>!IsEmpty(Window(home).Property(ShowInfo)) + !IsEmpty(Window(home).Property(TVGuide.PreviewThumbs)</visible>
+			<animation effect="fade" start="100" end="100" delay="200">Hidden</animation>
+			<left>0</left>
+			<top>135</top>
 			<animation effect="slide" end="480,0" condition="StringCompare(Container(2000).Position,1)">Conditional</animation>
 			<animation effect="slide" end="960,0" condition="StringCompare(Container(2000).Position,2)">Conditional</animation>
 			<animation effect="slide" end="1440,0" condition="StringCompare(Container(2000).Position,3)">Conditional</animation>
@@ -768,7 +1078,7 @@
 			<control type="image">
 				<width>480</width>
 				<height>270</height>
-				<texture colordiffuse="$VAR[UnFocusedColor]" border="11">views/border.png</texture>
+				<texture colordiffuse="$VAR[FocusedColor]" border="11">views/border.png</texture>
 			</control>
 		</control>
 	</controls>
