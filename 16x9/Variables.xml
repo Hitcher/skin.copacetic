@@ -28,8 +28,26 @@
 	<variable name="InfoTitle">
 		<value condition="Container.Content(episodes) + !IntegerGreaterThan(ListItem.Episode,9)">$INFO[ListItem.Season]$INFO[ListItem.Episode,x0] [UPPERCASE]$INFO[ListItem.Title][/UPPERCASE]</value>
 		<value condition="Container.Content(episodes)">$INFO[ListItem.Season]$INFO[ListItem.Episode,x] [UPPERCASE]$INFO[ListItem.Title][/UPPERCASE]</value>
+		<value condition="Container.Content(albums)">[UPPERCASE]$INFO[ListItem.Album][/UPPERCASE]</value>
+		<value condition="Container.Content(artists)">[UPPERCASE]$INFO[ListItem.Artist][/UPPERCASE]</value>
+		<value condition="Container.Content(songs)">[UPPERCASE]$INFO[ListItem.TrackNumber].$INFO[ListItem.Title][/UPPERCASE]</value>
 		<value condition="!IsEmpty(ListItem.Title)">[UPPERCASE]$INFO[ListItem.Title][/UPPERCASE]</value>
 		<value>[UPPERCASE]$INFO[ListItem.Label][/UPPERCASE]</value>
+	</variable>
+	<variable name="DialogMusicInfoLine1">
+		<value condition="Container.Content(albums) + !IsEmpty(ListItem.Artist)">[UPPERCASE]$INFO[ListItem.Artist]$INFO[ListItem.Year, | ,][/UPPERCASE]</value>
+		<value condition="Container.Content(artists) + !IsEmpty(ListItem.Property(Artist_Mood))">[UPPERCASE]$INFO[ListItem.Property(Artist_Mood)]$INFO[ListItem.Property(Artist_YearsActive), | ,][/UPPERCASE]</value>
+		<value condition="Container.Content(songs) + !IsEmpty(ListItem.Artist)">[UPPERCASE]$INFO[ListItem.Artist][/UPPERCASE]</value>
+	</variable>
+	<variable name="DialogMusicInfoLine2">
+		<value condition="Container.Content(albums) + !IsEmpty(ListItem.Property(Album_Label))">$INFO[ListItem.Property(Album_Label)]$INFO[ListItem.Property(Album_Mood), | ]</value>
+		<value condition="Container.Content(artists) + !IsEmpty(ListItem.Property(Artist_Formed))">$INFO[ListItem.Property(Artist_Formed)]</value>
+		<value condition="Container.Content(songs) + !IsEmpty(ListItem.Album)">$INFO[ListItem.Album]</value>
+	</variable>
+	<variable name="Description">
+		<value condition="Container.Content(albums) + !IsEmpty(ListItem.Property(Album_Description))">$INFO[ListItem.Property(Album_Description)]</value>
+		<value condition="Container.Content(artists) + !IsEmpty(ListItem.Property(Artist_Description))">$INFO[ListItem.Property(Artist_Description)]</value>
+		<value condition="Container.Content(songs) + !IsEmpty(ListItem.Comment)">$INFO[ListItem.Comment]</value>
 	</variable>
 	<variable name="DialogVideoInfoLine1">
 		<value condition="Container.Content(movies) + !IsEmpty(ListItem.Year)">[UPPERCASE]$INFO[ListItem.Year]$INFO[ListItem.Duration, | , $LOCALIZE[31138]]$INFO[ListItem.VideoResolution, | ][/UPPERCASE]</value>
@@ -100,8 +118,9 @@
 		<value condition="!IsEmpty(Window(Home).Property(NextAired.LatestDate))">$INFO[Window(Home).Property(NextAired.LatestDate), | $LOCALIZE[31130] ]</value>
 	</variable>	
 	<variable name="VolumeDetails">
-		<value condition="!Player.Passthrough">$INFO[Control.GetLabel(404),,%]</value>
-		<value>$LOCALIZE[29802]</value>
+		<value condition="Player.Passthrough">$LOCALIZE[29802]</value>
+		<value condition="Player.Muted">$LOCALIZE[31144]</value>
+		<value>$INFO[Control.GetLabel(404),,%]</value>
 	</variable>
 	<variable name="BorderImage">
 		<value condition="!StringCompare(ListItem.Overlay,OverlayWatched.png)">views/border.png</value>
@@ -386,12 +405,12 @@
 		<value condition="Container.Content(episodes)">[UPPERCASE]$INFO[ListItem.VideoResolution][/UPPERCASE]</value>
 	</variable>
 	<variable name="ListLabelFO">
-		<value condition="!Container.Content(episodes) | StringCompare(ListItem.Label,..)">[UPPERCASE]$INFO[ListItem.Label][/UPPERCASE]</value>
+		<value condition="!Container.Content(episodes) | ListItem.IsParentFolder">[UPPERCASE]$INFO[ListItem.Label][/UPPERCASE]</value>
 		<value condition="!IntegerGreaterThan(ListItem.Episode,9)">$INFO[ListItem.Season]$INFO[ListItem.Episode,x0] [UPPERCASE]$INFO[ListItem.Title][/UPPERCASE]</value>
 		<value>$INFO[ListItem.Season]$INFO[ListItem.Episode,x] [UPPERCASE]$INFO[ListItem.Title][/UPPERCASE]</value>
 	</variable>
 	<variable name="ListLabelNF">
-		<value condition="!Container.Content(episodes) | StringCompare(ListItem.Label,..)">$INFO[ListItem.Label]</value>
+		<value condition="!Container.Content(episodes) | ListItem.IsParentFolder">$INFO[ListItem.Label]</value>
 		<value>$INFO[ListItem.Title]</value>
 	</variable>
 	<variable name="Fanart">
@@ -402,16 +421,26 @@
 		<value condition="!IsEmpty(ListItem.FileName)">$INFO[ListItem.FileNameAndPath]</value>
 	</variable>
 	<variable name="StarRating">
-		<value condition="IntegerGreaterThan(ListItem.Rating,9.5)">flags/stars/rating10.png</value>
-		<value condition="IntegerGreaterThan(ListItem.Rating,8.5)">flags/stars/rating9.png</value>
-		<value condition="IntegerGreaterThan(ListItem.Rating,7.5)">flags/stars/rating8.png</value>
-		<value condition="IntegerGreaterThan(ListItem.Rating,6.5)">flags/stars/rating7.png</value>
-		<value condition="IntegerGreaterThan(ListItem.Rating,5.5)">flags/stars/rating6.png</value>
-		<value condition="IntegerGreaterThan(ListItem.Rating,4.5)">flags/stars/rating5.png</value>
-		<value condition="IntegerGreaterThan(ListItem.Rating,3.5)">flags/stars/rating4.png</value>
-		<value condition="IntegerGreaterThan(ListItem.Rating,2.5)">flags/stars/rating3.png</value>
-		<value condition="IntegerGreaterThan(ListItem.Rating,1.5)">flags/stars/rating2.png</value>
-		<value condition="IntegerGreaterThan(ListItem.Rating,0.5)">flags/stars/rating1.png</value>
+		<value condition="!Container.Content(songs) + IntegerGreaterThan(ListItem.Rating,9.5)">flags/stars/rating10.png</value>
+		<value condition="!Container.Content(songs) + IntegerGreaterThan(ListItem.Rating,8.5)">flags/stars/rating9.png</value>
+		<value condition="!Container.Content(songs) + IntegerGreaterThan(ListItem.Rating,7.5)">flags/stars/rating8.png</value>
+		<value condition="!Container.Content(songs) + IntegerGreaterThan(ListItem.Rating,6.5)">flags/stars/rating7.png</value>
+		<value condition="!Container.Content(songs) + IntegerGreaterThan(ListItem.Rating,5.5)">flags/stars/rating6.png</value>
+		<value condition="!Container.Content(songs) + IntegerGreaterThan(ListItem.Rating,4.5)">flags/stars/rating5.png</value>
+		<value condition="!Container.Content(songs) + IntegerGreaterThan(ListItem.Rating,3.5)">flags/stars/rating4.png</value>
+		<value condition="!Container.Content(songs) + IntegerGreaterThan(ListItem.Rating,2.5)">flags/stars/rating3.png</value>
+		<value condition="!Container.Content(songs) + IntegerGreaterThan(ListItem.Rating,1.5)">flags/stars/rating2.png</value>
+		<value condition="!Container.Content(songs) + IntegerGreaterThan(ListItem.Rating,0.5)">flags/stars/rating1.png</value>
+		<value condition="Container.Content(songs) + IntegerGreaterThan(ListItem.UserRating,9.5)">flags/stars/rating10.png</value>
+		<value condition="Container.Content(songs) + IntegerGreaterThan(ListItem.UserRating,8.5)">flags/stars/rating9.png</value>
+		<value condition="Container.Content(songs) + IntegerGreaterThan(ListItem.UserRating,7.5)">flags/stars/rating8.png</value>
+		<value condition="Container.Content(songs) + IntegerGreaterThan(ListItem.UserRating,6.5)">flags/stars/rating7.png</value>
+		<value condition="Container.Content(songs) + IntegerGreaterThan(ListItem.UserRating,5.5)">flags/stars/rating6.png</value>
+		<value condition="Container.Content(songs) + IntegerGreaterThan(ListItem.UserRating,4.5)">flags/stars/rating5.png</value>
+		<value condition="Container.Content(songs) + IntegerGreaterThan(ListItem.UserRating,3.5)">flags/stars/rating4.png</value>
+		<value condition="Container.Content(songs) + IntegerGreaterThan(ListItem.UserRating,2.5)">flags/stars/rating3.png</value>
+		<value condition="Container.Content(songs) + IntegerGreaterThan(ListItem.UserRating,1.5)">flags/stars/rating2.png</value>
+		<value condition="Container.Content(songs) + IntegerGreaterThan(ListItem.UserRating,0.5)">flags/stars/rating1.png</value>
 		<value>flags/stars/rating0.png</value>
 	</variable>
 	<variable name="VideoInfoImage">
@@ -423,8 +452,8 @@
 		<value>$INFO[ListItem.Icon]</value>
 	</variable>
 	<variable name="LandscapeIcon">
-		<value condition="Container.Content(episodes) + [StringCompare(Container.Viewmode,$LOCALIZE[31110]) | StringCompare(Container.Viewmode,$LOCALIZE[31111])] + !Skin.HasSetting(DisableEpisodeThumbs)">$INFO[ListItem.Icon]</value>
-		<value condition="Container.Content(episodes) + [StringCompare(Container.Viewmode,$LOCALIZE[31110]) | StringCompare(Container.Viewmode,$LOCALIZE[31111])] + !IsEmpty(ListItem.Art(fanart))">$INFO[ListItem.Art(fanart)]</value>
+		<value condition="Container.Content(episodes) + [StringCompare(Container.Viewmode,$LOCALIZE[31500]) | StringCompare(Container.Viewmode,$LOCALIZE[31501])] + !Skin.HasSetting(DisableEpisodeThumbs)">$INFO[ListItem.Icon]</value>
+		<value condition="Container.Content(episodes) + [StringCompare(Container.Viewmode,$LOCALIZE[31500]) | StringCompare(Container.Viewmode,$LOCALIZE[31501])] + !IsEmpty(ListItem.Art(fanart))">$INFO[ListItem.Art(fanart)]</value>
 		<value condition="!Container.Content(episodes) + !IsEmpty(ListItem.Art(fanart))">$INFO[ListItem.Art(fanart)]</value>
 		<value>$INFO[ListItem.Icon]</value>
 	</variable>

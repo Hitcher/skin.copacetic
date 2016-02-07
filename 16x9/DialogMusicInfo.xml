@@ -1,30 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <window>
-	<!-- movieinformation -->
-	<defaultcontrol always="true">97</defaultcontrol>
-	<onload condition="System.HasAddon(script.tvtunes)">RunScript(script.tvtunes,backend=True)</onload>
+	<!-- musicinformation -->
+	<defaultcontrol always="true">9000</defaultcontrol>
 	<controls>
-		<!-- Cast Button -->
-		<control type="button" id="5">
-			<include>HiddenControl</include>
-		</control>
-		<!-- Browse/Play Button -->
-		<control type="togglebutton" id="8">
-			<include>HiddenControl</include>
-			<label>208</label>
-			<altlabel>1024</altlabel>
-			<usealttexture>Container.Content(TVShows) | Container.Content(seasons)</usealttexture>
-		</control>
-		<!-- Get Thumb Button -->
-		<control type="button" id="10">
-			<include>HiddenControl</include>
-		</control>
-		<!-- Artwork Downloader Button -->
-		<control type="button" id="20">
-			<include>HiddenControl</include>
-			<onclick condition="Container.Content(tvshows)">RunScript(script.artwork.downloader, mode=gui, mediatype=tvshow, dbid=$INFO[ListItem.DBID])</onclick>
-			<onclick condition="Container.Content(movies)">RunScript(script.artwork.downloader, mode=gui, mediatype=movie, dbid=$INFO[ListItem.DBID])</onclick>
-		</control>
 		<control type="group">
 			<include>InfoDialogFadeAnimation</include>
 			<include>MediaInfoDiffuse</include>
@@ -44,20 +22,11 @@
 						<height>210</height>
 						<align>right</align>
 						<orientation>vertical</orientation>
-						<visible>IsEmpty(ListItem.Art(clearlogo)) | [!IsEmpty(ListItem.Art(clearlogo)) + !Skin.HasSetting(EnableLogos)]</visible>
 						<control type="textbox">
 							<height max="210">auto</height>
 							<font>Light60Spaced</font>
 							<label>$VAR[InfoTitle]</label>
 						</control>
-					</control>
-					<control type="image">
-						<top>50</top>
-						<width>640</width>
-						<height>248</height>
-						<aspectratio scalediffuse="false">keep</aspectratio>
-						<texture background="true">$INFO[ListItem.Art(clearlogo)]</texture>
-						<visible>Skin.HasSetting(EnableLogos)</visible>
 					</control>
 					<!-- Details Line 1 -->
 					<control type="label">
@@ -65,7 +34,7 @@
 						<width>78%</width>
 						<height>36</height>
 						<font>Light36</font>
-						<label>$VAR[DialogVideoInfoLine1]</label>
+						<label>$VAR[DialogMusicInfoLine1]</label>
 					</control>
 					<!-- Star Rating -->
 					<control type="image">
@@ -75,7 +44,6 @@
 						<height>24</height>
 						<aspectratio>keep</aspectratio>
 						<texture colordiffuse="$VAR[FocusedColor]">$VAR[StarRating]</texture>
-						<visible>!Container.Content(seasons)</visible>
 					</control>
 					<!-- Details Line 2 -->
 					<control type="label">
@@ -85,14 +53,14 @@
 						<font>Light33</font>
 						<textcolor>$VAR[UnFocusedColor]</textcolor>
 						<wrapmultiline>true</wrapmultiline>
-						<label>$VAR[DialogVideoInfoLine2]</label>
+						<label>$VAR[DialogMusicInfoLine2]</label>
 					</control>
-					<!-- Plot -->
+					<!-- Description -->
 					<control type="textbox">
 						<top>479</top>
 						<height>195</height>
 						<font>Light27</font>
-						<label>$VAR[Plot]</label>
+						<label>$VAR[Description]</label>
 						<textcolor>$VAR[UnFocusedColor]</textcolor>
 						<autoscroll delay="10000" time="2000" repeat="12000">True</autoscroll>
 					</control>
@@ -102,33 +70,18 @@
 						<itemgap>100</itemgap>
 						<orientation>horizontal</orientation>
 						<usecontrolcoords>true</usecontrolcoords>
-						<!-- Studio Flag -->
+						<!-- Audio Flag -->
 						<control type="image">
 							<width>120</width>
 							<height>80</height>
 							<aspectratio>keep</aspectratio>
-							<texture colordiffuse="$VAR[FocusedColor]" fallback="flags/default_studio.png">$INFO[ListItem.Studio,flags/studios/,.png]</texture>
-							<visible>!IsEmpty(ListItem.Studio)</visible>
-						</control>
-						<!-- MPAA Rating Flag -->
-						<control type="image">
-							<width>120</width>
-							<height>80</height>
-							<aspectratio>keep</aspectratio>
-							<texture colordiffuse="$VAR[FocusedColor]" fallback="flags/default_rating.png">$VAR[Info_Certificate]</texture>
-							<visible>!IsEmpty(ListItem.MPAA)</visible>
-						</control>
-						<!-- Source Flag -->
-						<control type="image">
-							<width>120</width>
-							<height>80</height>
-							<aspectratio>keep</aspectratio>
-							<texture colordiffuse="$VAR[FocusedColor]">$VAR[Video_Source]</texture>
+							<texture colordiffuse="$VAR[FocusedColor]" fallback="flags/default_studio.png">$INFO[ListItem.FileExtension,flags/audio/,.png]</texture>
+							<visible>!IsEmpty(ListItem.FileExtension)</visible>
 						</control>
 					</control>
 				</control>
 				<!-- Button grouplist -->
-				<control type="grouplist">
+				<control type="grouplist" id="9000">
 					<bottom>50</bottom>
 					<height>75</height>
 					<itemgap>0</itemgap>
@@ -137,109 +90,23 @@
 					<onup condition="!StringCompare(Control.GetLabel(5),$LOCALIZE[207])">Close</onup>
 					<ondown>Close</ondown>
 					<orientation>horizontal</orientation>
-					<!-- Play/Browse Button -->
-					<control type="button" id="97">
-						<include>DialogButton</include>
-						<label>$INFO[Control.GetLabel(8)]</label>
-						<onclick>SendClick(movieinformation,8)</onclick>
-						<visible>Control.IsVisible(8)</visible>
-					</control>
-					<!-- Trailer Button -->
-					<control type="button" id="11">
-						<include>DialogButton</include>
-						<label>20410</label>
-						<visible>!IsEmpty(ListItem.Trailer)</visible>
-					</control>
 					<!-- Refresh Button -->
 					<control type="button" id="6">
 						<include>DialogButton</include>
-						<label>184</label>
 					</control>
-					<!-- Art Button -->
-					<control type="button" id="99">
+					<!-- Thumb Button -->
+					<control type="button" id="10">
 						<include>DialogButton</include>
-						<label>31142</label>
-						<onclick condition="System.HasAddon(script.toolbox) + System.HasAddon(script.artwork.downloader)">SetProperty(Dialog.NumItems,2)</onclick>
-						<onclick condition="System.HasAddon(script.toolbox) + System.HasAddon(script.artwork.downloader)">SetProperty(Dialog.1.Label,Default Scraper)</onclick>
-						<onclick condition="System.HasAddon(script.toolbox) + System.HasAddon(script.artwork.downloader)">SetProperty(Dialog.1.BuiltIn,SendClick(movieinformation,10))</onclick>
-						<onclick condition="System.HasAddon(script.toolbox) + System.HasAddon(script.artwork.downloader)">SetProperty(Dialog.2.Label,Artwork Downloader)</onclick>
-						<onclick condition="System.HasAddon(script.toolbox) + System.HasAddon(script.artwork.downloader) + Container.Content(tvshows)">SetProperty(Dialog.2.BuiltIn,RunScript(script.artwork.downloader, mode=gui, mediatype=tvshow, dbid=$INFO[ListItem.DBID]))</onclick>
-						<onclick condition="System.HasAddon(script.toolbox) + System.HasAddon(script.artwork.downloader) + Container.Content(movies)">SetProperty(Dialog.2.BuiltIn,RunScript(script.artwork.downloader, mode=gui, mediatype=movie, dbid=$INFO[ListItem.DBID]))</onclick>
-						<onclick condition="System.HasAddon(script.toolbox) + System.HasAddon(script.artwork.downloader)">RunScript(script.toolbox,info=selectdialog,header=Choose method)</onclick>
-						<onclick condition="!System.HasAddon(script.toolbox) | !System.HasAddon(script.artwork.downloader)]">SendClick(movieinformation,10)</onclick>
+					</control>
+					<!-- Fanart Button -->
+					<control type="button" id="12">
+						<include>DialogButton</include>
 					</control>
 					<!-- Cast Button -->
-					<control type="button" id="98">
+					<control type="button" id="7">
 						<include>DialogButton</include>
-						<label>206</label>
-						<onclick>SendClick(5)</onclick>
-						<onclick>SetFocus(50)</onclick>
 					</control>
 				</control>
-			</control>
-			<!-- Cast -->
-			<control type="fixedlist" id="50">
-				<left>0</left>
-				<top>270</top>
-				<width>2180</width>
-				<height>540</height>
-				<onup>noop</onup>
-				<ondown>98</ondown>
-				<ondown>SendClick(5)</ondown>
-				<onleft>noop</onleft>
-				<onright>noop</onright>
-				<onback>9000</onback>
-				<preloaditems>2</preloaditems>
-				<focusposition>1</focusposition>
-				<orientation>horizontal</orientation>
-				<viewtype label="31520">list</viewtype>
-				<scrolltime tween="sine" easing="inout">360</scrolltime>
-				<animation effect="fade" start="0" end="100" time="200">Visible</animation>
-				<itemlayout height="540" width="360">
-					<control type="image">
-						<width>360</width>
-						<height>540</height>
-						<aspectratio>scale</aspectratio>
-						<texture background="true">$INFO[ListItem.Icon]</texture>
-					</control>
-					<control type="image">
-						<width>360</width>
-						<height>540</height>
-						<texture colordiffuse="$VAR[DiffuseColor]">views/white_50.png</texture>
-					</control>
-				</itemlayout>
-				<focusedlayout height="540" width="360">
-					<control type="image">
-						<width>360</width>
-						<height>540</height>
-						<aspectratio>scale</aspectratio>
-						<texture background="true">$INFO[ListItem.Icon]</texture>
-					</control>
-					<control type="image">
-						<width>360</width>
-						<height>540</height>
-						<texture colordiffuse="$VAR[DiffuseColor]">views/white_50.png</texture>
-						<animation center="auto" condition="Control.HasFocus(50)" easing="inout" effect="fade" end="0" start="100" time="300" tween="sine">Focus</animation>
-						<animation center="auto" condition="Control.HasFocus(50)" easing="inout" effect="fade" end="100" start="0" time="300" tween="sine">UnFocus</animation>
-					</control>
-					<control type="image">
-						<width>360</width>
-						<height>540</height>
-						<texture colordiffuse="$VAR[BorderColor]" border="11">views/border.png</texture>
-						<animation center="auto" condition="Control.HasFocus(50)" easing="inout" effect="fade" end="100" start="0" time="300" tween="sine">Focus</animation>
-						<animation center="auto" condition="Control.HasFocus(50)" easing="inout" effect="fade" end="0" start="100" time="300" tween="sine">UnFocus</animation>
-					</control>
-				</focusedlayout>
-			</control>
-			<control type="label">
-				<left>360</left>
-				<top>838</top>
-				<width>1510</width>
-				<height>56</height>
-				<font>Light36</font>
-				<textcolor>$VAR[FocusedColor]</textcolor>
-				<label>$VAR[ActorRoleLabel]</label>
-				<visible>StringCompare(Control.GetLabel(5),$LOCALIZE[207])</visible>
 			</control>
 		</control>
 		<!-- Image -->
@@ -276,7 +143,7 @@
 				<control type="image">
 					<width>720</width>
 					<height>1080</height>
-				<aspectratio>scale</aspectratio>
+					<aspectratio>scale</aspectratio>
 					<texture background="true">$INFO[ListItem.Icon]</texture>
 				</control>
 				<control type="image">
@@ -293,7 +160,7 @@
 				<control type="image">
 					<width>1080</width>
 					<height>1080</height>
-				<aspectratio>scale</aspectratio>
+					<aspectratio>scale</aspectratio>
 					<texture background="true">$INFO[ListItem.Icon]</texture>
 				</control>
 				<control type="image">
@@ -309,7 +176,7 @@
 				<control type="image">
 					<width>360</width>
 					<height>540</height>
-				<aspectratio>scale</aspectratio>
+					<aspectratio>scale</aspectratio>
 					<texture background="true">$INFO[ListItem.Icon]</texture>
 				</control>
 				<control type="image">
@@ -326,7 +193,7 @@
 				<control type="image">
 					<width>540</width>
 					<height>540</height>
-				<aspectratio>scale</aspectratio>
+					<aspectratio>scale</aspectratio>
 					<texture background="true">$INFO[ListItem.Icon]</texture>
 				</control>
 				<control type="image">
@@ -344,7 +211,7 @@
 				<control type="image">
 					<width>960</width>
 					<height>540</height>
-				<aspectratio>scale</aspectratio>
+					<aspectratio>scale</aspectratio>
 					<texture background="true">$VAR[LandscapeIcon]</texture>
 				</control>
 				<control type="image">
@@ -361,7 +228,7 @@
 				<control type="image">
 					<width>960</width>
 					<height>540</height>
-				<aspectratio>scale</aspectratio>
+					<aspectratio>scale</aspectratio>
 					<texture background="true">$VAR[ThumbIcon]</texture>
 				</control>
 				<control type="image">
@@ -392,7 +259,7 @@
 				<control type="image">
 					<width>360</width>
 					<height>540</height>
-				<aspectratio>scale</aspectratio>
+					<aspectratio>scale</aspectratio>
 					<texture background="true">$INFO[ListItem.Icon]</texture>
 				</control>
 				<control type="image">
@@ -415,7 +282,7 @@
 				<control type="image">
 					<width>360</width>
 					<height>360</height>
-				<aspectratio>scale</aspectratio>
+					<aspectratio>scale</aspectratio>
 					<texture background="true">$INFO[ListItem.Icon]</texture>
 				</control>
 				<control type="image">
@@ -438,7 +305,7 @@
 				<control type="image">
 					<width>480</width>
 					<height>270</height>
-				<aspectratio>scale</aspectratio>
+					<aspectratio>scale</aspectratio>
 					<texture background="true">$VAR[WallIcon]</texture>
 				</control>
 				<control type="image">
@@ -461,7 +328,7 @@
 				<control type="image">
 					<width>480</width>
 					<height>270</height>
-				<aspectratio>scale</aspectratio>
+					<aspectratio>scale</aspectratio>
 					<texture background="true">$VAR[ThumbIcon]</texture>
 				</control>
 				<control type="image">
@@ -477,51 +344,6 @@
 					<width>480</width>
 					<height>270</height>
 					<texture colordiffuse="$VAR[BorderColor]" border="11,43,43,11">$VAR[BorderImage]</texture>
-				</control>
-			</control>
-			<!-- Viewtype_534_WallDiscart -->
-			<control type="group">
-				<left>0</left>
-				<top>0</top>
-				<width>540</width>
-				<height>540</height>
-				<animation effect="slide" end="540,0" condition="StringCompare(Window(home).Property(CurrentColumn),1)">Conditional</animation>
-				<animation effect="slide" end="1080,0" condition="StringCompare(Window(home).Property(CurrentColumn),2)">Conditional</animation>
-				<animation effect="slide" end="1620,0" condition="StringCompare(Window(home).Property(CurrentColumn),3)">Conditional</animation>
-				<animation effect="slide" end="0,540" condition="StringCompare(Window(home).Property(CurrentRow),1)">Conditional</animation>
-				<visible>StringCompare(Container.Viewmode,$LOCALIZE[31534])</visible>
-				<control type="image">
-					<width>540</width>
-					<height>540</height>
-					<texture background="true">$INFO[ListItem.Art(discart)]</texture>
-					<visible>!IsEmpty(ListItem.Art(discart))</visible>
-				</control>
-				<control type="group">
-					<visible>IsEmpty(ListItem.Art(discart))</visible>
-					<control type="image">
-						<width>540</width>
-						<height>540</height>
-						<aspectratio scalediffuse="false">scale</aspectratio>
-						<texture background="true" diffuse="views/discart_diffuse.png">$VAR[DiscArtImage]</texture>
-					</control>
-					<control type="image">
-						<left>141</left>
-						<top>390</top>
-						<width>258</width>
-						<height>100</height>
-						<aspectratio scalediffuse="false">keep</aspectratio>
-						<texture background="true">$INFO[ListItem.Art(clearlogo)]</texture>
-					</control>
-					<control type="image">
-						<width>540</width>
-						<height>540</height>
-						<texture>views/discart_overlay.png</texture>
-					</control>
-				</control>
-				<control type="image">
-					<width>540</width>
-					<height>540</height>
-					<texture colordiffuse="$VAR[UnFocusedColor]">$VAR[DiscArtBorderFO]</texture>
 				</control>
 			</control>
 		</control>
