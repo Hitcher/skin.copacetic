@@ -3,106 +3,110 @@
 	<include name="Viewtype_50_List">
 		<control type="group">
 			<visible>Control.IsVisible(50)</visible>
+			<include>FullscreenDimensions</include>
+			<control type="group">
+				<visible>Skin.String(ListView_Fanart,On)</visible>
+				<include>Fanart</include>
+				<include>ViewtypeOverlay</include>
+			</control>
+
+			<!--On Previous Scroll Delay-->
+			<control type="group" id="5005">
+				<visible>Container(50).OnPrevious</visible>
+				<animation effect="slide" end="0,0" time="380" reversible="false">Hidden</animation>
+			</control>
+
+			<!--On Next Scroll Delay-->
+			<control type="group" id="5006">
+				<visible>Container(50).OnNext</visible>
+				<animation effect="slide" end="0,0" time="380" reversible="false">Hidden</animation>
+			</control>
+
 			<!-- List -->
 			<control type="fixedlist" id="50">
-				<left>50</left>
-				<top>144</top>
-				<width>1820</width>
-				<height>896</height>
-				<onup>50</onup>
-				<ondown>50</ondown>
+				<viewtype label="535">list</viewtype>
+				<left>192</left>
+				<top>28</top>
+				<width>1536</width>
+				<height>990</height>
 				<onleft>3000</onleft>
 				<onright>60</onright>
 				<pagecontrol>60</pagecontrol>
-				<focusposition>6</focusposition>
+				<focusposition>8</focusposition>
+				<movement>0</movement>
 				<orientation>vertical</orientation>
-				<viewtype label="535">list</viewtype>
-				<scrolltime tween="sine" easing="inout">200</scrolltime>
-				<include>MediaInfoHideAnimation</include>
-				<itemlayout height="59" width="1820">
-					<control type="label">
-						<width>910</width>
-						<height>59</height>
-						<font>Thin48</font>
-						<align>right</align>
-						<textcolor>$VAR[TextColor]</textcolor>
-						<label>$VAR[ListLabelNF]</label>
-					</control>
-					<control type="image">
-						<left>922</left>
-						<top>15</top>
-						<width>36</width>
-						<height>30</height>
-						<texture colordiffuse="$VAR[TextColor]">views/watched_tick_nf.png</texture>
-						<visible>String.IsEqual(ListItem.Overlay,OverlayWatched.png)</visible>
+				<scrolltime tween="sine" easing="inout">380</scrolltime>
+				<itemlayout height="57" width="1536">
+					<control type="group">
+						<include>HideContent</include>
+						<control type="label">
+							<width>100%</width>
+							<height>100%</height>
+							<font>ListUnfocused</font>
+							<textcolor>$VAR[PrimaryColor]</textcolor>
+							<label>$VAR[Title]</label>
+						</control>
 					</control>
 				</itemlayout>
-				<focusedlayout height="70" width="1820">
-					<control type="button">
-						<visible>false</visible>
-						<onfocus>SetProperty(CurrentView,50,home)</onfocus>
-					</control>
-					<control type="label">
-						<width>910</width>
-						<height>70</height>
-						<font>Med60</font>
-						<align>right</align>
-						<scroll>true</scroll>
-						<textcolor>$VAR[TextColor]</textcolor>
-						<label>$VAR[ListLabelFO]</label>
-					</control>
-					<control type="image">
-						<left>922</left>
-						<top>20</top>
-						<width>36</width>
-						<height>30</height>
-						<texture colordiffuse="$VAR[TextColor]">views/watched_tick_fo.png</texture>
-						<visible>String.IsEqual(ListItem.Overlay,OverlayWatched.png)</visible>
-					</control>
-					<control type="label">
-						<left>955</left>
-						<width>870</width>
-						<height>70</height>
-						<font>Thin48</font>
-						<textcolor>$VAR[TextColor]</textcolor>
-						<label>  $VAR[InfoList]</label>
-						<visible>!Window.IsVisible(contextmenu) + !String.Contains(ListItem.Icon,Default) + !Container.Content(episodes) + !Control.HasFocus(3000) + !Container.OnNext + !Container.OnPrevious</visible>
-						<animation effect="fade" start="0" end="100" time="200" delay="800">Visible</animation>
+
+				<focusedlayout height="78" width="1536">
+					<include>HiddenFocusButton</include>
+					<control type="group">
+						<include>HideContent</include>
+						<control type="fadelabel">
+							<width>100%</width>
+							<height>100%</height>
+							<font>ListFocused</font>
+							<textcolor>$VAR[ListFocusedColor]</textcolor>
+							<label>$VAR[Title]</label>
+							<scrollout>false</scrollout>
+							<pauseatend>1000</pauseatend>
+						</control>
 					</control>
 				</focusedlayout>
 			</control>
-			<!-- Episode Icon -->
+
 			<control type="group">
-				<left>1130</left>
-				<top>360</top>
-				<width>640</width>
-				<visible>!String.Contains(ListItem.Icon,Default) + !Window.IsVisible(movieinformation) + [Container.Content(episodes) | Window.IsVisible(pictures)]</visible>
-				<control type="image">
-					<left>10</left>
-					<top>10</top>
-					<width>620</width>
-					<height>340</height>
-					<fadetime>80</fadetime>
-					<aspectratio align="right">scale</aspectratio>
-					<texture>$INFO[Container(50).ListItem.Icon]</texture>
-				</control>
-				<control type="image">
-					<width>640</width>
-					<height>360</height>
-					<texture colordiffuse="$VAR[TextColor]" border="11,43,43,11">$VAR[BorderImage]</texture>
+				<visible>!Control.IsVisible(5005) + !Control.IsVisible(5006)</visible>
+				<include>ProgressBarFadeAnimation</include>
+				<!--Progress Bar-->
+				<include content="ProgressBar">
+					<param name="left" value="0"/>
+					<param name="top" value="1072"/>
+					<param name="width" value="1920"/>
+					<param name="height" value="8"/>
+				</include>
+			</control>
+
+			<control type="grouplist">
+				<left>192</left>
+				<top>484</top>
+				<width>1536</width>
+				<height>78</height>
+				<itemgap>12</itemgap>
+				<orientation>horizontal</orientation>
+				<usecontrolcoords>true</usecontrolcoords>
+				<include>HideContent</include>
+				<visible>Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | Container.Content(episodes) | Container.Content(artists)</visible>
+				<visible>!Control.IsVisible(5005) + !Control.IsVisible(5006) + Skin.String(ListView_Details,TitleAndInfo)</visible>
+				<include>ProgressBarFadeAnimation</include>
+				<control type="label">
+					<width>auto</width>
+					<height>100%</height>
+					<font>ListFocused</font>
+					<textcolor>$VAR[Blank]</textcolor>
+					<label>$VAR[Title]</label>
 				</control>
 				<control type="label">
-					<right>0</right>
-					<top>386</top>
-					<width>640</width>
-					<height>48</height>
-					<font>Thin48</font>
-					<align>right</align>
-					<textcolor>$VAR[TextColor]</textcolor>
-					<label>$VAR[InfoList]</label>
-					<visible>Container.Content(episodes)</visible>
+					<width>auto</width>
+					<top>21</top>
+					<height>52</height>
+					<font>ListDetails</font>
+					<textcolor>$VAR[PrimaryColor]</textcolor>
+					<label>/ $VAR[TitleInfo]</label>
 				</control>
 			</control>
+
 		</control>
 	</include>
 </includes>

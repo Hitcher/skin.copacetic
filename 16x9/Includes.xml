@@ -1,32 +1,18 @@
-<includes>
+ <includes>
 	<include file="Animations.xml" />
 	<include file="Colors.xml" />
+	<include file="Constants.xml" />
 	<include file="Defaults.xml" />
 	<include file="Parameters.xml" />
 	<include file="script-skinshortcuts-includes.xml"/>
 	<include file="Viewtype_50_List.xml" />
 	<include file="Viewtype_500_Billboard.xml" />
-	<include file="Viewtype_501_BillboardInfo.xml" />
-	<include file="Viewtype_510_FilmstripPoster.xml" />
-	<include file="Viewtype_511_FilmstripSquare.xml" />
-	<include file="Viewtype_520_RowPoster.xml" />
-	<include file="Viewtype_521_RowSquare.xml" />
-	<include file="Viewtype_522_RowLandscape.xml" />
-	<include file="Viewtype_523_RowThumb.xml" />
-	<include file="Viewtype_530_WallPoster.xml" />
-	<include file="Viewtype_531_WallSquare.xml" />
-	<include file="Viewtype_532_WallLandscape.xml" />
-	<include file="Viewtype_533_WallThumb.xml" />
-	<include file="Viewtype_534_WallDiscart.xml" />
+	<include file="Viewtype_501_Showcase.xml" />
+	<include file="Viewtype_502_Gallery.xml" />
+	<include file="Viewtype_503_Strip.xml" />
+	<include file="Viewtype_504_Grid.xml" />
 	<include file="Variables.xml" />
-	<!-- Copacetic -->
-	<!-- Window overlay image -->
-	<include name="WindowBackgroundImage">
-		<control type="image">
-			<include>FullscreenDimensions</include>
-			<texture colordiffuse="$VAR[BackgroundColor]">views/white_100.png</texture>
-		</control>
-	</include>
+
 	<!-- Fullscreen dimensions -->
 	<include name="FullscreenDimensions">
 		<left>0</left>
@@ -34,25 +20,1108 @@
 		<width>1920</width>
 		<height>1080</height>
 	</include>
+
+	<!-- Fanart-->
+	<include name="Fanart">
+		<control type="image">
+			<visible>Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | Container.Content(episodes) | Container.Content(artists)</visible>
+			<aspectratio>scale</aspectratio>
+			<fadetime>380</fadetime>
+			<texture fallback="empty" background="true">$VAR[Fanart]</texture>
+		</control>
+	</include>
+
+	<!-- Random Fanart-->
+	<include name="FanartSlideshow">
+		<control type="list" id="12341">
+			<content sortby="random" limit="2">videodb://movies/titles/</content>
+			<content sortby="random" limit="1">videodb://tvshows/titles/</content>
+			<content sortby="random" limit="1">videodb://movies/titles/</content>
+			<content sortby="random" limit="3">videodb://tvshows/titles/</content>
+			<content sortby="random" limit="2">videodb://movies/titles/</content>
+			<content sortby="random" limit="2">videodb://tvshows/titles/</content>
+			<content sortby="random" limit="3">videodb://movies/titles/</content>
+			<content sortby="random" limit="2">videodb://tvshows/titles/</content>
+			<content sortby="random" limit="1">videodb://movies/titles/</content>
+			<content sortby="random" limit="1">videodb://tvshows/titles/</content>
+			<autoscroll time="7000">true</autoscroll> <!-- Time to show each image, in milliseconds -->
+			<itemlayout />
+			<focusedlayout />
+		</control>
+		<control type="multiimage" id="12340">
+			<imagepath background="true">$INFO[Container(12341).ListItem.Art(fanart)]</imagepath>
+			<aspectratio>scale</aspectratio>
+			<fadetime>600</fadetime>
+			<pauseatend>10000</pauseatend>
+			<randomize>true</randomize>
+		</control>
+	</include>
+
+	<include name="ViewtypeOverlay">
+		<control type="image">
+			<texture colordiffuse="$VAR[SecondaryColor]">$VAR[ViewtypeOverlayTexture]</texture>
+		</control>
+	</include>
+
+	<include name="DialogBackground">
+		<control type="group">
+			<control type="image">
+				<visible>Skin.String(Theme,Dark)</visible>
+				<texture colordiffuse="$VAR[SecondaryColor]">views/white_75.png</texture>
+			</control>
+			<control type="image">
+				<visible>Skin.String(Theme,Light)</visible>
+				<texture colordiffuse="$VAR[SecondaryColor]">views/white_85.png</texture>
+			</control>
+		</control>
+	</include>
+
+	<include name="HomeGradientOverlay">
+		<control type="image">
+			<visible>Skin.String(Theme,Dark)</visible>
+			<include>FullscreenDimensions</include>
+			<texture colordiffuse="$VAR[SecondaryColor]">views/home-gradient_100-0.png</texture>
+		</control>
+		<control type="image">
+			<visible>Skin.String(Theme,Light)</visible>
+			<include>FullscreenDimensions</include>
+			<texture colordiffuse="$VAR[SecondaryColor]">views/home-gradient_100-20.png</texture>
+		</control>
+	</include>
+
+	<!--Options Menu Label Unfocused-->
+	<include name="OptionsMenuLabelUnfocused">
+		<definition>
+			<height>47</height>
+			<font>MediumListUnfocused</font>
+			<textcolor>$VAR[PrimaryColor]</textcolor>
+		</definition>
+	</include>
+
+	<!--Options Menu Label Focused-->
+	<include name="OptionsMenuLabelFocused">
+		<definition>
+			<height>57</height>
+			<font>MediumListFocused</font>
+			<textcolor>$VAR[AccentColor]</textcolor>
+		</definition>
+	</include>
+
+
+
+	<!--Home Menu Label Unfocused-->
+	<include name="HomeMenuLabelUnfocused">
+		<param name="top" default="17"/>
+		<param name="height" default="57"/>
+		<param name="font" default="ListUnfocused"/>
+		<param name="textcolor" default="$VAR[PrimaryColor]"/>
+		<definition>
+			<height>$PARAM[height]</height>
+			<top>$PARAM[top]</top>
+			<width>auto</width>
+			<font>$PARAM[font]</font>
+			<textcolor>$PARAM[textcolor]</textcolor>
+		</definition>
+	</include>
+
+	<!--Home Menu Label-->
+	<include name="HomeMenuLabelFocused">
+		<param name="hiddenid"/>
+		<param name="position"/>
+		<param name="top" default="0"/>
+		<param name="height" default="78"/>
+		<param name="font" default="ListFocused"/>
+		<param name="textcolor" default="$VAR[AccentColor]"/>
+		<definition>
+			<control type="label">
+				<top>$PARAM[top]</top>
+				<height>$PARAM[height]</height>
+				<width>auto</width>
+				<font>$PARAM[font]</font>
+				<textcolor>$PARAM[textcolor]</textcolor>
+				<label>$INFO[Container($PARAM[hiddenid]).ListItemPosition($PARAM[position]).Label]</label>
+				<visible>String.IsEqual(Container($PARAM[hiddenid]).ListItemPosition($PARAM[position]).Label, Container($PARAM[hiddenid]).ListItem.Label)</visible>
+			</control>
+		</definition>
+	</include>
+
+	<!--Home Menu Label Unfocused-->
+	<include name="HomeMenuLabelUnfocusedContent">
+		<param name="hiddenid"/>"
+		<param name="previousposition"/>
+		<param name="position"/>
+		<param name="nextposition"/>
+		<param name="unfocusedtop" default="17"/>
+		<param name="unfocusedheight" default="57"/>
+		<param name="unfocusedfont" default="ListUnfocused"/>
+		<param name="unfocusedtextcolor" default="$VAR[PrimaryColor]"/>
+		<definition>
+			<control type="label">
+				<description>position is not empty. previousposition is focused. nextposition is empty. position is last in list</description>
+        <visible>!String.IsEmpty(Container($PARAM[hiddenid]).ListItemPosition($PARAM[position]).Label)</visible>
+				<visible>!String.IsEqual(Container($PARAM[hiddenid]).ListItemPosition($PARAM[position]).Label, Container($PARAM[hiddenid]).ListItem.Label)</visible>
+				<visible>String.IsEqual(Container($PARAM[hiddenid]).ListItemPosition($PARAM[previousposition]).Label, Container($PARAM[hiddenid]).ListItem.Label)</visible>
+				<visible>String.IsEmpty(Container($PARAM[hiddenid]).ListItemPosition($PARAM[nextposition]).Label)</visible>
+				<label>/ $INFO[Container($PARAM[hiddenid]).ListItemPosition($PARAM[position]).Label]</label>
+				<include content="HomeMenuLabelUnfocused">
+					<param name="top" value="$PARAM[unfocusedtop]"/>
+					<param name="height" value="$PARAM[unfocusedheight]"/>
+					<param name="font" value="$PARAM[unfocusedfont]"/>
+					<param name="textcolor" value="$PARAM[unfocusedtextcolor]"/>
+				</include>
+			</control>
+			<control type="label">
+				<description>previousposition is focused. nextposition is not empty. position is not last in list</description>
+				<visible>!String.IsEqual(Container($PARAM[hiddenid]).ListItemPosition($PARAM[position]).Label, Container($PARAM[hiddenid]).ListItem.Label)</visible>
+				<visible>String.IsEqual(Container($PARAM[hiddenid]).ListItemPosition($PARAM[previousposition]).Label, Container($PARAM[hiddenid]).ListItem.Label)</visible>
+				<visible>!String.IsEmpty(Container($PARAM[hiddenid]).ListItemPosition($PARAM[nextposition]).Label)</visible>
+				<label>/ $INFO[Container($PARAM[hiddenid]).ListItemPosition($PARAM[position]).Label] /</label>
+				<include content="HomeMenuLabelUnfocused">
+					<param name="top" value="$PARAM[unfocusedtop]"/>
+					<param name="height" value="$PARAM[unfocusedheight]"/>
+					<param name="font" value="$PARAM[unfocusedfont]"/>
+					<param name="textcolor" value="$PARAM[unfocusedtextcolor]"/>
+				</include>
+			</control>
+			<control type="label">
+				<description>position is not empty. previousposition is not focused. position is not focused. nextposition is empty. position is last in list</description>
+        <visible>!String.IsEmpty(Container($PARAM[hiddenid]).ListItemPosition($PARAM[position]).Label)</visible>
+				<visible>!String.IsEqual(Container($PARAM[hiddenid]).ListItemPosition($PARAM[position]).Label, Container($PARAM[hiddenid]).ListItem.Label)</visible>
+				<visible>!String.IsEqual(Container($PARAM[hiddenid]).ListItemPosition($PARAM[previousposition]).Label, Container($PARAM[hiddenid]).ListItem.Label)</visible>
+				<visible>String.IsEmpty(Container($PARAM[hiddenid]).ListItemPosition($PARAM[nextposition]).Label)</visible>
+				<label>$INFO[Container($PARAM[hiddenid]).ListItemPosition($PARAM[position]).Label]</label>
+				<include content="HomeMenuLabelUnfocused">
+					<param name="top" value="$PARAM[unfocusedtop]"/>
+					<param name="height" value="$PARAM[unfocusedheight]"/>
+					<param name="font" value="$PARAM[unfocusedfont]"/>
+					<param name="textcolor" value="$PARAM[unfocusedtextcolor]"/>
+				</include>
+			</control>
+			<control type="label">
+				<description>previousposition is not focused. position is not focused. nextposition is not empty. position is not last in list</description>
+				<visible>!String.IsEqual(Container($PARAM[hiddenid]).ListItemPosition($PARAM[position]).Label, Container($PARAM[hiddenid]).ListItem.Label)</visible>
+				<visible>!String.IsEqual(Container($PARAM[hiddenid]).ListItemPosition($PARAM[previousposition]).Label, Container($PARAM[hiddenid]).ListItem.Label)</visible>
+				<visible>!String.IsEmpty(Container($PARAM[hiddenid]).ListItemPosition($PARAM[nextposition]).Label)</visible>
+				<label>$INFO[Container($PARAM[hiddenid]).ListItemPosition($PARAM[position]).Label] /</label>
+				<include content="HomeMenuLabelUnfocused">
+					<param name="top" value="$PARAM[unfocusedtop]"/>
+					<param name="height" value="$PARAM[unfocusedheight]"/>
+					<param name="font" value="$PARAM[unfocusedfont]"/>
+					<param name="textcolor" value="$PARAM[unfocusedtextcolor]"/>
+				</include>
+			</control>
+		</definition>
+	</include>
+
+
+	<!--Dummy Horizontal List-->
+	<include name="DummyHorizontalList">
+		<param name="dummyid"/>
+		<param name="hiddenid"/>
+		<param name="top" default="483"/>
+		<param name="height" default="78"/>
+		<param name="itemgap" default="12"/>
+		<param name="focusedtop" default="0"/>
+		<param name="focusedheight" default="78"/>
+		<param name="focusedfont" default="ListFocused"/>
+		<param name="focusedtextcolor" default="$VAR[AccentColor]"/>
+		<param name="unfocusedtop" default="17"/>
+		<param name="unfocusedheight" default="57"/>
+		<param name="unfocusedfont" default="ListUnfocused"/>
+		<param name="unfocusedtextcolor" default="$VAR[PrimaryColor]"/>
+ 		<definition>
+			<control type="grouplist" id="$PARAM[dummyid]">
+				<top>$PARAM[top]</top>
+				<left>192</left>
+				<width>1536</width>
+				<height>$PARAM[height]</height>
+				<orientation>horizontal</orientation>
+				<align>center</align>
+				<itemgap>$PARAM[itemgap]</itemgap>
+				<usecontrolcoords>true</usecontrolcoords>
+				<scrolltime tween="sine" easing="inout">380</scrolltime>
+				<animation effect="slide" start="0" end="-120" condition="!Container($PARAM[hiddenid]).OnScrollNext" reversible="false" time="200" tween="sine" easing="inout">Conditional</animation>
+				<animation effect="slide" start="0" end="120" condition="!Container($PARAM[hiddenid]).OnScrollPrevious" reversible="false" time="200" tween="sine" easing="inout">Conditional</animation>
+
+				<!--Previous-->
+				<control type="label">
+					<visible>Container($PARAM[hiddenid]).HasPrevious</visible>
+					<label>...</label>
+					<include content="HomeMenuLabelUnfocused">
+						<param name="unfocusedtop" value="$PARAM[unfocusedtop]"/>
+						<param name="unfocusedheight" value="$PARAM[unfocusedheight]"/>
+						<param name="unfocusedfont" value="$PARAM[unfocusedfont]"/>
+						<param name="unfocusedtextcolor" value="$PARAM[unfocusedtextcolor]"/>
+					</include>
+				</control>
+
+				<!--Position 0 Unfocused-->
+				<include content="HomeMenuLabelUnfocusedContent">
+					<param name="hiddenid" value="$PARAM[hiddenid]"/>
+					<param name="previousposition" value="-1"/>
+					<param name="position" value="0"/>
+					<param name="nextposition" value="1"/>
+					<param name="unfocusedtop" value="$PARAM[unfocusedtop]"/>
+					<param name="unfocusedheight" value="$PARAM[unfocusedheight]"/>
+					<param name="unfocusedfont" value="$PARAM[unfocusedfont]"/>
+					<param name="unfocusedtextcolor" value="$PARAM[unfocusedtextcolor]"/>
+				</include>
+				<!--Position 0 Focused-->
+				<include content="HomeMenuLabelFocused">
+					<param name="hiddenid" value="$PARAM[hiddenid]"/>
+					<param name="position" value="0"/>
+					<param name="top" value="$PARAM[focusedtop]"/>
+					<param name="height" value="$PARAM[focusedheight]"/>
+					<param name="font" value="$PARAM[focusedfont]"/>
+					<param name="textcolor" value="$PARAM[focusedtextcolor]"/>
+				</include>
+
+				<!--Position 1 Focused-->
+				<include content="HomeMenuLabelFocused">
+					<param name="hiddenid" value="$PARAM[hiddenid]"/>
+					<param name="position" value="1"/>
+					<param name="top" value="$PARAM[focusedtop]"/>
+					<param name="height" value="$PARAM[focusedheight]"/>
+					<param name="font" value="$PARAM[focusedfont]"/>
+					<param name="textcolor" value="$PARAM[focusedtextcolor]"/>
+				</include>
+				<!--Position 1 Unfocused-->
+				<include content="HomeMenuLabelUnfocusedContent">
+					<param name="hiddenid" value="$PARAM[hiddenid]"/>
+					<param name="previousposition" value="0"/>
+					<param name="position" value="1"/>
+					<param name="nextposition" value="2"/>
+					<param name="unfocusedtop" value="$PARAM[unfocusedtop]"/>
+					<param name="unfocusedheight" value="$PARAM[unfocusedheight]"/>
+					<param name="unfocusedfont" value="$PARAM[unfocusedfont]"/>
+					<param name="unfocusedtextcolor" value="$PARAM[unfocusedtextcolor]"/>
+				</include>
+
+				<!--Position 2 Focused-->
+				<include content="HomeMenuLabelFocused">
+					<param name="hiddenid" value="$PARAM[hiddenid]"/>
+					<param name="position" value="2"/>
+					<param name="top" value="$PARAM[focusedtop]"/>
+					<param name="height" value="$PARAM[focusedheight]"/>
+					<param name="font" value="$PARAM[focusedfont]"/>
+					<param name="textcolor" value="$PARAM[focusedtextcolor]"/>
+				</include>
+				<!--Position 2 Unfocused-->
+				<include content="HomeMenuLabelUnfocusedContent">
+					<param name="hiddenid" value="$PARAM[hiddenid]"/>
+					<param name="previousposition" value="1"/>
+					<param name="position" value="2"/>
+					<param name="nextposition" value="3"/>
+					<param name="unfocusedtop" value="$PARAM[unfocusedtop]"/>
+					<param name="unfocusedheight" value="$PARAM[unfocusedheight]"/>
+					<param name="unfocusedfont" value="$PARAM[unfocusedfont]"/>
+					<param name="unfocusedtextcolor" value="$PARAM[unfocusedtextcolor]"/>
+				</include>
+
+				<!--Position 3 Focused-->
+				<include content="HomeMenuLabelFocused">
+					<param name="hiddenid" value="$PARAM[hiddenid]"/>
+					<param name="position" value="3"/>
+					<param name="top" value="$PARAM[focusedtop]"/>
+					<param name="height" value="$PARAM[focusedheight]"/>
+					<param name="font" value="$PARAM[focusedfont]"/>
+					<param name="textcolor" value="$PARAM[focusedtextcolor]"/>
+				</include>
+				<!--Position 3 Unfocused-->
+				<include content="HomeMenuLabelUnfocusedContent">
+					<param name="hiddenid" value="$PARAM[hiddenid]"/>
+					<param name="previousposition" value="2"/>
+					<param name="position" value="3"/>
+					<param name="nextposition" value="4"/>
+					<param name="unfocusedtop" value="$PARAM[unfocusedtop]"/>
+					<param name="unfocusedheight" value="$PARAM[unfocusedheight]"/>
+					<param name="unfocusedfont" value="$PARAM[unfocusedfont]"/>
+					<param name="unfocusedtextcolor" value="$PARAM[unfocusedtextcolor]"/>
+				</include>
+
+				<!--Position 4 Focused-->
+				<include content="HomeMenuLabelFocused">
+					<param name="hiddenid" value="$PARAM[hiddenid]"/>
+					<param name="position" value="4"/>
+					<param name="top" value="$PARAM[focusedtop]"/>
+					<param name="height" value="$PARAM[focusedheight]"/>
+					<param name="font" value="$PARAM[focusedfont]"/>
+					<param name="textcolor" value="$PARAM[focusedtextcolor]"/>
+				</include>
+				<!--Position 4 Unfocused-->
+				<include content="HomeMenuLabelUnfocusedContent">
+					<param name="hiddenid" value="$PARAM[hiddenid]"/>
+					<param name="previousposition" value="3"/>
+					<param name="position" value="4"/>
+					<param name="nextposition" value="5"/>
+					<param name="unfocusedtop" value="$PARAM[unfocusedtop]"/>
+					<param name="unfocusedheight" value="$PARAM[unfocusedheight]"/>
+					<param name="unfocusedfont" value="$PARAM[unfocusedfont]"/>
+					<param name="unfocusedtextcolor" value="$PARAM[unfocusedtextcolor]"/>
+				</include>
+
+				<!--Position 5 Focused-->
+				<include content="HomeMenuLabelFocused">
+					<param name="hiddenid" value="$PARAM[hiddenid]"/>
+					<param name="position" value="5"/>
+					<param name="top" value="$PARAM[focusedtop]"/>
+					<param name="height" value="$PARAM[focusedheight]"/>
+					<param name="font" value="$PARAM[focusedfont]"/>
+					<param name="textcolor" value="$PARAM[focusedtextcolor]"/>
+				</include>
+				<!--Position 5 Unfocused-->
+				<include content="HomeMenuLabelUnfocusedContent">
+					<param name="hiddenid" value="$PARAM[hiddenid]"/>
+					<param name="previousposition" value="4"/>
+					<param name="position" value="5"/>
+					<param name="nextposition" value="6"/>
+					<param name="unfocusedtop" value="$PARAM[unfocusedtop]"/>
+					<param name="unfocusedheight" value="$PARAM[unfocusedheight]"/>
+					<param name="unfocusedfont" value="$PARAM[unfocusedfont]"/>
+					<param name="unfocusedtextcolor" value="$PARAM[unfocusedtextcolor]"/>
+				</include>
+
+				<!--Next-->
+				<control type="label">
+					<include content="HomeMenuLabelUnfocused">
+						<param name="unfocusedtop" value="$PARAM[unfocusedtop]"/>
+						<param name="unfocusedheight" value="$PARAM[unfocusedheight]"/>
+						<param name="unfocusedfont" value="$PARAM[unfocusedfont]"/>
+						<param name="unfocusedtextcolor" value="$PARAM[unfocusedtextcolor]"/>
+					</include>
+					<visible>Container($PARAM[hiddenid]).HasNext</visible>
+					<label>...</label>
+				</control>
+
+			</control>
+		</definition>
+	</include>
+
+	<!--Hide when Dialog windows are visible-->
+	<include name="HideContent">
+		<visible>!Window.IsVisible(contextmenu) + !Control.HasFocus(3000) + !Window.IsTopMost(selectdialog) + !Window.IsTopMost(shutdownmenu) + !Window.IsVisible(okdialog) + !Window.IsTopMost(yesnodialog) + !Window.IsVisible(movieinformation)</visible>
+	</include>
+
+	<!--HiddenFocusButton-->
+	<include name="HiddenFocusButton">
+		<control type="button">
+			<visible allowhiddenfocus="true">false</visible>
+			<onfocus condition="System.HasAddon(script.embuary.helper) + [container.content(tvshows) | container.content(seasons)]">RunScript(script.embuary.helper,action=calc,do='"($INFO[ListItem.Property(WatchedEpisodes)] / $INFO[ListItem.Property(TotalEpisodes)]) * 100"',prop=MyResult)</onfocus>
+		</control>
+	</include>
+
+	<!--ListIcon-->
+	<include name="ListIcon">
+		<param name="width" default="100%"/>
+		<param name="height" default="100%"/>
+		<param name="left" default="0"/>
+		<param name="top" default="0"/>
+    <param name="visible" default="true"/>
+    <param name="animationtype" default=""/>
+    <param name="animationeffect" default=""/>
+    <param name="animationend" default=""/>
+    <param name="animationcondition" default=""/>
+		<param name="texture" default="$VAR[Thumbnail(0)Content]"/>
+		<definition>
+      <control type="group">
+        <left>$PARAM[left]</left>
+        <top>$PARAM[top]</top>
+        <width>$PARAM[width]</width>
+        <height>$PARAM[height]</height>
+        <visible>$PARAM[visible]</visible>
+        <animation effect="$PARAM[animationeffect]" end="$PARAM[animationend]" condition="$PARAM[animationcondition]" time="380" tween="sine" easing="inout" reversible="false">$PARAM[animationtype]</animation>
+        <control type="image">
+          <left>0</left>
+				  <top>0</top>
+				  <width>$PARAM[width]</width>
+				  <height>$PARAM[height]</height>
+				  <aspectratio>scale</aspectratio>
+				  <texture background="true">$PARAM[texture]</texture>
+			   </control>
+       </control>
+		</definition>
+	</include>
+
+  <!--DropShadow-->
+  <include name="DropShadow">
+		<param name="left" default="0"/>
+		<param name="top" default="0"/>
+		<param name="width" default="100%"/>
+		<param name="height" default="100%"/>
+    <param name="texture" default=""/>
+    <param name="visible" default="true"/>
+    <param name="animationtype" default=""/>
+    <param name="animationeffect" default=""/>
+    <param name="animationtime" default="380"/>
+    <param name="animationend" default=""/>
+		<definition>
+			<control type="image">
+        <left>$PARAM[left]</left>
+				<top>$PARAM[top]</top>
+				<width>$PARAM[width]</width>
+				<height>$PARAM[height]</height>
+				<aspectratio>stretch</aspectratio>
+        <texture colordiffuse="$VAR[ShadowColor]">$PARAM[texture]</texture>
+        <visible>Skin.String(Theme,Light)</visible>
+        <visible>$PARAM[visible]</visible>
+        <animation effect="$PARAM[animationeffect]" end="$PARAM[animationend]" time="$PARAM[animationtime]" tween="sine" easing="inout" reversible="false">$PARAM[animationtype]</animation>
+			</control>
+    </definition>
+  </include>
+
+	<!--TVshow/Seasons ProgressBar-->
+	<include name="TVProgressBar">
+		<param name="visible" default="true"/>
+		<param name="height"/>
+		<param name="width"/>
+		<param name="texture" default="views/white_100.png"/>
+		<param name="texturecolor" default="$VAR[ProgressBarFocusColor]"/>
+		<definition>
+			<control type="image">
+				<visible>[Container.Content(tvshows) | Container.Content(seasons)] + Integer.IsGreater($NUMBER[Window(home).Property(MyResult)],0)</visible>
+				<visible>$PARAM[visible]</visible>
+				<height>$PARAM[height]</height>
+				<width>$PARAM[width]</width>
+				<texture colordiffuse="$PARAM[texturecolor]">$PARAM[texture]</texture>
+			</control>
+		</definition>
+	</include>
+
+	<!--Progress bar-->
+	<include name="ProgressBar">
+		<param name="visible" default="true"/>
+		<param name="left" default="0"/>
+		<param name="top"/>
+    <param name="bottom"/>
+		<param name="width" default="100%"/>
+		<param name="height" default="8"/>
+		<param name="backgroundcolor" default="$VAR[ProgressBarBackgroundColor]"/>
+		<param name="backgoundtexture" default="views/white_100.png"/>
+		<param name="focuscolor" default="$VAR[ProgressBarFocusColor]"/>
+		<param name="focustexture" default="views/white_100.png"/>
+		<definition>
+			<control type="group">
+				<include>HideContent</include>
+				<visible>$PARAM[visible]</visible>
+				<include>ProgressBarFadeAnimation</include>
+				<left>$PARAM[left]</left>
+				<top>$PARAM[top]</top>
+				<width>$PARAM[width]</width>
+				<height>$PARAM[height]</height>
+
+				<!--backing bar for tvshows and seasons -->
+				<include content="TVProgressBar">
+					<param name="width" value="$PARAM[width]"/>
+					<param name="height" value="$PARAM[height]"/>
+					<param name="texture" value="$PARAM[backgoundtexture]"/>
+					<param name="texturecolor" value="$PARAM[backgroundcolor]"/>
+				</include>
+				<!--Video is resumable-->
+				<control type="progress">
+					<visible>ListItem.IsResumable</visible>
+					<width>$PARAM[width]</width>
+					<height>$PARAM[height]</height>
+					<texturebg colordiffuse="$PARAM[backgroundcolor]">$PARAM[backgoundtexture]</texturebg>
+					<lefttexture></lefttexture>
+					<midtexture colordiffuse="$PARAM[focuscolor]">$PARAM[focustexture]</midtexture>
+					<righttexture></righttexture>
+					<overlaytexture></overlaytexture>
+					<info>ListItem.PercentPlayed</info>
+				</control>
+				<!--Video watched-->
+				<control type="image">
+					<width>$PARAM[width]</width>
+					<height>$PARAM[height]</height>
+					<visible>!ListItem.IsResumable + String.IsEqual(ListItem.Overlay,OverlayWatched.png)</visible>
+					<texture colordiffuse="$PARAM[focuscolor]">$PARAM[focustexture]</texture>
+				</control>
+				<!--episodes and seasons 0-5%-->
+        <control type="group">
+          <visible>!ListItem.IsResumable + !String.IsEqual(ListItem.Overlay,OverlayWatched.png)</visible>
+  				<include content="TVProgressBar">
+  					<param name="visible" value="Integer.IsGreater($NUMBER[Window(home).Property(MyResult)],0) + Integer.IsLessOrEqual($NUMBER[Window(home).Property(MyResult)],5)"/>
+  					<param name="width" value="5%"/>
+  					<param name="height" value="$PARAM[height]"/>
+  					<param name="texture" value="$PARAM[focustexture]"/>
+  					<param name="texturecolor" value="$PARAM[focuscolor]"/>
+  				</include>
+  				<!--episodes and seasons 5-10%-->
+  				<include content="TVProgressBar">
+  					<param name="visible" value="Integer.IsGreater($NUMBER[Window(home).Property(MyResult)],5) + Integer.IsLessOrEqual($NUMBER[Window(home).Property(MyResult)],10)"/>
+  					<param name="width" value="10%"/>
+  					<param name="height" value="$PARAM[height]"/>
+  					<param name="texture" value="$PARAM[focustexture]"/>
+  					<param name="texturecolor" value="$PARAM[focuscolor]"/>
+  				</include>
+  				<!--episodes and seasons 10-15%-->
+  				<include content="TVProgressBar">
+  					<param name="visible" value="Integer.IsGreater($NUMBER[Window(home).Property(MyResult)],10) + Integer.IsLessOrEqual($NUMBER[Window(home).Property(MyResult)],15)"/>
+  					<param name="width" value="15%"/>
+  					<param name="height" value="$PARAM[height]"/>
+  					<param name="texture" value="$PARAM[focustexture]"/>
+  					<param name="texturecolor" value="$PARAM[focuscolor]"/>
+  				</include>
+  				<!--episodes and seasons 15-20%-->
+  				<include content="TVProgressBar">
+  					<param name="visible" value="Integer.IsGreater($NUMBER[Window(home).Property(MyResult)],15) + Integer.IsLessOrEqual($NUMBER[Window(home).Property(MyResult)],20)"/>
+  					<param name="width" value="20%"/>
+  					<param name="height" value="$PARAM[height]"/>
+  					<param name="texture" value="$PARAM[focustexture]"/>
+  					<param name="texturecolor" value="$PARAM[focuscolor]"/>
+  				</include>
+  				<!--episodes and seasons 20-25%-->
+  				<include content="TVProgressBar">
+  					<param name="visible" value="Integer.IsGreater($NUMBER[Window(home).Property(MyResult)],20) + Integer.IsLessOrEqual($NUMBER[Window(home).Property(MyResult)],25)"/>
+  					<param name="width" value="25%"/>
+  					<param name="height" value="$PARAM[height]"/>
+  					<param name="texture" value="$PARAM[focustexture]"/>
+  					<param name="texturecolor" value="$PARAM[focuscolor]"/>
+  				</include>
+  				<!--episodes and seasons 25-30%-->
+  				<include content="TVProgressBar">
+  					<param name="visible" value="Integer.IsGreater($NUMBER[Window(home).Property(MyResult)],25) + Integer.IsLessOrEqual($NUMBER[Window(home).Property(MyResult)],30)"/>
+  					<param name="width" value="30%"/>
+  					<param name="height" value="$PARAM[height]"/>
+  					<param name="texture" value="$PARAM[focustexture]"/>
+  					<param name="texturecolor" value="$PARAM[focuscolor]"/>
+  				</include>
+  				<!--episodes and seasons 30-35%-->
+  				<include content="TVProgressBar">
+  					<param name="visible" value="Integer.IsGreater($NUMBER[Window(home).Property(MyResult)],30) + Integer.IsLessOrEqual($NUMBER[Window(home).Property(MyResult)],35)"/>
+  					<param name="width" value="35%"/>
+  					<param name="height" value="$PARAM[height]"/>
+  					<param name="texture" value="$PARAM[focustexture]"/>
+  					<param name="texturecolor" value="$PARAM[focuscolor]"/>
+  				</include>
+  				<!--episodes and seasons 35-40%-->
+  				<include content="TVProgressBar">
+  					<param name="visible" value="Integer.IsGreater($NUMBER[Window(home).Property(MyResult)],35) + Integer.IsLessOrEqual($NUMBER[Window(home).Property(MyResult)],40)"/>
+  					<param name="width" value="40%"/>
+  					<param name="height" value="$PARAM[height]"/>
+  					<param name="texture" value="$PARAM[focustexture]"/>
+  					<param name="texturecolor" value="$PARAM[focuscolor]"/>
+  				</include>
+  				<!--episodes and seasons 40-45%-->
+  				<include content="TVProgressBar">
+  					<param name="visible" value="Integer.IsGreater($NUMBER[Window(home).Property(MyResult)],40) + Integer.IsLessOrEqual($NUMBER[Window(home).Property(MyResult)],45)"/>
+  					<param name="width" value="45%"/>
+  					<param name="height" value="$PARAM[height]"/>
+  					<param name="texture" value="$PARAM[focustexture]"/>
+  					<param name="texturecolor" value="$PARAM[focuscolor]"/>
+  				</include>
+  				<!--episodes and seasons 45-50%-->
+  				<include content="TVProgressBar">
+  					<param name="visible" value="Integer.IsGreater($NUMBER[Window(home).Property(MyResult)],45) + Integer.IsLessOrEqual($NUMBER[Window(home).Property(MyResult)],50)"/>
+  					<param name="width" value="50%"/>
+  					<param name="height" value="$PARAM[height]"/>
+  					<param name="texture" value="$PARAM[focustexture]"/>
+  					<param name="texturecolor" value="$PARAM[focuscolor]"/>
+  				</include>
+  				<!--episodes and seasons 50-55%-->
+  				<include content="TVProgressBar">
+  					<param name="visible" value="Integer.IsGreater($NUMBER[Window(home).Property(MyResult)],50) + Integer.IsLessOrEqual($NUMBER[Window(home).Property(MyResult)],55)"/>
+  					<param name="width" value="55%"/>
+  					<param name="height" value="$PARAM[height]"/>
+  				</include>
+  				<!--episodes and seasons 55-60%-->
+  				<include content="TVProgressBar">
+  					<param name="visible" value="Integer.IsGreater($NUMBER[Window(home).Property(MyResult)],55) + Integer.IsLessOrEqual($NUMBER[Window(home).Property(MyResult)],60)"/>
+  					<param name="width" value="60%"/>
+  					<param name="height" value="$PARAM[height]"/>
+  					<param name="texture" value="$PARAM[focustexture]"/>
+  					<param name="texturecolor" value="$PARAM[focuscolor]"/>
+  				</include>
+  				<!--episodes and seasons 60-65%-->
+  				<include content="TVProgressBar">
+  					<param name="visible" value="Integer.IsGreater($NUMBER[Window(home).Property(MyResult)],60) + Integer.IsLessOrEqual($NUMBER[Window(home).Property(MyResult)],65)"/>
+  					<param name="width" value="65%"/>
+  					<param name="height" value="$PARAM[height]"/>
+  					<param name="texture" value="$PARAM[focustexture]"/>
+  					<param name="texturecolor" value="$PARAM[focuscolor]"/>
+  				</include>
+  				<!--episodes and seasons 65-70%-->
+  				<include content="TVProgressBar">
+  					<param name="visible" value="Integer.IsGreater($NUMBER[Window(home).Property(MyResult)],65) + Integer.IsLessOrEqual($NUMBER[Window(home).Property(MyResult)],70)"/>
+  					<param name="width" value="70%"/>
+  					<param name="height" value="$PARAM[height]"/>
+  					<param name="texture" value="$PARAM[focustexture]"/>
+  					<param name="texturecolor" value="$PARAM[focuscolor]"/>
+  				</include>
+  				<!--episodes and seasons 70-75%-->
+  				<include content="TVProgressBar">
+  					<param name="visible" value="Integer.IsGreater($NUMBER[Window(home).Property(MyResult)],70) + Integer.IsLessOrEqual($NUMBER[Window(home).Property(MyResult)],75)"/>
+  					<param name="width" value="75%"/>
+  					<param name="height" value="$PARAM[height]"/>
+  					<param name="texture" value="$PARAM[focustexture]"/>
+  					<param name="texturecolor" value="$PARAM[focuscolor]"/>
+  				</include>
+  				<!--episodes and seasons 75-80%-->
+  				<include content="TVProgressBar">
+  					<param name="visible" value="Integer.IsGreater($NUMBER[Window(home).Property(MyResult)],75) + Integer.IsLessOrEqual($NUMBER[Window(home).Property(MyResult)],80)"/>
+  					<param name="width" value="80%"/>
+  					<param name="height" value="$PARAM[height]"/>
+  					<param name="texture" value="$PARAM[focustexture]"/>
+  					<param name="texturecolor" value="$PARAM[focuscolor]"/>
+  				</include>
+  				<!--episodes and seasons 80-85%-->
+  				<include content="TVProgressBar">
+  					<param name="visible" value="Integer.IsGreater($NUMBER[Window(home).Property(MyResult)],80) + Integer.IsLessOrEqual($NUMBER[Window(home).Property(MyResult)],85)"/>
+  					<param name="width" value="85%"/>
+  					<param name="height" value="$PARAM[height]"/>
+  				</include>
+  				<!--episodes and seasons 85-90%-->
+  				<include content="TVProgressBar">
+  					<param name="visible" value="Integer.IsGreater($NUMBER[Window(home).Property(MyResult)],85) + Integer.IsLessOrEqual($NUMBER[Window(home).Property(MyResult)],90)"/>
+  					<param name="width" value="90%"/>
+  					<param name="height" value="$PARAM[height]"/>
+  					<param name="texture" value="$PARAM[focustexture]"/>
+  					<param name="texturecolor" value="$PARAM[focuscolor]"/>
+  				</include>
+  				<!--episodes and seasons 90-95%-->
+  				<include content="TVProgressBar">
+  					<param name="visible" value="Integer.IsGreater($NUMBER[Window(home).Property(MyResult)],90) + Integer.IsLessOrEqual($NUMBER[Window(home).Property(MyResult)],95)"/>
+  					<param name="width" value="95%"/>
+  					<param name="height" value="$PARAM[height]"/>
+  					<param name="texture" value="$PARAM[focustexture]"/>
+  					<param name="texturecolor" value="$PARAM[focuscolor]"/>
+  				</include>
+  				<!--episodes and seasons 95-100%-->
+  				<include content="TVProgressBar">
+  					<param name="visible" value="Integer.IsGreater($NUMBER[Window(home).Property(MyResult)],95) + Integer.IsLessOrEqual($NUMBER[Window(home).Property(MyResult)],100)"/>
+  					<param name="width" value="97.5%"/>
+  					<param name="height" value="$PARAM[height]"/>
+  					<param name="texture" value="$PARAM[focustexture]"/>
+  					<param name="texturecolor" value="$PARAM[focuscolor]"/>
+  				</include>
+        </control>
+			</control>
+		</definition>
+	</include>
+
+	<!--Media Flags-->
+	<include name="MediaFlags">
+		<param name="groupvisible" default="!Skin.String(Flags,Off) + !Control.IsVisible(504)"/>
+		<definition>
+			<control type="group">
+				<include>HideContent</include>
+				<include>ProgressBarFadeAnimation</include>
+				<visible>$PARAM[groupvisible]</visible>
+				<control type="group">
+					<!--Studio-->
+					<control type="image" id="914">
+						<visible>Skin.String(Flags,All) | Skin.String(Flags,Studio)</visible>
+						<left>1660</left>
+						<top>970</top>
+						<width>90</width>
+						<height>60</height>
+						<aspectratio>keep</aspectratio>
+						<texture colordiffuse="$VAR[PrimaryColor]" fallback="flags/blank.png">$VAR[Studio_Name]</texture>
+						<animation effect="slide" start="0,0" end="120,0" time="0" condition="!Control.IsVisible(503) + [Skin.String(Flags,Studio) | [Skin.String(Flags,All) + String.IsEqual(Control.GetLabel(915),flags/blank.png)]]">Conditional</animation>
+						<animation effect="slide" start="0,0" end="-1610,0" time="0" condition="Control.IsVisible(503)">Conditional</animation>
+					</control>
+					<!--MPAA flag-->
+					<control type="image" id="915">
+						<visible>Skin.String(Flags,All) | Skin.String(Flags,Rating)</visible>
+						<left>1780</left>
+						<top>970</top>
+						<width>90</width>
+						<height>60</height>
+						<aspectratio>keep</aspectratio>
+						<texture colordiffuse="$VAR[PrimaryColor]" fallback="flags/blank.png">$VAR[MPAA_Certificate]</texture>
+					</control>
+				</control>
+			</control>
+		</definition>
+	</include>
+
+	<!--Grid View Layout-->
+	<include name="GridViewLayout">
+		<!--ListIcon attributes-->
+    <param name="left" default="110"/>
+    <param name="top" default="44"/>
+    <param name="width" default="528"/>
+    <param name="height" default="297"/>
+    <param name="fadecondition" default="false"/>
+		<param name="zoomcondition" default="false"/>
+    <param name="animationend" default="94,35,560,315"/>
+    <param name="animationtime" default="200"/>
+		<!--Dropshadow attributes-->
+		<param name="dropshadowleft" default="188"/>
+		<param name="dropshadowtop" default="74"/>
+		<param name="dropshadowwidth" default="372"/>
+		<param name="dropshadowheight" default="237"/>
+    <param name="dropshadowtexture" default="views/dropshadow_grid-fanart.png"/>
+    <param name="dropshadowanimationend" default="64,25,620,395"/>
+		<!--ProgressBar attributes-->
+    <param name="progressbarleft" default="94"/>
+    <param name="progressbartop" default="350"/>
+    <param name="progressbarwidth" default="560"/>
+    <param name="progressbarvisible" default="false"/>
+		<!--GridTitle attributes-->
+		<param name="gridtitlescroll" default="false"/>
+		<param name="gridtitlewidth" default="528"/>
+		<param name="gridtitleleft" default="110"/>
+		<param name="gridtitletop" default="368"/>
+		<param name="gridtitlefont" default="GridUnfocused"/>
+		<param name="gridtitletextcolor" default="$VAR[TertiaryColor]"/>
+		<!--Info attributes-->
+		<param name="griddetailstop" default="410"/>
+		<param name="griddetailsfont" default="GridDetails"/>
+    <param name="griddetailstextcolor" default="$VAR[TertiaryColor]"/>
+    <param name="griddetailsvisible" default="false"/>
+  -->
+		<definition>
+      <!--Dropshadow-->
+      <control type="group">
+        <left>$PARAM[dropshadowleft]</left>
+        <top>$PARAM[dropshadowtop]</top>
+        <width>$PARAM[dropshadowwidth]</width>
+        <height>$PARAM[dropshadowheight]</height>
+        <animation effect="zoom" end="$PARAM[dropshadowanimationend]" time="$PARAM[animationtime]" tween="sine" easing="out" condition="$PARAM[zoomcondition]">Focus</animation>
+        <include content="DropShadow">
+          <param name="left" value="0"/>
+          <param name="top" value="0"/>
+          <param name="width" value="100%"/>
+          <param name="height" value="100%"/>
+          <param name="texture" value="$PARAM[dropshadowtexture]"/>
+        </include>
+      </control>
+			<!--ListIcon-->
+      <control type="image">
+        <animation effect="zoom" end="$PARAM[animationend]" time="$PARAM[animationtime]" tween="sine" easing="out" condition="$PARAM[zoomcondition]">Focus</animation>
+        <left>$PARAM[left]</left>
+        <top>$PARAM[top]</top>
+        <width>$PARAM[width]</width>
+        <height>$PARAM[height]</height>
+        <aspectratio>scale</aspectratio>
+        <texture background="true" colordiffuse="$VAR[FocusFadeColor]">views/white_100.png</texture>
+      </control>
+      <control type="group">
+        <left>$PARAM[left]</left>
+        <top>$PARAM[top]</top>
+        <width>$PARAM[width]</width>
+        <height>$PARAM[height]</height>
+        <animation effect="fade" start="100" end="66" time="1200" tween="sine" easing="out" condition="$PARAM[fadecondition]" reversible="false" pulse="true">Conditional</animation>
+        <animation effect="zoom" end="$PARAM[animationend]" time="$PARAM[animationtime]" tween="sine" easing="out" condition="$PARAM[zoomcondition]">Focus</animation>
+        <include content="ListIcon">
+          <param name="left" value="0"/>
+          <param name="top" value="0"/>
+          <param name="width" value="100%"/>
+        </include>
+      </control>
+      <!--ProgressBar-->
+      <control type="group">
+        <left>$PARAM[progressbarleft]</left>
+        <top>$PARAM[progressbartop]</top>
+        <width>$PARAM[progressbarwidth]</width>
+        <height>8</height>
+        <visible>$PARAM[progressbarvisible]</visible>
+        <animation effect="fade" start="0" end="100" time="380" delay="380" tween="sine" easing="out" condition="$PARAM[fadecondition]" reversible="false">Focus</animation>
+        <include content="ProgressBar">
+          <param name="left" value="0"/>
+          <param name="top" value="0"/>
+          <param name="width" value="100%"/>
+          <param name="height" value="100%"/>
+        </include>
+      </control>
+				<!--GridTitle-->
+				<control type="label">
+					<include>HideContent</include>
+					<include>ContentFadeAnimation</include>
+					<visible>Skin.String(GridView_Details,Title) | Skin.String(GridView_Details,TitleAndInfo)</visible>
+					<left>$PARAM[gridtitleleft]</left>
+					<width>$PARAM[gridtitlewidth]</width>
+					<top>$PARAM[gridtitletop]</top>
+					<height>39</height>
+					<align>center</align>
+					<font>$PARAM[gridtitlefont]</font>
+					<textcolor>$PARAM[gridtitletextcolor]</textcolor>
+					<label>$VAR[Title]</label>
+					<scroll>$PARAM[gridtitlescroll]</scroll>
+					<scrollsuffix> / </scrollsuffix>
+				</control>
+				<!--GridDetails-->
+				<control type="label">
+					<include>HideContent</include>
+					<include>ContentFadeAnimation</include>
+					<visible>Skin.String(GridView_Details,TitleAndInfo)</visible>
+          <visible>$PARAM[griddetailsvisible]</visible>
+					<left>$PARAM[gridtitleleft]</left>
+					<width>$PARAM[gridtitlewidth]</width>
+					<top>$PARAM[griddetailstop]</top>
+					<height>29</height>
+					<align>center</align>
+					<font>$PARAM[griddetailsfont]</font>
+					<textcolor>$PARAM[griddetailstextcolor]</textcolor>
+					<label>$VAR[TitleInfo]</label>
+					<scroll>$PARAM[gridtitlescroll]</scroll>
+					<scrollsuffix> / </scrollsuffix>
+				</control>
+
+      -->
+		</definition>
+	</include>
+
+	<include name="GridViewtItemLayout_Fanart">
+    <include content="GridViewLayout"/>
+	</include>
+
+	<include name="GridViewFocusLayout_Fanart">
+    <include content="GridViewLayout">
+      <param name="fadecondition" value="true"/>
+      <param name="zoomcondition" value="true"/>
+      <param name="progressbarvisible" value="!Control.IsVisible(50401) + !Control.IsVisible(50402)"/>
+      <param name="gridtitlescroll" value="true"/>
+      <param name="gridtitlewidth" value="560"/>
+      <param name="gridtitleleft" value="94"/>
+      <param name="gridtitletop" value="365"/>
+      <param name="gridtitlefont" value="GridFocused"/>
+      <param name="gridtitletextcolor" value="$VAR[PrimaryColor]"/>
+      <param name="griddetailstop" value="407"/>
+      <param name="griddetailsfont" value="GridDetails"/>
+      <param name="griddetailsvisible" value="true"/>
+    </include>
+	</include>
+
+	<include name="GridViewItemLayout_Posters">
+		<include content="GridViewLayout">
+      <param name="width" value="300"/>
+      <param name="height" value="450"/>
+      <param name="animationend" value="98,26,324,486"/>
+      <param name="dropshadowleft" value="155"/>
+      <param name="dropshadowtop" value="113"/>
+      <param name="dropshadowwidth" value="211"/>
+      <param name="dropshadowheight" value="311"/>
+      <param name="dropshadowtexture" value="views/dropshadow_grid-poster.png"/>
+      <param name="dropshadowanimationend" value="68,16,384,566"/>
+      <param name="gridtitlewidth" value="300"/>
+      <param name="gridtitletop" value="530"/>
+		</include>
+	</include>
+
+	<include name="GridViewFocusLayout_Posters">
+		<include content="GridViewLayout">
+      <param name="width" value="300"/>
+      <param name="height" value="450"/>
+      <param name="fadecondition" value="true"/>
+      <param name="zoomcondition" value="true"/>
+      <param name="animationend" value="98,26,324,486"/>
+      <param name="dropshadowleft" value="155"/>
+      <param name="dropshadowtop" value="113"/>
+      <param name="dropshadowwidth" value="211"/>
+      <param name="dropshadowheight" value="311"/>
+      <param name="dropshadowtexture" value="views/dropshadow_grid-poster.png"/>
+      <param name="dropshadowanimationend" value="68,16,384,566"/>
+      <param name="progressbarvisible" value="!Control.IsVisible(50401) + !Control.IsVisible(50402)"/>
+      <param name="progressbarleft" value="98"/>
+      <param name="progressbartop" value="512"/>
+      <param name="progressbarwidth" value="324"/>
+      <param name="gridtitlescroll" value="true"/>
+      <param name="gridtitlewidth" value="314"/>
+      <param name="gridtitleleft" value="103"/>
+      <param name="gridtitletop" value="527"/>
+      <param name="gridtitlefont" value="GridFocused"/>
+      <param name="gridtitletextcolor" value="$VAR[PrimaryColor]"/>
+      <param name="griddetailstop" value="569"/>
+      <param name="griddetailsfont" value="GridDetails"/>
+      <param name="griddetailsvisible" value="true"/>
+		</include>
+	</include>
+
+	<!--Common View Details-->
+	<include name="CommonViewDetails">
+		<param name="groupvisibility" default="!Skin.String(BillboardView_Details,Off)"/>
+		<param name="left" default="50"/>
+		<param name="bottom" default="50"/>
+		<param name="width" default="1820"/>
+		<param name="height" default="419"/>
+		<param name="align" default="right"/>
+    <param name="itemgap" default="15"/>
+		<param name="labeltype" default="label"/>
+		<param name="titlevisibility" default="Skin.String(BillboardView_Logo,Off) | [Skin.String(BillboardView_Logo,On) + String.IsEmpty(ListItem.Art(clearlogo))]"/>
+		<param name="titleheight" default="90"/>
+		<param name="titlefont" default="BillboardFocused"/>
+		<param name="titlealign" default="left"/>
+		<param name="logovisibility" default="Skin.String(BillboardView_Logo,On) + !String.IsEmpty(ListItem.Art(clearlogo))"/>
+		<param name="infovisibility" default="Skin.String(BillboardView_Details,TitleAndInfo) | Skin.String(BillboardView_Details,All)"/>
+		<param name="infoheight" default="43"/>
+		<param name="infofont" default="DialogDetails"/>
+		<param name="plotvisibility" default="[Skin.String(Flags,Off) | [Skin.String(Flags,All) + String.IsEqual(Control.GetLabel(914),flags/blank.png + String.IsEqual(Control.GetLabel(915),flags/blank.png)] | [Skin.String(Flags,Studio) + String.IsEqual(Control.GetLabel(914),flags/blank.png)] | [Skin.String(Flags,Rating) + String.IsEqual(Control.GetLabel(915),flags/blank.png)]] + [Skin.String(BillboardView_Details,TitleAndPlot) | Skin.String(BillboardView_Details,All)]"/>"
+		<param name="plotmaxheight" default="120"/>
+		<param name="plotfont" default="BillboardBody"/>
+		<param name="altplotvisibility" default="Skin.String(Flags,All) + !String.IsEqual(Control.GetLabel(914),flags/blank.png) + !String.IsEqual(Control.GetLabel(915),flags/blank.png) + [Skin.String(BillboardView_Details,TitleAndPlot) | Skin.String(BillboardView_Details,All)]"/>
+		<param name="altplotwidth" default="1580"/>
+		<param name="alt2plotvisibility" default="[Skin.String(Flags,Studio) + !String.IsEqual(Control.GetLabel(914),flags/blank.png] | [Skin.String(Flags,Rating) + !String.IsEqual(Control.GetLabel(915),flags/blank.png] | [Skin.String(Flags,All) + [String.IsEqual(Control.GetLabel(914),flags/blank.png) + !String.IsEqual(Control.GetLabel(915),flags/blank.png)] | [!String.IsEqual(Control.GetLabel(914),flags/blank.png) + String.IsEqual(Control.GetLabel(915),flags/blank.png)]] + [Skin.String(BillboardView_Details,TitleAndPlot) | Skin.String(BillboardView_Details,All)]"/>
+		<param name="alt2plotwidth" default="1700"/>
+		<definition>
+			<control type="grouplist">
+				<include>HideContent</include>
+				<visible>$PARAM[groupvisibility]</visible>
+				<include>ProgressBarFadeAnimation</include>
+				<left>$PARAM[left]</left>
+				<bottom>$PARAM[bottom]</bottom>
+				<width>$PARAM[width]</width>
+				<height>$PARAM[height]</height>
+				<orientation>vertical</orientation>
+				<align>$PARAM[align]</align>
+				<itemgap>$PARAM[itemgap]</itemgap>
+				<!--Title-->
+				<control type="$PARAM[labeltype]">
+					<visible>$PARAM[titlevisibility]</visible>
+					<height max="$PARAM[titleheight]">auto</height>
+					<font>$PARAM[titlefont]</font>
+					<textcolor>$VAR[PrimaryColor]</textcolor>
+					<label>$VAR[Title]</label>
+					<align>$PARAM[titlealign]</align>
+					<scroll>true</scroll>
+					<scrollsuffix> / </scrollsuffix>
+				</control>
+				<!--Logo-->
+				<control type="image">
+					<visible>$PARAM[logovisibility]</visible>
+					<width>560</width>
+					<height>217</height>
+					<aspectratio>keep</aspectratio>
+					<texture background="true">$INFO[ListItem.Art(clearlogo)]</texture>
+				</control>
+				<!--Info-->
+				<control type="label" id="916">
+					<visible>false</visible>
+					<label>$VAR[TitleInfo]</label>
+				</control>
+				<control type="label">
+					<visible>$PARAM[infovisibility]</visible>
+					<visible>!String.IsEqual(Control.GetLabel(916),EMPTY)</visible>
+					<height>$PARAM[infoheight]</height>
+					<font>$PARAM[infofont]</font>
+					<textcolor>$VAR[PrimaryColor]</textcolor>
+					<label>$VAR[TitleInfo]</label>
+					<align>$PARAM[titlealign]</align>
+					<scroll>true</scroll>
+					<scrollsuffix> / </scrollsuffix>
+				</control>
+				<!--Plot (NoFlags)-->
+				<control type="textbox">
+					<height max="$PARAM[plotmaxheight]">auto</height>
+					<visible>$PARAM[plotvisibility]</visible>
+					<font>$PARAM[plotfont]</font>
+					<textcolor>$VAR[PrimaryColor]</textcolor>
+					<label>$VAR[Plot]</label>
+					<align>$PARAM[titlealign]</align>
+					<autoscroll delay="5000" time="1500" repeat="2000">true</autoscroll>
+				</control>
+				<!--Plot (2 Flags for Billboard View)-->
+				<control type="textbox">
+					<visible>$PARAM[altplotvisibility]</visible>
+					<height max="$PARAM[plotmaxheight]">auto</height>
+					<width>$PARAM[altplotwidth]</width>
+					<font>$PARAM[plotfont]</font>
+					<textcolor>$VAR[PrimaryColor]</textcolor>
+					<label>$VAR[Plot]</label>
+					<align>$PARAM[titlealign]</align>
+					<autoscroll delay="5000" time="1500" repeat="2000">true</autoscroll>
+				</control>
+				<!--Plot (1 Flag for Billboard View)-->
+				<control type="textbox">
+					<visible>$PARAM[alt2plotvisibility]</visible>
+					<height max="$PARAM[plotmaxheight]">auto</height>
+					<width>$PARAM[alt2plotwidth]</width>
+					<font>$PARAM[plotfont]</font>
+					<textcolor>$VAR[PrimaryColor]</textcolor>
+					<label>$VAR[Plot]</label>
+					<align>$PARAM[titlealign]</align>
+					<autoscroll delay="5000" time="1500" repeat="2000">true</autoscroll>
+				</control>
+			</control>
+		</definition>
+	</include>
+
+	<!-- Clock -->
+	<include name="Clock">
+		<control type="grouplist">
+			<right>25</right>
+			<top>25</top>
+			<width>152</width>
+			<height>70</height>
+			<align>right</align>
+			<itemgap>3</itemgap>
+			<orientation>horizontal</orientation>
+			<usecontrolcoords>true</usecontrolcoords>
+			<!--<include>HomeClockAnimation</include>-->
+			<control type="label">
+				<width>auto</width>
+				<height>70</height>
+				<font>ClockFocused</font>
+				<align>right</align>
+				<textcolor>$VAR[PrimaryColor]</textcolor>
+				<label>$INFO[System.Time(hh)]</label>
+			</control>
+			<control type="label">
+				<width>auto</width>
+				<height>57</height>
+				<top>13</top>
+				<font>ListUnfocused</font>
+				<align>right</align>
+				<textcolor>$VAR[PrimaryColor]</textcolor>
+				<label>$INFO[System.Time(mm)]</label>
+			</control>
+		</control>
+	</include>
+
+
+	<!--Has Next/Previous horizontal
+	<include name="HasNextPreviousHorizontal">
+		<control type="group">
+			<include>HideMediaDetails</include>
+			<top>520</top>
+			<height>40</height>
+			<left>25</left>
+			<width>1870</width>
+			<control type="image">
+				<visible>Container(503).HasPrevious</visible>
+				<include>ContentFadeAnimation</include>
+				<left>0</left>
+				<width>25</width>
+				<aspectratio>keep</aspectratio>
+				<texture colordiffuse="$VAR[TextColor]">views/arrow_left.png</texture>
+			</control>
+			<control type="image">
+				<visible>Container(503).HasNext</visible>
+				<include>ContentFadeAnimation</include>
+				<right>0</right>
+				<width>25</width>
+				<aspectratio>keep</aspectratio>
+				<texture colordiffuse="$VAR[TextColor]" flipx="true">views/arrow_left.png</texture>
+			</control>
+		</control>
+	</include>
+
+
+
+
+
+
+
+
+
+	<!-- Window overlay image -->
+	<include name="WindowBackgroundImage">
+		<control type="image">
+			<include>FullscreenDimensions</include>
+			<texture colordiffuse="$VAR[BackgroundColor]">views/white_100.png</texture>
+		</control>
+	</include>
 	<!-- Dialog background image -->
 	<include name="DialogBackgroundImage">
 		<control type="group">
 			<include>WindowFadeAnimation</include>
 			<control type="image">
 				<include>FullscreenDimensions</include>
-				<texture colordiffuse="$VAR[SecondaryColor]">views/white_100.png</texture>
+				<texture colordiffuse="$VAR[AccentColor]">views/white_100.png</texture>
 			</control>
 		</control>
 	</include>
-	<!-- Menu fade background image -->
-	<include name="MenuFadeBackgroundImage">
-		<control type="image">
-			<include>WindowFadeAnimation</include>
-			<include>FullscreenDimensions</include>
-			<texture colordiffuse="$VAR[SecondaryColor]">views/white_100.png</texture>
-			<include>Opacity</include>
-		</control>
-	</include>
+
 	<!-- Options background image -->
 	<include name="OptionsBackgroundImage">
 		<control type="image">
@@ -60,118 +1129,27 @@
 			<texture border="20">dialogs/OptionsBackground.png</texture>
 		</control>
 	</include>
-	<!-- Fanart -->
-	<include name="Fanart">
-		<control type="group">
-			<animation effect="fade" start="100" end="0" time="200" condition="!Control.IsVisible(50) | String.Contains(ListItem.Icon,Default) | String.Contains(Control.GetLabel(999),empty)">Conditional</animation>
-			<control type="image" id="999">
-				<include>FullscreenDimensions</include>
-				<fadetime>400</fadetime>
-				<texture fallback="empty" background="true">$VAR[Fanart]</texture>
-			</control>
-			<control type="image">
-				<include>FullscreenDimensions</include>
-				<texture colordiffuse="$VAR[DiffuseColor]">views/white_100.png</texture>
-			</control>
-		</control>
-	</include>
-	<!-- Clock -->
-	<include name="Clock">
-		<control type="grouplist">
-			<right>50</right>
-			<top>42</top>
-			<width>400</width>
-			<height>60</height>
-			<align>right</align>
-			<itemgap>0</itemgap>
-			<orientation>horizontal</orientation>
-			<include>HomeClockAnimation</include>
-			<control type="label">
-				<width>auto</width>
-				<height>59</height>
-				<font>Med60</font>
-				<align>right</align>
-				<textcolor>$VAR[SecondaryColor]</textcolor>
-				<label>$INFO[System.Time(hh)]</label>
-			</control>
-			<control type="label">
-				<width>auto</width>
-				<height>69</height>
-				<font>Thin48</font>
-				<align>right</align>
-				<textcolor>$VAR[TextColor]</textcolor>
-				<label>$INFO[System.Time(mm)]</label>
-			</control>
-		</control>
-	</include>
-	<!--  Watched Indicator -->
+
+	<!--Watched Indicator
 	<include name="WatchedIndicator">
 		<control type="image">
+			<top>0</top>
 			<right>0</right>
-			<width>50</width>
-			<height>50</height>
+			<width>75</width>
+			<height>75</height>
 			<texture>views/watched_indicator.png</texture>
 			<visible>String.IsEqual(ListItem.Overlay,OverlayWatched.png)</visible>
 		</control>
 		<control type="image">
+			<top>0</top>
 			<right>0</right>
-			<width>50</width>
-			<height>50</height>
+			<height>75</height>
+			<width>61.5</width>
 			<texture colordiffuse="$VAR[BackgroundColor]">views/watched_indicator_back.png</texture>
 			<visible>String.IsEqual(ListItem.Overlay,OverlayWatched.png)</visible>
 		</control>
-	</include>
-	<!--  Disc Watched Indicator -->
-	<include name="DiscWatchedIndicator">
-		<control type="image">
-			<right>0</right>
-			<width>540</width>
-			<height>540</height>
-			<texture>views/discart_watched.png</texture>
-			<visible>String.IsEqual(ListItem.Overlay,OverlayWatched.png)</visible>
-		</control>
-		<control type="image">
-			<right>0</right>
-			<width>540</width>
-			<height>540</height>
-			<texture colordiffuse="$VAR[BackgroundColor]">views/discart_watched_back.png</texture>
-			<visible>String.IsEqual(ListItem.Overlay,OverlayWatched.png)</visible>
-		</control>
-	</include>
-	<include name="MediaInfoDiffuse">
-		<control type="image">
-			<include>FullscreenDimensions</include>
-			<texture colordiffuse="$VAR[SecondaryColor]">views/white_90.png</texture>
-		</control>
-	</include>
-	<include name="MediaInfoWidth860">
-		<width>860</width>
-	</include>
-	<include name="MediaInfoWidth738">
-		<width>738</width>
-	</include>
-	<include name="Flags">
-		<!-- Studio Flag -->
-		<control type="image">
-			<left>1580</left>
-			<top>950</top>
-			<width>120</width>
-			<height>80</height>
-			<aspectratio>keep</aspectratio>
-			<texture colordiffuse="$VAR[TextColor]" fallback="flags/default_studio.png">$INFO[ListItem.Studio,flags/studios/,.png]</texture>
-			<visible>!String.Contains(ListItem.Icon,Default) + !Container.Content(artists)</visible>
-		</control>
-		<!-- MPAA Rating Flag -->
-		<control type="image">
-			<left>1750</left>
-			<top>950</top>
-			<width>120</width>
-			<height>80</height>
-			<aspectratio>keep</aspectratio>
-			<texture colordiffuse="$VAR[TextColor]" fallback="flags/default_rating.png">$VAR[Info_Certificate]</texture>
-			<visible>!String.Contains(ListItem.Icon,Default) + !Container.Content(artists)</visible>
-		</control>
-	</include>
+	</include>-->
+
 	<include name="Opacity">
 		<!-- Opacity -->
 		<animation effect="fade" start="100" end="80" condition="String.IsEmpty(Skin.String(Opacity))">Conditional</animation>

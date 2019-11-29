@@ -1,6 +1,62 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <includes>
-	<!-- Copacetic -->
+
+<!--Dialogs fade in/out-->
+	<include name="WindowFadeAnimation">
+		<animation effect="fade" start="0" end="100" time="380" tween="sine" easing="out" reversible="true">WindowOpen</animation>
+		<animation effect="fade" start="100" end="0" time="380" tween="sine" easing="out" reversible="true">WindowClose</animation>
+	</include>
+
+<!--Dialogs fade in/out where dialog is part of another window-->
+	<include name="OptionsMenuFadeAnimation">
+		<animation effect="fade" start="0" end="100" time="380" tween="sine" easing="out" reversible="true">Visible</animation>
+		<animation effect="fade" start="100" end="0" time="380" tween="sine" easing="out" reversible="true">Hidden</animation>
+	</include>
+
+<!--Content fade in/out where needs to be hidden instantly-->
+	<include name="ContentFadeAnimation">
+		<animation effect="fade" start="0" end="100" time="380" tween="sine" easing="out" reversible="true">Visible</animation>
+		<animation effect="fade" start="100" end="0" time="0" tween="sine" easing="out" reversible="true">Hidden</animation>
+	</include>
+
+	<include name="ScrollBarAnimation">
+		<animation effect="fade" start="100" end="0" time="300" tween="sine" easing="out" condition="![Container.Scrolling | Control.HasFocus(60)]">Conditional</animation>
+	</include>
+
+	<include name="ProgressBarFadeAnimation" reversible="false">
+		<animation effect="fade" start="0" end="100" time="380" tween="sine" easing="out" delay="380" condition="!Control.IsVisible(504)">Visible</animation>
+		<animation effect="fade" start="0" end="100" time="0" tween="sine" easing="out" delay="380" condition="Control.IsVisible(504)">Visible</animation>
+		<animation effect="fade" start="100" end="0" time="0">Hidden</animation>
+	</include>
+
+
+	<!--
+	<include name="OptionsAnimation">
+		<animation type="Visible" reversible="false">
+			<effect type="fade" start="0" end="100" time="200" />
+			<effect type="slide" start="500,0" end="0,0" time="400" tween="cubic" easing="out"/>
+		</animation>
+		<animation type="Hidden">
+			<effect type="fade" start="100" end="0" time="0" />
+		</animation>
+	</include>
+-->
+
+
+	<!--
+	<include name="MenuAnimation">
+		<animation type="WindowOpen" reversible="false">
+			<effect type="fade" start="0" end="100" time="200" />
+			<effect type="slide" start="500,0" end="0,0" time="400" tween="cubic" easing="out"/>
+		</animation>
+		<animation type="WindowClose">
+			<effect type="fade" start="100" end="0" time="0" />
+		</animation>
+	</include>
+-->
+
+	<!-- not yet processed-->
+
 	<include name="InfoDialogFadeAnimation">
 		<animation effect="fade" start="0" end="100" time="200" condition="!Window.IsVisible(1104) | String.IsEqual(Container.Viewmode,$LOCALIZE[31501])">WindowOpen</animation>
 		<animation effect="fade" start="100" end="0" time="200">WindowClose</animation>
@@ -15,9 +71,6 @@
 		<animation effect="slide" start="0,-150" end="0,0" time="400" tween="cubic" easing="out">WindowOpen</animation>
 		<animation effect="fade" start="100" end="0" time="200">WindowClose</animation>
 	</include>
-	<include name="ScrollBarAnimation">
-		<animation effect="fade" start="100" end="0" time="200" condition="![Container.Scrolling | Control.HasFocus(60)]">Conditional</animation>
-	</include>
 	<include name="MediaInfoAnimation">
 		<animation type="Visible" reversible="true">
 			<effect type="fade" start="0" end="100" time="400" tween="cubic" easing="out"/>
@@ -25,7 +78,7 @@
 	</include>
 	<include name="MediaInfoDiffuseAnimation">
 		<control type="image">
-			<texture colordiffuse="$VAR[SecondaryColor]">views/white_90.png</texture>
+			<texture colordiffuse="$VAR[SecondaryColor]">views/white_70.png</texture>
 			<visible>System.IdleTime(3) + !String.Contains(ListItem.Icon,Default) + !Container.Content(files) + !Container.Content(genres) + !Container.Content(years) + !Container.Content(actors) + !Container.Content(playlists) + !Container.Content(plugins) + !Container.Content(studios) + !Container.Content(directors) + !Container.Content(sets) + !Container.Content(tags) + !Control.HasFocus(60) + !Control.HasFocus(3000) + !Window.IsVisible(yesnodialog) + !Window.IsVisible(progressdialog) + !Window.IsVisible(virtualkeyboard) + !Window.IsVisible(contextmenu) + !Window.IsVisible(numericinput) + !Window.IsVisible(shutdownmenu) + !Window.IsVisible(playercontrols) + !Window.IsVisible(songinformation) + !Window.IsVisible(busydialog) + !Window.IsVisible(addoninformation) + !Window.IsVisible(textviewer) + !Window.IsVisible(selectdialog) + !Window.IsVisible(musicinformation) + !Window.IsVisible(okdialog)</visible>
 			<animation type="Visible" reversible="true">
 				<effect type="fade" start="0" end="100" time="400" tween="cubic" easing="out"/>
@@ -36,24 +89,6 @@
 	<include name="MediaInfoHideAnimation">
 		<animation type="Conditional" condition="Window.IsVisible(movieinformation) | Window.IsVisible(musicinformation) | Window.IsVisible(songinformation) | Window.IsVisible(addoninformation)" reversible="true">
 			<effect type="fade" start="100" end="0" time="200" tween="cubic" easing="out"/>
-		</animation>
-	</include>
-	<include name="OptionsAnimation">
-		<animation type="Visible" reversible="false">
-			<effect type="fade" start="0" end="100" time="200" />
-			<effect type="slide" start="500,0" end="0,0" time="400" tween="cubic" easing="out"/>
-		</animation>
-		<animation type="Hidden">
-			<effect type="fade" start="100" end="0" time="0" />
-		</animation>
-	</include>
-	<include name="MenuAnimation">
-		<animation type="WindowOpen" reversible="false">
-			<effect type="fade" start="0" end="100" time="200" />
-			<effect type="slide" start="500,0" end="0,0" time="400" tween="cubic" easing="out"/>
-		</animation>
-		<animation type="WindowClose">
-			<effect type="fade" start="100" end="0" time="0" />
 		</animation>
 	</include>
 	<include name="DialogAnimation">
@@ -76,26 +111,7 @@
 		</animation>
 		<animation condition="Window.IsVisible(1102)" reversible="false" type="Conditional">
 			<effect easing="out" end="0,-18" start="0,0" time="60" tween="sine" type="slide" />
-			<effect delay="80" easing="out" end="0,18" start="0,0" time="120" tween="sine" type="slide" />
 		</animation>
 	</include>
-	<include name="VisibleFadeAnimation">
-		<animation effect="fade" start="0" end="100" time="200">Visible</animation>
-		<animation effect="fade" start="100" end="0" time="200">Hidden</animation>
-	</include>
-	<!-- Conq -->
-	<include name="WindowFadeAnimation">
-		<animation effect="fade" start="0" end="100" time="200">WindowOpen</animation>
-		<animation effect="fade" start="100" end="0" time="200">WindowClose</animation>
-	</include>
-	<include name="DialogZoomAnimation">
-		<animation type="WindowOpen">
-			<effect type="zoom" start="70" end="100" center="auto" tween="back" easing="inout" time="300" />
-			<effect type="fade" start="0" end="100" time="300" />
-		</animation>
-		<animation type="WindowClose">
-			<effect type="zoom" start="100" end="70" center="auto" time="100" />
-			<effect type="fade" start="100" end="0" time="100" />
-		</animation>
-	</include>
+
 </includes>
