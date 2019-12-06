@@ -462,7 +462,6 @@
 				<height>$PARAM[height]</height>
 				<aspectratio>stretch</aspectratio>
         <texture colordiffuse="$VAR[ShadowColor]">$PARAM[texture]</texture>
-        <visible>Skin.String(Theme,Light)</visible>
         <visible>$PARAM[visible]</visible>
         <animation effect="$PARAM[animationeffect]" end="$PARAM[animationend]" time="$PARAM[animationtime]" tween="sine" easing="inout" reversible="false">$PARAM[animationtype]</animation>
 			</control>
@@ -736,48 +735,54 @@
 
 	<!--Grid View Layout-->
 	<include name="GridViewLayout">
-		<!--ListIcon attributes-->
-    <param name="left" default="110"/>
-    <param name="top" default="44"/>
+    <!--Dropshadow attributes-->
+		<param name="dropshadowleft" default="176"/>
+		<param name="dropshadowtop" default="79"/>
+		<param name="dropshadowwidth" default="511"/>
+		<param name="dropshadowheight" default="296"/>
+    <param name="dropshadowvisible" default="false"/>
+    <param name="dropshadowvisibledark" default="false"/>
+    <param name="dropshadowtexture" default="views/dropshadow_grid-fanart.png"/>
+    <param name="dropshadowtexturedark" default="views/dropshadow_grid-fanart_dark.png"/>
+    <param name="dropshadowanimationend" default="45,2,774,491"/>
+    <!--ListIcon attributes-->
+    <param name="left" default="168"/>
+    <param name="top" default="79"/>
     <param name="width" default="528"/>
     <param name="height" default="297"/>
     <param name="fadecondition" default="false"/>
 		<param name="zoomcondition" default="false"/>
-    <param name="animationend" default="94,35,560,315"/>
+    <param name="animationend" default="120,52,624,351"/>
     <param name="animationtime" default="200"/>
     <param name="watchedstatusvisibility" default="true"/>
-		<!--Dropshadow attributes-->
-		<param name="dropshadowleft" default="188"/>
-		<param name="dropshadowtop" default="74"/>
-		<param name="dropshadowwidth" default="372"/>
-		<param name="dropshadowheight" default="237"/>
-    <param name="dropshadowtexture" default="views/dropshadow_grid-fanart.png"/>
-    <param name="dropshadowanimationend" default="64,25,620,395"/>
+    <!--Border attributes-->
+    <param name="bordervisible" default="false"/>
 		<!--ProgressBar attributes-->
-    <param name="progressbarleft" default="94"/>
-    <param name="progressbartop" default="350"/>
-    <param name="progressbarwidth" default="560"/>
+    <param name="progressbarleft" default="120"/>
+    <param name="progressbartop" default="402"/>
+    <param name="progressbarwidth" default="624"/>
     <param name="progressbarvisible" default="false"/>
 		<!--GridTitle attributes-->
 		<param name="gridtitlescroll" default="false"/>
-		<param name="gridtitlewidth" default="528"/>
-		<param name="gridtitleleft" default="110"/>
-		<param name="gridtitletop" default="368"/>
+		<param name="gridtitlewidth" default="468"/>
+		<param name="gridtitleleft" default="198"/>
+		<param name="gridtitletop" default="418"/>
 		<param name="gridtitlefont" default="GridUnfocused"/>
 		<param name="gridtitletextcolor" default="$VAR[TertiaryColor]"/>
 		<!--Info attributes-->
-		<param name="griddetailstop" default="410"/>
+		<param name="griddetailstop" default="454"/>
 		<param name="griddetailsfont" default="GridDetails"/>
     <param name="griddetailstextcolor" default="$VAR[TertiaryColor]"/>
     <param name="griddetailsvisible" default="false"/>
   -->
 		<definition>
-      <!--Dropshadow-->
+      <!--Light Dropshadow-->
       <control type="group">
         <left>$PARAM[dropshadowleft]</left>
         <top>$PARAM[dropshadowtop]</top>
         <width>$PARAM[dropshadowwidth]</width>
         <height>$PARAM[dropshadowheight]</height>
+        <visible>$PARAM[dropshadowvisible]</visible>
         <animation effect="zoom" end="$PARAM[dropshadowanimationend]" time="$PARAM[animationtime]" tween="sine" easing="out" condition="$PARAM[zoomcondition]">Focus</animation>
         <include content="DropShadow">
           <param name="left" value="0"/>
@@ -787,22 +792,29 @@
           <param name="texture" value="$PARAM[dropshadowtexture]"/>
         </include>
       </control>
-			<!--ListIcon-->
-      <control type="image">
-        <animation effect="zoom" end="$PARAM[animationend]" time="$PARAM[animationtime]" tween="sine" easing="out" condition="$PARAM[zoomcondition]">Focus</animation>
-        <left>$PARAM[left]</left>
-        <top>$PARAM[top]</top>
-        <width>$PARAM[width]</width>
-        <height>$PARAM[height]</height>
-        <aspectratio>scale</aspectratio>
-        <texture background="true" colordiffuse="$VAR[FocusFadeColor]">views/white_100.png</texture>
+      <!--Dark Dropshadow-->
+      <control type="group">
+        <left>$PARAM[dropshadowleft]</left>
+        <top>$PARAM[dropshadowtop]</top>
+        <width>$PARAM[dropshadowwidth]</width>
+        <height>$PARAM[dropshadowheight]</height>
+        <visible>$PARAM[dropshadowvisibledark]</visible>
+        <animation effect="zoom" end="$PARAM[dropshadowanimationend]" time="$PARAM[animationtime]" tween="sine" easing="out" condition="$PARAM[zoomcondition]">Focus</animation>
+        <include content="DropShadow">
+          <param name="left" value="0"/>
+          <param name="top" value="0"/>
+          <param name="width" value="100%"/>
+          <param name="height" value="100%"/>
+          <param name="texture" value="$PARAM[dropshadowtexturedark]"/>
+        </include>
       </control>
+      <!--ListIcon-->
       <control type="group">
         <left>$PARAM[left]</left>
         <top>$PARAM[top]</top>
         <width>$PARAM[width]</width>
         <height>$PARAM[height]</height>
-        <animation effect="fade" start="100" end="66" time="1200" tween="sine" easing="out" condition="$PARAM[fadecondition]" reversible="false" pulse="true">Conditional</animation>
+        <animation effect="fade" start="100" end="70" time="1200" tween="sine" easing="out" condition="$PARAM[fadecondition]" reversible="false" pulse="true">Conditional</animation>
         <animation effect="zoom" end="$PARAM[animationend]" time="$PARAM[animationtime]" tween="sine" easing="out" condition="$PARAM[zoomcondition]">Focus</animation>
         <include content="ListIcon">
           <param name="left" value="0"/>
@@ -810,13 +822,25 @@
           <param name="width" value="100%"/>
         </include>
       </control>
+      <!--Border-->
+      <control type="image">
+        <animation effect="zoom" end="$PARAM[animationend]" time="$PARAM[animationtime]" tween="sine" easing="out" condition="$PARAM[zoomcondition]">Focus</animation>
+        <left>$PARAM[left]</left>
+        <top>$PARAM[top]</top>
+        <width>$PARAM[width]</width>
+        <height>$PARAM[height]</height>
+        <aspectratio>stretch</aspectratio>
+        <visible>$PARAM[bordervisible]</visible>
+        <texture border="2" colordiffuse="$VAR[BorderColor]">views/border_1px.png</texture>
+      </control>
+      <!--Watched overlay-->
       <control type="image">
         <left>$PARAM[left]</left>
         <top>$PARAM[top]</top>
         <width>$PARAM[width]</width>
         <height>$PARAM[height]</height>
         <visible>$PARAM[watchedstatusvisibility]</visible>
-        <visible>Container.Content(episodes) + String.IsEqual(ListItem.Overlay,OverlayWatched.png)</visible>
+        <visible>String.IsEqual(ListItem.Overlay,OverlayWatched.png)</visible>
         <texture colordiffuse="$VAR[SecondaryColor]">views/white_50.png</texture>
       </control>
       <!--ProgressBar-->
@@ -867,8 +891,6 @@
 					<scroll>$PARAM[gridtitlescroll]</scroll>
 					<scrollsuffix> / </scrollsuffix>
 				</control>
-
-      -->
 		</definition>
 	</include>
 
@@ -878,17 +900,19 @@
 
 	<include name="GridViewFocusLayout_Fanart">
     <include content="GridViewLayout">
-      <param name="fadecondition" value="true"/>
+      <param name="dropshadowvisible" value="Skin.String(Theme,Light) + [Skin.String(GridView_Display,Fanart) | String.IsEmpty(Skin.String(GridView_Display)) | Container.Content(episodes)]"/>
+      <param name="dropshadowvisibledark" value="[Skin.String(Theme,Dark) | String.IsEmpty(Skin.String(Theme))] + [Skin.String(GridView_Display,Fanart) | String.IsEmpty(Skin.String(GridView_Display)) | Container.Content(episodes)]"/>
       <param name="zoomcondition" value="true"/>
-      <param name="watchedstatusvisibility" default="false"/>
+      <param name="watchedstatusvisibility" value="false"/>
+      <param name="bordervisible" value="true"/>
       <param name="progressbarvisible" value="!Control.IsVisible(50401) + !Control.IsVisible(50402)"/>
       <param name="gridtitlescroll" value="true"/>
-      <param name="gridtitlewidth" value="560"/>
-      <param name="gridtitleleft" value="94"/>
-      <param name="gridtitletop" value="365"/>
+      <param name="gridtitlewidth" value="624"/>
+      <param name="gridtitleleft" value="120"/>
+      <param name="gridtitletop" value="415"/>
       <param name="gridtitlefont" value="GridFocused"/>
       <param name="gridtitletextcolor" value="$VAR[PrimaryColor]"/>
-      <param name="griddetailstop" value="407"/>
+      <param name="griddetailstop" value="454"/>
       <param name="griddetailsfont" value="GridDetails"/>
       <param name="griddetailsvisible" value="true"/>
     </include>
@@ -896,45 +920,47 @@
 
 	<include name="GridViewItemLayout_Posters">
 		<include content="GridViewLayout">
+      <param name="left" value="190"/>
+      <param name="top" value="82"/>
       <param name="width" value="300"/>
       <param name="height" value="450"/>
-      <param name="animationend" value="98,26,324,486"/>
-      <param name="dropshadowleft" value="155"/>
-      <param name="dropshadowtop" value="113"/>
-      <param name="dropshadowwidth" value="211"/>
-      <param name="dropshadowheight" value="311"/>
-      <param name="dropshadowtexture" value="views/dropshadow_grid-poster.png"/>
-      <param name="dropshadowanimationend" value="68,16,384,566"/>
-      <param name="gridtitlewidth" value="300"/>
-      <param name="gridtitletop" value="530"/>
+      <param name="animationend" value="167,47,346,519"/>
+      <param name="gridtitlewidth" value="284"/>
+      <param name="gridtitleleft" value="198"/>
+      <param name="gridtitletop" value="581"/>
 		</include>
 	</include>
 
 	<include name="GridViewFocusLayout_Posters">
 		<include content="GridViewLayout">
+      <param name="dropshadowleft" value="215"/>
+      <param name="dropshadowtop" value="130"/>
+      <param name="dropshadowwidth" value="250"/>
+      <param name="dropshadowheight" value="353"/>
+      <param name="dropshadowvisible" value="Skin.String(Theme,Light) + Skin.String(GridView_Display,Posters) + !Container.Content(episodes)"/>
+      <param name="dropshadowvisibledark" value="[Skin.String(Theme,Dark) | String.IsEmpty(Skin.String(Theme))] + Skin.String(GridView_Display,Posters) + !Container.Content(episodes)"/>
+      <param name="dropshadowtexture" value="views/dropshadow_grid-poster.png"/>
+      <param name="dropshadowtexturedark" value="views/dropshadow_grid-poster_dark.png"/>
+      <param name="dropshadowanimationend" value="92,-3,496,659"/>
+      <param name="left" value="190"/>
+      <param name="top" value="82"/>
       <param name="width" value="300"/>
       <param name="height" value="450"/>
-      <param name="fadecondition" value="true"/>
+      <param name="animationend" value="167,47,346,519"/>
       <param name="zoomcondition" value="true"/>
-      <param name="watchedstatusvisibility" default="false"/>
-      <param name="animationend" value="98,26,324,486"/>
-      <param name="dropshadowleft" value="155"/>
-      <param name="dropshadowtop" value="113"/>
-      <param name="dropshadowwidth" value="211"/>
-      <param name="dropshadowheight" value="311"/>
-      <param name="dropshadowtexture" value="views/dropshadow_grid-poster.png"/>
-      <param name="dropshadowanimationend" value="68,16,384,566"/>
+      <param name="watchedstatusvisibility" value="false"/>
+      <param name="bordervisible" value="true"/>
       <param name="progressbarvisible" value="!Control.IsVisible(50401) + !Control.IsVisible(50402)"/>
-      <param name="progressbarleft" value="98"/>
-      <param name="progressbartop" value="512"/>
-      <param name="progressbarwidth" value="324"/>
+      <param name="progressbarleft" value="167"/>
+      <param name="progressbartop" value="565"/>
+      <param name="progressbarwidth" value="346"/>
       <param name="gridtitlescroll" value="true"/>
-      <param name="gridtitlewidth" value="314"/>
-      <param name="gridtitleleft" value="103"/>
-      <param name="gridtitletop" value="527"/>
+      <param name="gridtitlewidth" value="346"/>
+      <param name="gridtitleleft" value="167"/>
+      <param name="gridtitletop" value="578"/>
       <param name="gridtitlefont" value="GridFocused"/>
       <param name="gridtitletextcolor" value="$VAR[PrimaryColor]"/>
-      <param name="griddetailstop" value="569"/>
+      <param name="griddetailstop" value="617"/>
       <param name="griddetailsfont" value="GridDetails"/>
       <param name="griddetailsvisible" value="true"/>
 		</include>
