@@ -34,8 +34,8 @@
 	<!-- Random Fanart-->
 	<include name="FanartSlideshow">
 		<control type="list" id="12341">
-			<content sortby="random" limit="2">videodb://movies/titles/</content>
-			<content sortby="random" limit="1">videodb://tvshows/titles/</content>
+			<content sortby="random" limit="30">videodb://movies/titles/</content>
+<!--			<content sortby="random" limit="1">videodb://tvshows/titles/</content>
 			<content sortby="random" limit="1">videodb://movies/titles/</content>
 			<content sortby="random" limit="3">videodb://tvshows/titles/</content>
 			<content sortby="random" limit="2">videodb://movies/titles/</content>
@@ -43,7 +43,7 @@
 			<content sortby="random" limit="3">videodb://movies/titles/</content>
 			<content sortby="random" limit="2">videodb://tvshows/titles/</content>
 			<content sortby="random" limit="1">videodb://movies/titles/</content>
-			<content sortby="random" limit="1">videodb://tvshows/titles/</content>
+			<content sortby="random" limit="1">videodb://tvshows/titles/</content>-->
 			<autoscroll time="7000">true</autoscroll> <!-- Time to show each image, in milliseconds -->
 			<itemlayout />
 			<focusedlayout />
@@ -59,7 +59,7 @@
 
 	<include name="ViewtypeOverlay">
 		<control type="image">
-			<texture colordiffuse="$VAR[SecondaryColor]">$VAR[ViewtypeOverlayTexture]</texture>
+			<texture colordiffuse="$VAR[DarkColor]">$VAR[ViewtypeOverlayTexture]</texture>
 		</control>
 	</include>
 
@@ -434,7 +434,7 @@
         <animation effect="$PARAM[animationeffect]" end="$PARAM[animationend]" condition="$PARAM[animationcondition]" time="380" tween="sine" easing="inout" reversible="false">$PARAM[animationtype]</animation>
         <control type="image">
           <left>$PARAM[iconleft]</left>
-				  <aspectratio>scale</aspectratio>
+				  <aspectratio align="center">scale</aspectratio>
 				  <texture background="true">$PARAM[texture]</texture>
 			  </control>
         <control type="image">
@@ -493,7 +493,7 @@
 
 	<!--Progress bar-->
 	<include name="ProgressBar">
-		<param name="visible" default="true"/>
+		<param name="visible" default="!Control.HasFocus(60)"/>
 		<param name="left"/>
 		<param name="top" default="1056"/>
     <param name="bottom"/>
@@ -719,7 +719,7 @@
 						<width>90</width>
 						<height>60</height>
 						<aspectratio>keep</aspectratio>
-						<texture colordiffuse="$VAR[PrimaryColor]" fallback="flags/blank.png">$VAR[Studio_Name]</texture>
+						<texture colordiffuse="$VAR[FlagColor]" fallback="flags/blank.png">$VAR[Studio_Name]</texture>
 						<animation effect="slide" start="0,0" end="120,0" time="0" condition="!Control.IsVisible(503) + [Skin.String(Flags,Studio) | [Skin.String(Flags,All) + String.IsEqual(Control.GetLabel(915),flags/blank.png)]]">Conditional</animation>
 						<animation effect="slide" start="0,0" end="-1610,0" time="0" condition="Control.IsVisible(503)">Conditional</animation>
 					</control>
@@ -731,7 +731,7 @@
 						<width>90</width>
 						<height>60</height>
 						<aspectratio>keep</aspectratio>
-						<texture colordiffuse="$VAR[PrimaryColor]" fallback="flags/blank.png">$VAR[MPAA_Certificate]</texture>
+						<texture colordiffuse="$VAR[FlagColor]" fallback="flags/blank.png">$VAR[MPAA_Certificate]</texture>
 					</control>
 				</control>
 			</control>
@@ -772,13 +772,14 @@
 		<param name="gridtitlescroll" default="false"/>
 		<param name="gridtitlewidth" default="462"/>
 		<param name="gridtitleleft" default="186"/>
-		<param name="gridtitletop" default="413"/>
+		<param name="gridtitletop" default="416"/>
+    <param name="gridtitleheight" default="33"/>
 		<param name="gridtitlefont" default="ExtraSmallUnfocused"/>
 		<param name="gridtitletextcolor" default="$VAR[TertiaryColor]"/>
 		<!--Info attributes-->
 		<param name="griddetailstop" default="451"/>
 		<param name="griddetailsfont" default="ExtraSmallSubTitle"/>
-    <param name="griddetailstextcolor" default="$VAR[TertiaryColor]"/>
+    <param name="griddetailstextcolor" default="$VAR[PrimaryColor]"/>
     <param name="griddetailsvisible" default="false"/>
 		<definition>
       <!--Light Dropshadow-->
@@ -854,10 +855,11 @@
         <top>$PARAM[progressbartop]</top>
         <width>$PARAM[progressbarwidth]</width>
         <visible>$PARAM[progressbarvisible]</visible>
-        <animation effect="fade" start="0" end="100" time="380" delay="380" tween="sine" easing="out" condition="$PARAM[fadecondition]" reversible="false">Focus</animation>
+        <animation effect="fade" start="0" end="100" time="380" delay="760" tween="sine" easing="out" condition="$PARAM[fadecondition]" reversible="false">Focus</animation>
         <include content="ProgressBar">
           <param name="left" value="0"/>
           <param name="top" value="0"/>
+          <param name="width" value="100%"/>
         </include>
       </control>
 				<!--GridTitle-->
@@ -868,7 +870,7 @@
 					<left>$PARAM[gridtitleleft]</left>
 					<width>$PARAM[gridtitlewidth]</width>
 					<top>$PARAM[gridtitletop]</top>
-					<height>38</height>
+					<height>$PARAM[gridtitleheight]</height>
 					<align>center</align>
 					<font>$PARAM[gridtitlefont]</font>
 					<textcolor>$PARAM[gridtitletextcolor]</textcolor>
@@ -913,6 +915,8 @@
       <param name="gridtitlescroll" value="true"/>
       <param name="gridtitlewidth" value="624"/>
       <param name="gridtitleleft" value="105"/>
+      <param name="gridtitletop" value="413"/>
+      <param name="gridtitleheight" value="38"/>
       <param name="gridtitlefont" value="ExtraSmallFocused"/>
       <param name="gridtitletextcolor" value="$VAR[PrimaryColor]"/>
       <param name="griddetailsvisible" value="true"/>
@@ -928,7 +932,7 @@
       <param name="animationend" value="167,47,346,519"/>
       <param name="gridtitlewidth" value="284"/>
       <param name="gridtitleleft" value="198"/>
-      <param name="gridtitletop" value="581"/>
+      <param name="gridtitletop" value="578"/>
 		</include>
 	</include>
 
@@ -949,47 +953,51 @@
       <param name="height" value="450"/>
       <param name="animationend" value="167,47,346,519"/>
       <param name="zoomcondition" value="true"/>
+      <param name="fadecondition" value="true"/>
+      <param name="showgradient" value="true"/>
       <param name="watchedstatusvisibility" value="false"/>
       <param name="bordervisible" value="true"/>
       <param name="progressbarvisible" value="!Control.IsVisible(50401) + !Control.IsVisible(50402)"/>
-      <param name="progressbarleft" value="167"/>
-      <param name="progressbartop" value="565"/>
-      <param name="progressbarwidth" value="346"/>
+      <param name="progressbarleft" value="192"/>
+      <param name="progressbartop" value="552"/>
+      <param name="progressbarwidth" value="296"/>
       <param name="gridtitlescroll" value="true"/>
       <param name="gridtitlewidth" value="346"/>
+      <param name="gridtitleheight" value="38"/>
       <param name="gridtitleleft" value="167"/>
-      <param name="gridtitletop" value="578"/>
-      <param name="gridtitlefont" value="GridFocused"/>
+      <param name="gridtitletop" value="576"/>
+      <param name="gridtitlefont" value="ExtraSmallFocused"/>
       <param name="gridtitletextcolor" value="$VAR[PrimaryColor]"/>
-      <param name="griddetailstop" value="617"/>
-      <param name="griddetailsfont" value="GridDetails"/>
+      <param name="griddetailstop" value="614"/>
       <param name="griddetailsvisible" value="true"/>
 		</include>
 	</include>
 
 	<!--Common View Details-->
 	<include name="CommonViewDetails">
-		<param name="groupvisibility" default="!Skin.String(ShowcaseView_Details,Off)"/>
-		<param name="left" default="1250"/>
+		<param name="groupvisibility" default="!Skin.String(ShowcaseView_Details,Off) + [Skin.String(ShowcaseView_Logo,Off) | String.IsEmpty(ListItem.Art(clearlogo))]"/>
+		<param name="left" default="1190"/>
 		<param name="bottom" default="120"/>
 		<param name="width" default="620"/>
 		<param name="height" default="840"/>
 		<param name="align" default="center"/>
     <param name="itemgap" default="0"/>
 		<param name="labeltype" default="textbox"/>
-		<param name="titlevisibility" default="Skin.String(ShowcaseView_Logo,Off) | [Skin.String(ShowcaseView_Logo,On) + String.IsEmpty(ListItem.Art(clearlogo))] | String.IsEmpty(Skin.String(ShowcaseView_Logo)"/>
-		<param name="titleheight" default="220"/>
+		<param name="titlevisibility" default="true"/>
+		<param name="titleheight" default="248"/>
 		<param name="titlefont" default="MediumFocused"/>
+    <param name="titlecolor" default="$VAR[PrimaryColor]"/>
 		<param name="titlealign" default="left"/>
-		<param name="logovisibility" default="Skin.String(ShowcaseView_Logo,On) + !String.IsEmpty(ListItem.Art(clearlogo))"/>
+		<param name="logovisibility" default="false"/>
 		<param name="infovisibility" default="Skin.String(ShowcaseView_Details,TitleAndInfo) | Skin.String(ShowcaseView_Details,All) | String.IsEmpty(Skin.String(ShowcaseView_Details)"/>
 		<param name="infoheight" default="40"/>
-    <param name="titleinfogap" default="5"/>
+    <param name="titleinfogap" default="0"/>
 		<param name="infofont" default="MediumSubTitle"/>
 		<param name="plotvisibility" default="Skin.String(ShowcaseView_Details,TitleAndPlot) | Skin.String(ShowcaseView_Details,All) | String.IsEmpty(Skin.String(ShowcaseView_Details)"/>"
 		<param name="plotmaxheight" default="287"/>
     <param name="infoplotgap" default="50"/>
 		<param name="plotfont" default="Body"/>
+    <param name="plotcolor" default="$VAR[TertiaryColor]"/>
 		<definition>
 			<control type="grouplist">
 				<include>HideContent</include>
@@ -1008,7 +1016,7 @@
 					<visible>$PARAM[titlevisibility]</visible>
 					<height max="$PARAM[titleheight]">auto</height>
 					<font>$PARAM[titlefont]</font>
-					<textcolor>$VAR[PrimaryColor]</textcolor>
+					<textcolor>$PARAM[titlecolor]</textcolor>
 					<label>$VAR[Title]</label>
 					<align>$PARAM[titlealign]</align>
 					<scroll>true</scroll>
@@ -1029,7 +1037,7 @@
 					<visible>!String.IsEqual(Control.GetLabel(916),EMPTY)</visible>
 					<height>$PARAM[infoheight]</height>
 					<font>$PARAM[infofont]</font>
-					<textcolor>$VAR[PrimaryColor]</textcolor>
+					<textcolor>$PARAM[titlecolor]</textcolor>
 					<label>$VAR[TitleInfo]</label>
 					<align>$PARAM[titlealign]</align>
 					<scroll>true</scroll>
@@ -1041,7 +1049,7 @@
 					<height max="$PARAM[plotmaxheight]">auto</height>
 					<visible>$PARAM[plotvisibility]</visible>
 					<font>$PARAM[plotfont]</font>
-					<textcolor>$VAR[TertiaryColor]</textcolor>
+					<textcolor>$PARAM[plotcolor]</textcolor>
 					<label>$VAR[Plot]</label>
 					<align>$PARAM[titlealign]</align>
 					<autoscroll delay="5000" time="1500" repeat="2000">true</autoscroll>
