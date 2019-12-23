@@ -6,11 +6,12 @@
 	<include file="Parameters.xml" />
 	<include file="script-skinshortcuts-includes.xml"/>
 	<include file="Viewtype_50_List.xml" />
-	<include file="Viewtype_500_Billboard.xml" />
-	<include file="Viewtype_501_Showcase.xml" />
-	<include file="Viewtype_502_Gallery.xml" />
-	<include file="Viewtype_503_Strip.xml" />
-	<include file="Viewtype_504_Grid.xml" />
+  <include file="Viewtype_500_Detailed_List.xml" />
+	<include file="Viewtype_501_Billboard.xml" />
+	<include file="Viewtype_502_Showcase.xml" />
+	<include file="Viewtype_503_Gallery.xml" />
+	<include file="Viewtype_504_Strip.xml" />
+	<include file="Viewtype_505_Grid.xml" />
 	<include file="Variables.xml" />
 
 	<!-- Fullscreen dimensions -->
@@ -421,7 +422,7 @@
     <param name="animationeffect" default=""/>
     <param name="animationend" default=""/>
     <param name="animationcondition" default=""/>
-    <param name="iconleft" default="$PARAM[left]"/>
+    <param name="fadetime" default="0"/>
 		<param name="texture" default="$VAR[Thumbnail(0)Content]"/>
     <param name="showgradient" default="false"/>
 		<definition>
@@ -433,13 +434,12 @@
         <visible>$PARAM[visible]</visible>
         <animation effect="$PARAM[animationeffect]" end="$PARAM[animationend]" condition="$PARAM[animationcondition]" time="380" tween="sine" easing="inout" reversible="false">$PARAM[animationtype]</animation>
         <control type="image">
-          <left>$PARAM[iconleft]</left>
+          <fadetime>$PARAM[fadetime]</fadetime>
 				  <aspectratio align="center">scale</aspectratio>
 				  <texture background="true">$PARAM[texture]</texture>
 			  </control>
         <control type="image">
           <visible>$PARAM[showgradient]</visible>
-          <left>$PARAM[iconleft]</left>
           <aspectratio>stretch</aspectratio>
           <texture colordiffuse="$VAR[DarkColor]">views/gradient_art-overlay.png</texture>
         </control>
@@ -704,7 +704,7 @@
 
 	<!--Media Flags-->
 	<include name="MediaFlags">
-		<param name="groupvisible" default="!Skin.String(Flags,Off) + !Control.IsVisible(504)"/>
+		<param name="groupvisible" default="!Skin.String(Flags,Off) + !Control.IsVisible(505) + !Control.IsVisible(500)"/>
 		<definition>
 			<control type="group">
 				<include>HideContent</include>
@@ -720,8 +720,8 @@
 						<height>60</height>
 						<aspectratio>keep</aspectratio>
 						<texture colordiffuse="$VAR[FlagColor]" fallback="flags/blank.png">$VAR[Studio_Name]</texture>
-						<animation effect="slide" start="0,0" end="120,0" time="0" condition="!Control.IsVisible(503) + [Skin.String(Flags,Studio) | [Skin.String(Flags,All) + String.IsEqual(Control.GetLabel(915),flags/blank.png)]]">Conditional</animation>
-						<animation effect="slide" start="0,0" end="-1610,0" time="0" condition="Control.IsVisible(503)">Conditional</animation>
+						<animation effect="slide" start="0,0" end="120,0" time="0" condition="!Control.IsVisible(504) + [Skin.String(Flags,Studio) | [Skin.String(Flags,All) + String.IsEqual(Control.GetLabel(915),flags/blank.png)]]">Conditional</animation>
+						<animation effect="slide" start="0,0" end="-1610,0" time="0" condition="Control.IsVisible(504)">Conditional</animation>
 					</control>
 					<!--MPAA flag-->
 					<control type="image" id="915">
@@ -737,6 +737,193 @@
 			</control>
 		</definition>
 	</include>
+
+
+  <!--ListView Layout-->
+  <include name="ListViewLayout">
+    <param name="labeltype" default="label"/>
+    <param name="font" default="LargeUnfocused"/>
+    <param name="textcolor" default="$VAR[LightColor]"/>
+    <definition>
+      <control type="$PARAM[labeltype]">
+        <include>HideContent</include>
+        <width>1536</width>
+        <height>100%</height>
+        <aligny>center</aligny>
+        <font>$PARAM[font]</font>
+        <textcolor>$PARAM[textcolor]</textcolor>
+        <label>$VAR[Title]</label>
+        <scrollout>false</scrollout>
+        <pauseatend>1000</pauseatend>
+      </control>
+    </definition>
+  </include>
+
+  <!--DetailedListView Line-->
+  <include name="DetailedListViewLine">
+    <param name="left" default="55"/>
+    <param name="top" default="0"/>
+    <param name="width" default="32"/>
+    <param name="height" default="144"/>
+    <definition>
+      <control type="image">
+        <left>$PARAM[left]</left>
+        <top>$PARAM[top]</top>
+        <width>$PARAM[width]</width>
+        <height>$PARAM[height]</height>
+        <aspectratio>stretch</aspectratio>
+        <texture colordiffuse="$VAR[BorderColor]">views/line_detailedlist.png</texture>
+      </control>
+    </definition>
+  </include>
+
+  <!--DetailedListView Layout-->
+  <include name="DetailedListViewLayout">
+    <param name="width" default="1440"/>
+    <param name="height" default="144"/>
+    <param name="unfocusedvisible" default="true"/>
+    <param name="focusedvisible" default="false"/>
+    <param name="backingwidth" default="1152"/>
+    <param name="backingcolor" default="$VAR[PrimaryColor]"/>
+    <param name="backingtexturelight" default="views/white_5.png"/>
+    <param name="backingtexturedark" default="views/white_10.png"/>
+    <param name="titlelabeltype" default="label"/>
+    <param name="titleleft" default="426"/>
+    <param name="titletop" default="38"/>
+    <param name="titlewidth" default="845"/>
+    <param name="titleheight" default="40"/>
+    <param name="titlefont" default="DetailedListUnfocused"/>
+    <param name="titletextcolor" default="$VAR[TertiaryColor]"/>
+    <param name="subtitletop" default="80"/>
+    <param name="fanartvisible" default="true"/>
+    <definition>
+      <control type="group">
+        <animation effect="slide" end="-240,0" time="0" condition="!Skin.String(DetailedListView_Display,Fanart) + !Skin.String(DetailedListView_Display,Off)">Conditional</animation>
+        <control type="group">
+          <height>$PARAM[height]</height>
+          <width>$PARAM[width]</width>
+          <include>HideContent</include>
+          <include>ContentFadeAnimation</include>
+          <!--Unfocused-Unwatched-->
+          <control type="group">
+            <visible>$PARAM[unfocusedvisible]</visible>
+            <visible>!String.IsEqual(ListItem.Overlay,OverlayWatched.png)</visible>
+            <include content="DetailedListViewLine"/>
+          </control>
+          <!--Unfocused-Watched-->
+          <control type="group">
+            <visible>$PARAM[unfocusedvisible]</visible>
+            <visible>String.IsEqual(ListItem.Overlay,OverlayWatched.png)</visible>
+            <include content="DetailedListViewLine">
+              <param name="height" value="46"/>
+            </include>
+            <control type="image">
+              <left>57</left>
+              <top>61</top>
+              <width>29</width>
+              <height>21</height>
+              <aspectratio>keep</aspectratio>
+              <texture colordiffuse="$VAR[PrimaryColor]">views/check_unfocused.png</texture>
+            </control>
+            <include content="DetailedListViewLine">
+              <param name="top" value="98"/>
+              <param name="height" value="46"/>
+            </include>
+          </control>
+          <!--Focused-Unwatched/Watched-->
+          <control type="group">
+            <visible>$PARAM[focusedvisible]</visible>
+            <control type="image">
+              <visible>!String.IsEqual(ListItem.Overlay,OverlayWatched.png)</visible>
+              <height>$PARAM[height]</height>
+              <width>$PARAM[height]</width>
+              <texture colordiffuse="$PARAM[backingcolor]">views/white_100.png</texture>
+            </control>
+            <control type="image">
+              <visible>String.IsEqual(ListItem.Overlay,OverlayWatched.png)</visible>
+              <height>$PARAM[height]</height>
+              <width>$PARAM[height]</width>
+              <texture colordiffuse="$VAR[AccentColor]">views/white_100.png</texture>
+            </control>
+            <control type="image">
+              <visible>String.IsEqual(ListItem.Overlay,OverlayWatched.png)</visible>
+              <left>54</left>
+              <top>58</top>
+              <width>36</width>
+              <height>28</height>
+              <aspectratio>keep</aspectratio>
+              <texture colordiffuse="$VAR[LightColor]">views/check_focused.png</texture>
+            </control>
+          </control>
+          <!--Right Line-->
+          <control type="group">
+            <animation effect="fade" end="0" time="0" condition="!Skin.String(DetailedListView_Display,Fanart) + !Skin.String(DetailedListView_Display,Off)">Conditional</animation>
+            <include content="DetailedListViewLine">
+              <param name="left" value="1352"/>
+            </include>
+          </control>
+          <!--Backing-->
+          <control type="image">
+            <visible>Skin.String(Theme,Light)</visible>
+            <left>$PARAM[height]</left>
+            <width>$PARAM[backingwidth]</width>
+            <height>$PARAM[height]</height>
+            <texture colordiffuse="$PARAM[backingcolor]">$PARAM[backingtexturelight]</texture>
+          </control>
+          <control type="image">
+            <visible>Skin.String(Theme,Dark) | String.IsEmpty(Skin.String(Theme))</visible>
+            <left>$PARAM[height]</left>
+            <width>$PARAM[backingwidth]</width>
+            <height>$PARAM[height]</height>
+            <texture colordiffuse="$PARAM[backingcolor]">$PARAM[backingtexturedark]</texture>
+          </control>
+          <!--Title-->
+          <control type="group">
+            <control type="$PARAM[titlelabeltype]">
+              <animation effect="slide" end="0,13" time="0" condition="Skin.String(DetailedListView_Details,Title)">Conditional</animation>
+              <left>$PARAM[titleleft]</left>
+              <top>$PARAM[titletop]</top>
+              <width>$PARAM[titlewidth]</width>
+              <height>$PARAM[titleheight]</height>
+              <label>$VAR[Title]</label>
+              <font>$PARAM[titlefont]</font>
+              <textcolor>$PARAM[titletextcolor]</textcolor>
+              <scroll>true</scroll>
+              <scrollsuffix> / </scrollsuffix>
+            </control>
+            <!--SubTitle-->
+            <control type="label">
+              <visible>!Skin.String(DetailedListView_Details,Title)</visible>
+              <left>$PARAM[titleleft]</left>
+              <top>$PARAM[subtitletop]</top>
+              <width>$PARAM[titlewidth]</width>
+              <height>26</height>
+              <label>$VAR[TitleInfo]</label>
+              <font>DetailedListSubTitle</font>
+              <textcolor>$VAR[TertiaryColor]</textcolor>
+            </control>
+          </control>
+        </control>
+        <!--Fanart-->
+        <control type="group">
+          <visible>$PARAM[fanartvisible]</visible>
+          <left>$PARAM[height]</left>
+          <width>256</width>
+          <height>$PARAM[height]</height>
+          <control type="image">
+            <texture background="true">$VAR[Thumbnail(0)Content]</texture>
+          </control>
+          <control type="image">
+            <visible>$PARAM[unfocusedvisible]</visible>
+            <texture colordiffuse="$VAR[SecondaryColor]">views/white_30.png</texture>
+          </control>
+        </control>
+      </control>
+
+
+
+    </definition>
+  </include>
 
 	<!--Grid View Layout-->
 	<include name="GridViewLayout">
@@ -774,11 +961,11 @@
 		<param name="gridtitleleft" default="186"/>
 		<param name="gridtitletop" default="416"/>
     <param name="gridtitleheight" default="33"/>
-		<param name="gridtitlefont" default="ExtraSmallUnfocused"/>
+		<param name="gridtitlefont" default="GridUnfocused"/>
 		<param name="gridtitletextcolor" default="$VAR[TertiaryColor]"/>
 		<!--Info attributes-->
 		<param name="griddetailstop" default="451"/>
-		<param name="griddetailsfont" default="ExtraSmallSubTitle"/>
+		<param name="griddetailsfont" default="GridSubTitle"/>
     <param name="griddetailstextcolor" default="$VAR[PrimaryColor]"/>
     <param name="griddetailsvisible" default="false"/>
 		<definition>
@@ -911,13 +1098,13 @@
       <param name="showgradient" value="true"/>
       <param name="watchedstatusvisibility" value="false"/>
       <param name="bordervisible" value="true"/>
-      <param name="progressbarvisible" value="!Control.IsVisible(50401) + !Control.IsVisible(50402)"/>
+      <param name="progressbarvisible" value="!Control.IsVisible(50502) + !Control.IsVisible(50503)"/>
       <param name="gridtitlescroll" value="true"/>
       <param name="gridtitlewidth" value="624"/>
       <param name="gridtitleleft" value="105"/>
       <param name="gridtitletop" value="413"/>
       <param name="gridtitleheight" value="38"/>
-      <param name="gridtitlefont" value="ExtraSmallFocused"/>
+      <param name="gridtitlefont" value="GridFocused"/>
       <param name="gridtitletextcolor" value="$VAR[PrimaryColor]"/>
       <param name="griddetailsvisible" value="true"/>
     </include>
@@ -957,7 +1144,7 @@
       <param name="showgradient" value="true"/>
       <param name="watchedstatusvisibility" value="false"/>
       <param name="bordervisible" value="true"/>
-      <param name="progressbarvisible" value="!Control.IsVisible(50401) + !Control.IsVisible(50402)"/>
+      <param name="progressbarvisible" value="!Control.IsVisible(50502) + !Control.IsVisible(50503)"/>
       <param name="progressbarleft" value="192"/>
       <param name="progressbartop" value="552"/>
       <param name="progressbarwidth" value="296"/>
@@ -966,7 +1153,7 @@
       <param name="gridtitleheight" value="38"/>
       <param name="gridtitleleft" value="167"/>
       <param name="gridtitletop" value="576"/>
-      <param name="gridtitlefont" value="ExtraSmallFocused"/>
+      <param name="gridtitlefont" value="GridFocused"/>
       <param name="gridtitletextcolor" value="$VAR[PrimaryColor]"/>
       <param name="griddetailstop" value="614"/>
       <param name="griddetailsvisible" value="true"/>
@@ -1100,7 +1287,7 @@
 			<left>25</left>
 			<width>1870</width>
 			<control type="image">
-				<visible>Container(503).HasPrevious</visible>
+				<visible>Container(504).HasPrevious</visible>
 				<include>ContentFadeAnimation</include>
 				<left>0</left>
 				<width>25</width>
@@ -1108,7 +1295,7 @@
 				<texture colordiffuse="$VAR[TextColor]">views/arrow_left.png</texture>
 			</control>
 			<control type="image">
-				<visible>Container(503).HasNext</visible>
+				<visible>Container(504).HasNext</visible>
 				<include>ContentFadeAnimation</include>
 				<right>0</right>
 				<width>25</width>
