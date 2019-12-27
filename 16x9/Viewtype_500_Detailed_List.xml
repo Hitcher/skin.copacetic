@@ -29,6 +29,40 @@
 				<pagecontrol>60</pagecontrol>
 				<orientation>vertical</orientation>
 				<scrolltime tween="sine" easing="inout">380</scrolltime>
+				<animation effect="slide" end="0,468" time="0" reversible="false" condition="Integer.IsEqual(Container(500).NumItems,1)">Conditional</animation>
+				<animation effect="slide" end="0,396" time="0" reversible="false" condition="Integer.IsEqual(Container(500).NumItems,2)">Conditional</animation>
+				<animation effect="slide" end="0,324" time="0" reversible="false" condition="Integer.IsEqual(Container(500).NumItems,3)">Conditional</animation>
+				<animation effect="slide" end="0,252" time="0" reversible="false" condition="Integer.IsEqual(Container(500).NumItems,4)">Conditional</animation>
+				<animation effect="slide" end="0,180" time="0" reversible="false" condition="Integer.IsEqual(Container(500).NumItems,5)">Conditional</animation>
+				<animation effect="slide" end="0,108" time="0" reversible="false" condition="Integer.IsEqual(Container(500).NumItems,6)">Conditional</animation>
+				<animation effect="slide" end="0,36" time="0" reversible="false" condition="Integer.IsEqual(Container(500).NumItems,7)">Conditional</animation>
+
+				<itemlayout height="144" width="1440" condition="Skin.String(DetailedListView_Display,Off)">
+					<include content="DetailedListViewLayout">
+						<param name="titleleft" value="170"/>
+						<param name="fanartvisible" value="false"/>
+					</include>
+				</itemlayout>
+
+				<focusedlayout height="144" width="1440" condition="Skin.String(DetailedListView_Display,Off)">
+					<include>HiddenFocusButton</include>
+					<include content="DetailedListViewLayout">
+						<param name="unfocusedvisible" value="false"/>
+						<param name="focusedvisible" value="true"/>
+						<param name="backingwidth" value="1440"/>
+						<param name="backingcolor" value="$VAR[DetailedListFocusColor]"/>
+						<param name="backingtexturelight" value="views/white_100.png"/>
+						<param name="backingtexturedark" value="views/white_100.png"/>
+						<param name="titletop" value="37"/>
+						<param name="titlewidth" value="989"/>
+						<param name="titleheight" value="44"/>
+						<param name="titlefont" value="DetailedListFocused"/>
+						<param name="titletextcolor" value="$VAR[SecondaryColor]"/>
+						<param name="subtitletop" value="81"/>
+						<param name="titleleft" value="170"/>
+						<param name="fanartvisible" value="false"/>
+					</include>
+				</focusedlayout>
 
 				<itemlayout height="144" width="1440" condition="Skin.String(DetailedListView_Display,Fanart) | String.IsEmpty(Skin.String(DetailedListView_Display))">
 					<include content="DetailedListViewLayout"/>
@@ -110,7 +144,7 @@
 					</include>
 				</focusedlayout>
 
-				<itemlayout height="144" width="840" condition="Skin.String(DetailedListView_Display,Showcase)">
+				<itemlayout height="144" width="840" condition="Skin.String(DetailedListView_Display,Showcase) + !Container.Content(episodes)">
 					<include content="DetailedListViewLayout">
 						<param name="width" value="696"/>
 				    <param name="backingwidth" value="696"/>
@@ -120,7 +154,7 @@
 					</include>
 				</itemlayout>
 
-				<focusedlayout height="144" width="840" condition="Skin.String(DetailedListView_Display,Showcase)">
+				<focusedlayout height="144" width="840" condition="Skin.String(DetailedListView_Display,Showcase) + !Container.Content(episodes)">
 					<include>HiddenFocusButton</include>
 					<include content="DetailedListViewLayout">
 						<param name="width" value="696"/>
@@ -141,7 +175,6 @@
 					</include>
 				</focusedlayout>
 
-
 			</control>
 
 			<control type="group">
@@ -152,27 +185,19 @@
 					<param name="left" value="1200"/>
 					<param name="top" value="0"/>
 					<param name="fadetime" value="200"/>
-					<param name="texture" value="$INFO[ListItem.Art(poster)]"/>
-					<param name="showgradient" value="true"/>
-				</include>
-				<include content="ProgressBar">
-					<param name="left" value="1400"/>
+					<param name="texture" value="$VAR[PosterArt]"/>
 				</include>
 			</control>
 
 			<control type="group">
-				<visible>Skin.String(DetailedListView_Display,Showcase)</visible>
+				<visible>Skin.String(DetailedListView_Display,Showcase) + !Container.Content(episodes)</visible>
 				<include content="ListIcon">
 					<param name="width" value="1080"/>
 					<param name="height" value="1080"/>
 					<param name="left" value="840"/>
 					<param name="top" value="0"/>
 					<param name="fadetime" value="200"/>
-					<param name="texture" value="$INFO[ListItem.Art(showcase)]"/>
-					<param name="showgradient" value="true"/>
-				</include>
-				<include content="ProgressBar">
-					<param name="left" value="1220"/>
+					<param name="texture" value="$VAR[ShowcaseArt]"/>
 				</include>
 			</control>
 

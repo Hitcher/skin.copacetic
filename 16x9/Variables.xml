@@ -11,7 +11,7 @@
 		<value condition="Control.IsVisible(50)">views/white_50.png</value>
 		<value condition="Control.IsVisible(501) + [Skin.String(BillboardView_Details, All) | Skin.String(BillboardView_Details,TitleAndPlot) | String.IsEmpty(Skin.String(BillboardView_Details))]">views/white_50.png</value>
 		<value condition="Control.IsVisible(501) + [Skin.String(BillboardView_Details, Title) | Skin.String(BillboardView_Details, TitleAndInfo)]">views/white_20.png</value>
-		<value condition="String.IsEmpty(Skin.String(Theme)">views/white_50.png</value>
+		<value>views/white_75.png</value>
 	</variable>
 
 	<!--Showcase custom art -1-->
@@ -32,6 +32,12 @@
 			<value>$INFO[ListItem(1).Art(fanart)]</value>
 	</variable>
 
+	<!--PosterArt-->
+	<variable name="PosterArt">
+		<value condition="Container.Content(episodes)">$INFO[ListItem.Art(season.poster)]</value>
+		<value>$INFO[ListItem.Art(poster)]</value>
+	</variable>
+
 
 	<!--Thumbnail-3-->
 	<variable name="Thumbnail(-3)Content">
@@ -50,7 +56,7 @@
 		<value condition="!String.IsEmpty(Container.ListItemNoWrap(-2).FolderPath) + !Container.Content(episodes) + Control.IsVisible(503) + Skin.String(GalleryView_Display,Posters)">$INFO[ListItem(-2).Art(poster)]</value>
 		<value condition="!String.IsEmpty(Container.ListItemNoWrap(-2).FolderPath) + !Container.Content(episodes) + Control.IsVisible(504) + Skin.String(StripView_Display,Posters)">$INFO[ListItem(-2).Art(poster)]</value>
 		<value condition="!String.IsEmpty(Container.ListItemNoWrap(-2).FolderPath) + !Container.Content(episodes) + Control.IsVisible(504) + [Skin.String(StripView_Display,Fanart) | String.IsEmpty(Skin.String(StripView_Display)]">$INFO[ListItem(-2).Art(fanart)]</value>
-		<value>ListItem.Thumb</value>
+		<value>ListItem.Icon</value>
 	</variable>
 
 	<!--Thumbnail-1-->
@@ -62,7 +68,7 @@
 		<value condition="!String.IsEmpty(Container.ListItemNoWrap(-1).FolderPath) + !Container.Content(episodes) + Control.IsVisible(503) + Skin.String(GalleryView_Display,Posters)">$INFO[ListItem(-1).Art(poster)]</value>
 		<value condition="!String.IsEmpty(Container.ListItemNoWrap(-1).FolderPath) + !Container.Content(episodes) + Control.IsVisible(504) + Skin.String(StripView_Display,Posters)">$INFO[ListItem(-1).Art(poster)]</value>
 		<value condition="!String.IsEmpty(Container.ListItemNoWrap(-1).FolderPath) + !Container.Content(episodes) + Control.IsVisible(504) + [Skin.String(StripView_Display,Fanart) | String.IsEmpty(Skin.String(StripView_Display)]">$INFO[ListItem(-1).Art(fanart)]</value>
-		<value>ListItem.Thumb</value>
+		<value>ListItem.Icon</value>
 	</variable>
 
 	<!--Thumbnail 0 [Focused]-->
@@ -80,7 +86,7 @@
 		<value condition="!Container.Content(episodes) + Control.IsVisible(504) + Skin.String(StripView_Display,Posters)">$INFO[ListItem.Art(poster)]</value>
 		<value condition="!Container.Content(episodes) + Control.IsVisible(505) + [Skin.String(GridView_Display,Fanart) | String.IsEmpty(Skin.String(GridView_Display)]">$INFO[ListItem.Art(fanart)]</value>
 		<value condition="!Container.Content(episodes) + Control.IsVisible(505) + Skin.String(GridView_Display,Posters)">$INFO[ListItem.Art(poster)]</value>
-		<value>ListItem.Thumb</value>
+		<value>ListItem.Icon</value>
 	</variable>
 
 	<!--Thumbnail 1-->
@@ -117,14 +123,49 @@
 
 	<!--Title-->
 	<variable name="Title">
-		<value condition="Container.Content(episodes) + !Integer.IsGreater(ListItem.Episode,9)">$INFO[ListItem.Season]$INFO[ListItem.Episode,x0] $INFO[ListItem.Title]</value>
-		<value condition="Container.Content(episodes)">$INFO[ListItem.Season]$INFO[ListItem.Episode,x] $INFO[ListItem.Title]</value>
+		<value condition="Container.Content(episodes)">$INFO[ListItem.Title]</value>
 		<value condition="Container.Content(albums)">$INFO[ListItem.Album]</value>
 		<value condition="Container.Content(artists)">$INFO[ListItem.Artist]</value>
 		<value condition="Container.Content(songs)">$INFO[ListItem.TrackNumber].$INFO[ListItem.Title]</value>
 		<value condition="!String.IsEmpty(ListItem.Title)">$INFO[ListItem.Title]</value>
 		<value>$INFO[ListItem.Label]</value>
 	</variable>
+
+	<!-- Seasons Label -->
+	<variable name="SeasonsLabel">
+		<value condition="Container.Content(tvshows) + !String.IsEmpty(ListItem.Property(TotalSeasons)) + String.IsEqual(ListItem.Property(TotalSeasons),1)">$LOCALIZE[32121]</value>
+		<value>$LOCALIZE[32122]</value>
+	</variable>
+
+	<!--Title Info Label-->
+	<variable name="TitleInfo">
+		<!--  Movies (All Views): 2019 / 152 mins-->
+		<value condition="Container.Content(movies) + !String.IsEmpty(ListItem.Year)">[UPPERCASE]$INFO[ListItem.Year]$INFO[ListItem.Duration(mins), / , $LOCALIZE[31138]][/UPPERCASE]</value>
+		<value condition="Container.Content(movies) + !String.IsEmpty(ListItem.Duration)">[UPPERCASE]$INFO[ListItem.Duration(mins),, $LOCALIZE[31138]][/UPPERCASE]</value>
+ 		<!-- TV Shows (Views 50, 505): 2019 / 5 Seasons -->
+		<value condition="Container.Content(tvshows) + [Control.IsVisible(50) | Control.IsVisible(505)] + !String.IsEmpty(ListItem.Year)">[UPPERCASE]$INFO[ListItem.Year]$INFO[ListItem.Property(TotalSeasons), / , ]$VAR[SeasonsLabel][/UPPERCASE]</value>
+		<value condition="Container.Content(tvshows) + [Control.IsVisible(50) | Control.IsVisible(505)] + !String.IsEmpty(ListItem.Property(TotalSeasons))">[UPPERCASE]$INFO[ListItem.Property(TotalSeasons),, ]$VAR[SeasonsLabel][/UPPERCASE]</value>
+		<!-- TV Shows (Remaining Views): 2019 / 5 Seasons / 7/8 Watched-->
+		<value condition="Container.Content(tvshows) + ![Control.IsVisible(50) | Control.IsVisible(505)] + !String.IsEmpty(ListItem.Year)">[UPPERCASE]$INFO[ListItem.Year]$INFO[ListItem.Property(TotalSeasons), / , ]$VAR[SeasonsLabel]$INFO[ListItem.Property(WatchedEpisodes), / ,/]$INFO[ListItem.Property(NumEpisodes),, $LOCALIZE[32001]][/UPPERCASE]</value>
+		<value condition="Container.Content(tvshows) + ![Control.IsVisible(50) | Control.IsVisible(505)] + !String.IsEmpty(ListItem.Property(TotalSeasons))">[UPPERCASE]$INFO[ListItem.Property(TotalSeasons),, ]$VAR[SeasonsLabel]$INFO[ListItem.Property(WatchedEpisodes), / ,/]$INFO[ListItem.Property(NumEpisodes),, $LOCALIZE[32001]][/UPPERCASE]</value>
+		<value condition="Container.Content(tvshows) + ![Control.IsVisible(50) | Control.IsVisible(505)] + !String.IsEmpty(ListItem.Property(WatchedEpisodes))">[UPPERCASE]$INFO[ListItem.Property(WatchedEpisodes),,/]$INFO[ListItem.Property(NumEpisodes),, $LOCALIZE[32001]][/UPPERCASE]</value>
+		<!-- Seasons (Views 50, 505): Legion / 2019 -->
+		<value condition="Container.Content(seasons) + [Control.IsVisible(50) | Control.IsVisible(505)] + !String.IsEmpty(ListItem.TVShowTitle)">[UPPERCASE]$INFO[ListItem.TVShowTitle]$INFO[ListItem.Year, / ][/UPPERCASE]</value>
+		<value condition="Container.Content(seasons) + [Control.IsVisible(50) | Control.IsVisible(505)] + !String.IsEmpty(ListItem.Year)">[UPPERCASE][ListItem.Year][/UPPERCASE]</value>
+		<!-- Seasons (Remaining Views): Legion / 2019 / 0/9 Watched-->
+		<value condition="Container.Content(seasons) + ![Control.IsVisible(50) | Control.IsVisible(505)] + !String.IsEmpty(ListItem.TVShowTitle)">[UPPERCASE]$INFO[ListItem.TVShowTitle]$INFO[ListItem.Year, / ]$INFO[ListItem.Property(WatchedEpisodes), / ,/]$INFO[ListItem.Property(NumEpisodes),, ]$LOCALIZE[32001][/UPPERCASE]</value>
+		<value condition="Container.Content(seasons) + ![Control.IsVisible(50) | Control.IsVisible(505)] + !String.IsEmpty(ListItem.Year)">[UPPERCASE]$INFO[ListItem.Year]$INFO[ListItem.Property(WatchedEpisodes), / ,/]$INFO[ListItem.Property(NumEpisodes),, ]$LOCALIZE[32001][/UPPERCASE]</value>
+		<value condition="Container.Content(seasons) + ![Control.IsVisible(50) | Control.IsVisible(505)] + !String.IsEmpty(ListItem.Property(WatchedEpisodes))">[UPPERCASE]$INFO[ListItem.Property(WatchedEpisodes),,/]$INFO[ListItem.Property(NumEpisodes),, ]$LOCALIZE[32001][/UPPERCASE]</value>
+		<!--Episodes (All Views): 2x01 Legion / 12/19/2019 / 42 mins-->
+		<value condition="Container.Content(episodes) + !String.IsEmpty(ListItem.TVShowTitle) + !Integer.IsGreater(ListItem.Episode,9)">$INFO[ListItem.Season]$INFO[ListItem.Episode,x0][UPPERCASE]$INFO[ListItem.TVShowTitle, / , ]$INFO[ListItem.Duration(mins), / , $LOCALIZE[31138]][/UPPERCASE]</value>
+		<value condition="Container.Content(episodes) + !String.IsEmpty(ListItem.TVShowTitle)">[UPPERCASE]$INFO[ListItem.Season]$INFO[ListItem.Episode,x] $INFO[ListItem.TVShowTitle, / , ][/UPPERCASE]</value>
+		<value condition="Container.Content(episodes) + !String.IsEmpty(ListItem.Duration)">[UPPERCASE]$INFO[ListItem.Duration(mins),, $LOCALIZE[31138]][/UPPERCASE]</value>
+		<!--Artists (All Views): Jazz / 1980-90s-->
+		<value condition="Container.Content(artists) + !String.IsEmpty(ListItem.Property(Artist_Genre))">[UPPERCASE]$INFO[ListItem.Property(Artist_Genre)]$INFO[ListItem.Property(Artist_YearsActive), / ][/UPPERCASE]</value>
+		<value condition="Container.Content(artists) + !String.IsEmpty(ListItem.Property(Artist_YearsActive))">[UPPERCASE][ListItem.Property(Artist_YearsActive)][/UPPERCASE]</value>
+		<value></value>
+	</variable>
+
 
 	<!--Plot-->
 	<variable name="Plot">
@@ -200,63 +241,8 @@
 		<value condition="String.StartsWith(ListItem.VideoResolution,480)">SD</value>
 	</variable>
 
-	<!-- Seasons Label -->
-	<variable name="SeasonsLabel">
-		<value condition="Container.Content(tvshows) + !String.IsEmpty(ListItem.Property(TotalSeasons)) + String.IsEqual(ListItem.Property(TotalSeasons),1)">$LOCALIZE[32121]</value>
-		<value>$LOCALIZE[32122]</value>
-	</variable>
-
-	<!--Title Info Label-->
-	<variable name="TitleInfo">
-		<value condition="Container.Content(movies) + Window.IsActive(movieinformation)">$INFO[ListItem.Year,, / ]$VAR[ResolutionLabel,, / ]$INFO[ListItem.Director,, / ]$INFO[ListItem.Duration(mins),, $LOCALIZE[31138] / ]ENDS $INFO[ListItem.EndTime]</value>
-
-		<!--  Movies (All Views): 2019 / 152 mins-->
-		<value condition="Container.Content(movies) + !String.IsEmpty(ListItem.Year)">[UPPERCASE]$INFO[ListItem.Year]$INFO[ListItem.Duration(mins), / , $LOCALIZE[31138]][/UPPERCASE]</value>
-		<value condition="Container.Content(movies) + !String.IsEmpty(ListItem.Duration)">[UPPERCASE]$INFO[ListItem.Duration(mins),, $LOCALIZE[31138]][/UPPERCASE]</value>
- 		<!-- TV Shows (Views 50, 505): 2019 / 5 Seasons -->
-		<value condition="Container.Content(tvshows) + [Control.IsVisible(50) | Control.IsVisible(505)] + !String.IsEmpty(ListItem.Year)">[UPPERCASE]$INFO[ListItem.Year]$INFO[ListItem.Property(TotalSeasons), / , ]$VAR[SeasonsLabel][/UPPERCASE]</value>
-		<value condition="Container.Content(tvshows) + [Control.IsVisible(50) | Control.IsVisible(505)] + !String.IsEmpty(ListItem.Property(TotalSeasons))">[UPPERCASE]$INFO[ListItem.Property(TotalSeasons),, ]$VAR[SeasonsLabel][/UPPERCASE]</value>
-		<!-- TV Shows (Remaining Views): 2019 / 5 Seasons / 7/8 Watched-->
-		<value condition="Container.Content(tvshows) + ![Control.IsVisible(50) | Control.IsVisible(505)] + !String.IsEmpty(ListItem.Year)">[UPPERCASE]$INFO[ListItem.Year]$INFO[ListItem.Property(TotalSeasons), / , ]$VAR[SeasonsLabel]$INFO[ListItem.Property(WatchedEpisodes), / ,/]$INFO[ListItem.Property(NumEpisodes),, $LOCALIZE[32001]][/UPPERCASE]</value>
-		<value condition="Container.Content(tvshows) + ![Control.IsVisible(50) | Control.IsVisible(505)] + !String.IsEmpty(ListItem.Property(TotalSeasons))">[UPPERCASE]$INFO[ListItem.Property(TotalSeasons),, ]$VAR[SeasonsLabel]$INFO[ListItem.Property(WatchedEpisodes), / ,/]$INFO[ListItem.Property(NumEpisodes),, $LOCALIZE[32001]][/UPPERCASE]</value>
-		<value condition="Container.Content(tvshows) + ![Control.IsVisible(50) | Control.IsVisible(505)] + !String.IsEmpty(ListItem.Property(WatchedEpisodes))">[UPPERCASE]$INFO[ListItem.Property(WatchedEpisodes),,/]$INFO[ListItem.Property(NumEpisodes),, $LOCALIZE[32001]][/UPPERCASE]</value>
 
 
-		<!-- Seasons (Views 50, 505): Legion / 2019 -->
-		<value condition="Container.Content(seasons) + [Control.IsVisible(50) | Control.IsVisible(505)] + !String.IsEmpty(ListItem.TVShowTitle)">$INFO[ListItem.TVShowTitle]$INFO[ListItem.Year, / ]</value>
-		<value condition="Container.Content(seasons) + [Control.IsVisible(50) | Control.IsVisible(505)] + !String.IsEmpty(ListItem.Year)">[ListItem.Year]</value>
-		<!-- Seasons (Remaining Views): Legion / 2019 / 0/9 Watched-->
-		<value condition="Container.Content(seasons) + ![Control.IsVisible(50) | Control.IsVisible(505)] + !String.IsEmpty(ListItem.TVShowTitle)">$INFO[ListItem.TVShowTitle]$INFO[ListItem.Year, / ]$INFO[ListItem.Property(WatchedEpisodes), / ,/]$INFO[ListItem.Property(NumEpisodes),, ]$LOCALIZE[32001]</value>
-		<value condition="Container.Content(seasons) + ![Control.IsVisible(50) | Control.IsVisible(505)] + !String.IsEmpty(ListItem.Year)">$INFO[ListItem.Year]$INFO[ListItem.Property(WatchedEpisodes), / ,/]$INFO[ListItem.Property(NumEpisodes),, ]$LOCALIZE[32001]</value>
-		<value condition="Container.Content(seasons) + ![Control.IsVisible(50) | Control.IsVisible(505)] + !String.IsEmpty(ListItem.Property(WatchedEpisodes))">$INFO[ListItem.Property(WatchedEpisodes),,/]$INFO[ListItem.Property(NumEpisodes),, ]$LOCALIZE[32001]</value>
-		<!--Episodes (All Views): Legion / 12/19/2019 / 42 mins-->
-		<value condition="Container.Content(episodes) + !String.IsEmpty(ListItem.TVShowTitle)">$INFO[ListItem.TVShowTitle]$INFO[ListItem.Duration(mins), / , $LOCALIZE[31138]]</value>
-		<value condition="Container.Content(episodes) + !String.IsEmpty(ListItem.Duration)">$INFO[ListItem.Duration(mins),, $LOCALIZE[31138]]</value>
-		<!--Artists (All Views): Jazz / 1980-90s-->
-		<value condition="Container.Content(artists) + !String.IsEmpty(ListItem.Property(Artist_Genre))">$INFO[ListItem.Property(Artist_Genre)]$INFO[ListItem.Property(Artist_YearsActive), / ]</value>
-		<value condition="Container.Content(artists) + !String.IsEmpty(ListItem.Property(Artist_YearsActive))">[ListItem.Property(Artist_YearsActive)]</value>
-		<value></value>
-	</variable>
-
-
-	<!--Title Info Label 2-->
-	<variable name="TitleInfo2">
-		<!--Full Movie Info (Line 1)-->
-		<value condition="Container.Content(movies) + Window.IsActive(movieinformation) + !String.IsEmpty[ListItem.Genre]">$INFO[ListItem.Genre]</value>
-	</variable>
-
-
-
-
-
-
-
-
-		<variable name="WallIcon">
-			<value condition="!Container.Content(episodes) + !String.IsEmpty(ListItem.Art(landscape)) + Skin.HasSetting(EnableLandscape)">$INFO[ListItem.Art(landscape)]</value>
-			<value condition="!Container.Content(episodes) + !String.IsEmpty(ListItem.Art(fanart))">$INFO[ListItem.Art(fanart)]</value>
-			<value>$INFO[ListItem.Icon]</value>
-		</variable>
 
 
 
