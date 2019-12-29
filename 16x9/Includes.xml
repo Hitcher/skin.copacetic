@@ -28,7 +28,7 @@
 			<visible>Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | Container.Content(episodes) | Container.Content(artists)</visible>
 			<aspectratio>scale</aspectratio>
 			<fadetime>380</fadetime>
-			<texture fallback="empty" background="true">$VAR[Fanart]</texture>
+			<texture background="true">$VAR[Thumbnail(0)Content]</texture>
 		</control>
 	</include>
 
@@ -388,14 +388,6 @@
 		<visible>!Window.IsVisible(contextmenu) + !Control.HasFocus(3000) + !Window.IsTopMost(selectdialog) + !Window.IsTopMost(shutdownmenu) + !Window.IsVisible(okdialog) + !Window.IsTopMost(yesnodialog) + !Window.IsVisible(movieinformation)</visible>
 	</include>
 
-	<!--HiddenFocusButton-->
-	<include name="HiddenFocusButton">
-		<control type="button">
-			<visible allowhiddenfocus="true">false</visible>
-			<onfocus condition="System.HasAddon(script.embuary.helper) + [container.content(tvshows) | container.content(seasons)]">RunScript(script.embuary.helper,action=calc,do='"($INFO[ListItem.Property(WatchedEpisodes)] / $INFO[ListItem.Property(TotalEpisodes)]) * 100"',prop=MyResult)</onfocus>
-		</control>
-	</include>
-
 	<!--ListIcon-->
 	<include name="ListIcon">
 		<param name="width" default="100%"/>
@@ -458,6 +450,14 @@
     </definition>
   </include>
 
+  <!--HiddenFocusButton-->
+  <include name="HiddenFocusButton">
+    <control type="button">
+      <visible allowhiddenfocus="true">false</visible>
+      <onfocus condition="System.HasAddon(script.embuary.helper) + [Container.Content(tvshows) | Container.Content(seasons)]">RunScript(script.embuary.helper,action=calc,do='"($INFO[ListItem.Property(WatchedEpisodes)] / $INFO[ListItem.Property(TotalEpisodes)]) * 100"',prop=MyResult)</onfocus>
+    </control>
+  </include>
+
 	<!--TVshow/Seasons ProgressBar-->
 	<include name="TVProgressBar">
 		<param name="visible" default="true"/>
@@ -467,7 +467,7 @@
 		<param name="texturecolor" default="$VAR[ProgressBarFocusColor]"/>
 		<definition>
 			<control type="image">
-				<visible>[Container.Content(tvshows) | Container.Content(seasons) | Control.IsVisible(500) + Container.Content(episodes)] + Integer.IsGreater($NUMBER[Window(home).Property(MyResult)],0)</visible>
+				<visible>[Container.Content(tvshows) | Container.Content(seasons)] + Integer.IsGreater($NUMBER[Window(home).Property(MyResult)],0)</visible>
 				<visible>$PARAM[visible]</visible>
 				<height>$PARAM[height]</height>
 				<width>$PARAM[width]</width>
@@ -755,19 +755,22 @@
     <param name="backingtexturelight" default="views/white_5.png"/>
     <param name="backingtexturedark" default="views/white_10.png"/>
     <param name="titlelabeltype" default="label"/>
-    <param name="titleleft" default="426"/>
+    <param name="titleleft" default="425"/>
     <param name="titletop" default="38"/>
     <param name="titlewidth" default="845"/>
-    <param name="titleheight" default="40"/>
+    <param name="titleheight" default="39"/>
     <param name="titlefont" default="DetailedListUnfocused"/>
     <param name="titlescroll" default="false"/>
     <param name="titletextcolor" default="$VAR[TertiaryColor]"/>
-    <param name="subtitletop" default="80"/>
-    <param name="subtitlefont" default="DetailedListSubTitle"/>
+    <param name="subtitletop" default="77"/>
+    <param name="subtitleheight" default="29"/>
+    <param name="subtitlefont" default="DetailedListSubTitleUnfocused"/>
     <param name="fanartvisible" default="true"/>
+    <param name="iconcolor" default="$VAR[TertiaryColor]"/>
+    <param name="icontexture" default="views/defaulticon_unfocused.png"/>
     <definition>
       <control type="group">
-        <animation effect="slide" end="-240,0" time="0" condition="!Skin.String(DetailedListView_Display,Fanart) + !Skin.String(DetailedListView_Display,Off)">Conditional</animation>
+        <animation effect="slide" end="-240,0" time="0" condition="!Skin.String(DetailedListView_Display,Fanart) + [Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | Container.Content(episodes)]">Conditional</animation>
         <control type="group">
           <height>$PARAM[height]</height>
           <width>$PARAM[width]</width>
@@ -817,16 +820,18 @@
             <height>$PARAM[height]</height>
             <texture colordiffuse="$PARAM[backingcolor]">$PARAM[backingtexturedark]</texture>
           </control>
-          <!--Title-->
+          <!--Title -->
           <control type="group">
+            <visible>!ListItem.IsFolder</visible>
             <control type="$PARAM[titlelabeltype]">
-              <animation effect="slide" end="0,13" time="0" condition="Skin.String(DetailedListView_Details,Title) | ![Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | Container.Content(episodes)]">Conditional</animation>
+              <animation effect="slide" end="0,13" time="0" condition="Skin.String(DetailedListView_Details,Title)">Conditional</animation>
               <left>$PARAM[titleleft]</left>
               <top>$PARAM[titletop]</top>
               <width>$PARAM[titlewidth]</width>
               <height>$PARAM[titleheight]</height>
               <label>$VAR[Title]</label>
               <font>$PARAM[titlefont]</font>
+              <aligny>center</aligny>
               <textcolor>$PARAM[titletextcolor]</textcolor>
               <scroll>$PARAM[scroll]</scroll>
               <scrollsuffix> / </scrollsuffix>
@@ -837,11 +842,26 @@
               <left>$PARAM[titleleft]</left>
               <top>$PARAM[subtitletop]</top>
               <width>$PARAM[titlewidth]</width>
-              <height>26</height>
+              <height>$PARAM[subtitleheight]</height>
+              <aligny>center</aligny>
               <label>$VAR[TitleInfo]</label>
               <font>$PARAM[subtitlefont]</font>
               <textcolor>$PARAM[titletextcolor]</textcolor>
             </control>
+          </control>
+          <!--title for folders-->
+          <control type="$PARAM[titlelabeltype]">
+            <visible>ListItem.IsFolder</visible>
+            <left>$PARAM[titleleft]</left>
+            <top>46</top>
+            <width>$PARAM[titlewidth]</width>
+            <height>$PARAM[titleheight]</height>
+            <label>$VAR[Title]</label>
+            <font>$PARAM[titlefont]</font>
+            <aligny>center</aligny>
+            <textcolor>$PARAM[titletextcolor]</textcolor>
+            <scroll>$PARAM[scroll]</scroll>
+            <scrollsuffix> / </scrollsuffix>
           </control>
         </control>
         <!--Fanart-->
@@ -851,10 +871,19 @@
           <width>256</width>
           <height>$PARAM[height]</height>
           <control type="image">
+            <include>HideContent</include>
+            <visible>ListItem.IsFolder</visible>
+            <aspectratio align="center">center</aspectratio>
+            <texture colordiffuse="$PARAM[iconcolor]">$PARAM[icontexture]</texture>
+          </control>
+          <control type="image">
+            <visible>!ListItem.IsFolder</visible>
+            <aspectratio align="center">scale</aspectratio>
             <texture background="true">$VAR[Thumbnail(0)Content]</texture>
           </control>
           <control type="image">
             <visible>$PARAM[unfocusedvisible]</visible>
+            <visible>!ListItem.IsFolder</visible>
             <texture colordiffuse="$VAR[SecondaryColor]">views/white_30.png</texture>
           </control>
         </control>
