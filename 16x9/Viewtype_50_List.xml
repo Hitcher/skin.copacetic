@@ -5,8 +5,10 @@
 			<visible>Control.IsVisible(50)</visible>
 			<include>FullscreenDimensions</include>
 			<control type="group">
-				<visible>!Skin.String(ListView_Fanart,Off) + !String.IsEmpty(ListItem.Art(fanart))</visible>
-				<include>Fanart</include>
+				<visible>!Skin.String(ListView_Fanart,Off) + [Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | Container.Content(episodes) | Container.Content(artists)]</visible>
+				<include content="ListIcon">
+					<param name="fadetime" value="380"/>
+				</include>
 				<include>ViewtypeOverlay</include>
 			</control>
 
@@ -37,32 +39,18 @@
 				<orientation>vertical</orientation>
 				<scrolltime tween="sine" easing="inout">380</scrolltime>
 
-				<itemlayout height="52" width="1536" condition="!String.IsEmpty(ListItem.Art(fanart))">
+				<itemlayout height="52" width="1536">
 					<include content="ListViewLayout"/>
 				</itemlayout>
 
-				<itemlayout height="52" width="1536" condition="String.IsEmpty(ListItem.Art(fanart))">
-					<include content="ListViewLayout">
-						<param name="textcolor" value="$VAR[PrimaryColor]"/>
-					</include>
-				</itemlayout>
-
-				<focusedlayout height="60" width="1536" condition="!String.IsEmpty(ListItem.Art(fanart))">
+				<focusedlayout height="60" width="1536">
 					<include>HiddenFocusButton</include>
 					<include content="ListViewLayout">
 						<param name="labeltype" value="fadelabel"/>
 						<param name="font" value="LargeFocused"/>
+						<param name="textcolor" value="$VAR[ListFocusColor]"/>
 					</include>
 				</focusedlayout>
-
-				<focusedlayout height="60" width="1536" condition="String.IsEmpty(ListItem.Art(fanart))">
-					<include content="ListViewLayout">
-						<param name="labeltype" value="fadelabel"/>
-						<param name="font" value="LargeFocused"/>
-						<param name="textcolor" value="$VAR[AccentColor]"/>
-					</include>
-				</focusedlayout>
-
 
 			</control>
 
