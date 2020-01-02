@@ -41,12 +41,49 @@
 		<!-- Main group -->
 		<control type="group">
 
+			<!--Background gradient for Light mode-->
 			<control type="image">
 				<visible>Skin.String(Theme,Light)</visible>
 				<aspectratio>stretch</aspectratio>
 				<texture colordiffuse="$VAR[DarkColor]">views/gradient_light-background.png</texture>
 			</control>
 
+			<!--On Previous Scroll Delay-->
+			<control type="group" id="5001">
+				<visible>Container.OnPrevious</visible>
+				<animation effect="slide" end="0,0" time="380" reversible="false">Hidden</animation>
+			</control>
+
+			<!--On Next Scroll Delay-->
+			<control type="group" id="5002">
+				<visible>Container.OnNext</visible>
+				<animation effect="slide" end="0,0" time="380" reversible="false">Hidden</animation>
+			</control>
+
+			<!--Fanart background for 50,501-->
+			<control type="group">
+				<visible>[Control.IsVisible(501) + !Control.IsVisible(5001) + !Control.IsVisible(5002)] | [Control.IsVisible(50) + !Skin.String(ListView_Fanart,Off) + [Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | Container.Content(episodes) | Container.Content(artists)]]</visible>
+				<include content="ListIcon">
+						<param name="left" value="0"/>
+						<param name="top" value="0"/>
+						<param name="width" value="1920"/>
+						<param name="height" value="1080"/>
+						<param name="fadetime" value="300"/>
+				</include>
+				<control type="group">
+					<visible>Control.IsVisible(50) | [Control.IsVisible(501) + !Skin.String(BillboardView_Details,Off)]</visible>
+					<include>ViewtypeOverlay</include>
+				</control>
+			</control>
+
+			<!--Flags-->
+			<control type="group">
+				<visible>!Control.IsVisible(5001) + !Control.IsVisible(5002)</visible>
+				<include>ProgressBarFadeAnimation</include>
+				<include>MediaFlags</include>
+			</control>
+
+			<!--Viewtypes-->
 			<description>Include the following views in MyVideoNav</description>
 			<include>Viewtype_50_List</include>
 			<include>Viewtype_500_Detailed_List</include>
@@ -55,19 +92,6 @@
 			<include>Viewtype_503_Gallery</include>
 			<include>Viewtype_504_Strip</include>
 			<include>Viewtype_505_Grid</include>
-
-			<!--Flags-->
-			<control type="group">
-				<visible>!Control.IsVisible(5001) + !Control.IsVisible(5002)</visible>
-				<visible>!Control.IsVisible(5003) + !Control.IsVisible(5004)</visible>
-				<visible>!Control.IsVisible(5005) + !Control.IsVisible(5006)</visible>
-				<visible>!Control.IsVisible(5007) + !Control.IsVisible(5008)</visible>
-				<visible>!Control.IsVisible(5009) + !Control.IsVisible(5010)</visible>
-				<visible>!Control.IsVisible(5011) + !Control.IsVisible(5012)</visible>
-				<visible>!Control.IsVisible(5013) + !Control.IsVisible(5014)</visible>
-				<include>ProgressBarFadeAnimation</include>
-				<include>MediaFlags</include>
-			</control>
 
 			<!--Scrollbars-->
 			<control type="scrollbar" id="60">
@@ -80,7 +104,7 @@
 				<onright>3000</onright>
 				<showonepage>false</showonepage>
 				<orientation>vertical</orientation>
-				<texturesliderbackground colordiffuse="$VAR[PrimaryColor]">views/white_10.png</texturesliderbackground>
+				<texturesliderbackground colordiffuse="$VAR[PrimaryColor]">views/white_20.png</texturesliderbackground>
 				<texturesliderbar colordiffuse="$VAR[PrimaryColor]">views/white_20.png</texturesliderbar>
 				<texturesliderbarfocus colordiffuse="$VAR[PrimaryColor]">views/white_100.png</texturesliderbarfocus>
 				<textureslidernib></textureslidernib>
@@ -100,7 +124,7 @@
 				<ondown>3000</ondown>
 				<showonepage>false</showonepage>
 				<orientation>horizontal</orientation>
-				<texturesliderbackground colordiffuse="$VAR[PrimaryColor]">views/white_10.png</texturesliderbackground>
+				<texturesliderbackground colordiffuse="$VAR[PrimaryColor]">views/white_20.png</texturesliderbackground>
 				<texturesliderbar colordiffuse="$VAR[PrimaryColor]">views/white_20.png</texturesliderbar>
 				<texturesliderbarfocus colordiffuse="$VAR[PrimaryColor]">views/white_100.png</texturesliderbarfocus>
 				<textureslidernib></textureslidernib>
@@ -1131,7 +1155,7 @@
 					<item>
 						<description>Update Library</description>
 						<onclick>SetFocus(50)</onclick>
-						<onclick>ActivateWindow(settings)</onclick>
+						<onclick>UpdateLibrary(video)</onclick>
 						<label>$LOCALIZE[653]</label>
 						<label2>$LOCALIZE[653]</label2>
 						<visible>!Library.IsScanningVideo</visible>

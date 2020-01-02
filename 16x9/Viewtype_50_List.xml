@@ -4,32 +4,62 @@
 		<control type="group">
 			<visible>Control.IsVisible(50)</visible>
 			<include>FullscreenDimensions</include>
+			<!--Content-->
 			<control type="group">
+				<visible>!Control.IsVisible(5001) + !Control.IsVisible(5002)</visible>
+				<include>ProgressBarFadeAnimation</include>
+				<!--Progress Bar-->
+				<include content="ProgressBar">
+					<param name="left" value="800"/>
+					<param name="top" value="1056"/>
+				</include>
+				<!--Details-->
+				<control type="grouplist">
+					<left>144</left>
+					<top>510</top>
+					<height>60</height>
+					<itemgap>5</itemgap>
+					<orientation>horizontal</orientation>
+					<usecontrolcoords>true</usecontrolcoords>
+					<include>HideContent</include>
+					<visible>Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | Container.Content(episodes) | Container.Content(artists)</visible>
+					<visible>Skin.String(ListView_Details,TitleAndInfo) | String.IsEmpty(Skin.String(ListView_Details)</visible>
+					<control type="label">
+						<width>auto</width>
+						<height>100%</height>
+						<font>LargeFocused</font>
+						<textcolor>$VAR[Blank]</textcolor>
+						<label>$VAR[Title]</label>
+					</control>
+					<control type="label">
+						<width>600</width>
+						<top>14</top>
+						<height>43</height>
+						<font>MediumSubTitle</font>
+						<textcolor>$VAR[LightColor]</textcolor>
+						<label>$VAR[TitleInfo, / ]</label>
+						<scroll>true</scroll>
+						<scrollsuffix></scrollsuffix>
+					</control>
+				</control>
+			</control>
+
+			<!---Transition background-->
+			<control type="group">
+				<visible>Control.IsVisible(5001) | Control.IsVisible(5002)</visible>
 				<visible>!Skin.String(ListView_Fanart,Off) + [Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | Container.Content(episodes) | Container.Content(artists)]</visible>
 				<include content="ListIcon">
-					<param name="fadetime" value="380"/>
+						<param name="fadetime" value="300"/>
 				</include>
 				<include>ViewtypeOverlay</include>
-			</control>
-
-			<!--On Previous Scroll Delay-->
-			<control type="group" id="5001">
-				<visible>Container(50).OnPrevious</visible>
-				<animation effect="slide" end="0,0" time="380" reversible="false">Hidden</animation>
-			</control>
-
-			<!--On Next Scroll Delay-->
-			<control type="group" id="5002">
-				<visible>Container(50).OnNext</visible>
-				<animation effect="slide" end="0,0" time="380" reversible="false">Hidden</animation>
 			</control>
 
 			<!-- List -->
 			<control type="fixedlist" id="50">
 				<viewtype label="535">list</viewtype>
-				<left>192</left>
+				<left>0</left>
 				<top>94</top>
-				<width>1597</width>
+				<width>1219</width>
 				<height>892</height>
 				<onleft>3000</onleft>
 				<onright>60</onright>
@@ -38,59 +68,24 @@
 				<movement>0</movement>
 				<orientation>vertical</orientation>
 				<scrolltime tween="sine" easing="inout">380</scrolltime>
-
-				<itemlayout height="52" width="1536">
+				<itemlayout height="52" width="1165">
 					<include content="ListViewLayout"/>
 				</itemlayout>
-
-				<focusedlayout height="60" width="1536">
+				<focusedlayout height="60" width="1165">
 					<include>HiddenFocusButton</include>
 					<include content="ListViewLayout">
-						<param name="labeltype" value="fadelabel"/>
+						<param name="checkleft" value="54"/>
+						<param name="checktop" value="18"/>
+						<param name="checkwidth" value="36"/>
+						<param name="checkheight" value="28"/>
+						<param name="checktexture" value="views/check_focused.png"/>
+						<param name="labeltype" value="label"/>
+						<param name="labelleft" value="144"/>
 						<param name="font" value="LargeFocused"/>
 						<param name="textcolor" value="$VAR[ListFocusColor]"/>
+						<param name="scroll" value="false"/>
 					</include>
 				</focusedlayout>
-
-			</control>
-
-			<!--Progress Bar-->
-			<control type="group">
-				<visible>!Control.IsVisible(5001) + !Control.IsVisible(5002)</visible>
-				<include>ProgressBarFadeAnimation</include>
-				<include content="ProgressBar">
-					<param name="left" value="800"/>
-					<param name="top" value="1056"/>
-				</include>
-			</control>
-
-			<control type="grouplist">
-				<left>192</left>
-				<top>510</top>
-				<width>1536</width>
-				<height>60</height>
-				<itemgap>10</itemgap>
-				<orientation>horizontal</orientation>
-				<usecontrolcoords>true</usecontrolcoords>
-				<include>HideContent</include>
-				<visible>Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | Container.Content(episodes) | Container.Content(artists)</visible>
-				<visible>!Control.IsVisible(5001) + !Control.IsVisible(5002) + [Skin.String(ListView_Details,TitleAndInfo) | String.IsEmpty(Skin.String(ListView_Details)]</visible>
-				<include>ProgressBarFadeAnimation</include>
-				<control type="label">
-					<width>auto</width>
-					<height>100%</height>
-					<font>LargeFocused</font>
-					<textcolor>$VAR[Blank]</textcolor>
-					<label>$VAR[Title]</label>
-				</control>
-				<control type="label">
-					<width>auto</width>
-					<top>14</top>
-					<height>43</height>
-					<font>MediumSubTitle</font>
-					<textcolor>$VAR[LightColor]</textcolor>
-					<label>/ $VAR[TitleInfo]</label>
-				</control>
 			</control>
 
 		</control>

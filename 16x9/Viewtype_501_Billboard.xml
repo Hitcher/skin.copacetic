@@ -4,28 +4,15 @@
 		<control type="group">
 			<visible>Control.IsVisible(501)</visible>
 			<include>FullscreenDimensions</include>
-
-			<!--On Previous Scroll Delay-->
-			<control type="group" id="5005">
-				<visible>Container(501).OnPrevious</visible>
-				<animation effect="slide" end="0,0" time="380" reversible="false">Hidden</animation>
-			</control>
-
-			<!--On Next Scroll Delay-->
-			<control type="group" id="5006">
-				<visible>Container(501).OnNext</visible>
-				<animation effect="slide" end="0,0" time="380" reversible="false">Hidden</animation>
-			</control>
-
-			<!-- List -->
+			<!--Container-->
 			<control type="list" id="501">
 				<viewtype label="31501">list</viewtype>
-				<width>1920</width>
-				<height>1080</height>
 				<left>0</left>
 				<top>0</top>
 				<onup>3000</onup>
 				<ondown>60</ondown>
+				<onleft>0</onleft>
+				<onright>0</onright>
 				<pagecontrol>60</pagecontrol>
 				<preloaditems>2</preloaditems>
 				<orientation>horizontal</orientation>
@@ -34,23 +21,15 @@
 				<visible>String.Contains(Container.FolderPath,videodb://) | String.Contains(Container.FolderPath,special://) | String.Contains(Container.FolderPath,addons://) | String.Contains(Container.FolderPath,musicdb://) | String.Contains(Container.FolderPath,androidapp://)</visible>
 				<focusedlayout width="1920" height="1080">
 					<include>HiddenFocusButton</include>
-					<include content="ListIcon"/>
-						<control type="group">
-							<visible>!Skin.String(BillboardView_Details,Off)</visible>
-							<include>ViewtypeOverlay</include>
-						</control>
 				</focusedlayout>
 				<itemlayout width="1920" height="1080">
-					<include content="ListIcon"/>
-						<control type="group">
-							<visible>!Skin.String(BillboardView_Details,Off)</visible>
-							<include>ViewtypeOverlay</include>
-						</control>
 				</itemlayout>
 			</control>
+
+			<!--Static Content-->
 			<control type="group">
+				<visible>!Control.IsVisible(5001) + !Control.IsVisible(5002)</visible>
 				<include>ProgressBarFadeAnimation</include>
-				<visible>!Control.IsVisible(5005) + !Control.IsVisible(5006)</visible>
 				<!--Details no logo-->
 				<include content="CommonViewDetails">
 					<param name="groupvisibility" value="!Skin.String(BillboardView_Details,Off) + [Skin.String(BillboardView_Logo,Off) | String.IsEmpty(ListItem.Art(clearlogo)) | String.IsEmpty(Skin.String(BillboardView_Details)]"/>
@@ -99,6 +78,69 @@
 					<param name="height" value="4"/>
 				</include>
 			</control>
+
+			<!--On Previous Thumbs-->
+			<control type="group">
+				<visible>Control.IsVisible(5001)</visible>
+				<!--Move Icon -1 to 0-->
+				<include content="ListIcon">
+					<param name="left" value="-1920"/>
+					<param name="top" value="0"/>
+					<param name="width" value="1920"/>
+					<param name="height" value="1080"/>
+					<param name="visible" value="Container(501).OnPrevious"/>
+					<param name="animationtype" value="Hidden"/>
+					<param name="animationeffect" value="slide"/>
+					<param name="animationend" value="1920,0"/>
+				</include>
+				<!--Move Icon 0 to 1-->
+				<include content="ListIcon">
+					<param name="left" value="0"/>
+					<param name="top" value="0"/>
+					<param name="width" value="1920"/>
+					<param name="height" value="1080"/>
+					<param name="visible" value="Container(501).OnPrevious + !String.IsEmpty(Container.ListItemNoWrap(1).FolderPath)"/>
+					<param name="texture" value="$VAR[Thumbnail(1)Content]"/>
+					<param name="animationtype" value="Hidden"/>
+					<param name="animationeffect" value="slide"/>
+					<param name="animationend" value="1920,0"/>
+				</include>
+			</control>
+
+			<!--On Next Thumbs-->
+			<control type="group">
+				<visible>Control.IsVisible(5002)</visible>
+				<!--Move Icon 0 to -1-->
+				<include content="ListIcon">
+					<param name="left" value="0"/>
+					<param name="top" value="0"/>
+					<param name="width" value="1920"/>
+					<param name="height" value="1080"/>
+					<param name="visible" value="Container(501).OnNext + !String.IsEmpty(Container.ListItemNoWrap(-1).FolderPath)"/>
+					<param name="texture" value="$VAR[Thumbnail(-1)Content]"/>
+					<param name="animationtype" value="Hidden"/>
+					<param name="animationeffect" value="slide"/>
+					<param name="animationend" value="-1920,0"/>
+				</include>
+				<!--Move Icon 0 to -1-->
+				<include content="ListIcon">
+					<param name="left" value="1920"/>
+					<param name="top" value="0"/>
+					<param name="width" value="1920"/>
+					<param name="height" value="1080"/>
+					<param name="visible" value="Container(501).OnNext"/>
+					<param name="animationtype" value="Hidden"/>
+					<param name="animationeffect" value="slide"/>
+					<param name="animationend" value="-1920,0"/>
+				</include>
+			</control>
+
+			<!--Viewtypeoverlay-->
+			<control type="group">
+				<visible>[Control.IsVisible(5001) | Control.IsVisible(5002)] + !Skin.String(BillboardView_Details,Off)</visible>
+				<include>ViewtypeOverlay</include>
+			</control>
+
 		</control>
 	</include>
 </includes>

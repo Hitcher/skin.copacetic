@@ -4,6 +4,7 @@
 		<control type="group">
 			<visible>Control.IsVisible(504)</visible>
 			<include>FullscreenDimensions</include>
+			<!--Container-->
 			<control type="fixedlist" id="504">
 				<viewtype label="31520">list</viewtype>
 				<left>0</left>
@@ -32,13 +33,138 @@
 				<itemlayout height="820" width="450" condition="Skin.String(StripView_Display,Posters) + !Container.Content(episodes)" />
 			</control>
 
+			<!--Static Content-->
 			<control type="group">
-				<animation effect="slide" end="0,-104" time="100" tween="sine" easing="inout" condition="Skin.String(StripView_Details,TitleAndInfo) | Skin.String(StripView_Details,TitleAndPlot) | Skin.String(StripView_Details,All) | String.IsEmpty(Skin.String(StripView_Details)">Conditional</animation>
+				<visible>!Control.IsVisible(5001) + !Control.IsVisible(5002)</visible>
+				<include>ProgressBarFadeAnimation</include>
+				<!--Progress bar-->
+				<control type="group">
+					<animation effect="slide" end="0,-104" condition="Skin.String(StripView_Details,TitleAndInfo) | Skin.String(StripView_Details,TitleAndPlot) | Skin.String(StripView_Details,All) | String.IsEmpty(Skin.String(StripView_Details)">Conditional</animation>
+					<include content="ProgressBar">
+						<param name="left" value="800"/>
+						<param name="top" value="860"/>
+					</include>
+				</control>
+				<!--Details-->
+				<include content="CommonViewDetails">
+					<param name="groupvisibility" value="!Skin.String(StripView_Details,Off)"/>
+					<param name="left" value="192"/>
+					<param name="bottom" value="50"/>
+					<param name="width" value="1536"/>
+					<param name="height" value="230"/>
+					<param name="align" value="right"/>
+					<param name="labeltype" value="label"/>
+					<param name="titlevisibility" value="true"/>
+					<param name="titleheight" value="55"/>
+					<param name="titlefont" value="SmallFocused"/>
+					<param name="titlealign" value="center"/>
+					<param name="logovisibility" value="false"/>
+					<param name="infovisibility" value="Skin.String(StripView_Details,TitleAndInfo) | Skin.String(StripView_Details,All) | String.IsEmpty(Skin.String(StripView_Details)"/>
+					<param name="infoheight" value="35"/>
+					<param name="titleinfogap" value="0"/>
+					<param name="infofont" value="SmallSubTitle"/>
+					<param name="plotvisibility" value="Skin.String(StripView_Details,TitleAndPlot) | Skin.String(StripView_Details,All) | String.IsEmpty(Skin.String(StripView_Details)"/>"
+					<param name="plotmaxheight" value="110"/>
+					<param name="infoplotgap" value="25"/>
+					<param name="plotfont" value="Body"/>
+				</include>
+			</control>
 
-				<!--On Previous Thumbs-->
-				<control type="group" id="5011">
-					<visible>Container(504).OnPrevious</visible>
-					<animation effect="slide" end="0,0" time="380" reversible="false">Hidden</animation>
+			<!--Static thumbnails-->
+			<control type="group">
+				<animation effect="slide" end="0,-104" condition="Skin.String(StripView_Details,TitleAndInfo) | Skin.String(StripView_Details,TitleAndPlot) | Skin.String(StripView_Details,All) | String.IsEmpty(Skin.String(StripView_Details)">Conditional</animation>
+				<!--Fanart thumbnails-->
+				<control type="group">
+					<visible>!Control.IsVisible(5001) + !Control.IsVisible(5002) + [Skin.String(StripView_Display,Fanart) | Container.Content(episodes) | String.IsEmpty(Skin.String(StripView_Display)]</visible>
+					<include content="ListIcon">
+						<param name="left" value="-450"/>
+						<param name="top" value="294"/>
+						<param name="width" value="880"/>
+						<param name="height" value="495"/>
+						<param name="texture" value="$VAR[Thumbnail(-1)Content]"/>
+						<param name="visible" value="!String.IsEmpty(Container.ListItemNoWrap(-1).FolderPath)"/>
+					</include>
+					<include content="DropShadow">
+						<param name="left" value="450"/>
+						<param name="top" value="260"/>
+						<param name="width" value="1020"/>
+						<param name="height" value="640"/>
+						<param name="texture" value="views/dropshadow_strip-fanart.png"/>
+						<param name="visible" value="Skin.String(Theme,Light)"/>
+					</include>
+					<include content="ListIcon">
+						<param name="left" value="480"/>
+						<param name="top" value="270"/>
+						<param name="width" value="960"/>
+						<param name="height" value="540"/>
+					</include>
+					<include content="ListIcon">
+						<param name="left" value="1490"/>
+						<param name="top" value="294"/>
+						<param name="width" value="880"/>
+						<param name="height" value="495"/>
+						<param name="texture" value="$VAR[Thumbnail(1)Content]"/>
+						<param name="visible" value="!String.IsEmpty(Container.ListItemNoWrap(1).FolderPath)"/>
+					</include>
+				</control>
+				<!--Poster thumbnails-->
+				<control type="group">
+					<visible>!Control.IsVisible(5001) + !Control.IsVisible(5002) + !Container.Content(episodes) + Skin.String(StripView_Display,Posters)</visible>
+					<include content="ListIcon">
+						<param name="left" value="-80"/>
+						<param name="top" value="232"/>
+						<param name="width" value="370"/>
+						<param name="height" value="555"/>
+						<param name="texture" value="$VAR[Thumbnail(-2)Content]"/>
+						<param name="visible" value="!String.IsEmpty(Container.ListItemNoWrap(-2).FolderPath)"/>
+					</include>
+					<include content="ListIcon">
+						<param name="left" value="340"/>
+						<param name="top" value="232"/>
+						<param name="width" value="370"/>
+						<param name="height" value="555"/>
+						<param name="texture" value="$VAR[Thumbnail(-1)Content]"/>
+						<param name="visible" value="!String.IsEmpty(Container.ListItemNoWrap(-1).FolderPath)"/>
+					</include>
+					<include content="DropShadow">
+						<param name="left" value="730"/>
+						<param name="top" value="200"/>
+						<param name="width" value="460"/>
+						<param name="height" value="700"/>
+						<param name="texture" value="views/dropshadow_strip-poster.png"/>
+						<param name="visible" value="Skin.String(Theme,Light)"/>
+					</include>
+					<include content="ListIcon">
+						<param name="left" value="760"/>
+						<param name="top" value="210"/>
+						<param name="width" value="400"/>
+						<param name="height" value="600"/>
+					</include>
+					<include content="ListIcon">
+						<param name="left" value="1210"/>
+						<param name="top" value="232"/>
+						<param name="width" value="370"/>
+						<param name="height" value="555"/>
+						<param name="texture" value="$VAR[Thumbnail(1)Content]"/>
+						<param name="visible" value="!String.IsEmpty(Container.ListItemNoWrap(1).FolderPath)"/>
+					</include>
+					<include content="ListIcon">
+						<param name="left" value="1630"/>
+						<param name="top" value="232"/>
+						<param name="width" value="370"/>
+						<param name="height" value="555"/>
+						<param name="texture" value="$VAR[Thumbnail(2)Content]"/>
+						<param name="visible" value="!String.IsEmpty(Container.ListItemNoWrap(2).FolderPath)"/>
+					</include>
+				</control>
+			</control>
+
+			<!--On Previous Thumbs-->
+			<control type="group">
+				<visible>Control.IsVisible(5001)</visible>
+				<include>CustomViewsBackground</include>
+				<control type="group">
+					<animation effect="slide" end="0,-104" condition="Skin.String(StripView_Details,TitleAndInfo) | Skin.String(StripView_Details,TitleAndPlot) | Skin.String(StripView_Details,All) | String.IsEmpty(Skin.String(StripView_Details)">Conditional</animation>
 					<!--Fanart-->
 					<control type="group">
 						<visible>Skin.String(StripView_Display,Fanart) | Container.Content(episodes) | String.IsEmpty(Skin.String(StripView_Display)</visible>
@@ -215,11 +341,14 @@
 						</include>
 					</control>
 				</control>
+			</control>
 
-				<!--On Next Thumbs-->
-				<control type="group" id="5012">
-					<visible>Container(504).OnNext</visible>
-					<animation effect="slide" end="0,0" time="380" reversible="false">Hidden</animation>
+			<!--On Next Thumbs-->
+			<control type="group">
+				<visible>Control.IsVisible(5002)</visible>
+				<include>CustomViewsBackground</include>
+				<control type="group">
+					<animation effect="slide" end="0,-104" condition="Skin.String(StripView_Details,TitleAndInfo) | Skin.String(StripView_Details,TitleAndPlot) | Skin.String(StripView_Details,All) | String.IsEmpty(Skin.String(StripView_Details)">Conditional</animation>
 					<!--Fanart-->
 					<control type="group">
 						<visible>Skin.String(StripView_Display,Fanart) | Container.Content(episodes) | String.IsEmpty(Skin.String(StripView_Display)</visible>
@@ -396,135 +525,6 @@
 						</include>
 					</control>
 				</control>
-
-				<!--Static thumbnails-->
-				<control type="group" id="5042">
-
-					<!--Fanart thumbnails-->
-					<control type="group">
-						<visible>!Control.IsVisible(5011) + !Control.IsVisible(5012) + [Skin.String(StripView_Display,Fanart) | Container.Content(episodes) | String.IsEmpty(Skin.String(StripView_Display)]</visible>
-						<include content="ListIcon">
-							<param name="left" value="-450"/>
-							<param name="top" value="294"/>
-							<param name="width" value="880"/>
-							<param name="height" value="495"/>
-							<param name="texture" value="$VAR[Thumbnail(-1)Content]"/>
-							<param name="visible" value="!String.IsEmpty(Container.ListItemNoWrap(-1).FolderPath)"/>
-						</include>
-						<include content="DropShadow">
-							<param name="left" value="450"/>
-							<param name="top" value="260"/>
-							<param name="width" value="1020"/>
-							<param name="height" value="640"/>
-							<param name="texture" value="views/dropshadow_strip-fanart.png"/>
-							<param name="visible" value="Skin.String(Theme,Light)"/>
-						</include>
-						<include content="ListIcon">
-							<param name="left" value="480"/>
-							<param name="top" value="270"/>
-							<param name="width" value="960"/>
-							<param name="height" value="540"/>
-						</include>
-						<include content="ListIcon">
-							<param name="left" value="1490"/>
-							<param name="top" value="294"/>
-							<param name="width" value="880"/>
-							<param name="height" value="495"/>
-							<param name="texture" value="$VAR[Thumbnail(1)Content]"/>
-							<param name="visible" value="!String.IsEmpty(Container.ListItemNoWrap(1).FolderPath)"/>
-						</include>
-					</control>
-
-					<!--Poster thumbnails-->
-					<control type="group">
-						<visible>!Control.IsVisible(5011) + !Control.IsVisible(5012) + !Container.Content(episodes) + Skin.String(StripView_Display,Posters)</visible>
-						<include content="ListIcon">
-							<param name="left" value="-80"/>
-							<param name="top" value="232"/>
-							<param name="width" value="370"/>
-							<param name="height" value="555"/>
-							<param name="texture" value="$VAR[Thumbnail(-2)Content]"/>
-							<param name="visible" value="!String.IsEmpty(Container.ListItemNoWrap(-2).FolderPath)"/>
-						</include>
-						<include content="ListIcon">
-							<param name="left" value="340"/>
-							<param name="top" value="232"/>
-							<param name="width" value="370"/>
-							<param name="height" value="555"/>
-							<param name="texture" value="$VAR[Thumbnail(-1)Content]"/>
-							<param name="visible" value="!String.IsEmpty(Container.ListItemNoWrap(-1).FolderPath)"/>
-						</include>
-						<include content="DropShadow">
-							<param name="left" value="730"/>
-							<param name="top" value="200"/>
-							<param name="width" value="460"/>
-							<param name="height" value="700"/>
-							<param name="texture" value="views/dropshadow_strip-poster.png"/>
-							<param name="visible" value="Skin.String(Theme,Light)"/>
-						</include>
-						<include content="ListIcon">
-							<param name="left" value="760"/>
-							<param name="top" value="210"/>
-							<param name="width" value="400"/>
-							<param name="height" value="600"/>
-						</include>
-						<include content="ListIcon">
-							<param name="left" value="1210"/>
-							<param name="top" value="232"/>
-							<param name="width" value="370"/>
-							<param name="height" value="555"/>
-							<param name="texture" value="$VAR[Thumbnail(1)Content]"/>
-							<param name="visible" value="!String.IsEmpty(Container.ListItemNoWrap(1).FolderPath)"/>
-						</include>
-						<include content="ListIcon">
-							<param name="left" value="1630"/>
-							<param name="top" value="232"/>
-							<param name="width" value="370"/>
-							<param name="height" value="555"/>
-							<param name="texture" value="$VAR[Thumbnail(2)Content]"/>
-							<param name="visible" value="!String.IsEmpty(Container.ListItemNoWrap(2).FolderPath)"/>
-						</include>
-					</control>
-
-					<!--Progress bar-->
-					<control type="group">
-						<visible>!Control.IsVisible(5011) + !Control.IsVisible(5012)</visible>
-						<include>ProgressBarFadeAnimation</include>
-						<include content="ProgressBar">
-							<param name="left" value="800"/>
-							<param name="top" value="860"/>
-						</include>
-					</control>
-
-				</control>
-			</control>
-
-			<!--Details-->
-			<control type="group">
-				<visible>!Control.IsVisible(5011) + !Control.IsVisible(5012)</visible>
-				<include>ProgressBarFadeAnimation</include>
-				<include content="CommonViewDetails">
-					<param name="groupvisibility" value="!Skin.String(StripView_Details,Off)"/>
-					<param name="left" value="192"/>
-					<param name="bottom" value="50"/>
-					<param name="width" value="1536"/>
-					<param name="height" value="230"/>
-					<param name="align" value="right"/>
-					<param name="labeltype" value="label"/>
-					<param name="titlevisibility" value="true"/>
-					<param name="titleheight" value="55"/>
-					<param name="titlefont" value="SmallFocused"/>
-					<param name="titlealign" value="center"/>
-					<param name="logovisibility" value="false"/>
-					<param name="infovisibility" value="Skin.String(StripView_Details,TitleAndInfo) | Skin.String(StripView_Details,All) | String.IsEmpty(Skin.String(StripView_Details)"/>
-					<param name="infoheight" value="35"/>
-					<param name="titleinfogap" value="0"/>
-					<param name="infofont" value="SmallSubTitle"/>
-					<param name="plotvisibility" value="Skin.String(StripView_Details,TitleAndPlot) | Skin.String(StripView_Details,All) | String.IsEmpty(Skin.String(StripView_Details)"/>"
-					<param name="plotmaxheight" value="110"/>
-					<param name="infoplotgap" value="25"/>
-					<param name="plotfont" value="Body"/>
-				</include>
 			</control>
 
 		</control>

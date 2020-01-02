@@ -4,6 +4,7 @@
 		<control type="group">
 			<visible>Control.IsVisible(503)</visible>
 			<include>FullscreenDimensions</include>
+			<!--Container-->
 			<control type="fixedlist" id="503">
 				<viewtype label="31520">list</viewtype>
 				<onup>3000</onup>
@@ -29,14 +30,105 @@
 					<include>HiddenFocusButton</include>
 				</focusedlayout>
 			</control>
-			<!--scroll left-->
+
 			<control type="group">
 				<animation effect="slide" start="0,0" end="-240,0" time="100" tween="sine" easing="inout" condition="Skin.String(GalleryView_Details,Off)">Conditional</animation>
+				<!--Static thumbnails-->
+				<control type="group" id="5032">
+					<!--Fanart thumbnails-->
+					<control type="group">
+						<visible>!Control.IsVisible(5001) + !Control.IsVisible(5002) + [Skin.String(GalleryView_Display,Fanart) | Container.Content(episodes) | String.IsEmpty(Skin.String(GalleryView_Display)]</visible>
+						<include content="DropShadow">
+							<param name="left" value="570"/>
+							<param name="top" value="193"/>
+							<param name="width" value="1260"/>
+							<param name="height" value="775"/>
+							<param name="texture" value="views/dropshadow_gallery-fanart.png"/>
+							<param name="visible" value="Skin.String(Theme,Light)"/>
+						</include>
+						<include content="ListIcon">
+							<param name="left" value="600"/>
+							<param name="top" value="203"/>
+							<param name="width" value="1200"/>
+							<param name="height" value="675"/>
+						</include>
+						<include content="ListIcon">
+							<param name="left" value="1850"/>
+							<param name="top" value="270"/>
+							<param name="width" value="960"/>
+							<param name="height" value="540"/>
+							<param name="visible" value="!String.IsEmpty(Container.ListItemNoWrap(1).FolderPath)"/>
+							<param name="texture" value="$VAR[Thumbnail(1)Content]"/>
+						</include>
+					</control>
+					<!--Poster thumbnails-->
+					<control type="group">
+						<visible>!Control.IsVisible(5001) + !Control.IsVisible(5002) + Skin.String(GalleryView_Display,Posters) + !Container.Content(episodes)</visible>
+						<include content="DropShadow">
+							<param name="left" value="570"/>
+							<param name="top" value="110"/>
+							<param name="width" value="620"/>
+							<param name="height" value="940"/>
+							<param name="texture" value="views/dropshadow_gallery-poster.png"/>
+							<param name="visible" value="Skin.String(Theme,Light)"/>
+						</include>
+						<include content="ListIcon">
+							<param name="left" value="600"/>
+							<param name="top" value="120"/>
+							<param name="width" value="560"/>
+							<param name="height" value="840"/>
+						</include>
+						<include content="ListIcon">
+							<param name="left" value="1210"/>
+							<param name="top" value="180"/>
+							<param name="width" value="480"/>
+							<param name="height" value="720"/>
+							<param name="visible" value="!String.IsEmpty(Container.ListItemNoWrap(1).FolderPath)"/>
+							<param name="texture" value="$VAR[Thumbnail(1)Content]"/>
+						</include>
+						<include content="ListIcon">
+							<param name="left" value="1740"/>
+							<param name="top" value="180"/>
+							<param name="width" value="480"/>
+							<param name="height" value="720"/>
+							<param name="visible" value="!String.IsEmpty(Container.ListItemNoWrap(2).FolderPath)"/>
+							<param name="texture" value="$VAR[Thumbnail(2)Content]"/>
+						</include>
+					</control>
+				</control>
+
+				<!--Static content-->
+				<control type="group">
+					<visible>!Control.IsVisible(5001) + !Control.IsVisible(5002)</visible>
+					<include>ProgressBarFadeAnimation</include>
+					<!--Progress bar-->
+					<control type="group">
+						<animation effect="slide" end="-320,82" time="0" condition="Skin.String(GalleryView_Display,Posters) + !Container.Content(episodes)">Conditional</animation>
+						<include content="ProgressBar">
+							<param name="left" value="1040"/>
+							<param name="top" value="928"/>
+						</include>
+					</control>
+					<!--Details-->
+					<include content="CommonViewDetails">
+						<param name="groupvisibility" value="!Skin.String(GalleryView_Details,Off)"/>
+						<param name="left" value="40"/>
+						<param name="width" value="500"/>
+						<param name="titlevisibility" value="true"/>
+						<param name="titleheight" value="200"/>
+						<param name="titlefont" value="SmallFocused"/>
+						<param name="logovisibility" value="false"/>
+						<param name="infovisibility" value="Skin.String(GalleryView_Details,TitleAndInfo) | Skin.String(GalleryView_Details,All) | String.IsEmpty(Skin.String(GalleryView_Details)"/>
+						<param name="infoheight" value="105"/>
+						<param name="infofont" value="SmallSubTitle"/>
+						<param name="plotvisibility" value="Skin.String(GalleryView_Details,TitleAndPlot) | Skin.String(GalleryView_Details,All) | String.IsEmpty(Skin.String(GalleryView_Details)"/>"
+					</include>
+				</control>
 
 				<!--On Previous Thumbs-->
-				<control type="group" id="5009">
-					<visible>Container(503).OnPrevious</visible>
-					<animation effect="slide" end="0,0" time="380" reversible="false">Hidden</animation>
+				<control type="group">
+					<visible>Control.IsVisible(5001)</visible>
+					<include>CustomViewsBackground</include>
 					<!--Fanart-->
 					<control type="group">
 						<visible>Skin.String(GalleryView_Display,Fanart) | Container.Content(episodes) | String.IsEmpty(Skin.String(GalleryView_Display)</visible>
@@ -100,7 +192,6 @@
 							<param name="animationend" value="1010,0"/>
 						</include>
 					</control>
-
 					<!--Posters-->
 					<control type="group">
 						<visible>Skin.String(GalleryView_Display,Posters) + !Container.Content(episodes)</visible>
@@ -179,9 +270,9 @@
 				</control>
 
 				<!--On Next Thumbs-->
-				<control type="group" id="5010">
-					<visible>Container(503).OnNext</visible>
-					<animation effect="slide" end="0,0" time="380" reversible="false">Hidden</animation>
+				<control type="group">
+					<visible>Control.IsVisible(5002)</visible>
+					<include>CustomViewsBackground</include>
 					<!--Fanart-->
 					<control type="group">
 						<visible>Skin.String(GalleryView_Display,Fanart) | Container.Content(episodes) | String.IsEmpty(Skin.String(GalleryView_Display)</visible>
@@ -245,7 +336,6 @@
 							<param name="animationend" value="-1830,0"/>
 						</include>
 					</control>
-
 					<!--Posters-->
 					<control type="group">
 						<visible>Skin.String(GalleryView_Display,Posters) + !Container.Content(episodes)</visible>
@@ -323,102 +413,6 @@
 					</control>
 				</control>
 
-				<!--Static thumbnails-->
-				<control type="group" id="5032">
-
-					<!--Fanart thumbnails-->
-					<control type="group">
-						<visible>!Control.IsVisible(5009) + !Control.IsVisible(5010) + [Skin.String(GalleryView_Display,Fanart) | Container.Content(episodes) | String.IsEmpty(Skin.String(GalleryView_Display)]</visible>
-						<include content="DropShadow">
-							<param name="left" value="570"/>
-							<param name="top" value="193"/>
-							<param name="width" value="1260"/>
-							<param name="height" value="775"/>
-							<param name="texture" value="views/dropshadow_gallery-fanart.png"/>
-							<param name="visible" value="Skin.String(Theme,Light)"/>
-						</include>
-						<include content="ListIcon">
-							<param name="left" value="600"/>
-							<param name="top" value="203"/>
-							<param name="width" value="1200"/>
-							<param name="height" value="675"/>
-						</include>
-						<include content="ListIcon">
-							<param name="left" value="1850"/>
-							<param name="top" value="270"/>
-							<param name="width" value="960"/>
-							<param name="height" value="540"/>
-							<param name="visible" value="!String.IsEmpty(Container.ListItemNoWrap(1).FolderPath)"/>
-							<param name="texture" value="$VAR[Thumbnail(1)Content]"/>
-						</include>
-					</control>
-
-					<!--Poster thumbnails-->
-					<control type="group">
-						<visible>!Control.IsVisible(5009) + !Control.IsVisible(5010) + Skin.String(GalleryView_Display,Posters) + !Container.Content(episodes)</visible>
-						<include content="DropShadow">
-							<param name="left" value="570"/>
-							<param name="top" value="110"/>
-							<param name="width" value="620"/>
-							<param name="height" value="940"/>
-							<param name="texture" value="views/dropshadow_gallery-poster.png"/>
-							<param name="visible" value="Skin.String(Theme,Light)"/>
-						</include>
-						<include content="ListIcon">
-							<param name="left" value="600"/>
-							<param name="top" value="120"/>
-							<param name="width" value="560"/>
-							<param name="height" value="840"/>
-						</include>
-						<include content="ListIcon">
-							<param name="left" value="1210"/>
-							<param name="top" value="180"/>
-							<param name="width" value="480"/>
-							<param name="height" value="720"/>
-							<param name="visible" value="!String.IsEmpty(Container.ListItemNoWrap(1).FolderPath)"/>
-							<param name="texture" value="$VAR[Thumbnail(1)Content]"/>
-						</include>
-						<include content="ListIcon">
-							<param name="left" value="1740"/>
-							<param name="top" value="180"/>
-							<param name="width" value="480"/>
-							<param name="height" value="720"/>
-							<param name="visible" value="!String.IsEmpty(Container.ListItemNoWrap(2).FolderPath)"/>
-							<param name="texture" value="$VAR[Thumbnail(2)Content]"/>
-						</include>
-					</control>
-
-					<!--Details-->
-					<control type="group">
-						<visible>!Control.IsVisible(5009) + !Control.IsVisible(5010)</visible>
-						<include>ProgressBarFadeAnimation</include>
-						<include content="CommonViewDetails">
-							<param name="groupvisibility" value="!Skin.String(GalleryView_Details,Off)"/>
-							<param name="left" value="40"/>
-							<param name="width" value="500"/>
-							<param name="titlevisibility" value="true"/>
-							<param name="titleheight" value="200"/>
-							<param name="titlefont" value="SmallFocused"/>
-							<param name="logovisibility" value="false"/>
-							<param name="infovisibility" value="Skin.String(GalleryView_Details,TitleAndInfo) | Skin.String(GalleryView_Details,All) | String.IsEmpty(Skin.String(GalleryView_Details)"/>
-							<param name="infoheight" value="105"/>
-							<param name="infofont" value="SmallSubTitle"/>
-							<param name="plotvisibility" value="Skin.String(GalleryView_Details,TitleAndPlot) | Skin.String(GalleryView_Details,All) | String.IsEmpty(Skin.String(GalleryView_Details)"/>"
-						</include>
-					</control>
-
-					<!--Progress bar-->
-					<control type="group">
-						<visible>!Control.IsVisible(5009) + !Control.IsVisible(5010)</visible>
-						<animation effect="slide" end="-320,82" time="0" condition="Skin.String(GalleryView_Display,Posters) + !Container.Content(episodes)">Conditional</animation>
-						<include>ProgressBarFadeAnimation</include>
-						<include content="ProgressBar">
-							<param name="left" value="1040"/>
-							<param name="top" value="928"/>
-						</include>
-					</control>
-
-				</control>
 			</control>
 		</control>
 	</include>

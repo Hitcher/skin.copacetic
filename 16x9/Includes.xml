@@ -77,6 +77,21 @@
 		</control>
 	</include>
 
+  <include name="CustomViewsBackground">
+    <control type="group">
+      <include>FullscreenDimensions</include>
+      <control type="image">
+        <aspectratio>stretch</aspectratio>
+        <texture colordiffuse="$VAR[SecondaryColor]">views/white_100.png</texture>
+      </control>
+      <control type="image">
+        <visible>Skin.String(Theme,Light)</visible>
+        <aspectratio>stretch</aspectratio>
+        <texture colordiffuse="$VAR[DarkColor]">views/gradient_light-background.png</texture>
+      </control>
+    </control>
+  </include>
+
 	<!--Options Menu Label Unfocused-->
 	<include name="OptionsMenuLabelUnfocused">
 		<definition>
@@ -442,6 +457,7 @@
     <param name="animationend" default=""/>
     <param name="animationcondition" default=""/>
     <param name="fadetime" default="0"/>
+    <param name="backgroundcolor" default="$VAR[IconBackgroundColor]"/>
     <param name="aspectratio" default="keep"/>
 		<param name="texture" default="$VAR[Thumbnail(0)Content]"/>
     <param name="fadetime" default="0"/>
@@ -456,7 +472,7 @@
         <animation effect="$PARAM[animationeffect]" end="$PARAM[animationend]" condition="$PARAM[animationcondition]" time="380" tween="sine" easing="inout" reversible="false">$PARAM[animationtype]</animation>
         <control type="image">
           <aspectratio>stretch</aspectratio>
-          <texture colordiffuse="$VAR[IconBackgroundColor]">views/white_100.png</texture>
+          <texture colordiffuse="$PARAM[backgroundcolor]">views/white_100.png</texture>
         </control>
         <control type="image">
 				  <aspectratio align="center">$PARAM[aspectratio]</aspectratio>
@@ -502,7 +518,9 @@
   <include name="HiddenFocusButton">
     <control type="button">
       <visible allowhiddenfocus="true">false</visible>
-      <onfocus condition="System.HasAddon(script.embuary.helper) + [Container.Content(tvshows) | Container.Content(seasons)]">RunScript(script.embuary.helper,action=calc,do='"($INFO[ListItem.Property(WatchedEpisodes)] / $INFO[ListItem.Property(TotalEpisodes)]) * 100"',prop=MyResult)</onfocus>
+      <animation effect="slide" end="0,0" time="380" reversible="false">Focus</animation>
+      <onfocus condition="System.HasAddon(script.embuary.helper) + !String.IsEqual(ListItem.Overlay,OverlayWatched.png) + [Container.Content(tvshows) | Container.Content(seasons)]">RunScript(script.embuary.helper,action=calc,do='"($INFO[ListItem.Property(WatchedEpisodes)] / $INFO[ListItem.Property(TotalEpisodes)]) * 100"',prop=MyResult)</onfocus>
+      <onunfocus>ClearProperty(MyResult,home)</onunfocus>
     </control>
   </include>
 
@@ -515,7 +533,6 @@
 		<param name="texturecolor" default="$VAR[ProgressBarFocusColor]"/>
 		<definition>
 			<control type="image">
-				<visible>[Container.Content(tvshows) | Container.Content(seasons)] + Integer.IsGreater($NUMBER[Window(home).Property(MyResult)],0)</visible>
 				<visible>$PARAM[visible]</visible>
 				<height>$PARAM[height]</height>
 				<width>$PARAM[width]</width>
@@ -526,33 +543,24 @@
 
 	<!--Progress bar-->
 	<include name="ProgressBar">
-		<param name="visible" default="!Control.HasFocus(60)"/>
+		<param name="visible" default="![Control.HasFocus(60) + [Control.IsVisible(50) | Control.IsVisible(501) | Control.IsVisible(502)]]"/>
 		<param name="left"/>
 		<param name="top" default="1056"/>
     <param name="bottom"/>
 		<param name="width" default="320"/>
 		<param name="height" default="4"/>
 		<param name="backgroundcolor" default="$VAR[ProgressBarBackgroundColor]"/>
-		<param name="backgoundtexture" default="views/white_10.png"/>
+		<param name="backgoundtexture" default="views/white_20.png"/>
 		<param name="focuscolor" default="$VAR[ProgressBarFocusColor]"/>
 		<param name="focustexture" default="views/white_100.png"/>
 		<definition>
 			<control type="group">
 				<include>HideContent</include>
 				<visible>$PARAM[visible]</visible>
-				<include>ProgressBarFadeAnimation</include>
 				<left>$PARAM[left]</left>
 				<top>$PARAM[top]</top>
 				<width>$PARAM[width]</width>
 				<height>$PARAM[height]</height>
-
-				<!--backing bar for tvshows and seasons -->
-				<include content="TVProgressBar">
-					<param name="width" value="$PARAM[width]"/>
-					<param name="height" value="$PARAM[height]"/>
-					<param name="texture" value="$PARAM[backgoundtexture]"/>
-					<param name="texturecolor" value="$PARAM[backgroundcolor]"/>
-				</include>
 				<!--Video is resumable-->
 				<control type="progress">
 					<visible>ListItem.IsResumable</visible>
@@ -572,10 +580,17 @@
 					<visible>!ListItem.IsResumable + String.IsEqual(ListItem.Overlay,OverlayWatched.png)</visible>
 					<texture colordiffuse="$PARAM[focuscolor]">$PARAM[focustexture]</texture>
 				</control>
-				<!--episodes and seasons 0-5%-->
         <control type="group">
-          <visible>!ListItem.IsResumable + !String.IsEqual(ListItem.Overlay,OverlayWatched.png)</visible>
-  				<include content="TVProgressBar">
+          <visible>Integer.IsGreater($NUMBER[Window(home).Property(MyResult)],0)</visible>
+          <!--Backing bar for tvshows and seasons -->
+          <include content="TVProgressBar">
+            <param name="width" value="$PARAM[width]"/>
+            <param name="height" value="$PARAM[height]"/>
+            <param name="texture" value="$PARAM[backgoundtexture]"/>
+            <param name="texturecolor" value="$PARAM[backgroundcolor]"/>
+          </include>
+          <!--episodes and seasons 0-5%-->
+        	<include content="TVProgressBar">
   					<param name="visible" value="Integer.IsGreater($NUMBER[Window(home).Property(MyResult)],0) + Integer.IsLessOrEqual($NUMBER[Window(home).Property(MyResult)],5)"/>
   					<param name="width" value="5%"/>
   					<param name="height" value="$PARAM[height]"/>
@@ -741,7 +756,6 @@
 		<definition>
 			<control type="group">
 				<include>HideContent</include>
-				<include>ProgressBarFadeAnimation</include>
 				<visible>$PARAM[groupvisible]</visible>
 				<control type="group">
 					<!--Studio-->
@@ -771,24 +785,40 @@
 		</definition>
 	</include>
 
-
   <!--ListView Layout-->
   <include name="ListViewLayout">
+    <param name="checkleft" default="57"/>
+    <param name="checktop" default="18"/>
+    <param name="checkwidth" default="29"/>
+    <param name="checkheight" default="21"/>
+    <param name="checktexture" default="views/check_unfocused.png"/>
     <param name="labeltype" default="label"/>
+    <param name="labelleft" default="144"/>
     <param name="font" default="LargeUnfocused"/>
     <param name="textcolor" default="$VAR[ListUnfocusColor]"/>
+    <param name="scroll" default="false"/>
     <definition>
-      <control type="$PARAM[labeltype]">
-        <include>HideContent</include>
-        <width>1536</width>
-        <height>100%</height>
-        <aligny>center</aligny>
-        <font>$PARAM[font]</font>
-        <textcolor>$PARAM[textcolor]</textcolor>
-        <label>$VAR[Title]</label>
-        <scrollout>false</scrollout>
-        <pauseatend>1000</pauseatend>
-      </control>
+        <control type="image">
+          <include>HideContent</include>
+          <left>$PARAM[checkleft]</left>
+          <top>$PARAM[checktop]</top>
+          <width>$PARAM[checkwidth]</width>
+          <height>$PARAM[checkheight]</height>
+          <texture colordiffuse="$VAR[LightColor]">$PARAM[checktexture]</texture>
+          <visible>String.IsEqual(ListItem.Overlay,OverlayWatched.png)</visible>
+        </control>
+        <control type="$PARAM[labeltype]">
+          <include>HideContent</include>
+          <left>$PARAM[labelleft]</left>
+          <width>1075</width>
+          <height>100%</height>
+          <aligny>center</aligny>
+          <font>$PARAM[font]</font>
+          <textcolor>$PARAM[textcolor]</textcolor>
+          <label>$VAR[Title]</label>
+          <scroll>$PARAM[scroll]</scroll>
+          <scrollsuffix> / </scrollsuffix>
+        </control>
     </definition>
   </include>
 
@@ -885,7 +915,7 @@
               <scrollsuffix> / </scrollsuffix>
             </control>
             <!--SubTitle-->
-            <control type="label">
+            <control type="$PARAM[titlelabeltype]">
               <visible>!Skin.String(DetailedListView_Details,Title)</visible>
               <left>$PARAM[titleleft]</left>
               <top>$PARAM[subtitletop]</top>
@@ -895,9 +925,11 @@
               <label>$VAR[TitleInfo]</label>
               <font>$PARAM[subtitlefont]</font>
               <textcolor>$PARAM[titletextcolor]</textcolor>
+              <scroll>$PARAM[scroll]</scroll>
+              <scrollsuffix> / </scrollsuffix>
             </control>
           </control>
-          <!--title for folders-->
+          <!--Title for folders-->
           <control type="$PARAM[titlelabeltype]">
             <visible>String.IsEmpty(ListItem.Art(Thumb)</visible>
             <left>169</left>
@@ -1195,7 +1227,6 @@
 			<control type="grouplist">
 				<include>HideContent</include>
 				<visible>$PARAM[groupvisibility]</visible>
-				<include>ProgressBarFadeAnimation</include>
 				<left>$PARAM[left]</left>
 				<bottom>$PARAM[bottom]</bottom>
 				<width>$PARAM[width]</width>

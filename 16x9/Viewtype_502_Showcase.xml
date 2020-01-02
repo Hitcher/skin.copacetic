@@ -5,6 +5,7 @@
 		<control type="group">
 			<visible>Control.IsVisible(502)</visible>
 			<include>FullscreenDimensions</include>
+			<!--Container-->
 			<control type="fixedlist" id="502">
 				<viewtype label="31520">list</viewtype>
 				<onup>3000</onup>
@@ -23,195 +24,189 @@
 					<include>HiddenFocusButton</include>
 				</focusedlayout>
 			</control>
-			<!--scroll left-->
+
+			<!--Static thumbnails-->
 			<control type="group">
+				<!--Fanart thumbnails-->
+				<include content="ListIcon">
+					<param name="left" value="0"/>
+					<param name="top" value="0"/>
+					<param name="width" value="1080"/>
+					<param name="height" value="1080"/>
+					<param name="aspectratio" value="scale"/>
+					<param name="visible" value="!Control.IsVisible(5001) + !Control.IsVisible(5002) + [Skin.String(ShowcaseView_Display,Fanart) | Container.Content(episodes) | String.IsEmpty(Skin.String(ShowcaseView_Display)]"/>
+					<param name="showgradient" value="true"/>
+				</include>
+				<!--Poster thumbnails-->
+				<include content="ListIcon">
+					<param name="left" value="0"/>
+					<param name="top" value="0"/>
+					<param name="width" value="720"/>
+					<param name="height" value="1080"/>
+					<param name="visible" value="!Control.IsVisible(5001) + !Control.IsVisible(5002) + Skin.String(ShowcaseView_Display,Posters) + !Container.Content(episodes)"/>
+					<param name="showgradient" value="true"/>
+				</include>
+			</control>
 
-				<!--On Previous Thumbs-->
-				<control type="group" id="5007">
-					<visible>Container(502).OnPrevious</visible>
-					<animation effect="slide" end="0,0" time="380" reversible="false">Hidden</animation>
-					<!--Fanart-->
-					<control type="group">
-						<visible>Skin.String(ShowcaseView_Display,Fanart) | Container.Content(episodes) | String.IsEmpty(Skin.String(ShowcaseView_Display)</visible>
-						<!--Move Icon -1 to 0-->
-						<include content="ListIcon">
-							<param name="left" value="-1920"/>
-							<param name="top" value="0"/>
-							<param name="width" value="1080"/>
-							<param name="height" value="1080"/>
-							<param name="aspectratio" value="scale"/>
-							<param name="visible" value="Container(502).OnPrevious"/>
-							<param name="animationtype" value="Hidden"/>
-							<param name="animationeffect" value="slide"/>
-							<param name="animationend" value="1920,0"/>
-							<param name="showgradient" value="true"/>
-
-						</include>
-						<!--Move Icon 0 to 1-->
-						<include content="ListIcon">
-							<param name="left" value="0"/>
-							<param name="top" value="0"/>
-							<param name="width" value="1080"/>
-							<param name="height" value="1080"/>
-							<param name="aspectratio" value="scale"/>
-							<param name="visible" value="Container(502).OnPrevious + !String.IsEmpty(Container.ListItemNoWrap(1).FolderPath)"/>
-							<param name="animationtype" value="Hidden"/>
-							<param name="animationeffect" value="slide"/>
-							<param name="animationend" value="1920,0"/>
-							<param name="texture" value="$VAR[Thumbnail(1)Content]"/>
-							<param name="showgradient" value="true"/>
-						</include>
-					</control>
-
-					<!--Posters-->
-					<control type="group">
-						<visible>Skin.String(ShowcaseView_Display,Posters) + !Container.Content(episodes)</visible>
-						<!--Move Icon -1 to 0-->
-						<include content="ListIcon">
-							<param name="left" value="-1920"/>
-							<param name="top" value="0"/>
-							<param name="width" value="720"/>
-							<param name="height" value="1080"/>
-							<param name="visible" value="Container(502).OnPrevious"/>
-							<param name="animationtype" value="Hidden"/>
-							<param name="animationeffect" value="slide"/>
-							<param name="animationend" value="1920,0"/>
-							<param name="showgradient" value="true"/>
-						</include>
-						<!--Move Icon 0 to 1-->
-						<include content="ListIcon">
-							<param name="left" value="0"/>
-							<param name="top" value="0"/>
-							<param name="width" value="720"/>
-							<param name="height" value="1080"/>
-							<param name="texture" value="$VAR[Thumbnail(1)Content]"/>
-							<param name="visible" value="Container(502).OnPrevious + !String.IsEmpty(Container.ListItemNoWrap(1).FolderPath)"/>
-							<param name="animationtype" value="Hidden"/>
-							<param name="animationeffect" value="slide"/>
-							<param name="animationend" value="1920,0"/>
-							<param name="showgradient" value="true"/>
-						</include>
-					</control>
+			<!--Static content-->
+			<control type="group">
+				<visible>!Control.IsVisible(5001) + !Control.IsVisible(5002)</visible>
+				<include>ProgressBarFadeAnimation</include>
+				<!--Progress bar-->
+				<control type="group">
+					<animation effect="slide" end="-180,0" time="0" condition="Skin.String(ShowcaseView_Display,Posters) + !Container.Content(episodes)">Conditional</animation>
+					<include content="ProgressBar">
+						<param name="left" value="380"/>
+					</include>
 				</control>
-
-				<!--On Next Thumbs-->
-				<control type="group" id="5008">
-					<visible>Container(502).OnNext</visible>
-					<animation effect="slide" end="0,0" time="380" reversible="false">Hidden</animation>
-					<!--Fanart-->
-					<control type="group">
-						<visible>Skin.String(ShowcaseView_Display,Fanart) | Container.Content(episodes) | String.IsEmpty(Skin.String(ShowcaseView_Display)</visible>
-						<!--Move Icon 0 to -1-->
-						<include content="ListIcon">
-							<param name="left" value="0"/>
-							<param name="top" value="0"/>
-							<param name="width" value="1080"/>
-							<param name="height" value="1080"/>
-							<param name="aspectratio" value="scale"/>
-							<param name="visible" value="Container(502).OnNext + !String.IsEmpty(Container.ListItemNoWrap(-1).FolderPath)"/>
-							<param name="animationtype" value="Hidden"/>
-							<param name="animationeffect" value="slide"/>
-							<param name="animationend" value="-1920,0"/>
-							<param name="texture" value="$VAR[Thumbnail(-1)Content]"/>
-							<param name="showgradient" value="true"/>
-						</include>
-						<!--Move Icon 1 to 0-->
-						<include content="ListIcon">
-							<param name="left" value="1920"/>
-							<param name="top" value="0"/>
-							<param name="width" value="1080"/>
-							<param name="height" value="1080"/>
-							<param name="aspectratio" value="scale"/>
-							<param name="visible" value="Container(502).OnNext"/>
-							<param name="animationtype" value="Hidden"/>
-							<param name="animationeffect" value="slide"/>
-							<param name="animationend" value="-1920,0"/>
-							<param name="showgradient" value="true"/>
-						</include>
-					</control>
-
-					<!--Posters-->
-					<control type="group">
-						<visible>Skin.String(ShowcaseView_Display,Posters) + !Container.Content(episodes)</visible>
-						<!--Move Icon 0 to -1-->
-						<include content="ListIcon">
-							<param name="left" value="0"/>
-							<param name="top" value="0"/>
-							<param name="width" value="720"/>
-							<param name="height" value="1080"/>
-							<param name="texture" value="$VAR[Thumbnail(-1)Content]"/>
-							<param name="visible" value="Container(502).OnNext + !String.IsEmpty(Container.ListItemNoWrap(-1).FolderPath)"/>
-							<param name="animationtype" value="Hidden"/>
-							<param name="animationeffect" value="slide"/>
-							<param name="animationend" value="-1920,0"/>
-							<param name="showgradient" value="true"/>
-						</include>
-						<!--Move Icon 1 to 0-->
-						<include content="ListIcon">
-							<param name="left" value="1920"/>
-							<param name="top" value="0"/>
-							<param name="width" value="720"/>
-							<param name="height" value="1080"/>
-							<param name="visible" value="Container(502).OnNext"/>
-							<param name="animationtype" value="Hidden"/>
-							<param name="animationeffect" value="slide"/>
-							<param name="animationend" value="-1920,0"/>
-							<param name="showgradient" value="true"/>
-						</include>
-					</control>
+				<!--Details-->
+				<control type="group">
+					<animation effect="slide" start="0,0" end="-240,0" time="100" condition="Skin.String(ShowcaseView_Display,Posters) + !Container.Content(episodes)">Conditional</animation>
+					<!--details no logo-->
+					<include content="CommonViewDetails"/>
+					<!--details with logo-->
+					<include content="CommonViewDetails">
+						<param name="groupvisibility" value="!Skin.String(ShowcaseView_Details,Off) + Skin.String(ShowcaseView_Logo,On) + !String.IsEmpty(ListItem.Art(clearlogo))"/>
+						<param name="bottom" value="203"/>
+						<param name="titlevisibility" value="false"/>
+						<param name="logovisibility" value="true"/>
+						<param name="titleinfogap" value="20"/>
+					</include>
 				</control>
+			</control>
 
-				<!--Static thumbnails-->
-				<control type="group" id="5022">
-					<!--Fanart thumbnails-->
+			<!--On Previous Thumbs-->
+			<control type="group">
+				<visible>Control.IsVisible(5001)</visible>
+				<include>CustomViewsBackground</include>
+				<!--Fanart-->
+				<control type="group">
+					<visible>Skin.String(ShowcaseView_Display,Fanart) | Container.Content(episodes) | String.IsEmpty(Skin.String(ShowcaseView_Display)</visible>
+					<!--Move Icon -1 to 0-->
+					<include content="ListIcon">
+						<param name="left" value="-1920"/>
+						<param name="top" value="0"/>
+						<param name="width" value="1080"/>
+						<param name="height" value="1080"/>
+						<param name="aspectratio" value="scale"/>
+						<param name="visible" value="Container(502).OnPrevious"/>
+						<param name="animationtype" value="Hidden"/>
+						<param name="animationeffect" value="slide"/>
+						<param name="animationend" value="1920,0"/>
+						<param name="showgradient" value="true"/>
+					</include>
+					<!--Move Icon 0 to 1-->
 					<include content="ListIcon">
 						<param name="left" value="0"/>
 						<param name="top" value="0"/>
 						<param name="width" value="1080"/>
 						<param name="height" value="1080"/>
 						<param name="aspectratio" value="scale"/>
-						<param name="visible" value="!Control.IsVisible(5007) + !Control.IsVisible(5008) + [Skin.String(ShowcaseView_Display,Fanart) | Container.Content(episodes) | String.IsEmpty(Skin.String(ShowcaseView_Display)]"/>
+						<param name="visible" value="Container(502).OnPrevious + !String.IsEmpty(Container.ListItemNoWrap(1).FolderPath)"/>
+						<param name="animationtype" value="Hidden"/>
+						<param name="animationeffect" value="slide"/>
+						<param name="animationend" value="1920,0"/>
+						<param name="texture" value="$VAR[Thumbnail(1)Content]"/>
 						<param name="showgradient" value="true"/>
 					</include>
-
-					<!--Poster thumbnails-->
-						<include content="ListIcon">
-							<param name="left" value="0"/>
-							<param name="top" value="0"/>
-							<param name="width" value="720"/>
-							<param name="height" value="1080"/>
-							<param name="visible" value="!Control.IsVisible(5007) + !Control.IsVisible(5008) + Skin.String(ShowcaseView_Display,Posters) + !Container.Content(episodes)"/>
-							<param name="showgradient" value="true"/>
-						</include>
-
-					<!--Details-->
-					<control type="group">
-						<visible>!Control.IsVisible(5007) + !Control.IsVisible(5008)</visible>
-						<animation effect="slide" start="0,0" end="-240,0" time="100" condition="Skin.String(ShowcaseView_Display,Posters) + !Container.Content(episodes)">Conditional</animation>
-						<include>ProgressBarFadeAnimation</include>
-						<!--details no logo-->
-						<include content="CommonViewDetails"/>
-						<!--details with logo-->
-						<include content="CommonViewDetails">
-							<param name="groupvisibility" value="!Skin.String(ShowcaseView_Details,Off) + Skin.String(ShowcaseView_Logo,On) + !String.IsEmpty(ListItem.Art(clearlogo))"/>
-							<param name="bottom" value="203"/>
-							<param name="titlevisibility" value="false"/>
-							<param name="logovisibility" value="true"/>
-							<param name="titleinfogap" value="20"/>
-						</include>
-					</control>
-					<!--Progress bar-->
-					<control type="group">
-						<animation effect="slide" end="-180,0" time="0" condition="Skin.String(ShowcaseView_Display,Posters) + !Container.Content(episodes)">Conditional</animation>
-						<visible>!Control.IsVisible(5007) + !Control.IsVisible(5008)</visible>
-						<include>ProgressBarFadeAnimation</include>
-						<include content="ProgressBar">
-							<param name="left" value="380"/>
-						</include>
-					</control>
 				</control>
-
+				<!--Posters-->
+				<control type="group">
+					<visible>Skin.String(ShowcaseView_Display,Posters) + !Container.Content(episodes)</visible>
+					<!--Move Icon -1 to 0-->
+					<include content="ListIcon">
+						<param name="left" value="-1920"/>
+						<param name="top" value="0"/>
+						<param name="width" value="720"/>
+						<param name="height" value="1080"/>
+						<param name="visible" value="Container(502).OnPrevious"/>
+						<param name="animationtype" value="Hidden"/>
+						<param name="animationeffect" value="slide"/>
+						<param name="animationend" value="1920,0"/>
+						<param name="showgradient" value="true"/>
+					</include>
+					<!--Move Icon 0 to 1-->
+					<include content="ListIcon">
+						<param name="left" value="0"/>
+						<param name="top" value="0"/>
+						<param name="width" value="720"/>
+						<param name="height" value="1080"/>
+						<param name="texture" value="$VAR[Thumbnail(1)Content]"/>
+						<param name="visible" value="Container(502).OnPrevious + !String.IsEmpty(Container.ListItemNoWrap(1).FolderPath)"/>
+						<param name="animationtype" value="Hidden"/>
+						<param name="animationeffect" value="slide"/>
+						<param name="animationend" value="1920,0"/>
+						<param name="showgradient" value="true"/>
+					</include>
+				</control>
 			</control>
+
+			<!--On Next Thumbs-->
+			<control type="group">
+				<visible>Control.IsVisible(5002)</visible>
+				<include>CustomViewsBackground</include>
+				<!--Fanart-->
+				<control type="group">
+					<visible>Skin.String(ShowcaseView_Display,Fanart) | Container.Content(episodes) | String.IsEmpty(Skin.String(ShowcaseView_Display)</visible>
+					<!--Move Icon 0 to -1-->
+					<include content="ListIcon">
+						<param name="left" value="0"/>
+						<param name="top" value="0"/>
+						<param name="width" value="1080"/>
+						<param name="height" value="1080"/>
+						<param name="aspectratio" value="scale"/>
+						<param name="visible" value="Container(502).OnNext + !String.IsEmpty(Container.ListItemNoWrap(-1).FolderPath)"/>
+						<param name="animationtype" value="Hidden"/>
+						<param name="animationeffect" value="slide"/>
+						<param name="animationend" value="-1920,0"/>
+						<param name="texture" value="$VAR[Thumbnail(-1)Content]"/>
+						<param name="showgradient" value="true"/>
+					</include>
+					<!--Move Icon 1 to 0-->
+					<include content="ListIcon">
+						<param name="left" value="1920"/>
+						<param name="top" value="0"/>
+						<param name="width" value="1080"/>
+						<param name="height" value="1080"/>
+						<param name="aspectratio" value="scale"/>
+						<param name="visible" value="Container(502).OnNext"/>
+						<param name="animationtype" value="Hidden"/>
+						<param name="animationeffect" value="slide"/>
+						<param name="animationend" value="-1920,0"/>
+						<param name="showgradient" value="true"/>
+					</include>
+				</control>
+				<!--Posters-->
+				<control type="group">
+					<visible>Skin.String(ShowcaseView_Display,Posters) + !Container.Content(episodes)</visible>
+					<!--Move Icon 0 to -1-->
+					<include content="ListIcon">
+						<param name="left" value="0"/>
+						<param name="top" value="0"/>
+						<param name="width" value="720"/>
+						<param name="height" value="1080"/>
+						<param name="texture" value="$VAR[Thumbnail(-1)Content]"/>
+						<param name="visible" value="Container(502).OnNext + !String.IsEmpty(Container.ListItemNoWrap(-1).FolderPath)"/>
+						<param name="animationtype" value="Hidden"/>
+						<param name="animationeffect" value="slide"/>
+						<param name="animationend" value="-1920,0"/>
+						<param name="showgradient" value="true"/>
+					</include>
+					<!--Move Icon 1 to 0-->
+					<include content="ListIcon">
+						<param name="left" value="1920"/>
+						<param name="top" value="0"/>
+						<param name="width" value="720"/>
+						<param name="height" value="1080"/>
+						<param name="visible" value="Container(502).OnNext"/>
+						<param name="animationtype" value="Hidden"/>
+						<param name="animationeffect" value="slide"/>
+						<param name="animationend" value="-1920,0"/>
+						<param name="showgradient" value="true"/>
+					</include>
+				</control>
+			</control>
+
 		</control>
 	</include>
 </includes>
