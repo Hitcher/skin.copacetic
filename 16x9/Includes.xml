@@ -457,6 +457,7 @@
     <param name="animationend" default=""/>
     <param name="animationcondition" default=""/>
     <param name="fadetime" default="0"/>
+    <param name="backgroundvisible" default="true"/>
     <param name="backgroundcolor" default="$VAR[IconBackgroundColor]"/>
     <param name="aspectratio" default="keep"/>
 		<param name="texture" default="$VAR[Thumbnail(0)Content]"/>
@@ -471,6 +472,7 @@
         <visible>$PARAM[visible]</visible>
         <animation effect="$PARAM[animationeffect]" end="$PARAM[animationend]" condition="$PARAM[animationcondition]" time="380" tween="sine" easing="inout" reversible="false">$PARAM[animationtype]</animation>
         <control type="image">
+          <visible>$PARAM[backgroundvisible]</visible>
           <aspectratio>stretch</aspectratio>
           <texture colordiffuse="$PARAM[backgroundcolor]">views/white_100.png</texture>
         </control>
@@ -520,6 +522,7 @@
       <visible allowhiddenfocus="true">false</visible>
       <animation effect="slide" end="0,0" time="380" reversible="false">Focus</animation>
       <onfocus condition="System.HasAddon(script.embuary.helper) + !String.IsEqual(ListItem.Overlay,OverlayWatched.png) + [Container.Content(tvshows) | Container.Content(seasons)]">RunScript(script.embuary.helper,action=calc,do='"($INFO[ListItem.Property(WatchedEpisodes)] / $INFO[ListItem.Property(TotalEpisodes)]) * 100"',prop=MyResult)</onfocus>
+      <!--<onfocus condition="System.HasAddon(script.embuary.helper) + !String.IsEqual(ListItem.Overlay,OverlayWatched.png) + ListItem.IsCollection">RunScript(script.embuary.helper,action=calc,do='"($INFO[Container(4500).TotalWatched]] / $INFO[Container(4500).NumItems]) * 100"',prop=MyResult)</onfocus>-->
       <onunfocus>ClearProperty(MyResult,home)</onunfocus>
     </control>
   </include>
@@ -580,9 +583,10 @@
 					<visible>!ListItem.IsResumable + String.IsEqual(ListItem.Overlay,OverlayWatched.png)</visible>
 					<texture colordiffuse="$PARAM[focuscolor]">$PARAM[focustexture]</texture>
 				</control>
+        <!--Sets, TVshows and Episodes-->
         <control type="group">
-          <visible>Integer.IsGreater($NUMBER[Window(home).Property(MyResult)],0)</visible>
-          <!--Backing bar for tvshows and seasons -->
+          <visible>Integer.IsGreater($NUMBER[Window(home).Property(MyResult)],0) + [Container.Content(tvshows) | !Container.Content(seasons) | ListItem.IsCollection]</visible>
+          <!--Backing bar for sets, tvshows and seasons -->
           <include content="TVProgressBar">
             <param name="width" value="$PARAM[width]"/>
             <param name="height" value="$PARAM[height]"/>
@@ -804,7 +808,7 @@
           <top>$PARAM[checktop]</top>
           <width>$PARAM[checkwidth]</width>
           <height>$PARAM[checkheight]</height>
-          <texture colordiffuse="$VAR[LightColor]">$PARAM[checktexture]</texture>
+          <texture colordiffuse="$PARAM[textcolor]">$PARAM[checktexture]</texture>
           <visible>String.IsEqual(ListItem.Overlay,OverlayWatched.png)</visible>
         </control>
         <control type="$PARAM[labeltype]">
@@ -953,6 +957,7 @@
           <visible>!String.IsEmpty(ListItem.Art(Thumb)</visible>
           <include content="ListIcon">
             <param name="aspectratio" value="scale"/>
+            <param name="backgroundvisible" value="false"/>
           </include>
           <control type="image">
             <visible>$PARAM[unfocusedvisible]</visible>
@@ -1226,6 +1231,7 @@
 		<definition>
 			<control type="grouplist">
 				<include>HideContent</include>
+        <visible>!Container.IsUpdating</visible>
 				<visible>$PARAM[groupvisibility]</visible>
 				<left>$PARAM[left]</left>
 				<bottom>$PARAM[bottom]</bottom>

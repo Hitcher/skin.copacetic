@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <includes>
 
+	<variable name="MovieSetsPath">
+		<value condition="ListItem.IsCollection">$INFO[ListItem.FolderPath]</value>
+	</variable>
+
 	<variable name="ViewtypeOverlayTexture">
 		<value condition="Control.IsVisible(50)">views/white_66.png</value>
-		<value condition="Control.IsVisible(501) + [Skin.String(BillboardView_Details, All) | Skin.String(BillboardView_Details,TitleAndPlot) | String.IsEmpty(Skin.String(BillboardView_Details))]">views/white_66.png</value>
-		<value condition="Control.IsVisible(501) + [Skin.String(BillboardView_Details, Title) | Skin.String(BillboardView_Details, TitleAndInfo)]">views/white_20.png</value>
+		<value condition="Control.IsVisible(501) + !Skin.String(BillboardView_Details, Title)">views/white_66.png</value>
+		<value condition="Control.IsVisible(501)">views/white_20.png</value>
 		<value>views/white_75.png</value>
 	</variable>
 
@@ -168,7 +172,9 @@
 		<value condition="Container.Content(movies) + !String.IsEmpty(ListItem.Year)">[UPPERCASE]$INFO[ListItem.Year]$INFO[ListItem.Duration(mins), / , $LOCALIZE[31138]][/UPPERCASE]</value>
 		<value condition="Container.Content(movies) + !String.IsEmpty(ListItem.Duration)">[UPPERCASE]$INFO[ListItem.Duration(mins),, $LOCALIZE[31138]][/UPPERCASE]</value>
 		<!--<value condition="Container.Content(movies) + !String.IsEmpty(ListItem.EndTime)">[UPPERCASE]$INFO[ListItem.EndTime,$LOCALIZE[32000] ][/UPPERCASE]</value>-->
- 		<!-- TV Shows (Views 50, 505): 2019 / 5 Seasons -->
+		<value condition="ListItem.IsCollection + !String.IsEmpty(Container(4500).ListItem(0).Year)">[UPPERCASE]$INFO[Container(4500).ListItem(0).Year]$INFO[Container(4500).ListItem(-1).Year,-]$INFO[Container(4500).NumItems, / , Movies][/UPPERCASE]</value>
+		<value condition="ListItem.IsCollection + !String.IsEmpty(Container(4500).NumItems)">[UPPERCASE]$INFO[Container(4500).NumItems,, Movies][/UPPERCASE]</value>
+		<!-- TV Shows (Views 50, 505): 2019 / 5 Seasons -->
 		<value condition="Container.Content(tvshows) + [Control.IsVisible(50) | Control.IsVisible(505)] + !String.IsEmpty(ListItem.Year)">[UPPERCASE]$INFO[ListItem.Year]$INFO[ListItem.Property(TotalSeasons), / , ]$VAR[SeasonsLabel][/UPPERCASE]</value>
 		<value condition="Container.Content(tvshows) + [Control.IsVisible(50) | Control.IsVisible(505)] + !String.IsEmpty(ListItem.Property(TotalSeasons))">[UPPERCASE]$INFO[ListItem.Property(TotalSeasons),, ]$VAR[SeasonsLabel][/UPPERCASE]</value>
 		<!-- TV Shows (Remaining Views): 2019 / 5 Seasons / 7/8 Watched-->

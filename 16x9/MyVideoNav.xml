@@ -38,6 +38,12 @@
 			<include>HiddenControl</include>
 		</control>
 
+		<!--Hidden Set list-->
+		<control type="list" id="4500">
+			<include>HiddenControl</include>
+			<content sortby="year" sortorder="ascending">$VAR[MovieSetsPath]</content>
+ 		</control>
+
 		<!-- Main group -->
 		<control type="group">
 
@@ -62,7 +68,8 @@
 
 			<!--Fanart background for 50,501-->
 			<control type="group">
-				<visible>[Control.IsVisible(501) + !Control.IsVisible(5001) + !Control.IsVisible(5002)] | [Control.IsVisible(50) + !Skin.String(ListView_Fanart,Off) + [Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | Container.Content(episodes) | Container.Content(artists)]]</visible>
+				<visible>Control.IsVisible(501) | [Control.IsVisible(50) + !Skin.String(ListView_Fanart,Off) + [Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | Container.Content(episodes) | Container.Content(artists)]]</visible>
+				<include>ViewtypeFadeAnimation</include>
 				<include content="ListIcon">
 						<param name="left" value="0"/>
 						<param name="top" value="0"/>
@@ -92,6 +99,40 @@
 			<include>Viewtype_503_Gallery</include>
 			<include>Viewtype_504_Strip</include>
 			<include>Viewtype_505_Grid</include>
+
+			<control type="group">
+				<visible>ListItem.IsCollection</visible>
+				<control type="label">
+					<label>content path: $VAR[MovieSetsPath]</label>
+					<textcolor>white</textcolor>
+					<bottom>0</bottom>
+					<font>GridUnfocused</font>
+				</control>
+				<control type="label">
+					<label>NumItems: $INFO[Container(4500).NumItems]</label>
+					<textcolor>white</textcolor>
+					<bottom>50</bottom>
+					<font>GridUnfocused</font>
+				</control>
+				<control type="label">
+					<label>TotalWatched: $INFO[Container(4500).TotalWatched]</label>
+					<textcolor>white</textcolor>
+					<bottom>100</bottom>
+					<font>GridUnfocused</font>
+				</control>
+				<control type="label">
+					<label>ListItem(0).Year: $INFO[Container(4500).ListItem(0).Year]</label>
+					<textcolor>white</textcolor>
+					<bottom>150</bottom>
+					<font>GridUnfocused</font>
+				</control>
+				<control type="label">
+					<label>ListItem(-1).Year: $INFO[Container(4500).ListItem(-1).Year]</label>
+					<textcolor>white</textcolor>
+					<bottom>200</bottom>
+					<font>GridUnfocused</font>
+				</control>
+			</control>
 
 			<!--Scrollbars-->
 			<control type="scrollbar" id="60">
@@ -405,9 +446,9 @@
 
 					<!--Showcase View Display-->
 					<item>
-						<description>Display / Fanart</description>
-						<label>‹ Fanart ›</label>
-						<label2>Display / Fanart</label2>
+						<description>Display / Showcase</description>
+						<label>‹ Showcase ›</label>
+						<label2>Display / Showcase</label2>
 						<onclick>SetFocus(50)</onclick>
 						<property name="ActionLeft">Skin.SetString(ShowcaseView_Display,Posters)</property>
 						<property name="ActionRight">Skin.SetString(ShowcaseView_Display,Posters)</property>
