@@ -1,679 +1,1204 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <window>
-	<!-- Music -->
-	<backgroundcolor>$VAR[BackgroundColor]</backgroundcolor>
+	<!-- Videos -->
+	<backgroundcolor>$VAR[SecondaryColor]</backgroundcolor>
+	<include>FullscreenDimensions</include>
+	<include>WindowFadeAnimation</include>
 	<defaultcontrol always="true">50</defaultcontrol>
 	<menucontrol>3000</menucontrol>
-	<views>50,51,500,502,510,511,520,521,522,523,530,531,532,533,534</views>
+	<views>50,500,501,502,503,504,505</views>
 	<controls>
+
 		<!-- Hidden controls -->
 		<control type="button" id="3">
+			<description>Select sort method (sort by: name, date size, etc...)</description>
 			<include>HiddenControl</include>
 		</control>
 		<control type="togglebutton" id="4">
+			<description>Select sortmode (ascending or descending)</description>
 			<usealttexture>Container.SortDirection(Descending)</usealttexture>
 			<include>HiddenControl</include>
 		</control>
 		<control type="button" id="8">
+			<description>Search for a string anywhere in the Kodi video database</description>
 			<include>HiddenControl</include>
 		</control>
-		<control type="button" id="16">
+		<control type="button" id="14">
+			<description>Show only unwatched or all videos</description>
 			<include>HiddenControl</include>
 		</control>
 		<control type="edit" id="19">
+			<description>Filter the media files to only show items that include the specified string in the name</description>
 			<include>HiddenControl</include>
 		</control>
 		<control type="togglebutton" id="20">
+			<description>Update library</description>
 			<usealttexture>Library.IsScanningVideo</usealttexture>
 			<include>HiddenControl</include>
 		</control>
-		<!-- Fanart -->
-		<include>Fanart</include>
+
 		<!-- Main group -->
 		<control type="group">
-			<include>WindowFadeAnimation</include>
-			<include>OptionsHideAnimation</include>
-			<!-- Views -->
+
+			<!--Background gradient for Light mode-->
+			<control type="image">
+				<visible>Skin.String(Theme,Light)</visible>
+				<aspectratio>stretch</aspectratio>
+				<texture colordiffuse="$VAR[DarkColor]">views/gradient_light-background.png</texture>
+			</control>
+
+			<!--On Previous Scroll Delay-->
+			<control type="group" id="5001">
+				<visible>Container.OnPrevious</visible>
+				<animation effect="slide" end="0,0" time="380" reversible="false">Hidden</animation>
+			</control>
+
+			<!--On Next Scroll Delay-->
+			<control type="group" id="5002">
+				<visible>Container.OnNext</visible>
+				<animation effect="slide" end="0,0" time="380" reversible="false">Hidden</animation>
+			</control>
+
+			<!--Fanart background for 50,501-->
+			<control type="group">
+				<visible>Control.IsVisible(501) | [Control.IsVisible(50) + !Skin.String(ListView_Fanart,Off) + [Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | Container.Content(episodes) | Container.Content(artists)]]</visible>
+				<include>ViewtypeFadeAnimation</include>
+				<include content="ListIcon">
+						<param name="left" value="0"/>
+						<param name="top" value="0"/>
+						<param name="width" value="1920"/>
+						<param name="height" value="1080"/>
+						<param name="fadetime" value="300"/>
+				</include>
+				<control type="group">
+					<visible>Control.IsVisible(50) | [Control.IsVisible(501) + !Skin.String(BillboardView_Details,Off)]</visible>
+					<include>ViewtypeOverlay</include>
+				</control>
+			</control>
+
+			<!--Flags-->
+			<control type="group">
+				<visible>!Control.IsVisible(5001) + !Control.IsVisible(5002)</visible>
+				<include>ProgressBarFadeAnimation</include>
+				<include>MediaFlags</include>
+			</control>
+
+			<!--Viewtypes-->
+			<description>Include the following views in MyVideoNav</description>
 			<include>Viewtype_50_List</include>
-			<include>Viewtype_500_Billboard</include>
-			<include>Viewtype_502_BillboardInfo</include>
-			<include>Viewtype_511_FilmstripSquare</include>
-			<include>Viewtype_521_RowSquare</include>
-			<include>Viewtype_522_RowLandscape</include>
-			<include>Viewtype_531_WallSquare</include>
-			<include>Viewtype_532_WallLandscape</include>
-			<include>Viewtype_534_WallDiscart</include>
-			<!-- Scrollbar -->
+			<include>Viewtype_500_Detailed_List</include>
+			<include>Viewtype_501_Billboard</include>
+			<include>Viewtype_502_Showcase</include>
+			<include>Viewtype_503_Gallery</include>
+			<include>Viewtype_504_Strip</include>
+			<include>Viewtype_505_Grid</include>
+
+			<!--Scrollbars-->
 			<control type="scrollbar" id="60">
-				<left>980</left>
-				<top>144</top>
-				<width>20</width>
-				<height>896</height>
+				<description>Scrollbar vertical</description>
+				<right>25</right>
+				<top>270</top>
+				<width>4</width>
+				<height>540</height>
 				<onleft>50</onleft>
 				<onright>3000</onright>
 				<showonepage>false</showonepage>
 				<orientation>vertical</orientation>
-				<texturesliderbackground colordiffuse="$VAR[UnFocusedColor]">views/white_50.png</texturesliderbackground>
-				<texturesliderbar colordiffuse="$VAR[BackgroundColor]">views/white_70.png</texturesliderbar>
-				<texturesliderbarfocus colordiffuse="$VAR[BackgroundColor]">views/white_100.png</texturesliderbarfocus>
+				<texturesliderbackground colordiffuse="$VAR[PrimaryColor]">views/white_20.png</texturesliderbackground>
+				<texturesliderbar colordiffuse="$VAR[PrimaryColor]">views/white_20.png</texturesliderbar>
+				<texturesliderbarfocus colordiffuse="$VAR[PrimaryColor]">views/white_100.png</texturesliderbarfocus>
 				<textureslidernib></textureslidernib>
 				<textureslidernibfocus></textureslidernibfocus>
-				<visible>Control.IsVisible(50)</visible>
+				<visible>Control.IsVisible(50) | Control.IsVisible(500) | Control.IsVisible(505)</visible>
 				<include>ScrollBarAnimation</include>
 			</control>
+
+			<!--Horizontal Scrollbar-->
 			<control type="scrollbar" id="60">
-				<bottom>0</bottom>
-				<width>1920</width>
-				<height>20</height>
+				<description>Scrollbar horizontal</description>
+				<left>480</left>
+				<bottom>20</bottom>
+				<width>960</width>
+				<height>4</height>
 				<onup>50</onup>
 				<ondown>3000</ondown>
 				<showonepage>false</showonepage>
 				<orientation>horizontal</orientation>
-				<texturesliderbackground colordiffuse="$VAR[UnFocusedColor]">views/white_50.png</texturesliderbackground>
-				<texturesliderbar colordiffuse="$VAR[BackgroundColor]">views/white_70.png</texturesliderbar>
-				<texturesliderbarfocus colordiffuse="$VAR[BackgroundColor]">views/white_100.png</texturesliderbarfocus>
+				<texturesliderbackground colordiffuse="$VAR[PrimaryColor]">views/white_20.png</texturesliderbackground>
+				<texturesliderbar colordiffuse="$VAR[PrimaryColor]">views/white_20.png</texturesliderbar>
+				<texturesliderbarfocus colordiffuse="$VAR[PrimaryColor]">views/white_100.png</texturesliderbarfocus>
 				<textureslidernib></textureslidernib>
 				<textureslidernibfocus></textureslidernibfocus>
-				<visible>!Control.IsVisible(50)</visible>
+				<visible>Control.IsVisible(501) | Control.IsVisible(502) | Control.IsVisible(503) | Control.IsVisible(504)</visible>
 				<include>ScrollBarAnimation</include>
 			</control>
 		</control>
-		<!-- Options -->
-		<control type="image">
-			<include>ContentFadeAnimation</include>
-			<include>FullscreenDimensions</include>
-			<texture colordiffuse="$VAR[SecondaryColor]">views/white_70.png</texture>
-			<visible>Control.HasFocus(3000)</visible>
-		</control>
-		<control type="fixedlist" id="3000">
-			<left>1030</left>
-			<top>144</top>
-			<width>860</width>
-			<height>896</height>
-			<onup>50</onup>
-			<ondown>50</ondown>
-			<onback>50</onback>
-			<onleft condition="String.IsEmpty(Container(3000).ListItem.Property(ActionLeft))">50</onleft>
-			<onright condition="String.IsEmpty(Container(3000).ListItem.Property(ActionRight))">50</onright>
-			<onleft condition="!String.IsEmpty(Container(3000).ListItem.Property(ActionLeft))">$INFO[Container(3000).ListItem.Property(ActionLeft)]</onleft>
-			<onright condition="!String.IsEmpty(Container(3000).ListItem.Property(ActionRight))">$INFO[Container(3000).ListItem.Property(ActionRight)]</onright>
-			<movement>6</movement>
-			<focusposition>6</focusposition>
-			<orientation>vertical</orientation>
-			<viewtype label="535">list</viewtype>
-			<defaultcontrol always="true">0</defaultcontrol>
-			<scrolltime tween="sine" easing="inout">200</scrolltime>
+
+		<!--Viewtype Options Menu-->
+		<control type="group">
 			<visible allowhiddenfocus="true">Control.HasFocus(3000)</visible>
-			<include>OptionsAnimation</include>
-			<itemlayout height="59" width="860">
-				<control type="label">
-					<width>860</width>
-					<height>59</height>
-					<font>Thin48</font>
-					<textcolor>$VAR[TextColor]</textcolor>
-					<label>$INFO[ListItem.Label2]</label>
-				</control>
-			</itemlayout>
-			<focusedlayout height="70" width="860">
-				<control type="label">
-					<width>860</width>
-					<height>70</height>
-					<font>Light60</font>
-					<textcolor>$VAR[TextColor]</textcolor>
-					<label>[UPPERCASE]$INFO[ListItem.Label][/UPPERCASE]</label>
-				</control>
-			</focusedlayout>
-			<content>
-				<!-- Viewmode -->
-				<item>
-					<onclick>SetFocus(50)</onclick>
-					<label>‹ $LOCALIZE[535] ›</label>
-					<label2>$LOCALIZE[31105] | $LOCALIZE[535]</label2>
-					<property name="ActionLeft">Container.PreviousViewMode</property>
-					<property name="ActionRight">Container.NextViewMode</property>
-					<visible>Control.IsVisible(50)</visible>
-				</item>
-				<item>
-					<onclick>SetFocus(500)</onclick>
-					<label>‹ $LOCALIZE[31500] ›</label>
-					<label2>$LOCALIZE[31105] | $LOCALIZE[31500]</label2>
-					<property name="ActionLeft">Container.PreviousViewMode</property>
-					<property name="ActionRight">Container.NextViewMode</property>
-					<visible>Control.IsVisible(500)</visible>
-				</item>
-				<item>
-					<onclick>SetFocus(502)</onclick>
-					<label>‹ $LOCALIZE[31502] ›</label>
-					<label2>$LOCALIZE[31105] | $LOCALIZE[31502]</label2>
-					<property name="ActionLeft">Container.PreviousViewMode</property>
-					<property name="ActionRight">Container.NextViewMode</property>
-					<visible>Control.IsVisible(502)</visible>
-				</item>
-				<item>
-					<onclick>SetFocus(510)</onclick>
-					<label>‹ $LOCALIZE[31510] ›</label>
-					<label2>$LOCALIZE[31105] | $LOCALIZE[31510]</label2>
-					<property name="ActionLeft">Container.PreviousViewMode</property>
-					<property name="ActionRight">Container.NextViewMode</property>
-					<visible>Control.IsVisible(510)</visible>
-				</item>
-				<item>
-					<onclick>SetFocus(511)</onclick>
-					<label>‹ $LOCALIZE[31511] ›</label>
-					<label2>$LOCALIZE[31105] | $LOCALIZE[31511]</label2>
-					<property name="ActionLeft">Container.PreviousViewMode</property>
-					<property name="ActionRight">Container.NextViewMode</property>
-					<visible>Control.IsVisible(511)</visible>
-				</item>
-				<item>
-					<onclick>SetFocus(520)</onclick>
-					<label>‹ $LOCALIZE[31520] ›</label>
-					<label2>$LOCALIZE[31105] | $LOCALIZE[31520]</label2>
-					<property name="ActionLeft">Container.PreviousViewMode</property>
-					<property name="ActionRight">Container.NextViewMode</property>
-					<visible>Control.IsVisible(520)</visible>
-				</item>
-				<item>
-					<onclick>SetFocus(521)</onclick>
-					<label>‹ $LOCALIZE[31521] ›</label>
-					<label2>$LOCALIZE[31105] | $LOCALIZE[31521]</label2>
-					<property name="ActionLeft">Container.PreviousViewMode</property>
-					<property name="ActionRight">Container.NextViewMode</property>
-					<visible>Control.IsVisible(521)</visible>
-				</item>
-				<item>
-					<onclick>SetFocus(522)</onclick>
-					<label>‹ $LOCALIZE[31522] ›</label>
-					<label2>$LOCALIZE[31105] | $LOCALIZE[31522]</label2>
-					<property name="ActionLeft">Container.PreviousViewMode</property>
-					<property name="ActionRight">Container.NextViewMode</property>
-					<visible>Control.IsVisible(522)</visible>
-				</item>
-				<item>
-					<onclick>SetFocus(523)</onclick>
-					<label>‹ $LOCALIZE[31523] ›</label>
-					<label2>$LOCALIZE[31105] | $LOCALIZE[31523]</label2>
-					<property name="ActionLeft">Container.PreviousViewMode</property>
-					<property name="ActionRight">Container.NextViewMode</property>
-					<visible>Control.IsVisible(523)</visible>
-				</item>
-				<item>
-					<onclick>SetFocus(530)</onclick>
-					<label>‹ $LOCALIZE[31530] ›</label>
-					<label2>$LOCALIZE[31105] | $LOCALIZE[31530]</label2>
-					<property name="ActionLeft">Container.PreviousViewMode</property>
-					<property name="ActionRight">Container.NextViewMode</property>
-					<visible>Control.IsVisible(530)</visible>
-				</item>
-				<item>
-					<onclick>SetFocus(531)</onclick>
-					<label>‹ $LOCALIZE[31531] ›</label>
-					<label2>$LOCALIZE[31105] | $LOCALIZE[31531]</label2>
-					<property name="ActionLeft">Container.PreviousViewMode</property>
-					<property name="ActionRight">Container.NextViewMode</property>
-					<visible>Control.IsVisible(531)</visible>
-				</item>
-				<item>
-					<onclick>SetFocus(532)</onclick>
-					<label>‹ $LOCALIZE[31532] ›</label>
-					<label2>$LOCALIZE[31105] | $LOCALIZE[31532]</label2>
-					<property name="ActionLeft">Container.PreviousViewMode</property>
-					<property name="ActionRight">Container.NextViewMode</property>
-					<visible>Control.IsVisible(532)</visible>
-				</item>
-				<item>
-					<onclick>SetFocus(533)</onclick>
-					<label>‹ $LOCALIZE[31533] ›</label>
-					<label2>$LOCALIZE[31105] | $LOCALIZE[31533]</label2>
-					<property name="ActionLeft">Container.PreviousViewMode</property>
-					<property name="ActionRight">Container.NextViewMode</property>
-					<visible>Control.IsVisible(533)</visible>
-				</item>
-				<item>
-					<onclick>SetFocus(534)</onclick>
-					<label>‹ $LOCALIZE[31534] ›</label>
-					<label2>$LOCALIZE[31105] | $LOCALIZE[31534]</label2>
-					<property name="ActionLeft">Container.PreviousViewMode</property>
-					<property name="ActionRight">Container.NextViewMode</property>
-					<visible>Control.IsVisible(534)</visible>
-				</item>
-				<!-- Sort -->
-				<item>
-					<onclick>SetFocus(50)</onclick>
-					<label>‹ $LOCALIZE[551] ›</label>
-					<label2>$LOCALIZE[31106] | $LOCALIZE[551]</label2>
-					<property name="ActionLeft">Container.PreviousSortMethod</property>
-					<property name="ActionRight">Container.NextSortMethod</property>
-					<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[551])</visible>
-				</item>
-				<item>
-					<onclick>SetFocus(50)</onclick>
-					<label>‹ $LOCALIZE[552] ›</label>
-					<label2>$LOCALIZE[31106] | $LOCALIZE[552]</label2>
-					<property name="ActionLeft">Container.PreviousSortMethod</property>
-					<property name="ActionRight">Container.NextSortMethod</property>
-					<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[552])</visible>
-				</item>
-				<item>
-					<onclick>SetFocus(50)</onclick>
-					<label>‹ $LOCALIZE[553] ›</label>
-					<label2>$LOCALIZE[31106] | $LOCALIZE[553]</label2>
-					<property name="ActionLeft">Container.PreviousSortMethod</property>
-					<property name="ActionRight">Container.NextSortMethod</property>
-					<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[553])</visible>
-				</item>
-				<item>
-					<onclick>SetFocus(50)</onclick>
-					<label>‹ $LOCALIZE[623] ›</label>
-					<label2>$LOCALIZE[31106] | $LOCALIZE[623]</label2>
-					<property name="ActionLeft">Container.PreviousSortMethod</property>
-					<property name="ActionRight">Container.NextSortMethod</property>
-					<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[623])</visible>
-				</item>
-				<item>
-					<onclick>SetFocus(50)</onclick>
-					<label>‹ $LOCALIZE[564] ›</label>
-					<label2>$LOCALIZE[31106] | $LOCALIZE[564]</label2>
-					<property name="ActionLeft">Container.PreviousSortMethod</property>
-					<property name="ActionRight">Container.NextSortMethod</property>
-					<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[564])</visible>
-				</item>
-				<item>
-					<onclick>SetFocus(50)</onclick>
-					<label>‹ $LOCALIZE[554] ›</label>
-					<label2>$LOCALIZE[31106] | $LOCALIZE[554]</label2>
-					<property name="ActionLeft">Container.PreviousSortMethod</property>
-					<property name="ActionRight">Container.NextSortMethod</property>
-					<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[554])</visible>
-				</item>
-				<item>
-					<onclick>SetFocus(50)</onclick>
-					<label>‹ $LOCALIZE[20359] ›</label>
-					<label2>$LOCALIZE[31106] | $LOCALIZE[20359]</label2>
-					<property name="ActionLeft">Container.PreviousSortMethod</property>
-					<property name="ActionRight">Container.NextSortMethod</property>
-					<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[20359])</visible>
-				</item>
-				<item>
-					<onclick>SetFocus(50)</onclick>
-					<label>‹ $LOCALIZE[180] ›</label>
-					<label2>$LOCALIZE[31106] | $LOCALIZE[180]</label2>
-					<property name="ActionLeft">Container.PreviousSortMethod</property>
-					<property name="ActionRight">Container.NextSortMethod</property>
-					<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[180])</visible>
-				</item>
-				<item>
-					<onclick>SetFocus(50)</onclick>
-					<label>‹ $LOCALIZE[556] ›</label>
-					<label2>$LOCALIZE[31106] | $LOCALIZE[556]</label2>
-					<property name="ActionLeft">Container.PreviousSortMethod</property>
-					<property name="ActionRight">Container.NextSortMethod</property>
-					<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[556])</visible>
-				</item>
-				<item>
-					<onclick>SetFocus(50)</onclick>
-					<label>‹ $LOCALIZE[557] ›</label>
-					<label2>$LOCALIZE[31106] | $LOCALIZE[557]</label2>
-					<property name="ActionLeft">Container.PreviousSortMethod</property>
-					<property name="ActionRight">Container.NextSortMethod</property>
-					<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[557])</visible>
-				</item>
-				<item>
-					<onclick>SetFocus(50)</onclick>
-					<label>‹ $LOCALIZE[558] ›</label>
-					<label2>$LOCALIZE[31106] | $LOCALIZE[558]</label2>
-					<property name="ActionLeft">Container.PreviousSortMethod</property>
-					<property name="ActionRight">Container.NextSortMethod</property>
-					<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[558])</visible>
-				</item>
-				<item>
-					<onclick>SetFocus(50)</onclick>
-					<label>‹ $LOCALIZE[515] ›</label>
-					<label2>$LOCALIZE[31106] | $LOCALIZE[515]</label2>
-					<property name="ActionLeft">Container.PreviousSortMethod</property>
-					<property name="ActionRight">Container.NextSortMethod</property>
-					<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[515])</visible>
-				</item>
-				<item>
-					<onclick>SetFocus(50)</onclick>
-					<label>‹ $LOCALIZE[574] ›</label>
-					<label2>$LOCALIZE[31106] | $LOCALIZE[574]</label2>
-					<property name="ActionLeft">Container.PreviousSortMethod</property>
-					<property name="ActionRight">Container.NextSortMethod</property>
-					<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[574])</visible>
-				</item>
-				<item>
-					<onclick>SetFocus(50)</onclick>
-					<label>‹ $LOCALIZE[570] ›</label>
-					<label2>$LOCALIZE[31106] | $LOCALIZE[570]</label2>
-					<property name="ActionLeft">Container.PreviousSortMethod</property>
-					<property name="ActionRight">Container.NextSortMethod</property>
-					<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[570])</visible>
-				</item>
-				<item>
-					<onclick>SetFocus(50)</onclick>
-					<label>‹ $LOCALIZE[561] ›</label>
-					<label2>$LOCALIZE[31106] | $LOCALIZE[561]</label2>
-					<property name="ActionLeft">Container.PreviousSortMethod</property>
-					<property name="ActionRight">Container.NextSortMethod</property>
-					<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[561])</visible>
-				</item>
-				<item>
-					<onclick>SetFocus(50)</onclick>
-					<label>‹ $LOCALIZE[563] ›</label>
-					<label2>$LOCALIZE[31106] | $LOCALIZE[563]</label2>
-					<property name="ActionLeft">Container.PreviousSortMethod</property>
-					<property name="ActionRight">Container.NextSortMethod</property>
-					<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[563])</visible>
-				</item>
-				<item>
-					<onclick>SetFocus(50)</onclick>
-					<label>‹ $LOCALIZE[38018] ›</label>
-					<label2>$LOCALIZE[31106] | $LOCALIZE[38018]</label2>
-					<property name="ActionLeft">Container.PreviousSortMethod</property>
-					<property name="ActionRight">Container.NextSortMethod</property>
-					<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[38018])</visible>
-				</item>
-				<item>
-					<onclick>SetFocus(50)</onclick>
-					<label>‹ $LOCALIZE[171] ›</label>
-					<label2>$LOCALIZE[31106] | $LOCALIZE[171]</label2>
-					<property name="ActionLeft">Container.PreviousSortMethod</property>
-					<property name="ActionRight">Container.NextSortMethod</property>
-					<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[171])</visible>
-				</item>
-				<item>
-					<onclick>SetFocus(50)</onclick>
-					<label>‹ $LOCALIZE[562] ›</label>
-					<label2>$LOCALIZE[31106] | $LOCALIZE[562]</label2>
-					<property name="ActionLeft">Container.PreviousSortMethod</property>
-					<property name="ActionRight">Container.NextSortMethod</property>
-					<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[562])</visible>
-				</item>
-				<item>
-					<onclick>SetFocus(50)</onclick>
-					<label>‹ $LOCALIZE[20368] ›</label>
-					<label2>$LOCALIZE[31106] | $LOCALIZE[20368]</label2>
-					<property name="ActionLeft">Container.PreviousSortMethod</property>
-					<property name="ActionRight">Container.NextSortMethod</property>
-					<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[20368])</visible>
-				</item>
-				<item>
-					<onclick>SetFocus(50)</onclick>
-					<label>‹ $LOCALIZE[567] ›</label>
-					<label2>$LOCALIZE[31106] | $LOCALIZE[567]</label2>
-					<property name="ActionLeft">Container.PreviousSortMethod</property>
-					<property name="ActionRight">Container.NextSortMethod</property>
-					<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[567])</visible>
-				</item>
-				<item>
-					<onclick>SetFocus(50)</onclick>
-					<label>‹ $LOCALIZE[559] ›</label>
-					<label2>$LOCALIZE[31106] | $LOCALIZE[559]</label2>
-					<property name="ActionLeft">Container.PreviousSortMethod</property>
-					<property name="ActionRight">Container.NextSortMethod</property>
-					<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[559])</visible>
-				</item>
-				<item>
-					<onclick>SetFocus(50)</onclick>
-					<label>‹ $LOCALIZE[20074] ›</label>
-					<label2>$LOCALIZE[31106] | $LOCALIZE[20074]</label2>
-					<property name="ActionLeft">Container.PreviousSortMethod</property>
-					<property name="ActionRight">Container.NextSortMethod</property>
-					<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[20074])</visible>
-				</item>
-				<item>
-					<onclick>SetFocus(50)</onclick>
-					<label>‹ $LOCALIZE[572] ›</label>
-					<label2>$LOCALIZE[31106] | $LOCALIZE[572]</label2>
-					<property name="ActionLeft">Container.PreviousSortMethod</property>
-					<property name="ActionRight">Container.NextSortMethod</property>
-					<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[572])</visible>
-				</item>
-				<item>
-					<onclick>SetFocus(50)</onclick>
-					<label>‹ $LOCALIZE[573] ›</label>
-					<label2>$LOCALIZE[31106] | $LOCALIZE[573]</label2>
-					<property name="ActionLeft">Container.PreviousSortMethod</property>
-					<property name="ActionRight">Container.NextSortMethod</property>
-					<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[573])</visible>
-				</item>
-				<item>
-					<onclick>SetFocus(50)</onclick>
-					<label>‹ $LOCALIZE[568] ›</label>
-					<label2>$LOCALIZE[31106] | $LOCALIZE[568]</label2>
-					<property name="ActionLeft">Container.PreviousSortMethod</property>
-					<property name="ActionRight">Container.NextSortMethod</property>
-					<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[568])</visible>
-				</item>
-				<item>
-					<onclick>SetFocus(50)</onclick>
-					<label>‹ $LOCALIZE[20455] ›</label>
-					<label2>$LOCALIZE[31106] | $LOCALIZE[20455]</label2>
-					<property name="ActionLeft">Container.PreviousSortMethod</property>
-					<property name="ActionRight">Container.NextSortMethod</property>
-					<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[20455])</visible>
-				</item>
-				<item>
-					<onclick>SetFocus(50)</onclick>
-					<label>‹ $LOCALIZE[19029] ›</label>
-					<label2>$LOCALIZE[31106] | $LOCALIZE[19029]</label2>
-					<property name="ActionLeft">Container.PreviousSortMethod</property>
-					<property name="ActionRight">Container.NextSortMethod</property>
-					<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[19029])</visible>
-				</item>
-				<item>
-					<onclick>SetFocus(50)</onclick>
-					<label>‹ $LOCALIZE[549] ›</label>
-					<label2>$LOCALIZE[31106] | $LOCALIZE[549]</label2>
-					<property name="ActionLeft">Container.PreviousSortMethod</property>
-					<property name="ActionRight">Container.NextSortMethod</property>
-					<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[549])</visible>
-				</item>
-				<item>
-					<onclick>SetFocus(50)</onclick>
-					<label>‹ $LOCALIZE[577] ›</label>
-					<label2>$LOCALIZE[31106] | $LOCALIZE[577]</label2>
-					<property name="ActionLeft">Container.PreviousSortMethod</property>
-					<property name="ActionRight">Container.NextSortMethod</property>
-					<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[577])</visible>
-				</item>
-				<item>
-					<onclick>SetFocus(50)</onclick>
-					<label>‹ $LOCALIZE[16018] ›</label>
-					<label2>$LOCALIZE[31106] | $LOCALIZE[16018]</label2>
-					<property name="ActionLeft">Container.PreviousSortMethod</property>
-					<property name="ActionRight">Container.NextSortMethod</property>
-					<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[16018])</visible>
-				</item>
-				<item>
-					<onclick>SetFocus(50)</onclick>
-					<label>‹ $LOCALIZE[205] ›</label>
-					<label2>$LOCALIZE[31106] | $LOCALIZE[205]</label2>
-					<property name="ActionLeft">Container.PreviousSortMethod</property>
-					<property name="ActionRight">Container.NextSortMethod</property>
-					<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[205])</visible>
-				</item>
-				<item>
-					<onclick>SetFocus(50)</onclick>
-					<label>‹ $LOCALIZE[13409] ›</label>
-					<label2>$LOCALIZE[31106] | $LOCALIZE[13409]</label2>
-					<property name="ActionLeft">Container.PreviousSortMethod</property>
-					<property name="ActionRight">Container.NextSortMethod</property>
-					<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[13409])</visible>
-				</item>
-				<item>
-					<onclick>SetFocus(50)</onclick>
-					<label>‹ $LOCALIZE[20364] ›</label>
-					<label2>$LOCALIZE[31106] | $LOCALIZE[20364]</label2>
-					<property name="ActionLeft">Container.PreviousSortMethod</property>
-					<property name="ActionRight">Container.NextSortMethod</property>
-					<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[20364])</visible>
-				</item>
-				<item>
-					<onclick>SetFocus(50)</onclick>
-					<label>‹ $LOCALIZE[126] ›</label>
-					<label2>$LOCALIZE[31106] | $LOCALIZE[126]</label2>
-					<property name="ActionLeft">Container.PreviousSortMethod</property>
-					<property name="ActionRight">Container.NextSortMethod</property>
-					<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[126])</visible>
-				</item>
-				<item>
-					<onclick>SetFocus(50)</onclick>
-					<label>‹ $LOCALIZE[20373] ›</label>
-					<label2>$LOCALIZE[31106] | $LOCALIZE[20373]</label2>
-					<property name="ActionLeft">Container.PreviousSortMethod</property>
-					<property name="ActionRight">Container.NextSortMethod</property>
-					<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[20373])</visible>
-				</item>
-				<item>
-					<onclick>SetFocus(50)</onclick>
-					<label>‹ $LOCALIZE[20360] ›</label>
-					<label2>$LOCALIZE[31106] | $LOCALIZE[20360]</label2>
-					<property name="ActionLeft">Container.PreviousSortMethod</property>
-					<property name="ActionRight">Container.NextSortMethod</property>
-					<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[20360])</visible>
-				</item>
-				<item>
-					<onclick>SetFocus(50)</onclick>
-					<label>‹ $LOCALIZE[21441] ›</label>
-					<label2>$LOCALIZE[31106] | $LOCALIZE[21441]</label2>
-					<property name="ActionLeft">Container.PreviousSortMethod</property>
-					<property name="ActionRight">Container.NextSortMethod</property>
-					<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[21441])</visible>
-				</item>
-				<item>
-					<onclick>SetFocus(50)</onclick>
-					<label>‹ $LOCALIZE[21443] ›</label>
-					<label2>$LOCALIZE[31106] | $LOCALIZE[21443]</label2>
-					<property name="ActionLeft">Container.PreviousSortMethod</property>
-					<property name="ActionRight">Container.NextSortMethod</property>
-					<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[21443])</visible>
-				</item>
-				<item>
-					<onclick>SetFocus(50)</onclick>
-					<label>‹ $LOCALIZE[21445] ›</label>
-					<label2>$LOCALIZE[31106] | $LOCALIZE[21445]</label2>
-					<property name="ActionLeft">Container.PreviousSortMethod</property>
-					<property name="ActionRight">Container.NextSortMethod</property>
-					<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[21445])</visible>
-				</item>
-				<item>
-					<onclick>SetFocus(50)</onclick>
-					<label>‹ $LOCALIZE[21374] ›</label>
-					<label2>$LOCALIZE[31106] | $LOCALIZE[21374]</label2>
-					<property name="ActionLeft">Container.PreviousSortMethod</property>
-					<property name="ActionRight">Container.NextSortMethod</property>
-					<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[21374])</visible>
-				</item>
-				<item>
-					<onclick>SetFocus(50)</onclick>
-					<label>‹ $LOCALIZE[21444] ›</label>
-					<label2>$LOCALIZE[31106] | $LOCALIZE[21444]</label2>
-					<property name="ActionLeft">Container.PreviousSortMethod</property>
-					<property name="ActionRight">Container.NextSortMethod</property>
-					<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[21444])</visible>
-				</item>
-				<item>
-					<onclick>SetFocus(50)</onclick>
-					<label>‹ $LOCALIZE[21446] ›</label>
-					<label2>$LOCALIZE[31106] | $LOCALIZE[21446]</label2>
-					<property name="ActionLeft">Container.PreviousSortMethod</property>
-					<property name="ActionRight">Container.NextSortMethod</property>
-					<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[21446])</visible>
-				</item>
-				<item>
-					<onclick>SetFocus(50)</onclick>
-					<label>‹ $LOCALIZE[21447] ›</label>
-					<label2>$LOCALIZE[31106] | $LOCALIZE[21447]</label2>
-					<property name="ActionLeft">Container.PreviousSortMethod</property>
-					<property name="ActionRight">Container.NextSortMethod</property>
-					<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[21447])</visible>
-				</item>
-				<item>
-					<onclick>SetFocus(50)</onclick>
-					<label>‹ $LOCALIZE[21448] ›</label>
-					<label2>$LOCALIZE[31106] | $LOCALIZE[21448]</label2>
-					<property name="ActionLeft">Container.PreviousSortMethod</property>
-					<property name="ActionRight">Container.NextSortMethod</property>
-					<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[21448])</visible>
-				</item>
-				<item>
-					<onclick>SetFocus(50)</onclick>
-					<label>‹ $LOCALIZE[590] ›</label>
-					<label2>$LOCALIZE[31106] | $LOCALIZE[590]</label2>
-					<property name="ActionLeft">Container.PreviousSortMethod</property>
-					<property name="ActionRight">Container.NextSortMethod</property>
-					<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[590])</visible>
-				</item>
-				<!-- Order -->
-				<item>
-					<onclick>SetFocus(50)</onclick>
-					<label>‹ $LOCALIZE[584] ›</label>
-					<label2>$LOCALIZE[31107] | $LOCALIZE[584]</label2>
-					<property name="ActionLeft">SendClick(4)</property>
-					<property name="ActionRight">SendClick(4)</property>
-					<visible>Control.IsEnabled(4) + Container.SortDirection(ascending)</visible>
-				</item>
-				<item>
-					<onclick>SetFocus(50)</onclick>
-					<label>‹ $LOCALIZE[585] ›</label>
-					<label2>$LOCALIZE[31107] | $LOCALIZE[585]</label2>
-					<property name="ActionLeft">SendClick(4)</property>
-					<property name="ActionRight">SendClick(4)</property>
-					<visible>Control.IsEnabled(4) + Container.SortDirection(descending)</visible>
-				</item>
-				<!-- Filter -->
-				<item>
-					<onclick>SetFocus(50)</onclick>
-					<onclick condition="Container.CanFilter + !Container.CanFilterAdvanced">SetFocus(19)</onclick>
-					<onclick condition="Container.CanFilter + !Container.CanFilterAdvanced">Select</onclick>
-					<onclick condition="Container.CanFilter + !Container.CanFilterAdvanced">SetFocus(50)</onclick>
-					<onclick condition="Container.CanFilterAdvanced">Filter</onclick>
-					<label>587</label>
-					<label2>587</label2>
-					<visible>Container.CanFilter | Container.CanFilterAdvanced</visible>
-				</item>
-				<!-- Search -->
-				<item>
-					<onclick>SetFocus(50)</onclick>
-					<onclick>SendClick(8)</onclick>
-					<label>137</label>
-					<label2>137</label2>
-					<visible>Control.IsEnabled(8)</visible>
-				</item>
-				<!-- PartyMode -->
-				<item>
-					<onclick>SendClick(16)</onclick>
-					<label>$LOCALIZE[589]</label>
-					<label2>$LOCALIZE[589]</label2>
-					<visible>Control.IsEnabled(16)</visible>
-				</item>
-				<!-- Update library -->
-				<item>
-					<onclick>SetFocus(50)</onclick>
-					<onclick>SendClick(20)</onclick>
-					<label>$LOCALIZE[653]</label>
-					<label2>$LOCALIZE[653]</label2>
-					<visible>Control.IsEnabled(20) + !Library.IsScanningMusic</visible>
-				</item>
-				<!-- Cancel update -->
-				<item>
-					<onclick>SetFocus(50)</onclick>
-					<onclick>SendClick(20)</onclick>
-					<label>$LOCALIZE[13353]</label>
-					<label2>$LOCALIZE[13353]</label2>
-					<visible>Control.IsEnabled(20) + Library.IsScanningMusic</visible>
-				</item>
-				<!-- Current playlist -->
-				<item>
-					<onclick>SetFocus(50)</onclick>
-					<onclick>ActivateWindow(musicplaylist)</onclick>
-					<label>$LOCALIZE[13350]</label>
-					<label2>$LOCALIZE[13350]</label2>
-					<visible>!String.IsEqual(Playlist.Length(music),0)</visible>
-				</item>
-			</content>
+			<include>FullscreenDimensions</include>
+			<include>DialogBackground</include>
+			<include>OptionsMenuFadeAnimation</include>
+			<control type="fixedlist" id="3000">
+				<viewtype label="535">list</viewtype>
+				<visible allowhiddenfocus="true">Control.HasFocus(3000)</visible>
+				<description>Options menu</description>
+				<left>120</left>
+				<top>240</top>
+				<width>1080</width>
+				<height>620</height>
+				<onup>0</onup>
+				<ondown>0</ondown>
+				<onback>50</onback>
+				<onleft condition="String.IsEmpty(Container(3000).ListItem.Property(ActionLeft))">50</onleft>
+				<onright condition="String.IsEmpty(Container(3000).ListItem.Property(ActionRight))">50</onright>
+				<onleft condition="!String.IsEmpty(Container(3000).ListItem.Property(ActionLeft))">$INFO[Container(3000).ListItem.Property(ActionLeft)]</onleft>
+				<onright condition="!String.IsEmpty(Container(3000).ListItem.Property(ActionRight))">$INFO[Container(3000).ListItem.Property(ActionRight)]</onright>
+				<orientation>vertical</orientation>
+				<focusposition>0</focusposition>
+				<movement>12</movement>
+				<defaultcontrol always="true">0</defaultcontrol>
+				<scrolltime tween="sine" easing="inout">380</scrolltime>
+				<itemlayout height="55" width="1080">
+					<control type="label">
+						<include>OptionsMenuLabelUnfocused</include>
+						<label>$INFO[ListItem.Label2]</label>
+					</control>
+				</itemlayout>
+				<focusedlayout height="70" width="910">
+					<control type="label">
+						<include>OptionsMenuLabelFocused</include>
+						<label>$INFO[ListItem.Label]</label>
+					</control>
+				</focusedlayout>
+				<content>
+					<!--Viewtypes-->
+					<item>
+						<description>View / List</description>
+						<onclick>SetFocus(50)</onclick>
+						<label>‹ $LOCALIZE[535] ›</label>
+						<label2>$LOCALIZE[32100] / $LOCALIZE[535]</label2>
+						<property name="ActionLeft">Container.PreviousViewMode</property>
+						<property name="ActionRight">Container.NextViewMode</property>
+						<visible>Control.IsVisible(50)</visible>
+					</item>
+					<item>
+						<description>View / Detailed List</description>
+						<onclick>SetFocus(500)</onclick>
+						<label>‹ Detailed List ›</label>
+						<label2>$LOCALIZE[32100] / Detailed List</label2>
+						<property name="ActionLeft">Container.PreviousViewMode</property>
+						<property name="ActionRight">Container.NextViewMode</property>
+						<visible>Control.IsVisible(500)</visible>
+					</item>
+					<item>
+						<description>View / Billboard</description>
+						<onclick>SetFocus(501)</onclick>
+						<label>‹ Billboard ›</label>
+						<label2>$LOCALIZE[32100] / Billboard</label2>
+						<property name="ActionLeft">Container.PreviousViewMode</property>
+						<property name="ActionRight">Container.NextViewMode</property>
+						<visible>Control.IsVisible(501)</visible>
+					</item>
+					<item>
+						<description>View / Showcase</description>
+						<onclick>SetFocus(502)</onclick>
+						<label>‹ Showcase ›</label>
+						<label2>$LOCALIZE[32100] / Showcase</label2>
+						<property name="ActionLeft">Container.PreviousViewMode</property>
+						<property name="ActionRight">Container.NextViewMode</property>
+						<visible>Control.IsVisible(502)</visible>
+					</item>
+					<item>
+						<description>View / Gallery</description>
+						<onclick>SetFocus(503)</onclick>
+						<label>‹ Gallery ›</label>
+						<label2>$LOCALIZE[32100] / Gallery</label2>
+						<property name="ActionLeft">Container.PreviousViewMode</property>
+						<property name="ActionRight">Container.NextViewMode</property>
+						<visible>Control.IsVisible(503)</visible>
+					</item>
+					<item>
+						<description>View / Strip</description>
+						<onclick>SetFocus(504)</onclick>
+						<label>‹ Strip ›</label>
+						<label2>$LOCALIZE[32100] / Strip</label2>
+						<property name="ActionLeft">Container.PreviousViewMode</property>
+						<property name="ActionRight">Container.NextViewMode</property>
+						<visible>Control.IsVisible(504)</visible>
+					</item>
+					<item>
+						<description>View / Grid</description>
+						<onclick>SetFocus(505)</onclick>
+						<label>‹ Grid ›</label>
+						<label2>$LOCALIZE[32100] / Grid</label2>
+						<property name="ActionLeft">Container.PreviousViewMode</property>
+						<property name="ActionRight">Container.NextViewMode</property>
+						<visible>Control.IsVisible(505)</visible>
+					</item>
+
+					<!--List View Details -->
+					<item>
+						<description>Details / Title</description>
+						<label>‹ Title ›</label>
+						<label2>$LOCALIZE[32109] / Title</label2>
+						<onclick>SetFocus(50)</onclick>
+						<property name="ActionLeft">Skin.SetString(ListView_Details,TitleAndInfo)</property>
+						<property name="ActionRight">Skin.SetString(ListView_Details,TitleAndInfo)</property>
+						<visible>Control.IsVisible(50) + [Skin.String(ListView_Details,Title) | String.IsEmpty(Skin.String(ListView_Details)] + !Container.Content()</visible>
+					</item>
+					<item>
+						<description>Details / Title and Info</description>
+						<label>‹ Title and Info ›</label>
+						<label2>$LOCALIZE[32109] / Title and Info</label2>
+						<onclick>SetFocus(50)</onclick>
+						<property name="ActionLeft">Skin.SetString(ListView_Details,Title)</property>
+						<property name="ActionRight">Skin.SetString(ListView_Details,Title)</property>
+						<visible>Control.IsVisible(50) + Skin.String(ListView_Details,TitleAndinfo) + !Container.Content()</visible>
+					</item>
+
+					<!--List View Fanart-->
+					<item>
+						<description>Fanart / On</description>
+						<label>‹ On ›</label>
+						<label2>Fanart / On</label2>
+						<onclick>SetFocus(50)</onclick>
+						<property name="ActionLeft">Skin.SetString(ListView_Fanart,Off)</property>
+						<property name="ActionRight">Skin.SetString(ListView_Fanart,Off)</property>
+						<visible>Control.IsVisible(50) + [Skin.String(ListView_Fanart,On) | String.IsEmpty(Skin.String(ListView_Fanart)] + !Container.Content() + !Container.Content(Files)</visible>
+					</item>
+					<item>
+						<description>Fanart / Off</description>
+						<label>‹ Off ›</label>
+						<label2>Fanart / Off</label2>
+						<onclick>SetFocus(50)</onclick>
+						<property name="ActionLeft">Skin.SetString(ListView_Fanart,On)</property>
+						<property name="ActionRight">Skin.SetString(ListView_Fanart,On)</property>
+						<visible>Control.IsVisible(50) + Skin.String(ListView_Fanart,Off) + !Container.Content() + !Container.Content(Files)</visible>
+					</item>
+
+					<!--DetailedList View Display-->
+					<item>
+						<description>Display / Fanart</description>
+						<label>‹ Fanart ›</label>
+						<label2>Display / Fanart</label2>
+						<onclick>SetFocus(50)</onclick>
+						<property name="ActionLeft">Skin.SetString(DetailedListView_Display,Square)</property>
+						<property name="ActionRight">Skin.SetString(DetailedListView_Display,Posters)</property>
+						<visible>Control.IsVisible(500) + [Skin.String(DetailedListView_Display,Fanart) | String.IsEmpty(Skin.String(DetailedListView_Display)] + [Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | Container.Content(episodes)]</visible>
+					</item>
+					<item>
+						<description>Display / Posters</description>
+						<label>‹ Posters ›</label>
+						<label2>Display / Posters</label2>
+						<onclick>SetFocus(50)</onclick>
+						<property name="ActionLeft">Skin.SetString(DetailedListView_Display,Fanart)</property>
+						<property name="ActionRight">Skin.SetString(DetailedListView_Display,Both)</property>
+						<visible>Control.IsVisible(500) + Skin.String(DetailedListView_Display,Posters) + [Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | Container.Content(episodes)]</visible>
+					</item>
+					<item>
+						<description>Display / Both</description>
+						<label>‹ Both ›</label>
+						<label2>Display / Both</label2>
+						<onclick>SetFocus(50)</onclick>
+						<property name="ActionLeft">Skin.SetString(DetailedListView_Display,Posters)</property>
+						<property name="ActionRight">Skin.SetString(DetailedListView_Display,Square)</property>
+						<visible>Control.IsVisible(500) + Skin.String(DetailedListView_Display,Both) + [Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | Container.Content(episodes)]</visible>
+					</item>
+					<item>
+						<description>Display / Showcase</description>
+						<label>‹ Showcase ›</label>
+						<label2>Display / Showcase</label2>
+						<onclick>SetFocus(50)</onclick>
+						<property name="ActionLeft">Skin.SetString(DetailedListView_Display,Both)</property>
+						<property name="ActionRight">Skin.SetString(DetailedListView_Display,Fanart)</property>
+						<visible>Control.IsVisible(500) + Skin.String(DetailedListView_Display,Square) + [Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | Container.Content(episodes)]</visible>
+					</item>
+
+					<!--DetailedList View Details -->
+					<item>
+						<description>Details / Title</description>
+						<label>‹ Title ›</label>
+						<label2>$LOCALIZE[32109] / Title</label2>
+						<onclick>SetFocus(50)</onclick>
+						<property name="ActionLeft">Skin.SetString(DetailedListView_Details,TitleAndInfo)</property>
+						<property name="ActionRight">Skin.SetString(DetailedListView_Details,TitleAndInfo)</property>
+						<visible>Control.IsVisible(500) + Skin.String(DetailedListView_Details,Title)</visible>
+					</item>
+					<item>
+						<description>Details / Title and Info</description>
+						<label>‹ Title and Info ›</label>
+						<label2>$LOCALIZE[32109] / Title and Info</label2>
+						<onclick>SetFocus(50)</onclick>
+						<property name="ActionLeft">Skin.SetString(DetailedListView_Details,Title)</property>
+						<property name="ActionRight">Skin.SetString(DetailedListView_Details,Title)</property>
+						<visible>Control.IsVisible(500) + [Skin.String(DetailedListView_Details,TitleAndinfo) | String.IsEmpty(Skin.String(DetailedListView_Details)]</visible>
+					</item>
+
+					<!--Billboard View Details-->
+					<item>
+						<description>Details / Off</description>
+						<label>‹ Off ›</label>
+						<label2>$LOCALIZE[32109] / Off</label2>
+						<onclick>SetFocus(50)</onclick>
+						<property name="ActionLeft">Skin.SetString(BillboardView_Details,All)</property>
+						<property name="ActionRight">Skin.SetString(BillboardView_Details,Title)</property>
+						<visible>Control.IsVisible(501) + Skin.String(BillboardView_Details,Off)</visible>
+					</item>
+					<item>
+						<description>Details / Title</description>
+						<label>‹ Title ›</label>
+						<label2>$LOCALIZE[32109] / Title</label2>
+						<onclick>SetFocus(50)</onclick>
+						<property name="ActionLeft">Skin.SetString(BillboardView_Details,Off)</property>
+						<property name="ActionRight">Skin.SetString(BillboardView_Details,TitleAndInfo)</property>
+						<visible>Control.IsVisible(501) + Skin.String(BillboardView_Details,Title)</visible>
+					</item>
+					<item>
+						<description>Details / Title And Info</description>
+						<label>‹ Title and Info ›</label>
+						<label2>$LOCALIZE[32109] / Title and Info</label2>
+						<onclick>SetFocus(50)</onclick>
+						<property name="ActionLeft">Skin.SetString(BillboardView_Details,Title)</property>
+						<property name="ActionRight">Skin.SetString(BillboardView_Details,TitleAndPlot)</property>
+						<visible>Control.IsVisible(501) + Skin.String(BillboardView_Details,TitleAndInfo)</visible>
+					</item>
+					<item>
+						<description>Details / Title And Plot</description>
+						<label>‹ Title and Plot ›</label>
+						<label2>$LOCALIZE[32109] / Title and Plot</label2>
+						<onclick>SetFocus(50)</onclick>
+						<property name="ActionLeft">Skin.SetString(BillboardView_Details,TitleAndInfo)</property>
+						<property name="ActionRight">Skin.SetString(BillboardView_Details,All)</property>
+						<visible>Control.IsVisible(501) + Skin.String(BillboardView_Details,TitleAndPlot)</visible>
+					</item>
+					<item>
+						<description>Details / All</description>
+						<label>‹ All ›</label>
+						<label2>$LOCALIZE[32109] / All</label2>
+						<onclick>SetFocus(50)</onclick>
+						<property name="ActionLeft">Skin.SetString(BillboardView_Details,TitleAndPlot)</property>
+						<property name="ActionRight">Skin.SetString(BillboardView_Details,Off)</property>
+						<visible>Control.IsVisible(501) + [Skin.String(BillboardView_Details,All) | String.IsEmpty(Skin.String(BillboardView_Details)]</visible>
+					</item>
+
+					<!--Billboard View Logo-->
+					<item>
+						<description>Logo / Off</description>
+						<label>‹ Off ›</label>
+						<label2>Logo / Off</label2>
+						<onclick>SetFocus(50)</onclick>
+						<property name="ActionLeft">Skin.SetString(BillboardView_Logo,On)</property>
+						<property name="ActionRight">Skin.SetString(BillboardView_Logo,On)</property>
+						<visible>Control.IsVisible(501) + [!Skin.String(BillboardView_Details,Off) + Skin.String(BillboardView_Logo,Off) + ![Container.Content(seasons) | Container.Content(episodes)] | String.IsEmpty(Skin.String(BillboardView_Logo)]</visible>
+					</item>
+					<item>
+						<description>Logo / On</description>
+						<label>‹ On ›</label>
+						<label2>Logo / On</label2>
+						<onclick>SetFocus(50)</onclick>
+						<property name="ActionLeft">Skin.SetString(BillboardView_Logo,Off)</property>
+						<property name="ActionRight">Skin.SetString(BillboardView_Logo,Off)</property>
+						<visible>Control.IsVisible(501) + !Skin.String(BillboardView_Details,Off) + Skin.String(BillboardView_Logo,On) + ![Container.Content(seasons) | Container.Content(episodes)]</visible>
+					</item>
+
+					<!--Showcase View Display-->
+					<item>
+						<description>Display / Square</description>
+						<label>‹ Square ›</label>
+						<label2>Display / Square</label2>
+						<onclick>SetFocus(50)</onclick>
+						<property name="ActionLeft">Skin.SetString(ShowcaseView_Display,Posters)</property>
+						<property name="ActionRight">Skin.SetString(ShowcaseView_Display,Posters)</property>
+						<visible>Control.IsVisible(502) + !Container.Content(episodes) + [Skin.String(ShowcaseView_Display,Square) | String.IsEmpty(Skin.String(ShowcaseView_Display)]</visible>
+					</item>
+					<item>
+						<description>Display / Posters</description>
+						<label>‹ Posters ›</label>
+						<label2>Display / Posters</label2>
+						<onclick>SetFocus(50)</onclick>
+						<property name="ActionLeft">Skin.SetString(ShowcaseView_Display,Square)</property>
+						<property name="ActionRight">Skin.SetString(ShowcaseView_Display,Square)</property>
+						<visible>Control.IsVisible(502) + !Container.Content(episodes) + Skin.String(ShowcaseView_Display,Posters)</visible>
+					</item>
+
+					<!--Showcase View Details-->
+					<item>
+						<description>Details / Off</description>
+						<label>‹ Off ›</label>
+						<label2>$LOCALIZE[32109] / Off</label2>
+						<onclick>SetFocus(50)</onclick>
+						<property name="ActionLeft">Skin.SetString(ShowcaseView_Details,All)</property>
+						<property name="ActionRight">Skin.SetString(ShowcaseView_Details,Title)</property>
+						<visible>Control.IsVisible(502) + Skin.String(ShowcaseView_Details,Off)</visible>
+					</item>
+					<item>
+						<description>Details / Title</description>
+						<label>‹ Title ›</label>
+						<label2>$LOCALIZE[32109] / Title</label2>
+						<onclick>SetFocus(50)</onclick>
+						<property name="ActionLeft">Skin.SetString(ShowcaseView_Details,Off)</property>
+						<property name="ActionRight">Skin.SetString(ShowcaseView_Details,TitleAndInfo)</property>
+						<visible>Control.IsVisible(502) + Skin.String(ShowcaseView_Details,Title)</visible>
+					</item>
+					<item>
+						<description>Details / Title And Info</description>
+						<label>‹ Title And Info ›</label>
+						<label2>$LOCALIZE[32109] / Title And Info</label2>
+						<onclick>SetFocus(50)</onclick>
+						<property name="ActionLeft">Skin.SetString(ShowcaseView_Details,Title)</property>
+						<property name="ActionRight">Skin.SetString(ShowcaseView_Details,TitleAndPlot)</property>
+						<visible>Control.IsVisible(502) + Skin.String(ShowcaseView_Details,TitleAndInfo)</visible>
+					</item>
+					<item>
+						<description>Details / Title And Plot</description>
+						<label>‹ Title and Plot ›</label>
+						<label2>$LOCALIZE[32109] / Title and Plot</label2>
+						<onclick>SetFocus(50)</onclick>
+						<property name="ActionLeft">Skin.SetString(ShowcaseView_Details,TitleAndInfo)</property>
+						<property name="ActionRight">Skin.SetString(ShowcaseView_Details,All)</property>
+						<visible>Control.IsVisible(502) + Skin.String(ShowcaseView_Details,TitleAndPlot)</visible>
+					</item>
+					<item>
+						<description>Details / All</description>
+						<label>‹ All ›</label>
+						<label2>$LOCALIZE[32109] / All</label2>
+						<onclick>SetFocus(50)</onclick>
+						<property name="ActionLeft">Skin.SetString(ShowcaseView_Details,TitleAndPlot)</property>
+						<property name="ActionRight">Skin.SetString(ShowcaseView_Details,Off)</property>
+						<visible>Control.IsVisible(502) + [Skin.String(ShowcaseView_Details,All) | String.IsEmpty(Skin.String(ShowcaseView_Details)]</visible>
+					</item>
+
+					<!--Showcase View Logo-->
+					<item>
+						<description>Logo / Off</description>
+						<label>‹ Off ›</label>
+						<label2>Logo / Off</label2>
+						<onclick>SetFocus(50)</onclick>
+						<property name="ActionLeft">Skin.SetString(ShowcaseView_Logo,On)</property>
+						<property name="ActionRight">Skin.SetString(ShowcaseView_Logo,On)</property>
+						<visible>Control.IsVisible(502) + [!Skin.String(ShowcaseView_Details,Off) + Skin.String(ShowcaseView_Logo,Off) + ![Container.Content(seasons) | Container.Content(episodes)] | String.IsEmpty(Skin.String(ShowcaseView_Logo)]</visible>
+					</item>
+					<item>
+						<description>Logo / On</description>
+						<label>‹ On ›</label>
+						<label2>Logo / On</label2>
+						<onclick>SetFocus(50)</onclick>
+						<property name="ActionLeft">Skin.SetString(ShowcaseView_Logo,Off)</property>
+						<property name="ActionRight">Skin.SetString(ShowcaseView_Logo,Off)</property>
+						<visible>Control.IsVisible(502) + !Skin.String(ShowcaseView_Details,Off) + Skin.String(ShowcaseView_Logo,On) + ![Container.Content(seasons) | Container.Content(episodes)]</visible>
+					</item>
+
+					<!--Gallery View Display-->
+					<item>
+						<description>Display / Fanart</description>
+						<label>‹ Fanart ›</label>
+						<label2>Display / Fanart</label2>
+						<onclick>SetFocus(50)</onclick>
+						<property name="ActionLeft">Skin.SetString(GalleryView_Display,Posters)</property>
+						<property name="ActionRight">Skin.SetString(GalleryView_Display,Posters)</property>
+						<visible>Control.IsVisible(503) + !Container.Content(episodes) + [Skin.String(GalleryView_Display,Fanart) | String.IsEmpty(Skin.String(GalleryView_Display)]</visible>
+					</item>
+					<item>
+						<description>Display / Posters</description>
+						<label>‹ Posters ›</label>
+						<label2>Display / Posters</label2>
+						<onclick>SetFocus(50)</onclick>
+						<property name="ActionLeft">Skin.SetString(GalleryView_Display,Fanart)</property>
+						<property name="ActionRight">Skin.SetString(GalleryView_Display,Fanart)</property>
+						<visible>Control.IsVisible(503) + !Container.Content(episodes) + Skin.String(GalleryView_Display,Posters)</visible>
+					</item>
+
+					<!--Gallery View Details-->
+					<item>
+						<description>Details / Off</description>
+						<label>‹ Off ›</label>
+						<label2>$LOCALIZE[32109] / Off</label2>
+						<onclick>SetFocus(50)</onclick>
+						<property name="ActionLeft">Skin.SetString(GalleryView_Details,All)</property>
+						<property name="ActionRight">Skin.SetString(GalleryView_Details,Title)</property>
+						<visible>Control.IsVisible(503) + Skin.String(GalleryView_Details,Off)</visible>
+					</item>
+					<item>
+						<description>Details / Title</description>
+						<label>‹ Title ›</label>
+						<label2>$LOCALIZE[32109] / Title</label2>
+						<onclick>SetFocus(50)</onclick>
+						<property name="ActionLeft">Skin.SetString(GalleryView_Details,Off)</property>
+						<property name="ActionRight">Skin.SetString(GalleryView_Details,TitleAndInfo)</property>
+						<visible>Control.IsVisible(503) + Skin.String(GalleryView_Details,Title)</visible>
+					</item>
+					<item>
+						<description>Details / Title And Info</description>
+						<label>‹ Title and Info ›</label>
+						<label2>$LOCALIZE[32109] / Title and Info</label2>
+						<onclick>SetFocus(50)</onclick>
+						<property name="ActionLeft">Skin.SetString(GalleryView_Details,Title)</property>
+						<property name="ActionRight">Skin.SetString(GalleryView_Details,TitleAndPlot)</property>
+						<visible>Control.IsVisible(503) + Skin.String(GalleryView_Details,TitleAndInfo)</visible>
+					</item>
+					<item>
+						<description>Details / Title And Plot</description>
+						<label>‹ Title and Plot ›</label>
+						<label2>$LOCALIZE[32109] / Title and Plot</label2>
+						<onclick>SetFocus(50)</onclick>
+						<property name="ActionLeft">Skin.SetString(GalleryView_Details,TitleAndInfo)</property>
+						<property name="ActionRight">Skin.SetString(GalleryView_Details,All)</property>
+						<visible>Control.IsVisible(503) + Skin.String(GalleryView_Details,TitleAndPlot)</visible>
+					</item>
+					<item>
+						<description>Details / All</description>
+						<label>‹ All ›</label>
+						<label2>$LOCALIZE[32109] / All</label2>
+						<onclick>SetFocus(50)</onclick>
+						<property name="ActionLeft">Skin.SetString(GalleryView_Details,TitleAndPlot)</property>
+						<property name="ActionRight">Skin.SetString(GalleryView_Details,Off)</property>
+						<visible>Control.IsVisible(503) + [Skin.String(GalleryView_Details,All) | String.IsEmpty(Skin.String(GalleryView_Details)]</visible>
+					</item>
+
+					<!--Strip View Display-->
+					<item>
+						<description>Display / Posters</description>
+						<label>‹ Posters ›</label>
+						<label2>Display / Posters</label2>
+						<onclick>SetFocus(50)</onclick>
+						<property name="ActionLeft">Skin.SetString(StripView_Display,Square)</property>
+						<property name="ActionRight">Skin.SetString(StripView_Display,Fanart)</property>
+						<visible>Control.IsVisible(504) + !Container.Content(episodes) + !Container.Content(artists) + !Container.Content(albums) + [Skin.String(StripView_Display,Posters) |	String.IsEmpty(Skin.String(StripView_Display)]</visible>
+					</item>
+					<item>
+						<description>Display / Fanart</description>
+						<label>‹ Fanart ›</label>
+						<label2>Display / Fanart</label2>
+						<onclick>SetFocus(50)</onclick>
+						<property name="ActionLeft">Skin.SetString(StripView_Display,Posters)</property>
+						<property name="ActionRight">Skin.SetString(StripView_Display,Square)</property>
+						<visible>Control.IsVisible(504) + !Container.Content(episodes) + !Container.Content(artists) + !Container.Content(albums) + Skin.String(StripView_Display,Fanart)</visible>
+					</item>
+					<item>
+						<description>Display / Square</description>
+						<label>‹ Square ›</label>
+						<label2>Display / Square</label2>
+						<onclick>SetFocus(50)</onclick>
+						<property name="ActionLeft">Skin.SetString(StripView_Display,Fanart)</property>
+						<property name="ActionRight">Skin.SetString(StripView_Display,Posters)</property>
+						<visible>Control.IsVisible(504) + !Container.Content(episodes) + !Container.Content(artists) + !Container.Content(albums) + Skin.String(StripView_Display,Square)</visible>
+					</item>
+
+					<!--Strip View Display (Container.Content(artists))-->
+					<item>
+						<description>Display / Fanart</description>
+						<label>‹ Fanart ›</label>
+						<label2>Display / Fanart</label2>
+						<onclick>SetFocus(50)</onclick>
+						<property name="ActionLeft">Skin.SetString(StripView_Display,Square)</property>
+						<property name="ActionRight">Skin.SetString(StripView_Display,Square)</property>
+						<visible>Control.IsVisible(504) + Container.Content(artists) + Skin.String(StripView_Display,Fanart)</visible>
+					</item>
+					<item>
+						<description>Display / Square</description>
+						<label>‹ Square ›</label>
+						<label2>Display / Square</label2>
+						<onclick>SetFocus(50)</onclick>
+						<property name="ActionLeft">Skin.SetString(StripView_Display,Fanart)</property>
+						<property name="ActionRight">Skin.SetString(StripView_Display,Fanart)</property>
+						<visible>Control.IsVisible(504) + Container.Content(artists) + Skin.String(StripView_Display,Square)</visible>
+					</item>
+
+					<!--Strip View Details-->
+					<item>
+						<description>Details / Off</description>
+						<label>‹ Off ›</label>
+						<label2>$LOCALIZE[32109] / Off</label2>
+						<onclick>SetFocus(50)</onclick>
+						<property name="ActionLeft">Skin.SetString(StripView_Details,All)</property>
+						<property name="ActionRight">Skin.SetString(StripView_Details,Title)</property>
+						<visible>Control.IsVisible(504) + Skin.String(StripView_Details,Off)</visible>
+					</item>
+					<item>
+						<description>Details / Title</description>
+						<label>‹ Title ›</label>
+						<label2>$LOCALIZE[32109] / Title</label2>
+						<onclick>SetFocus(50)</onclick>
+						<property name="ActionLeft">Skin.SetString(StripView_Details,Off)</property>
+						<property name="ActionRight">Skin.SetString(StripView_Details,TitleAndInfo)</property>
+						<visible>Control.IsVisible(504) + Skin.String(StripView_Details,Title)</visible>
+					</item>
+					<item>
+						<description>Details / Title And Info</description>
+						<label>‹ Title And Info ›</label>
+						<label2>$LOCALIZE[32109] / Title And Info</label2>
+						<onclick>SetFocus(50)</onclick>
+						<property name="ActionLeft">Skin.SetString(StripView_Details,Title)</property>
+						<property name="ActionRight">Skin.SetString(StripView_Details,TitleAndPlot)</property>
+						<visible>Control.IsVisible(504) + Skin.String(StripView_Details,TitleAndInfo)</visible>
+					</item>
+					<item>
+						<description>Details / Title And Plot</description>
+						<label>‹ Title and Plot ›</label>
+						<label2>$LOCALIZE[32109] / Title and Plot</label2>
+						<onclick>SetFocus(50)</onclick>
+						<property name="ActionLeft">Skin.SetString(StripView_Details,TitleAndInfo)</property>
+						<property name="ActionRight">Skin.SetString(StripView_Details,All)</property>
+						<visible>Control.IsVisible(504) + Skin.String(StripView_Details,TitleAndPlot)</visible>
+					</item>
+					<item>
+						<description>Details / All</description>
+						<label>‹ All ›</label>
+						<label2>$LOCALIZE[32109] / All</label2>
+						<onclick>SetFocus(50)</onclick>
+						<property name="ActionLeft">Skin.SetString(StripView_Details,TitleAndPlot)</property>
+						<property name="ActionRight">Skin.SetString(StripView_Details,Off)</property>
+						<visible>Control.IsVisible(504) + [Skin.String(StripView_Details,All) | String.IsEmpty(Skin.String(StripView_Details)]</visible>
+					</item>
+
+					<!--Grid View Display-->
+					<item>
+						<description>Display / Fanart</description>
+						<label>‹ Fanart ›</label>
+						<label2>Display / Fanart</label2>
+						<onclick>SetFocus(50)</onclick>
+						<property name="ActionLeft">Skin.SetString(GridView_Display,Posters)</property>
+						<property name="ActionRight">Skin.SetString(GridView_Display,Posters)</property>
+						<visible>Control.IsVisible(505) + !Container.Content(episodes) + [Skin.String(GridView_Display,Fanart) | String.IsEmpty(Skin.String(GridView_Display)]</visible>
+					</item>
+					<item>
+						<description>Display / Posters</description>
+						<label>‹ Posters ›</label>
+						<label2>Display / Posters</label2>
+						<onclick>SetFocus(50)</onclick>
+						<property name="ActionLeft">Skin.SetString(GridView_Display,Fanart)</property>
+						<property name="ActionRight">Skin.SetString(GridView_Display,Fanart)</property>
+						<visible>Control.IsVisible(505) + !Container.Content(episodes) + Skin.String(GridView_Display,Posters)</visible>
+					</item>
+
+					<!--Grid View Details-->
+					<item>
+						<description>Details / Off</description>
+						<label>‹ Off ›</label>
+						<label2>$LOCALIZE[32109] / Off</label2>
+						<onclick>SetFocus(50)</onclick>
+						<property name="ActionLeft">Skin.SetString(GridView_Details,TitleAndInfo)</property>
+						<property name="ActionRight">Skin.SetString(GridView_Details,Title)</property>
+						<visible>Control.IsVisible(505) + Skin.String(GridView_Details,Off)</visible>
+					</item>
+					<item>
+						<description>Details / Title</description>
+						<label>‹ Title ›</label>
+						<label2>$LOCALIZE[32109] / Title</label2>
+						<onclick>SetFocus(50)</onclick>
+						<property name="ActionLeft">Skin.SetString(GridView_Details,Off)</property>
+						<property name="ActionRight">Skin.SetString(GridView_Details,TitleAndInfo)</property>
+						<visible>Control.IsVisible(505) + Skin.String(GridView_Details,Title)</visible>
+					</item>
+					<item>
+						<description>Details / Title And Info</description>
+						<label>‹ Title And Info ›</label>
+						<label2>$LOCALIZE[32109] / Title And Info</label2>
+						<onclick>SetFocus(50)</onclick>
+						<property name="ActionLeft">Skin.SetString(GridView_Details,Title)</property>
+						<property name="ActionRight">Skin.SetString(GridView_Details,Off)</property>
+						<visible>Control.IsVisible(505) + [Skin.String(GridView_Details,TitleAndInfo) | String.IsEmpty(Skin.String(GridView_Details)]</visible>
+					</item>
+
+					<!--Flags-->
+					<item>
+						<description>Flags / Off</description>
+						<label>‹ Off ›</label>
+						<label2>Flags / Off</label2>
+						<onclick>SetFocus(50)</onclick>
+						<property name="ActionLeft">Skin.SetString(Flags,All)</property>
+						<property name="ActionRight">Skin.SetString(Flags,Studio)</property>
+						<visible>Skin.String(Flags,Off) + !Control.IsVisible(505) + !Control.IsVisible(500) + !Container.Content() + !Container.Content(Files)</visible>
+					</item>
+					<item>
+						<description>Flags / Studio</description>
+						<label>‹ Studio ›</label>
+						<label2>Flags / Studio</label2>
+						<onclick>SetFocus(50)</onclick>
+						<property name="ActionLeft">Skin.SetString(Flags,Off)</property>
+						<property name="ActionRight">Skin.SetString(Flags,Rating)</property>
+						<visible>Skin.String(Flags,Studio) + !Control.IsVisible(505) + !Control.IsVisible(500) + !Container.Content() + !Container.Content(Files)</visible>
+					</item>
+					<item>
+						<description>Flags / Age Rating</description>
+						<label>‹ Age Rating ›</label>
+						<label2>Flags / Age Rating</label2>
+						<onclick>SetFocus(50)</onclick>
+						<property name="ActionLeft">Skin.SetString(Flags,Studio)</property>
+						<property name="ActionRight">Skin.SetString(Flags,All)</property>
+						<visible>Skin.String(Flags,Rating) + !Control.IsVisible(505) + !Control.IsVisible(500) + !Container.Content() + !Container.Content(Files)</visible>
+					</item>
+					<item>
+						<description>Flags / All</description>
+						<label>‹ All ›</label>
+						<label2>Flags / All</label2>
+						<onclick>SetFocus(50)</onclick>
+						<property name="ActionLeft">Skin.SetString(Flags,Rating)</property>
+						<property name="ActionRight">Skin.SetString(Flags,Off)</property>
+						<visible>[Skin.String(Flags,All) | String.IsEmpty(Skin.String(Flags)] + !Control.IsVisible(505) + !Control.IsVisible(500) + !Container.Content() + !Container.Content(Files)</visible>
+					</item>
+
+					<!-- Sort / Name -->
+					<item>
+						<onclick>SetFocus(50)</onclick>
+						<label>‹ $LOCALIZE[551] ›</label>
+						<label2>$LOCALIZE[32118] / $LOCALIZE[551]</label2>
+						<property name="ActionLeft">Container.PreviousSortMethod</property>
+						<property name="ActionRight">Container.NextSortMethod</property>
+						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[551])</visible>
+					</item>
+					<!-- Sort / Date -->
+					<item>
+						<onclick>SetFocus(50)</onclick>
+						<label>‹ $LOCALIZE[552] ›</label>
+						<label2>$LOCALIZE[32118] / $LOCALIZE[552]</label2>
+						<property name="ActionLeft">Container.PreviousSortMethod</property>
+						<property name="ActionRight">Container.NextSortMethod</property>
+						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[552])</visible>
+					</item>
+					<!-- Sort / Size -->
+					<item>
+						<onclick>SetFocus(50)</onclick>
+						<label>‹ $LOCALIZE[553] ›</label>
+						<label2>$LOCALIZE[32118] / $LOCALIZE[553]</label2>
+						<property name="ActionLeft">Container.PreviousSortMethod</property>
+						<property name="ActionRight">Container.NextSortMethod</property>
+						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[553])</visible>
+					</item>
+					<!-- Sort / File -->
+					<item>
+						<onclick>SetFocus(50)</onclick>
+						<label>‹ $LOCALIZE[623] ›</label>
+						<label2>$LOCALIZE[32118] / $LOCALIZE[623]</label2>
+						<property name="ActionLeft">Container.PreviousSortMethod</property>
+						<property name="ActionRight">Container.NextSortMethod</property>
+						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[623])</visible>
+					</item>
+					<item>
+						<onclick>SetFocus(50)</onclick>
+						<label>‹ $LOCALIZE[564] ›</label>
+						<label2>$LOCALIZE[32118] / $LOCALIZE[564]</label2>
+						<property name="ActionLeft">Container.PreviousSortMethod</property>
+						<property name="ActionRight">Container.NextSortMethod</property>
+						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[564])</visible>
+					</item>
+					<item>
+						<onclick>SetFocus(50)</onclick>
+						<label>‹ $LOCALIZE[554] ›</label>
+						<label2>$LOCALIZE[32118] / $LOCALIZE[554]</label2>
+						<property name="ActionLeft">Container.PreviousSortMethod</property>
+						<property name="ActionRight">Container.NextSortMethod</property>
+						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[554])</visible>
+					</item>
+					<item>
+						<onclick>SetFocus(50)</onclick>
+						<label>‹ $LOCALIZE[20359] ›</label>
+						<label2>$LOCALIZE[32118] / $LOCALIZE[20359]</label2>
+						<property name="ActionLeft">Container.PreviousSortMethod</property>
+						<property name="ActionRight">Container.NextSortMethod</property>
+						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[20359])</visible>
+					</item>
+					<item>
+						<onclick>SetFocus(50)</onclick>
+						<label>‹ $LOCALIZE[180] ›</label>
+						<label2>$LOCALIZE[32118] / $LOCALIZE[180]</label2>
+						<property name="ActionLeft">Container.PreviousSortMethod</property>
+						<property name="ActionRight">Container.NextSortMethod</property>
+						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[180])</visible>
+					</item>
+					<item>
+						<onclick>SetFocus(50)</onclick>
+						<label>‹ $LOCALIZE[556] ›</label>
+						<label2>$LOCALIZE[32118] / $LOCALIZE[556]</label2>
+						<property name="ActionLeft">Container.PreviousSortMethod</property>
+						<property name="ActionRight">Container.NextSortMethod</property>
+						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[556])</visible>
+					</item>
+					<item>
+						<onclick>SetFocus(50)</onclick>
+						<label>‹ $LOCALIZE[557] ›</label>
+						<label2>$LOCALIZE[32118] / $LOCALIZE[557]</label2>
+						<property name="ActionLeft">Container.PreviousSortMethod</property>
+						<property name="ActionRight">Container.NextSortMethod</property>
+						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[557])</visible>
+					</item>
+					<item>
+						<onclick>SetFocus(50)</onclick>
+						<label>‹ $LOCALIZE[558] ›</label>
+						<label2>$LOCALIZE[32118] / $LOCALIZE[558]</label2>
+						<property name="ActionLeft">Container.PreviousSortMethod</property>
+						<property name="ActionRight">Container.NextSortMethod</property>
+						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[558])</visible>
+					</item>
+					<item>
+						<onclick>SetFocus(50)</onclick>
+						<label>‹ $LOCALIZE[515] ›</label>
+						<label2>$LOCALIZE[32118] / $LOCALIZE[515]</label2>
+						<property name="ActionLeft">Container.PreviousSortMethod</property>
+						<property name="ActionRight">Container.NextSortMethod</property>
+						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[515])</visible>
+					</item>
+					<item>
+						<onclick>SetFocus(50)</onclick>
+						<label>‹ $LOCALIZE[574] ›</label>
+						<label2>$LOCALIZE[32118] / $LOCALIZE[574]</label2>
+						<property name="ActionLeft">Container.PreviousSortMethod</property>
+						<property name="ActionRight">Container.NextSortMethod</property>
+						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[574])</visible>
+					</item>
+					<item>
+						<onclick>SetFocus(50)</onclick>
+						<label>‹ $LOCALIZE[570] ›</label>
+						<label2>$LOCALIZE[32118] / $LOCALIZE[570]</label2>
+						<property name="ActionLeft">Container.PreviousSortMethod</property>
+						<property name="ActionRight">Container.NextSortMethod</property>
+						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[570])</visible>
+					</item>
+					<item>
+						<onclick>SetFocus(50)</onclick>
+						<label>‹ $LOCALIZE[561] ›</label>
+						<label2>$LOCALIZE[32118] / $LOCALIZE[561]</label2>
+						<property name="ActionLeft">Container.PreviousSortMethod</property>
+						<property name="ActionRight">Container.NextSortMethod</property>
+						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[561])</visible>
+					</item>
+					<item>
+						<onclick>SetFocus(50)</onclick>
+						<label>‹ $LOCALIZE[563] ›</label>
+						<label2>$LOCALIZE[32118] / $LOCALIZE[563]</label2>
+						<property name="ActionLeft">Container.PreviousSortMethod</property>
+						<property name="ActionRight">Container.NextSortMethod</property>
+						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[563])</visible>
+					</item>
+					<item>
+						<onclick>SetFocus(50)</onclick>
+						<label>‹ $LOCALIZE[38018] ›</label>
+						<label2>$LOCALIZE[32118] / $LOCALIZE[38018]</label2>
+						<property name="ActionLeft">Container.PreviousSortMethod</property>
+						<property name="ActionRight">Container.NextSortMethod</property>
+						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[38018])</visible>
+					</item>
+					<item>
+						<onclick>SetFocus(50)</onclick>
+						<label>‹ $LOCALIZE[171] ›</label>
+						<label2>$LOCALIZE[32118] / $LOCALIZE[171]</label2>
+						<property name="ActionLeft">Container.PreviousSortMethod</property>
+						<property name="ActionRight">Container.NextSortMethod</property>
+						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[171])</visible>
+					</item>
+					<item>
+						<onclick>SetFocus(50)</onclick>
+						<label>‹ $LOCALIZE[562] ›</label>
+						<label2>$LOCALIZE[32118] / $LOCALIZE[562]</label2>
+						<property name="ActionLeft">Container.PreviousSortMethod</property>
+						<property name="ActionRight">Container.NextSortMethod</property>
+						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[562])</visible>
+					</item>
+					<item>
+						<onclick>SetFocus(50)</onclick>
+						<label>‹ $LOCALIZE[20368] ›</label>
+						<label2>$LOCALIZE[32118] / $LOCALIZE[20368]</label2>
+						<property name="ActionLeft">Container.PreviousSortMethod</property>
+						<property name="ActionRight">Container.NextSortMethod</property>
+						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[20368])</visible>
+					</item>
+					<item>
+						<onclick>SetFocus(50)</onclick>
+						<label>‹ $LOCALIZE[567] ›</label>
+						<label2>$LOCALIZE[32118] / $LOCALIZE[567]</label2>
+						<property name="ActionLeft">Container.PreviousSortMethod</property>
+						<property name="ActionRight">Container.NextSortMethod</property>
+						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[567])</visible>
+					</item>
+					<item>
+						<onclick>SetFocus(50)</onclick>
+						<label>‹ $LOCALIZE[559] ›</label>
+						<label2>$LOCALIZE[32118] / $LOCALIZE[559]</label2>
+						<property name="ActionLeft">Container.PreviousSortMethod</property>
+						<property name="ActionRight">Container.NextSortMethod</property>
+						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[559])</visible>
+					</item>
+					<item>
+						<onclick>SetFocus(50)</onclick>
+						<label>‹ $LOCALIZE[20074] ›</label>
+						<label2>$LOCALIZE[32118] / $LOCALIZE[20074]</label2>
+						<property name="ActionLeft">Container.PreviousSortMethod</property>
+						<property name="ActionRight">Container.NextSortMethod</property>
+						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[20074])</visible>
+					</item>
+					<item>
+						<onclick>SetFocus(50)</onclick>
+						<label>‹ $LOCALIZE[572] ›</label>
+						<label2>$LOCALIZE[32118] / $LOCALIZE[572]</label2>
+						<property name="ActionLeft">Container.PreviousSortMethod</property>
+						<property name="ActionRight">Container.NextSortMethod</property>
+						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[572])</visible>
+					</item>
+					<item>
+						<onclick>SetFocus(50)</onclick>
+						<label>‹ $LOCALIZE[573] ›</label>
+						<label2>$LOCALIZE[32118] / $LOCALIZE[573]</label2>
+						<property name="ActionLeft">Container.PreviousSortMethod</property>
+						<property name="ActionRight">Container.NextSortMethod</property>
+						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[573])</visible>
+					</item>
+					<item>
+						<onclick>SetFocus(50)</onclick>
+						<label>‹ $LOCALIZE[568] ›</label>
+						<label2>$LOCALIZE[32118] / $LOCALIZE[568]</label2>
+						<property name="ActionLeft">Container.PreviousSortMethod</property>
+						<property name="ActionRight">Container.NextSortMethod</property>
+						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[568])</visible>
+					</item>
+					<item>
+						<onclick>SetFocus(50)</onclick>
+						<label>‹ $LOCALIZE[20455] ›</label>
+						<label2>$LOCALIZE[32118] / $LOCALIZE[20455]</label2>
+						<property name="ActionLeft">Container.PreviousSortMethod</property>
+						<property name="ActionRight">Container.NextSortMethod</property>
+						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[20455])</visible>
+					</item>
+					<item>
+						<onclick>SetFocus(50)</onclick>
+						<label>‹ $LOCALIZE[19029] ›</label>
+						<label2>$LOCALIZE[32118] / $LOCALIZE[19029]</label2>
+						<property name="ActionLeft">Container.PreviousSortMethod</property>
+						<property name="ActionRight">Container.NextSortMethod</property>
+						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[19029])</visible>
+					</item>
+					<item>
+						<onclick>SetFocus(50)</onclick>
+						<label>‹ $LOCALIZE[549] ›</label>
+						<label2>$LOCALIZE[32118] / $LOCALIZE[549]</label2>
+						<property name="ActionLeft">Container.PreviousSortMethod</property>
+						<property name="ActionRight">Container.NextSortMethod</property>
+						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[549])</visible>
+					</item>
+					<item>
+						<onclick>SetFocus(50)</onclick>
+						<label>‹ $LOCALIZE[577] ›</label>
+						<label2>$LOCALIZE[32118] / $LOCALIZE[577]</label2>
+						<property name="ActionLeft">Container.PreviousSortMethod</property>
+						<property name="ActionRight">Container.NextSortMethod</property>
+						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[577])</visible>
+					</item>
+					<item>
+						<onclick>SetFocus(50)</onclick>
+						<label>‹ $LOCALIZE[16018] ›</label>
+						<label2>$LOCALIZE[32118] / $LOCALIZE[16018]</label2>
+						<property name="ActionLeft">Container.PreviousSortMethod</property>
+						<property name="ActionRight">Container.NextSortMethod</property>
+						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[16018])</visible>
+					</item>
+					<item>
+						<onclick>SetFocus(50)</onclick>
+						<label>‹ $LOCALIZE[205] ›</label>
+						<label2>$LOCALIZE[32118] / $LOCALIZE[205]</label2>
+						<property name="ActionLeft">Container.PreviousSortMethod</property>
+						<property name="ActionRight">Container.NextSortMethod</property>
+						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[205])</visible>
+					</item>
+					<item>
+						<onclick>SetFocus(50)</onclick>
+						<label>‹ $LOCALIZE[13409] ›</label>
+						<label2>$LOCALIZE[32118] / $LOCALIZE[13409]</label2>
+						<property name="ActionLeft">Container.PreviousSortMethod</property>
+						<property name="ActionRight">Container.NextSortMethod</property>
+						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[13409])</visible>
+					</item>
+					<item>
+						<onclick>SetFocus(50)</onclick>
+						<label>‹ $LOCALIZE[20364] ›</label>
+						<label2>$LOCALIZE[32118] / $LOCALIZE[20364]</label2>
+						<property name="ActionLeft">Container.PreviousSortMethod</property>
+						<property name="ActionRight">Container.NextSortMethod</property>
+						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[20364])</visible>
+					</item>
+					<item>
+						<onclick>SetFocus(50)</onclick>
+						<label>‹ $LOCALIZE[126] ›</label>
+						<label2>$LOCALIZE[32118] / $LOCALIZE[126]</label2>
+						<property name="ActionLeft">Container.PreviousSortMethod</property>
+						<property name="ActionRight">Container.NextSortMethod</property>
+						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[126])</visible>
+					</item>
+					<item>
+						<onclick>SetFocus(50)</onclick>
+						<label>‹ $LOCALIZE[20373] ›</label>
+						<label2>$LOCALIZE[32118] / $LOCALIZE[20373]</label2>
+						<property name="ActionLeft">Container.PreviousSortMethod</property>
+						<property name="ActionRight">Container.NextSortMethod</property>
+						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[20373])</visible>
+					</item>
+					<item>
+						<onclick>SetFocus(50)</onclick>
+						<label>‹ $LOCALIZE[20360] ›</label>
+						<label2>$LOCALIZE[32118] / $LOCALIZE[20360]</label2>
+						<property name="ActionLeft">Container.PreviousSortMethod</property>
+						<property name="ActionRight">Container.NextSortMethod</property>
+						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[20360])</visible>
+					</item>
+					<item>
+						<onclick>SetFocus(50)</onclick>
+						<label>‹ $LOCALIZE[21441] ›</label>
+						<label2>$LOCALIZE[32118] / $LOCALIZE[21441]</label2>
+						<property name="ActionLeft">Container.PreviousSortMethod</property>
+						<property name="ActionRight">Container.NextSortMethod</property>
+						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[21441])</visible>
+					</item>
+					<item>
+						<onclick>SetFocus(50)</onclick>
+						<label>‹ $LOCALIZE[21443] ›</label>
+						<label2>$LOCALIZE[32118] / $LOCALIZE[21443]</label2>
+						<property name="ActionLeft">Container.PreviousSortMethod</property>
+						<property name="ActionRight">Container.NextSortMethod</property>
+						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[21443])</visible>
+					</item>
+					<item>
+						<onclick>SetFocus(50)</onclick>
+						<label>‹ $LOCALIZE[21445] ›</label>
+						<label2>$LOCALIZE[32118] / $LOCALIZE[21445]</label2>
+						<property name="ActionLeft">Container.PreviousSortMethod</property>
+						<property name="ActionRight">Container.NextSortMethod</property>
+						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[21445])</visible>
+					</item>
+					<item>
+						<onclick>SetFocus(50)</onclick>
+						<label>‹ $LOCALIZE[21374] ›</label>
+						<label2>$LOCALIZE[32118] / $LOCALIZE[21374]</label2>
+						<property name="ActionLeft">Container.PreviousSortMethod</property>
+						<property name="ActionRight">Container.NextSortMethod</property>
+						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[21374])</visible>
+					</item>
+					<item>
+						<onclick>SetFocus(50)</onclick>
+						<label>‹ $LOCALIZE[21444] ›</label>
+						<label2>$LOCALIZE[32118] / $LOCALIZE[21444]</label2>
+						<property name="ActionLeft">Container.PreviousSortMethod</property>
+						<property name="ActionRight">Container.NextSortMethod</property>
+						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[21444])</visible>
+					</item>
+					<item>
+						<onclick>SetFocus(50)</onclick>
+						<label>‹ $LOCALIZE[21446] ›</label>
+						<label2>$LOCALIZE[32118] / $LOCALIZE[21446]</label2>
+						<property name="ActionLeft">Container.PreviousSortMethod</property>
+						<property name="ActionRight">Container.NextSortMethod</property>
+						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[21446])</visible>
+					</item>
+					<item>
+						<onclick>SetFocus(50)</onclick>
+						<label>‹ $LOCALIZE[21447] ›</label>
+						<label2>$LOCALIZE[32118] / $LOCALIZE[21447]</label2>
+						<property name="ActionLeft">Container.PreviousSortMethod</property>
+						<property name="ActionRight">Container.NextSortMethod</property>
+						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[21447])</visible>
+					</item>
+					<item>
+						<onclick>SetFocus(50)</onclick>
+						<label>‹ $LOCALIZE[21448] ›</label>
+						<label2>$LOCALIZE[32118] / $LOCALIZE[21448]</label2>
+						<property name="ActionLeft">Container.PreviousSortMethod</property>
+						<property name="ActionRight">Container.NextSortMethod</property>
+						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[21448])</visible>
+					</item>
+					<item>
+						<onclick>SetFocus(50)</onclick>
+						<label>‹ $LOCALIZE[590] ›</label>
+						<label2>$LOCALIZE[32118] / $LOCALIZE[590]</label2>
+						<property name="ActionLeft">Container.PreviousSortMethod</property>
+						<property name="ActionRight">Container.NextSortMethod</property>
+						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[590])</visible>
+					</item>
+
+					<!-- Order -->
+					<item>
+						<onclick>SetFocus(50)</onclick>
+						<label>‹ $LOCALIZE[584] ›</label>
+						<label2>$LOCALIZE[32119] / $LOCALIZE[584]</label2>
+						<property name="ActionLeft">SendClick(4)</property>
+						<property name="ActionRight">SendClick(4)</property>
+						<visible>Control.IsEnabled(4) + Container.SortDirection(ascending)</visible>
+					</item>
+					<item>
+						<onclick>SetFocus(50)</onclick>
+						<label>‹ $LOCALIZE[585] ›</label>
+						<label2>$LOCALIZE[32119] / $LOCALIZE[585]</label2>
+						<property name="ActionLeft">SendClick(4)</property>
+						<property name="ActionRight">SendClick(4)</property>
+						<visible>Control.IsEnabled(4) + Container.SortDirection(descending)</visible>
+					</item>
+
+					<!-- Include Watched/All-->
+					<item>
+						<onclick>SetFocus(50)</onclick>
+						<label>‹ $LOCALIZE[16100] ›</label>
+						<label2>$LOCALIZE[32120] / $LOCALIZE[16100]</label2>
+						<property name="ActionLeft">SendClick(14)</property>
+						<property name="ActionRight">SendClick(14)</property>
+						<visible>Control.IsEnabled(14) + !System.Setting(hidewatched)</visible>
+					</item>
+					<item>
+						<onclick>SetFocus(50)</onclick>
+						<label>‹ $LOCALIZE[16101] ›</label>
+						<label2>$LOCALIZE[32120] / $LOCALIZE[16101]</label2>
+						<property name="ActionLeft">SendClick(14)</property>
+						<property name="ActionRight">SendClick(14)</property>
+						<visible>Control.IsEnabled(14) + System.Setting(hidewatched)</visible>
+					</item>
+
+					<!-- Filter -->
+					<item>
+						<onclick>SetFocus(50)</onclick>
+						<onclick condition="Container.CanFilter + !Container.CanFilterAdvanced">SetFocus(19)</onclick>
+						<onclick condition="Container.CanFilter + !Container.CanFilterAdvanced">Select</onclick>
+						<onclick condition="Container.CanFilter + !Container.CanFilterAdvanced">SetFocus(50)</onclick>
+						<onclick condition="Container.CanFilterAdvanced">Filter</onclick>
+						<label>587</label>
+						<label2>587</label2>
+						<visible>Container.CanFilter | Container.CanFilterAdvanced</visible>
+					</item>
+
+					<!-- Search -->
+					<item>
+						<onclick>SetFocus(50)</onclick>
+						<onclick>SendClick(8)</onclick>
+						<label>137</label>
+						<label2>137</label2>
+						<visible>Control.IsEnabled(8)</visible>
+					</item>
+
+					<!-- Current playlist -->
+					<item>
+						<onclick>SetFocus(50)</onclick>
+						<onclick>ActivateWindow(videoplaylist)</onclick>
+						<label>$LOCALIZE[13350]</label>
+						<label2>$LOCALIZE[13350]</label2>
+						<visible>!String.IsEqual(Playlist.Length(video),0)</visible>
+					</item>
+
+					<!-- Update Library -->
+					<item>
+						<description>Update Library</description>
+						<onclick>SetFocus(50)</onclick>
+						<onclick>UpdateLibrary(video)</onclick>
+						<label>$LOCALIZE[653]</label>
+						<label2>$LOCALIZE[653]</label2>
+						<visible>!Library.IsScanningVideo</visible>
+					</item>
+					<item>
+						<description>Cancel Update</description>
+						<onclick>SetFocus(50)</onclick>
+						<onclick>SendClick(20)</onclick>
+						<label>$LOCALIZE[13353]</label>
+						<label2>$LOCALIZE[13353]</label2>
+						<visible>Library.IsScanningVideo</visible>
+					</item>
+
+				</content>
+			</control>
 		</control>
 	</controls>
 </window>

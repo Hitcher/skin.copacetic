@@ -8,8 +8,6 @@
 			<!--Container-->
 			<control type="fixedlist" id="504">
 				<viewtype label="31520">list</viewtype>
-				<left>0</left>
-				<top>0</top>
 				<onup>3000</onup>
 				<ondown>60</ondown>
 				<onleft>0</onleft>
@@ -18,17 +16,24 @@
 				<preloaditems>2</preloaditems>
 				<focusposition>0</focusposition>
 				<orientation>horizontal</orientation>
-				<visible>Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | Container.Content(episodes) | Container.Content(artists)</visible>
+				<visible>Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | Container.Content(episodes) | Container.Content(artists) | Container.Content(albums) | Container.Content(Addons)</visible>
 				<visible>String.Contains(Container.FolderPath,videodb://) | String.Contains(Container.FolderPath,special://) | String.Contains(Container.FolderPath,addons://) | String.Contains(Container.FolderPath,musicdb://) | String.Contains(Container.FolderPath,androidapp://)</visible>
 				<scrolltime tween="sine" easing="inout">380</scrolltime>
-				<focusedlayout height="820" width="1010" condition="Skin.String(StripView_Display,Fanart) | Container.Content(episodes) | String.IsEmpty(Skin.String(StripView_Display)">
+				<!--Poster layout-->
+				<focusedlayout width="480" height="720" condition="[Skin.String(StripView_Display,Posters) | String.IsEmpty(Skin.String(StripView_Display)] + !Container.Content(episodes) + !Container.Content(artists) + !Container.Content(albums)">
 					<include>HiddenFocusButton</include>
 				</focusedlayout>
-				<focusedlayout height="820" width="450" condition="Skin.String(StripView_Display,Posters) + !Container.Content(episodes)">
+				<itemlayout width="480" height="720" condition="[Skin.String(StripView_Display,Posters) | String.IsEmpty(Skin.String(StripView_Display)] + !Container.Content(episodes) + !Container.Content(artists) + !Container.Content(albums)"/>
+				<!--Fanart layout-->
+				<focusedlayout width="960" height="540" condition="[Skin.String(StripView_Display,Fanart) | Container.Content(episodes)] + !Container.Content(albums)">
 					<include>HiddenFocusButton</include>
 				</focusedlayout>
-				<itemlayout height="820" width="1010" condition="Skin.String(StripView_Display,Fanart) | Container.Content(episodes) | String.IsEmpty(Skin.String(StripView_Display)" />
-				<itemlayout height="820" width="450" condition="Skin.String(StripView_Display,Posters) + !Container.Content(episodes)" />
+				<itemlayout width="960" height="540"  condition="[Skin.String(StripView_Display,Fanart) | Container.Content(episodes)] + !Container.Content(albums)"/>
+				<!--Square layout-->
+				<focusedlayout width="540" height="540"  condition="[Skin.String(StripView_Display,Square) | Container.Content(albums)]  + !Container.Content(episodes)">
+					<include>HiddenFocusButton</include>
+				</focusedlayout>
+				<itemlayout width="540" height="540"  condition="[Skin.String(StripView_Display,Square) | Container.Content(albums)] + !Container.Content(episodes)" />
 			</control>
 
 			<!--Static Content-->
@@ -37,120 +42,148 @@
 				<include>ProgressBarFadeAnimation</include>
 				<!--Progress bar-->
 				<control type="group">
-					<animation effect="slide" end="0,-104" condition="Skin.String(StripView_Details,TitleAndPlot) | Skin.String(StripView_Details,All) | String.IsEmpty(Skin.String(StripView_Details)">Conditional</animation>
+					<animation effect="slide" end="0,-120" time="0" condition="[[Skin.String(StripView_Display,Fanart) | Container.Content(episodes)] + !Container.Content(albums)] | [[Skin.String(StripView_Display,Square) | Container.Content(albums)] + !Container.Content(episodes)]">Conditional</animation>
+					<animation effect="slide" end="240,0" time="0" condition="!Skin.String(StripView_Details,Off) + [[Skin.String(StripView_Display,Fanart) | Container.Content(episodes)] + !Container.Content(albums)]">Conditional</animation>
 					<include content="ProgressBar">
-						<param name="left" value="800"/>
-						<param name="top" value="860"/>
+						<param name="left" value="780"/>
+						<param name="top" value="954"/>
 					</include>
 				</control>
 				<!--Details-->
-				<include content="CommonViewDetails">
-					<param name="groupvisibility" value="!Skin.String(StripView_Details,Off)"/>
-					<param name="left" value="192"/>
-					<param name="bottom" value="50"/>
-					<param name="width" value="1536"/>
-					<param name="height" value="230"/>
-					<param name="align" value="right"/>
-					<param name="labeltype" value="label"/>
-					<param name="titlevisibility" value="true"/>
-					<param name="titleheight" value="55"/>
-					<param name="titlefont" value="SmallFocused"/>
-					<param name="titlealign" value="center"/>
-					<param name="logovisibility" value="false"/>
-					<param name="infovisibility" value="Skin.String(StripView_Details,TitleAndInfo) | Skin.String(StripView_Details,All) | String.IsEmpty(Skin.String(StripView_Details)"/>
-					<param name="infoheight" value="35"/>
-					<param name="titleinfogap" value="0"/>
-					<param name="infofont" value="SmallSubTitle"/>
-					<param name="plotvisibility" value="Skin.String(StripView_Details,TitleAndPlot) | Skin.String(StripView_Details,All) | String.IsEmpty(Skin.String(StripView_Details)"/>"
-					<param name="plotmaxheight" value="110"/>
-					<param name="infoplotgap" value="25"/>
-					<param name="plotfont" value="Body"/>
-				</include>
+				<control type="group">
+					<animation effect="slide" end="0,-30" time="0" condition="[[Skin.String(StripView_Display,Fanart) | Container.Content(episodes)] + !Container.Content(albums)] | [[Skin.String(StripView_Display,Square) | Container.Content(albums)] + !Container.Content(episodes)]">Conditional</animation>
+					<include content="CommonViewDetails">
+						<param name="groupvisibility" value="!Skin.String(StripView_Details,Off)"/>
+						<param name="left" value="60"/>
+						<param name="width" value="600"/>
+						<param name="infovisibility" value="Skin.String(StripView_Details,TitleAndInfo) | Skin.String(StripView_Details,All) | String.IsEmpty(Skin.String(StripView_Details)"/>
+						<param name="plotvisibility" value="Skin.String(StripView_Details,TitleAndPlot) | Skin.String(StripView_Details,All) | String.IsEmpty(Skin.String(StripView_Details)"/>
+					</include>
+				</control>
 			</control>
 
 			<!--Static thumbnails-->
 			<control type="group">
-				<animation effect="slide" end="0,-104" condition="Skin.String(StripView_Details,TitleAndPlot) | Skin.String(StripView_Details,All) | String.IsEmpty(Skin.String(StripView_Details)">Conditional</animation>
-				<!--Fanart thumbnails-->
+				<!--Posters-->
 				<control type="group">
-					<visible>!Control.IsVisible(5001) + !Control.IsVisible(5002) + [Skin.String(StripView_Display,Fanart) | Container.Content(episodes) | String.IsEmpty(Skin.String(StripView_Display)]</visible>
+					<visible>[Skin.String(StripView_Display,Posters) | String.IsEmpty(Skin.String(StripView_Display)] + !Container.Content(episodes) + !Container.Content(artists) + !Container.Content(albums) + !Control.IsVisible(5001) + !Control.IsVisible(5002)</visible>
+					<!--Icon -2-->
 					<include content="ListIcon">
-						<param name="left" value="-450"/>
-						<param name="top" value="294"/>
-						<param name="width" value="880"/>
-						<param name="height" value="495"/>
+						<param name="left" value="-240"/>
+						<param name="top" value="180"/>
+						<param name="width" value="480"/>
+						<param name="height" value="720"/>
+						<param name="texture" value="$VAR[Thumbnail(-2)Content]"/>
+						<param name="visible" value="!String.IsEmpty(Container.ListItemNoWrap(-2).FolderPath) + Skin.String(StripView_Details,Off)"/>
+					</include>
+					<!--Icon -1-->
+					<include content="ListIcon">
+						<param name="left" value="240"/>
+						<param name="top" value="180"/>
+						<param name="width" value="480"/>
+						<param name="height" value="720"/>
 						<param name="texture" value="$VAR[Thumbnail(-1)Content]"/>
-						<param name="visible" value="!String.IsEmpty(Container.ListItemNoWrap(-1).FolderPath)"/>
+						<param name="visible" value="!String.IsEmpty(Container.ListItemNoWrap(-1).FolderPath) + Skin.String(StripView_Details,Off)"/>
 					</include>
-					<include content="DropShadow">
-						<param name="left" value="450"/>
-						<param name="top" value="260"/>
-						<param name="width" value="1020"/>
-						<param name="height" value="640"/>
-						<param name="texture" value="views/dropshadow_strip-fanart.png"/>
-						<param name="visible" value="Skin.String(Theme,Light)"/>
+					<!--Icon 0-->
+					<include content="ListIcon">
+						<param name="left" value="720"/>
+						<param name="top" value="180"/>
+						<param name="width" value="480"/>
+						<param name="height" value="720"/>
 					</include>
+					<!--Icon 1-->
+					<include content="ListIcon">
+						<param name="left" value="1200"/>
+						<param name="top" value="180"/>
+						<param name="width" value="480"/>
+						<param name="height" value="720"/>
+						<param name="texture" value="$VAR[Thumbnail(1)Content]"/>
+						<param name="visible" value="!String.IsEmpty(Container.ListItemNoWrap(1).FolderPath)"/>
+					</include>
+					<!--Icon 2-->
+					<include content="ListIcon">
+						<param name="left" value="1680"/>
+						<param name="top" value="180"/>
+						<param name="width" value="480"/>
+						<param name="height" value="720"/>
+						<param name="texture" value="$VAR[Thumbnail(2)Content]"/>
+						<param name="visible" value="!String.IsEmpty(Container.ListItemNoWrap(2).FolderPath)"/>
+					</include>
+				</control>
+				<!--Fanart-->
+				<control type="group">
+					<visible>[Skin.String(StripView_Display,Fanart) | Container.Content(episodes)] + !Container.Content(albums) + !Control.IsVisible(5001) + !Control.IsVisible(5002)</visible>
+					<animation effect="slide" end="240,0" time="0" condition="!Skin.String(StripView_Details,Off)">Conditional</animation>
+					<!--Icon -1-->
+					<include content="ListIcon">
+						<param name="left" value="-480"/>
+						<param name="top" value="240"/>
+						<param name="width" value="960"/>
+						<param name="height" value="540"/>
+						<param name="texture" value="$VAR[Thumbnail(-1)Content]"/>
+						<param name="visible" value="!String.IsEmpty(Container.ListItemNoWrap(-1).FolderPath) + Skin.String(StripView_Details,Off)"/>
+					</include>
+					<!--Icon 0-->
 					<include content="ListIcon">
 						<param name="left" value="480"/>
-						<param name="top" value="270"/>
+						<param name="top" value="240"/>
 						<param name="width" value="960"/>
 						<param name="height" value="540"/>
 					</include>
+					<!--Icon 1-->
 					<include content="ListIcon">
-						<param name="left" value="1490"/>
-						<param name="top" value="294"/>
-						<param name="width" value="880"/>
-						<param name="height" value="495"/>
+						<param name="left" value="1440"/>
+						<param name="top" value="240"/>
+						<param name="width" value="960"/>
+						<param name="height" value="540"/>
 						<param name="texture" value="$VAR[Thumbnail(1)Content]"/>
 						<param name="visible" value="!String.IsEmpty(Container.ListItemNoWrap(1).FolderPath)"/>
 					</include>
 				</control>
-				<!--Poster thumbnails-->
+				<!--Square-->
 				<control type="group">
-					<visible>!Control.IsVisible(5001) + !Control.IsVisible(5002) + !Container.Content(episodes) + Skin.String(StripView_Display,Posters)</visible>
+					<visible>[Skin.String(StripView_Display,Square) | Container.Content(albums)]  + !Container.Content(episodes) + !Control.IsVisible(5001) + !Control.IsVisible(5002)</visible>
+					<!--Icon -2-->
 					<include content="ListIcon">
-						<param name="left" value="-80"/>
-						<param name="top" value="232"/>
-						<param name="width" value="370"/>
-						<param name="height" value="555"/>
+						<param name="left" value="-390"/>
+						<param name="top" value="240"/>
+						<param name="width" value="540"/>
+						<param name="height" value="540"/>
 						<param name="texture" value="$VAR[Thumbnail(-2)Content]"/>
-						<param name="visible" value="!String.IsEmpty(Container.ListItemNoWrap(-2).FolderPath)"/>
+						<param name="visible" value="!String.IsEmpty(Container.ListItemNoWrap(-2).FolderPath) + Skin.String(StripView_Details,Off)"/>
 					</include>
+					<!--Icon -1-->
 					<include content="ListIcon">
-						<param name="left" value="340"/>
-						<param name="top" value="232"/>
-						<param name="width" value="370"/>
-						<param name="height" value="555"/>
+						<param name="left" value="150"/>
+						<param name="top" value="240"/>
+						<param name="width" value="540"/>
+						<param name="height" value="540"/>
 						<param name="texture" value="$VAR[Thumbnail(-1)Content]"/>
-						<param name="visible" value="!String.IsEmpty(Container.ListItemNoWrap(-1).FolderPath)"/>
+						<param name="visible" value="!String.IsEmpty(Container.ListItemNoWrap(-1).FolderPath) + Skin.String(StripView_Details,Off)"/>
 					</include>
-					<include content="DropShadow">
-						<param name="left" value="730"/>
-						<param name="top" value="200"/>
-						<param name="width" value="460"/>
-						<param name="height" value="700"/>
-						<param name="texture" value="views/dropshadow_strip-poster.png"/>
-						<param name="visible" value="Skin.String(Theme,Light)"/>
-					</include>
+					<!--Icon 0-->
 					<include content="ListIcon">
-						<param name="left" value="760"/>
-						<param name="top" value="210"/>
-						<param name="width" value="400"/>
-						<param name="height" value="600"/>
+						<param name="left" value="690"/>
+						<param name="top" value="240"/>
+						<param name="width" value="540"/>
+						<param name="height" value="540"/>
 					</include>
+					<!--Icon 1-->
 					<include content="ListIcon">
-						<param name="left" value="1210"/>
-						<param name="top" value="232"/>
-						<param name="width" value="370"/>
-						<param name="height" value="555"/>
+						<param name="left" value="1230"/>
+						<param name="top" value="240"/>
+						<param name="width" value="540"/>
+						<param name="height" value="540"/>
 						<param name="texture" value="$VAR[Thumbnail(1)Content]"/>
 						<param name="visible" value="!String.IsEmpty(Container.ListItemNoWrap(1).FolderPath)"/>
 					</include>
+					<!--Icon 2-->
 					<include content="ListIcon">
-						<param name="left" value="1630"/>
-						<param name="top" value="232"/>
-						<param name="width" value="370"/>
-						<param name="height" value="555"/>
+						<param name="left" value="1770"/>
+						<param name="top" value="240"/>
+						<param name="width" value="540"/>
+						<param name="height" value="540"/>
 						<param name="texture" value="$VAR[Thumbnail(2)Content]"/>
 						<param name="visible" value="!String.IsEmpty(Container.ListItemNoWrap(2).FolderPath)"/>
 					</include>
@@ -161,183 +194,240 @@
 			<control type="group">
 				<visible>Control.IsVisible(5001)</visible>
 				<include>CustomViewsBackground</include>
+				<!--Posters-->
 				<control type="group">
-					<animation effect="slide" end="0,-104" condition="Skin.String(StripView_Details,TitleAndPlot) | Skin.String(StripView_Details,All) | String.IsEmpty(Skin.String(StripView_Details)">Conditional</animation>
-					<!--Fanart-->
-					<control type="group">
-						<visible>Skin.String(StripView_Display,Fanart) | Container.Content(episodes) | String.IsEmpty(Skin.String(StripView_Display)</visible>
-						<!--Move Icon -2 to -1-->
-						<include content="ListIcon">
-							<param name="left" value="-1380"/>
-							<param name="top" value="293"/>
-							<param name="width" value="880"/>
-							<param name="height" value="495"/>
-							<param name="texture" value="$VAR[Thumbnail(-1)Content]"/>
-							<param name="visible" value="Container(504).OnPrevious + !String.IsEmpty(Container.ListItemNoWrap(-1).FolderPath)"/>
-							<param name="animationtype" value="Hidden"/>
-							<param name="animationeffect" value="slide"/>
-							<param name="animationend" value="930,0"/>
-						</include>
-						<!--Move DropShadow -1 to 0-->
-						<include content="DropShadow">
-							<param name="left" value="-388"/>
-							<param name="top" value="290"/>
-							<param name="width" value="765"/>
-							<param name="height" value="480"/>
-							<param name="texture" value="views/dropshadow_strip-fanart.png"/>
-							<param name="visible" value="Skin.String(Theme,Light) + Container(504).OnPrevious"/>
-							<param name="animationtype" value="Hidden"/>
-							<param name="animationeffect" value="zoom"/>
-							<param name="animationend" value="450,260,1020,640"/>
-						</include>
-						<!--Move Icon -1 to -0-->
-						<include content="ListIcon">
-							<param name="left" value="-450"/>
-							<param name="top" value="293"/>
-							<param name="width" value="880"/>
-							<param name="height" value="495"/>
-							<param name="visible" value="Container(504).OnPrevious"/>
-							<param name="animationtype" value="Hidden"/>
-							<param name="animationeffect" value="zoom"/>
-							<param name="animationend" value="480,270,960,540"/>
-						</include>
-						<!--Move DropShadow 0 to 1-->
-						<include content="DropShadow">
-							<param name="left" value="450"/>
-							<param name="top" value="260"/>
-							<param name="width" value="1020"/>
-							<param name="height" value="640"/>
-							<param name="texture" value="views/dropshadow_strip-fanart.png"/>
-							<param name="visible" value="Skin.String(Theme,Light) + Container(504).OnPrevious + !String.IsEmpty(Container.ListItemNoWrap(1).FolderPath)"/>
-							<param name="animationtype" value="Hidden"/>
-							<param name="animationeffect" value="zoom"/>
-							<param name="animationend" value="1548,300,765,480"/>
-						</include>
-						<!--Move Icon 0 to 1-->
-						<include content="ListIcon">
-							<param name="left" value="480"/>
-							<param name="top" value="270"/>
-							<param name="width" value="960"/>
-							<param name="height" value="540"/>
-							<param name="texture" value="$VAR[Thumbnail(1)Content]"/>
-							<param name="visible" value="Container(504).OnPrevious + !String.IsEmpty(Container.ListItemNoWrap(1).FolderPath)"/>
-							<param name="animationtype" value="Hidden"/>
-							<param name="animationeffect" value="zoom"/>
-							<param name="animationend" value="1490,293,880,495"/>
-						</include>
-						<!--Move Icon 1 to 2-->
-						<include content="ListIcon">
-							<param name="left" value="1490"/>
-							<param name="top" value="293"/>
-							<param name="width" value="880"/>
-							<param name="height" value="495"/>
-							<param name="texture" value="$VAR[Thumbnail(2)Content]"/>
-							<param name="visible" value="Container(504).OnPrevious + !String.IsEmpty(Container.ListItemNoWrap(2).FolderPath)"/>
-							<param name="animationtype" value="Hidden"/>
-							<param name="animationeffect" value="slide"/>
-							<param name="animationend" value="930,0"/>
-						</include>
-					</control>
-
-					<!--Posters-->
-					<control type="group">
-						<visible>Skin.String(StripView_Display,Posters) + !Container.Content(episodes)</visible>
-						<!--Move Icon -3 to -2-->
-						<include content="ListIcon">
-							<param name="left" value="-500"/>
-							<param name="top" value="232"/>
-							<param name="width" value="370"/>
-							<param name="height" value="555"/>
-							<param name="texture" value="$VAR[Thumbnail(-2)Content]"/>
-							<param name="visible" value="Container(504).OnPrevious + !String.IsEmpty(Container.ListItemNoWrap(-2).FolderPath)"/>
-							<param name="animationtype" value="Hidden"/>
-							<param name="animationeffect" value="slide"/>
-							<param name="animationend" value="420,0"/>
-						</include>
-						<!--Move Icon -2 to -1-->
-						<include content="ListIcon">
-							<param name="left" value="-80"/>
-							<param name="top" value="232"/>
-							<param name="width" value="370"/>
-							<param name="height" value="555"/>
-							<param name="texture" value="$VAR[Thumbnail(-1)Content]"/>
-							<param name="visible" value="Container(504).OnPrevious + !String.IsEmpty(Container.ListItemNoWrap(-1).FolderPath)"/>
-							<param name="animationtype" value="Hidden"/>
-							<param name="animationeffect" value="slide"/>
-							<param name="animationend" value="420,0"/>
-						</include>
-						<!--Move DropShadow -1 to 0-->
-						<include content="DropShadow">
-							<param name="left" value="352"/>
-							<param name="top" value="247"/>
-							<param name="width" value="345"/>
-							<param name="height" value="525"/>
-							<param name="texture" value="views/dropshadow_strip-poster.png"/>
-							<param name="visible" value="Skin.String(Theme,Light) + Container(504).OnPrevious"/>
-							<param name="animationtype" value="Hidden"/>
-							<param name="animationeffect" value="zoom"/>
-							<param name="animationend" value="730,200,460,700"/>
-						</include>
-						<!--Move Icon -1 to 0-->
-						<include content="ListIcon">
-							<param name="left" value="340"/>
-							<param name="top" value="232"/>
-							<param name="width" value="370"/>
-							<param name="height" value="555"/>
-							<param name="visible" value="Container(504).OnPrevious"/>
-							<param name="animationtype" value="Hidden"/>
-							<param name="animationeffect" value="zoom"/>
-							<param name="animationend" value="760,210,400,600"/>
-						</include>
-						<!--Move DropShadow 0 to 1-->
-						<include content="DropShadow">
-							<param name="left" value="730"/>
-							<param name="top" value="200"/>
-							<param name="width" value="460"/>
-							<param name="height" value="700"/>
-							<param name="texture" value="views/dropshadow_strip-poster.png"/>
-							<param name="visible" value="Skin.String(Theme,Light) + Container(504).OnPrevious + !String.IsEmpty(Container.ListItemNoWrap(1).FolderPath)"/>
-							<param name="animationtype" value="Hidden"/>
-							<param name="animationeffect" value="zoom"/>
-							<param name="animationend" value="1222,247,370,555"/>
-						</include>
-						<!--Move Icon 0 to 1-->
-						<include content="ListIcon">
-							<param name="left" value="760"/>
-							<param name="top" value="210"/>
-							<param name="width" value="400"/>
-							<param name="height" value="600"/>
-							<param name="texture" value="$VAR[Thumbnail(1)Content]"/>
-							<param name="visible" value="Container(504).OnPrevious + !String.IsEmpty(Container.ListItemNoWrap(1).FolderPath)"/>
-							<param name="animationtype" value="Hidden"/>
-							<param name="animationeffect" value="zoom"/>
-							<param name="animationend" value="1210,232,370,555"/>
-						</include>
-						<!--Move Icon 1 to 2-->
-						<include content="ListIcon">
-							<param name="left" value="1210"/>
-							<param name="top" value="232"/>
-							<param name="width" value="370"/>
-							<param name="height" value="555"/>
-							<param name="texture" value="$VAR[Thumbnail(2)Content]"/>
-							<param name="visible" value="Container(504).OnPrevious + !String.IsEmpty(Container.ListItemNoWrap(2).FolderPath)"/>
-							<param name="animationtype" value="Hidden"/>
-							<param name="animationeffect" value="slide"/>
-							<param name="animationend" value="420,0"/>
-						</include>
-						<!--Move Icon 2 to 3-->
-						<include content="ListIcon">
-							<param name="left" value="1630"/>
-							<param name="top" value="232"/>
-							<param name="width" value="370"/>
-							<param name="height" value="555"/>
-							<param name="texture" value="$VAR[Thumbnail(3)Content]"/>
-							<param name="visible" value="Container(504).OnPrevious + !String.IsEmpty(Container.ListItemNoWrap(3).FolderPath)"/>
-							<param name="animationtype" value="Hidden"/>
-							<param name="animationeffect" value="slide"/>
-							<param name="animationend" value="420,0"/>
-						</include>
-					</control>
+					<visible>[Skin.String(StripView_Display,Posters) | String.IsEmpty(Skin.String(StripView_Display)] + !Container.Content(episodes) + !Container.Content(artits) + !Container.Content(albums)</visible>
+					<!--Move Icon -3 to -2-->
+					<include content="ListIcon">
+						<param name="left" value="-720"/>
+						<param name="top" value="180"/>
+						<param name="width" value="480"/>
+						<param name="height" value="720"/>
+						<param name="texture" value="$VAR[Thumbnail(-2)Content]"/>
+						<param name="visible" value="Container(504).OnPrevious + !String.IsEmpty(Container.ListItemNoWrap(-2).FolderPath) + Skin.String(StripView_Details,Off)"/>
+						<param name="animationtype" value="Hidden"/>
+						<param name="animationeffect" value="slide"/>
+						<param name="animationend" value="480,0"/>
+					</include>
+					<!--Move Icon -2 to -1-->
+					<include content="ListIcon">
+						<param name="left" value="-240"/>
+						<param name="top" value="180"/>
+						<param name="width" value="480"/>
+						<param name="height" value="720"/>
+						<param name="texture" value="$VAR[Thumbnail(-1)Content]"/>
+						<param name="visible" value="Container(504).OnPrevious + !String.IsEmpty(Container.ListItemNoWrap(-1).FolderPath) + Skin.String(StripView_Details,Off)"/>
+						<param name="animationtype" value="Hidden"/>
+						<param name="animationeffect" value="slide"/>
+						<param name="animationend" value="480,0"/>
+					</include>
+					<!--Move Icon -1 to 0-->
+					<include content="ListIcon">
+						<param name="left" value="240"/>
+						<param name="top" value="180"/>
+						<param name="width" value="480"/>
+						<param name="height" value="720"/>
+						<param name="visible" value="Container(504).OnPrevious  + Skin.String(StripView_Details,Off)"/>
+						<param name="animationtype" value="Hidden"/>
+						<param name="animationeffect" value="slide"/>
+						<param name="animationend" value="480,0"/>
+					</include>
+					<!--Alternative Animation if Details On-->
+					<include content="ListIcon">
+						<param name="left" value="-480"/>
+						<param name="top" value="180"/>
+						<param name="width" value="480"/>
+						<param name="height" value="720"/>
+						<param name="visible" value="Container(504).OnPrevious  + !Skin.String(StripView_Details,Off)"/>
+						<param name="animationtype" value="Hidden"/>
+						<param name="animationeffect" value="slide"/>
+						<param name="animationend" value="1200,0"/>
+					</include>
+					<!--Move Icon 0 to 1-->
+					<include content="ListIcon">
+						<param name="left" value="720"/>
+						<param name="top" value="180"/>
+						<param name="width" value="480"/>
+						<param name="height" value="720"/>
+						<param name="texture" value="$VAR[Thumbnail(1)Content]"/>
+						<param name="visible" value="Container(504).OnPrevious + !String.IsEmpty(Container.ListItemNoWrap(1).FolderPath)"/>
+						<param name="animationtype" value="Hidden"/>
+						<param name="animationeffect" value="slide"/>
+						<param name="animationend" value="480,0"/>
+					</include>
+					<!--Move Icon 1 to 2-->
+					<include content="ListIcon">
+						<param name="left" value="1200"/>
+						<param name="top" value="180"/>
+						<param name="width" value="480"/>
+						<param name="height" value="720"/>
+						<param name="texture" value="$VAR[Thumbnail(2)Content]"/>
+						<param name="visible" value="Container(504).OnPrevious + !String.IsEmpty(Container.ListItemNoWrap(2).FolderPath)"/>
+						<param name="animationtype" value="Hidden"/>
+						<param name="animationeffect" value="slide"/>
+						<param name="animationend" value="480,0"/>
+					</include>
+					<!--Move Icon 2 to 3-->
+					<include content="ListIcon">
+						<param name="left" value="1680"/>
+						<param name="top" value="180"/>
+						<param name="width" value="480"/>
+						<param name="height" value="720"/>
+						<param name="texture" value="$VAR[Thumbnail(3)Content]"/>
+						<param name="visible" value="Container(504).OnPrevious + !String.IsEmpty(Container.ListItemNoWrap(3).FolderPath)"/>
+						<param name="animationtype" value="Hidden"/>
+						<param name="animationeffect" value="slide"/>
+						<param name="animationend" value="480,0"/>
+					</include>
+				</control>
+				<!--Fanart-->
+				<control type="group">
+					<visible>[Skin.String(StripView_Display,Fanart) | Container.Content(episodes)] + !Container.Content(albums)</visible>
+					<animation effect="slide" end="240,0" time="0" condition="!Skin.String(StripView_Details,Off)">Conditional</animation>
+					<!--Move Icon -2 to -1-->
+					<include content="ListIcon">
+						<param name="left" value="-1440"/>
+						<param name="top" value="240"/>
+						<param name="width" value="960"/>
+						<param name="height" value="540"/>
+						<param name="texture" value="$VAR[Thumbnail(-1)Content]"/>
+						<param name="visible" value="Container(504).OnPrevious + !String.IsEmpty(Container.ListItemNoWrap(-1).FolderPath) + Skin.String(StripView_Details,Off)"/>
+						<param name="animationtype" value="Hidden"/>
+						<param name="animationeffect" value="slide"/>
+						<param name="animationend" value="960,0"/>
+					</include>
+					<!--Move Icon -1 to 0-->
+					<include content="ListIcon">
+						<param name="left" value="-480"/>
+						<param name="top" value="240"/>
+						<param name="width" value="960"/>
+						<param name="height" value="540"/>
+						<param name="visible" value="Container(504).OnPrevious  + Skin.String(StripView_Details,Off)"/>
+						<param name="animationtype" value="Hidden"/>
+						<param name="animationeffect" value="slide"/>
+						<param name="animationend" value="960,0"/>
+					</include>
+					<!--Alternative Animation if Details On-->
+					<include content="ListIcon">
+						<param name="left" value="-1200"/>
+						<param name="top" value="240"/>
+						<param name="width" value="960"/>
+						<param name="height" value="540"/>
+						<param name="visible" value="Container(504).OnPrevious  + !Skin.String(StripView_Details,Off)"/>
+						<param name="animationtype" value="Hidden"/>
+						<param name="animationeffect" value="slide"/>
+						<param name="animationend" value="1680,0"/>
+					</include>
+					<!--Move Icon 0 to 1-->
+					<include content="ListIcon">
+						<param name="left" value="480"/>
+						<param name="top" value="240"/>
+						<param name="width" value="960"/>
+						<param name="height" value="540"/>
+						<param name="texture" value="$VAR[Thumbnail(1)Content]"/>
+						<param name="visible" value="Container(504).OnPrevious + !String.IsEmpty(Container.ListItemNoWrap(1).FolderPath)"/>
+						<param name="animationtype" value="Hidden"/>
+						<param name="animationeffect" value="slide"/>
+						<param name="animationend" value="960,0"/>
+					</include>
+					<!--Move Icon 1 to 2-->
+					<include content="ListIcon">
+						<param name="left" value="1440"/>
+						<param name="top" value="240"/>
+						<param name="width" value="960"/>
+						<param name="height" value="540"/>
+						<param name="texture" value="$VAR[Thumbnail(2)Content]"/>
+						<param name="visible" value="Container(504).OnPrevious + !String.IsEmpty(Container.ListItemNoWrap(2).FolderPath)"/>
+						<param name="animationtype" value="Hidden"/>
+						<param name="animationeffect" value="slide"/>
+						<param name="animationend" value="960,0"/>
+					</include>
+				</control>
+				<!--Square-->
+				<control type="group">
+					<visible>[Skin.String(StripView_Display,Square) | Container.Content(albums)]  + !Container.Content(episodes)</visible>
+					<!--Move Icon -3 to -2-->
+					<include content="ListIcon">
+						<param name="left" value="-930"/>
+						<param name="top" value="240"/>
+						<param name="width" value="540"/>
+						<param name="height" value="540"/>
+						<param name="texture" value="$VAR[Thumbnail(-2)Content]"/>
+						<param name="visible" value="Container(504).OnPrevious + !String.IsEmpty(Container.ListItemNoWrap(-2).FolderPath) + Skin.String(StripView_Details,Off)"/>
+						<param name="animationtype" value="Hidden"/>
+						<param name="animationeffect" value="slide"/>
+						<param name="animationend" value="540,0"/>
+					</include>
+					<!--Move Icon -2 to -1-->
+					<include content="ListIcon">
+						<param name="left" value="-390"/>
+						<param name="top" value="240"/>
+						<param name="width" value="540"/>
+						<param name="height" value="540"/>
+						<param name="texture" value="$VAR[Thumbnail(-1)Content]"/>
+						<param name="visible" value="Container(504).OnPrevious + !String.IsEmpty(Container.ListItemNoWrap(-1).FolderPath) + Skin.String(StripView_Details,Off)"/>
+						<param name="animationtype" value="Hidden"/>
+						<param name="animationeffect" value="slide"/>
+						<param name="animationend" value="540,0"/>
+					</include>
+					<!--Move Icon -1 to 0-->
+					<include content="ListIcon">
+						<param name="left" value="150"/>
+						<param name="top" value="240"/>
+						<param name="width" value="540"/>
+						<param name="height" value="540"/>
+						<param name="visible" value="Container(504).OnPrevious  + Skin.String(StripView_Details,Off)"/>
+						<param name="animationtype" value="Hidden"/>
+						<param name="animationeffect" value="slide"/>
+						<param name="animationend" value="540,0"/>
+					</include>
+					<!--Alternative Animation if Details On-->
+					<include content="ListIcon">
+						<param name="left" value="-540"/>
+						<param name="top" value="240"/>
+						<param name="width" value="540"/>
+						<param name="height" value="540"/>
+						<param name="visible" value="Container(504).OnPrevious  + !Skin.String(StripView_Details,Off)"/>
+						<param name="animationtype" value="Hidden"/>
+						<param name="animationeffect" value="slide"/>
+						<param name="animationend" value="1230,0"/>
+					</include>
+					<!--Move Icon 0 to 1-->
+					<include content="ListIcon">
+						<param name="left" value="690"/>
+						<param name="top" value="240"/>
+						<param name="width" value="540"/>
+						<param name="height" value="540"/>
+						<param name="texture" value="$VAR[Thumbnail(1)Content]"/>
+						<param name="visible" value="Container(504).OnPrevious + !String.IsEmpty(Container.ListItemNoWrap(1).FolderPath)"/>
+						<param name="animationtype" value="Hidden"/>
+						<param name="animationeffect" value="slide"/>
+						<param name="animationend" value="540,0"/>
+					</include>
+					<!--Move Icon 1 to 2-->
+					<include content="ListIcon">
+						<param name="left" value="1230"/>
+						<param name="top" value="240"/>
+						<param name="width" value="540"/>
+						<param name="height" value="540"/>
+						<param name="texture" value="$VAR[Thumbnail(2)Content]"/>
+						<param name="visible" value="Container(504).OnPrevious + !String.IsEmpty(Container.ListItemNoWrap(2).FolderPath)"/>
+						<param name="animationtype" value="Hidden"/>
+						<param name="animationeffect" value="slide"/>
+						<param name="animationend" value="540,0"/>
+					</include>
+					<!--Move Icon 2 to 3-->
+					<include content="ListIcon">
+						<param name="left" value="1770"/>
+						<param name="top" value="240"/>
+						<param name="width" value="540"/>
+						<param name="height" value="540"/>
+						<param name="texture" value="$VAR[Thumbnail(3)Content]"/>
+						<param name="visible" value="Container(504).OnPrevious + !String.IsEmpty(Container.ListItemNoWrap(3).FolderPath)"/>
+						<param name="animationtype" value="Hidden"/>
+						<param name="animationeffect" value="slide"/>
+						<param name="animationend" value="540,0"/>
+					</include>
 				</control>
 			</control>
 
@@ -345,183 +435,243 @@
 			<control type="group">
 				<visible>Control.IsVisible(5002)</visible>
 				<include>CustomViewsBackground</include>
+				<!--Posters-->
 				<control type="group">
-					<animation effect="slide" end="0,-104" condition="Skin.String(StripView_Details,TitleAndPlot) | Skin.String(StripView_Details,All) | String.IsEmpty(Skin.String(StripView_Details)">Conditional</animation>
-					<!--Fanart-->
-					<control type="group">
-						<visible>Skin.String(StripView_Display,Fanart) | Container.Content(episodes) | String.IsEmpty(Skin.String(StripView_Display)</visible>
-						<!--Move Icon -1 to -2-->
-						<include content="ListIcon">
-							<param name="left" value="-450"/>
-							<param name="top" value="293"/>
-							<param name="width" value="880"/>
-							<param name="height" value="495"/>
-							<param name="texture" value="$VAR[Thumbnail(-2)Content]"/>
-							<param name="visible" value="Container(504).OnNext + !String.IsEmpty(Container.ListItemNoWrap(-2).FolderPath)"/>
-							<param name="animationtype" value="Hidden"/>
-							<param name="animationeffect" value="slide"/>
-							<param name="animationend" value="-930,0"/>
-						</include>
-						<!--Move DropShadow 0 to -1-->
-						<include content="DropShadow">
-							<param name="left" value="450"/>
-							<param name="top" value="260"/>
-							<param name="width" value="1020"/>
-							<param name="height" value="640"/>
-							<param name="texture" value="views/dropshadow_strip-fanart.png"/>
-							<param name="visible" value="Skin.String(Theme,Light) + Container(504).OnNext + !String.IsEmpty(Container.ListItemNoWrap(-1).FolderPath)"/>
-							<param name="animationtype" value="Hidden"/>
-							<param name="animationeffect" value="zoom"/>
-							<param name="animationend" value="-387,290,765,480"/>
-						</include>
-						<!--Move Icon 0 to -1-->
-						<include content="ListIcon">
-							<param name="left" value="480"/>
-							<param name="top" value="270"/>
-							<param name="width" value="960"/>
-							<param name="height" value="540"/>
-							<param name="texture" value="$VAR[Thumbnail(-1)Content]"/>
-							<param name="visible" value="Container(504).OnNext + !String.IsEmpty(Container.ListItemNoWrap(-1).FolderPath)"/>
-							<param name="animationtype" value="Hidden"/>
-							<param name="animationeffect" value="zoom"/>
-							<param name="animationend" value="-450,293,880,495"/>
-						</include>
-						<!--Move DropShadow 1 to 0-->
-						<include content="DropShadow">
-							<param name="left" value="1548"/>
-							<param name="top" value="300"/>
-							<param name="width" value="765"/>
-							<param name="height" value="480"/>
-							<param name="texture" value="views/dropshadow_strip-fanart.png"/>
-							<param name="visible" value="Skin.String(Theme,Light) + Container(504).OnNext"/>
-							<param name="animationtype" value="Hidden"/>
-							<param name="animationeffect" value="zoom"/>
-							<param name="animationend" value="450,260,1020,640"/>
-						</include>
-						<!--Move Icon 1 to 0-->
-						<include content="ListIcon">
-							<param name="left" value="1490"/>
-							<param name="top" value="293"/>
-							<param name="width" value="880"/>
-							<param name="height" value="495"/>
-							<param name="visible" value="Container(504).OnNext"/>
-							<param name="animationtype" value="Hidden"/>
-							<param name="animationeffect" value="zoom"/>
-							<param name="animationend" value="480,270,960,540"/>
-						</include>
-						<!--Move Icon 2 to 1-->
-						<include content="ListIcon">
-							<param name="left" value="2420"/>
-							<param name="top" value="293"/>
-							<param name="width" value="880"/>
-							<param name="height" value="495"/>
-							<param name="texture" value="$VAR[Thumbnail(1)Content]"/>
-							<param name="visible" value="Container(504).OnNext + !String.IsEmpty(Container.ListItemNoWrap(1).FolderPath)"/>
-							<param name="animationtype" value="Hidden"/>
-							<param name="animationeffect" value="slide"/>
-							<param name="animationend" value="-930,0"/>
-						</include>
-					</control>
-
-					<!--Posters-->
-					<control type="group">
-						<visible>Skin.String(StripView_Display,Posters) + !Container.Content(episodes)</visible>
-						<!--Move Icon -2 to -3-->
-						<include content="ListIcon">
-							<param name="left" value="-80"/>
-							<param name="top" value="232"/>
-							<param name="width" value="370"/>
-							<param name="height" value="555"/>
-							<param name="texture" value="$VAR[Thumbnail(-3)Content]"/>
-							<param name="visible" value="Container(504).OnNext + !String.IsEmpty(Container.ListItemNoWrap(-3).FolderPath)"/>
-							<param name="animationtype" value="Hidden"/>
-							<param name="animationeffect" value="slide"/>
-							<param name="animationend" value="-420,0"/>
-						</include>
-						<!--Move Icon -1 to -2-->
-						<include content="ListIcon">
-							<param name="left" value="340"/>
-							<param name="top" value="232"/>
-							<param name="width" value="370"/>
-							<param name="height" value="555"/>
-							<param name="texture" value="$VAR[Thumbnail(-2)Content]"/>
-							<param name="visible" value="Container(504).OnNext + !String.IsEmpty(Container.ListItemNoWrap(-2).FolderPath)"/>
-							<param name="animationtype" value="Hidden"/>
-							<param name="animationeffect" value="slide"/>
-							<param name="animationend" value="-420,0"/>
-						</include>
-						<!--Move DropShadow 0 to -1-->
-						<include content="DropShadow">
-							<param name="left" value="730"/>
-							<param name="top" value="200"/>
-							<param name="width" value="460"/>
-							<param name="height" value="700"/>
-							<param name="texture" value="views/dropshadow_strip-poster.png"/>
-							<param name="visible" value="Skin.String(Theme,Light) + Container(504).OnNext + !String.IsEmpty(Container.ListItemNoWrap(-1).FolderPath)"/>
-							<param name="animationtype" value="Hidden"/>
-							<param name="animationeffect" value="zoom"/>
-							<param name="animationend" value="352,247,345,525"/>
-						</include>
-						<!--Move Icon 0 to -1-->
-						<include content="ListIcon">
-							<param name="left" value="760"/>
-							<param name="top" value="210"/>
-							<param name="width" value="400"/>
-							<param name="height" value="600"/>
-							<param name="texture" value="$VAR[Thumbnail(-1)Content]"/>
-							<param name="visible" value="Container(504).OnNext + !String.IsEmpty(Container.ListItemNoWrap(-1).FolderPath)"/>
-							<param name="animationtype" value="Hidden"/>
-							<param name="animationeffect" value="zoom"/>
-							<param name="animationend" value="340,232,370,555"/>
-						</include>
-						<!--Move DropShadow 1 to 0-->
-						<include content="DropShadow">
-							<param name="left" value="1222"/>
-							<param name="top" value="247"/>
-							<param name="width" value="345"/>
-							<param name="height" value="525"/>
-							<param name="texture" value="views/dropshadow_strip-poster.png"/>
-							<param name="visible" value="Skin.String(Theme,Light) + Container(504).OnNext"/>
-							<param name="animationtype" value="Hidden"/>
-							<param name="animationeffect" value="zoom"/>
-							<param name="animationend" value="730,200,460,700"/>
-						</include>
-						<!--Move Icon 1 to 0-->
-						<include content="ListIcon">
-							<param name="left" value="1210"/>
-							<param name="top" value="232"/>
-							<param name="width" value="370"/>
-							<param name="height" value="555"/>
-							<param name="visible" value="Container(504).OnNext"/>
-							<param name="animationtype" value="Hidden"/>
-							<param name="animationeffect" value="zoom"/>
-							<param name="animationend" value="760,210,400,600"/>
-						</include>
-						<!--Move Icon 2 to 1-->
-						<include content="ListIcon">
-							<param name="left" value="1630"/>
-							<param name="top" value="232"/>
-							<param name="width" value="370"/>
-							<param name="height" value="555"/>
-							<param name="texture" value="$VAR[Thumbnail(1)Content]"/>
-							<param name="visible" value="Container(504).OnNext + !String.IsEmpty(Container.ListItemNoWrap(1).FolderPath)"/>
-							<param name="animationtype" value="Hidden"/>
-							<param name="animationeffect" value="slide"/>
-							<param name="animationend" value="-420,0"/>
-						</include>
-						<!--Move Icon 3 to 2-->
-						<include content="ListIcon">
-							<param name="left" value="2050"/>
-							<param name="top" value="232"/>
-							<param name="width" value="370"/>
-							<param name="height" value="555"/>
-							<param name="texture" value="$VAR[Thumbnail(2)Content]"/>
-							<param name="visible" value="Container(504).OnNext + !String.IsEmpty(Container.ListItemNoWrap(2).FolderPath)"/>
-							<param name="animationtype" value="Hidden"/>
-							<param name="animationeffect" value="slide"/>
-							<param name="animationend" value="-420,0"/>
-						</include>
-					</control>
+					<visible>[Skin.String(StripView_Display,Posters) | String.IsEmpty(Skin.String(StripView_Display)] + !Container.Content(episodes) + !Container.Content(artists) + !Container.Content(albums)</visible>
+					<!--Move Icon -2 to -3-->
+					<include content="ListIcon">
+						<param name="left" value="-240"/>
+						<param name="top" value="180"/>
+						<param name="width" value="480"/>
+						<param name="height" value="720"/>
+						<param name="texture" value="$VAR[Thumbnail(-3)Content]"/>
+						<param name="visible" value="Container(504).OnNext + !String.IsEmpty(Container.ListItemNoWrap(-3).FolderPath) + Skin.String(StripView_Details,Off)"/>
+						<param name="animationtype" value="Hidden"/>
+						<param name="animationeffect" value="slide"/>
+						<param name="animationend" value="-480,0"/>
+					</include>
+					<!--Move Icon -1 to -2-->
+					<include content="ListIcon">
+						<param name="left" value="240"/>
+						<param name="top" value="180"/>
+						<param name="width" value="480"/>
+						<param name="height" value="720"/>
+						<param name="texture" value="$VAR[Thumbnail(-2)Content]"/>
+						<param name="visible" value="Container(504).OnNext + !String.IsEmpty(Container.ListItemNoWrap(-2).FolderPath) + Skin.String(StripView_Details,Off)"/>
+						<param name="animationtype" value="Hidden"/>
+						<param name="animationeffect" value="slide"/>
+						<param name="animationend" value="-480,0"/>
+					</include>
+					<!--Move Icon 0 to -1-->
+					<include content="ListIcon">
+						<param name="left" value="720"/>
+						<param name="top" value="180"/>
+						<param name="width" value="480"/>
+						<param name="height" value="720"/>
+						<param name="texture" value="$VAR[Thumbnail(-1)Content]"/>
+						<param name="visible" value="Container(504).OnNext + !String.IsEmpty(Container.ListItemNoWrap(-1).FolderPath) + Skin.String(StripView_Details,Off)"/>
+						<param name="animationtype" value="Hidden"/>
+						<param name="animationeffect" value="slide"/>
+						<param name="animationend" value="-480,0"/>
+					</include>
+					<!--Alternative Animation if Details On-->
+					<include content="ListIcon">
+						<param name="left" value="720"/>
+						<param name="top" value="180"/>
+						<param name="width" value="480"/>
+						<param name="height" value="720"/>
+						<param name="texture" value="$VAR[Thumbnail(-1)Content]"/>
+						<param name="visible" value="Container(504).OnNext + !String.IsEmpty(Container.ListItemNoWrap(-1).FolderPath) + !Skin.String(StripView_Details,Off)"/>
+						<param name="animationtype" value="Hidden"/>
+						<param name="animationeffect" value="slide"/>
+						<param name="animationend" value="-1200,0"/>
+					</include>
+					<!--Move Icon 1 to 0-->
+					<include content="ListIcon">
+						<param name="left" value="1200"/>
+						<param name="top" value="180"/>
+						<param name="width" value="480"/>
+						<param name="height" value="720"/>
+						<param name="visible" value="Container(504).OnNext"/>
+						<param name="animationtype" value="Hidden"/>
+						<param name="animationeffect" value="slide"/>
+						<param name="animationend" value="-480,0"/>
+					</include>
+					<!--Move Icon 2 to 1-->
+					<include content="ListIcon">
+						<param name="left" value="1680"/>
+						<param name="top" value="180"/>
+						<param name="width" value="480"/>
+						<param name="height" value="720"/>
+						<param name="texture" value="$VAR[Thumbnail(1)Content]"/>
+						<param name="visible" value="Container(504).OnNext + !String.IsEmpty(Container.ListItemNoWrap(1).FolderPath)"/>
+						<param name="animationtype" value="Hidden"/>
+						<param name="animationeffect" value="slide"/>
+						<param name="animationend" value="-480,0"/>
+					</include>
+					<!--Move Icon 3 to 2-->
+					<include content="ListIcon">
+						<param name="left" value="2160"/>
+						<param name="top" value="180"/>
+						<param name="width" value="480"/>
+						<param name="height" value="720"/>
+						<param name="texture" value="$VAR[Thumbnail(2)Content]"/>
+						<param name="visible" value="Container(504).OnNext + !String.IsEmpty(Container.ListItemNoWrap(2).FolderPath)"/>
+						<param name="animationtype" value="Hidden"/>
+						<param name="animationeffect" value="slide"/>
+						<param name="animationend" value="-480,0"/>
+					</include>
+				</control>
+				<!--Fanart-->
+				<control type="group">
+					<visible>[Skin.String(StripView_Display,Fanart) | Container.Content(episodes)] + !Container.Content(albums)</visible>
+					<animation effect="slide" end="240,0" time="0" condition="!Skin.String(StripView_Details,Off)">Conditional</animation>
+					<!--Move Icon -1 to -2-->
+					<include content="ListIcon">
+						<param name="left" value="-480"/>
+						<param name="top" value="240"/>
+						<param name="width" value="960"/>
+						<param name="height" value="540"/>
+						<param name="texture" value="$VAR[Thumbnail(-2)Content]"/>
+						<param name="visible" value="Container(504).OnNext + !String.IsEmpty(Container.ListItemNoWrap(-2).FolderPath) + Skin.String(StripView_Details,Off)"/>
+						<param name="animationtype" value="Hidden"/>
+						<param name="animationeffect" value="slide"/>
+						<param name="animationend" value="-960,0"/>
+					</include>
+					<!--Move Icon 0 to -1-->
+					<include content="ListIcon">
+						<param name="left" value="480"/>
+						<param name="top" value="240"/>
+						<param name="width" value="960"/>
+						<param name="height" value="540"/>
+						<param name="texture" value="$VAR[Thumbnail(-1)Content]"/>
+						<param name="visible" value="Container(504).OnNext + !String.IsEmpty(Container.ListItemNoWrap(-1).FolderPath) + Skin.String(StripView_Details,Off)"/>
+						<param name="animationtype" value="Hidden"/>
+						<param name="animationeffect" value="slide"/>
+						<param name="animationend" value="-960,0"/>
+					</include>
+					<!--Alternative Animation if Details On-->
+					<include content="ListIcon">
+						<param name="left" value="480"/>
+						<param name="top" value="240"/>
+						<param name="width" value="960"/>
+						<param name="height" value="540"/>
+						<param name="texture" value="$VAR[Thumbnail(-1)Content]"/>
+						<param name="visible" value="Container(504).OnNext + !String.IsEmpty(Container.ListItemNoWrap(-1).FolderPath) + !Skin.String(StripView_Details,Off)"/>
+						<param name="animationtype" value="Hidden"/>
+						<param name="animationeffect" value="slide"/>
+						<param name="animationend" value="-1680,0"/>
+					</include>
+					<!--Move Icon 1 to 0-->
+					<include content="ListIcon">
+						<param name="left" value="1440"/>
+						<param name="top" value="240"/>
+						<param name="width" value="960"/>
+						<param name="height" value="540"/>
+						<param name="visible" value="Container(504).OnNext"/>
+						<param name="animationtype" value="Hidden"/>
+						<param name="animationeffect" value="slide"/>
+						<param name="animationend" value="-960,0"/>
+					</include>
+					<!--Move Icon 2 to 1-->
+					<include content="ListIcon">
+						<param name="left" value="2400"/>
+						<param name="top" value="240"/>
+						<param name="width" value="960"/>
+						<param name="height" value="540"/>
+						<param name="texture" value="$VAR[Thumbnail(1)Content]"/>
+						<param name="visible" value="Container(504).OnNext + !String.IsEmpty(Container.ListItemNoWrap(1).FolderPath)"/>
+						<param name="animationtype" value="Hidden"/>
+						<param name="animationeffect" value="slide"/>
+						<param name="animationend" value="-960,0"/>
+					</include>
+				</control>
+				<!--Square-->
+				<control type="group">
+					<visible>[Skin.String(StripView_Display,Square) | Container.Content(albums)]  + !Container.Content(episodes)</visible>
+					<!--Move Icon -2 to -3-->
+					<include content="ListIcon">
+						<param name="left" value="-390"/>
+						<param name="top" value="240"/>
+						<param name="width" value="540"/>
+						<param name="height" value="540"/>
+						<param name="texture" value="$VAR[Thumbnail(-3)Content]"/>
+						<param name="visible" value="Container(504).OnNext + !String.IsEmpty(Container.ListItemNoWrap(-3).FolderPath) + Skin.String(StripView_Details,Off)"/>
+						<param name="animationtype" value="Hidden"/>
+						<param name="animationeffect" value="slide"/>
+						<param name="animationend" value="-540,0"/>
+					</include>
+					<!--Move Icon -1 to -2-->
+					<include content="ListIcon">
+						<param name="left" value="150"/>
+						<param name="top" value="240"/>
+						<param name="width" value="540"/>
+						<param name="height" value="540"/>
+						<param name="texture" value="$VAR[Thumbnail(-2)Content]"/>
+						<param name="visible" value="Container(504).OnNext + !String.IsEmpty(Container.ListItemNoWrap(-2).FolderPath) + Skin.String(StripView_Details,Off)"/>
+						<param name="animationtype" value="Hidden"/>
+						<param name="animationeffect" value="slide"/>
+						<param name="animationend" value="-540,0"/>
+					</include>
+					<!--Move Icon 0 to -1-->
+					<include content="ListIcon">
+						<param name="left" value="690"/>
+						<param name="top" value="240"/>
+						<param name="width" value="540"/>
+						<param name="height" value="540"/>
+						<param name="texture" value="$VAR[Thumbnail(-1)Content]"/>
+						<param name="visible" value="Container(504).OnNext + !String.IsEmpty(Container.ListItemNoWrap(-1).FolderPath) + Skin.String(StripView_Details,Off)"/>
+						<param name="animationtype" value="Hidden"/>
+						<param name="animationeffect" value="slide"/>
+						<param name="animationend" value="-540,0"/>
+					</include>
+					<!--Alternative Animation if Details On-->
+					<include content="ListIcon">
+						<param name="left" value="690"/>
+						<param name="top" value="240"/>
+						<param name="width" value="540"/>
+						<param name="height" value="540"/>
+						<param name="texture" value="$VAR[Thumbnail(-1)Content]"/>
+						<param name="visible" value="Container(504).OnNext + !String.IsEmpty(Container.ListItemNoWrap(-1).FolderPath) + !Skin.String(StripView_Details,Off)"/>
+						<param name="animationtype" value="Hidden"/>
+						<param name="animationeffect" value="slide"/>
+						<param name="animationend" value="-1230,0"/>
+					</include>
+					<!--Move Icon 1 to 0-->
+					<include content="ListIcon">
+						<param name="left" value="1230"/>
+						<param name="top" value="240"/>
+						<param name="width" value="540"/>
+						<param name="height" value="540"/>
+						<param name="visible" value="Container(504).OnNext"/>
+						<param name="animationtype" value="Hidden"/>
+						<param name="animationeffect" value="slide"/>
+						<param name="animationend" value="-540,0"/>
+					</include>
+					<!--Move Icon 2 to 1-->
+					<include content="ListIcon">
+						<param name="left" value="1770"/>
+						<param name="top" value="240"/>
+						<param name="width" value="540"/>
+						<param name="height" value="540"/>
+						<param name="texture" value="$VAR[Thumbnail(1)Content]"/>
+						<param name="visible" value="Container(504).OnNext + !String.IsEmpty(Container.ListItemNoWrap(1).FolderPath)"/>
+						<param name="animationtype" value="Hidden"/>
+						<param name="animationeffect" value="slide"/>
+						<param name="animationend" value="-540,0"/>
+					</include>
+					<!--Move Icon 3 to 2-->
+					<include content="ListIcon">
+						<param name="left" value="2310"/>
+						<param name="top" value="240"/>
+						<param name="width" value="540"/>
+						<param name="height" value="540"/>
+						<param name="texture" value="$VAR[Thumbnail(2)Content]"/>
+						<param name="visible" value="Container(504).OnNext + !String.IsEmpty(Container.ListItemNoWrap(2).FolderPath)"/>
+						<param name="animationtype" value="Hidden"/>
+						<param name="animationeffect" value="slide"/>
+						<param name="animationend" value="-540,0"/>
+					</include>
 				</control>
 			</control>
 
