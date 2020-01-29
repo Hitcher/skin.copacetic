@@ -7,7 +7,7 @@
 	<defaultcontrol always="true">50</defaultcontrol>
 	<menucontrol>3000</menucontrol>
 	<onload condition="System.HasAddon(script.tv.show.next.aired)">RunScript(script.tv.show.next.aired,backend=True)</onload>
-	<views>50,500,501,502,503,504,505</views>
+	<views>50,500,501,502,504,505</views>
 	<controls>
 
 		<!-- Hidden controls -->
@@ -72,8 +72,11 @@
 
 			<!--Fanart background for 50,501-->
 			<control type="group">
-				<visible>Control.IsVisible(501) | [Control.IsVisible(50) + !Skin.String(ListView_Fanart,Off) + [Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | Container.Content(episodes) | Container.Content(artists)]]</visible>
+				<visible>[Control.IsVisible(501) | [Control.IsVisible(50) + !Skin.String(ListView_Fanart,Off)]] + [Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | Container.Content(episodes) | Container.Content(artists)]</visible>
 				<include>ViewtypeFadeAnimation</include>
+				<control type="image">
+					<texture colordiffuse="$VAR[DarkColor]">views/white_100.png</texture>
+					</control>
 				<include content="ListIcon">
 						<param name="left" value="0"/>
 						<param name="top" value="0"/>
@@ -100,23 +103,31 @@
 			<include>Viewtype_500_Detailed_List</include>
 			<include>Viewtype_501_Billboard</include>
 			<include>Viewtype_502_Showcase</include>
-			<include>Viewtype_503_Gallery</include>
 			<include>Viewtype_504_Strip</include>
 			<include>Viewtype_505_Grid</include>
+
+<!--TEST LABEL
+			<control type="label">
+				<label>$INFO[Container.ViewMode]</label>
+				<font>MusicPlayer_Title</font>
+				<textcolor>$VAR[PrimaryColor]</textcolor>
+				<left>800</left>
+			</control>
+-->
 
 			<!--Scrollbars-->
 			<control type="scrollbar" id="60">
 				<description>Scrollbar vertical</description>
-				<right>25</right>
-				<top>270</top>
-				<width>4</width>
-				<height>540</height>
+				<right>27</right>
+				<top>180</top>
+				<width>6</width>
+				<height>720</height>
 				<onleft>50</onleft>
 				<onright>3000</onright>
 				<showonepage>false</showonepage>
 				<orientation>vertical</orientation>
-				<texturesliderbackground colordiffuse="$VAR[PrimaryColor]">views/white_20.png</texturesliderbackground>
-				<texturesliderbar colordiffuse="$VAR[PrimaryColor]">views/white_20.png</texturesliderbar>
+				<texturesliderbackground colordiffuse="$VAR[ProgressBarBackgroundColor]">views/white_10.png</texturesliderbackground>
+				<texturesliderbar colordiffuse="$VAR[AccentColor]">views/white_100.png</texturesliderbar>
 				<texturesliderbarfocus colordiffuse="$VAR[PrimaryColor]">views/white_100.png</texturesliderbarfocus>
 				<textureslidernib></textureslidernib>
 				<textureslidernibfocus></textureslidernibfocus>
@@ -127,16 +138,16 @@
 			<!--Horizontal Scrollbar-->
 			<control type="scrollbar" id="60">
 				<description>Scrollbar horizontal</description>
-				<left>480</left>
-				<bottom>20</bottom>
-				<width>960</width>
-				<height>4</height>
+				<left>420</left>
+				<bottom>27</bottom>
+				<width>1080</width>
+				<height>6</height>
 				<onup>50</onup>
 				<ondown>3000</ondown>
 				<showonepage>false</showonepage>
 				<orientation>horizontal</orientation>
-				<texturesliderbackground colordiffuse="$VAR[PrimaryColor]">views/white_20.png</texturesliderbackground>
-				<texturesliderbar colordiffuse="$VAR[PrimaryColor]">views/white_20.png</texturesliderbar>
+				<texturesliderbackground colordiffuse="$VAR[ProgressBarBackgroundColor]">views/white_10.png</texturesliderbackground>
+				<texturesliderbar colordiffuse="$VAR[AccentColor]">views/white_100.png</texturesliderbar>
 				<texturesliderbarfocus colordiffuse="$VAR[PrimaryColor]">views/white_100.png</texturesliderbarfocus>
 				<textureslidernib></textureslidernib>
 				<textureslidernibfocus></textureslidernibfocus>
@@ -220,15 +231,6 @@
 						<property name="ActionLeft">Container.PreviousViewMode</property>
 						<property name="ActionRight">Container.NextViewMode</property>
 						<visible>Control.IsVisible(502)</visible>
-					</item>
-					<item>
-						<description>View / Gallery</description>
-						<onclick>SetFocus(503)</onclick>
-						<label>‹ Gallery ›</label>
-						<label2>$LOCALIZE[32100] / Gallery</label2>
-						<property name="ActionLeft">Container.PreviousViewMode</property>
-						<property name="ActionRight">Container.NextViewMode</property>
-						<visible>Control.IsVisible(503)</visible>
 					</item>
 					<item>
 						<description>View / Strip</description>
@@ -499,73 +501,6 @@
 						<property name="ActionLeft">Skin.SetString(ShowcaseView_Logo,Off)</property>
 						<property name="ActionRight">Skin.SetString(ShowcaseView_Logo,Off)</property>
 						<visible>Control.IsVisible(502) + !Skin.String(ShowcaseView_Details,Off) + Skin.String(ShowcaseView_Logo,On) + ![Container.Content(seasons) | Container.Content(episodes)]</visible>
-					</item>
-
-					<!--Gallery View Display-->
-					<item>
-						<description>Display / Fanart</description>
-						<label>‹ Fanart ›</label>
-						<label2>Display / Fanart</label2>
-						<onclick>SetFocus(50)</onclick>
-						<property name="ActionLeft">Skin.SetString(GalleryView_Display,Posters)</property>
-						<property name="ActionRight">Skin.SetString(GalleryView_Display,Posters)</property>
-						<visible>Control.IsVisible(503) + !Container.Content(episodes) + [Skin.String(GalleryView_Display,Fanart) | String.IsEmpty(Skin.String(GalleryView_Display)]</visible>
-					</item>
-					<item>
-						<description>Display / Posters</description>
-						<label>‹ Posters ›</label>
-						<label2>Display / Posters</label2>
-						<onclick>SetFocus(50)</onclick>
-						<property name="ActionLeft">Skin.SetString(GalleryView_Display,Fanart)</property>
-						<property name="ActionRight">Skin.SetString(GalleryView_Display,Fanart)</property>
-						<visible>Control.IsVisible(503) + !Container.Content(episodes) + Skin.String(GalleryView_Display,Posters)</visible>
-					</item>
-
-					<!--Gallery View Details-->
-					<item>
-						<description>Details / Off</description>
-						<label>‹ Off ›</label>
-						<label2>$LOCALIZE[32109] / Off</label2>
-						<onclick>SetFocus(50)</onclick>
-						<property name="ActionLeft">Skin.SetString(GalleryView_Details,All)</property>
-						<property name="ActionRight">Skin.SetString(GalleryView_Details,Title)</property>
-						<visible>Control.IsVisible(503) + Skin.String(GalleryView_Details,Off)</visible>
-					</item>
-					<item>
-						<description>Details / Title</description>
-						<label>‹ Title ›</label>
-						<label2>$LOCALIZE[32109] / Title</label2>
-						<onclick>SetFocus(50)</onclick>
-						<property name="ActionLeft">Skin.SetString(GalleryView_Details,Off)</property>
-						<property name="ActionRight">Skin.SetString(GalleryView_Details,TitleAndInfo)</property>
-						<visible>Control.IsVisible(503) + Skin.String(GalleryView_Details,Title)</visible>
-					</item>
-					<item>
-						<description>Details / Title And Info</description>
-						<label>‹ Title and Info ›</label>
-						<label2>$LOCALIZE[32109] / Title and Info</label2>
-						<onclick>SetFocus(50)</onclick>
-						<property name="ActionLeft">Skin.SetString(GalleryView_Details,Title)</property>
-						<property name="ActionRight">Skin.SetString(GalleryView_Details,TitleAndPlot)</property>
-						<visible>Control.IsVisible(503) + Skin.String(GalleryView_Details,TitleAndInfo)</visible>
-					</item>
-					<item>
-						<description>Details / Title And Plot</description>
-						<label>‹ Title and Plot ›</label>
-						<label2>$LOCALIZE[32109] / Title and Plot</label2>
-						<onclick>SetFocus(50)</onclick>
-						<property name="ActionLeft">Skin.SetString(GalleryView_Details,TitleAndInfo)</property>
-						<property name="ActionRight">Skin.SetString(GalleryView_Details,All)</property>
-						<visible>Control.IsVisible(503) + Skin.String(GalleryView_Details,TitleAndPlot)</visible>
-					</item>
-					<item>
-						<description>Details / All</description>
-						<label>‹ All ›</label>
-						<label2>$LOCALIZE[32109] / All</label2>
-						<onclick>SetFocus(50)</onclick>
-						<property name="ActionLeft">Skin.SetString(GalleryView_Details,TitleAndPlot)</property>
-						<property name="ActionRight">Skin.SetString(GalleryView_Details,Off)</property>
-						<visible>Control.IsVisible(503) + [Skin.String(GalleryView_Details,All) | String.IsEmpty(Skin.String(GalleryView_Details)]</visible>
 					</item>
 
 					<!--Strip View Display-->

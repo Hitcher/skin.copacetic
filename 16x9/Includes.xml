@@ -9,12 +9,14 @@
   <include file="Viewtype_500_Detailed_List.xml" />
 	<include file="Viewtype_501_Billboard.xml" />
 	<include file="Viewtype_502_Showcase.xml" />
-	<include file="Viewtype_503_Gallery.xml" />
 	<include file="Viewtype_504_Strip.xml" />
 	<include file="Viewtype_505_Grid.xml" />
 	<include file="Variables.xml" />
 
   <!--Expressions-->
+
+  <expression name="List_Background_IsVisible">!Skin.String(ListView_Fanart,Off) + [Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | Container.Content(episodes) | Container.Content(artists)]</expression>
+
   <expression name="StripView_Display_Posters">[Skin.String(StripView_Display,Posters) | String.IsEmpty(Skin.String(StripView_Display)] + !Container.Content(episodes) + !Container.Content(artists) + !Container.Content(albums)</expression>
   <expression name="StripView_Display_Fanart">[Skin.String(StripView_Display,Fanart) | Container.Content(episodes)] + !Container.Content(albums)</expression>
   <expression name="StripView_Display_Square">[Skin.String(StripView_Display,Square) | Container.Content(albums)] + !Container.Content(episodes)</expression>
@@ -24,6 +26,9 @@
   <expression name="GridView_Display_Square">Skin.String(GridView_Display,Square) | Container.Content(albums)</expression>
   <expression name="GridView_Details_Enabled">Skin.String(GridView_Details,Title) | Skin.String(GridView_Details,TitleAndInfo)</expression>
   <expression name="GridView_Details_Disabled">Skin.String(GridView_Details,Off) | String.IsEmpty(Skin.String(GridView_Details)</expression>
+
+  <expression name="Volumebar_240_IsVisible">String.IsEqual(Container.ViewMode,Strip)</expression>
+  <expression name="Volumebar_180_IsVisible">!$EXP[Volumebar_240_IsVisible]</expression>
 
 
 
@@ -93,6 +98,10 @@
       <control type="image">
         <aspectratio>stretch</aspectratio>
         <texture colordiffuse="$VAR[SecondaryColor]">views/white_100.png</texture>
+      </control>
+      <control type="image">
+        <visible>$EXP[List_Background_IsVisible]</visible>
+        <texture colordiffuse="$VAR[DarkColor]">views/white_100.png</texture>
       </control>
       <control type="image">
         <visible>Skin.String(Theme,Light)</visible>
@@ -481,7 +490,7 @@
         <control type="image">
 				  <aspectratio align="center">$PARAM[aspectratio]</aspectratio>
 				  <texture background="true">$PARAM[texture]</texture>
-          <!--<texture background="true" colordiffuse="$VAR[AccentColor]">views/white_100.png</texture>-->
+          <texture background="true" colordiffuse="$VAR[AccentColor]">views/white_100.png</texture>
           <fadetime>$PARAM[fadetime]</fadetime>
 			  </control>
         <!--Progress Bar backing overlay-->
@@ -594,7 +603,7 @@
 				</control>
         <!--Sets, TVshows and Episodes-->
         <control type="group">
-          <visible>!String.IsEqual(ListItem.Overlay,OverlayWatched.png) + Integer.IsGreater($NUMBER[Window(home).Property(MyResult)],0) + [[Container.Content(tvshows) | Container.Content(seasons) | ListItem.IsCollection] | [Control.IsVisible(500) + Container.Content(episodes) + !Skin.String(DetailedListView_Display,Square)]]</visible>
+          <visible>!String.IsEqual(ListItem.Overlay,OverlayWatched.png) + Integer.IsGreater($NUMBER[Window(home).Property(MyResult)],0) + [[Container.Content(tvshows) | Container.Content(seasons) | [Control.IsVisible(500) + Container.Content(episodes) + !Skin.String(DetailedListView_Display,Square)]]</visible>
           <!--Background-->
           <control type="image">
   					<width>$PARAM[width]</width>
@@ -668,14 +677,15 @@
 
   <!--ListView Layout-->
   <include name="ListViewLayout">
-    <param name="checkleft" default="57"/>
-    <param name="checktop" default="18"/>
+    <param name="checkleft" default="46"/>
+    <param name="checktop" default="17"/>
     <param name="checkwidth" default="29"/>
     <param name="checkheight" default="21"/>
     <param name="checktexture" default="views/check_unfocused.png"/>
     <param name="labeltype" default="label"/>
-    <param name="labelleft" default="144"/>
-    <param name="font" default="LargeUnfocused"/>
+    <param name="labelleft" default="120"/>
+    <param name="labelmaxwidth" default="720"/>
+    <param name="font" default="List_Title_Unfocused"/>
     <param name="textcolor" default="$VAR[ListUnfocusColor]"/>
     <param name="scroll" default="false"/>
     <definition>
@@ -691,7 +701,7 @@
         </control>
         <control type="$PARAM[labeltype]">
           <left>$PARAM[labelleft]</left>
-          <width max="1075">auto</width>
+          <width max="$PARAM[labelmaxwidth]">auto</width>
           <height>100%</height>
           <aligny>center</aligny>
           <font>$PARAM[font]</font>
@@ -810,7 +820,6 @@
               <scroll>$PARAM[scroll]</scroll>
               <scrollsuffix> / </scrollsuffix>
             </control>
-
           </control>
           <!--Title for folders-->
           <control type="$PARAM[titlelabeltype]">
@@ -1233,6 +1242,98 @@
 			</control>
 		</definition>
 	</include>
+
+  <!--Volumebar-->
+  <include name="Volumebar">
+    <param name="visible" default="false"/>
+    <param name="height" default="240"/>
+    <param name="rotatecenter" default="120,120"/>
+    <param name="progressbarid" default=""/>
+    <param name="progressbarleft" default="60"/>
+    <param name="progressbartop" default="105"/>
+    <definition>
+      <!--Backing-->
+      <control type="group">
+        <visible>$PARAM[visible]</visible>
+        <animation effect="rotate" center="$PARAM[rotatecenter]" end="90" time="0" condition="true" reversible="false">Conditional</animation>
+        <left>0</left>
+        <top>0</top>
+        <width>$PARAM[height]</width>
+        <height>$PARAM[height]</height>
+        <control type="image">
+          <texture colordiffuse="$VAR[DarkGreyColor]">views/white_100.png</texture>
+        </control>
+        <!-- Progressbar -->
+        <control type="progress" id="$PARAM[progressbarid]">
+          <left>$PARAM[progressbarleft]</left>
+          <top>$PARAM[progressbartop]</top>
+          <width>120</width>
+          <height>30</height>
+          <info>player.volume</info>
+          <texturebg colordiffuse="$VAR[LightColor]">views/white_20.png</texturebg>
+          <lefttexture></lefttexture>
+          <midtexture colordiffuse="$VAR[LightColor]">views/white_75.png</midtexture>
+          <righttexture></righttexture>
+          <overlaytexture></overlaytexture>
+          <visible>!Player.Muted</visible>
+        </control>
+      </control>
+    </definition>
+  </include>
+
+  <!--Volume details-->
+  <include name="Volumedetails">
+    <param name="visible" default=""/>
+    <param name="left" default="0"/>
+    <param name="width" default="100%"/>
+    <param name="top" default="0"/>
+    <param name="height" default="240"/>
+    <param name="textalign" default="right"/>
+    <param name="titlelabel" default="13376"/>
+    <param name="infolabel" default="$VAR[VolumeDetails]"/>
+    <definition>
+      <control type="grouplist">
+        <visible>$PARAM[visible]</visible>
+        <left>$PARAM[left]</left>
+        <width>$PARAM[width]</width>
+        <top>$PARAM[top]</top>
+        <height>$PARAM[height]</height>
+        <orientation>vertical</orientation>
+        <align>center</align>
+        <itemgap>0</itemgap>
+        <!-- Title-->
+        <control type="label">
+          <left>0</left>
+          <width>100%</width>
+          <height>48</height>
+          <align>$PARAM[textalign]</align>
+          <scroll>true</scroll>
+          <scrollsuffix> / </scrollsuffix>
+          <font>MusicPlayer_Title</font>
+          <label>$PARAM[titlelabel]</label>
+          <textcolor>$VAR[MusicPlayerTextColor]</textcolor>
+        </control>
+        <!-- Details-->
+        <control type="label">
+          <left>0</left>
+          <width>100%</width>
+          <height>36</height>
+          <align>$PARAM[textalign]</align>
+          <scroll>true</scroll>
+          <scrollsuffix> / </scrollsuffix>
+          <font>MusicPlayer_Info</font>
+          <label>$PARAM[infolabel]</label>
+          <textcolor>$VAR[MusicPlayerTextColor]</textcolor>
+        </control>
+      </control>
+    </definition>
+  </include>
+
+
+
+
+
+
 
 	<!-- Clock -->
 	<include name="Clock">
