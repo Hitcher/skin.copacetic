@@ -14,13 +14,17 @@
 	<include file="Variables.xml" />
 
   <!--Expressions-->
+  <expression name="All_Containers">Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | Container.Content(episodes) | Container.Content(artists) | Container.Content(albums) | Container.Content(songs) | Container.Content(Addons)</expression>
+  <expression name="Fanart_Containers">Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | Container.Content(episodes) | Container.Content(artists)</expression>
 
-  <expression name="List_Background_IsVisible">!Skin.String(ListView_Fanart,Off) + [Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | Container.Content(episodes) | Container.Content(artists)]</expression>
-
+  <expression name="ListView_Background_IsVisible">!Skin.String(ListView_Fanart,Off) + [Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | Container.Content(episodes) | Container.Content(artists)]</expression>
+  <expression name="BillboardView_Details_Info_IsVisible">Skin.String(BillboardView_Details,TitleAndInfo) | Skin.String(BillboardView_Details,All) | String.IsEmpty(Skin.String(BillboardView_Details)</expression>
+  <expression name="BillboardView_Details_Plot_IsVisible">Skin.String(BillboardView_Details,TitleAndPlot) | Skin.String(BillboardView_Details,All) | String.IsEmpty(Skin.String(BillboardView_Details)</expression>
+  <expression name="ShowcaseView_Display_Posters">Skin.String(ShowcaseView_Display,Posters) + !Container.Content(episodes) + !Container.Content(albums)</expression>
+  <expression name="ShowcaseView_Display_Square">Skin.String(ShowcaseView_Display,Square) | Container.Content(episodes) | Container.Content(albums) | String.IsEmpty(Skin.String(ShowcaseView_Display)</expression>
   <expression name="StripView_Display_Posters">[Skin.String(StripView_Display,Posters) | String.IsEmpty(Skin.String(StripView_Display)] + !Container.Content(episodes) + !Container.Content(artists) + !Container.Content(albums)</expression>
   <expression name="StripView_Display_Fanart">[Skin.String(StripView_Display,Fanart) | Container.Content(episodes)] + !Container.Content(albums)</expression>
   <expression name="StripView_Display_Square">[Skin.String(StripView_Display,Square) | Container.Content(albums)] + !Container.Content(episodes)</expression>
-
   <expression name="GridView_Display_Fanart">Skin.String(GridView_Display,Fanart) | String.IsEmpty(Skin.String(GridView_Display) | Container.Content(episodes)</expression>
   <expression name="GridView_Display_Posters">Skin.String(GridView_Display,Posters) + !Container.Content(episodes) + !Container.Content(albums)</expression>
   <expression name="GridView_Display_Square">Skin.String(GridView_Display,Square) | Container.Content(albums)</expression>
@@ -29,8 +33,7 @@
 
   <expression name="Volumebar_240_IsVisible">String.IsEqual(Container.ViewMode,Strip)</expression>
   <expression name="Volumebar_180_IsVisible">!$EXP[Volumebar_240_IsVisible]</expression>
-
-
+  <expression name="DialogVisible">Control.IsVisible(3000) | Window.IsVisible(contextmenu) | Window.IsVisible(shutdownmenu) | Window.IsVisible(selectdialog) | Window.IsVisible(okdialog) | Window.IsTopMost(yesnodialog) | Window.IsVisible(movieinformation)</expression>
 
 	<!-- Fullscreen dimensions -->
 	<include name="FullscreenDimensions">
@@ -79,7 +82,6 @@
       </definition>
 	</include>
 
-
 	<include name="ViewtypeOverlay">
 		<control type="image">
 			<texture colordiffuse="$VAR[DarkColor]">$VAR[ViewtypeOverlayTexture]</texture>
@@ -100,7 +102,7 @@
         <texture colordiffuse="$VAR[SecondaryColor]">views/white_100.png</texture>
       </control>
       <control type="image">
-        <visible>$EXP[List_Background_IsVisible]</visible>
+        <visible>Control.IsVisible(50) + $EXP[ListView_Background_IsVisible]</visible>
         <texture colordiffuse="$VAR[DarkColor]">views/white_100.png</texture>
       </control>
       <control type="image">
@@ -565,7 +567,7 @@
 	<!--Progress bar-->
 	<include name="ProgressBar">
 		<param name="visible" default="![Control.HasFocus(60) + [Control.IsVisible(50) | Control.IsVisible(501) | Control.IsVisible(502)]]"/>
-		<param name="left"/>
+		<param name="left" default="780"/>
 		<param name="top" default="1047"/>
     <param name="bottom"/>
 		<param name="width" default="360"/>
@@ -603,7 +605,7 @@
 				</control>
         <!--Sets, TVshows and Episodes-->
         <control type="group">
-          <visible>!String.IsEqual(ListItem.Overlay,OverlayWatched.png) + Integer.IsGreater($NUMBER[Window(home).Property(MyResult)],0) + [[Container.Content(tvshows) | Container.Content(seasons) | [Control.IsVisible(500) + Container.Content(episodes) + !Skin.String(DetailedListView_Display,Square)]]</visible>
+          <visible>!String.IsEqual(ListItem.Overlay,OverlayWatched.png) + Integer.IsGreater($NUMBER[Window(home).Property(MyResult)],0) + [Container.Content(tvshows) | Container.Content(seasons) | [Control.IsVisible(500) + Container.Content(episodes) + !Skin.String(DetailedListView_Display,Square)]]</visible>
           <!--Background-->
           <control type="image">
   					<width>$PARAM[width]</width>
@@ -1160,7 +1162,7 @@
 	<!--Common View Details-->
 	<include name="CommonViewDetails">
 		<param name="groupvisibility" default="!Skin.String(ShowcaseView_Details,Off) + [Skin.String(ShowcaseView_Logo,Off) | String.IsEmpty(ListItem.Art(clearlogo))]"/>
-		<param name="left" default="960"/>
+		<param name="left" default="1140"/>
 		<param name="bottom" default="180"/>
 		<param name="width" default="720"/>
 		<param name="height" default="720"/>
@@ -1168,17 +1170,17 @@
     <param name="itemgap" default="0"/>
 		<param name="labeltype" default="textbox"/>
 		<param name="titlevisibility" default="true"/>
-		<param name="titleheight" default="156"/>
+		<param name="titleheight" default="180"/>
 		<param name="titlefont" default="Showcase_Title"/>
     <param name="titlecolor" default="$VAR[PrimaryColor]"/>
 		<param name="titlealign" default="left"/>
 		<param name="logovisibility" default="false"/>
 		<param name="infovisibility" default="Skin.String(ShowcaseView_Details,TitleAndInfo) | Skin.String(ShowcaseView_Details,All) | String.IsEmpty(Skin.String(ShowcaseView_Details)"/>
-		<param name="infoheight" default="70"/>
     <param name="titleinfogap" default="5"/>
+    <param name="infoheight" default="35"/>
 		<param name="infofont" default="Showcase_Info"/>
 		<param name="plotvisibility" default="Skin.String(ShowcaseView_Details,TitleAndPlot) | Skin.String(ShowcaseView_Details,All) | String.IsEmpty(Skin.String(ShowcaseView_Details)"/>"
-		<param name="plotmaxheight" default="198"/>
+		<param name="plotmaxheight" default="240"/>
     <param name="infoplotgap" default="60"/>
 		<param name="plotfont" default="Body"/>
     <param name="plotcolor" default="$VAR[TertiaryColor]"/>
@@ -1276,6 +1278,14 @@
           <righttexture></righttexture>
           <overlaytexture></overlaytexture>
           <visible>!Player.Muted</visible>
+        </control>
+        <control type="image">
+          <visible>Player.Muted</visible>
+          <left>$PARAM[progressbarleft]</left>
+          <top>$PARAM[progressbartop]</top>
+          <width>120</width>
+          <height>30</height>
+          <texture colordiffuse="$VAR[AccentColor]">views/white_100.png</texture>
         </control>
       </control>
     </definition>
