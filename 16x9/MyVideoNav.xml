@@ -6,7 +6,6 @@
 	<include>WindowFadeAnimation</include>
 	<defaultcontrol always="true">50</defaultcontrol>
 	<menucontrol>3000</menucontrol>
-	<onload condition="System.HasAddon(script.tv.show.next.aired)">RunScript(script.tv.show.next.aired,backend=True)</onload>
 	<views>50,500,501,502,504,505</views>
 	<controls>
 
@@ -108,7 +107,7 @@
 
 <!--TEST LABEL
 			<control type="label">
-				<label>$INFO[Container.ViewMode]</label>
+				<label>$INFO[window(Home).property(OptionsMenu)]</label>
 				<font>MusicPlayer_Title</font>
 				<textcolor>$VAR[PrimaryColor]</textcolor>
 				<left>800</left>
@@ -164,14 +163,17 @@
 			<include>OptionsMenuFadeAnimation</include>
 			<control type="fixedlist" id="3000">
 				<viewtype label="535">list</viewtype>
-				<visible allowhiddenfocus="true">Control.HasFocus(3000)</visible>
 				<description>Options menu</description>
-				<left>120</left>
+				<visible allowhiddenfocus="true">!Window.IsVisible(shutdownmenu)</visible>
+				<include>ContentFadeAnimation</include>
+				<left>120</left>\
 				<top>240</top>
 				<width>1080</width>
 				<height>620</height>
 				<onup>0</onup>
 				<ondown>0</ondown>
+				<onfocus>SetProperty(OptionsMenu,Active,Home)</onfocus>
+				<onunfocus condition="!String.IsEmpty(window(Home).property(OptionsMenu))">ClearProperty(OptionsMenu,Home)</onunfocus>
 				<onback>50</onback>
 				<onleft condition="String.IsEmpty(Container(3000).ListItem.Property(ActionLeft))">50</onleft>
 				<onright condition="String.IsEmpty(Container(3000).ListItem.Property(ActionRight))">50</onright>
@@ -259,7 +261,7 @@
 						<onclick>SetFocus(50)</onclick>
 						<property name="ActionLeft">Skin.SetString(ListView_Details,TitleAndInfo)</property>
 						<property name="ActionRight">Skin.SetString(ListView_Details,TitleAndInfo)</property>
-						<visible>Control.IsVisible(50) + [Skin.String(ListView_Details,Title) | String.IsEmpty(Skin.String(ListView_Details)] + !Container.Content()</visible>
+						<visible>Control.IsVisible(50) + [Skin.String(ListView_Details,Title) | String.IsEmpty(Skin.String(ListView_Details))] + !Container.Content()</visible>
 					</item>
 					<item>
 						<description>Details / Title and Info</description>
@@ -279,7 +281,7 @@
 						<onclick>SetFocus(50)</onclick>
 						<property name="ActionLeft">Skin.SetString(ListView_Fanart,Off)</property>
 						<property name="ActionRight">Skin.SetString(ListView_Fanart,Off)</property>
-						<visible>Control.IsVisible(50) + [Skin.String(ListView_Fanart,On) | String.IsEmpty(Skin.String(ListView_Fanart)] + !Container.Content() + !Container.Content(Files)</visible>
+						<visible>Control.IsVisible(50) + [Skin.String(ListView_Fanart,On) | String.IsEmpty(Skin.String(ListView_Fanart))] + !Container.Content() + !Container.Content(Files)</visible>
 					</item>
 					<item>
 						<description>Fanart / Off</description>
@@ -299,7 +301,7 @@
 						<onclick>SetFocus(50)</onclick>
 						<property name="ActionLeft">Skin.SetString(DetailedListView_Display,Square)</property>
 						<property name="ActionRight">Skin.SetString(DetailedListView_Display,Posters)</property>
-						<visible>Control.IsVisible(500) + [Skin.String(DetailedListView_Display,Fanart) | String.IsEmpty(Skin.String(DetailedListView_Display)] + [Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | Container.Content(episodes)]</visible>
+						<visible>Control.IsVisible(500) + [Skin.String(DetailedListView_Display,Fanart) | String.IsEmpty(Skin.String(DetailedListView_Display))] + [Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | Container.Content(episodes)]</visible>
 					</item>
 					<item>
 						<description>Display / Posters</description>
@@ -346,7 +348,7 @@
 						<onclick>SetFocus(50)</onclick>
 						<property name="ActionLeft">Skin.SetString(DetailedListView_Details,Title)</property>
 						<property name="ActionRight">Skin.SetString(DetailedListView_Details,Title)</property>
-						<visible>Control.IsVisible(500) + [Skin.String(DetailedListView_Details,TitleAndinfo) | String.IsEmpty(Skin.String(DetailedListView_Details)]</visible>
+						<visible>Control.IsVisible(500) + [Skin.String(DetailedListView_Details,TitleAndinfo) | String.IsEmpty(Skin.String(DetailedListView_Details))]</visible>
 					</item>
 
 					<!--Billboard View Details-->
@@ -393,7 +395,7 @@
 						<onclick>SetFocus(50)</onclick>
 						<property name="ActionLeft">Skin.SetString(BillboardView_Details,TitleAndPlot)</property>
 						<property name="ActionRight">Skin.SetString(BillboardView_Details,Off)</property>
-						<visible>Control.IsVisible(501) + [Skin.String(BillboardView_Details,All) | String.IsEmpty(Skin.String(BillboardView_Details)]</visible>
+						<visible>Control.IsVisible(501) + [Skin.String(BillboardView_Details,All) | String.IsEmpty(Skin.String(BillboardView_Details))]</visible>
 					</item>
 
 					<!--Billboard View Logo-->
@@ -404,7 +406,7 @@
 						<onclick>SetFocus(50)</onclick>
 						<property name="ActionLeft">Skin.SetString(BillboardView_Logo,On)</property>
 						<property name="ActionRight">Skin.SetString(BillboardView_Logo,On)</property>
-						<visible>Control.IsVisible(501) + [!Skin.String(BillboardView_Details,Off) + Skin.String(BillboardView_Logo,Off) + ![Container.Content(seasons) | Container.Content(episodes)] | String.IsEmpty(Skin.String(BillboardView_Logo)]</visible>
+						<visible>Control.IsVisible(501) + [!Skin.String(BillboardView_Details,Off) + Skin.String(BillboardView_Logo,Off) + ![Container.Content(seasons) | Container.Content(episodes)] | String.IsEmpty(Skin.String(BillboardView_Logo))]</visible>
 					</item>
 					<item>
 						<description>Logo / On</description>
@@ -424,7 +426,7 @@
 						<onclick>SetFocus(50)</onclick>
 						<property name="ActionLeft">Skin.SetString(ShowcaseView_Display,Posters)</property>
 						<property name="ActionRight">Skin.SetString(ShowcaseView_Display,Posters)</property>
-						<visible>Control.IsVisible(502) + !Container.Content(episodes) + [Skin.String(ShowcaseView_Display,Square) | String.IsEmpty(Skin.String(ShowcaseView_Display)]</visible>
+						<visible>Control.IsVisible(502) + !Container.Content(episodes) + [Skin.String(ShowcaseView_Display,Square) | String.IsEmpty(Skin.String(ShowcaseView_Display))]</visible>
 					</item>
 					<item>
 						<description>Display / Posters</description>
@@ -480,7 +482,7 @@
 						<onclick>SetFocus(50)</onclick>
 						<property name="ActionLeft">Skin.SetString(ShowcaseView_Details,TitleAndPlot)</property>
 						<property name="ActionRight">Skin.SetString(ShowcaseView_Details,Off)</property>
-						<visible>Control.IsVisible(502) + [Skin.String(ShowcaseView_Details,All) | String.IsEmpty(Skin.String(ShowcaseView_Details)]</visible>
+						<visible>Control.IsVisible(502) + [Skin.String(ShowcaseView_Details,All) | String.IsEmpty(Skin.String(ShowcaseView_Details))]</visible>
 					</item>
 
 					<!--Showcase View Logo-->
@@ -491,7 +493,7 @@
 						<onclick>SetFocus(50)</onclick>
 						<property name="ActionLeft">Skin.SetString(ShowcaseView_Logo,On)</property>
 						<property name="ActionRight">Skin.SetString(ShowcaseView_Logo,On)</property>
-						<visible>Control.IsVisible(502) + [!Skin.String(ShowcaseView_Details,Off) + Skin.String(ShowcaseView_Logo,Off) + ![Container.Content(seasons) | Container.Content(episodes)] | String.IsEmpty(Skin.String(ShowcaseView_Logo)]</visible>
+						<visible>Control.IsVisible(502) + [!Skin.String(ShowcaseView_Details,Off) + Skin.String(ShowcaseView_Logo,Off) + ![Container.Content(seasons) | Container.Content(episodes)] | String.IsEmpty(Skin.String(ShowcaseView_Logo))]</visible>
 					</item>
 					<item>
 						<description>Logo / On</description>
@@ -511,7 +513,7 @@
 						<onclick>SetFocus(50)</onclick>
 						<property name="ActionLeft">Skin.SetString(StripView_Display,Square)</property>
 						<property name="ActionRight">Skin.SetString(StripView_Display,Fanart)</property>
-						<visible>Control.IsVisible(504) + !Container.Content(episodes) + !Container.Content(artists) + !Container.Content(albums) + [Skin.String(StripView_Display,Posters) |	String.IsEmpty(Skin.String(StripView_Display)]</visible>
+						<visible>Control.IsVisible(504) + !Container.Content(episodes) + !Container.Content(artists) + !Container.Content(albums) + [Skin.String(StripView_Display,Posters) |	String.IsEmpty(Skin.String(StripView_Display))]</visible>
 					</item>
 					<item>
 						<description>Display / Fanart</description>
@@ -596,7 +598,7 @@
 						<onclick>SetFocus(50)</onclick>
 						<property name="ActionLeft">Skin.SetString(StripView_Details,TitleAndPlot)</property>
 						<property name="ActionRight">Skin.SetString(StripView_Details,Off)</property>
-						<visible>Control.IsVisible(504) + [Skin.String(StripView_Details,All) | String.IsEmpty(Skin.String(StripView_Details)]</visible>
+						<visible>Control.IsVisible(504) + [Skin.String(StripView_Details,All) | String.IsEmpty(Skin.String(StripView_Details))]</visible>
 					</item>
 
 					<!--Grid View Display-->
@@ -607,7 +609,7 @@
 						<onclick>SetFocus(50)</onclick>
 						<property name="ActionLeft">Skin.SetString(GridView_Display,Square)</property>
 						<property name="ActionRight">Skin.SetString(GridView_Display,Posters)</property>
-						<visible>Control.IsVisible(505) + !Container.Content(episodes) + !Container.Content(albums) + [Skin.String(GridView_Display,Fanart) | String.IsEmpty(Skin.String(GridView_Display)]</visible>
+						<visible>Control.IsVisible(505) + !Container.Content(episodes) + !Container.Content(albums) + [Skin.String(GridView_Display,Fanart) | String.IsEmpty(Skin.String(GridView_Display))]</visible>
 					</item>
 					<item>
 						<description>Display / Posters</description>
@@ -654,7 +656,7 @@
 						<onclick>SetFocus(50)</onclick>
 						<property name="ActionLeft">Skin.SetString(GridView_Details,Title)</property>
 						<property name="ActionRight">Skin.SetString(GridView_Details,Off)</property>
-						<visible>Control.IsVisible(505) + [Skin.String(GridView_Details,TitleAndInfo) | String.IsEmpty(Skin.String(GridView_Details)]</visible>
+						<visible>Control.IsVisible(505) + [Skin.String(GridView_Details,TitleAndInfo) | String.IsEmpty(Skin.String(GridView_Details))]</visible>
 					</item>
 
 					<!--Flags-->
@@ -692,7 +694,7 @@
 						<onclick>SetFocus(50)</onclick>
 						<property name="ActionLeft">Skin.SetString(Flags,Rating)</property>
 						<property name="ActionRight">Skin.SetString(Flags,Off)</property>
-						<visible>[Skin.String(Flags,All) | String.IsEmpty(Skin.String(Flags)] + !Control.IsVisible(505) + !Control.IsVisible(500) + !Container.Content() + !Container.Content(Files)</visible>
+						<visible>[Skin.String(Flags,All) | String.IsEmpty(Skin.String(Flags))] + !Control.IsVisible(505) + !Control.IsVisible(500) + !Container.Content() + !Container.Content(Files)</visible>
 					</item>
 
 					<!-- Sort / Name -->

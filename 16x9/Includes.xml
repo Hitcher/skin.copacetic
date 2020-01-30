@@ -18,22 +18,26 @@
   <expression name="Fanart_Containers">Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | Container.Content(episodes) | Container.Content(artists)</expression>
 
   <expression name="ListView_Background_IsVisible">!Skin.String(ListView_Fanart,Off) + [Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | Container.Content(episodes) | Container.Content(artists)]</expression>
-  <expression name="BillboardView_Details_Info_IsVisible">Skin.String(BillboardView_Details,TitleAndInfo) | Skin.String(BillboardView_Details,All) | String.IsEmpty(Skin.String(BillboardView_Details)</expression>
-  <expression name="BillboardView_Details_Plot_IsVisible">Skin.String(BillboardView_Details,TitleAndPlot) | Skin.String(BillboardView_Details,All) | String.IsEmpty(Skin.String(BillboardView_Details)</expression>
+  <expression name="ListView_Details_Info_IsVisible">Skin.String(ListView_Details,TitleAndInfo)</expression>
+  <expression name="BillboardView_Details_Info_IsVisible">Skin.String(BillboardView_Details,TitleAndInfo) | Skin.String(BillboardView_Details,All) | String.IsEmpty(Skin.String(BillboardView_Details))</expression>
+  <expression name="BillboardView_Details_Plot_IsVisible">Skin.String(BillboardView_Details,TitleAndPlot) | Skin.String(BillboardView_Details,All) | String.IsEmpty(Skin.String(BillboardView_Details))</expression>
   <expression name="ShowcaseView_Display_Posters">Skin.String(ShowcaseView_Display,Posters) + !Container.Content(episodes) + !Container.Content(albums)</expression>
-  <expression name="ShowcaseView_Display_Square">Skin.String(ShowcaseView_Display,Square) | Container.Content(episodes) | Container.Content(albums) | String.IsEmpty(Skin.String(ShowcaseView_Display)</expression>
-  <expression name="StripView_Display_Posters">[Skin.String(StripView_Display,Posters) | String.IsEmpty(Skin.String(StripView_Display)] + !Container.Content(episodes) + !Container.Content(artists) + !Container.Content(albums)</expression>
+  <expression name="ShowcaseView_Display_Square">Skin.String(ShowcaseView_Display,Square) | Container.Content(episodes) | Container.Content(albums) | String.IsEmpty(Skin.String(ShowcaseView_Display))</expression>
+  <expression name="ShowcaseView_Details_Info_IsVisible">Skin.String(ShowcaseView_Details,TitleAndInfo) | Skin.String(ShowcaseView_Details,All) | String.IsEmpty(Skin.String(ShowcaseView_Details))</expression>
+  <expression name="ShowcaseView_Details_Logo_IsVisible">Skin.String(ShowcaseView_Logo,On) + !String.IsEmpty(ListItem.Art(clearlogo))</expression>
+  <expression name="StripView_Display_Posters">[Skin.String(StripView_Display,Posters) | String.IsEmpty(Skin.String(StripView_Display))] + !Container.Content(episodes) + !Container.Content(artists) + !Container.Content(albums)</expression>
   <expression name="StripView_Display_Fanart">[Skin.String(StripView_Display,Fanart) | Container.Content(episodes)] + !Container.Content(albums)</expression>
   <expression name="StripView_Display_Square">[Skin.String(StripView_Display,Square) | Container.Content(albums)] + !Container.Content(episodes)</expression>
-  <expression name="GridView_Display_Fanart">Skin.String(GridView_Display,Fanart) | String.IsEmpty(Skin.String(GridView_Display) | Container.Content(episodes)</expression>
+  <expression name="StripView_Details_Info_IsVisible">Skin.String(StripView_Details,TitleAndInfo) | Skin.String(StripView_Details,All) | String.IsEmpty(Skin.String(StripView_Details))</expression>
+  <expression name="GridView_Display_Fanart">Skin.String(GridView_Display,Fanart) | String.IsEmpty(Skin.String(GridView_Display)) | Container.Content(episodes)</expression>
   <expression name="GridView_Display_Posters">Skin.String(GridView_Display,Posters) + !Container.Content(episodes) + !Container.Content(albums)</expression>
   <expression name="GridView_Display_Square">Skin.String(GridView_Display,Square) | Container.Content(albums)</expression>
   <expression name="GridView_Details_Enabled">Skin.String(GridView_Details,Title) | Skin.String(GridView_Details,TitleAndInfo)</expression>
-  <expression name="GridView_Details_Disabled">Skin.String(GridView_Details,Off) | String.IsEmpty(Skin.String(GridView_Details)</expression>
+  <expression name="GridView_Details_Disabled">Skin.String(GridView_Details,Off) | String.IsEmpty(Skin.String(GridView_Details))</expression>
 
   <expression name="Volumebar_240_IsVisible">String.IsEqual(Container.ViewMode,Strip)</expression>
   <expression name="Volumebar_180_IsVisible">!$EXP[Volumebar_240_IsVisible]</expression>
-  <expression name="DialogVisible">Control.IsVisible(3000) | Window.IsVisible(contextmenu) | Window.IsVisible(shutdownmenu) | Window.IsVisible(selectdialog) | Window.IsVisible(okdialog) | Window.IsTopMost(yesnodialog) | Window.IsVisible(movieinformation)</expression>
+  <expression name="DialogVisible">Control.IsVisible(3000) | String.IsEqual(window(home).property(OptionsMenu),Active) | Window.IsVisible(contextmenu) | Window.IsVisible(shutdownmenu) | Window.IsVisible(selectdialog) | Window.IsVisible(okdialog) | Window.IsTopMost(yesnodialog) | Window.IsVisible(movieinformation)</expression>
 
 	<!-- Fullscreen dimensions -->
 	<include name="FullscreenDimensions">
@@ -475,7 +479,7 @@
     <param name="animationtype" default=""/>
     <param name="animationeffect" default=""/>
     <param name="animationend" default=""/>
-    <param name="animationcondition" default=""/>
+    <param name="animationcondition" default="false"/>
     <param name="aspectratio" default="scale"/>
 		<param name="texture" default="$VAR[Thumbnail(0)Content]"/>
     <param name="fadetime" default="0"/>
@@ -521,6 +525,7 @@
     <param name="texture" default="views/dropshadow_left_120.png"/>
     <param name="visible" default="true"/>
     <param name="animationtype" default=""/>
+    <param name="animationcondition" default="false"/>
     <param name="animationeffect" default=""/>
     <param name="animationend" default=""/>
     <param name="animationtime" default="380"/>
@@ -557,16 +562,15 @@
     <control type="button">
       <visible allowhiddenfocus="true">false</visible>
       <animation effect="slide" end="0,0" time="380" reversible="false">Focus</animation>
-      <onfocus condition="System.HasAddon(script.embuary.helper) + !String.IsEqual(ListItem.Overlay,OverlayWatched.png) + [Container.Content(tvshows) | Container.Content(seasons)]">RunScript(script.embuary.helper,action=calc,do='"($INFO[ListItem.Property(WatchedEpisodes)] / $INFO[ListItem.Property(TotalEpisodes)]) * 100"',prop=MyResult)</onfocus>
-      <onfocus condition="System.HasAddon(script.embuary.helper) + [Control.IsVisible(500) + Container.Content(episodes) + !Skin.String(DetailedListView_Display,Square)]">RunScript(script.embuary.helper,action=calc,do='"($INFO[Container.TotalWatched] / $INFO[Container.NumItems]) * 100"',prop=MyResult)</onfocus>
-      <onunfocus condition="!String.IsEmpty($INFO[window(home).property(myresult)">ClearProperty(MyResult,home)</onunfocus>
-      <!--<onfocus condition="System.HasAddon(script.embuary.helper) + !String.IsEqual(ListItem.Overlay,OverlayWatched.png) + ListItem.IsCollection">RunScript(script.embuary.helper,action=calc,do='"($INFO[Container(4500).TotalWatched]] / $INFO[Container(4500).NumItems]) * 100"',prop=MyResult)</onfocus>-->
+      <onfocus condition="System.HasAddon(script.embuary.helper) + !String.IsEmpty(ListItem.Label) + !String.IsEqual(ListItem.Overlay,OverlayWatched.png) + [Container.Content(tvshows) | Container.Content(seasons)]">RunScript(script.embuary.helper,action=calc,do='"($INFO[ListItem.Property(WatchedEpisodes)] / $INFO[ListItem.Property(TotalEpisodes)]) * 100"',prop=MyResult)</onfocus>
+      <onfocus condition="System.HasAddon(script.embuary.helper) + !String.IsEmpty(ListItem.Label) + [Control.IsVisible(500) + Container.Content(episodes) + !Skin.String(DetailedListView_Display,Square)]">RunScript(script.embuary.helper,action=calc,do='"($INFO[Container.TotalWatched] / $INFO[Container.NumItems]) * 100"',prop=MyResult)</onfocus>
+      <onunfocus condition="!String.IsEmpty(Window(Home).Property(MyResult))">ClearProperty(MyResult,home)</onunfocus>
     </control>
   </include>
 
 	<!--Progress bar-->
 	<include name="ProgressBar">
-		<param name="visible" default="![Control.HasFocus(60) + [Control.IsVisible(50) | Control.IsVisible(501) | Control.IsVisible(502)]]"/>
+		<param name="visible" default="!Control.HasFocus(60)"/>
 		<param name="left" default="780"/>
 		<param name="top" default="1047"/>
     <param name="bottom"/>
@@ -645,7 +649,7 @@
 
 	<!--Media Flags-->
 	<include name="MediaFlags">
-		<param name="groupvisible" default="!Skin.String(Flags,Off) + !Control.IsVisible(505) + !Control.IsVisible(500)"/>
+		<param name="groupvisible" default="!Skin.String(Flags,Off) + !Control.IsVisible(505) + !Control.IsVisible(500) + !Control.HasFocus(60)"/>
 		<definition>
 			<control type="group">
 				<include>HideContent</include>
@@ -653,7 +657,7 @@
 				<control type="group">
 					<!--Studio-->
 					<control type="image" id="914">
-						<visible>Skin.String(Flags,All) | Skin.String(Flags,Studio) | String.IsEmpty(Skin.String(Flags)</visible>
+						<visible>Skin.String(Flags,All) | Skin.String(Flags,Studio) | String.IsEmpty(Skin.String(Flags))</visible>
 						<left>1605</left>
 						<top>960</top>
 						<width>90</width>
@@ -664,7 +668,7 @@
 					</control>
 					<!--MPAA flag-->
 					<control type="image" id="915">
-						<visible>Skin.String(Flags,All) | Skin.String(Flags,Rating) | String.IsEmpty(Skin.String(Flags)</visible>
+						<visible>Skin.String(Flags,All) | Skin.String(Flags,Rating) | String.IsEmpty(Skin.String(Flags))</visible>
 						<left>1785</left>
 						<top>960</top>
 						<width>90</width>
@@ -684,7 +688,6 @@
     <param name="checkwidth" default="29"/>
     <param name="checkheight" default="21"/>
     <param name="checktexture" default="views/check_unfocused.png"/>
-    <param name="labeltype" default="label"/>
     <param name="labelleft" default="120"/>
     <param name="labelmaxwidth" default="720"/>
     <param name="font" default="List_Title_Unfocused"/>
@@ -701,7 +704,7 @@
           <texture colordiffuse="$PARAM[textcolor]">$PARAM[checktexture]</texture>
           <visible>String.IsEqual(ListItem.Overlay,OverlayWatched.png)</visible>
         </control>
-        <control type="$PARAM[labeltype]">
+        <control type="label">
           <left>$PARAM[labelleft]</left>
           <width max="$PARAM[labelmaxwidth]">auto</width>
           <height>100%</height>
@@ -794,7 +797,7 @@
           </control>
           <!--Title -->
           <control type="group">
-            <visible>!String.IsEmpty(ListItem.Art(Thumb)</visible>
+            <visible>!String.IsEmpty(ListItem.Art(Thumb))</visible>
             <control type="$PARAM[titlelabeltype]">
               <animation effect="slide" end="0,13" time="0" condition="Skin.String(DetailedListView_Details,Title) | ListItem.IsCollection">Conditional</animation>
               <left>$PARAM[titleleft]</left>
@@ -825,7 +828,7 @@
           </control>
           <!--Title for folders-->
           <control type="$PARAM[titlelabeltype]">
-            <visible>String.IsEmpty(ListItem.Art(Thumb)</visible>
+            <visible>String.IsEmpty(ListItem.Art(Thumb))</visible>
             <left>169</left>
             <top>46</top>
             <width>$PARAM[titlewidth]</width>
@@ -844,7 +847,7 @@
           <left>$PARAM[height]</left>
           <width>256</width>
           <height>$PARAM[height]</height>
-          <visible>!String.IsEmpty(ListItem.Art(Thumb)</visible>
+          <visible>!String.IsEmpty(ListItem.Art(Thumb))</visible>
           <include content="ListIcon">
             <param name="aspectratio" value="scale"/>
             <param name="backgroundvisible" value="false"/>
@@ -1175,11 +1178,11 @@
     <param name="titlecolor" default="$VAR[PrimaryColor]"/>
 		<param name="titlealign" default="left"/>
 		<param name="logovisibility" default="false"/>
-		<param name="infovisibility" default="Skin.String(ShowcaseView_Details,TitleAndInfo) | Skin.String(ShowcaseView_Details,All) | String.IsEmpty(Skin.String(ShowcaseView_Details)"/>
+		<param name="infovisibility" default="Skin.String(ShowcaseView_Details,TitleAndInfo) | Skin.String(ShowcaseView_Details,All) | String.IsEmpty(Skin.String(ShowcaseView_Details))"/>
     <param name="titleinfogap" default="5"/>
     <param name="infoheight" default="35"/>
 		<param name="infofont" default="Showcase_Info"/>
-		<param name="plotvisibility" default="Skin.String(ShowcaseView_Details,TitleAndPlot) | Skin.String(ShowcaseView_Details,All) | String.IsEmpty(Skin.String(ShowcaseView_Details)"/>"
+		<param name="plotvisibility" default="Skin.String(ShowcaseView_Details,TitleAndPlot) | Skin.String(ShowcaseView_Details,All) | String.IsEmpty(Skin.String(ShowcaseView_Details))"/>
 		<param name="plotmaxheight" default="240"/>
     <param name="infoplotgap" default="60"/>
 		<param name="plotfont" default="Body"/>
@@ -1253,6 +1256,7 @@
     <param name="progressbarid" default=""/>
     <param name="progressbarleft" default="60"/>
     <param name="progressbartop" default="105"/>
+    <param name="crossleft" default="100"/>
     <definition>
       <!--Backing-->
       <control type="group">
@@ -1281,11 +1285,11 @@
         </control>
         <control type="image">
           <visible>Player.Muted</visible>
-          <left>$PARAM[progressbarleft]</left>
-          <top>$PARAM[progressbartop]</top>
-          <width>120</width>
-          <height>30</height>
-          <texture colordiffuse="$VAR[AccentColor]">views/white_100.png</texture>
+          <left>$PARAM[crossleft]</left>
+          <top>$PARAM[crossleft]</top>
+          <width>39</width>
+          <height>39</height>
+          <texture colordiffuse="$VAR[AccentColor]">views/cross-large_focused.png</texture>
         </control>
       </control>
     </definition>
@@ -1339,42 +1343,48 @@
     </definition>
   </include>
 
-
-
-
-
-
-
 	<!-- Clock -->
 	<include name="Clock">
-		<control type="grouplist">
-			<right>25</right>
-			<top>25</top>
-			<width>152</width>
-			<height>70</height>
-			<align>right</align>
-			<itemgap>3</itemgap>
-			<orientation>horizontal</orientation>
-			<usecontrolcoords>true</usecontrolcoords>
-			<!--<include>HomeClockAnimation</include>-->
-			<control type="label">
-				<width>auto</width>
-				<height>70</height>
-				<font>BillboardFocused</font>
-				<align>right</align>
-				<textcolor>$VAR[LightColor]</textcolor>
-				<label>$INFO[System.Time(hh)]</label>
-			</control>
-			<control type="label">
-				<width>auto</width>
-				<height>57</height>
-				<top>13</top>
-				<font>LargeUnfocused</font>
-				<align>right</align>
-				<textcolor>$VAR[LightColor]</textcolor>
-				<label>$INFO[System.Time(mm)]</label>
-			</control>
-		</control>
+    <param name="backgroundcolor" default="$VAR[AccentColor]"/>
+    <param name="backgroundopacity" default="views/white_100.png"/>
+    <param name="textcolor" default="$VAR[LightColor]"/>
+    <definition>
+      <control type="group">
+        <right>0</right>
+        <top>0</top>
+        <width>180</width>
+        <height>180</height>
+        <control type="image">
+          <texture colordiffuse="$PARAM[backgroundcolor]">$PARAM[backgroundopacity]</texture>
+        </control>
+    		<control type="grouplist">
+    			<top>55</top>
+    			<width>180</width>
+    			<height>70</height>
+    			<align>center</align>
+    			<itemgap>3</itemgap>
+    			<orientation>horizontal</orientation>
+    			<usecontrolcoords>true</usecontrolcoords>
+    			<control type="label">
+    				<width>auto</width>
+    				<height>70</height>
+    				<font>List_Title_Focused</font>
+    				<align>right</align>
+    				<textcolor>$PARAM[textcolor]</textcolor>
+    				<label>$INFO[System.Time(hh)]</label>
+    			</control>
+    			<control type="label">
+    				<width>auto</width>
+    				<height>55</height>
+    				<top>13</top>
+    				<font>Main_Menu_Unfocused</font>
+    				<align>right</align>
+    				<textcolor>$PARAM[textcolor]</textcolor>
+    				<label>$INFO[System.Time(mm)]</label>
+    			</control>
+    		</control>
+      </control>
+    </definition>
 	</include>
 
 
@@ -1439,25 +1449,6 @@
 		</control>
 	</include>
 
-	<!--Watched Indicator
-	<include name="WatchedIndicator">
-		<control type="image">
-			<top>0</top>
-			<right>0</right>
-			<width>75</width>
-			<height>75</height>
-			<texture>views/watched_indicator.png</texture>
-			<visible>String.IsEqual(ListItem.Overlay,OverlayWatched.png)</visible>
-		</control>
-		<control type="image">
-			<top>0</top>
-			<right>0</right>
-			<height>75</height>
-			<width>61.5</width>
-			<texture colordiffuse="$VAR[BackgroundColor]">views/watched_indicator_back.png</texture>
-			<visible>String.IsEqual(ListItem.Overlay,OverlayWatched.png)</visible>
-		</control>
-	</include>-->
 
 	<include name="Opacity">
 		<!-- Opacity -->
