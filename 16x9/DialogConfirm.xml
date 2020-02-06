@@ -5,100 +5,62 @@
 	<onunload condition="String.IsEmpty(Window(Home).Property(SkinInitStarted))">ReplaceWindow(Startup.xml)</onunload>
 
 	<defaultcontrol always="true">9000</defaultcontrol>
-	<include>DialogZoomAnimation</include>
+	<include>WindowFadeAnimation</include>
 	<controls>
+		<include>FullscreenDimensions</include>
+		<include>DialogBackground</include>
 		<!-- Main group -->
 		<control type="group">
-			<include>FullscreenDimensions</include>
-			<control type="group">
-				<visible>!Window.IsVisible(home)</visible>
-				<include>Dark85</include>
-			</control>
-			<control type="group">
-				<left>192</left>
-				<top>50</top>
-				<width>1536</width>
-				<height>980</height>
+			<include content="ButtonGroup">
+				<param name="id" value="9000"/>
+				<param name="button1id" value="10"/>
+				<param name="button1unfocusedtexture" value="views/cross-large_unfocused.png"/>
+				<param name="button1focusedtexture" value="views/cross-large_focused.png"/>
+				<param name="button2id" value="11"/>
+				<param name="button2unfocusedtexture" value="views/check-large_unfocused.png"/>
+				<param name="button2focusedtexture" value="views/check-large_focused.png"/>
+			</include>
+			<control type="grouplist">
+				<left>120</left>
+				<top>60</top>
+				<width>1680</width>
+				<height>960</height>
+				<itemgap>0</itemgap>
+				<orientation>vertical</orientation>
+				<align>center</align>
 				<!--Heading-->
-				<control type="grouplist">
-					<top>0</top>
-					<height>490</height>
-					<width>auto</width>
-					<align>right</align>
-					<orientation>vertical</orientation>
-					<control type="textbox" id="1">
-						<height max="490">auto</height>
-						<font>menu_focused</font>
-						<textcolor>$VAR[TextColor]</textcolor>
-						<label>$INFO[Control.GetLabel(1)] $INFO[System.Progressbar,- ,%]</label>
-					</control>
+				<control type="textbox" id="1">
+					<height max="480">auto</height>
+					<font>List_Title_Focused</font>
+					<textcolor>$VAR[PrimaryColor]</textcolor>
+					<label>$INFO[Control.GetLabel(1)] $INFO[System.Progressbar,- ,%]</label>
 				</control>
 				<!-- Details -->
-				<control type="grouplist">
-					<bottom>0</bottom>
-					<height>490</height>
-					<width>auto</width>
-					<align>left</align>
-					<orientation>vertical</orientation>
-					<control type="textbox" id="9">
-						<height max="490">auto</height>
-						<font>menu_unfocused</font>
-						<textcolor>$VAR[TextColor]</textcolor>
-						<label>$INFO[Control.GetLabel(9)]</label>
-						<visible>!String.IsEmpty(Control.GetLabel(9))</visible>
-					</control>
+				<control type="textbox" id="9">
+					<height max="480">auto</height>
+					<font>List_Title_Unfocused</font>
+					<textcolor>$VAR[PrimaryColor]</textcolor>
+					<label>$INFO[Control.GetLabel(9)]</label>
+					<visible>!String.IsEmpty(Control.GetLabel(9))</visible>
 				</control>
 			</control>
-			<!--button textures-->
-			<control type="grouplist">
-				<bottom>50</bottom>
-				<right>50</right>
-				<height>50</height>
-				<width>250</width>
-				<align>right</align>
-				<orientation>horizontal</orientation>
-				<itemgap>50</itemgap>
-				<control type="image">
-					<width>50</width>
-					<height>50</height>
-					<texture colordiffuse="$VAR[FocusedColor]">views/cross-large_focused.png</texture>
-					<visible>Control.IsVisible(10) + Control.HasFocus(10)</visible>
-				</control>
-				<control type="image">
-					<width>50</width>
-					<height>50</height>
-					<texture colordiffuse="$VAR[TextColor]">views/cross-large_unfocused.png</texture>
-					<visible>Control.IsVisible(10) + !Control.HasFocus(10)</visible>
-				</control>
-				<control type="image">
-					<width>50</width>
-					<height>50</height>
-					<texture colordiffuse="$VAR[FocusedColor]">views/check-large_focused.png</texture>
-					<visible>Control.IsVisible(11) + Control.HasFocus(11)</visible>
-				</control>
-				<control type="image">
-					<width>50</width>
-					<height>50</height>
-					<texture colordiffuse="$VAR[TextColor]">views/check-large_unfocused.png</texture>
-					<visible>Control.IsVisible(11) + !Control.HasFocus(11)</visible>
-				</control>
+			<!--Progress Bar-->
+			<control type="progress" id="20">
+				<width>360</width>
+				<height>8</height>
+				<left>780</left>
+				<top>1047</top>
+				<texturebg colordiffuse="$VAR[ProgressBarBackgroundColor]">views/white_10.png</texturebg>
+				<lefttexture></lefttexture>
+				<midtexture colordiffuse="$VAR[ProgressBarFocusColor]">views/white_100.png</midtexture>
+				<righttexture></righttexture>
+				<overlaytexture></overlaytexture>
 			</control>
-			<!--hidden buttons-->
-			<include content="DialogButtons">
-				<param name="Button4Visible" value="false" />
-				<!-- Custom Button -->
-				<param name="Button3ID" value="12" />
-				<param name="Button3Label" value="" />
-				<param name="Button3Visible" value="true" />
-				<!-- Cancel Button -->
-				<param name="Button2ID" value="10" />
-				<param name="Button2Label" value="" />
-				<param name="Button2Visible" value="true" />
-				<!-- OK Button -->
-				<param name="Button1ID" value="11" />
-				<param name="Button1Label" value="" />
-				<param name="Button1Visible" value="true" />
-			</include>
 		</control>
 	</controls>
 </window>
+
+<param name="progressbarbackgroundcolor" default="$VAR[IconDetailsProgressBarBackgroundColor]"/>
+<param name="progressbarbackgroundtexture" default="views/white_100.png"/>
+<param name="progressbarfocuscolor" default="$VAR[IconDetailsProgressBarFocusColor]"/>
+<param name="progressbarfocustexture" default="views/white_100.png"/>

@@ -3,37 +3,36 @@
 	<include name="Viewtype_504_Strip">
 		<control type="group">
 			<visible>Control.IsVisible(504)</visible>
-			<include>ViewtypeFadeAnimation</include>
+			<include>ViewModeFadeAnimation</include>
 			<include>FullscreenDimensions</include>
 			<!--Container-->
 			<control type="fixedlist" id="504">
 				<viewtype label="Strip">wrap</viewtype>
 				<onup>3000</onup>
 				<ondown>60</ondown>
-				<onleft>0</onleft>
-				<onright>0</onright>
+				<onleft>3000</onleft>
+				<onright>3000</onright>
 				<pagecontrol>60</pagecontrol>
 				<preloaditems>2</preloaditems>
 				<focusposition>0</focusposition>
 				<orientation>horizontal</orientation>
 				<visible>$EXP[All_Containers]</visible>
-				<!--<visible>String.Contains(Container.FolderPath,videodb://) | String.Contains(Container.FolderPath,special://) | String.Contains(Container.FolderPath,addons://) | String.Contains(Container.FolderPath,musicdb://) | String.Contains(Container.FolderPath,androidapp://)</visible>-->
 				<scrolltime tween="sine" easing="inout">380</scrolltime>
 				<!--Poster layout-->
-				<focusedlayout width="480" height="720" condition="$EXP[StripView_Display_Posters]">
+				<focusedlayout width="480" height="720" condition="$EXP[StripView_Display_IsPosters]">
 					<include>HiddenFocusButton</include>
 				</focusedlayout>
-				<itemlayout width="480" height="720" condition="$EXP[StripView_Display_Posters]"/>
+				<itemlayout width="480" height="720" condition="$EXP[StripView_Display_IsPosters]"/>
 				<!--Fanart layout-->
-				<focusedlayout width="1120" height="630" condition="$EXP[StripView_Display_Fanart]">
+				<focusedlayout width="1120" height="630" condition="$EXP[StripView_Display_IsFanart]">
 					<include>HiddenFocusButton</include>
 				</focusedlayout>
-				<itemlayout width="960" height="540"  condition="$EXP[StripView_Display_Fanart]"/>
+				<itemlayout width="960" height="540"  condition="$EXP[StripView_Display_IsFanart]"/>
 				<!--Square layout-->
-				<focusedlayout width="540" height="540"  condition="$EXP[StripView_Display_Square]">
+				<focusedlayout width="540" height="540"  condition="$EXP[StripView_Display_IsSquare]">
 					<include>HiddenFocusButton</include>
 				</focusedlayout>
-				<itemlayout width="540" height="540"  condition="$EXP[StripView_Display_Square]"/>
+				<itemlayout width="540" height="540"  condition="$EXP[StripView_Display_IsSquare]"/>
 			</control>
 
 			<!--Static Content-->
@@ -42,31 +41,43 @@
 				<include>ProgressBarFadeAnimation</include>
 				<!--Progress bar-->
 				<control type="group">
-					<animation effect="slide" end="0,-24" time="0" condition="$EXP[StripView_Display_Fanart] | $EXP[StripView_Display_Square]">Conditional</animation>
-					<animation effect="slide" end="75,0" time="0" condition="$EXP[StripView_Display_Square] + !Skin.String(StripView_Details,Off)">Conditional</animation>
-					<animation effect="slide" end="320,0" time="0" condition="!Skin.String(StripView_Details,Off) + $EXP[StripView_Display_Fanart]">Conditional</animation>
+					<animation effect="slide" end="0,-24" time="0" condition="$EXP[StripView_Display_IsFanart] | $EXP[StripView_Display_IsSquare]">Conditional</animation>
+					<animation effect="slide" end="75,0" time="0" condition="$EXP[StripView_Display_IsSquare] + !Skin.String(StripView_Details,Off)">Conditional</animation>
+					<animation effect="slide" end="320,0" time="0" condition="!Skin.String(StripView_Details,Off) + $EXP[StripView_Display_IsFanart]">Conditional</animation>
 					<include content="ProgressBar">
 						<param name="left" value="780"/>
 						<param name="top" value="954"/>
 					</include>
 				</control>
-				<!--Details-->
+				<!--Details no logo-->
 				<control type="group">
 					<include content="CommonViewDetails">
-						<param name="groupvisibility" value="!Skin.String(StripView_Details,Off)"/>
+						<param name="groupvisibility" value="!Skin.String(StripView_Details,Off) + [Skin.String(StripView_Logo,Off) | String.IsEmpty(ListItem.Art(clearlogo))]"/>
 						<param name="left" value="60"/>
 						<param name="width" value="600"/>
-						<param name="infovisibility" value="Skin.String(StripView_Details,TitleAndInfo) | Skin.String(StripView_Details,All) | String.IsEmpty(Skin.String(StripView_Details))"/>
-						<param name="plotvisibility" value="Skin.String(StripView_Details,TitleAndPlot) | Skin.String(StripView_Details,All) | String.IsEmpty(Skin.String(StripView_Details))"/>
+						<param name="infovisibility" value="$EXP[StripView_Details_Info_IsVisible]"/>
+						<param name="plotvisibility" value="$EXP[StripView_Details_Plot_IsVisible]"/>
+					</include>
+					<!--Details with logo-->
+					<include content="CommonViewDetails">
+						<param name="groupvisibility" value="$EXP[StripView_Details_Logo_IsVisible]"/>
+						<param name="left" value="60"/>
+						<param name="width" value="600"/>
+						<param name="titlevisibility" value="false"/>
+						<param name="logovisibility" value="true"/>
+						<param name="titleinfogap" value="20"/>
+						<param name="infovisibility" value="$EXP[StripView_Details_Info_IsVisible]"/>
+						<param name="plotvisibility" value="$EXP[StripView_Details_Plot_IsVisible]"/>
 					</include>
 				</control>
 			</control>
 
 			<!--Static thumbnails-->
 			<control type="group">
+				<visible>!Control.IsVisible(5001) + !Control.IsVisible(5002)</visible>
 				<!--Posters-->
 				<control type="group">
-					<visible>!Control.IsVisible(5001) + !Control.IsVisible(5002) + $EXP[StripView_Display_Posters]</visible>
+					<visible>$EXP[StripView_Display_IsPosters]</visible>
 					<!--Icon -2-->
 					<include content="ListIcon">
 						<param name="left" value="-80"/>
@@ -130,7 +141,7 @@
 				</control>
 				<!--Fanart-->
 				<control type="group">
-					<visible>!Control.IsVisible(5001) + !Control.IsVisible(5002) + $EXP[StripView_Display_Fanart]</visible>
+					<visible>$EXP[StripView_Display_IsFanart]</visible>
 					<animation effect="slide" end="320,0" time="0" condition="!Skin.String(StripView_Details,Off)">Conditional</animation>
 					<!--Icon -1-->
 					<include content="ListIcon">
@@ -177,7 +188,7 @@
 				</control>
 				<!--Square-->
 				<control type="group">
-					<visible>!Control.IsVisible(5001) + !Control.IsVisible(5002) + $EXP[StripView_Display_Square]</visible>
+					<visible>$EXP[StripView_Display_IsSquare]</visible>
 					<animation effect="slide" end="75,0" time="0" condition="!Skin.String(StripView_Details,Off)">Conditional</animation>
 					<!--Icon -2-->
 					<include content="ListIcon">
@@ -248,7 +259,7 @@
 				<include>CustomViewsBackground</include>
 				<!--Posters-->
 				<control type="group">
-					<visible>$EXP[StripView_Display_Posters]</visible>
+					<visible>$EXP[StripView_Display_IsPosters]</visible>
 					<!--Move Icon -3 to -2-->
 					<include content="ListIcon">
 						<param name="left" value="-480"/>
@@ -289,15 +300,15 @@
 					</include>
 					<!--Alternative Animation if Details On-->
 					<include content="ListIcon">
-						<param name="left" value="-400"/>
-						<param name="top" value="240"/>
-						<param name="width" value="400"/>
-						<param name="height" value="600"/>
+						<param name="left" value="-480"/>
+						<param name="top" value="180"/>
+						<param name="width" value="480"/>
+						<param name="height" value="720"/>
 						<param name="visible" value="Container(504).OnPrevious  + !Skin.String(StripView_Details,Off)"/>
 						<param name="animationtype" value="Hidden"/>
 						<param name="animationcondition" value="true"/>
-						<param name="animationeffect" value="zoom"/>
-						<param name="animationend" value="720,180,480,720"/>
+						<param name="animationeffect" value="slide"/>
+						<param name="animationend" value="1200,0"/>
 					</include>
 					<!--Move Icon 0 to 1-->
 					<include content="ListIcon">
@@ -412,7 +423,7 @@
 				</control>
 				<!--Fanart-->
 				<control type="group">
-					<visible>$EXP[StripView_Display_Fanart]</visible>
+					<visible>$EXP[StripView_Display_IsFanart]</visible>
 					<animation effect="slide" end="320,0" time="0" condition="!Skin.String(StripView_Details,Off)">Conditional</animation>
 					<!--Move Icon -2 to -1-->
 					<include content="ListIcon">
@@ -441,15 +452,15 @@
 					</include>
 					<!--Alternative Animation if Details On-->
 					<include content="ListIcon">
-						<param name="left" value="-1200"/>
-						<param name="top" value="285"/>
-						<param name="width" value="960"/>
-						<param name="height" value="540"/>
+						<param name="left" value="-1360"/>
+						<param name="top" value="240"/>
+						<param name="width" value="1120"/>
+						<param name="height" value="630"/>
 						<param name="visible" value="Container(504).OnPrevious  + !Skin.String(StripView_Details,Off)"/>
 						<param name="animationtype" value="Hidden"/>
 						<param name="animationcondition" value="true"/>
-						<param name="animationeffect" value="zoom"/>
-						<param name="animationend" value="400,240,1120,630"/>
+						<param name="animationeffect" value="slide"/>
+						<param name="animationend" value="1760,0"/>
 					</include>
 					<!--Move Icon 0 to 1-->
 					<include content="ListIcon">
@@ -551,7 +562,7 @@
 				</control>
 				<!--Square-->
 				<control type="group">
-					<visible>$EXP[StripView_Display_Square]</visible>
+					<visible>$EXP[StripView_Display_IsSquare]</visible>
 					<animation effect="slide" end="75,0" time="0" condition="!Skin.String(StripView_Details,Off)">Conditional</animation>
 					<!--Move Icon -3 to -2-->
 					<include content="ListIcon">
@@ -593,15 +604,15 @@
 					</include>
 					<!--Alternative Animation if Details On-->
 					<include content="ListIcon">
-						<param name="left" value="-540"/>
-						<param name="top" value="285"/>
-						<param name="width" value="540"/>
-						<param name="height" value="540"/>
+						<param name="left" value="-630"/>
+						<param name="top" value="240"/>
+						<param name="width" value="630"/>
+						<param name="height" value="630"/>
 						<param name="visible" value="Container(504).OnPrevious  + !Skin.String(StripView_Details,Off)"/>
 						<param name="animationtype" value="Hidden"/>
 						<param name="animationcondition" value="true"/>
-						<param name="animationeffect" value="zoom"/>
-						<param name="animationend" value="645,245,630,630"/>
+						<param name="animationeffect" value="slide"/>
+						<param name="animationend" value="1275,0"/>
 					</include>
 					<!--Move Icon 0 to 1-->
 					<include content="ListIcon">
@@ -722,7 +733,7 @@
 				<include>CustomViewsBackground</include>
 				<!--Posters-->
 				<control type="group">
-					<visible>$EXP[StripView_Display_Posters]</visible>
+					<visible>$EXP[StripView_Display_IsPosters]</visible>
 					<!--Move Icon -2 to -3-->
 					<include content="ListIcon">
 						<param name="left" value="-80"/>
@@ -772,8 +783,8 @@
 						<param name="visible" value="Container(504).OnNext + !String.IsEmpty(Container.ListItemNoWrap(-1).FolderPath) + !Skin.String(StripView_Details,Off)"/>
 						<param name="animationtype" value="Hidden"/>
 						<param name="animationcondition" value="true"/>
-						<param name="animationeffect" value="zoom"/>
-						<param name="animationend" value="-400,240,400,600"/>
+						<param name="animationeffect" value="slide"/>
+						<param name="animationend" value="-1200,0"/>
 					</include>
 					<!--Move Icon 1 to 0-->
 					<include content="ListIcon">
@@ -887,7 +898,7 @@
 				</control>
 				<!--Fanart-->
 				<control type="group">
-					<visible>$EXP[StripView_Display_Fanart]</visible>
+					<visible>$EXP[StripView_Display_IsFanart]</visible>
 					<animation effect="slide" end="320,0" time="0" condition="!Skin.String(StripView_Details,Off)">Conditional</animation>
 					<!--Move Icon -1 to -2-->
 					<include content="ListIcon">
@@ -1027,7 +1038,7 @@
 				</control>
 				<!--Square-->
 				<control type="group">
-					<visible>$EXP[StripView_Display_Square]</visible>
+					<visible>$EXP[StripView_Display_IsSquare]</visible>
 					<animation effect="slide" end="75,0" time="0" condition="!Skin.String(StripView_Details,Off)">Conditional</animation>
 					<!--Move Icon -2 to -3-->
 					<include content="ListIcon">
@@ -1078,8 +1089,8 @@
 						<param name="visible" value="Container(504).OnNext + !String.IsEmpty(Container.ListItemNoWrap(-1).FolderPath) + !Skin.String(StripView_Details,Off)"/>
 						<param name="animationtype" value="Hidden"/>
 						<param name="animationcondition" value="true"/>
-						<param name="animationeffect" value="zoom"/>
-						<param name="animationend" value="-540,285,540,540"/>
+						<param name="animationeffect" value="slide"/>
+						<param name="animationend" value="-1275,0"/>
 					</include>
 					<!--Move Icon 1 to 0-->
 					<include content="ListIcon">
