@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <window>
 	<!-- Videos -->
+	<onload condition="!String.IsEmpty(window(Home).property(OptionsMenu))">ClearProperty(OptionsMenu,Home)</onload>
+	<onunload condition="!String.IsEmpty(window(Home).property(OptionsMenu))">ClearProperty(OptionsMenu,Home)</onunload>
 	<backgroundcolor>$VAR[SecondaryColor]</backgroundcolor>
 	<include>FullscreenDimensions</include>
 	<include>WindowFadeAnimation</include>
@@ -47,6 +49,12 @@
 			<content sortby="year" sortorder="ascending">$VAR[MovieSetsPath]</content>
  		</control>
 
+		<!--Hidden labels-->
+		<control type="label" id="931">
+			<visible allowhiddenfocus="false">false</visible>
+			<label>$VAR[TitleInfo]</label>
+		</control>
+
 		<!-- Main group -->
 		<control type="group">
 
@@ -84,7 +92,7 @@
 						<param name="fadetime" value="300"/>
 				</include>
 				<include content="ViewtypeOverlay">
-					<param name="visible" value="Control.IsVisible(50) | [Control.IsVisible(501) + !Skin.String(BillboardView_Details,Off)]"/>
+					<param name="visible" value="$EXP[ListView_IsVisible] | [$EXP[BillboardView_IsVisible] + !Skin.String(BillboardView_Details,Off)]"/>
 				</include>
 			</control>
 
@@ -107,10 +115,10 @@
 <!--TEST LABEL-->
 			<control type="label">
 				<!--<label>$INFO[window(Home).property(GridView_TopRightIcon)]</label>-->
-				<label>$INFO[Control.GetLabel(32)]</label>
-				<font>MusicPlayer_Title</font>
+				<!--<label>$INFO[Control.GetLabel(32)]</label>-->
+				<font>body</font>
 				<textcolor>$VAR[PrimaryColor]</textcolor>
-				<left>800</left>
+				<left>200</left>
 			</control>
 
 			<!--Scrollbars-->
@@ -129,7 +137,7 @@
 				<texturesliderbarfocus colordiffuse="$VAR[ProgressBarFocusColor]">views/white_100.png</texturesliderbarfocus>
 				<textureslidernib></textureslidernib>
 				<textureslidernibfocus></textureslidernibfocus>
-				<visible>Control.IsVisible(50) | Control.IsVisible(500) | Control.IsVisible(505)</visible>
+				<visible>$EXP[ListView_IsVisible] | $EXP[DetailedListView_IsVisible] | $EXP[GridView_IsVisible]</visible>
 				<include>ScrollBarAnimation</include>
 			</control>
 
@@ -149,7 +157,7 @@
 				<texturesliderbarfocus colordiffuse="$VAR[ProgressBarFocusColor]">views/white_100.png</texturesliderbarfocus>
 				<textureslidernib></textureslidernib>
 				<textureslidernibfocus></textureslidernibfocus>
-				<visible>Control.IsVisible(501) | Control.IsVisible(502) | Control.IsVisible(503) | Control.IsVisible(504)</visible>
+				<visible>$EXP[BillboardView_IsVisible] | $EXP[ShowcaseView_IsVisible] | $EXP[StripView_IsVisible]</visible>
 				<include>ScrollBarAnimation</include>
 			</control>
 		</control>
@@ -213,7 +221,7 @@
 						<label2>$LOCALIZE[32100] / Detailed List</label2>
 						<property name="ActionLeft">Container.PreviousViewMode</property>
 						<property name="ActionRight">Container.NextViewMode</property>
-						<visible>Control.IsVisible(500)</visible>
+						<visible>$EXP[DetailedListView_IsVisible]</visible>
 					</item>
 					<item>
 						<description>View / Billboard</description>
@@ -222,7 +230,7 @@
 						<label2>$LOCALIZE[32100] / Billboard</label2>
 						<property name="ActionLeft">Container.PreviousViewMode</property>
 						<property name="ActionRight">Container.NextViewMode</property>
-						<visible>Control.IsVisible(501)</visible>
+						<visible>$EXP[BillboardView_IsVisible]</visible>
 					</item>
 					<item>
 						<description>View / Showcase</description>
@@ -231,7 +239,7 @@
 						<label2>$LOCALIZE[32100] / Showcase</label2>
 						<property name="ActionLeft">Container.PreviousViewMode</property>
 						<property name="ActionRight">Container.NextViewMode</property>
-						<visible>Control.IsVisible(502)</visible>
+						<visible>$EXP[ShowcaseView_IsVisible]</visible>
 					</item>
 					<item>
 						<description>View / Strip</description>
@@ -240,7 +248,7 @@
 						<label2>$LOCALIZE[32100] / Strip</label2>
 						<property name="ActionLeft">Container.PreviousViewMode</property>
 						<property name="ActionRight">Container.NextViewMode</property>
-						<visible>Control.IsVisible(504)</visible>
+						<visible>$EXP[StripView_IsVisible]</visible>
 					</item>
 					<item>
 						<description>View / Grid</description>
@@ -249,10 +257,11 @@
 						<label2>$LOCALIZE[32100] / Grid</label2>
 						<property name="ActionLeft">Container.PreviousViewMode</property>
 						<property name="ActionRight">Container.NextViewMode</property>
-						<visible>Control.IsVisible(505)</visible>
+						<visible>$EXP[GridView_IsVisible]</visible>
 					</item>
 
-					<!--List View Fanart-->
+<!--DISPLAY-->
+					<!--List View Display-->
 					<item>
 						<description>Fanart / Background</description>
 						<label>‹ Background ›</label>
@@ -260,7 +269,7 @@
 						<onclick>SetFocus(50)</onclick>
 						<property name="ActionLeft">Skin.SetString(ListView_Fanart,Off)</property>
 						<property name="ActionRight">Skin.SetString(ListView_Fanart,Off)</property>
-						<visible>$EXP[ListView_IsVisible] + [Skin.String(ListView_Fanart,Background) | String.IsEmpty(Skin.String(ListView_Fanart))] + !Container.Content() + !Container.Content(Files)</visible>
+						<visible>$EXP[ListView_IsVisible] + $EXP[ListView_Fanart_Background_IsVisible] + !Container.Content() + !Container.Content(Files)</visible>
 					</item>
 					<item>
 						<description>Fanart / Off</description>
@@ -272,6 +281,114 @@
 						<visible>$EXP[ListView_IsVisible] + Skin.String(ListView_Fanart,Off) + !Container.Content() + !Container.Content(Files)</visible>
 					</item>
 
+					<!--DetailedList View Display-->
+					<item>
+						<description>Display / Fanart</description>
+						<label>‹ Fanart ›</label>
+						<label2>Display / Fanart</label2>
+						<onclick>SetFocus(50)</onclick>
+						<property name="ActionLeft">Skin.SetString(DetailedListView_Display,Square)</property>
+						<property name="ActionRight">Skin.SetString(DetailedListView_Display,Posters)</property>
+						<visible>$EXP[DetailedListView_IsVisible] + $EXP[DetailedListView_Display_IsFanart]</visible>
+					</item>
+					<item>
+						<description>Display / Posters</description>
+						<label>‹ Posters ›</label>
+						<label2>Display / Posters</label2>
+						<onclick>SetFocus(50)</onclick>
+						<property name="ActionLeft">Skin.SetString(DetailedListView_Display,Fanart)</property>
+						<property name="ActionRight">Skin.SetString(DetailedListView_Display,Square)</property>
+						<visible>$EXP[DetailedListView_IsVisible] + $EXP[DetailedListView_Display_IsPosters]</visible>
+					</item>
+					<item>
+						<description>Display / Square</description>
+						<label>‹ Square ›</label>
+						<label2>Display / Square</label2>
+						<onclick>SetFocus(50)</onclick>
+						<property name="ActionLeft">Skin.SetString(DetailedListView_Display,Posters)</property>
+						<property name="ActionRight">Skin.SetString(DetailedListView_Display,Fanart)</property>
+						<visible>$EXP[DetailedListView_IsVisible] + $EXP[DetailedListView_Display_IsSquare]</visible>
+					</item>
+
+					<!--Showcase View Display-->
+					<item>
+						<description>Display / Square</description>
+						<label>‹ Square ›</label>
+						<label2>Display / Square</label2>
+						<onclick>SetFocus(50)</onclick>
+						<property name="ActionLeft">Skin.SetString(ShowcaseView_Display,Posters)</property>
+						<property name="ActionRight">Skin.SetString(ShowcaseView_Display,Posters)</property>
+						<visible>$EXP[ShowcaseView_IsVisible] + $EXP[ShowcaseView_Display_IsSquare]</visible>
+					</item>
+					<item>
+						<description>Display / Posters</description>
+						<label>‹ Posters ›</label>
+						<label2>Display / Posters</label2>
+						<onclick>SetFocus(50)</onclick>
+						<property name="ActionLeft">Skin.SetString(ShowcaseView_Display,Square)</property>
+						<property name="ActionRight">Skin.SetString(ShowcaseView_Display,Square)</property>
+						<visible>$EXP[ShowcaseView_IsVisible] + $EXP[ShowcaseView_Display_IsPosters]</visible>
+					</item>
+
+					<!--Strip View Display-->
+					<item>
+						<description>Display / Posters</description>
+						<label>‹ Posters ›</label>
+						<label2>Display / Posters</label2>
+						<onclick>SetFocus(50)</onclick>
+						<property name="ActionLeft">Skin.SetString(StripView_Display,Square)</property>
+						<property name="ActionRight">Skin.SetString(StripView_Display,Fanart)</property>
+						<visible>$EXP[StripView_IsVisible] + $EXP[StripView_Display_IsPosters]</visible>
+					</item>
+					<item>
+						<description>Display / Fanart</description>
+						<label>‹ Fanart ›</label>
+						<label2>Display / Fanart</label2>
+						<onclick>SetFocus(50)</onclick>
+						<property name="ActionLeft">Skin.SetString(StripView_Display,Posters)</property>
+						<property name="ActionRight">Skin.SetString(StripView_Display,Square)</property>
+						<visible>$EXP[StripView_IsVisible] + $EXP[StripView_Display_IsFanart]</visible>
+					</item>
+					<item>
+						<description>Display / Square</description>
+						<label>‹ Square ›</label>
+						<label2>Display / Square</label2>
+						<onclick>SetFocus(50)</onclick>
+						<property name="ActionLeft">Skin.SetString(StripView_Display,Fanart)</property>
+						<property name="ActionRight">Skin.SetString(StripView_Display,Posters)</property>
+						<visible>$EXP[StripView_IsVisible] + $EXP[StripView_Display_IsSquare]</visible>
+					</item>
+
+					<!--GridView Display-->
+					<item>
+						<description>Display / Fanart</description>
+						<label>‹ Fanart ›</label>
+						<label2>Display / Fanart</label2>
+						<onclick>SetFocus(50)</onclick>
+						<property name="ActionLeft">Skin.SetString(GridView_Display,Square)</property>
+						<property name="ActionRight">Skin.SetString(GridView_Display,Posters)</property>
+						<visible>$EXP[GridView_IsVisible] + $EXP[GridView_Display_IsFanart]</visible>
+					</item>
+					<item>
+						<description>Display / Posters</description>
+						<label>‹ Posters ›</label>
+						<label2>Display / Posters</label2>
+						<onclick>SetFocus(50)</onclick>
+						<property name="ActionLeft">Skin.SetString(GridView_Display,Fanart)</property>
+						<property name="ActionRight">Skin.SetString(GridView_Display,Square)</property>
+						<visible>$EXP[GridView_IsVisible] + $EXP[GridView_Display_IsPosters]</visible>
+					</item>
+					<item>
+						<description>Display / Square</description>
+						<label>‹ Square ›</label>
+						<label2>Display / Square</label2>
+						<onclick>SetFocus(50)</onclick>
+						<property name="ActionLeft">Skin.SetString(GridView_Display,Posters)</property>
+						<property name="ActionRight">Skin.SetString(GridView_Display,Fanart)</property>
+						<visible>$EXP[GridView_IsVisible] + $EXP[GridView_Display_IsSquare]</visible>
+					</item>
+
+<!--DETAILS-->
 					<!--List View Details -->
 					<item>
 						<description>Details / Title</description>
@@ -292,82 +409,6 @@
 						<visible>$EXP[ListView_IsVisible] + Skin.String(ListView_Details,TitleAndinfo) + !Container.Content()</visible>
 					</item>
 
-					<!--ListView Flags-->
-					<item>
-						<description>Flags / Off</description>
-						<label>‹ Off ›</label>
-						<label2>Flags / Off</label2>
-						<onclick>SetFocus(50)</onclick>
-						<property name="ActionLeft">Skin.SetString(ListView_Flags,All)</property>
-						<property name="ActionRight">Skin.SetString(ListView_Flags,Studio)</property>
-						<visible>$EXP[ListView_IsVisible] + Skin.String(ListView_Flags,Off) + !Container.Content() + !Container.Content(Files)</visible>
-					</item>
-					<item>
-						<description>Flags / Studio</description>
-						<label>‹ Studio ›</label>
-						<label2>Flags / Studio</label2>
-						<onclick>SetFocus(50)</onclick>
-						<property name="ActionLeft">Skin.SetString(ListView_Flags,Off)</property>
-						<property name="ActionRight">Skin.SetString(ListView_Flags,Rating)</property>
-						<visible>$EXP[ListView_IsVisible] + Skin.String(ListView_Flags,Studio) + !Container.Content() + !Container.Content(Files)</visible>
-					</item>
-					<item>
-						<description>Flags / Age Rating</description>
-						<label>‹ Age Rating ›</label>
-						<label2>Flags / Age Rating</label2>
-						<onclick>SetFocus(50)</onclick>
-						<property name="ActionLeft">Skin.SetString(ListView_Flags,Studio)</property>
-						<property name="ActionRight">Skin.SetString(ListView_Flags,All)</property>
-						<visible>$EXP[ListView_IsVisible] + Skin.String(ListView_Flags,Rating) + !Container.Content() + !Container.Content(Files)</visible>
-					</item>
-					<item>
-						<description>Flags / All</description>
-						<label>‹ All ›</label>
-						<label2>Flags / All</label2>
-						<onclick>SetFocus(50)</onclick>
-						<property name="ActionLeft">Skin.SetString(ListView_Flags,Rating)</property>
-						<property name="ActionRight">Skin.SetString(ListView_Flags,Off)</property>
-						<visible>$EXP[ListView_IsVisible] + [Skin.String(ListView_Flags,All) | String.IsEmpty(Skin.String(ListView_Flags))] + !Container.Content() + !Container.Content(Files)</visible>
-					</item>
-
-					<!--DetailedList View Display-->
-					<item>
-						<description>Display / Fanart</description>
-						<label>‹ Fanart ›</label>
-						<label2>Display / Fanart</label2>
-						<onclick>SetFocus(50)</onclick>
-						<property name="ActionLeft">Skin.SetString(DetailedListView_Display,Square)</property>
-						<property name="ActionRight">Skin.SetString(DetailedListView_Display,Posters)</property>
-						<visible>Control.IsVisible(500) + [Skin.String(DetailedListView_Display,Fanart) | String.IsEmpty(Skin.String(DetailedListView_Display))] + [Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | Container.Content(episodes)]</visible>
-					</item>
-					<item>
-						<description>Display / Posters</description>
-						<label>‹ Posters ›</label>
-						<label2>Display / Posters</label2>
-						<onclick>SetFocus(50)</onclick>
-						<property name="ActionLeft">Skin.SetString(DetailedListView_Display,Fanart)</property>
-						<property name="ActionRight">Skin.SetString(DetailedListView_Display,Both)</property>
-						<visible>Control.IsVisible(500) + Skin.String(DetailedListView_Display,Posters) + [Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | Container.Content(episodes)]</visible>
-					</item>
-					<item>
-						<description>Display / Both</description>
-						<label>‹ Both ›</label>
-						<label2>Display / Both</label2>
-						<onclick>SetFocus(50)</onclick>
-						<property name="ActionLeft">Skin.SetString(DetailedListView_Display,Posters)</property>
-						<property name="ActionRight">Skin.SetString(DetailedListView_Display,Square)</property>
-						<visible>Control.IsVisible(500) + Skin.String(DetailedListView_Display,Both) + [Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | Container.Content(episodes)]</visible>
-					</item>
-					<item>
-						<description>Display / Showcase</description>
-						<label>‹ Showcase ›</label>
-						<label2>Display / Showcase</label2>
-						<onclick>SetFocus(50)</onclick>
-						<property name="ActionLeft">Skin.SetString(DetailedListView_Display,Both)</property>
-						<property name="ActionRight">Skin.SetString(DetailedListView_Display,Fanart)</property>
-						<visible>Control.IsVisible(500) + Skin.String(DetailedListView_Display,Square) + [Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | Container.Content(episodes)]</visible>
-					</item>
-
 					<!--DetailedList View Details -->
 					<item>
 						<description>Details / Title</description>
@@ -376,7 +417,7 @@
 						<onclick>SetFocus(50)</onclick>
 						<property name="ActionLeft">Skin.SetString(DetailedListView_Details,TitleAndInfo)</property>
 						<property name="ActionRight">Skin.SetString(DetailedListView_Details,TitleAndInfo)</property>
-						<visible>Control.IsVisible(500) + Skin.String(DetailedListView_Details,Title)</visible>
+						<visible>$EXP[DetailedListView_IsVisible] + Skin.String(DetailedListView_Details,Title)</visible>
 					</item>
 					<item>
 						<description>Details / Title and Info</description>
@@ -385,7 +426,7 @@
 						<onclick>SetFocus(50)</onclick>
 						<property name="ActionLeft">Skin.SetString(DetailedListView_Details,Title)</property>
 						<property name="ActionRight">Skin.SetString(DetailedListView_Details,Title)</property>
-						<visible>Control.IsVisible(500) + [Skin.String(DetailedListView_Details,TitleAndinfo) | String.IsEmpty(Skin.String(DetailedListView_Details))]</visible>
+						<visible>$EXP[DetailedListView_IsVisible] + [Skin.String(DetailedListView_Details,TitleAndinfo) | String.IsEmpty(Skin.String(DetailedListView_Details))]</visible>
 					</item>
 
 					<!--Billboard View Details-->
@@ -396,7 +437,7 @@
 						<onclick>SetFocus(50)</onclick>
 						<property name="ActionLeft">Skin.SetString(BillboardView_Details,All)</property>
 						<property name="ActionRight">Skin.SetString(BillboardView_Details,Title)</property>
-						<visible>Control.IsVisible(501) + Skin.String(BillboardView_Details,Off)</visible>
+						<visible>$EXP[BillboardView_IsVisible] + Skin.String(BillboardView_Details,Off)</visible>
 					</item>
 					<item>
 						<description>Details / Title</description>
@@ -405,7 +446,7 @@
 						<onclick>SetFocus(50)</onclick>
 						<property name="ActionLeft">Skin.SetString(BillboardView_Details,Off)</property>
 						<property name="ActionRight">Skin.SetString(BillboardView_Details,TitleAndInfo)</property>
-						<visible>Control.IsVisible(501) + Skin.String(BillboardView_Details,Title)</visible>
+						<visible>$EXP[BillboardView_IsVisible] + Skin.String(BillboardView_Details,Title)</visible>
 					</item>
 					<item>
 						<description>Details / Title And Info</description>
@@ -414,7 +455,7 @@
 						<onclick>SetFocus(50)</onclick>
 						<property name="ActionLeft">Skin.SetString(BillboardView_Details,Title)</property>
 						<property name="ActionRight">Skin.SetString(BillboardView_Details,TitleAndPlot)</property>
-						<visible>Control.IsVisible(501) + Skin.String(BillboardView_Details,TitleAndInfo)</visible>
+						<visible>$EXP[BillboardView_IsVisible] + Skin.String(BillboardView_Details,TitleAndInfo)</visible>
 					</item>
 					<item>
 						<description>Details / Title And Plot</description>
@@ -423,7 +464,7 @@
 						<onclick>SetFocus(50)</onclick>
 						<property name="ActionLeft">Skin.SetString(BillboardView_Details,TitleAndInfo)</property>
 						<property name="ActionRight">Skin.SetString(BillboardView_Details,All)</property>
-						<visible>Control.IsVisible(501) + Skin.String(BillboardView_Details,TitleAndPlot)</visible>
+						<visible>$EXP[BillboardView_IsVisible] + Skin.String(BillboardView_Details,TitleAndPlot)</visible>
 					</item>
 					<item>
 						<description>Details / All</description>
@@ -432,85 +473,7 @@
 						<onclick>SetFocus(50)</onclick>
 						<property name="ActionLeft">Skin.SetString(BillboardView_Details,TitleAndPlot)</property>
 						<property name="ActionRight">Skin.SetString(BillboardView_Details,Off)</property>
-						<visible>Control.IsVisible(501) + [Skin.String(BillboardView_Details,All) | String.IsEmpty(Skin.String(BillboardView_Details))]</visible>
-					</item>
-
-					<!--Billboard View Logo-->
-					<item>
-						<description>Logo / Off</description>
-						<label>‹ Off ›</label>
-						<label2>Logo / Off</label2>
-						<onclick>SetFocus(50)</onclick>
-						<property name="ActionLeft">Skin.SetString(BillboardView_Logo,On)</property>
-						<property name="ActionRight">Skin.SetString(BillboardView_Logo,On)</property>
-						<visible>Control.IsVisible(501) + [!Skin.String(BillboardView_Details,Off) + Skin.String(BillboardView_Logo,Off) + ![Container.Content(seasons) | Container.Content(episodes)] | String.IsEmpty(Skin.String(BillboardView_Logo))]</visible>
-					</item>
-					<item>
-						<description>Logo / On</description>
-						<label>‹ On ›</label>
-						<label2>Logo / On</label2>
-						<onclick>SetFocus(50)</onclick>
-						<property name="ActionLeft">Skin.SetString(BillboardView_Logo,Off)</property>
-						<property name="ActionRight">Skin.SetString(BillboardView_Logo,Off)</property>
-						<visible>Control.IsVisible(501) + !Skin.String(BillboardView_Details,Off) + Skin.String(BillboardView_Logo,On) + ![Container.Content(seasons) | Container.Content(episodes)]</visible>
-					</item>
-
-					<!--BillboardView Flags-->
-					<item>
-						<description>Flags / Off</description>
-						<label>‹ Off ›</label>
-						<label2>Flags / Off</label2>
-						<onclick>SetFocus(50)</onclick>
-						<property name="ActionLeft">Skin.SetString(BillboardView_Flags,All)</property>
-						<property name="ActionRight">Skin.SetString(BillboardView_Flags,Studio)</property>
-						<visible>$EXP[BillboardView_IsVisible] + Skin.String(BillboardView_Flags,Off)</visible>
-					</item>
-					<item>
-						<description>Flags / Studio</description>
-						<label>‹ Studio ›</label>
-						<label2>Flags / Studio</label2>
-						<onclick>SetFocus(50)</onclick>
-						<property name="ActionLeft">Skin.SetString(BillboardView_Flags,Off)</property>
-						<property name="ActionRight">Skin.SetString(BillboardView_Flags,Rating)</property>
-						<visible>$EXP[BillboardView_IsVisible] + Skin.String(BillboardView_Flags,Studio)</visible>
-					</item>
-					<item>
-						<description>Flags / Age Rating</description>
-						<label>‹ Age Rating ›</label>
-						<label2>Flags / Age Rating</label2>
-						<onclick>SetFocus(50)</onclick>
-						<property name="ActionLeft">Skin.SetString(BillboardView_Flags,Studio)</property>
-						<property name="ActionRight">Skin.SetString(BillboardView_Flags,All)</property>
-						<visible>$EXP[BillboardView_IsVisible] + Skin.String(BillboardView_Flags,Rating)</visible>
-					</item>
-					<item>
-						<description>Flags / All</description>
-						<label>‹ All ›</label>
-						<label2>Flags / All</label2>
-						<onclick>SetFocus(50)</onclick>
-						<property name="ActionLeft">Skin.SetString(BillboardView_Flags,Rating)</property>
-						<property name="ActionRight">Skin.SetString(BillboardView_Flags,Off)</property>
-						<visible>$EXP[BillboardView_IsVisible] + [Skin.String(BillboardView_Flags,All) | String.IsEmpty(Skin.String(BillboardView_Flags))]</visible>
-					</item>
-
-					<!--Showcase View Display-->
-					<item>
-						<description>Display / Square</description>
-						<label>‹ Square ›</label>
-						<label2>Display / Square</label2>
-						<onclick>SetFocus(50)</onclick>
-						<property name="ActionLeft">Skin.SetString(ShowcaseView_Display,Posters)</property>
-						<property name="ActionRight">Skin.SetString(ShowcaseView_Display,Posters)</property>
-						<visible>Control.IsVisible(502) + !Container.Content(episodes) + [Skin.String(ShowcaseView_Display,Square) | String.IsEmpty(Skin.String(ShowcaseView_Display))]</visible>
-					</item>
-					<item>
-						<description>Display / Posters</description>
-						<label>‹ Posters ›</label>
-						<label2>Display / Posters</label2>
-						<onclick>SetFocus(50)</onclick>
-						<property name="ActionLeft">Skin.SetString(ShowcaseView_Display,Square)</property>
-						<property name="ActionRight">Skin.SetString(ShowcaseView_Display,Square)</property>
-						<visible>Control.IsVisible(502) + !Container.Content(episodes) + Skin.String(ShowcaseView_Display,Posters)</visible>
+						<visible>$EXP[BillboardView_IsVisible] + [Skin.String(BillboardView_Details,All) | String.IsEmpty(Skin.String(BillboardView_Details))]</visible>
 					</item>
 
 					<!--Showcase View Details-->
@@ -521,7 +484,7 @@
 						<onclick>SetFocus(50)</onclick>
 						<property name="ActionLeft">Skin.SetString(ShowcaseView_Details,All)</property>
 						<property name="ActionRight">Skin.SetString(ShowcaseView_Details,Title)</property>
-						<visible>Control.IsVisible(502) + Skin.String(ShowcaseView_Details,Off)</visible>
+						<visible>$EXP[ShowcaseView_IsVisible] + Skin.String(ShowcaseView_Details,Off)</visible>
 					</item>
 					<item>
 						<description>Details / Title</description>
@@ -530,7 +493,7 @@
 						<onclick>SetFocus(50)</onclick>
 						<property name="ActionLeft">Skin.SetString(ShowcaseView_Details,Off)</property>
 						<property name="ActionRight">Skin.SetString(ShowcaseView_Details,TitleAndInfo)</property>
-						<visible>Control.IsVisible(502) + Skin.String(ShowcaseView_Details,Title)</visible>
+						<visible>$EXP[ShowcaseView_IsVisible] + Skin.String(ShowcaseView_Details,Title)</visible>
 					</item>
 					<item>
 						<description>Details / Title And Info</description>
@@ -539,7 +502,7 @@
 						<onclick>SetFocus(50)</onclick>
 						<property name="ActionLeft">Skin.SetString(ShowcaseView_Details,Title)</property>
 						<property name="ActionRight">Skin.SetString(ShowcaseView_Details,TitleAndPlot)</property>
-						<visible>Control.IsVisible(502) + Skin.String(ShowcaseView_Details,TitleAndInfo)</visible>
+						<visible>$EXP[ShowcaseView_IsVisible] + Skin.String(ShowcaseView_Details,TitleAndInfo)</visible>
 					</item>
 					<item>
 						<description>Details / Title And Plot</description>
@@ -548,7 +511,7 @@
 						<onclick>SetFocus(50)</onclick>
 						<property name="ActionLeft">Skin.SetString(ShowcaseView_Details,TitleAndInfo)</property>
 						<property name="ActionRight">Skin.SetString(ShowcaseView_Details,All)</property>
-						<visible>Control.IsVisible(502) + Skin.String(ShowcaseView_Details,TitleAndPlot)</visible>
+						<visible>$EXP[ShowcaseView_IsVisible] + Skin.String(ShowcaseView_Details,TitleAndPlot)</visible>
 					</item>
 					<item>
 						<description>Details / All</description>
@@ -557,94 +520,7 @@
 						<onclick>SetFocus(50)</onclick>
 						<property name="ActionLeft">Skin.SetString(ShowcaseView_Details,TitleAndPlot)</property>
 						<property name="ActionRight">Skin.SetString(ShowcaseView_Details,Off)</property>
-						<visible>Control.IsVisible(502) + [Skin.String(ShowcaseView_Details,All) | String.IsEmpty(Skin.String(ShowcaseView_Details))]</visible>
-					</item>
-
-					<!--Showcase View Logo-->
-					<item>
-						<description>Logo / Off</description>
-						<label>‹ Off ›</label>
-						<label2>Logo / Off</label2>
-						<onclick>SetFocus(50)</onclick>
-						<property name="ActionLeft">Skin.SetString(ShowcaseView_Logo,On)</property>
-						<property name="ActionRight">Skin.SetString(ShowcaseView_Logo,On)</property>
-						<visible>Control.IsVisible(502) + [!Skin.String(ShowcaseView_Details,Off) + Skin.String(ShowcaseView_Logo,Off) + ![Container.Content(seasons) | Container.Content(episodes)] | String.IsEmpty(Skin.String(ShowcaseView_Logo))]</visible>
-					</item>
-					<item>
-						<description>Logo / On</description>
-						<label>‹ On ›</label>
-						<label2>Logo / On</label2>
-						<onclick>SetFocus(50)</onclick>
-						<property name="ActionLeft">Skin.SetString(ShowcaseView_Logo,Off)</property>
-						<property name="ActionRight">Skin.SetString(ShowcaseView_Logo,Off)</property>
-						<visible>Control.IsVisible(502) + !Skin.String(ShowcaseView_Details,Off) + Skin.String(ShowcaseView_Logo,On) + ![Container.Content(seasons) | Container.Content(episodes)]</visible>
-					</item>
-
-					<!--ShowcaseView Flags-->
-					<item>
-						<description>Flags / Off</description>
-						<label>‹ Off ›</label>
-						<label2>Flags / Off</label2>
-						<onclick>SetFocus(50)</onclick>
-						<property name="ActionLeft">Skin.SetString(ShowcaseView_Flags,All)</property>
-						<property name="ActionRight">Skin.SetString(ShowcaseView_Flags,Studio)</property>
-						<visible>$EXP[ShowcaseView_IsVisible] + Skin.String(ShowcaseView_Flags,Off)</visible>
-					</item>
-					<item>
-						<description>Flags / Studio</description>
-						<label>‹ Studio ›</label>
-						<label2>Flags / Studio</label2>
-						<onclick>SetFocus(50)</onclick>
-						<property name="ActionLeft">Skin.SetString(ShowcaseView_Flags,Off)</property>
-						<property name="ActionRight">Skin.SetString(ShowcaseView_Flags,Rating)</property>
-						<visible>$EXP[ShowcaseView_IsVisible] + Skin.String(ShowcaseView_Flags,Studio)</visible>
-					</item>
-					<item>
-						<description>Flags / Age Rating</description>
-						<label>‹ Age Rating ›</label>
-						<label2>Flags / Age Rating</label2>
-						<onclick>SetFocus(50)</onclick>
-						<property name="ActionLeft">Skin.SetString(ShowcaseView_Flags,Studio)</property>
-						<property name="ActionRight">Skin.SetString(ShowcaseView_Flags,All)</property>
-						<visible>$EXP[ShowcaseView_IsVisible] + Skin.String(ShowcaseView_Flags,Rating)</visible>
-					</item>
-					<item>
-						<description>Flags / All</description>
-						<label>‹ All ›</label>
-						<label2>Flags / All</label2>
-						<onclick>SetFocus(50)</onclick>
-						<property name="ActionLeft">Skin.SetString(ShowcaseView_Flags,Rating)</property>
-						<property name="ActionRight">Skin.SetString(ShowcaseView_Flags,Off)</property>
-						<visible>$EXP[ShowcaseView_IsVisible] + [Skin.String(ShowcaseView_Flags,All) | String.IsEmpty(Skin.String(ShowcaseView_Flags))]</visible>
-					</item>
-
-					<!--Strip View Display-->
-					<item>
-						<description>Display / Posters</description>
-						<label>‹ Posters ›</label>
-						<label2>Display / Posters</label2>
-						<onclick>SetFocus(50)</onclick>
-						<property name="ActionLeft">Skin.SetString(StripView_Display,Square)</property>
-						<property name="ActionRight">Skin.SetString(StripView_Display,Fanart)</property>
-						<visible>$EXP[StripView_Display_IsPosters]</visible>
-					</item>
-					<item>
-						<description>Display / Fanart</description>
-						<label>‹ Fanart ›</label>
-						<label2>Display / Fanart</label2>
-						<onclick>SetFocus(50)</onclick>
-						<property name="ActionLeft">Skin.SetString(StripView_Display,Posters)</property>
-						<property name="ActionRight">Skin.SetString(StripView_Display,Square)</property>
-						<visible>$EXP[StripView_Display_IsFanart]</visible>
-					</item>
-					<item>
-						<description>Display / Square</description>
-						<label>‹ Square ›</label>
-						<label2>Display / Square</label2>
-						<onclick>SetFocus(50)</onclick>
-						<property name="ActionLeft">Skin.SetString(StripView_Display,Fanart)</property>
-						<property name="ActionRight">Skin.SetString(StripView_Display,Posters)</property>
-						<visible>$EXP[StripView_Display_IsSquare]</visible>
+						<visible>$EXP[ShowcaseView_IsVisible] + [Skin.String(ShowcaseView_Details,All) | String.IsEmpty(Skin.String(ShowcaseView_Details))]</visible>
 					</item>
 
 					<!--Strip View Details-->
@@ -655,7 +531,7 @@
 						<onclick>SetFocus(50)</onclick>
 						<property name="ActionLeft">Skin.SetString(StripView_Details,All)</property>
 						<property name="ActionRight">Skin.SetString(StripView_Details,Title)</property>
-						<visible>Control.IsVisible(504) + Skin.String(StripView_Details,Off)</visible>
+						<visible>$EXP[StripView_IsVisible] + Skin.String(StripView_Details,Off)</visible>
 					</item>
 					<item>
 						<description>Details / Title</description>
@@ -664,7 +540,7 @@
 						<onclick>SetFocus(50)</onclick>
 						<property name="ActionLeft">Skin.SetString(StripView_Details,Off)</property>
 						<property name="ActionRight">Skin.SetString(StripView_Details,TitleAndInfo)</property>
-						<visible>Control.IsVisible(504) + Skin.String(StripView_Details,Title)</visible>
+						<visible>$EXP[StripView_IsVisible] + Skin.String(StripView_Details,Title)</visible>
 					</item>
 					<item>
 						<description>Details / Title And Info</description>
@@ -673,7 +549,7 @@
 						<onclick>SetFocus(50)</onclick>
 						<property name="ActionLeft">Skin.SetString(StripView_Details,Title)</property>
 						<property name="ActionRight">Skin.SetString(StripView_Details,TitleAndPlot)</property>
-						<visible>Control.IsVisible(504) + Skin.String(StripView_Details,TitleAndInfo)</visible>
+						<visible>$EXP[StripView_IsVisible] + Skin.String(StripView_Details,TitleAndInfo)</visible>
 					</item>
 					<item>
 						<description>Details / Title And Plot</description>
@@ -682,7 +558,7 @@
 						<onclick>SetFocus(50)</onclick>
 						<property name="ActionLeft">Skin.SetString(StripView_Details,TitleAndInfo)</property>
 						<property name="ActionRight">Skin.SetString(StripView_Details,All)</property>
-						<visible>Control.IsVisible(504) + Skin.String(StripView_Details,TitleAndPlot)</visible>
+						<visible>$EXP[StripView_IsVisible] + Skin.String(StripView_Details,TitleAndPlot)</visible>
 					</item>
 					<item>
 						<description>Details / All</description>
@@ -691,94 +567,7 @@
 						<onclick>SetFocus(50)</onclick>
 						<property name="ActionLeft">Skin.SetString(StripView_Details,TitleAndPlot)</property>
 						<property name="ActionRight">Skin.SetString(StripView_Details,Off)</property>
-						<visible>Control.IsVisible(504) + [Skin.String(StripView_Details,All) | String.IsEmpty(Skin.String(StripView_Details))]</visible>
-					</item>
-
-					<!--StripView Logo-->
-					<item>
-						<description>Logo / Off</description>
-						<label>‹ Off ›</label>
-						<label2>Logo / Off</label2>
-						<onclick>SetFocus(50)</onclick>
-						<property name="ActionLeft">Skin.SetString(StripView_Logo,On)</property>
-						<property name="ActionRight">Skin.SetString(StripView_Logo,On)</property>
-						<visible>Control.IsVisible(504) + [!Skin.String(StripView_Details,Off) + Skin.String(StripView_Logo,Off) + ![Container.Content(seasons) | Container.Content(episodes)] | String.IsEmpty(Skin.String(StripView_Logo))]</visible>
-					</item>
-					<item>
-						<description>Logo / On</description>
-						<label>‹ On ›</label>
-						<label2>Logo / On</label2>
-						<onclick>SetFocus(50)</onclick>
-						<property name="ActionLeft">Skin.SetString(StripView_Logo,Off)</property>
-						<property name="ActionRight">Skin.SetString(StripView_Logo,Off)</property>
-						<visible>Control.IsVisible(504) + !Skin.String(StripView_Details,Off) + Skin.String(StripView_Logo,On) + ![Container.Content(seasons) | Container.Content(episodes)]</visible>
-					</item>
-
-					<!--StripView Flags-->
-					<item>
-						<description>Flags / Off</description>
-						<label>‹ Off ›</label>
-						<label2>Flags / Off</label2>
-						<onclick>SetFocus(50)</onclick>
-						<property name="ActionLeft">Skin.SetString(StripView_Flags,All)</property>
-						<property name="ActionRight">Skin.SetString(StripView_Flags,Studio)</property>
-						<visible>$EXP[StripView_IsVisible] + Skin.String(StripView_Flags,Off)</visible>
-					</item>
-					<item>
-						<description>Flags / Studio</description>
-						<label>‹ Studio ›</label>
-						<label2>Flags / Studio</label2>
-						<onclick>SetFocus(50)</onclick>
-						<property name="ActionLeft">Skin.SetString(StripView_Flags,Off)</property>
-						<property name="ActionRight">Skin.SetString(StripView_Flags,Rating)</property>
-						<visible>$EXP[StripView_IsVisible] + Skin.String(StripView_Flags,Studio)</visible>
-					</item>
-					<item>
-						<description>Flags / Age Rating</description>
-						<label>‹ Age Rating ›</label>
-						<label2>Flags / Age Rating</label2>
-						<onclick>SetFocus(50)</onclick>
-						<property name="ActionLeft">Skin.SetString(StripView_Flags,Studio)</property>
-						<property name="ActionRight">Skin.SetString(StripView_Flags,All)</property>
-						<visible>$EXP[StripView_IsVisible] + Skin.String(StripView_Flags,Rating)</visible>
-					</item>
-					<item>
-						<description>Flags / All</description>
-						<label>‹ All ›</label>
-						<label2>Flags / All</label2>
-						<onclick>SetFocus(50)</onclick>
-						<property name="ActionLeft">Skin.SetString(StripView_Flags,Rating)</property>
-						<property name="ActionRight">Skin.SetString(StripView_Flags,Off)</property>
-						<visible>$EXP[StripView_IsVisible] + [Skin.String(StripView_Flags,All) | String.IsEmpty(Skin.String(StripView_Flags))]</visible>
-					</item>
-
-					<!--GridView Display-->
-					<item>
-						<description>Display / Fanart</description>
-						<label>‹ Fanart ›</label>
-						<label2>Display / Fanart</label2>
-						<onclick>SetFocus(50)</onclick>
-						<property name="ActionLeft">Skin.SetString(GridView_Display,Square)</property>
-						<property name="ActionRight">Skin.SetString(GridView_Display,Posters)</property>
-						<visible>$EXP[GridView_Display_IsFanart]</visible>
-					</item>
-					<item>
-						<description>Display / Posters</description>
-						<label>‹ Posters ›</label>
-						<label2>Display / Posters</label2>
-						<onclick>SetFocus(50)</onclick>
-						<property name="ActionLeft">Skin.SetString(GridView_Display,Fanart)</property>
-						<property name="ActionRight">Skin.SetString(GridView_Display,Square)</property>
-						<visible>$EXP[GridView_Display_IsPosters]</visible>
-					</item>
-					<item>
-						<description>Display / Square</description>
-						<label>‹ Square ›</label>
-						<label2>Display / Square</label2>
-						<onclick>SetFocus(50)</onclick>
-						<property name="ActionLeft">Skin.SetString(GridView_Display,Posters)</property>
-						<property name="ActionRight">Skin.SetString(GridView_Display,Fanart)</property>
-						<visible>$EXP[GridView_Display_IsSquare]</visible>
+						<visible>$EXP[StripView_IsVisible] + [Skin.String(StripView_Details,All) | String.IsEmpty(Skin.String(StripView_Details))]</visible>
 					</item>
 
 					<!--Grid View Details-->
@@ -789,7 +578,7 @@
 						<onclick>SetFocus(50)</onclick>
 						<property name="ActionLeft">Skin.SetString(GridView_Details,TitleAndInfo)</property>
 						<property name="ActionRight">Skin.SetString(GridView_Details,Title)</property>
-						<visible>Control.IsVisible(505) + Skin.String(GridView_Details,Off)</visible>
+						<visible>$EXP[GridView_IsVisible] + Skin.String(GridView_Details,Off)</visible>
 					</item>
 					<item>
 						<description>Details / Title</description>
@@ -798,7 +587,7 @@
 						<onclick>SetFocus(50)</onclick>
 						<property name="ActionLeft">Skin.SetString(GridView_Details,Off)</property>
 						<property name="ActionRight">Skin.SetString(GridView_Details,TitleAndInfo)</property>
-						<visible>Control.IsVisible(505) + Skin.String(GridView_Details,Title)</visible>
+						<visible>$EXP[GridView_IsVisible] + Skin.String(GridView_Details,Title)</visible>
 					</item>
 					<item>
 						<description>Details / Title And Info</description>
@@ -807,9 +596,224 @@
 						<onclick>SetFocus(50)</onclick>
 						<property name="ActionLeft">Skin.SetString(GridView_Details,Title)</property>
 						<property name="ActionRight">Skin.SetString(GridView_Details,Off)</property>
-						<visible>Control.IsVisible(505) + [Skin.String(GridView_Details,TitleAndInfo) | String.IsEmpty(Skin.String(GridView_Details))]</visible>
+						<visible>$EXP[GridView_IsVisible] + [Skin.String(GridView_Details,TitleAndInfo) | String.IsEmpty(Skin.String(GridView_Details))]</visible>
 					</item>
 
+<!--LOGO-->
+					<!--Billboard View Logo-->
+					<item>
+						<description>Logo / Off</description>
+						<label>‹ Off ›</label>
+						<label2>Logo / Off</label2>
+						<onclick>SetFocus(50)</onclick>
+						<property name="ActionLeft">Skin.SetString(BillboardView_Logo,On)</property>
+						<property name="ActionRight">Skin.SetString(BillboardView_Logo,On)</property>
+						<visible>$EXP[BillboardView_IsVisible] + !Skin.String(BillboardView_Details,Off) + [Skin.String(BillboardView_Logo,Off) | String.IsEmpty(Skin.String(BillboardView_Logo))] + $EXP[Logo_Containers]</visible>
+					</item>
+					<item>
+						<description>Logo / On</description>
+						<label>‹ On ›</label>
+						<label2>Logo / On</label2>
+						<onclick>SetFocus(50)</onclick>
+						<property name="ActionLeft">Skin.SetString(BillboardView_Logo,Off)</property>
+						<property name="ActionRight">Skin.SetString(BillboardView_Logo,Off)</property>
+						<visible>$EXP[BillboardView_IsVisible] + !Skin.String(BillboardView_Details,Off) + Skin.String(BillboardView_Logo,On) + $EXP[Logo_Containers]</visible>
+					</item>
+
+					<!--Showcase View Logo-->
+					<item>
+						<description>Logo / Off</description>
+						<label>‹ Off ›</label>
+						<label2>Logo / Off</label2>
+						<onclick>SetFocus(50)</onclick>
+						<property name="ActionLeft">Skin.SetString(ShowcaseView_Logo,On)</property>
+						<property name="ActionRight">Skin.SetString(ShowcaseView_Logo,On)</property>
+						<visible>$EXP[ShowcaseView_IsVisible] + !Skin.String(ShowcaseView_Details,Off) + [Skin.String(ShowcaseView_Logo,Off) | String.IsEmpty(Skin.String(ShowcaseView_Logo))] + $EXP[Logo_Containers]</visible>
+					</item>
+					<item>
+						<description>Logo / On</description>
+						<label>‹ On ›</label>
+						<label2>Logo / On</label2>
+						<onclick>SetFocus(50)</onclick>
+						<property name="ActionLeft">Skin.SetString(ShowcaseView_Logo,Off)</property>
+						<property name="ActionRight">Skin.SetString(ShowcaseView_Logo,Off)</property>
+						<visible>$EXP[ShowcaseView_IsVisible] + !Skin.String(ShowcaseView_Details,Off) + Skin.String(ShowcaseView_Logo,On) + $EXP[Logo_Containers]</visible>
+					</item>
+
+					<!--StripView Logo-->
+					<item>
+						<description>Logo / Off</description>
+						<label>‹ Off ›</label>
+						<label2>Logo / Off</label2>
+						<onclick>SetFocus(50)</onclick>
+						<property name="ActionLeft">Skin.SetString(StripView_Logo,On)</property>
+						<property name="ActionRight">Skin.SetString(StripView_Logo,On)</property>
+						<visible>$EXP[StripView_IsVisible] + !Skin.String(StripView_Details,Off) + [Skin.String(StripView_Logo,Off) | String.IsEmpty(Skin.String(StripView_Logo))] + $EXP[Logo_Containers]</visible>
+					</item>
+					<item>
+						<description>Logo / On</description>
+						<label>‹ On ›</label>
+						<label2>Logo / On</label2>
+						<onclick>SetFocus(50)</onclick>
+						<property name="ActionLeft">Skin.SetString(StripView_Logo,Off)</property>
+						<property name="ActionRight">Skin.SetString(StripView_Logo,Off)</property>
+						<visible>$EXP[StripView_IsVisible] + !Skin.String(StripView_Details,Off) + Skin.String(StripView_Logo,On) + $EXP[Logo_Containers]</visible>
+					</item>
+
+<!--FLAGS-->
+					<!--ListView Flags-->
+					<item>
+						<description>Flags / Off</description>
+						<label>‹ Off ›</label>
+						<label2>Flags / Off</label2>
+						<onclick>SetFocus(50)</onclick>
+						<property name="ActionLeft">Skin.SetString(ListView_Flags,All)</property>
+						<property name="ActionRight">Skin.SetString(ListView_Flags,Studio)</property>
+						<visible>$EXP[ListView_IsVisible] + Skin.String(ListView_Flags,Off) + $EXP[Flag_Containers]</visible>
+					</item>
+					<item>
+						<description>Flags / Studio</description>
+						<label>‹ Studio ›</label>
+						<label2>Flags / Studio</label2>
+						<onclick>SetFocus(50)</onclick>
+						<property name="ActionLeft">Skin.SetString(ListView_Flags,Off)</property>
+						<property name="ActionRight">Skin.SetString(ListView_Flags,Rating)</property>
+						<visible>$EXP[ListView_IsVisible] + Skin.String(ListView_Flags,Studio) + $EXP[Flag_Containers]</visible>
+					</item>
+					<item>
+						<description>Flags / Age Rating</description>
+						<label>‹ Age Rating ›</label>
+						<label2>Flags / Age Rating</label2>
+						<onclick>SetFocus(50)</onclick>
+						<property name="ActionLeft">Skin.SetString(ListView_Flags,Studio)</property>
+						<property name="ActionRight">Skin.SetString(ListView_Flags,All)</property>
+						<visible>$EXP[ListView_IsVisible] + Skin.String(ListView_Flags,Rating) + $EXP[Flag_Containers]</visible>
+					</item>
+					<item>
+						<description>Flags / All</description>
+						<label>‹ All ›</label>
+						<label2>Flags / All</label2>
+						<onclick>SetFocus(50)</onclick>
+						<property name="ActionLeft">Skin.SetString(ListView_Flags,Rating)</property>
+						<property name="ActionRight">Skin.SetString(ListView_Flags,Off)</property>
+						<visible>$EXP[ListView_IsVisible] + [Skin.String(ListView_Flags,All) | String.IsEmpty(Skin.String(ListView_Flags))] + $EXP[Flag_Containers]</visible>
+					</item>
+
+					<!--BillboardView Flags-->
+					<item>
+						<description>Flags / Off</description>
+						<label>‹ Off ›</label>
+						<label2>Flags / Off</label2>
+						<onclick>SetFocus(50)</onclick>
+						<property name="ActionLeft">Skin.SetString(BillboardView_Flags,All)</property>
+						<property name="ActionRight">Skin.SetString(BillboardView_Flags,Studio)</property>
+						<visible>$EXP[BillboardView_IsVisible] + Skin.String(BillboardView_Flags,Off) + $EXP[Flag_Containers]</visible>
+					</item>
+					<item>
+						<description>Flags / Studio</description>
+						<label>‹ Studio ›</label>
+						<label2>Flags / Studio</label2>
+						<onclick>SetFocus(50)</onclick>
+						<property name="ActionLeft">Skin.SetString(BillboardView_Flags,Off)</property>
+						<property name="ActionRight">Skin.SetString(BillboardView_Flags,Rating)</property>
+						<visible>$EXP[BillboardView_IsVisible] + Skin.String(BillboardView_Flags,Studio) + $EXP[Flag_Containers]</visible>
+					</item>
+					<item>
+						<description>Flags / Age Rating</description>
+						<label>‹ Age Rating ›</label>
+						<label2>Flags / Age Rating</label2>
+						<onclick>SetFocus(50)</onclick>
+						<property name="ActionLeft">Skin.SetString(BillboardView_Flags,Studio)</property>
+						<property name="ActionRight">Skin.SetString(BillboardView_Flags,All)</property>
+						<visible>$EXP[BillboardView_IsVisible] + Skin.String(BillboardView_Flags,Rating) + $EXP[Flag_Containers]</visible>
+					</item>
+					<item>
+						<description>Flags / All</description>
+						<label>‹ All ›</label>
+						<label2>Flags / All</label2>
+						<onclick>SetFocus(50)</onclick>
+						<property name="ActionLeft">Skin.SetString(BillboardView_Flags,Rating)</property>
+						<property name="ActionRight">Skin.SetString(BillboardView_Flags,Off)</property>
+						<visible>$EXP[BillboardView_IsVisible] + [Skin.String(BillboardView_Flags,All) | String.IsEmpty(Skin.String(BillboardView_Flags))] + $EXP[Flag_Containers]</visible>
+					</item>
+
+					<!--ShowcaseView Flags-->
+					<item>
+						<description>Flags / Off</description>
+						<label>‹ Off ›</label>
+						<label2>Flags / Off</label2>
+						<onclick>SetFocus(50)</onclick>
+						<property name="ActionLeft">Skin.SetString(ShowcaseView_Flags,All)</property>
+						<property name="ActionRight">Skin.SetString(ShowcaseView_Flags,Studio)</property>
+						<visible>$EXP[ShowcaseView_IsVisible] + Skin.String(ShowcaseView_Flags,Off) + $EXP[Flag_Containers]</visible>
+					</item>
+					<item>
+						<description>Flags / Studio</description>
+						<label>‹ Studio ›</label>
+						<label2>Flags / Studio</label2>
+						<onclick>SetFocus(50)</onclick>
+						<property name="ActionLeft">Skin.SetString(ShowcaseView_Flags,Off)</property>
+						<property name="ActionRight">Skin.SetString(ShowcaseView_Flags,Rating)</property>
+						<visible>$EXP[ShowcaseView_IsVisible] + Skin.String(ShowcaseView_Flags,Studio) + $EXP[Flag_Containers]</visible>
+					</item>
+					<item>
+						<description>Flags / Age Rating</description>
+						<label>‹ Age Rating ›</label>
+						<label2>Flags / Age Rating</label2>
+						<onclick>SetFocus(50)</onclick>
+						<property name="ActionLeft">Skin.SetString(ShowcaseView_Flags,Studio)</property>
+						<property name="ActionRight">Skin.SetString(ShowcaseView_Flags,All)</property>
+						<visible>$EXP[ShowcaseView_IsVisible] + Skin.String(ShowcaseView_Flags,Rating) + $EXP[Flag_Containers]</visible>
+					</item>
+					<item>
+						<description>Flags / All</description>
+						<label>‹ All ›</label>
+						<label2>Flags / All</label2>
+						<onclick>SetFocus(50)</onclick>
+						<property name="ActionLeft">Skin.SetString(ShowcaseView_Flags,Rating)</property>
+						<property name="ActionRight">Skin.SetString(ShowcaseView_Flags,Off)</property>
+						<visible>$EXP[ShowcaseView_IsVisible] + [Skin.String(ShowcaseView_Flags,All) | String.IsEmpty(Skin.String(ShowcaseView_Flags))] + $EXP[Flag_Containers]</visible>
+					</item>
+
+					<!--StripView Flags-->
+					<item>
+						<description>Flags / Off</description>
+						<label>‹ Off ›</label>
+						<label2>Flags / Off</label2>
+						<onclick>SetFocus(50)</onclick>
+						<property name="ActionLeft">Skin.SetString(StripView_Flags,All)</property>
+						<property name="ActionRight">Skin.SetString(StripView_Flags,Studio)</property>
+						<visible>$EXP[StripView_IsVisible] + Skin.String(StripView_Flags,Off) + $EXP[Flag_Containers]</visible>
+					</item>
+					<item>
+						<description>Flags / Studio</description>
+						<label>‹ Studio ›</label>
+						<label2>Flags / Studio</label2>
+						<onclick>SetFocus(50)</onclick>
+						<property name="ActionLeft">Skin.SetString(StripView_Flags,Off)</property>
+						<property name="ActionRight">Skin.SetString(StripView_Flags,Rating)</property>
+						<visible>$EXP[StripView_IsVisible] + $EXP[Flag_Containers] + Skin.String(StripView_Flags,Studio) + $EXP[Flag_Containers]</visible>
+					</item>
+					<item>
+						<description>Flags / Age Rating</description>
+						<label>‹ Age Rating ›</label>
+						<label2>Flags / Age Rating</label2>
+						<onclick>SetFocus(50)</onclick>
+						<property name="ActionLeft">Skin.SetString(StripView_Flags,Studio)</property>
+						<property name="ActionRight">Skin.SetString(StripView_Flags,All)</property>
+						<visible>$EXP[StripView_IsVisible] + Skin.String(StripView_Flags,Rating) + $EXP[Flag_Containers]</visible>
+					</item>
+					<item>
+						<description>Flags / All</description>
+						<label>‹ All ›</label>
+						<label2>Flags / All</label2>
+						<onclick>SetFocus(50)</onclick>
+						<property name="ActionLeft">Skin.SetString(StripView_Flags,Rating)</property>
+						<property name="ActionRight">Skin.SetString(StripView_Flags,Off)</property>
+						<visible>$EXP[StripView_IsVisible] + [Skin.String(StripView_Flags,All) | String.IsEmpty(Skin.String(StripView_Flags))] + $EXP[Flag_Containers]</visible>
+					</item>
+
+<!--SORT-->
 					<!-- Sort / Name -->
 					<item>
 						<onclick>SetFocus(50)</onclick>

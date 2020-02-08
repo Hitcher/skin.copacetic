@@ -2,12 +2,14 @@
 <includes>
 	<include name="Viewtype_50_List">
 		<control type="group">
-			<visible>Control.IsVisible(50)</visible>
+			<visible>$EXP[ListView_IsVisible]</visible>
 			<include>ViewModeFadeAnimation</include>
 			<include>FullscreenDimensions</include>
 			<!--Content-->
 			<control type="group">
 				<visible>!Control.IsVisible(5001) + !Control.IsVisible(5002)</visible>
+				<visible>!$EXP[Dialog_IsVisible]</visible>
+				<include>ContentFadeAnimation</include>
 				<include>ProgressBarFadeAnimation</include>
 				<!--Progress Bar-->
 				<include content="ProgressBar"/>
@@ -19,7 +21,6 @@
 					<itemgap>10</itemgap>
 					<orientation>horizontal</orientation>
 					<usecontrolcoords>true</usecontrolcoords>
-					<visible>!$EXP[DialogVisible]</visible>
 					<visible>Skin.String(ListView_Details,TitleAndInfo) | String.IsEmpty(Skin.String(ListView_Details))</visible>
 					<control type="label">
 						<width max="1080">auto</width>
@@ -55,35 +56,7 @@
 			</control>
 
 			<!-- List -->
-			<control type="fixedlist" id="50">
-				<viewtype label="List">list</viewtype>
-				<left>0</left>
-				<top>65</top>
-				<width>1200</width>
-				<height>950</height>
-				<onleft>3000</onleft>
-				<onright>60</onright>
-				<preloaditems>2</preloaditems>
-				<pagecontrol>60</pagecontrol>
-				<focusposition>8</focusposition>
-				<movement>0</movement>
-				<orientation>vertical</orientation>
-				<scrolltime tween="sine" easing="inout">380</scrolltime>
-				<itemlayout height="55" width="720">
-					<include content="ListViewLayout"/>
-				</itemlayout>
-				<focusedlayout height="70" width="1200">
-					<include>HiddenFocusButton</include>
-					<include content="ListViewLayout">
-						<param name="checktop" value="7"/>
-						<param name="checktexture" value="views/check_focused.png"/>
-						<param name="labelmaxwidth" value="1080"/>
-						<param name="font" value="List_Title_Focused"/>
-						<param name="textcolor" value="$VAR[ListFocusColor]"/>
-						<param name="scroll" value="false"/>
-					</include>
-				</focusedlayout>
-			</control>
+			<include content="ListViewTemplate"/>
 
 		</control>
 	</include>

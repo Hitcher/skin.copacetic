@@ -75,8 +75,8 @@
 
   <expression name="Icon_240_IsVisible">String.IsEqual(Container.ViewMode,Strip)</expression>
   <expression name="Icon_180_IsVisible">!$EXP[Icon_240_IsVisible]</expression>
-  <expression name="DialogVisible">String.IsEqual(window(home).property(OptionsMenu),Active) | Window.IsVisible(contextmenu) | Window.IsVisible(shutdownmenu) | Window.IsVisible(okdialog) | Window.IsVisible(yesnodialog) | Window.IsVisible(progressdialog) | Window.IsVisible(selectdialog) | Window.IsVisible(movieinformation)</expression>
-  <expression name="VolumeBarVisible">String.IsEqual(window(home).property(OptionsMenu),Active) | Window.IsVisible(contextmenu) | Window.IsVisible(shutdownmenu) | Window.IsVisible(okdialog) | Window.IsVisible(yesnodialog) | Window.IsVisible(progressdialog) | Window.IsVisible(selectdialog) | Window.IsVisible(movieinformation)</expression>
+  <expression name="Dialog_IsVisible">String.IsEqual(window(home).property(OptionsMenu),Active) | Window.IsVisible(contextmenu) | Window.IsVisible(shutdownmenu) | Window.IsVisible(okdialog) | Window.IsVisible(yesnodialog) | Window.IsVisible(progressdialog) | Window.IsVisible(selectdialog) | Window.IsVisible(movieinformation)</expression>
+  <expression name="Notification_IsVisible">Window.IsActive(notification) | Window.IsActive(extendedprogressdialog)</expression>
 
 	<!-- Fullscreen dimensions -->
 	<include name="FullscreenDimensions">
@@ -638,7 +638,7 @@
         <control type="image">
           <visible>$PARAM[bordervisible]</visible>
           <aspectratio>stretch</aspectratio>
-          <texture border="2" colordiffuse="$VAR[PrimaryColor]">views/border_1px_15.png</texture>
+          <texture border="2" colordiffuse="$VAR[PrimaryColor]">views/border_1px_10.png</texture>
         </control>
        </control>
 		</definition>
@@ -713,7 +713,7 @@
 		<definition>
 			<control type="group">
         <visible>$EXP[Video_Containers]</visible>
-				<visible>!$EXP[DialogVisible]</visible>
+				<visible>!$EXP[Dialog_IsVisible]</visible>
 				<visible>$PARAM[visible]</visible>
 				<left>$PARAM[left]</left>
 				<top>$PARAM[top]</top>
@@ -784,7 +784,7 @@
 		<definition>
 			<control type="group">
         <visible>$EXP[Flag_Containers]</visible>
-				<visible>!$EXP[DialogVisible]</visible>
+				<visible>!$EXP[Dialog_IsVisible]</visible>
 				<visible>$PARAM[groupvisible]</visible>
 				<control type="group">
 					<!--Studio-->
@@ -820,6 +820,7 @@
     <param name="checkwidth" default="60"/>
     <param name="checkheight" default="60"/>
     <param name="checktexture" default="views/check_unfocused.png"/>
+    <param name="label" default="$VAR[Title]"/>
     <param name="labelleft" default="120"/>
     <param name="labelmaxwidth" default="720"/>
     <param name="font" default="List_Title_Unfocused"/>
@@ -827,7 +828,8 @@
     <param name="scroll" default="false"/>
     <definition>
       <control type="group">
-        <visible>!$EXP[DialogVisible]</visible>
+        <visible>!$EXP[Dialog_IsVisible]</visible>
+        <include>ContentFadeAnimation</include>
         <control type="image">
           <left>$PARAM[checkleft]</left>
           <top>$PARAM[checktop]</top>
@@ -843,11 +845,53 @@
           <aligny>center</aligny>
           <font>$PARAM[font]</font>
           <textcolor>$PARAM[textcolor]</textcolor>
-          <label>$VAR[Title]</label>
+          <selectedcolor>$PARAM[textcolor]</selectedcolor>
+          <label>$PARAM[label]</label>
           <scroll>$PARAM[scroll]</scroll>
           <scrollsuffix> / </scrollsuffix>
         </control>
       </control>
+    </definition>
+  </include>
+
+  <include name="ListViewTemplate">
+    <param name="id" default="50"/>
+    <param name="onleft" default="3000"/>
+    <param name="onright" default="60"/>
+    <param name="label" default="$VAR[Title]"/>
+    <definition>
+      <control type="fixedlist" id="$PARAM[id]">
+				<viewtype label="List">list</viewtype>
+				<left>0</left>
+				<top>65</top>
+				<width>1200</width>
+				<height>950</height>
+				<onleft>$PARAM[onleft]</onleft>
+				<onright>$PARAM[onright]</onright>
+				<preloaditems>2</preloaditems>
+				<pagecontrol>60</pagecontrol>
+				<focusposition>8</focusposition>
+				<movement>0</movement>
+				<orientation>vertical</orientation>
+				<scrolltime tween="sine" easing="inout">380</scrolltime>
+				<itemlayout height="55" width="720">
+					<include content="ListViewLayout">
+            <param name="label" value="$PARAM[label]"/>
+          </include>
+				</itemlayout>
+				<focusedlayout height="70" width="1200">
+					<include>HiddenFocusButton</include>
+					<include content="ListViewLayout">
+						<param name="checktop" value="7"/>
+						<param name="checktexture" value="views/check_focused.png"/>
+            <param name="label" value="$PARAM[label]"/>
+						<param name="labelmaxwidth" value="1080"/>
+						<param name="font" value="List_Title_Focused"/>
+						<param name="textcolor" value="$VAR[ListFocusColor]"/>
+						<param name="scroll" value="false"/>
+					</include>
+				</focusedlayout>
+			</control>
     </definition>
   </include>
 
@@ -859,7 +903,6 @@
     <param name="focusedvisible" default="false"/>
     <param name="backingwidth" default="1200"/>
     <param name="backingcolor" default="$VAR[DetailedListBackingColor]"/>
-    <param name="titlelabeltype" default="label"/>
     <param name="titleleft" default="560"/>
     <param name="titletop" default="49"/>
     <param name="titlewidth" default="760"/>
@@ -871,40 +914,46 @@
     <param name="subtitleheight" default="32"/>
     <param name="subtitlefont" default="DetailedList_Info_Unfocused"/>
     <param name="fanartvisible" default="true"/>
+    <param name="fanartwidth" default="320"/>
     <definition>
       <control type="group">
         <control type="group">
           <height>$PARAM[height]</height>
           <width>$PARAM[width]</width>
-          <visible>!$EXP[DialogVisible]</visible>
+          <visible>!$EXP[Dialog_IsVisible]</visible>
           <include>ContentFadeAnimation</include>
-          <!--Unfocused-Watched-->
-          <control type="image">
-            <visible>$PARAM[unfocusedvisible]</visible>
-            <visible>String.IsEqual(ListItem.Overlay,OverlayWatched.png)</visible>
-            <left>60</left>
-            <top>60</top>
-            <width>60</width>
-            <height>60</height>
-            <aspectratio>keep</aspectratio>
-            <texture colordiffuse="$VAR[PrimaryColor]">views/check_unfocused.png</texture>
-          </control>
-          <!--Focused-Unwatched/Watched-->
+          <!--Watched Indicators-->
           <control type="group">
-            <visible>$PARAM[focusedvisible]</visible>
+            <visible>$EXP[Video_Containers]</visible>
+            <!--Unfocused-Watched-->
             <control type="image">
-              <height>$PARAM[height]</height>
-              <width>$PARAM[height]</width>
-              <texture colordiffuse="$PARAM[backingcolor]">views/white_100.png</texture>
-            </control>
-            <control type="image">
+              <visible>$EXP[Video_Containers]</visible>
+              <visible>$PARAM[unfocusedvisible]</visible>
               <visible>String.IsEqual(ListItem.Overlay,OverlayWatched.png)</visible>
               <left>60</left>
               <top>60</top>
               <width>60</width>
               <height>60</height>
               <aspectratio>keep</aspectratio>
-              <texture colordiffuse="$VAR[SecondaryColor]">views/check_focused.png</texture>
+              <texture colordiffuse="$VAR[PrimaryColor]">views/check_unfocused.png</texture>
+            </control>
+            <!--Focused-Unwatched/Watched-->
+            <control type="group">
+              <visible>$PARAM[focusedvisible]</visible>
+              <control type="image">
+                <height>$PARAM[height]</height>
+                <width>$PARAM[height]</width>
+                <texture colordiffuse="$PARAM[backingcolor]">views/white_100.png</texture>
+              </control>
+              <control type="image">
+                <visible>String.IsEqual(ListItem.Overlay,OverlayWatched.png)</visible>
+                <left>60</left>
+                <top>60</top>
+                <width>60</width>
+                <height>60</height>
+                <aspectratio>keep</aspectratio>
+                <texture colordiffuse="$VAR[SecondaryColor]">views/check_focused.png</texture>
+              </control>
             </control>
           </control>
           <!--Backing-->
@@ -917,7 +966,7 @@
           <!--Title -->
           <control type="group">
             <visible>!String.IsEmpty(ListItem.Art(Thumb))</visible>
-            <control type="$PARAM[titlelabeltype]">
+            <control type="label">
               <animation effect="slide" end="0,19" time="0" condition="Skin.String(DetailedListView_Details,Title) | ListItem.IsCollection">Conditional</animation>
               <left>$PARAM[titleleft]</left>
               <top>$PARAM[titletop]</top>
@@ -931,7 +980,7 @@
               <scrollsuffix> / </scrollsuffix>
             </control>
             <!--SubTitle-->
-            <control type="$PARAM[titlelabeltype]">
+            <control type="label" id="931">
               <visible>!ListItem.IsCollection + !Skin.String(DetailedListView_Details,Title)</visible>
               <left>$PARAM[titleleft]</left>
               <top>$PARAM[subtitletop]</top>
@@ -964,7 +1013,7 @@
         <control type="group">
           <visible>$PARAM[fanartvisible]</visible>
           <left>$PARAM[height]</left>
-          <width>320</width>
+          <width>$PARAM[fanartwidth]</width>
           <height>$PARAM[height]</height>
           <visible>!String.IsEmpty(ListItem.Art(Thumb))</visible>
           <include content="ListIcon"/>
@@ -1023,7 +1072,7 @@
         <height>$PARAM[height]</height>
         <!--Dropshadow-->
         <control type="group">
-          <visible>!$EXP[DialogVisible]</visible>
+          <visible>!$EXP[Dialog_IsVisible]</visible>
           <visible>$PARAM[dropshadowvisible]</visible>
           <include>ContentFadeAnimation</include>
           <!--Left Side-->
@@ -1138,7 +1187,7 @@
         </control>
         <!--Border-->
         <control type="group">
-          <visible>!$EXP[DialogVisible]</visible>
+          <visible>!$EXP[Dialog_IsVisible]</visible>
           <include>ContentFadeAnimation</include>
           <control type="image">
             <left>$PARAM[borderleft]</left>
@@ -1152,7 +1201,7 @@
         </control>
 				<!--GridTitle-->
 				<control type="label">
-					<visible>!$EXP[DialogVisible]</visible>
+					<visible>!$EXP[Dialog_IsVisible]</visible>
 					<include>ContentFadeAnimation</include>
 					<visible>$EXP[GridView_Details_Enabled]</visible>
 					<left>0</left>
@@ -1168,7 +1217,7 @@
 				</control>
 				<!--GridDetails-->
 				<control type="label">
-					<visible>!$EXP[DialogVisible]</visible>
+					<visible>!$EXP[Dialog_IsVisible]</visible>
 					<include>ContentFadeAnimation</include>
 					<visible>Skin.String(GridView_Details,TitleAndInfo)</visible>
           <visible>$PARAM[griddetailsvisible]</visible>
@@ -1288,6 +1337,15 @@
     </include>
   </include>
 
+  <!--HiddenGridButton-->
+  <include name="HiddenGridFocusButton">
+    <control type="button">
+      <visible allowhiddenfocus="true">false</visible>
+      <onfocus condition="[$EXP[GridView_Display_IsFanart] + Container.Position(2)] | [!$EXP[GridView_Display_IsFanart] + Container.Position(4)]">SetProperty(GridView_TopRightIcon,Focused,Home)</onfocus>
+      <onunfocus condition="![[$EXP[GridView_Display_IsFanart] + Container.Position(2)] | [!$EXP[GridView_Display_IsFanart] + Container.Position(4)]]">ClearProperty(GridView_TopRightIcon,Home)</onunfocus>
+    </control>
+  </include>
+
 	<!--Common View Details-->
 	<include name="CommonViewDetails">
 		<param name="groupvisibility" default="!Skin.String(ShowcaseView_Details,Off) + [Skin.String(ShowcaseView_Logo,Off) | String.IsEmpty(ListItem.Art(clearlogo))]"/>
@@ -1315,7 +1373,7 @@
     <param name="plotcolor" default="$VAR[TertiaryColor]"/>
 		<definition>
 			<control type="grouplist">
-				<visible>!$EXP[DialogVisible]</visible>
+				<visible>!$EXP[Dialog_IsVisible]</visible>
         <visible>!Container.IsUpdating</visible>
 				<visible>$PARAM[groupvisibility]</visible>
 				<left>$PARAM[left]</left>
@@ -1343,7 +1401,7 @@
 					<width>560</width>
 					<height>217</height>
 					<aspectratio>keep</aspectratio>
-					<texture background="true">$INFO[ListItem.Art(clearlogo)]</texture>
+					<texture background="true">$VAR[LogoPath]</texture>
 				</control>
 				<!--Info-->
 				<control type="$PARAM[labeltype]">
@@ -1373,15 +1431,6 @@
 			</control>
 		</definition>
 	</include>
-
-  <!--HiddenGridButton-->
-  <include name="HiddenGridFocusButton">
-    <control type="button">
-      <visible allowhiddenfocus="true">false</visible>
-      <onfocus condition="[$EXP[GridView_Display_IsFanart] + Container.Position(2)] | [!$EXP[GridView_Display_IsFanart] + Container.Position(4)]">SetProperty(GridView_TopRightIcon,Focused,Home)</onfocus>
-      <onunfocus condition="![[$EXP[GridView_Display_IsFanart] + Container.Position(2)] | [!$EXP[GridView_Display_IsFanart] + Container.Position(4)]]">ClearProperty(GridView_TopRightIcon,Home)</onunfocus>
-    </control>
-  </include>
 
   <!-- IconLayout -->
   <include name="IconLayout">
@@ -1716,156 +1765,162 @@
     <definition>
       <control type="group">
         <visible>$PARAM[visible]</visible>
-        <include content="IconDetailsLayout">
-          <param name="visible" value="Window.IsActive(home)"/>
-          <param name="width" value="1560"/>
-          <param name="height" value="180"/>
-          <param name="progressbarid" value="$PARAM[progressbarid]"/>
-          <param name="progressbarvisible" value="$PARAM[progressvisible]"/>
-          <param name="progressbarwidth" value="600"/>
-          <param name="titleid" value="$PARAM[titleid]"/>
-          <param name="titlelabel" value="$PARAM[titlelabel]"/>
-          <param name="infoid" value="$PARAM[infoid]"/>
-          <param name="infolabel" value="$PARAM[infolabel]"/>
-        </include>
-        <include content="IconDetailsLayout">
-          <param name="visible" value="Window.IsActive(fullscreenvideo) | String.IsEqual(Container.ViewMode,Billboard)"/>
-          <param name="left" value="0"/>
-          <param name="width" value="1740"/>
-          <param name="height" value="180"/>
-          <param name="progressbarid" value="$PARAM[progressbarid]"/>
-          <param name="progressbarvisible" value="$PARAM[progressvisible]"/>
-          <param name="titleid" value="$PARAM[titleid]"/>
-          <param name="titlelabel" value="$PARAM[titlelabel]"/>
-          <param name="infoid" value="$PARAM[infoid]"/>
-          <param name="infolabel" value="$PARAM[infolabel]"/>
-        </include>
-        <include content="IconDetailsLayout">
-          <param name="visible" value="String.IsEqual(Container.ViewMode,Showcase) + $EXP[ShowcaseView_Display_IsPosters]"/>
-          <param name="left" value="900"/>
-          <param name="width" value="1020"/>
-          <param name="height" value="180"/>
-          <param name="progressbarid" value="$PARAM[progressbarid]"/>
-          <param name="progressbarvisible" value="$PARAM[progressvisible]"/>
-          <param name="titleid" value="$PARAM[titleid]"/>
-          <param name="titlelabel" value="$PARAM[titlelabel]"/>
-          <param name="textalign" value="left"/>
-          <param name="infoid" value="$PARAM[infoid]"/>
-          <param name="infolabel" value="$PARAM[infolabel]"/>
-        </include>
-        <include content="IconDetailsLayout">
-          <param name="visible" value="String.IsEqual(Container.ViewMode,Showcase) + $EXP[ShowcaseView_Display_IsSquare]"/>
-          <param name="left" value="1260"/>
-          <param name="width" value="660"/>
-          <param name="height" value="180"/>
-          <param name="progressbarid" value="$PARAM[progressbarid]"/>
-          <param name="progressbarvisible" value="$PARAM[progressvisible]"/>
-          <param name="titleid" value="$PARAM[titleid]"/>
-          <param name="titlelabel" value="$PARAM[titlelabel]"/>
-          <param name="textalign" value="left"/>
-          <param name="infoid" value="$PARAM[infoid]"/>
-          <param name="infolabel" value="$PARAM[infolabel]"/>
-        </include>
-        <include content="IconDetailsLayout">
-          <param name="visible" value="String.IsEqual(Container.ViewMode,List)"/>
-          <param name="left" value="840"/>
-          <param name="width" value="900"/>
-          <param name="height" value="180"/>
-          <param name="progressbarid" value="$PARAM[progressbarid]"/>
-          <param name="progressbarvisible" value="$PARAM[progressvisible]"/>
-          <param name="titleid" value="$PARAM[titleid]"/>
-          <param name="titlelabel" value="$PARAM[titlelabel]"/>
-          <param name="infoid" value="$PARAM[infoid]"/>
-          <param name="infolabel" value="$PARAM[infolabel]"/>
-        </include>
-        <include content="IconDetailsLayout">
-          <param name="visible" value="String.IsEqual(Container.ViewMode,Strip) + $EXP[StripView_Display_IsPosters]"/>
-          <param name="left" value="720"/>
-          <param name="width" value="880"/>
-          <param name="height" value="180"/>
-          <param name="progressbarid" value="$PARAM[progressbarid]"/>
-          <param name="progressbarvisible" value="$PARAM[progressvisible]"/>
-          <param name="titleid" value="$PARAM[titleid]"/>
-          <param name="titlelabel" value="$PARAM[titlelabel]"/>
-          <param name="infoid" value="$PARAM[infoid]"/>
-          <param name="infolabel" value="$PARAM[infolabel]"/>
-        </include>
-
-
-        <include content="IconDetailsLayout">
-          <param name="visible" value="[String.IsEqual(Container.ViewMode,Strip) + $EXP[StripView_Display_IsFanart] + !Skin.String(StripView_Details,Off)]"/>
-          <param name="left" value="720"/>
-          <param name="width" value="880"/>
-          <param name="height" value="240"/>
-          <param name="progressbarid" value="$PARAM[progressbarid]"/>
-          <param name="progressbarvisible" value="$PARAM[progressvisible]"/>
-          <param name="titleid" value="$PARAM[titleid]"/>
-          <param name="titlelabel" value="$PARAM[titlelabel]"/>
-          <param name="infoid" value="$PARAM[infoid]"/>
-          <param name="infolabel" value="$PARAM[infolabel]"/>
-        </include>
-        <include content="IconDetailsLayout">
-          <param name="visible" value="String.IsEqual(Container.ViewMode,Strip) + $EXP[StripView_Display_IsFanart] + Skin.String(StripView_Details,Off)"/>
-          <param name="left" value="400"/>
-          <param name="width" value="880"/>
-          <param name="height" value="240"/>
-          <param name="progressbarid" value="$PARAM[progressbarid]"/>
-          <param name="progressbarvisible" value="$PARAM[progressvisible]"/>
-          <param name="titleid" value="$PARAM[titleid]"/>
-          <param name="titlelabel" value="$PARAM[titlelabel]"/>
-          <param name="infoid" value="$PARAM[infoid]"/>
-          <param name="infolabel" value="$PARAM[infolabel]"/>
-        </include>
-        <include content="IconDetailsLayout">
-          <param name="visible" value="String.IsEqual(Container.ViewMode,Strip) + $EXP[StripView_Display_IsSquare] + !Skin.String(StripView_Details,Off)"/>
-          <param name="left" value="960"/>
-          <param name="width" value="960"/>
-          <param name="height" value="240"/>
-          <param name="progressbarid" value="$PARAM[progressbarid]"/>
-          <param name="progressbarvisible" value="$PARAM[progressvisible]"/>
-          <param name="textalign" value="left"/>
-          <param name="titleid" value="$PARAM[titleid]"/>
-          <param name="titlelabel" value="$PARAM[titlelabel]"/>
-          <param name="infoid" value="$PARAM[infoid]"/>
-          <param name="infolabel" value="$PARAM[infolabel]"/>
-        </include>
-        <include content="IconDetailsLayout">
-          <param name="visible" value="String.IsEqual(Container.ViewMode,Strip) + $EXP[StripView_Display_IsSquare] + Skin.String(StripView_Details,Off)"/>
-          <param name="left" value="885"/>
-          <param name="width" value="1035"/>
-          <param name="height" value="240"/>
-          <param name="progressbarid" value="$PARAM[progressbarid]"/>
-          <param name="progressbarvisible" value="$PARAM[progressvisible]"/>
-          <param name="textalign" value="left"/>
-          <param name="titleid" value="$PARAM[titleid]"/>
-          <param name="titlelabel" value="$PARAM[titlelabel]"/>
-          <param name="infoid" value="$PARAM[infoid]"/>
-          <param name="infolabel" value="$PARAM[infolabel]"/>
-        </include>
-        <include content="IconDetailsLayout">
-          <param name="visible" value="String.IsEqual(Container.ViewMode,Grid) + [$EXP[GridView_Display_IsPosters] | $EXP[GridView_Display_IsSquare]]"/>
-          <param name="left" value="780"/>
-          <param name="width" value="900"/>
-          <param name="height" value="180"/>
-          <param name="progressbarid" value="$PARAM[progressbarid]"/>
-          <param name="progressbarvisible" value="$PARAM[progressvisible]"/>
-          <param name="titleid" value="$PARAM[titleid]"/>
-          <param name="titlelabel" value="$PARAM[titlelabel]"/>
-          <param name="infoid" value="$PARAM[infoid]"/>
-          <param name="infolabel" value="$PARAM[infolabel]"/>
-        </include>
-        <include content="IconDetailsLayout">
-          <param name="visible" value="String.IsEqual(Container.ViewMode,Grid) + $EXP[GridView_Display_IsFanart]"/>
-          <param name="left" value="664"/>
-          <param name="width" value="1004"/>
-          <param name="height" value="180"/>
-          <param name="progressbarid" value="$PARAM[progressbarid]"/>
-          <param name="progressbarvisible" value="$PARAM[progressvisible]"/>
-          <param name="titleid" value="$PARAM[titleid]"/>
-          <param name="titlelabel" value="$PARAM[titlelabel]"/>
-          <param name="infoid" value="$PARAM[infoid]"/>
-          <param name="infolabel" value="$PARAM[infolabel]"/>
-        </include>
+        <!--Right-Aligned-->
+        <animation effect="slide" end="180,0" time="0" reversible="false" condition="!Window.IsActive(volumebar)">Conditional</animation>
+        <control type="group">
+          <include content="IconDetailsLayout">
+            <param name="visible" value="Window.IsActive(home)"/>
+            <param name="width" value="1560"/>
+            <param name="height" value="180"/>
+            <param name="progressbarid" value="$PARAM[progressbarid]"/>
+            <param name="progressbarvisible" value="$PARAM[progressvisible]"/>
+            <param name="progressbarwidth" value="600"/>
+            <param name="titleid" value="$PARAM[titleid]"/>
+            <param name="titlelabel" value="$PARAM[titlelabel]"/>
+            <param name="infoid" value="$PARAM[infoid]"/>
+            <param name="infolabel" value="$PARAM[infolabel]"/>
+          </include>
+          <include content="IconDetailsLayout">
+            <param name="visible" value="Window.IsActive(fullscreenvideo) | String.IsEqual(Container.ViewMode,Billboard)"/>
+            <param name="left" value="0"/>
+            <param name="width" value="1740"/>
+            <param name="height" value="180"/>
+            <param name="progressbarid" value="$PARAM[progressbarid]"/>
+            <param name="progressbarvisible" value="$PARAM[progressvisible]"/>
+            <param name="titleid" value="$PARAM[titleid]"/>
+            <param name="titlelabel" value="$PARAM[titlelabel]"/>
+            <param name="infoid" value="$PARAM[infoid]"/>
+            <param name="infolabel" value="$PARAM[infolabel]"/>
+          </include>
+          <include content="IconDetailsLayout">
+            <param name="visible" value="String.IsEqual(Container.ViewMode,List)"/>
+            <param name="left" value="840"/>
+            <param name="width" value="900"/>
+            <param name="height" value="180"/>
+            <param name="progressbarid" value="$PARAM[progressbarid]"/>
+            <param name="progressbarvisible" value="$PARAM[progressvisible]"/>
+            <param name="titleid" value="$PARAM[titleid]"/>
+            <param name="titlelabel" value="$PARAM[titlelabel]"/>
+            <param name="infoid" value="$PARAM[infoid]"/>
+            <param name="infolabel" value="$PARAM[infolabel]"/>
+          </include>
+          <include content="IconDetailsLayout">
+            <param name="visible" value="String.IsEqual(Container.ViewMode,Strip) + $EXP[StripView_Display_IsPosters]"/>
+            <param name="left" value="720"/>
+            <param name="width" value="880"/>
+            <param name="height" value="180"/>
+            <param name="progressbarid" value="$PARAM[progressbarid]"/>
+            <param name="progressbarvisible" value="$PARAM[progressvisible]"/>
+            <param name="titleid" value="$PARAM[titleid]"/>
+            <param name="titlelabel" value="$PARAM[titlelabel]"/>
+            <param name="infoid" value="$PARAM[infoid]"/>
+            <param name="infolabel" value="$PARAM[infolabel]"/>
+          </include>
+          <include content="IconDetailsLayout">
+            <param name="visible" value="[String.IsEqual(Container.ViewMode,Strip) + $EXP[StripView_Display_IsFanart] + !Skin.String(StripView_Details,Off)]"/>
+            <param name="left" value="720"/>
+            <param name="width" value="880"/>
+            <param name="height" value="240"/>
+            <param name="progressbarid" value="$PARAM[progressbarid]"/>
+            <param name="progressbarvisible" value="$PARAM[progressvisible]"/>
+            <param name="titleid" value="$PARAM[titleid]"/>
+            <param name="titlelabel" value="$PARAM[titlelabel]"/>
+            <param name="infoid" value="$PARAM[infoid]"/>
+            <param name="infolabel" value="$PARAM[infolabel]"/>
+          </include>
+          <include content="IconDetailsLayout">
+            <param name="visible" value="String.IsEqual(Container.ViewMode,Strip) + $EXP[StripView_Display_IsFanart] + Skin.String(StripView_Details,Off)"/>
+            <param name="left" value="400"/>
+            <param name="width" value="880"/>
+            <param name="height" value="240"/>
+            <param name="progressbarid" value="$PARAM[progressbarid]"/>
+            <param name="progressbarvisible" value="$PARAM[progressvisible]"/>
+            <param name="titleid" value="$PARAM[titleid]"/>
+            <param name="titlelabel" value="$PARAM[titlelabel]"/>
+            <param name="infoid" value="$PARAM[infoid]"/>
+            <param name="infolabel" value="$PARAM[infolabel]"/>
+          </include>
+          <include content="IconDetailsLayout">
+            <param name="visible" value="String.IsEqual(Container.ViewMode,Grid) + [$EXP[GridView_Display_IsPosters] | $EXP[GridView_Display_IsSquare]]"/>
+            <param name="left" value="780"/>
+            <param name="width" value="900"/>
+            <param name="height" value="180"/>
+            <param name="progressbarid" value="$PARAM[progressbarid]"/>
+            <param name="progressbarvisible" value="$PARAM[progressvisible]"/>
+            <param name="titleid" value="$PARAM[titleid]"/>
+            <param name="titlelabel" value="$PARAM[titlelabel]"/>
+            <param name="infoid" value="$PARAM[infoid]"/>
+            <param name="infolabel" value="$PARAM[infolabel]"/>
+          </include>
+          <include content="IconDetailsLayout">
+            <param name="visible" value="String.IsEqual(Container.ViewMode,Grid) + $EXP[GridView_Display_IsFanart]"/>
+            <param name="left" value="664"/>
+            <param name="width" value="1004"/>
+            <param name="height" value="180"/>
+            <param name="progressbarid" value="$PARAM[progressbarid]"/>
+            <param name="progressbarvisible" value="$PARAM[progressvisible]"/>
+            <param name="titleid" value="$PARAM[titleid]"/>
+            <param name="titlelabel" value="$PARAM[titlelabel]"/>
+            <param name="infoid" value="$PARAM[infoid]"/>
+            <param name="infolabel" value="$PARAM[infolabel]"/>
+          </include>
+        </control>
+        <!--Left-Aligned-->
+        <control type="group">
+          <animation effect="slide" end="180,0" time="0" reversible="false" condition="!Window.IsActive(volumebar)">Conditional</animation>
+          <include content="IconDetailsLayout">
+            <param name="visible" value="String.IsEqual(Container.ViewMode,Showcase) + $EXP[ShowcaseView_Display_IsPosters]"/>
+            <param name="left" value="900"/>
+            <param name="width" value="1020"/>
+            <param name="height" value="180"/>
+            <param name="progressbarid" value="$PARAM[progressbarid]"/>
+            <param name="progressbarvisible" value="$PARAM[progressvisible]"/>
+            <param name="titleid" value="$PARAM[titleid]"/>
+            <param name="titlelabel" value="$PARAM[titlelabel]"/>
+            <param name="textalign" value="left"/>
+            <param name="infoid" value="$PARAM[infoid]"/>
+            <param name="infolabel" value="$PARAM[infolabel]"/>
+          </include>
+          <include content="IconDetailsLayout">
+            <param name="visible" value="String.IsEqual(Container.ViewMode,Showcase) + $EXP[ShowcaseView_Display_IsSquare]"/>
+            <param name="left" value="1260"/>
+            <param name="width" value="660"/>
+            <param name="height" value="180"/>
+            <param name="progressbarid" value="$PARAM[progressbarid]"/>
+            <param name="progressbarvisible" value="$PARAM[progressvisible]"/>
+            <param name="titleid" value="$PARAM[titleid]"/>
+            <param name="titlelabel" value="$PARAM[titlelabel]"/>
+            <param name="textalign" value="left"/>
+            <param name="infoid" value="$PARAM[infoid]"/>
+            <param name="infolabel" value="$PARAM[infolabel]"/>
+          </include>
+          <include content="IconDetailsLayout">
+            <param name="visible" value="String.IsEqual(Container.ViewMode,Strip) + $EXP[StripView_Display_IsSquare] + !Skin.String(StripView_Details,Off)"/>
+            <param name="left" value="960"/>
+            <param name="width" value="960"/>
+            <param name="height" value="240"/>
+            <param name="progressbarid" value="$PARAM[progressbarid]"/>
+            <param name="progressbarvisible" value="$PARAM[progressvisible]"/>
+            <param name="textalign" value="left"/>
+            <param name="titleid" value="$PARAM[titleid]"/>
+            <param name="titlelabel" value="$PARAM[titlelabel]"/>
+            <param name="infoid" value="$PARAM[infoid]"/>
+            <param name="infolabel" value="$PARAM[infolabel]"/>
+          </include>
+          <include content="IconDetailsLayout">
+            <param name="visible" value="String.IsEqual(Container.ViewMode,Strip) + $EXP[StripView_Display_IsSquare] + Skin.String(StripView_Details,Off)"/>
+            <param name="left" value="885"/>
+            <param name="width" value="1035"/>
+            <param name="height" value="240"/>
+            <param name="progressbarid" value="$PARAM[progressbarid]"/>
+            <param name="progressbarvisible" value="$PARAM[progressvisible]"/>
+            <param name="textalign" value="left"/>
+            <param name="titleid" value="$PARAM[titleid]"/>
+            <param name="titlelabel" value="$PARAM[titlelabel]"/>
+            <param name="infoid" value="$PARAM[infoid]"/>
+            <param name="infolabel" value="$PARAM[infolabel]"/>
+          </include>
+        </control>
       </control>
     </definition>
   </include>
