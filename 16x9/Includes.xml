@@ -6,7 +6,6 @@
 	<include file="Parameters.xml" />
 	<include file="script-skinshortcuts-includes.xml"/>
 	<include file="Viewtype_50_List.xml" />
-  <include file="Viewtype_500_Detailed_List.xml" />
 	<include file="Viewtype_501_Billboard.xml" />
 	<include file="Viewtype_502_Showcase.xml" />
 	<include file="Viewtype_504_Strip.xml" />
@@ -28,11 +27,6 @@
   <expression name="ListView_Flags_Studio_IsVisible">$EXP[ListView_IsVisible] + [Skin.String(ListView_Flags,All) | Skin.String(ListView_Flags,Studio) | String.IsEmpty(Skin.String(ListView_Flags))]</expression>
   <expression name="ListView_Flags_Rating_IsVisible">$EXP[ListView_IsVisible] + [Skin.String(ListView_Flags,All) | Skin.String(ListView_Flags,Rating) | String.IsEmpty(Skin.String(ListView_Flags))]</expression>
   <expression name="ListView_Flags_Studio_Shift">Skin.String(ListView_Flags,Studio) | [Skin.String(ListView_Flags,All) + String.IsEqual(Control.GetLabel(915),flags/blank.png)]</expression>
-
-  <expression name="DetailedListView_IsVisible">Control.IsVisible(500) | String.IsEqual(Container.ViewMode,DetailedList)</expression>
-  <expression name="DetailedListView_Display_IsFanart">Skin.String(DetailedListView_Display,Fanart) | String.IsEmpty(Skin.String(DetailedListView_Display))</expression>
-  <expression name="DetailedListView_Display_IsPosters">Skin.String(DetailedListView_Display,Posters)</expression>
-  <expression name="DetailedListView_Display_IsSquare">Skin.String(DetailedListView_Display,Square)</expression>
 
   <expression name="BillboardView_IsVisible">Control.IsVisible(501) | String.IsEqual(Container.ViewMode,Billboard)</expression>
   <expression name="BillboardView_Details_Info_IsVisible">Skin.String(BillboardView_Details,TitleAndInfo) | Skin.String(BillboardView_Details,All) | String.IsEmpty(Skin.String(BillboardView_Details))</expression>
@@ -693,7 +687,6 @@
       <visible allowhiddenfocus="true">false</visible>
       <animation effect="slide" end="0,0" time="380" reversible="false">Focus</animation>
       <onfocus condition="System.HasAddon(script.embuary.helper) + !String.IsEmpty(ListItem.Property(WatchedEpisodes)) + !String.IsEmpty(ListItem.Property(TotalEpisodes)) + !String.IsEqual(ListItem.Overlay,OverlayWatched.png) + [Container.Content(tvshows) | Container.Content(seasons)]">RunScript(script.embuary.helper,action=calc,do='"($INFO[ListItem.Property(WatchedEpisodes)] / $INFO[ListItem.Property(TotalEpisodes)]) * 100"',prop=MyResult)</onfocus>
-      <onfocus condition="System.HasAddon(script.embuary.helper) + !String.IsEmpty(Container.TotalWatched) + !String.IsEmpty(Container.NumItems) + [Control.IsVisible(500) + Container.Content(episodes) + !Skin.String(DetailedListView_Display,Square)]">RunScript(script.embuary.helper,action=calc,do='"($INFO[Container.TotalWatched] / $INFO[Container.NumItems]) * 100"',prop=MyResult)</onfocus>
       <onunfocus condition="!String.IsEmpty(Window(Home).Property(MyResult))">ClearProperty(MyResult,home)</onunfocus>
     </control>
   </include>
@@ -721,7 +714,7 @@
 				<height>$PARAM[height]</height>
 				<!--Video is resumable-->
 				<control type="progress">
-					<visible>ListItem.IsResumable + ![Control.IsVisible(500) + Container.Content(episodes) + !Skin.String(DetailedListView_Display,Square)]</visible>
+					<visible>ListItem.IsResumable</visible>
 					<width>$PARAM[width]</width>
 					<height>$PARAM[height]</height>
 					<texturebg colordiffuse="$PARAM[backgroundcolor]">$PARAM[backgoundtexture]</texturebg>
@@ -735,12 +728,12 @@
 				<control type="image">
 					<width>$PARAM[width]</width>
 					<height>$PARAM[height]</height>
-					<visible>Container.Content(albums) | !ListItem.IsResumable + String.IsEqual(ListItem.Overlay,OverlayWatched.png) + ![Control.IsVisible(500) + Container.Content(episodes) + !Skin.String(DetailedListView_Display,Square)]</visible>
+					<visible>Container.Content(albums) | [!ListItem.IsResumable + String.IsEqual(ListItem.Overlay,OverlayWatched.png)]</visible>
 					<texture colordiffuse="$PARAM[focuscolor]">$PARAM[focustexture]</texture>
 				</control>
         <!--Sets, TVshows and Episodes-->
         <control type="group">
-          <visible>!String.IsEqual(ListItem.Overlay,OverlayWatched.png) + Integer.IsGreater($NUMBER[Window(home).Property(MyResult)],0) + [Container.Content(tvshows) | Container.Content(seasons) | [Control.IsVisible(500) + Container.Content(episodes) + !Skin.String(DetailedListView_Display,Square)]]</visible>
+          <visible>!String.IsEqual(ListItem.Overlay,OverlayWatched.png) + Integer.IsGreater($NUMBER[Window(home).Property(MyResult)],0) + [Container.Content(tvshows) | Container.Content(seasons)]</visible>
           <!--Background-->
           <control type="image">
   					<width>$PARAM[width]</width>
@@ -815,11 +808,12 @@
 
   <!--ListView Layout-->
   <include name="ListViewLayout">
-    <param name="checkleft" default="30"/>
-    <param name="checktop" default="0"/>
-    <param name="checkwidth" default="60"/>
-    <param name="checkheight" default="60"/>
-    <param name="checktexture" default="views/check_unfocused.png"/>
+    <param name="iconleft" default="30"/>
+    <param name="icontop" default="5"/>
+    <param name="iconwidth" default="60"/>
+    <param name="iconheight" default="60"/>
+    <param name="icontexture" default="views/check_unfocused.png"/>
+    <param name="iconvisible" default="String.IsEqual(ListItem.Overlay,OverlayWatched.png)"/>
     <param name="label" default="$VAR[Title]"/>
     <param name="labelleft" default="120"/>
     <param name="labelmaxwidth" default="720"/>
@@ -831,12 +825,12 @@
         <visible>!$EXP[Dialog_IsVisible]</visible>
         <include>ContentFadeAnimation</include>
         <control type="image">
-          <left>$PARAM[checkleft]</left>
-          <top>$PARAM[checktop]</top>
-          <width>$PARAM[checkwidth]</width>
-          <height>$PARAM[checkheight]</height>
-          <texture colordiffuse="$PARAM[textcolor]">$PARAM[checktexture]</texture>
-          <visible>String.IsEqual(ListItem.Overlay,OverlayWatched.png)</visible>
+          <visible>$PARAM[iconvisible]</visible>
+          <left>$PARAM[iconleft]</left>
+          <top>$PARAM[icontop]</top>
+          <width>$PARAM[iconwidth]</width>
+          <height>$PARAM[iconheight]</height>
+          <texture colordiffuse="$PARAM[textcolor]">$PARAM[icontexture]</texture>
         </control>
         <control type="label">
           <left>$PARAM[labelleft]</left>
@@ -859,6 +853,11 @@
     <param name="onleft" default="3000"/>
     <param name="onright" default="60"/>
     <param name="label" default="$VAR[Title]"/>
+    <param name="unfocusedicontexture" default="views/check_unfocused.png"/>
+    <param name="unfocusediconvisible" default="String.IsEqual(ListItem.Overlay,OverlayWatched.png)"/>
+    <param name="focusedicontexture" default="views/check_focused.png"/>
+    <param name="focusediconvisible" default="String.IsEqual(ListItem.Overlay,OverlayWatched.png)"/>
+    <param name="textcolor" default="$VAR[ListUnfocusColor]"/>
     <definition>
       <control type="fixedlist" id="$PARAM[id]">
 				<viewtype label="List">list</viewtype>
@@ -877,6 +876,10 @@
 				<itemlayout height="55" width="720">
 					<include content="ListViewLayout">
             <param name="label" value="$PARAM[label]"/>
+            <param name="textcolor" value="$PARAM[textcolor]"/>
+            <param name="icontop" value="-3"/>
+            <param name="icontexture" value="$PARAM[unfocusedicontexture]"/>
+            <param name="iconvisible" value="$PARAM[unfocusediconvisible]"/>
           </include>
 				</itemlayout>
 				<focusedlayout height="70" width="1200">
@@ -887,142 +890,13 @@
             <param name="label" value="$PARAM[label]"/>
 						<param name="labelmaxwidth" value="1080"/>
 						<param name="font" value="List_Title_Focused"/>
-						<param name="textcolor" value="$VAR[ListFocusColor]"/>
+            <param name="textcolor" value="$PARAM[textcolor]"/>
 						<param name="scroll" value="false"/>
+            <param name="icontexture" value="$PARAM[focusedicontexture]"/>
+            <param name="iconvisible" value="$PARAM[focusediconvisible]"/>
 					</include>
 				</focusedlayout>
 			</control>
-    </definition>
-  </include>
-
-  <!--DetailedListView Layout-->
-  <include name="DetailedListViewLayout">
-    <param name="width" default="1440"/>
-    <param name="height" default="180"/>
-    <param name="unfocusedvisible" default="true"/>
-    <param name="focusedvisible" default="false"/>
-    <param name="backingwidth" default="1200"/>
-    <param name="backingcolor" default="$VAR[DetailedListBackingColor]"/>
-    <param name="titleleft" default="560"/>
-    <param name="titletop" default="49"/>
-    <param name="titlewidth" default="760"/>
-    <param name="titleheight" default="44"/>
-    <param name="titlefont" default="DetailedList_Title_Unfocused"/>
-    <param name="titlescroll" default="false"/>
-    <param name="titletextcolor" default="$VAR[IconDetailsTextColor]"/>
-    <param name="subtitletop" default="98"/>
-    <param name="subtitleheight" default="32"/>
-    <param name="subtitlefont" default="DetailedList_Info_Unfocused"/>
-    <param name="fanartvisible" default="true"/>
-    <param name="fanartwidth" default="320"/>
-    <definition>
-      <control type="group">
-        <control type="group">
-          <height>$PARAM[height]</height>
-          <width>$PARAM[width]</width>
-          <visible>!$EXP[Dialog_IsVisible]</visible>
-          <include>ContentFadeAnimation</include>
-          <!--Watched Indicators-->
-          <control type="group">
-            <visible>$EXP[Video_Containers]</visible>
-            <!--Unfocused-Watched-->
-            <control type="image">
-              <visible>$EXP[Video_Containers]</visible>
-              <visible>$PARAM[unfocusedvisible]</visible>
-              <visible>String.IsEqual(ListItem.Overlay,OverlayWatched.png)</visible>
-              <left>60</left>
-              <top>60</top>
-              <width>60</width>
-              <height>60</height>
-              <aspectratio>keep</aspectratio>
-              <texture colordiffuse="$VAR[PrimaryColor]">views/check_unfocused.png</texture>
-            </control>
-            <!--Focused-Unwatched/Watched-->
-            <control type="group">
-              <visible>$PARAM[focusedvisible]</visible>
-              <control type="image">
-                <height>$PARAM[height]</height>
-                <width>$PARAM[height]</width>
-                <texture colordiffuse="$PARAM[backingcolor]">views/white_100.png</texture>
-              </control>
-              <control type="image">
-                <visible>String.IsEqual(ListItem.Overlay,OverlayWatched.png)</visible>
-                <left>60</left>
-                <top>60</top>
-                <width>60</width>
-                <height>60</height>
-                <aspectratio>keep</aspectratio>
-                <texture colordiffuse="$VAR[SecondaryColor]">views/check_focused.png</texture>
-              </control>
-            </control>
-          </control>
-          <!--Backing-->
-          <control type="image">
-            <left>$PARAM[height]</left>
-            <width>$PARAM[backingwidth]</width>
-            <height>$PARAM[height]</height>
-            <texture colordiffuse="$PARAM[backingcolor]">views/white_100.png</texture>
-          </control>
-          <!--Title -->
-          <control type="group">
-            <visible>!String.IsEmpty(ListItem.Art(Thumb))</visible>
-            <control type="label">
-              <animation effect="slide" end="0,19" time="0" condition="Skin.String(DetailedListView_Details,Title) | ListItem.IsCollection">Conditional</animation>
-              <left>$PARAM[titleleft]</left>
-              <top>$PARAM[titletop]</top>
-              <width>$PARAM[titlewidth]</width>
-              <height>$PARAM[titleheight]</height>
-              <label>$VAR[Title]</label>
-              <font>$PARAM[titlefont]</font>
-              <aligny>center</aligny>
-              <textcolor>$PARAM[titletextcolor]</textcolor>
-              <scroll>$PARAM[scroll]</scroll>
-              <scrollsuffix> / </scrollsuffix>
-            </control>
-            <!--SubTitle-->
-            <control type="label" id="931">
-              <visible>!ListItem.IsCollection + !Skin.String(DetailedListView_Details,Title)</visible>
-              <left>$PARAM[titleleft]</left>
-              <top>$PARAM[subtitletop]</top>
-              <width>$PARAM[titlewidth]</width>
-              <height>$PARAM[subtitleheight]</height>
-              <aligny>center</aligny>
-              <label>$VAR[TitleInfo]</label>
-              <font>$PARAM[subtitlefont]</font>
-              <textcolor>$PARAM[titletextcolor]</textcolor>
-              <scroll>$PARAM[scroll]</scroll>
-              <scrollsuffix> / </scrollsuffix>
-            </control>
-          </control>
-          <!--Title for folders-->
-          <control type="$PARAM[titlelabeltype]">
-            <visible>String.IsEmpty(ListItem.Art(Thumb))</visible>
-            <left>169</left>
-            <top>46</top>
-            <width>$PARAM[titlewidth]</width>
-            <height>$PARAM[titleheight]</height>
-            <label>$VAR[Title]</label>
-            <font>$PARAM[titlefont]</font>
-            <aligny>center</aligny>
-            <textcolor>$PARAM[titletextcolor]</textcolor>
-            <scroll>$PARAM[scroll]</scroll>
-            <scrollsuffix> / </scrollsuffix>
-          </control>
-        </control>
-        <!--Fanart-->
-        <control type="group">
-          <visible>$PARAM[fanartvisible]</visible>
-          <left>$PARAM[height]</left>
-          <width>$PARAM[fanartwidth]</width>
-          <height>$PARAM[height]</height>
-          <visible>!String.IsEmpty(ListItem.Art(Thumb))</visible>
-          <include content="ListIcon"/>
-          <control type="image">
-            <visible>$PARAM[unfocusedvisible]</visible>
-            <texture colordiffuse="$VAR[SecondaryColor]">views/white_30.png</texture>
-          </control>
-        </control>
-      </control>
     </definition>
   </include>
 
