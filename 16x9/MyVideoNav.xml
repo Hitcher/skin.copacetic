@@ -49,10 +49,14 @@
 			<content sortby="year" sortorder="ascending">$VAR[MovieSetsPath]</content>
  		</control>
 
-		<!--Hidden labels-->
-		<control type="label" id="931">
-			<visible allowhiddenfocus="false">false</visible>
-			<label>$VAR[TitleInfo]</label>
+		<!--Hidden Controls for animation trigger on Grid Display/Details menu switching-->
+		<control type="button" id="940">
+			<visible allowhiddenfocus="true">false</visible>
+			<onfocus>Control.SetFocus(3000)</onfocus>
+		</control>
+		<control type="group" id="941">
+			<visible>Control.HasFocus(940)</visible>
+			<animation effect="slide" end="0,0" time="380" reversible="false">Hidden</animation>
 		</control>
 
 		<!-- Main group -->
@@ -77,25 +81,6 @@
 				<texture colordiffuse="$VAR[DarkColor]">views/gradient_light-background.png</texture>
 			</control>
 
-			<!--Fanart background for 50,501-->
-			<control type="group">
-				<visible>$EXP[Background_IsFanart]</visible>
-				<include>ViewModeFadeAnimation</include>
-				<control type="image">
-					<texture colordiffuse="$VAR[DarkColor]">views/white_100.png</texture>
-					</control>
-				<include content="ListIcon">
-						<param name="left" value="0"/>
-						<param name="top" value="0"/>
-						<param name="width" value="1920"/>
-						<param name="height" value="1080"/>
-						<param name="fadetime" value="300"/>
-				</include>
-				<include content="ViewtypeOverlay">
-					<param name="visible" value="$EXP[ListView_IsVisible] | [$EXP[BillboardView_IsVisible] + !Skin.String(BillboardView_Details,Off)]"/>
-				</include>
-			</control>
-
 			<!--Flags-->
 			<control type="group">
 				<visible>!Control.IsVisible(5001) + !Control.IsVisible(5002)</visible>
@@ -115,9 +100,11 @@
 			<control type="label">
 				<!--<label>$INFO[window(Home).property(GridView_TopRightIcon)]</label>-->
 				<!--<label>$INFO[Control.GetLabel(32)]</label>-->
-				<font>body</font>
+				<label>hello</label>
+				<visible>Control.IsVisible(945)</visible>
+				<font>List_Title_Focused</font>
 				<textcolor>$VAR[PrimaryColor]</textcolor>
-				<left>200</left>
+				<left>900</left>
 			</control>
 
 			<!--Scrollbars-->
@@ -128,7 +115,7 @@
 				<width>6</width>
 				<height>720</height>
 				<onleft>50</onleft>
-				<onright>3000</onright>
+				<onright>SetFocus(3000,0)</onright>
 				<showonepage>false</showonepage>
 				<orientation>vertical</orientation>
 				<texturesliderbackground colordiffuse="$VAR[ScrollBarColor]">views/white_10.png</texturesliderbackground>
@@ -148,7 +135,7 @@
 				<width>1080</width>
 				<height>6</height>
 				<onup>50</onup>
-				<ondown>3000</ondown>
+				<ondown>SetFocus(3000,0)</ondown>
 				<showonepage>false</showonepage>
 				<orientation>horizontal</orientation>
 				<texturesliderbackground colordiffuse="$VAR[ScrollBarColor]">views/white_10.png</texturesliderbackground>
@@ -185,10 +172,28 @@
 				<onright condition="String.IsEmpty(Container(3000).ListItem.Property(ActionRight))">50</onright>
 				<onleft condition="!String.IsEmpty(Container(3000).ListItem.Property(ActionLeft))">$INFO[Container(3000).ListItem.Property(ActionLeft)]</onleft>
 				<onright condition="!String.IsEmpty(Container(3000).ListItem.Property(ActionRight))">$INFO[Container(3000).ListItem.Property(ActionRight)]</onright>
+				<onleft condition="Container(3000).HasFocus(942)">SetFocus(940)</onleft>
+				<onright condition="Container(3000).HasFocus(942)">SetFocus(940)</onright>
+				<onleft condition="Container(3000).HasFocus(943)">SetFocus(940)</onleft>
+				<onright condition="Container(3000).HasFocus(943)">SetFocus(940)</onright>
+				<onleft condition="Container(3000).HasFocus(944)">SetFocus(940)</onleft>
+				<onright condition="Container(3000).HasFocus(944)">SetFocus(940)</onright>
+				<onleft condition="Container(3000).HasFocus(945)">SetFocus(940)</onleft>
+				<onright condition="Container(3000).HasFocus(945)">SetFocus(940)</onright>
+				<onleft condition="Container(3000).HasFocus(946)">SetFocus(940)</onleft>
+				<onright condition="Container(3000).HasFocus(947)">SetFocus(940)</onright>
+				<onleft condition="Container(3000).HasFocus(948)">SetFocus(940)</onleft>
+				<onright condition="Container(3000).HasFocus(948)">SetFocus(940)</onright>
+				<onleft condition="Container(3000).HasFocus(949)">SetFocus(940)</onleft>
+				<onright condition="Container(3000).HasFocus(949)">SetFocus(940)</onright>
+				<onleft condition="Container(3000).HasFocus(950)">SetFocus(940)</onleft>
+				<onright condition="Container(3000).HasFocus(950)">SetFocus(940)</onright>
+				<onleft condition="Container(3000).HasFocus(951)">SetFocus(940)</onleft>
+				<onright condition="Container(3000).HasFocus(951)">SetFocus(940)</onright>
 				<orientation>vertical</orientation>
 				<focusposition>0</focusposition>
 				<movement>12</movement>
-				<defaultcontrol always="true">0</defaultcontrol>
+				<defaultcontrol>1</defaultcontrol>
 				<scrolltime tween="sine" easing="inout">380</scrolltime>
 				<itemlayout height="55" width="1080">
 					<control type="label">
@@ -252,23 +257,41 @@
 
 <!--DISPLAY-->
 					<!--List View Display-->
-					<item>
-						<description>Fanart / Background</description>
+					<item id="948">
+						<description>Display / Background</description>
 						<label>‹ Background ›</label>
-						<label2>Fanart / Background</label2>
+						<label2>Display / Background</label2>
 						<onclick>SetFocus(50)</onclick>
-						<property name="ActionLeft">Skin.SetString(ListView_Fanart,Off)</property>
-						<property name="ActionRight">Skin.SetString(ListView_Fanart,Off)</property>
-						<visible>$EXP[ListView_IsVisible] + $EXP[ListView_Fanart_Background_IsVisible] + !Container.Content() + !Container.Content(Files)</visible>
+						<property name="ActionLeft">Skin.SetString(ListView_Display,Square)</property>
+						<property name="ActionRight">Skin.SetString(ListView_Display,Fanart)</property>
+						<visible>$EXP[ListView_IsVisible] + $EXP[ListView_Display_IsBackground]</visible>
 					</item>
-					<item>
-						<description>Fanart / Off</description>
-						<label>‹ Off ›</label>
-						<label2>Fanart / Off</label2>
+					<item id="949">
+						<description>Display / Fanart</description>
+						<label>‹ Fanart ›</label>
+						<label2>Display / Fanart</label2>
 						<onclick>SetFocus(50)</onclick>
-						<property name="ActionLeft">Skin.SetString(ListView_Fanart,Background)</property>
-						<property name="ActionRight">Skin.SetString(ListView_Fanart,Background)</property>
-						<visible>$EXP[ListView_IsVisible] + Skin.String(ListView_Fanart,Off) + !Container.Content() + !Container.Content(Files)</visible>
+						<property name="ActionLeft">Skin.SetString(ListView_Display,Background)</property>
+						<property name="ActionRight">Skin.SetString(ListView_Display,Posters)</property>
+						<visible>$EXP[ListView_IsVisible] + $EXP[ListView_Display_IsFanart]</visible>
+					</item>
+					<item id="950">
+						<description>Display / Posters</description>
+						<label>‹ Posters ›</label>
+						<label2>Display / Posters</label2>
+						<onclick>SetFocus(50)</onclick>
+						<property name="ActionLeft">Skin.SetString(ListView_Display,Fanart)</property>
+						<property name="ActionRight">Skin.SetString(ListView_Display,Square)</property>
+						<visible>$EXP[ListView_IsVisible] + $EXP[ListView_Display_IsPosters]</visible>
+					</item>
+					<item id="951">
+						<description>Display / Square</description>
+						<label>‹ Square ›</label>
+						<label2>Display / Square</label2>
+						<onclick>SetFocus(50)</onclick>
+						<property name="ActionLeft">Skin.SetString(ListView_Display,Posters)</property>
+						<property name="ActionRight">Skin.SetString(ListView_Display,Background)</property>
+						<visible>$EXP[ListView_IsVisible] + $EXP[ListView_Display_IsSquare]</visible>
 					</item>
 
 					<!--Showcase View Display-->
@@ -321,7 +344,7 @@
 					</item>
 
 					<!--GridView Display-->
-					<item>
+					<item id="942">
 						<description>Display / Fanart</description>
 						<label>‹ Fanart ›</label>
 						<label2>Display / Fanart</label2>
@@ -330,7 +353,7 @@
 						<property name="ActionRight">Skin.SetString(GridView_Display,Posters)</property>
 						<visible>$EXP[GridView_IsVisible] + $EXP[GridView_Display_IsFanart]</visible>
 					</item>
-					<item>
+					<item id="943">
 						<description>Display / Posters</description>
 						<label>‹ Posters ›</label>
 						<label2>Display / Posters</label2>
@@ -339,7 +362,7 @@
 						<property name="ActionRight">Skin.SetString(GridView_Display,Square)</property>
 						<visible>$EXP[GridView_IsVisible] + $EXP[GridView_Display_IsPosters]</visible>
 					</item>
-					<item>
+					<item id="944">
 						<description>Display / Square</description>
 						<label>‹ Square ›</label>
 						<label2>Display / Square</label2>
@@ -512,7 +535,7 @@
 					</item>
 
 					<!--Grid View Details-->
-					<item>
+					<item id="945">
 						<description>Details / Off</description>
 						<label>‹ Off ›</label>
 						<label2>$LOCALIZE[32109] / Off</label2>
@@ -521,7 +544,7 @@
 						<property name="ActionRight">Skin.SetString(GridView_Details,Title)</property>
 						<visible>$EXP[GridView_IsVisible] + Skin.String(GridView_Details,Off)</visible>
 					</item>
-					<item>
+					<item id="946">
 						<description>Details / Title</description>
 						<label>‹ Title ›</label>
 						<label2>$LOCALIZE[32109] / Title</label2>
@@ -530,7 +553,7 @@
 						<property name="ActionRight">Skin.SetString(GridView_Details,TitleAndInfo)</property>
 						<visible>$EXP[GridView_IsVisible] + Skin.String(GridView_Details,Title)</visible>
 					</item>
-					<item>
+					<item id="947">
 						<description>Details / Title And Info</description>
 						<label>‹ Title And Info ›</label>
 						<label2>$LOCALIZE[32109] / Title And Info</label2>

@@ -18,10 +18,13 @@
   <expression name="Fanart_Containers">Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | Container.Content(episodes) | Container.Content(artists)</expression>
   <expression name="Logo_Containers">[Container.Content(movies) | Container.Content(tvshows)]</expression>
   <expression name="Flag_Containers">[Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | Container.Content(episodes)]</expression>
-  <expression name="Background_IsFanart">[[$EXP[ListView_IsVisible] + $EXP[Fanart_Containers] + $EXP[ListView_Fanart_Background_IsVisible]] | $EXP[BillboardView_IsVisible]] + ![String.IsEmpty(ListItem.Art(fanart)) + String.IsEmpty(ListItem.Icon)]</expression>
+  <expression name="Background_IsFanart">[[$EXP[ListView_IsVisible] + $EXP[Fanart_Containers] + $EXP[ListView_Display_IsBackground]] | $EXP[BillboardView_IsVisible]] + ![String.IsEmpty(ListItem.Art(fanart)) + String.IsEmpty(ListItem.Icon)]</expression>
 
   <expression name="ListView_IsVisible">Control.IsVisible(50) | String.IsEqual(Container.ViewMode,List)</expression>
-  <expression name="ListView_Fanart_Background_IsVisible">Skin.String(ListView_Fanart,Background) | String.IsEmpty(Skin.String(ListView_Fanart))</expression>
+  <expression name="ListView_Display_IsBackground">Skin.String(ListView_Display,Background) | String.IsEmpty(Skin.String(ListView_Display)) + !Container.Content() + !Container.Content(Files)</expression>
+  <expression name="ListView_Display_IsFanart">Skin.String(ListView_Display,Fanart) + !Container.Content(albums) + !Container.Content() + !Container.Content(Files)</expression>
+  <expression name="ListView_Display_IsPosters">Skin.String(ListView_Display,Posters) + !Container.Content(episodes) + !Container.Content(artists) + !Container.Content(albums) + !Container.Content() + !Container.Content(Files)</expression>
+  <expression name="ListView_Display_IsSquare">Skin.String(ListView_Display,Square) + !Container.Content(episodes) + !Container.Content() + !Container.Content(Files)</expression>
   <expression name="ListView_Details_Info_IsVisible">Skin.String(ListView_Details,TitleAndInfo)</expression>
   <expression name="ListView_Flags_IsOn">$EXP[ListView_IsVisible] + !Skin.String(ListView_Flags,Off)</expression>
   <expression name="ListView_Flags_Studio_IsVisible">$EXP[ListView_IsVisible] + [Skin.String(ListView_Flags,All) | Skin.String(ListView_Flags,Studio) | String.IsEmpty(Skin.String(ListView_Flags))]</expression>
@@ -779,6 +782,7 @@
         <visible>$EXP[Flag_Containers]</visible>
 				<visible>!$EXP[Dialog_IsVisible]</visible>
 				<visible>$PARAM[groupvisible]</visible>
+        <animation effect="slide" end="-600,0" time="0" condition="$EXP[ListView_IsVisible] + !$EXP[ListView_Display_IsBackground]">Conditional</animation>
 				<control type="group">
 					<!--Studio-->
 					<control type="image" id="914">
@@ -850,7 +854,7 @@
 
   <include name="ListViewTemplate">
     <param name="id" default="50"/>
-    <param name="onleft" default="3000"/>
+    <param name="onleft" default="SetFocus(3000,0)"/>
     <param name="onright" default="60"/>
     <param name="label" default="$VAR[Title]"/>
     <param name="unfocusedicontexture" default="views/check_unfocused.png"/>
