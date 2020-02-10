@@ -31,10 +31,11 @@
 				<visible>$EXP[ListView_Display_IsBackground]</visible>
 				<visible>!Control.IsVisible(5001) + !Control.IsVisible(5002)</visible>
 				<visible>!$EXP[Dialog_IsVisible]</visible>
-				<include>ContentFadeAnimation</include>
 				<include>ProgressBarFadeAnimation</include>
 				<!--Progress Bar-->
 				<include content="ProgressBar"/>
+				<!--MediaFlags-->
+				<include>MediaFlags</include>
 				<!--Details-->
 				<control type="grouplist">
 					<left>120</left>
@@ -64,6 +65,16 @@
 				</control>
 			</control>
 
+			<!--Content - Details>Fanart/Posters/Square-->
+			<control type="group">
+				<visible>!$EXP[ListView_Display_IsBackground] + !Control.IsVisible(5001) + !Control.IsVisible(5002)</visible>
+				<include>ProgressBarFadeAnimation</include>
+					<control type="group">
+						<animation effect="slide" end="600,-93" time="0" condition="$EXP[ListView_Display_IsPosters]">Conditional</animation>
+						<include content="ProgressBar"/>
+					</control>
+			</control>
+
 			<!---Transition background-->
 			<control type="group">
 				<visible>Control.IsVisible(5001) | Control.IsVisible(5002)</visible>
@@ -77,9 +88,22 @@
 				</control>
 			</control>
 
+			<!--Content--Files-->
+			<!-- Image-->
+			<control type="image">
+				<visible>!Container.Content() + Container.Content(Files)</visible>
+				<left>1320</left>
+				<top>180</top>
+				<width>480</width>
+				<height>720</height>
+				<texture>$INFO[ListItem.Icon]</texture>
+				<aspectratio aligny="center">keep</aspectratio>
+				<fadetime>380</fadetime>
+			</control>
+
 			<!--Content - Display>Fanart/Posters/Square-->
 			<control type="group">
-				<visible>!Control.IsVisible(941)</visible>
+				<visible>!Control.IsVisible(941) + !$EXP[ListView_Display_IsBackground]</visible>
 				<animation effect="fade" start="0" end="100" time="190" tween="sine" easing="out" reversible="false">Visible</animation>
 				<control type="group">
 					<!--Poster-->
@@ -91,13 +115,9 @@
 						<param name="fadetime" value="300"/>
 						<param name="visible" value="$EXP[ListView_Display_IsPosters]"/>
 					</include>
-					<!--Progress Bar-->
-					<control type="group">
-						<animation effect="slide" end="600,-93" time="0" condition="$EXP[ListView_Display_IsPosters]">Conditional</animation>
-						<include content="ProgressBar"/>
-					</control>
 				</control>
 			</control>
+
 
 			<!-- List -->
 			<include content="ListViewTemplate"/>
