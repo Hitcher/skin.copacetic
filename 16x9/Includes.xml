@@ -21,10 +21,10 @@
   <expression name="Background_IsFanart">[[$EXP[ListView_IsVisible] + $EXP[Fanart_Containers] + $EXP[ListView_Display_IsBackground]] | $EXP[BillboardView_IsVisible]] + ![String.IsEmpty(ListItem.Art(fanart)) + String.IsEmpty(ListItem.Icon)]</expression>
 
   <expression name="ListView_IsVisible">Control.IsVisible(50) | String.IsEqual(Container.ViewMode,List)</expression>
-  <expression name="ListView_Display_IsBackground">Skin.String(ListView_Display,Background) | String.IsEmpty(Skin.String(ListView_Display)) + !Container.Content() + !Container.Content(Files)</expression>
-  <expression name="ListView_Display_IsFanart">Skin.String(ListView_Display,Fanart) + !Container.Content(albums) + !Container.Content() + !Container.Content(Files)</expression>
-  <expression name="ListView_Display_IsPosters">Skin.String(ListView_Display,Posters) + !Container.Content(episodes) + !Container.Content(artists) + !Container.Content(albums) + !Container.Content() + !Container.Content(Files)</expression>
-  <expression name="ListView_Display_IsSquare">Skin.String(ListView_Display,Square) + !Container.Content(episodes) + !Container.Content() + !Container.Content(Files)</expression>
+  <expression name="ListView_Display_IsBackground">Container.Content() | Container.Content(episodes) | Skin.String(ListView_Display,Background) | String.IsEmpty(Skin.String(ListView_Display)) + !Container.Content(files)</expression>
+  <expression name="ListView_Display_IsFanart">Container.Content(files)</expression>
+  <expression name="ListView_Display_IsPosters">Skin.String(ListView_Display,Posters) + !Container.Content(episodes) + !Container.Content(artists) + !Container.Content(albums) + !Container.Content() + !Container.Content(files)</expression>
+  <expression name="ListView_Display_IsSquare">Skin.String(ListView_Display,Square) + !Container.Content(episodes) + !Container.Content() + !Container.Content(files)</expression>
   <expression name="ListView_Details_Info_IsVisible">Skin.String(ListView_Details,TitleAndInfo)</expression>
   <expression name="ListView_Flags_IsOn">$EXP[ListView_IsVisible] + !Skin.String(ListView_Flags,Off)</expression>
   <expression name="ListView_Flags_Studio_IsVisible">$EXP[ListView_IsVisible] + [Skin.String(ListView_Flags,All) | Skin.String(ListView_Flags,Studio) | String.IsEmpty(Skin.String(ListView_Flags))]</expression>
@@ -620,9 +620,8 @@
         <visible>$PARAM[visible]</visible>
         <animation effect="$PARAM[animationeffect]" end="$PARAM[animationend]" condition="$PARAM[animationcondition]" time="380" tween="sine" easing="inout" reversible="false">$PARAM[animationtype]</animation>
         <control type="image">
-				  <aspectratio align="center">$PARAM[aspectratio]</aspectratio>
+				  <aspectratio align="center" aligny="center">$PARAM[aspectratio]</aspectratio>
 				  <texture background="true">$PARAM[texture]</texture>
-          <texture background="true" colordiffuse="$VAR[AccentColor]">views/white_100.png</texture>
           <fadetime>$PARAM[fadetime]</fadetime>
 			  </control>
         <!--Progress Bar backing overlay-->
@@ -696,7 +695,7 @@
 
 	<!--Progress bar-->
 	<include name="ProgressBar">
-		<param name="visible" default="!Control.HasFocus(60)"/>
+		<param name="visible" default="![Control.HasFocus(60) + [[$EXP[ListView_IsVisible] + $EXP[ListView_Display_IsBackground]] | $EXP[BillboardView_IsVisible] | $EXP[ShowcaseView_IsVisible] | $EXP[StripView_IsVisible]]]"/>
 		<param name="left" default="780"/>
 		<param name="top" default="1047"/>
     <param name="bottom"/>
@@ -776,13 +775,12 @@
 
 	<!--Media Flags-->
 	<include name="MediaFlags">
-		<param name="groupvisible" default="[$EXP[ListView_Flags_IsOn] | $EXP[BillboardView_Flags_IsOn] | $EXP[ShowcaseView_Flags_IsOn] | $EXP[StripView_Flags_IsOn]] + !Control.HasFocus(60)"/>
+		<param name="groupvisible" default="[$EXP[ListView_Flags_IsOn] | $EXP[BillboardView_Flags_IsOn] | $EXP[ShowcaseView_Flags_IsOn] | $EXP[StripView_Flags_IsOn]]"/>
 		<definition>
 			<control type="group">
         <visible>$EXP[Flag_Containers]</visible>
 				<visible>!$EXP[Dialog_IsVisible]</visible>
 				<visible>$PARAM[groupvisible]</visible>
-        <animation effect="slide" end="-600,0" time="0" condition="$EXP[ListView_IsVisible] + !$EXP[ListView_Display_IsBackground]">Conditional</animation>
 				<control type="group">
 					<!--Studio-->
 					<control type="image" id="914">
@@ -854,6 +852,7 @@
 
   <include name="ListViewTemplate">
     <param name="id" default="50"/>
+    <param name="left" default="0"/>
     <param name="onleft" default="SetFocus(3000,0)"/>
     <param name="onright" default="60"/>
     <param name="label" default="$VAR[Title]"/>
@@ -865,15 +864,15 @@
     <definition>
       <control type="fixedlist" id="$PARAM[id]">
 				<viewtype label="List">list</viewtype>
-				<left>0</left>
-				<top>65</top>
+				<left>$PARAM[left]</left>
+				<top>175</top>
 				<width>1200</width>
-				<height>950</height>
+				<height>730</height>
 				<onleft>$PARAM[onleft]</onleft>
 				<onright>$PARAM[onright]</onright>
 				<preloaditems>2</preloaditems>
 				<pagecontrol>60</pagecontrol>
-				<focusposition>8</focusposition>
+				<focusposition>6</focusposition>
 				<movement>0</movement>
 				<orientation>vertical</orientation>
 				<scrolltime tween="sine" easing="inout">380</scrolltime>
