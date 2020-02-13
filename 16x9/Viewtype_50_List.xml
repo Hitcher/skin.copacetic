@@ -19,7 +19,7 @@
 					<left>120</left>
 					<top>505</top>
 					<height>70</height>
-					<itemgap>10</itemgap>
+					<itemgap>5</itemgap>
 					<orientation>horizontal</orientation>
 					<usecontrolcoords>true</usecontrolcoords>
 					<visible>Skin.String(ListView_Details,TitleAndInfo) | String.IsEmpty(Skin.String(ListView_Details))</visible>
@@ -36,7 +36,7 @@
 						<height>35</height>
 						<font>Billboard_Info</font>
 						<textcolor>$VAR[ListUnfocusColor]</textcolor>
-						<label>$VAR[TitleInfo,/ ]</label>
+						<label>$VAR[TitleInfo, / ]</label>
 						<scroll>true</scroll>
 						<scrollsuffix></scrollsuffix>
 					</control>
@@ -45,12 +45,14 @@
 
 			<!--Content - Details>Fanart/Posters/Square-->
 			<control type="group">
-				<visible>!$EXP[ListView_Display_IsBackground] + !Control.IsVisible(5001) + !Control.IsVisible(5002) + !$EXP[Dialog_IsVisible]</visible>
+				<visible>$EXP[ListView_Display_IsFanart] | $EXP[ListView_Display_IsPosters] | $EXP[ListView_Display_IsSquare]</visible>
+				<visible>!Control.IsVisible(5001) + !Control.IsVisible(5002) + !$EXP[Dialog_IsVisible]</visible>
 				<include>ProgressBarFadeAnimation</include>
 					<control type="group">"
 						<animation effect="slide" end="-600,-46" time="0" condition="$EXP[ListView_Display_IsPosters]">Conditional</animation>
 						<animation effect="slide" end="-600,-166" time="0" condition="$EXP[ListView_Display_IsSquare]">Conditional</animation>
 						<animation effect="slide" end="-600,-271" time="0" condition="$EXP[ListView_Display_IsFanart]">Conditional</animation>
+						<animation effect="slide" end="0,-33" time="0" condition="String.IsEqual(Skin.String(ListView_Details),Title)">Conditional</animation>
 						<include content="ProgressBar"/>
 					</control>
 					<control type="label">
@@ -66,7 +68,7 @@
 						<align>center</align>
 						<label>$VAR[TitleInfo]</label>
 						<scroll>true</scroll>
-						<scrollsuffix>/</scrollsuffix>
+						<scrollsuffix> / </scrollsuffix>
 					</control>
 			</control>
 
@@ -85,7 +87,7 @@
 
 			<!--Content - Display>Fanart/Posters/Square-->
 			<control type="group">
-				<visible>!Control.IsVisible(941) + !$EXP[ListView_Display_IsBackground]</visible>
+				<visible>!Control.IsVisible(941)</visible>
 				<animation effect="fade" start="0" end="100" time="190" tween="sine" easing="out" reversible="false">Visible</animation>
 				<control type="group">
 					<!--Fanart-->
@@ -120,7 +122,7 @@
 
 			<!-- List -->
 			<control type="group">
-				<animation effect="slide" end="600,0" time="0" condition="!$EXP[ListView_Display_IsBackground]">Conditional</animation>
+				<animation effect="slide" end="600,0" time="0" condition="$EXP[ListView_Display_IsFanart] | $EXP[ListView_Display_IsPosters] | $EXP[ListView_Display_IsSquare]">Conditional</animation>
 				<include content="ListViewTemplate"/>
 			</control>
 		</control>

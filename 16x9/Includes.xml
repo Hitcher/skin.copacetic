@@ -13,18 +13,21 @@
 	<include file="Variables.xml" />
 
   <!--Expressions-->
-  <expression name="All_Containers">Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | Container.Content(episodes) | Container.Content(artists) | Container.Content(albums) | Container.Content(songs) | Container.Content(Addons)</expression>
-  <expression name="Video_Containers">Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | Container.Content(episodes)</expression>
+
+  <expression name="All_Paths">String.Contains(Container.FolderPath,videodb://) | String.Contains(Container.FolderPath,special://) | String.Contains(Container.FolderPath,addons://) | String.Contains(Container.FolderPath,musicdb://)</expression>
+  <expression name="Video_Containers">Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | Container.Content(episodes) | Container.Content(musicvideos)</expression>
+  <expression name="Music_Containers">Container.Content(artists) } Container.Content(albums) | Container.Content(songs)</expression>
+  <expression name="ListOnly_Containers">Container.Content() | Container.Content(files) | Container.Content(genres) | Container.Content(years) | Container.Content(actors) | Container.Content(playlists) | Container.Content(plugins) | Container.Content(studios) | Container.Content(directors) | Container.Content(tags | Container.Content(countries | Container.Content(roles | Container.Content(images)</expression>
   <expression name="Fanart_Containers">Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | Container.Content(episodes) | Container.Content(artists)</expression>
   <expression name="Logo_Containers">[Container.Content(movies) | Container.Content(tvshows)]</expression>
   <expression name="Flag_Containers">[Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | Container.Content(episodes)]</expression>
   <expression name="Background_IsFanart">[[$EXP[ListView_IsVisible] + $EXP[Fanart_Containers] + $EXP[ListView_Display_IsBackground]] | $EXP[BillboardView_IsVisible]] + ![String.IsEmpty(ListItem.Art(fanart)) + String.IsEmpty(ListItem.Icon)]</expression>
 
   <expression name="ListView_IsVisible">Control.IsVisible(50) | String.IsEqual(Container.ViewMode,List)</expression>
-  <expression name="ListView_Display_IsBackground">Container.Content() | Container.Content(episodes) | Skin.String(ListView_Display,Background) | String.IsEmpty(Skin.String(ListView_Display)) + !Container.Content(files)</expression>
+  <expression name="ListView_Display_IsBackground">!Container.Content(files) + [Container.Content() | Container.Content(episodes) | Skin.String(ListView_Display,Background) | String.IsEmpty(Skin.String(ListView_Display))]</expression>
   <expression name="ListView_Display_IsFanart">Container.Content(files)</expression>
-  <expression name="ListView_Display_IsPosters">Skin.String(ListView_Display,Posters) + !Container.Content(episodes) + !Container.Content(artists) + !Container.Content(albums) + !Container.Content() + !Container.Content(files)</expression>
-  <expression name="ListView_Display_IsSquare">Skin.String(ListView_Display,Square) + !Container.Content(episodes) + !Container.Content() + !Container.Content(files)</expression>
+  <expression name="ListView_Display_IsPosters">Skin.String(ListView_Display,Posters) + !Container.Content(episodes) + !Container.Content(artists) + !Container.Content(albums) + !$EXP[ListOnly_Containers]</expression>
+  <expression name="ListView_Display_IsSquare">Skin.String(ListView_Display,Square) + !Container.Content(episodes) + !$EXP[ListOnly_Containers]</expression>
   <expression name="ListView_Details_Info_IsVisible">Skin.String(ListView_Details,TitleAndInfo)</expression>
   <expression name="ListView_Flags_IsOn">$EXP[ListView_IsVisible] + !Skin.String(ListView_Flags,Off)</expression>
   <expression name="ListView_Flags_Studio_IsVisible">$EXP[ListView_IsVisible] + [Skin.String(ListView_Flags,All) | Skin.String(ListView_Flags,Studio) | String.IsEmpty(Skin.String(ListView_Flags))]</expression>
@@ -34,7 +37,7 @@
   <expression name="BillboardView_IsVisible">Control.IsVisible(501) | String.IsEqual(Container.ViewMode,Billboard)</expression>
   <expression name="BillboardView_Details_Info_IsVisible">Skin.String(BillboardView_Details,TitleAndInfo) | Skin.String(BillboardView_Details,All) | String.IsEmpty(Skin.String(BillboardView_Details))</expression>
   <expression name="BillboardView_Details_Plot_IsVisible">Skin.String(BillboardView_Details,TitleAndPlot) | Skin.String(BillboardView_Details,All) | String.IsEmpty(Skin.String(BillboardView_Details))</expression>
-  <expression name="BillboardView_Details_Logo_IsVisible">!Skin.String(BillboardView_Details,Off) + Skin.String(BillboardView_Logo,On) + !String.IsEmpty(ListItem.Art(clearlogo))</expression>
+  <expression name="BillboardView_Details_Logo_IsVisible">Skin.String(BillboardView_Logo,On) + !String.IsEmpty(ListItem.Art(clearlogo))</expression>
   <expression name="BillboardView_Flags_IsOn">$EXP[BillboardView_IsVisible] + !Skin.String(BillboardView_Flags,Off)</expression>
   <expression name="BillboardView_Flags_Studio_IsVisible">$EXP[BillboardView_IsVisible] + [Skin.String(BillboardView_Flags,All) | Skin.String(BillboardView_Flags,Studio) | String.IsEmpty(Skin.String(BillboardView_Flags))]</expression>
   <expression name="BillboardView_Flags_Rating_IsVisible">$EXP[BillboardView_IsVisible] + [Skin.String(BillboardView_Flags,All) | Skin.String(BillboardView_Flags,Rating) | String.IsEmpty(Skin.String(BillboardView_Flags))]</expression>
@@ -688,7 +691,7 @@
     <control type="button">
       <visible allowhiddenfocus="true">false</visible>
       <animation effect="slide" end="0,0" time="380" reversible="false">Focus</animation>
-      <onfocus condition="System.HasAddon(script.embuary.helper) + !String.IsEmpty(ListItem.Property(WatchedEpisodes)) + !String.IsEmpty(ListItem.Property(TotalEpisodes)) + !String.IsEqual(ListItem.Overlay,OverlayWatched.png) + [Container.Content(tvshows) | Container.Content(seasons)]">RunScript(script.embuary.helper,action=calc,do='"($INFO[ListItem.Property(WatchedEpisodes)] / $INFO[ListItem.Property(TotalEpisodes)]) * 100"',prop=MyResult)</onfocus>
+      <onfocus condition="System.HasAddon(script.embuary.helper) + Integer.IsGreater(ListItem.Property(WatchedEpisodes),0) + Integer.IsGreater(ListItem.Property(TotalEpisodes),0) + !String.IsEqual(ListItem.Overlay,OverlayWatched.png) + [Container.Content(tvshows) | Container.Content(seasons)]">RunScript(script.embuary.helper,action=calc,do='"($INFO[ListItem.Property(WatchedEpisodes)] / $INFO[ListItem.Property(TotalEpisodes)]) * 100"',prop=MyResult)</onfocus>
       <onunfocus condition="!String.IsEmpty(Window(Home).Property(MyResult))">ClearProperty(MyResult,home)</onunfocus>
     </control>
   </include>
@@ -707,7 +710,7 @@
 		<param name="focustexture" default="views/white_100.png"/>
 		<definition>
 			<control type="group">
-        <visible>$EXP[Video_Containers]</visible>
+        <visible>$EXP[Video_Containers] | Container.Content(files)</visible>
 				<visible>!$EXP[Dialog_IsVisible]</visible>
 				<visible>$PARAM[visible]</visible>
 				<left>$PARAM[left]</left>
@@ -730,7 +733,7 @@
 				<control type="image">
 					<width>$PARAM[width]</width>
 					<height>$PARAM[height]</height>
-					<visible>!ListItem.IsResumable + String.IsEqual(ListItem.Overlay,OverlayWatched.png)</visible>
+					<visible>!ListItem.IsResumable + String.IsEqual(ListItem.Overlay,OverlayWatched.png) + ![$EXP[ListView_IsVisible]]</visible>
 					<texture colordiffuse="$PARAM[focuscolor]">$PARAM[focustexture]</texture>
 				</control>
         <!--Sets, TVshows and Episodes-->
@@ -873,7 +876,6 @@
 				<preloaditems>2</preloaditems>
 				<pagecontrol>60</pagecontrol>
 				<focusposition>6</focusposition>
-				<movement>0</movement>
 				<orientation>vertical</orientation>
 				<scrolltime tween="sine" easing="inout">380</scrolltime>
 				<itemlayout height="55" width="720">
@@ -943,6 +945,7 @@
 		<param name="griddetailstop" default="407"/>
 		<definition>
       <control type="group">
+        <visible>!Control.IsVisible(941)</visible>
         <left>$PARAM[left]</left>
         <top>$PARAM[top]</top>
         <width>$PARAM[width]</width>
