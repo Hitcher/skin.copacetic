@@ -38,6 +38,20 @@
 			<usealttexture>Library.IsScanningVideo</usealttexture>
 			<include>HiddenControl</include>
 		</control>
+		<!--Hidden Controls for animation trigger on menu switching-->
+		<control type="button" id="940">
+			<visible allowhiddenfocus="true">false</visible>
+			<onfocus>Control.SetFocus(3000)</onfocus>
+		</control>
+		<control type="group" id="941">
+			<visible>Control.HasFocus(940)</visible>
+			<animation effect="slide" end="0,0" time="380" reversible="false">Hidden</animation>
+		</control>
+		<!--Hidden Control Media Flag slide-->
+		<control type="image" id="915">
+			<visible>false</visible>
+			<texture fallback="flags/blank.png">$VAR[MPAA_Certificate]</texture>
+		</control>
 
 		<!--Hidden Set list-->
 		<control type="list" id="4500">
@@ -49,15 +63,7 @@
 			<content sortby="year" sortorder="ascending">$VAR[MovieSetsPath]</content>
  		</control>
 
-		<!--Hidden Controls for animation trigger on menu switching-->
-		<control type="button" id="940">
-			<visible allowhiddenfocus="true">false</visible>
-			<onfocus>Control.SetFocus(3000)</onfocus>
-		</control>
-		<control type="group" id="941">
-			<visible>Control.HasFocus(940)</visible>
-			<animation effect="slide" end="0,0" time="380" reversible="false">Hidden</animation>
-		</control>
+
 
 		<!-- Main group -->
 		<control type="group">
@@ -72,26 +78,6 @@
 			<control type="group" id="5002">
 				<visible>Container.OnNext</visible>
 				<animation effect="slide" end="0,0" time="380" reversible="false">Hidden</animation>
-			</control>
-
-			<!--Fanart background for 50,501-->
-			<control type="group">
-				<visible>$EXP[Background_IsFanart]</visible>
-				<visible>!Control.IsVisible(941)</visible>
-				<animation effect="fade" start="0" end="100" time="190" tween="sine" easing="out" reversible="false">Visible</animation>
-				<control type="image">
-					<texture colordiffuse="$VAR[DarkColor]">views/white_100.png</texture>
-					</control>
-				<include content="ListIcon">
-						<param name="left" value="0"/>
-						<param name="top" value="0"/>
-						<param name="width" value="1920"/>
-						<param name="height" value="1080"/>
-						<param name="fadetime" value="300"/>
-				</include>
-				<include content="ViewtypeOverlay">
-					<param name="visible" value="$EXP[ListView_IsVisible] | [$EXP[BillboardView_IsVisible] + !Skin.String(BillboardView_Details,Off)]"/>
-				</include>
 			</control>
 
 			<!--Background gradient for Light mode-->
@@ -116,13 +102,14 @@
 			<include>Viewtype_504_Strip</include>
 			<include>Viewtype_505_Grid</include>
 
-<!--TEST LABEL
+<!--TEST LABEL-->
 			<control type="label">
 				<!--<label>$INFO[window(Home).property(GridView_TopRightIcon)]</label>-->
-				<!--<label>$INFO[Control.GetLabel(32)]</label>
-				<font>List_Title_Focused</font>
+				<!--<label>$INFO[Control.GetLabel(32)]</label>-->
+				<!--<label>$INFO[Container.ViewCount]</label>-->
+				<font>Body</font>
 				<textcolor>$VAR[PrimaryColor]</textcolor>
-				<left>900</left>
+				<left>500</left>
 			</control>
 
 			<!--Scrollbars-->
@@ -206,55 +193,64 @@
 				<onright condition="Container(3000).HasFocus(949)">SetFocus(940)</onright>
 				<onleft condition="Container(3000).HasFocus(950)">SetFocus(940)</onleft>
 				<onright condition="Container(3000).HasFocus(950)">SetFocus(940)</onright>
-				<onright condition="Container(3000).HasFocus(951)">SetFocus(940)</onright>
-				<onleft condition="Container(3000).HasFocus(952)">SetFocus(940)</onleft>
-				<onleft condition="Container(3000).HasFocus(953)">SetFocus(940)</onleft>
-				<onright condition="Container(3000).HasFocus(954)">SetFocus(940)</onright>
 				<orientation>vertical</orientation>
 				<focusposition>0</focusposition>
 				<movement>12</movement>
 				<defaultcontrol>1</defaultcontrol>
 				<scrolltime tween="sine" easing="inout">380</scrolltime>
 				<itemlayout height="55" width="1080">
-					<control type="label">
-						<include>OptionsMenuLabelUnfocused</include>
-						<label>$INFO[ListItem.Label2]</label>
-					</control>
+					<include content="ListViewLayout">
+						<param name="groupvisible" value="true"/>
+					  <param name="iconvisible" value="false"/>
+						<param name="label1visible" value="!Skin.String(Theme,Light)"/>
+						<param name="label2visible" value="Skin.String(Theme,Light)"/>
+					  <param name="label" value="$INFO[ListItem.Label2]"/>
+					  <param name="labelleft" value="0"/>
+						<param name="labelmaxwidth" value="100%"/>
+						<param name="textcolor" value="$VAR[PrimaryColor]"/>
+					</include>
 				</itemlayout>
-				<focusedlayout height="70" width="910">
-					<control type="label">
-						<include>OptionsMenuLabelFocused</include>
-						<label>$INFO[ListItem.Label]</label>
-					</control>
+				<focusedlayout height="70" width="1080">
+					<include content="ListViewLayout">
+						<param name="groupvisible" value="true"/>
+						<param name="iconvisible" value="false"/>
+						<param name="label1visible" value="true"/>
+						<param name="label2visible" value="false"/>
+						<param name="label" value="$INFO[ListItem.Label]"/>
+						<param name="labelleft" value="0"/>
+						<param name="labelmaxwidth" value="100%"/>
+						<param name="font1" value="List_Title_Focused"/>
+						<param name="textcolor" value="$VAR[PrimaryColor]"/>
+					</include>
 				</focusedlayout>
 				<content>
 					<!--Viewtypes-->
-					<item id="951">
+					<item>
 						<description>View / List</description>
 						<onclick>SetFocus(50)</onclick>
 						<label>‹ $LOCALIZE[535] ›</label>
 						<label2>$LOCALIZE[32100] / $LOCALIZE[535]</label2>
 						<property name="ActionLeft">Container.PreviousViewMode</property>
 						<property name="ActionRight">Container.NextViewMode</property>
-						<visible>$EXP[ListView_IsVisible] + !$EXP[ListOnly_Containers]</visible>
+						<visible>$EXP[ListView_IsVisible] + Integer.IsGreater(Container.ViewCount,1)</visible>
 					</item>
-					<item id="952">
+					<item>
 						<description>View / Billboard</description>
 						<onclick>SetFocus(501)</onclick>
 						<label>‹ Billboard ›</label>
 						<label2>$LOCALIZE[32100] / Billboard</label2>
 						<property name="ActionLeft">Container.PreviousViewMode</property>
 						<property name="ActionRight">Container.NextViewMode</property>
-						<visible>$EXP[BillboardView_IsVisible]</visible>
+						<visible>$EXP[BillboardView_IsVisible] + Integer.IsGreater(Container.ViewCount,1)</visible>
 					</item>
-					<item id="953">
+					<item>
 						<description>View / Showcase</description>
 						<onclick>SetFocus(502)</onclick>
 						<label>‹ Showcase ›</label>
 						<label2>$LOCALIZE[32100] / Showcase</label2>
 						<property name="ActionLeft">Container.PreviousViewMode</property>
 						<property name="ActionRight">Container.NextViewMode</property>
-						<visible>$EXP[ShowcaseView_IsVisible]</visible>
+						<visible>$EXP[ShowcaseView_IsVisible] + Integer.IsGreater(Container.ViewCount,1)</visible>
 					</item>
 					<item>
 						<description>View / Strip</description>
@@ -263,16 +259,16 @@
 						<label2>$LOCALIZE[32100] / Strip</label2>
 						<property name="ActionLeft">Container.PreviousViewMode</property>
 						<property name="ActionRight">Container.NextViewMode</property>
-						<visible>$EXP[StripView_IsVisible]</visible>
+						<visible>$EXP[StripView_IsVisible] + Integer.IsGreater(Container.ViewCount,1)</visible>
 					</item>
-					<item id="954">
+					<item>
 						<description>View / Grid</description>
 						<onclick>SetFocus(505)</onclick>
 						<label>‹ Grid ›</label>
 						<label2>$LOCALIZE[32100] / Grid</label2>
 						<property name="ActionLeft">Container.PreviousViewMode</property>
 						<property name="ActionRight">Container.NextViewMode</property>
-						<visible>$EXP[GridView_IsVisible]</visible>
+						<visible>$EXP[GridView_IsVisible] + Integer.IsGreater(Container.ViewCount,1)</visible>
 					</item>
 
 <!--DISPLAY-->

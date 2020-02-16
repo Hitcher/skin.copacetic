@@ -101,7 +101,7 @@
     <param name="path" default="videodb://movies/titles/"/>
       <definition>
     		<control type="list" id="12341">
-    			<content sortby="random" limit="30">$PARAM[path]</content>
+    			<content sortby="random">$PARAM[path]</content>
     <!--	<content sortby="random" limit="1">videodb://tvshows/titles/</content>
     			<content sortby="random" limit="1">videodb://movies/titles/</content>
     			<content sortby="random" limit="3">videodb://tvshows/titles/</content>
@@ -160,8 +160,8 @@
     </control>
   </include>
 
-  <!--Options Menu Label Focused-->
-	<include name="OptionsMenuLabelFocused">
+  <!--Context Menu Label Focused-->
+	<include name="ContextMenuLabelFocused">
 		<definition>
 			<height>70</height>
 			<font>List_Title_Focused</font>
@@ -169,8 +169,8 @@
 		</definition>
 	</include>
 
-	<!--Options Menu Label Unfocused-->
-	<include name="OptionsMenuLabelUnfocused">
+	<!--Context Menu Label Unfocused-->
+	<include name="ContextMenuLabelUnfocused">
 		<definition>
 			<height>55</height>
 			<font>List_Title_Unfocused</font>
@@ -178,6 +178,32 @@
 		</definition>
 	</include>
 
+  <!--Context Menu Label Unfocused-->
+  <include name="ContextMenuLabelUnfocusedLight">
+    <definition>
+      <height>55</height>
+      <font>List_Title_Unfocused_Light</font>
+      <textcolor>$VAR[PrimaryColor]</textcolor>
+    </definition>
+  </include>
+
+  <include name="ContextMenuLabelTemplate">
+    <control type="label">
+      <include>ContextMenuLabelUnfocused</include>
+      <label>$INFO[Control.GetLabel($PARAM[id])]</label>
+      <visible>Control.IsVisible($PARAM[id]) + !Control.HasFocus($PARAM[id]) + !Skin.String(Theme,Light)</visible>
+    </control>
+    <control type="label">
+      <include>ContextMenuLabelUnfocusedLight</include>
+      <label>$INFO[Control.GetLabel($PARAM[id])]</label>
+      <visible>Control.IsVisible($PARAM[id]) + !Control.HasFocus($PARAM[id]) + Skin.String(Theme,Light)</visible>
+    </control>
+    <control type="label">
+      <include>ContextMenuLabelFocused</include>
+      <label>$INFO[Control.GetLabel($PARAM[id])]</label>
+      <visible>Control.IsVisible($PARAM[id]) + Control.HasFocus($PARAM[id])</visible>
+    </control>
+  </include>
   <!--Home Menu Label Focused-->
 	<include name="HomeMenuLabelFocused">
 		<param name="hiddenid"/>
@@ -781,12 +807,11 @@
 		<param name="groupvisible" default="[$EXP[ListView_Flags_IsOn] | $EXP[BillboardView_Flags_IsOn] | $EXP[ShowcaseView_Flags_IsOn] | $EXP[StripView_Flags_IsOn]]"/>
 		<definition>
 			<control type="group">
-        <visible>$EXP[Flag_Containers]</visible>
 				<visible>!$EXP[Dialog_IsVisible]</visible>
 				<visible>$PARAM[groupvisible]</visible>
 				<control type="group">
 					<!--Studio-->
-					<control type="image" id="914">
+					<control type="image">
 						<visible>$EXP[ListView_Flags_Studio_IsVisible] | $EXP[BillboardView_Flags_Studio_IsVisible] | $EXP[ShowcaseView_Flags_Studio_IsVisible] | $EXP[StripView_Flags_Studio_IsVisible]</visible>
 						<left>1605</left>
 						<top>960</top>
@@ -797,7 +822,7 @@
 						<animation effect="slide" start="0,0" end="180,0" time="0" condition="[$EXP[ListView_IsVisible] + $EXP[ListView_Flags_Studio_Shift]] | [$EXP[BillboardView_IsVisible] + $EXP[BillboardView_Flags_Studio_Shift]] | [$EXP[ShowcaseView_IsVisible] + $EXP[ShowcaseView_Flags_Studio_Shift]] | [$EXP[StripView_IsVisible] + $EXP[StripView_Flags_Studio_Shift]]">Conditional</animation>
 					</control>
 					<!--MPAA flag-->
-					<control type="image" id="915">
+					<control type="image">
 						<visible>$EXP[ListView_Flags_Rating_IsVisible] | $EXP[BillboardView_Flags_Rating_IsVisible] | $EXP[ShowcaseView_Flags_Rating_IsVisible] | $EXP[StripView_Flags_Rating_IsVisible]</visible>
 						<left>1785</left>
 						<top>960</top>
@@ -813,22 +838,29 @@
 
   <!--ListView Layout-->
   <include name="ListViewLayout">
+    <param name="groupvisible" default="!$EXP[Dialog_IsVisible]"/>
+    <param name="animation" default="ContentFadeAnimation"/>
     <param name="iconleft" default="30"/>
     <param name="icontop" default="5"/>
     <param name="iconwidth" default="60"/>
     <param name="iconheight" default="60"/>
     <param name="icontexture" default="views/check_unfocused.png"/>
     <param name="iconvisible" default="String.IsEqual(ListItem.Overlay,OverlayWatched.png)"/>
+    <param name="label1visible" default="!Skin.String(Theme,Light) | $EXP[Background_IsFanart]"/>
+    <param name="label2visible" default="Skin.String(Theme,Light) + !$EXP[Background_IsFanart]"/>
     <param name="label" default="$VAR[Title]"/>
     <param name="labelleft" default="120"/>
     <param name="labelmaxwidth" default="720"/>
-    <param name="font" default="List_Title_Unfocused"/>
+    <param name="font1" default="List_Title_Unfocused"/>
+    <param name="font2" default="List_Title_Unfocused_Light"/>
     <param name="textcolor" default="$VAR[ListUnfocusColor]"/>
     <param name="scroll" default="false"/>
     <definition>
       <control type="group">
-        <visible>!$EXP[Dialog_IsVisible]</visible>
-        <include>ContentFadeAnimation</include>
+        <width>100%</width>
+        <height>$PARAM[labelheight]</height>
+        <visible>$PARAM[groupvisible]</visible>
+        <include>$PARAM[animation]</include>
         <control type="image">
           <visible>$PARAM[iconvisible]</visible>
           <left>$PARAM[iconleft]</left>
@@ -838,11 +870,25 @@
           <texture colordiffuse="$PARAM[textcolor]">$PARAM[icontexture]</texture>
         </control>
         <control type="label">
+          <visible>$PARAM[label1visible]</visible>
           <left>$PARAM[labelleft]</left>
           <width max="$PARAM[labelmaxwidth]">auto</width>
-          <height>100%</height>
+          <height>$PARAM[labelheight]</height>
           <aligny>center</aligny>
-          <font>$PARAM[font]</font>
+          <font>$PARAM[font1]</font>
+          <textcolor>$PARAM[textcolor]</textcolor>
+          <selectedcolor>$PARAM[textcolor]</selectedcolor>
+          <label>$PARAM[label]</label>
+          <scroll>$PARAM[scroll]</scroll>
+          <scrollsuffix> / </scrollsuffix>
+        </control>
+        <control type="label">
+          <visible>$PARAM[label2visible]</visible>
+          <left>$PARAM[labelleft]</left>
+          <width max="$PARAM[labelmaxwidth]">auto</width>
+          <height>$PARAM[labelheight]</height>
+          <aligny>center</aligny>
+          <font>$PARAM[font2]</font>
           <textcolor>$PARAM[textcolor]</textcolor>
           <selectedcolor>$PARAM[textcolor]</selectedcolor>
           <label>$PARAM[label]</label>
@@ -892,9 +938,11 @@
 					<include content="ListViewLayout">
 						<param name="checktop" value="7"/>
 						<param name="checktexture" value="views/check_focused.png"/>
+            <param name="label1visible" value="true"/>
+            <param name="label2visible" value="false"/>
             <param name="label" value="$PARAM[label]"/>
 						<param name="labelmaxwidth" value="1080"/>
-						<param name="font" value="List_Title_Focused"/>
+						<param name="font1" value="List_Title_Focused"/>
             <param name="textcolor" value="$PARAM[textcolor]"/>
 						<param name="scroll" value="false"/>
             <param name="icontexture" value="$PARAM[focusedicontexture]"/>
@@ -1247,10 +1295,12 @@
     <param name="titleinfogap" default="5"/>
     <param name="infoheight" default="35"/>
 		<param name="infofont" default="Showcase_Info"/>
-		<param name="plotvisibility" default="$EXP[ShowcaseView_Details_Plot_IsVisible]"/>
+		<param name="plotvisibility1" default="$EXP[ShowcaseView_Details_Plot_IsVisible] + !Skin.String(Theme,Light)"/>
+    <param name="plotfont1" default="Body"/>
+    <param name="plotvisibility2" default="$EXP[ShowcaseView_Details_Plot_IsVisible] + Skin.String(Theme,Light)"/>
+    <param name="plotfont2" default="Body_Light"/>
 		<param name="plotmaxheight" default="240"/>
     <param name="infoplotgap" default="60"/>
-		<param name="plotfont" default="Body"/>
     <param name="plotcolor" default="$VAR[TertiaryColor]"/>
 		<definition>
 			<control type="grouplist">
@@ -1302,13 +1352,24 @@
           <top>$PARAM[infoplotgap]</top>
 					<height max="$PARAM[plotmaxheight]">auto</height>
           <visible>!String.IsEmpty(ListItem.Plot)</visible>
-					<visible>$PARAM[plotvisibility]</visible>
-					<font>$PARAM[plotfont]</font>
+					<visible>$PARAM[plotvisibility1]</visible>
+					<font>$PARAM[plotfont1]</font>
 					<textcolor>$PARAM[plotcolor]</textcolor>
 					<label>$VAR[Plot]</label>
 					<align>$PARAM[titlealign]</align>
 					<autoscroll delay="5000" time="1500" repeat="2000">true</autoscroll>
 				</control>
+        <control type="textbox">
+          <top>$PARAM[infoplotgap]</top>
+          <height max="$PARAM[plotmaxheight]">auto</height>
+          <visible>!String.IsEmpty(ListItem.Plot)</visible>
+          <visible>$PARAM[plotvisibility2]</visible>
+          <font>$PARAM[plotfont2]</font>
+          <textcolor>$PARAM[plotcolor]</textcolor>
+          <label>$VAR[Plot]</label>
+          <align>$PARAM[titlealign]</align>
+          <autoscroll delay="5000" time="1500" repeat="2000">true</autoscroll>
+        </control>
 			</control>
 		</definition>
 	</include>
