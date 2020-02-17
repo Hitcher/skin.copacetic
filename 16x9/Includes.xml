@@ -678,6 +678,7 @@
     <param name="flipx" default="false"/>
     <param name="flipy" default="false"/>
     <param name="texture" default="views/dropshadow_left_120.png"/>
+    <param name="colordiffuse" default="$VAR[ShadowColor]"/>
     <param name="visible" default="true"/>
     <param name="animationtype" default=""/>
     <param name="animationcondition" default="false"/>
@@ -701,7 +702,7 @@
         <top>$PARAM[top]</top>
         <width>$PARAM[width]</width>
         <height>$PARAM[height]</height>
-        <texture colordiffuse="$VAR[ShadowColor]" flipx="$PARAM[flipx]" flipy="$PARAM[flipy]">$PARAM[texture]</texture>
+        <texture colordiffuse="$PARAM[colordiffuse]" flipx="$PARAM[flipx]" flipy="$PARAM[flipy]">$PARAM[texture]</texture>
         <visible>$PARAM[visible]</visible>
         <animation type="$PARAM[animationtype]" condition="$PARAM[animationcondition]" reversible="false">
           <effect type="$PARAM[animationeffect]" end="$PARAM[animationend]" time="$PARAM[animationtime]" tween="sine" easing="inout"/>
@@ -943,10 +944,16 @@
     <param name="height" default="333"/>
     <!--Dropshadow-->
     <param name="dropshadowvisible" default="false"/>
+    <param name="dropshadowtopleftcornerwatched" default="String.IsEqual(Control.GetLabel(1056),OverlayWatched.png)"/>
+    <param name="dropshadowtopsidewatched" default="String.IsEqual(Control.GetLabel(1057),OverlayWatched.png)"/>
+    <param name="dropshadowtoprightcornerwatched" default="String.IsEqual(Control.GetLabel(1058),OverlayWatched.png)"/>
     <param name="dropshadowrightsidevisibility" default="!Container.Column(2)"/>
-    <param name="dropshadowbottomsidevisibility" default="!String.IsEmpty(Control.GetLabel(962))"/>
     <param name="dropshadowbottomrightcornervisibility" default="!String.IsEmpty(Control.GetLabel(963))"/>
+    <param name="dropshadowbottomrightcornerwatched" default="String.IsEqual(Control.GetLabel(1063),OverlayWatched.png)"/>
+    <param name="dropshadowbottomsidevisibility" default="!String.IsEmpty(Control.GetLabel(962))"/>
+    <param name="dropshadowbottomsidewatched" default="String.IsEqual(Control.GetLabel(1062),OverlayWatched.png)"/>
     <param name="dropshadowbottomleftcornervisibility" default="!String.IsEmpty(Control.GetLabel(961))"/>
+    <param name="dropshadowbottomleftcornerwatched" default="String.IsEqual(Control.GetLabel(1061),OverlayWatched.png)"/>
     <!--ListIcon attributes-->
     <param name="aspectratio" default="scale"/>
     <param name="watchedstatusvisibility" default="true"/>
@@ -991,7 +998,15 @@
             <param name="top" value="0"/>
             <param name="width" value="120"/>
             <param name="height" value="$PARAM[height]"/>
-            <param name="visible" value="!Container.Column(0)"/>
+            <param name="visible" value="!Container.Column(0) + !String.IsEqual(Control.GetLabel(1059),OverlayWatched.png)"/>
+          </include>
+          <include content="DropShadow">
+            <param name="left" value="-120"/>
+            <param name="top" value="0"/>
+            <param name="width" value="120"/>
+            <param name="height" value="$PARAM[height]"/>
+            <param name="colordiffuse" value="$VAR[ShadowColorWatched]"/>
+            <param name="visible" value="!Container.Column(0) + String.IsEqual(Control.GetLabel(1059),OverlayWatched.png)"/>
           </include>
           <!--Top Left Corner-->
           <include content="DropShadow">
@@ -1000,7 +1015,16 @@
             <param name="width" value="120"/>
             <param name="height" value="120"/>
             <param name="texture" value="views/dropshadow_topleftcorner_120.png"/>
-            <param name="visible" value="$EXP[GridView_Details_Disabled] + !Container.Column(0)"/>
+            <param name="visible" value="$EXP[GridView_Details_Disabled] + !Container.Column(0) + !$PARAM[dropshadowtopleftcornerwatched]"/>
+          </include>
+          <include content="DropShadow">
+            <param name="left" value="-120"/>
+            <param name="top" value="-120"/>
+            <param name="width" value="120"/>
+            <param name="height" value="120"/>
+            <param name="texture" value="views/dropshadow_topleftcorner_120.png"/>
+            <param name="colordiffuse" value="$VAR[ShadowColorWatched]"/>
+            <param name="visible" value="$EXP[GridView_Details_Disabled] + !Container.Column(0) + $PARAM[dropshadowtopleftcornerwatched]"/>
           </include>
           <!--Top Side-->
           <include content="DropShadow">
@@ -1009,7 +1033,16 @@
             <param name="width" value="$PARAM[width]"/>
             <param name="height" value="120"/>
             <param name="texture" value="views/dropshadow_top_120.png"/>
-            <param name="visible" value="$EXP[GridView_Details_Disabled]"/>
+            <param name="visible" value="$EXP[GridView_Details_Disabled] + !$PARAM[dropshadowtopsidewatched]"/>
+          </include>
+          <include content="DropShadow">
+            <param name="left" value="0"/>
+            <param name="top" value="-120"/>
+            <param name="width" value="$PARAM[width]"/>
+            <param name="height" value="120"/>
+            <param name="texture" value="views/dropshadow_top_120.png"/>
+            <param name="colordiffuse" value="$VAR[ShadowColorWatched]"/>
+            <param name="visible" value="$EXP[GridView_Details_Disabled] + $PARAM[dropshadowtopsidewatched]"/>
           </include>
           <!--Top Right Corner-->
           <include content="DropShadow">
@@ -1019,7 +1052,17 @@
             <param name="height" value="120"/>
             <param name="flipx" value="true"/>
             <param name="texture" value="views/dropshadow_topleftcorner_120.png"/>
-            <param name="visible" value="$EXP[GridView_Details_Disabled] + $PARAM[dropshadowrightsidevisibility] + !String.IsEmpty(Control.GetLabel(960))"/>
+            <param name="visible" value="$EXP[GridView_Details_Disabled] + $PARAM[dropshadowrightsidevisibility] + !String.IsEmpty(Control.GetLabel(960)) + !$PARAM[dropshadowtoprightcornerwatched]"/>
+          </include>
+          <include content="DropShadow">
+            <param name="left" value="$PARAM[width]"/>
+            <param name="top" value="-120"/>
+            <param name="width" value="120"/>
+            <param name="height" value="120"/>
+            <param name="flipx" value="true"/>
+            <param name="texture" value="views/dropshadow_topleftcorner_120.png"/>
+            <param name="colordiffuse" value="$VAR[ShadowColorWatched]"/>
+            <param name="visible" value="$EXP[GridView_Details_Disabled] + $PARAM[dropshadowrightsidevisibility] + !String.IsEmpty(Control.GetLabel(960)) + $PARAM[dropshadowtoprightcornerwatched]"/>
           </include>
           <!--Rigt Side-->
           <include content="DropShadow">
@@ -1029,7 +1072,17 @@
             <param name="height" value="$PARAM[height]"/>
             <param name="flipx" value="true"/>
             <param name="texture" value="views/dropshadow_left_120.png"/>
-            <param name="visible" value="$PARAM[dropshadowrightsidevisibility] + !String.IsEmpty(Control.GetLabel(960))"/>
+            <param name="visible" value="$PARAM[dropshadowrightsidevisibility] + !String.IsEmpty(Control.GetLabel(960)) + !String.IsEqual(Control.GetLabel(1060),OverlayWatched.png)"/>
+          </include>
+          <include content="DropShadow">
+            <param name="left" value="$PARAM[width]"/>
+            <param name="top" value="0"/>
+            <param name="width" value="120"/>
+            <param name="height" value="$PARAM[height]"/>
+            <param name="flipx" value="true"/>
+            <param name="texture" value="views/dropshadow_left_120.png"/>
+            <param name="colordiffuse" value="$VAR[ShadowColorWatched]"/>
+            <param name="visible" value="$PARAM[dropshadowrightsidevisibility] + !String.IsEmpty(Control.GetLabel(960)) + String.IsEqual(Control.GetLabel(1060),OverlayWatched.png)"/>
           </include>
           <!--Bottom Right Corner-->
           <include content="DropShadow">
@@ -1040,7 +1093,18 @@
             <param name="flipx" value="true"/>
             <param name="flipy" value="true"/>
             <param name="texture" value="views/dropshadow_topleftcorner_120.png"/>
-            <param name="visible" value="$EXP[GridView_Details_Disabled] + $PARAM[dropshadowrightsidevisibility] + !String.IsEmpty(Control.GetLabel(960)) + $PARAM[dropshadowbottomsidevisibility] + $PARAM[dropshadowbottomrightcornervisibility]"/>
+            <param name="visible" value="$EXP[GridView_Details_Disabled] + $PARAM[dropshadowrightsidevisibility] + !String.IsEmpty(Control.GetLabel(960)) + $PARAM[dropshadowbottomsidevisibility] + $PARAM[dropshadowbottomrightcornervisibility] + !$PARAM[dropshadowbottomrightcornerwatched]"/>
+          </include>
+          <include content="DropShadow">
+            <param name="left" value="$PARAM[width]"/>
+            <param name="top" value="$PARAM[height]"/>
+            <param name="width" value="120"/>
+            <param name="height" value="120"/>
+            <param name="flipx" value="true"/>
+            <param name="flipy" value="true"/>
+            <param name="texture" value="views/dropshadow_topleftcorner_120.png"/>
+            <param name="colordiffuse" value="$VAR[ShadowColorWatched]"/>
+            <param name="visible" value="$EXP[GridView_Details_Disabled] + $PARAM[dropshadowrightsidevisibility] + !String.IsEmpty(Control.GetLabel(960)) + $PARAM[dropshadowbottomsidevisibility] + $PARAM[dropshadowbottomrightcornervisibility] + $PARAM[dropshadowbottomrightcornerwatched]"/>
           </include>
           <!--Bottom Side-->
           <include content="DropShadow">
@@ -1050,7 +1114,17 @@
             <param name="height" value="120"/>
             <param name="flipy" value="true"/>
             <param name="texture" value="views/dropshadow_top_120.png"/>
-            <param name="visible" value="$EXP[GridView_Details_Disabled] + $PARAM[dropshadowbottomsidevisibility]"/>
+            <param name="visible" value="$EXP[GridView_Details_Disabled] + $PARAM[dropshadowbottomsidevisibility] + !$PARAM[dropshadowbottomsidewatched]"/>
+          </include>
+          <include content="DropShadow">
+            <param name="left" value="0"/>
+            <param name="top" value="$PARAM[height]"/>
+            <param name="width" value="$PARAM[width]"/>
+            <param name="height" value="120"/>
+            <param name="flipy" value="true"/>
+            <param name="texture" value="views/dropshadow_top_120.png"/>
+            <param name="colordiffuse" value="$VAR[ShadowColorWatched]"/>
+            <param name="visible" value="$EXP[GridView_Details_Disabled] + $PARAM[dropshadowbottomsidevisibility] + $PARAM[dropshadowbottomsidewatched]"/>
           </include>
           <!--Bottom Left Corner-->
           <include content="DropShadow">
@@ -1060,7 +1134,17 @@
             <param name="height" value="120"/>
             <param name="flipy" value="true"/>
             <param name="texture" value="views/dropshadow_topleftcorner_120.png"/>
-            <param name="visible" value="$EXP[GridView_Details_Disabled] + !Container.Column(0) + $PARAM[dropshadowbottomleftcornervisibility]"/>
+            <param name="visible" value="$EXP[GridView_Details_Disabled] + !Container.Column(0) + $PARAM[dropshadowbottomleftcornervisibility] + !$PARAM[dropshadowbottomleftcornerwatched]"/>
+          </include>
+          <include content="DropShadow">
+            <param name="left" value="-120"/>
+            <param name="top" value="$PARAM[height]"/>
+            <param name="width" value="120"/>
+            <param name="height" value="120"/>
+            <param name="flipy" value="true"/>
+            <param name="texture" value="views/dropshadow_topleftcorner_120.png"/>
+            <param name="colordiffuse" value="$VAR[ShadowColorWatched]"/>
+            <param name="visible" value="$EXP[GridView_Details_Disabled] + !Container.Column(0) + $PARAM[dropshadowbottomleftcornervisibility] + $PARAM[dropshadowbottomleftcornerwatched]"/>
           </include>
         </control>
         <!--ListIcon-->
@@ -1181,10 +1265,16 @@
       <param name="width" value="360"/>
       <param name="height" value="540"/>
       <param name="dropshadowvisible" value="true"/>
+      <param name="dropshadowtopleftcornerwatched" value="String.IsEqual(Control.GetLabel(1054),OverlayWatched.png)"/>
+      <param name="dropshadowtopsidewatched" value="String.IsEqual(Control.GetLabel(1055),OverlayWatched.png)"/>
+      <param name="dropshadowtoprightcornerwatched" value="String.IsEqual(Control.GetLabel(1056),OverlayWatched.png)"/>
       <param name="dropshadowrightsidevisibility" value="!Container.Column(4)"/>
-      <param name="dropshadowbottomsidevisibility" value="!String.IsEmpty(Control.GetLabel(964))"/>
       <param name="dropshadowbottomrightcornervisibility" value="!String.IsEmpty(Control.GetLabel(965))"/>
-      <param name="dropshadowbottomleftcornervisibility" value="!String.IsEmpty(Control.GetLabel(963))"/>
+      <param name="dropshadowbottomrightcornerwatched" value="String.IsEqual(Control.GetLabel(1065),OverlayWatched.png)"/>
+      <param name="dropshadowbottomsidevisibility" value="!String.IsEmpty(Control.GetLabel(964))"/>
+      <param name="dropshadowbottomsidewatched" value="String.IsEqual(Control.GetLabel(1064),OverlayWatched.png)"/>
+      <param name="dropshadowbottomleftcornervisibility" value="!String.IsEmpty(Control.GetLabel(964))"/>
+      <param name="dropshadowbottomleftcornerwatched" value="String.IsEqual(Control.GetLabel(1063),OverlayWatched.png)"/>
       <param name="showgradient" value="true"/>
       <param name="watchedstatusvisibility" value="false"/>
       <param name="bordervisible" value="true"/>
@@ -1220,10 +1310,16 @@
       <param name="width" value="360"/>
       <param name="height" value="360"/>
       <param name="dropshadowvisible" value="true"/>
+      <param name="dropshadowtopleftcornerwatched" value="String.IsEqual(Control.GetLabel(1054),OverlayWatched.png)"/>
+      <param name="dropshadowtopsidewatched" value="String.IsEqual(Control.GetLabel(1055),OverlayWatched.png)"/>
+      <param name="dropshadowtoprightcornerwatched" value="String.IsEqual(Control.GetLabel(1056),OverlayWatched.png)"/>
       <param name="dropshadowrightsidevisibility" value="!Container.Column(4)"/>
-      <param name="dropshadowbottomsidevisibility" value="!String.IsEmpty(Control.GetLabel(964))"/>
       <param name="dropshadowbottomrightcornervisibility" value="!String.IsEmpty(Control.GetLabel(965))"/>
-      <param name="dropshadowbottomleftcornervisibility" value="!String.IsEmpty(Control.GetLabel(963))"/>
+      <param name="dropshadowbottomrightcornerwatched" value="String.IsEqual(Control.GetLabel(1065),OverlayWatched.png)"/>
+      <param name="dropshadowbottomsidevisibility" value="!String.IsEmpty(Control.GetLabel(964))"/>
+      <param name="dropshadowbottomsidewatched" value="String.IsEqual(Control.GetLabel(1064),OverlayWatched.png)"/>
+      <param name="dropshadowbottomleftcornervisibility" value="!String.IsEmpty(Control.GetLabel(964))"/>
+      <param name="dropshadowbottomleftcornerwatched" value="String.IsEqual(Control.GetLabel(1063),OverlayWatched.png)"/>
       <param name="aspectratio" value="scale"/>
       <param name="showgradient" value="true"/>
       <param name="watchedstatusvisibility" value="false"/>
