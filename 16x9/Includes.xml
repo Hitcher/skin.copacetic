@@ -14,14 +14,17 @@
 
   <!--Expressions-->
 
-  <expression name="All_Paths">String.Contains(Container.FolderPath,videodb://) | String.Contains(Container.FolderPath,special://) | String.Contains(Container.FolderPath,addons://) | String.Contains(Container.FolderPath,musicdb://)</expression>
+  <expression name="All_Paths">String.Contains(Container.FolderPath,videodb://) | String.Contains(Container.FolderPath,special://) | String.Contains(Container.FolderPath,addons://) | String.Contains(Container.FolderPath,musicdb://) | String.Contains(Container.FolderPath,plugin://)</expression>
   <expression name="Video_Containers">Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | Container.Content(episodes) | Container.Content(musicvideos)</expression>
   <expression name="Music_Containers">Container.Content(artists) } Container.Content(albums) | Container.Content(songs)</expression>
   <expression name="ListOnly_Containers">Container.Content() | Container.Content(files) | Container.Content(genres) | Container.Content(years) | Container.Content(actors) | Container.Content(playlists) | Container.Content(plugins) | Container.Content(studios) | Container.Content(directors) | Container.Content(tags) | Container.Content(countries) | Container.Content(roles) | Container.Content(images)</expression>
-  <expression name="Fanart_Containers">Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | Container.Content(episodes) | Container.Content(artists)</expression>
+  <expression name="Fanart_Containers">Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | Container.Content(episodes) | Container.Content(artists) | Container.content(albums) | Container.Content(songs)</expression>
   <expression name="Logo_Containers">[Container.Content(movies) | Container.Content(tvshows)]</expression>
   <expression name="Flag_Containers">[Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | Container.Content(episodes)]</expression>
   <expression name="Background_IsFanart">[[$EXP[ListView_IsVisible] + $EXP[Fanart_Containers] + $EXP[ListView_Display_IsBackground]] | $EXP[BillboardView_IsVisible]] + ![String.IsEmpty(ListItem.Art(fanart)) + String.IsEmpty(ListItem.Icon)]</expression>
+
+  <expression name="ContainerCycling">![[Container.Content(movies) + Control.IsVisible(951)] | [Container.Content(sets) + Control.IsVisible(952)] | [Container.Content(tvshows) + Control.IsVisible(953)] | [Container.Content(seasons) + Control.IsVisible(954)] | [Container.Content(episodes) + Control.IsVisible(955)] | [Container.Content(artists) + Control.IsVisible(956)] | [Container.Content(albums) + Control.IsVisible(957)] | [Container.Content(songs) + Control.IsVisible(958)] | [Container.Content() + Control.IsVisible(959)] | [Container.Content(files) + Control.IsVisible(960)] | [Container.Content(genres) + Control.IsVisible(961)] | [Container.Content(years) + Control.IsVisible(962)] | [Container.Content(actors) + Control.IsVisible(963)] | [Container.Content(playlists) + Control.IsVisible(964)] | [Container.Content(plugins) + Control.IsVisible(965)] | [Container.Content(studios) + Control.IsVisible(966)] | [Container.Content(directors) + Control.IsVisible(967)] | [Container.Content(tags) + Control.IsVisible(968)] | [Container.Content(countries) + Control.IsVisible(969)] | [Container.Content(roles) + Control.IsVisible(970)] | [Container.Content(images) + Control.IsVisible(971)]]</expression>
+  <expression name="ContentCycling">Control.IsVisible(5001) | Control.IsVisible(5002)</expression>
 
   <expression name="ListView_IsVisible">Control.IsVisible(50) | String.IsEqual(Container.ViewMode,List)</expression>
   <expression name="ListView_Display_IsBackground">!Container.Content(files) + [Container.Content() | Container.Content(episodes) | Skin.String(ListView_Display,Background) | String.IsEmpty(Skin.String(ListView_Display))]</expression>
@@ -98,31 +101,25 @@
 
 	<!-- Random Fanart-->
 	<include name="FanartSlideshow">
-    <param name="path" default="videodb://movies/titles/"/>
-      <definition>
-    		<control type="list" id="12341">
+    <param name="path" default="$VAR[SlideshowSource]"/>
+    <param name="listid" default="12341"/>
+    <definition>
+      <control type="group">
+    		<control type="list" id="$PARAM[listid]">
     			<content sortby="random">$PARAM[path]</content>
-    <!--	<content sortby="random" limit="1">videodb://tvshows/titles/</content>
-    			<content sortby="random" limit="1">videodb://movies/titles/</content>
-    			<content sortby="random" limit="3">videodb://tvshows/titles/</content>
-    			<content sortby="random" limit="2">videodb://movies/titles/</content>
-    			<content sortby="random" limit="2">videodb://tvshows/titles/</content>
-    			<content sortby="random" limit="3">videodb://movies/titles/</content>
-    			<content sortby="random" limit="2">videodb://tvshows/titles/</content>
-    			<content sortby="random" limit="1">videodb://movies/titles/</content>
-    			<content sortby="random" limit="1">videodb://tvshows/titles/</content>-->
     			<autoscroll time="7000">true</autoscroll> <!-- Time to show each image, in milliseconds -->
     			<itemlayout />
     			<focusedlayout />
     		</control>
-    		<control type="multiimage" id="12340">
-    			<imagepath background="true">$INFO[Container(12341).ListItem.Art(fanart)]</imagepath>
+    		<control type="multiimage">
+    			<imagepath background="true">$INFO[Container($PARAM[listid]).ListItem.Art(fanart)]</imagepath>
     			<aspectratio>scale</aspectratio>
-    			<fadetime>600</fadetime>
+    			<fadetime>1800</fadetime>
     			<pauseatend>10000</pauseatend>
     			<randomize>true</randomize>
     		</control>
-      </definition>
+      </control>
+    </definition>
 	</include>
 
 	<include name="ViewtypeOverlay">
@@ -178,25 +175,11 @@
 		</definition>
 	</include>
 
-  <!--Context Menu Label Unfocused-->
-  <include name="ContextMenuLabelUnfocusedLight">
-    <definition>
-      <height>55</height>
-      <font>List_Title_Unfocused_Light</font>
-      <textcolor>$VAR[PrimaryColor]</textcolor>
-    </definition>
-  </include>
-
   <include name="ContextMenuLabelTemplate">
     <control type="label">
       <include>ContextMenuLabelUnfocused</include>
       <label>$INFO[Control.GetLabel($PARAM[id])]</label>
-      <visible>Control.IsVisible($PARAM[id]) + !Control.HasFocus($PARAM[id]) + !Skin.String(Theme,Light)</visible>
-    </control>
-    <control type="label">
-      <include>ContextMenuLabelUnfocusedLight</include>
-      <label>$INFO[Control.GetLabel($PARAM[id])]</label>
-      <visible>Control.IsVisible($PARAM[id]) + !Control.HasFocus($PARAM[id]) + Skin.String(Theme,Light)</visible>
+      <visible>Control.IsVisible($PARAM[id]) + !Control.HasFocus($PARAM[id])</visible>
     </control>
     <control type="label">
       <include>ContextMenuLabelFocused</include>
@@ -718,6 +701,7 @@
     <control type="button">
       <visible allowhiddenfocus="true">false</visible>
       <animation effect="slide" end="0,0" time="380" reversible="false">Focus</animation>
+      <onfocus condition="!String.IsEmpty(Window(Home).Property(MyResult))">ClearProperty(MyResult,home)</onfocus>
       <onfocus condition="System.HasAddon(script.embuary.helper) + Integer.IsGreater(ListItem.Property(WatchedEpisodes),0) + Integer.IsGreater(ListItem.Property(TotalEpisodes),0) + !String.IsEqual(ListItem.Overlay,OverlayWatched.png) + [Container.Content(tvshows) | Container.Content(seasons)]">RunScript(script.embuary.helper,action=calc,do='"($INFO[ListItem.Property(WatchedEpisodes)] / $INFO[ListItem.Property(TotalEpisodes)]) * 100"',prop=MyResult)</onfocus>
       <onunfocus condition="!String.IsEmpty(Window(Home).Property(MyResult))">ClearProperty(MyResult,home)</onunfocus>
     </control>
@@ -981,251 +965,259 @@
 		<param name="griddetailstop" default="407"/>
 		<definition>
       <control type="group">
-        <visible>!Control.IsVisible(941)</visible>
-        <animation effect="fade" start="0" end="100" time="190" tween="sine" easing="out" reversible="false">Visible</animation>
-        <left>$PARAM[left]</left>
-        <top>$PARAM[top]</top>
-        <width>$PARAM[width]</width>
-        <height>$PARAM[height]</height>
-        <!--Dropshadow-->
+        <visible>!$EXP[ContainerCycling]</visible>
+				<include>ViewmodeCyclingAnimation</include>
         <control type="group">
-          <visible>!$EXP[Dialog_IsVisible]</visible>
-          <visible>$PARAM[dropshadowvisible]</visible>
-          <include>ContentFadeAnimation</include>
-          <!--Left Side-->
-          <include content="DropShadow">
-            <param name="left" value="-120"/>
-            <param name="top" value="0"/>
-            <param name="width" value="120"/>
-            <param name="height" value="$PARAM[height]"/>
-            <param name="visible" value="!Container.Column(0) + !String.IsEqual(Control.GetLabel(1059),OverlayWatched.png)"/>
-          </include>
-          <include content="DropShadow">
-            <param name="left" value="-120"/>
-            <param name="top" value="0"/>
-            <param name="width" value="120"/>
-            <param name="height" value="$PARAM[height]"/>
-            <param name="colordiffuse" value="$VAR[ShadowColorWatched]"/>
-            <param name="visible" value="!Container.Column(0) + String.IsEqual(Control.GetLabel(1059),OverlayWatched.png)"/>
-          </include>
-          <!--Top Left Corner-->
-          <include content="DropShadow">
-            <param name="left" value="-120"/>
-            <param name="top" value="-120"/>
-            <param name="width" value="120"/>
-            <param name="height" value="120"/>
-            <param name="texture" value="views/dropshadow_topleftcorner_120.png"/>
-            <param name="visible" value="$EXP[GridView_Details_Disabled] + !Container.Column(0) + !$PARAM[dropshadowtopleftcornerwatched]"/>
-          </include>
-          <include content="DropShadow">
-            <param name="left" value="-120"/>
-            <param name="top" value="-120"/>
-            <param name="width" value="120"/>
-            <param name="height" value="120"/>
-            <param name="texture" value="views/dropshadow_topleftcorner_120.png"/>
-            <param name="colordiffuse" value="$VAR[ShadowColorWatched]"/>
-            <param name="visible" value="$EXP[GridView_Details_Disabled] + !Container.Column(0) + $PARAM[dropshadowtopleftcornerwatched]"/>
-          </include>
-          <!--Top Side-->
-          <include content="DropShadow">
-            <param name="left" value="0"/>
-            <param name="top" value="-120"/>
-            <param name="width" value="$PARAM[width]"/>
-            <param name="height" value="120"/>
-            <param name="texture" value="views/dropshadow_top_120.png"/>
-            <param name="visible" value="$EXP[GridView_Details_Disabled] + !$PARAM[dropshadowtopsidewatched]"/>
-          </include>
-          <include content="DropShadow">
-            <param name="left" value="0"/>
-            <param name="top" value="-120"/>
-            <param name="width" value="$PARAM[width]"/>
-            <param name="height" value="120"/>
-            <param name="texture" value="views/dropshadow_top_120.png"/>
-            <param name="colordiffuse" value="$VAR[ShadowColorWatched]"/>
-            <param name="visible" value="$EXP[GridView_Details_Disabled] + $PARAM[dropshadowtopsidewatched]"/>
-          </include>
-          <!--Top Right Corner-->
-          <include content="DropShadow">
-            <param name="left" value="$PARAM[width]"/>
-            <param name="top" value="-120"/>
-            <param name="width" value="120"/>
-            <param name="height" value="120"/>
-            <param name="flipx" value="true"/>
-            <param name="texture" value="views/dropshadow_topleftcorner_120.png"/>
-            <param name="visible" value="$EXP[GridView_Details_Disabled] + $PARAM[dropshadowrightsidevisibility] + !String.IsEmpty(Control.GetLabel(960)) + !$PARAM[dropshadowtoprightcornerwatched]"/>
-          </include>
-          <include content="DropShadow">
-            <param name="left" value="$PARAM[width]"/>
-            <param name="top" value="-120"/>
-            <param name="width" value="120"/>
-            <param name="height" value="120"/>
-            <param name="flipx" value="true"/>
-            <param name="texture" value="views/dropshadow_topleftcorner_120.png"/>
-            <param name="colordiffuse" value="$VAR[ShadowColorWatched]"/>
-            <param name="visible" value="$EXP[GridView_Details_Disabled] + $PARAM[dropshadowrightsidevisibility] + !String.IsEmpty(Control.GetLabel(960)) + $PARAM[dropshadowtoprightcornerwatched]"/>
-          </include>
-          <!--Rigt Side-->
-          <include content="DropShadow">
-            <param name="left" value="$PARAM[width]"/>
-            <param name="top" value="0"/>
-            <param name="width" value="120"/>
-            <param name="height" value="$PARAM[height]"/>
-            <param name="flipx" value="true"/>
-            <param name="texture" value="views/dropshadow_left_120.png"/>
-            <param name="visible" value="$PARAM[dropshadowrightsidevisibility] + !String.IsEmpty(Control.GetLabel(960)) + !String.IsEqual(Control.GetLabel(1060),OverlayWatched.png)"/>
-          </include>
-          <include content="DropShadow">
-            <param name="left" value="$PARAM[width]"/>
-            <param name="top" value="0"/>
-            <param name="width" value="120"/>
-            <param name="height" value="$PARAM[height]"/>
-            <param name="flipx" value="true"/>
-            <param name="texture" value="views/dropshadow_left_120.png"/>
-            <param name="colordiffuse" value="$VAR[ShadowColorWatched]"/>
-            <param name="visible" value="$PARAM[dropshadowrightsidevisibility] + !String.IsEmpty(Control.GetLabel(960)) + String.IsEqual(Control.GetLabel(1060),OverlayWatched.png)"/>
-          </include>
-          <!--Bottom Right Corner-->
-          <include content="DropShadow">
-            <param name="left" value="$PARAM[width]"/>
-            <param name="top" value="$PARAM[height]"/>
-            <param name="width" value="120"/>
-            <param name="height" value="120"/>
-            <param name="flipx" value="true"/>
-            <param name="flipy" value="true"/>
-            <param name="texture" value="views/dropshadow_topleftcorner_120.png"/>
-            <param name="visible" value="$EXP[GridView_Details_Disabled] + $PARAM[dropshadowrightsidevisibility] + !String.IsEmpty(Control.GetLabel(960)) + $PARAM[dropshadowbottomsidevisibility] + $PARAM[dropshadowbottomrightcornervisibility] + !$PARAM[dropshadowbottomrightcornerwatched]"/>
-          </include>
-          <include content="DropShadow">
-            <param name="left" value="$PARAM[width]"/>
-            <param name="top" value="$PARAM[height]"/>
-            <param name="width" value="120"/>
-            <param name="height" value="120"/>
-            <param name="flipx" value="true"/>
-            <param name="flipy" value="true"/>
-            <param name="texture" value="views/dropshadow_topleftcorner_120.png"/>
-            <param name="colordiffuse" value="$VAR[ShadowColorWatched]"/>
-            <param name="visible" value="$EXP[GridView_Details_Disabled] + $PARAM[dropshadowrightsidevisibility] + !String.IsEmpty(Control.GetLabel(960)) + $PARAM[dropshadowbottomsidevisibility] + $PARAM[dropshadowbottomrightcornervisibility] + $PARAM[dropshadowbottomrightcornerwatched]"/>
-          </include>
-          <!--Bottom Side-->
-          <include content="DropShadow">
-            <param name="left" value="0"/>
-            <param name="top" value="$PARAM[height]"/>
-            <param name="width" value="$PARAM[width]"/>
-            <param name="height" value="120"/>
-            <param name="flipy" value="true"/>
-            <param name="texture" value="views/dropshadow_top_120.png"/>
-            <param name="visible" value="$EXP[GridView_Details_Disabled] + $PARAM[dropshadowbottomsidevisibility] + !$PARAM[dropshadowbottomsidewatched]"/>
-          </include>
-          <include content="DropShadow">
-            <param name="left" value="0"/>
-            <param name="top" value="$PARAM[height]"/>
-            <param name="width" value="$PARAM[width]"/>
-            <param name="height" value="120"/>
-            <param name="flipy" value="true"/>
-            <param name="texture" value="views/dropshadow_top_120.png"/>
-            <param name="colordiffuse" value="$VAR[ShadowColorWatched]"/>
-            <param name="visible" value="$EXP[GridView_Details_Disabled] + $PARAM[dropshadowbottomsidevisibility] + $PARAM[dropshadowbottomsidewatched]"/>
-          </include>
-          <!--Bottom Left Corner-->
-          <include content="DropShadow">
-            <param name="left" value="-120"/>
-            <param name="top" value="$PARAM[height]"/>
-            <param name="width" value="120"/>
-            <param name="height" value="120"/>
-            <param name="flipy" value="true"/>
-            <param name="texture" value="views/dropshadow_topleftcorner_120.png"/>
-            <param name="visible" value="$EXP[GridView_Details_Disabled] + !Container.Column(0) + $PARAM[dropshadowbottomleftcornervisibility] + !$PARAM[dropshadowbottomleftcornerwatched]"/>
-          </include>
-          <include content="DropShadow">
-            <param name="left" value="-120"/>
-            <param name="top" value="$PARAM[height]"/>
-            <param name="width" value="120"/>
-            <param name="height" value="120"/>
-            <param name="flipy" value="true"/>
-            <param name="texture" value="views/dropshadow_topleftcorner_120.png"/>
-            <param name="colordiffuse" value="$VAR[ShadowColorWatched]"/>
-            <param name="visible" value="$EXP[GridView_Details_Disabled] + !Container.Column(0) + $PARAM[dropshadowbottomleftcornervisibility] + $PARAM[dropshadowbottomleftcornerwatched]"/>
-          </include>
-        </control>
-        <!--ListIcon-->
-        <include content="ListIcon">
-          <param name="left" value="0"/>
-          <param name="top" value="0"/>
-          <param name="width" value="100%"/>
-          <param name="showgradient" value="$PARAM[showgradient]"/>
-          <param name="aspectratio" value="$PARAM[aspectratio]"/>
-        </include>
-        <!--Watched overlay-->
-        <control type="image">
-          <left>0</left>
-          <top>0</top>
-          <width>100%</width>
-          <height>100%</height>
-          <visible>$PARAM[watchedstatusvisibility]</visible>
-          <visible>String.IsEqual(ListItem.Overlay,OverlayWatched.png)</visible>
-          <texture colordiffuse="$VAR[SecondaryColor]">views/white_50.png</texture>
-        </control>
-        <!--ProgressBar-->
-        <control type="group">
-          <left>$PARAM[progressbarleft]</left>
-          <top>$PARAM[progressbartop]</top>
-          <width>$PARAM[progressbarwidth]</width>
-          <visible>$PARAM[progressbarvisible]</visible>
-          <include>ContentFadeAnimation</include>
-          <animation effect="fade" start="0" end="100" time="380" delay="760" tween="sine" easing="out" condition="$PARAM[fadecondition]" reversible="false">Focus</animation>
-          <include content="ProgressBar">
+          <visible>!Control.IsVisible(941)</visible>
+          <animation effect="fade" start="0" end="100" time="190" tween="sine" easing="out" reversible="false">Visible</animation>
+          <left>$PARAM[left]</left>
+          <top>$PARAM[top]</top>
+          <width>$PARAM[width]</width>
+          <height>$PARAM[height]</height>
+          <!--Dropshadow-->
+          <control type="group">
+            <visible>!$EXP[Dialog_IsVisible]</visible>
+            <visible>$PARAM[dropshadowvisible]</visible>
+            <include>ContentFadeAnimation</include>
+            <!--Left Side-->
+            <include content="DropShadow">
+              <param name="left" value="-120"/>
+              <param name="top" value="0"/>
+              <param name="width" value="120"/>
+              <param name="height" value="$PARAM[height]"/>
+              <param name="visible" value="!Container.Column(0) + !String.IsEqual(Control.GetLabel(1059),OverlayWatched.png)"/>
+            </include>
+            <include content="DropShadow">
+              <param name="left" value="-120"/>
+              <param name="top" value="0"/>
+              <param name="width" value="120"/>
+              <param name="height" value="$PARAM[height]"/>
+              <param name="colordiffuse" value="$VAR[ShadowColorWatched]"/>
+              <param name="visible" value="!Container.Column(0) + String.IsEqual(Control.GetLabel(1059),OverlayWatched.png)"/>
+            </include>
+            <!--Top Left Corner-->
+            <include content="DropShadow">
+              <param name="left" value="-120"/>
+              <param name="top" value="-120"/>
+              <param name="width" value="120"/>
+              <param name="height" value="120"/>
+              <param name="texture" value="views/dropshadow_topleftcorner_120.png"/>
+              <param name="visible" value="$EXP[GridView_Details_Disabled] + !Container.Column(0) + !$PARAM[dropshadowtopleftcornerwatched]"/>
+            </include>
+            <include content="DropShadow">
+              <param name="left" value="-120"/>
+              <param name="top" value="-120"/>
+              <param name="width" value="120"/>
+              <param name="height" value="120"/>
+              <param name="texture" value="views/dropshadow_topleftcorner_120.png"/>
+              <param name="colordiffuse" value="$VAR[ShadowColorWatched]"/>
+              <param name="visible" value="$EXP[GridView_Details_Disabled] + !Container.Column(0) + $PARAM[dropshadowtopleftcornerwatched]"/>
+            </include>
+            <!--Top Side-->
+            <include content="DropShadow">
+              <param name="left" value="0"/>
+              <param name="top" value="-120"/>
+              <param name="width" value="$PARAM[width]"/>
+              <param name="height" value="120"/>
+              <param name="texture" value="views/dropshadow_top_120.png"/>
+              <param name="visible" value="$EXP[GridView_Details_Disabled] + !$PARAM[dropshadowtopsidewatched]"/>
+            </include>
+            <include content="DropShadow">
+              <param name="left" value="0"/>
+              <param name="top" value="-120"/>
+              <param name="width" value="$PARAM[width]"/>
+              <param name="height" value="120"/>
+              <param name="texture" value="views/dropshadow_top_120.png"/>
+              <param name="colordiffuse" value="$VAR[ShadowColorWatched]"/>
+              <param name="visible" value="$EXP[GridView_Details_Disabled] + $PARAM[dropshadowtopsidewatched]"/>
+            </include>
+            <!--Top Right Corner-->
+            <include content="DropShadow">
+              <param name="left" value="$PARAM[width]"/>
+              <param name="top" value="-120"/>
+              <param name="width" value="120"/>
+              <param name="height" value="120"/>
+              <param name="flipx" value="true"/>
+              <param name="texture" value="views/dropshadow_topleftcorner_120.png"/>
+              <param name="visible" value="$EXP[GridView_Details_Disabled] + $PARAM[dropshadowrightsidevisibility] + !String.IsEmpty(Control.GetLabel(960)) + !$PARAM[dropshadowtoprightcornerwatched]"/>
+            </include>
+            <include content="DropShadow">
+              <param name="left" value="$PARAM[width]"/>
+              <param name="top" value="-120"/>
+              <param name="width" value="120"/>
+              <param name="height" value="120"/>
+              <param name="flipx" value="true"/>
+              <param name="texture" value="views/dropshadow_topleftcorner_120.png"/>
+              <param name="colordiffuse" value="$VAR[ShadowColorWatched]"/>
+              <param name="visible" value="$EXP[GridView_Details_Disabled] + $PARAM[dropshadowrightsidevisibility] + !String.IsEmpty(Control.GetLabel(960)) + $PARAM[dropshadowtoprightcornerwatched]"/>
+            </include>
+            <!--Rigt Side-->
+            <include content="DropShadow">
+              <param name="left" value="$PARAM[width]"/>
+              <param name="top" value="0"/>
+              <param name="width" value="120"/>
+              <param name="height" value="$PARAM[height]"/>
+              <param name="flipx" value="true"/>
+              <param name="texture" value="views/dropshadow_left_120.png"/>
+              <param name="visible" value="$PARAM[dropshadowrightsidevisibility] + !String.IsEmpty(Control.GetLabel(960)) + !String.IsEqual(Control.GetLabel(1060),OverlayWatched.png)"/>
+            </include>
+            <include content="DropShadow">
+              <param name="left" value="$PARAM[width]"/>
+              <param name="top" value="0"/>
+              <param name="width" value="120"/>
+              <param name="height" value="$PARAM[height]"/>
+              <param name="flipx" value="true"/>
+              <param name="texture" value="views/dropshadow_left_120.png"/>
+              <param name="colordiffuse" value="$VAR[ShadowColorWatched]"/>
+              <param name="visible" value="$PARAM[dropshadowrightsidevisibility] + !String.IsEmpty(Control.GetLabel(960)) + String.IsEqual(Control.GetLabel(1060),OverlayWatched.png)"/>
+            </include>
+            <!--Bottom Right Corner-->
+            <include content="DropShadow">
+              <param name="left" value="$PARAM[width]"/>
+              <param name="top" value="$PARAM[height]"/>
+              <param name="width" value="120"/>
+              <param name="height" value="120"/>
+              <param name="flipx" value="true"/>
+              <param name="flipy" value="true"/>
+              <param name="texture" value="views/dropshadow_topleftcorner_120.png"/>
+              <param name="visible" value="$EXP[GridView_Details_Disabled] + $PARAM[dropshadowrightsidevisibility] + !String.IsEmpty(Control.GetLabel(960)) + $PARAM[dropshadowbottomsidevisibility] + $PARAM[dropshadowbottomrightcornervisibility] + !$PARAM[dropshadowbottomrightcornerwatched]"/>
+            </include>
+            <include content="DropShadow">
+              <param name="left" value="$PARAM[width]"/>
+              <param name="top" value="$PARAM[height]"/>
+              <param name="width" value="120"/>
+              <param name="height" value="120"/>
+              <param name="flipx" value="true"/>
+              <param name="flipy" value="true"/>
+              <param name="texture" value="views/dropshadow_topleftcorner_120.png"/>
+              <param name="colordiffuse" value="$VAR[ShadowColorWatched]"/>
+              <param name="visible" value="$EXP[GridView_Details_Disabled] + $PARAM[dropshadowrightsidevisibility] + !String.IsEmpty(Control.GetLabel(960)) + $PARAM[dropshadowbottomsidevisibility] + $PARAM[dropshadowbottomrightcornervisibility] + $PARAM[dropshadowbottomrightcornerwatched]"/>
+            </include>
+            <!--Bottom Side-->
+            <include content="DropShadow">
+              <param name="left" value="0"/>
+              <param name="top" value="$PARAM[height]"/>
+              <param name="width" value="$PARAM[width]"/>
+              <param name="height" value="120"/>
+              <param name="flipy" value="true"/>
+              <param name="texture" value="views/dropshadow_top_120.png"/>
+              <param name="visible" value="$EXP[GridView_Details_Disabled] + $PARAM[dropshadowbottomsidevisibility] + !$PARAM[dropshadowbottomsidewatched]"/>
+            </include>
+            <include content="DropShadow">
+              <param name="left" value="0"/>
+              <param name="top" value="$PARAM[height]"/>
+              <param name="width" value="$PARAM[width]"/>
+              <param name="height" value="120"/>
+              <param name="flipy" value="true"/>
+              <param name="texture" value="views/dropshadow_top_120.png"/>
+              <param name="colordiffuse" value="$VAR[ShadowColorWatched]"/>
+              <param name="visible" value="$EXP[GridView_Details_Disabled] + $PARAM[dropshadowbottomsidevisibility] + $PARAM[dropshadowbottomsidewatched]"/>
+            </include>
+            <!--Bottom Left Corner-->
+            <include content="DropShadow">
+              <param name="left" value="-120"/>
+              <param name="top" value="$PARAM[height]"/>
+              <param name="width" value="120"/>
+              <param name="height" value="120"/>
+              <param name="flipy" value="true"/>
+              <param name="texture" value="views/dropshadow_topleftcorner_120.png"/>
+              <param name="visible" value="$EXP[GridView_Details_Disabled] + !Container.Column(0) + $PARAM[dropshadowbottomleftcornervisibility] + !$PARAM[dropshadowbottomleftcornerwatched]"/>
+            </include>
+            <include content="DropShadow">
+              <param name="left" value="-120"/>
+              <param name="top" value="$PARAM[height]"/>
+              <param name="width" value="120"/>
+              <param name="height" value="120"/>
+              <param name="flipy" value="true"/>
+              <param name="texture" value="views/dropshadow_topleftcorner_120.png"/>
+              <param name="colordiffuse" value="$VAR[ShadowColorWatched]"/>
+              <param name="visible" value="$EXP[GridView_Details_Disabled] + !Container.Column(0) + $PARAM[dropshadowbottomleftcornervisibility] + $PARAM[dropshadowbottomleftcornerwatched]"/>
+            </include>
+          </control>
+          <!--ListIcon-->
+          <include content="ListIcon">
             <param name="left" value="0"/>
             <param name="top" value="0"/>
             <param name="width" value="100%"/>
+            <param name="showgradient" value="$PARAM[showgradient]"/>
+            <param name="aspectratio" value="$PARAM[aspectratio]"/>
           </include>
-        </control>
-        <!--Border-->
-        <control type="group">
-          <visible>!$EXP[Dialog_IsVisible]</visible>
-          <include>ContentFadeAnimation</include>
+          <!--Watched overlay-->
           <control type="image">
-            <left>$PARAM[borderleft]</left>
-            <top>$PARAM[bordertop]</top>
-            <width>$PARAM[borderwidth]</width>
-            <height>$PARAM[borderheight]</height>
-            <aspectratio>stretch</aspectratio>
-            <visible>$PARAM[bordervisible]</visible>
-            <texture border="11" colordiffuse="$VAR[AccentColor]">views/border_10px.png</texture>
+            <left>0</left>
+            <top>0</top>
+            <width>100%</width>
+            <height>100%</height>
+            <visible>$PARAM[watchedstatusvisibility]</visible>
+            <visible>String.IsEqual(ListItem.Overlay,OverlayWatched.png)</visible>
+            <texture colordiffuse="$VAR[SecondaryColor]">views/white_50.png</texture>
           </control>
+          <!--ProgressBar-->
+          <control type="group">
+            <visible>!$EXP[ContainerCycling]</visible>
+            <include>ContainerSwitchingProgressBarAnimation</include>
+            <control type="group">
+              <left>$PARAM[progressbarleft]</left>
+              <top>$PARAM[progressbartop]</top>
+              <width>$PARAM[progressbarwidth]</width>
+              <visible>$PARAM[progressbarvisible]</visible>
+              <include>ContentFadeAnimation</include>
+              <animation effect="fade" start="0" end="100" time="380" delay="380" tween="sine" easing="out" condition="$PARAM[fadecondition]" reversible="false">Focus</animation>
+              <include content="ProgressBar">
+                <param name="left" value="0"/>
+                <param name="top" value="0"/>
+                <param name="width" value="100%"/>
+              </include>
+            </control>
+          </control>
+          <!--Border-->
+          <control type="group">
+            <visible>!$EXP[Dialog_IsVisible]</visible>
+            <include>ContentFadeAnimation</include>
+            <control type="image">
+              <left>$PARAM[borderleft]</left>
+              <top>$PARAM[bordertop]</top>
+              <width>$PARAM[borderwidth]</width>
+              <height>$PARAM[borderheight]</height>
+              <aspectratio>stretch</aspectratio>
+              <visible>$PARAM[bordervisible]</visible>
+              <texture border="11" colordiffuse="$VAR[AccentColor]">views/border_10px.png</texture>
+            </control>
+          </control>
+  				<!--GridTitle-->
+  				<control type="label">
+  					<visible>!$EXP[Dialog_IsVisible]</visible>
+  					<visible>$EXP[GridView_Details_Enabled]</visible>
+            <include>ContentFadeAnimation</include>
+  					<left>0</left>
+  					<width>$PARAM[width]</width>
+  					<top>$PARAM[gridtitletop]</top>
+  					<height>$PARAM[gridtitleheight]</height>
+  					<align>center</align>
+  					<font>$PARAM[gridtitlefont]</font>
+  					<textcolor>$PARAM[gridtitletextcolor]</textcolor>
+  					<label>$VAR[Title]</label>
+  					<scroll>$PARAM[gridtitlescroll]</scroll>
+  					<scrollsuffix> / </scrollsuffix>
+  				</control>
+  				<!--GridDetails-->
+  				<control type="label">
+  					<visible>!$EXP[Dialog_IsVisible]</visible>
+  					<include>ContentFadeAnimation</include>
+  					<visible>Skin.String(GridView_Details,TitleAndInfo)</visible>
+            <visible>$PARAM[griddetailsvisible]</visible>
+  					<left>0</left>
+  					<width>$PARAM[width]</width>
+  					<top>$PARAM[griddetailstop]</top>
+  					<height>29</height>
+  					<align>center</align>
+  					<font>Grid_Info</font>
+  					<textcolor>$VAR[PrimaryColor]</textcolor>
+  					<label>$VAR[TitleInfo]</label>
+  					<scroll>$PARAM[gridtitlescroll]</scroll>
+  					<scrollsuffix> / </scrollsuffix>
+  				</control>
         </control>
-				<!--GridTitle-->
-				<control type="label">
-					<visible>!$EXP[Dialog_IsVisible]</visible>
-					<visible>$EXP[GridView_Details_Enabled]</visible>
-          <include>ContentFadeAnimation</include>
-					<left>0</left>
-					<width>$PARAM[width]</width>
-					<top>$PARAM[gridtitletop]</top>
-					<height>$PARAM[gridtitleheight]</height>
-					<align>center</align>
-					<font>$PARAM[gridtitlefont]</font>
-					<textcolor>$PARAM[gridtitletextcolor]</textcolor>
-					<label>$VAR[Title]</label>
-					<scroll>$PARAM[gridtitlescroll]</scroll>
-					<scrollsuffix> / </scrollsuffix>
-				</control>
-				<!--GridDetails-->
-				<control type="label">
-					<visible>!$EXP[Dialog_IsVisible]</visible>
-					<include>ContentFadeAnimation</include>
-					<visible>Skin.String(GridView_Details,TitleAndInfo)</visible>
-          <visible>$PARAM[griddetailsvisible]</visible>
-					<left>0</left>
-					<width>$PARAM[width]</width>
-					<top>$PARAM[griddetailstop]</top>
-					<height>29</height>
-					<align>center</align>
-					<font>Grid_Info</font>
-					<textcolor>$VAR[PrimaryColor]</textcolor>
-					<label>$VAR[TitleInfo]</label>
-					<scroll>$PARAM[gridtitlescroll]</scroll>
-					<scrollsuffix> / </scrollsuffix>
-				</control>
       </control>
 	  </definition>
   </include>
@@ -1240,7 +1232,7 @@
       <param name="showgradient" value="true"/>
       <param name="watchedstatusvisibility" value="false"/>
       <param name="bordervisible" value="true"/>
-      <param name="progressbarvisible" value="!Control.IsVisible(5001) + !Control.IsVisible(5002)"/>
+      <param name="progressbarvisible" value="!$EXP[ContentCycling]"/>
       <param name="fadecondition" default="true"/>
       <param name="gridtitlescroll" value="true"/>
       <param name="gridtitletop" value="360"/>
@@ -1367,11 +1359,11 @@
 		<param name="logovisibility" default="false"/>
 		<param name="infovisibility" default="$EXP[ShowcaseView_Details_Info_IsVisible]"/>
     <param name="titleinfogap" default="5"/>
-    <param name="infoheight" default="35"/>
+    <param name="infoheight" default="70"/>
 		<param name="infofont" default="Showcase_Info"/>
     <param name="plotfont" default="Body"/>
     <param name="plotvisibility" default="$EXP[ShowcaseView_Details_Plot_IsVisible]"/>
-		<param name="plotmaxheight" default="240"/>
+		<param name="plotmaxheight" default="235"/>
     <param name="infoplotgap" default="60"/>
     <param name="plotcolor" default="$VAR[ListUnfocusColor]"/>
 		<definition>
@@ -1423,7 +1415,7 @@
 				<control type="textbox">
           <top>$PARAM[infoplotgap]</top>
 					<height max="$PARAM[plotmaxheight]">auto</height>
-          <visible>!String.IsEmpty(ListItem.Plot)</visible>
+          <visible>[$EXP[Video_Containers] + !String.IsEmpty(ListItem.Plot))] | [Container.Content(artists) + !String.IsEmpty(ListItem.Property(Artist_Description))] | [Container.Content(albums) + !String.IsEmpty(ListItem.Property(Album_Description))]</visible>
 					<visible>$PARAM[plotvisibility]</visible>
 					<font>$PARAM[plotfont]</font>
 					<textcolor>$PARAM[plotcolor]</textcolor>
