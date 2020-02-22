@@ -21,16 +21,19 @@
   <expression name="Fanart_Containers">Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | Container.Content(episodes) | Container.Content(artists) | Container.content(albums) | Container.Content(songs)</expression>
   <expression name="Logo_Containers">[Container.Content(movies) | Container.Content(tvshows)]</expression>
   <expression name="Flag_Containers">[Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | Container.Content(episodes)]</expression>
-  <expression name="Background_IsFanart">[[$EXP[ListView_IsVisible] + $EXP[Fanart_Containers] + $EXP[ListView_Display_IsBackground]] | $EXP[BillboardView_IsVisible]] + ![String.IsEmpty(ListItem.Art(fanart)) + String.IsEmpty(ListItem.Icon)]</expression>
+  <expression name="Background_IsFanart">[[$EXP[ListView_IsVisible] + $EXP[Fanart_Containers] + [$EXP[ListView_Display_IsBackground] | $EXP[ListView_Display_IsBackground_Music]]] | $EXP[BillboardView_IsVisible]] + ![String.IsEmpty(ListItem.Art(fanart)) + String.IsEmpty(ListItem.Icon)]</expression>
 
   <expression name="ContainerCycling">![[Container.Content(movies) + Control.IsVisible(951)] | [Container.Content(sets) + Control.IsVisible(952)] | [Container.Content(tvshows) + Control.IsVisible(953)] | [Container.Content(seasons) + Control.IsVisible(954)] | [Container.Content(episodes) + Control.IsVisible(955)] | [Container.Content(artists) + Control.IsVisible(956)] | [Container.Content(albums) + Control.IsVisible(957)] | [Container.Content(songs) + Control.IsVisible(958)] | [Container.Content() + Control.IsVisible(959)] | [Container.Content(files) + Control.IsVisible(960)] | [Container.Content(genres) + Control.IsVisible(961)] | [Container.Content(years) + Control.IsVisible(962)] | [Container.Content(actors) + Control.IsVisible(963)] | [Container.Content(playlists) + Control.IsVisible(964)] | [Container.Content(plugins) + Control.IsVisible(965)] | [Container.Content(studios) + Control.IsVisible(966)] | [Container.Content(directors) + Control.IsVisible(967)] | [Container.Content(tags) + Control.IsVisible(968)] | [Container.Content(countries) + Control.IsVisible(969)] | [Container.Content(roles) + Control.IsVisible(970)] | [Container.Content(images) + Control.IsVisible(971)]]</expression>
   <expression name="ContentCycling">Control.IsVisible(5001) | Control.IsVisible(5002)</expression>
 
   <expression name="ListView_IsVisible">Control.IsVisible(50) | String.IsEqual(Container.ViewMode,List)</expression>
-  <expression name="ListView_Display_IsBackground">!Container.Content(files) + [Container.Content() | Container.Content(episodes) | Skin.String(ListView_Display,Background) | String.IsEmpty(Skin.String(ListView_Display))]</expression>
-  <expression name="ListView_Display_IsFanart">Container.Content(files)</expression>
-  <expression name="ListView_Display_IsPosters">Skin.String(ListView_Display,Posters) + !Container.Content(episodes) + !Container.Content(artists) + !Container.Content(albums) + !$EXP[ListOnly_Containers]</expression>
-  <expression name="ListView_Display_IsSquare">Skin.String(ListView_Display,Square) + !Container.Content(episodes) + !$EXP[ListOnly_Containers]</expression>
+  <expression name="ListView_Display_IsBackground">Window.IsActive(videos) + [Skin.String(ListView_Display,Background) | String.IsEmpty(Skin.String(ListView_Display)) | Container.Content() | Container.Content(episodes)] + !Container.Content(files)</expression>
+  <expression name="ListView_Display_IsFanart">Window.IsActive(videos) + Container.Content(files)</expression>
+  <expression name="ListView_Display_IsPosters">Window.IsActive(videos) + Skin.String(ListView_Display,Posters) + !Container.Content(episodes) + !$EXP[ListOnly_Containers]</expression>
+  <expression name="ListView_Display_IsSquare">Window.IsActive(videos) + Skin.String(ListView_Display,Square) + !Container.Content(episodes) + !$EXP[ListOnly_Containers]</expression>
+  <expression name="ListView_Display_IsBackground_Music">Window.IsActive(music) + [Skin.String(ListView_Display_Music,Background) | String.IsEmpty(Skin.String(ListView_Display_Music)) | Container.Content()] + !Container.Content(albums) + !Container.Content(files)</expression>
+  <expression name="ListView_Display_IsSquare_Music">Window.IsActive(music) + [Skin.String(ListView_Display_Music,Square) | Container.Content(files) | Container.Content(albums)] + !$EXP[ListOnly_Containers]</expression>
+
   <expression name="ListView_Details_Info_IsVisible">Skin.String(ListView_Details,TitleAndInfo)</expression>
   <expression name="ListView_Flags_IsOn">$EXP[ListView_IsVisible] + !Skin.String(ListView_Flags,Off)</expression>
   <expression name="ListView_Flags_Studio_IsVisible">$EXP[ListView_IsVisible] + [Skin.String(ListView_Flags,All) | Skin.String(ListView_Flags,Studio) | String.IsEmpty(Skin.String(ListView_Flags))]</expression>
@@ -58,9 +61,11 @@
   <expression name="ShowcaseView_Flags_Studio_Shift">Skin.String(ShowcaseView_Flags,Studio) | [Skin.String(ShowcaseView_Flags,All) + String.IsEqual(Control.GetLabel(915),flags/blank.png)]</expression>
 
   <expression name="StripView_IsVisible">Control.IsVisible(504) | String.IsEqual(Container.ViewMode,Strip)</expression>
-  <expression name="StripView_Display_IsPosters">[Skin.String(StripView_Display,Posters) | String.IsEmpty(Skin.String(StripView_Display))] + !Container.Content(episodes) + !Container.Content(artists) + !Container.Content(albums)</expression>
-  <expression name="StripView_Display_IsFanart">[Skin.String(StripView_Display,Fanart) | Container.Content(episodes)] + !Container.Content(albums)</expression>
-  <expression name="StripView_Display_IsSquare">[Skin.String(StripView_Display,Square) | Container.Content(albums)] + !Container.Content(episodes)</expression>
+  <expression name="StripView_Display_IsPosters">Window.IsActive(videos) + [Skin.String(StripView_Display,Posters) | String.IsEmpty(Skin.String(StripView_Display))] + !Container.Content(episodes)</expression>
+  <expression name="StripView_Display_IsFanart">Window.IsActive(videos) + [Skin.String(StripView_Display,Fanart) | Container.Content(episodes)]</expression>
+  <expression name="StripView_Display_IsSquare">Window.IsActive(videos) + Skin.String(StripView_Display,Square) + !Container.Content(episodes)</expression>
+  <expression name="StripView_Display_IsFanart_Music">Window.IsActive(music) + [Skin.String(StripView_Display_Music,Fanart) | String.IsEmpty(Skin.String(StripView_Display_Music))] + !Container.Content(albums)</expression>
+  <expression name="StripView_Display_IsSquare_Music">Window.IsActive(music) + [Skin.String(StripView_Display_Music,Square) | Container.Content(albums)]</expression>
   <expression name="StripView_Details_Info_IsVisible">Skin.String(StripView_Details,TitleAndInfo) | Skin.String(StripView_Details,All) | String.IsEmpty(Skin.String(StripView_Details))</expression>
   <expression name="StripView_Details_Plot_IsVisible">Skin.String(StripView_Details,TitleAndPlot) | Skin.String(StripView_Details,All) | String.IsEmpty(Skin.String(StripView_Details))</expression>
   <expression name="StripView_Details_Logo_IsVisible">!Skin.String(StripView_Details,Off) + Skin.String(StripView_Logo,On) + !String.IsEmpty(ListItem.Art(clearlogo))</expression>
@@ -70,9 +75,11 @@
   <expression name="StripView_Flags_Studio_Shift">Skin.String(StripView_Flags,Studio) | [Skin.String(StripView_Flags,All) + String.IsEqual(Control.GetLabel(915),flags/blank.png)]</expression>
 
   <expression name="GridView_IsVisible">Control.IsVisible(505) | String.IsEqual(Container.ViewMode,Grid)</expression>
-  <expression name="GridView_Display_IsFanart">[Skin.String(GridView_Display,Fanart) | String.IsEmpty(Skin.String(GridView_Display)) | Container.Content(episodes)] + !Container.Content(albums)</expression>
-  <expression name="GridView_Display_IsPosters">Skin.String(GridView_Display,Posters) + !Container.Content(episodes) + !Container.Content(artists) + !Container.Content(albums)</expression>
-  <expression name="GridView_Display_IsSquare">[Skin.String(GridView_Display,Square) | Container.Content(albums)] + !Container.Content(episodes)</expression>
+  <expression name="GridView_Display_IsFanart">Window.IsActive(videos) + [Skin.String(GridView_Display,Fanart) | String.IsEmpty(Skin.String(GridView_Display)) | Container.Content(episodes)]</expression>
+  <expression name="GridView_Display_IsPosters">Window.IsActive(videos) + Skin.String(GridView_Display,Posters) + !Container.Content(episodes)</expression>
+  <expression name="GridView_Display_IsSquare">Window.IsActive(videos) + Skin.String(GridView_Display,Square) + !Container.Content(episodes)</expression>
+  <expression name="GridView_Display_IsFanart_Music">Window.IsActive(music) + [Skin.String(GridView_Display_Music,Fanart) | String.IsEmpty(Skin.String(GridView_Display_Music))] + !Container.Content(albums)</expression>
+  <expression name="GridView_Display_IsSquare_Music">Window.IsActive(music) + [Skin.String(GridView_Display_Music,Square) | Container.Content(albums)]</expression>
   <expression name="GridView_Details_Enabled">Skin.String(GridView_Details,Title) | Skin.String(GridView_Details,TitleAndInfo)</expression>
   <expression name="GridView_Details_Disabled">Skin.String(GridView_Details,Off) | String.IsEmpty(Skin.String(GridView_Details))</expression>
 
@@ -928,16 +935,16 @@
     <param name="height" default="333"/>
     <!--Dropshadow-->
     <param name="dropshadowvisible" default="false"/>
-    <param name="dropshadowtopleftcornerwatched" default="String.IsEqual(Control.GetLabel(1056),OverlayWatched.png)"/>
-    <param name="dropshadowtopsidewatched" default="String.IsEqual(Control.GetLabel(1057),OverlayWatched.png)"/>
-    <param name="dropshadowtoprightcornerwatched" default="String.IsEqual(Control.GetLabel(1058),OverlayWatched.png)"/>
+    <param name="dropshadowtopleftcornerwatched" default="String.IsEqual(Control.GetLabel(10560),OverlayWatched.png)"/>
+    <param name="dropshadowtopsidewatched" default="String.IsEqual(Control.GetLabel(10570),OverlayWatched.png)"/>
+    <param name="dropshadowtoprightcornerwatched" default="String.IsEqual(Control.GetLabel(10580),OverlayWatched.png)"/>
     <param name="dropshadowrightsidevisibility" default="!Container.Column(2)"/>
-    <param name="dropshadowbottomrightcornervisibility" default="!String.IsEmpty(Control.GetLabel(963))"/>
-    <param name="dropshadowbottomrightcornerwatched" default="String.IsEqual(Control.GetLabel(1063),OverlayWatched.png)"/>
-    <param name="dropshadowbottomsidevisibility" default="!String.IsEmpty(Control.GetLabel(962))"/>
-    <param name="dropshadowbottomsidewatched" default="String.IsEqual(Control.GetLabel(1062),OverlayWatched.png)"/>
-    <param name="dropshadowbottomleftcornervisibility" default="!String.IsEmpty(Control.GetLabel(961))"/>
-    <param name="dropshadowbottomleftcornerwatched" default="String.IsEqual(Control.GetLabel(1061),OverlayWatched.png)"/>
+    <param name="dropshadowbottomrightcornervisibility" default="!String.IsEmpty(Control.GetLabel(9630))"/>
+    <param name="dropshadowbottomrightcornerwatched" default="String.IsEqual(Control.GetLabel(10630),OverlayWatched.png)"/>
+    <param name="dropshadowbottomsidevisibility" default="!String.IsEmpty(Control.GetLabel(9620))"/>
+    <param name="dropshadowbottomsidewatched" default="String.IsEqual(Control.GetLabel(10620),OverlayWatched.png)"/>
+    <param name="dropshadowbottomleftcornervisibility" default="!String.IsEmpty(Control.GetLabel(9610))"/>
+    <param name="dropshadowbottomleftcornerwatched" default="String.IsEqual(Control.GetLabel(10610),OverlayWatched.png)"/>
     <!--ListIcon attributes-->
     <param name="aspectratio" default="scale"/>
     <param name="watchedstatusvisibility" default="true"/>
@@ -985,7 +992,7 @@
               <param name="top" value="0"/>
               <param name="width" value="120"/>
               <param name="height" value="$PARAM[height]"/>
-              <param name="visible" value="!Container.Column(0) + !String.IsEqual(Control.GetLabel(1059),OverlayWatched.png)"/>
+              <param name="visible" value="!Container.Column(0) + !String.IsEqual(Control.GetLabel(10590),OverlayWatched.png)"/>
             </include>
             <include content="DropShadow">
               <param name="left" value="-120"/>
@@ -993,7 +1000,7 @@
               <param name="width" value="120"/>
               <param name="height" value="$PARAM[height]"/>
               <param name="colordiffuse" value="$VAR[ShadowColorWatched]"/>
-              <param name="visible" value="!Container.Column(0) + String.IsEqual(Control.GetLabel(1059),OverlayWatched.png)"/>
+              <param name="visible" value="!Container.Column(0) + String.IsEqual(Control.GetLabel(10590),OverlayWatched.png)"/>
             </include>
             <!--Top Left Corner-->
             <include content="DropShadow">
@@ -1039,7 +1046,7 @@
               <param name="height" value="120"/>
               <param name="flipx" value="true"/>
               <param name="texture" value="views/dropshadow_topleftcorner_120.png"/>
-              <param name="visible" value="$EXP[GridView_Details_Disabled] + $PARAM[dropshadowrightsidevisibility] + !String.IsEmpty(Control.GetLabel(960)) + !$PARAM[dropshadowtoprightcornerwatched]"/>
+              <param name="visible" value="$EXP[GridView_Details_Disabled] + $PARAM[dropshadowrightsidevisibility] + !String.IsEmpty(Control.GetLabel(9600)) + !$PARAM[dropshadowtoprightcornerwatched]"/>
             </include>
             <include content="DropShadow">
               <param name="left" value="$PARAM[width]"/>
@@ -1049,7 +1056,7 @@
               <param name="flipx" value="true"/>
               <param name="texture" value="views/dropshadow_topleftcorner_120.png"/>
               <param name="colordiffuse" value="$VAR[ShadowColorWatched]"/>
-              <param name="visible" value="$EXP[GridView_Details_Disabled] + $PARAM[dropshadowrightsidevisibility] + !String.IsEmpty(Control.GetLabel(960)) + $PARAM[dropshadowtoprightcornerwatched]"/>
+              <param name="visible" value="$EXP[GridView_Details_Disabled] + $PARAM[dropshadowrightsidevisibility] + !String.IsEmpty(Control.GetLabel(9600)) + $PARAM[dropshadowtoprightcornerwatched]"/>
             </include>
             <!--Rigt Side-->
             <include content="DropShadow">
@@ -1059,7 +1066,7 @@
               <param name="height" value="$PARAM[height]"/>
               <param name="flipx" value="true"/>
               <param name="texture" value="views/dropshadow_left_120.png"/>
-              <param name="visible" value="$PARAM[dropshadowrightsidevisibility] + !String.IsEmpty(Control.GetLabel(960)) + !String.IsEqual(Control.GetLabel(1060),OverlayWatched.png)"/>
+              <param name="visible" value="$PARAM[dropshadowrightsidevisibility] + !String.IsEmpty(Control.GetLabel(9600)) + !String.IsEqual(Control.GetLabel(10600),OverlayWatched.png)"/>
             </include>
             <include content="DropShadow">
               <param name="left" value="$PARAM[width]"/>
@@ -1069,7 +1076,7 @@
               <param name="flipx" value="true"/>
               <param name="texture" value="views/dropshadow_left_120.png"/>
               <param name="colordiffuse" value="$VAR[ShadowColorWatched]"/>
-              <param name="visible" value="$PARAM[dropshadowrightsidevisibility] + !String.IsEmpty(Control.GetLabel(960)) + String.IsEqual(Control.GetLabel(1060),OverlayWatched.png)"/>
+              <param name="visible" value="$PARAM[dropshadowrightsidevisibility] + !String.IsEmpty(Control.GetLabel(9600)) + String.IsEqual(Control.GetLabel(10600),OverlayWatched.png)"/>
             </include>
             <!--Bottom Right Corner-->
             <include content="DropShadow">
@@ -1080,7 +1087,7 @@
               <param name="flipx" value="true"/>
               <param name="flipy" value="true"/>
               <param name="texture" value="views/dropshadow_topleftcorner_120.png"/>
-              <param name="visible" value="$EXP[GridView_Details_Disabled] + $PARAM[dropshadowrightsidevisibility] + !String.IsEmpty(Control.GetLabel(960)) + $PARAM[dropshadowbottomsidevisibility] + $PARAM[dropshadowbottomrightcornervisibility] + !$PARAM[dropshadowbottomrightcornerwatched]"/>
+              <param name="visible" value="$EXP[GridView_Details_Disabled] + $PARAM[dropshadowrightsidevisibility] + !String.IsEmpty(Control.GetLabel(9600)) + $PARAM[dropshadowbottomsidevisibility] + $PARAM[dropshadowbottomrightcornervisibility] + !$PARAM[dropshadowbottomrightcornerwatched]"/>
             </include>
             <include content="DropShadow">
               <param name="left" value="$PARAM[width]"/>
@@ -1091,7 +1098,7 @@
               <param name="flipy" value="true"/>
               <param name="texture" value="views/dropshadow_topleftcorner_120.png"/>
               <param name="colordiffuse" value="$VAR[ShadowColorWatched]"/>
-              <param name="visible" value="$EXP[GridView_Details_Disabled] + $PARAM[dropshadowrightsidevisibility] + !String.IsEmpty(Control.GetLabel(960)) + $PARAM[dropshadowbottomsidevisibility] + $PARAM[dropshadowbottomrightcornervisibility] + $PARAM[dropshadowbottomrightcornerwatched]"/>
+              <param name="visible" value="$EXP[GridView_Details_Disabled] + $PARAM[dropshadowrightsidevisibility] + !String.IsEmpty(Control.GetLabel(9600)) + $PARAM[dropshadowbottomsidevisibility] + $PARAM[dropshadowbottomrightcornervisibility] + $PARAM[dropshadowbottomrightcornerwatched]"/>
             </include>
             <!--Bottom Side-->
             <include content="DropShadow">
@@ -1257,16 +1264,16 @@
       <param name="width" value="360"/>
       <param name="height" value="540"/>
       <param name="dropshadowvisible" value="true"/>
-      <param name="dropshadowtopleftcornerwatched" value="String.IsEqual(Control.GetLabel(1054),OverlayWatched.png)"/>
-      <param name="dropshadowtopsidewatched" value="String.IsEqual(Control.GetLabel(1055),OverlayWatched.png)"/>
-      <param name="dropshadowtoprightcornerwatched" value="String.IsEqual(Control.GetLabel(1056),OverlayWatched.png)"/>
+      <param name="dropshadowtopleftcornerwatched" value="String.IsEqual(Control.GetLabel(10540),OverlayWatched.png)"/>
+      <param name="dropshadowtopsidewatched" value="String.IsEqual(Control.GetLabel(10550),OverlayWatched.png)"/>
+      <param name="dropshadowtoprightcornerwatched" value="String.IsEqual(Control.GetLabel(10560),OverlayWatched.png)"/>
       <param name="dropshadowrightsidevisibility" value="!Container.Column(4)"/>
-      <param name="dropshadowbottomrightcornervisibility" value="!String.IsEmpty(Control.GetLabel(965))"/>
-      <param name="dropshadowbottomrightcornerwatched" value="String.IsEqual(Control.GetLabel(1065),OverlayWatched.png)"/>
-      <param name="dropshadowbottomsidevisibility" value="!String.IsEmpty(Control.GetLabel(964))"/>
-      <param name="dropshadowbottomsidewatched" value="String.IsEqual(Control.GetLabel(1064),OverlayWatched.png)"/>
-      <param name="dropshadowbottomleftcornervisibility" value="!String.IsEmpty(Control.GetLabel(964))"/>
-      <param name="dropshadowbottomleftcornerwatched" value="String.IsEqual(Control.GetLabel(1063),OverlayWatched.png)"/>
+      <param name="dropshadowbottomrightcornervisibility" value="!String.IsEmpty(Control.GetLabel(9650))"/>
+      <param name="dropshadowbottomrightcornerwatched" value="String.IsEqual(Control.GetLabel(10650),OverlayWatched.png)"/>
+      <param name="dropshadowbottomsidevisibility" value="!String.IsEmpty(Control.GetLabel(9640))"/>
+      <param name="dropshadowbottomsidewatched" value="String.IsEqual(Control.GetLabel(10640),OverlayWatched.png)"/>
+      <param name="dropshadowbottomleftcornervisibility" value="!String.IsEmpty(Control.GetLabel(9640))"/>
+      <param name="dropshadowbottomleftcornerwatched" value="String.IsEqual(Control.GetLabel(10630),OverlayWatched.png)"/>
       <param name="showgradient" value="true"/>
       <param name="watchedstatusvisibility" value="false"/>
       <param name="bordervisible" value="true"/>
@@ -1302,16 +1309,16 @@
       <param name="width" value="360"/>
       <param name="height" value="360"/>
       <param name="dropshadowvisible" value="true"/>
-      <param name="dropshadowtopleftcornerwatched" value="String.IsEqual(Control.GetLabel(1054),OverlayWatched.png)"/>
-      <param name="dropshadowtopsidewatched" value="String.IsEqual(Control.GetLabel(1055),OverlayWatched.png)"/>
-      <param name="dropshadowtoprightcornerwatched" value="String.IsEqual(Control.GetLabel(1056),OverlayWatched.png)"/>
+      <param name="dropshadowtopleftcornerwatched" value="String.IsEqual(Control.GetLabel(10540),OverlayWatched.png)"/>
+      <param name="dropshadowtopsidewatched" value="String.IsEqual(Control.GetLabel(10550),OverlayWatched.png)"/>
+      <param name="dropshadowtoprightcornerwatched" value="String.IsEqual(Control.GetLabel(10560),OverlayWatched.png)"/>
       <param name="dropshadowrightsidevisibility" value="!Container.Column(4)"/>
-      <param name="dropshadowbottomrightcornervisibility" value="!String.IsEmpty(Control.GetLabel(965))"/>
-      <param name="dropshadowbottomrightcornerwatched" value="String.IsEqual(Control.GetLabel(1065),OverlayWatched.png)"/>
-      <param name="dropshadowbottomsidevisibility" value="!String.IsEmpty(Control.GetLabel(964))"/>
-      <param name="dropshadowbottomsidewatched" value="String.IsEqual(Control.GetLabel(1064),OverlayWatched.png)"/>
-      <param name="dropshadowbottomleftcornervisibility" value="!String.IsEmpty(Control.GetLabel(964))"/>
-      <param name="dropshadowbottomleftcornerwatched" value="String.IsEqual(Control.GetLabel(1063),OverlayWatched.png)"/>
+      <param name="dropshadowbottomrightcornervisibility" value="!String.IsEmpty(Control.GetLabel(9650))"/>
+      <param name="dropshadowbottomrightcornerwatched" value="String.IsEqual(Control.GetLabel(10650),OverlayWatched.png)"/>
+      <param name="dropshadowbottomsidevisibility" value="!String.IsEmpty(Control.GetLabel(9640))"/>
+      <param name="dropshadowbottomsidewatched" value="String.IsEqual(Control.GetLabel(10640),OverlayWatched.png)"/>
+      <param name="dropshadowbottomleftcornervisibility" value="!String.IsEmpty(Control.GetLabel(9640))"/>
+      <param name="dropshadowbottomleftcornerwatched" value="String.IsEqual(Control.GetLabel(10630),OverlayWatched.png)"/>
       <param name="aspectratio" value="scale"/>
       <param name="showgradient" value="true"/>
       <param name="watchedstatusvisibility" value="false"/>
