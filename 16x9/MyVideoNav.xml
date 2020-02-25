@@ -11,7 +11,7 @@
 	<views>50,501,502,504,505</views>
 	<controls>
 
-		<!-- Hidden controls -->
+		<!-- Hidden controls-->
 		<control type="button" id="3">
 			<description>Select sort method (sort by: name, date size, etc...)</description>
 			<include>HiddenControl</include>
@@ -46,6 +46,29 @@
 		<control type="group" id="941">
 			<visible>Control.HasFocus(940)</visible>
 			<animation effect="slide" end="0,0" time="380" reversible="false">Hidden</animation>
+		</control>
+
+		<!--Hidden Labels for fallback artwork-->
+		<control type="label" id="17850">
+			<label>$VAR[Thumbnail(-3)Content]</label>
+		</control>
+		<control type="label" id="17851">
+			<label>$VAR[Thumbnail(-2)Content]</label>
+		</control>
+		<control type="label" id="17852">
+			<label>$VAR[Thumbnail(-1)Content]</label>
+		</control>
+		<control type="label" id="17853">
+			<label>$VAR[Thumbnail(0)Content]</label>
+		</control>
+		<control type="label" id="17854">
+			<label>$VAR[Thumbnail(1)Content]</label>
+		</control>
+		<control type="label" id="17855">
+			<label>$VAR[Thumbnail(2)Content]</label>
+		</control>
+		<control type="label" id="17856">
+			<label>$VAR[Thumbnail(3)Content]</label>
 		</control>
 
 		<!--Hidden Controls for animation trigger on level switching with same view e.g. Strip TV > Strip Seasons-->
@@ -171,12 +194,8 @@
 				<animation effect="slide" end="0,0" time="380" reversible="false">Hidden</animation>
 			</control>
 
-			<!--Background gradient for Light mode-->
-			<control type="image">
-				<visible>Skin.String(Theme,Light)</visible>
-				<aspectratio>stretch</aspectratio>
-				<texture colordiffuse="$VAR[DarkColor]">views/gradient_light-background.png</texture>
-			</control>
+			<!--Background + gradient for Light mode-->
+			<include content="CustomViewsBackground"/>
 
 			<!--Viewtypes-->
 			<description>Include the following views in MyVideoNav</description>
@@ -359,7 +378,7 @@
 						<onclick>SetFocus(50)</onclick>
 						<property name="ActionLeft">Skin.SetString(ListView_Display,Background)</property>
 						<property name="ActionRight">Skin.SetString(ListView_Display,Square)</property>
-						<visible>$EXP[ListView_IsVisible] + $EXP[ListView_Display_IsPosters] +  !Container.Content(episodes)</visible>
+						<visible>$EXP[ListView_IsVisible] + $EXP[ListView_Display_IsPosters] +  !Container.Content(episodes) + !Container.Content(actors)</visible>
 					</item>
 					<item id="950">
 						<description>Display / Square</description>
@@ -458,7 +477,7 @@
 						<onclick>SetFocus(50)</onclick>
 						<property name="ActionLeft">Skin.SetString(ListView_Details,TitleAndInfo)</property>
 						<property name="ActionRight">Skin.SetString(ListView_Details,TitleAndInfo)</property>
-						<visible>$EXP[ListView_IsVisible] + [Skin.String(ListView_Details,Title) | String.IsEmpty(Skin.String(ListView_Details))] + !Container.Content()</visible>
+						<visible>$EXP[ListView_IsVisible] + [Skin.String(ListView_Details,Title) | String.IsEmpty(Skin.String(ListView_Details))] + $EXP[Info_Containers]</visible>
 					</item>
 					<item>
 						<description>Details / Title and Info</description>
@@ -467,7 +486,7 @@
 						<onclick>SetFocus(50)</onclick>
 						<property name="ActionLeft">Skin.SetString(ListView_Details,Title)</property>
 						<property name="ActionRight">Skin.SetString(ListView_Details,Title)</property>
-						<visible>$EXP[ListView_IsVisible] + Skin.String(ListView_Details,TitleAndinfo) + !Container.Content()</visible>
+						<visible>$EXP[ListView_IsVisible] + Skin.String(ListView_Details,TitleAndinfo) + $EXP[Info_Containers]</visible>
 					</item>
 
 					<!--Billboard View Details-->
@@ -846,6 +865,15 @@
 					</item>
 
 <!--SORT-->
+					<!--Sort / None-->
+					<item>
+						<onclick>SetFocus(50)</onclick>
+						<label>‹ $LOCALIZE[16018] ›</label>
+						<label2>$LOCALIZE[32118] / $LOCALIZE[16018]</label2>
+						<property name="ActionLeft">Container.PreviousSortMethod</property>
+						<property name="ActionRight">Container.NextSortMethod</property>
+						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[16018])</visible>
+					</item>
 					<!-- Sort / Name -->
 					<item>
 						<onclick>SetFocus(50)</onclick>
@@ -876,172 +904,13 @@
 					<!-- Sort / File -->
 					<item>
 						<onclick>SetFocus(50)</onclick>
-						<label>‹ $LOCALIZE[623] ›</label>
-						<label2>$LOCALIZE[32118] / $LOCALIZE[623]</label2>
-						<property name="ActionLeft">Container.PreviousSortMethod</property>
-						<property name="ActionRight">Container.NextSortMethod</property>
-						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[623])</visible>
-					</item>
-					<item>
-						<onclick>SetFocus(50)</onclick>
-						<label>‹ $LOCALIZE[564] ›</label>
-						<label2>$LOCALIZE[32118] / $LOCALIZE[564]</label2>
-						<property name="ActionLeft">Container.PreviousSortMethod</property>
-						<property name="ActionRight">Container.NextSortMethod</property>
-						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[564])</visible>
-					</item>
-					<item>
-						<onclick>SetFocus(50)</onclick>
-						<label>‹ $LOCALIZE[554] ›</label>
-						<label2>$LOCALIZE[32118] / $LOCALIZE[554]</label2>
-						<property name="ActionLeft">Container.PreviousSortMethod</property>
-						<property name="ActionRight">Container.NextSortMethod</property>
-						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[554])</visible>
-					</item>
-					<item>
-						<onclick>SetFocus(50)</onclick>
-						<label>‹ $LOCALIZE[20359] ›</label>
-						<label2>$LOCALIZE[32118] / $LOCALIZE[20359]</label2>
-						<property name="ActionLeft">Container.PreviousSortMethod</property>
-						<property name="ActionRight">Container.NextSortMethod</property>
-						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[20359])</visible>
-					</item>
-					<item>
-						<onclick>SetFocus(50)</onclick>
-						<label>‹ $LOCALIZE[180] ›</label>
-						<label2>$LOCALIZE[32118] / $LOCALIZE[180]</label2>
-						<property name="ActionLeft">Container.PreviousSortMethod</property>
-						<property name="ActionRight">Container.NextSortMethod</property>
-						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[180])</visible>
-					</item>
-					<item>
-						<onclick>SetFocus(50)</onclick>
-						<label>‹ $LOCALIZE[556] ›</label>
-						<label2>$LOCALIZE[32118] / $LOCALIZE[556]</label2>
-						<property name="ActionLeft">Container.PreviousSortMethod</property>
-						<property name="ActionRight">Container.NextSortMethod</property>
-						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[556])</visible>
-					</item>
-					<item>
-						<onclick>SetFocus(50)</onclick>
-						<label>‹ $LOCALIZE[557] ›</label>
-						<label2>$LOCALIZE[32118] / $LOCALIZE[557]</label2>
-						<property name="ActionLeft">Container.PreviousSortMethod</property>
-						<property name="ActionRight">Container.NextSortMethod</property>
-						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[557])</visible>
-					</item>
-					<item>
-						<onclick>SetFocus(50)</onclick>
-						<label>‹ $LOCALIZE[558] ›</label>
-						<label2>$LOCALIZE[32118] / $LOCALIZE[558]</label2>
-						<property name="ActionLeft">Container.PreviousSortMethod</property>
-						<property name="ActionRight">Container.NextSortMethod</property>
-						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[558])</visible>
-					</item>
-					<item>
-						<onclick>SetFocus(50)</onclick>
-						<label>‹ $LOCALIZE[515] ›</label>
-						<label2>$LOCALIZE[32118] / $LOCALIZE[515]</label2>
-						<property name="ActionLeft">Container.PreviousSortMethod</property>
-						<property name="ActionRight">Container.NextSortMethod</property>
-						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[515])</visible>
-					</item>
-					<item>
-						<onclick>SetFocus(50)</onclick>
-						<label>‹ $LOCALIZE[574] ›</label>
-						<label2>$LOCALIZE[32118] / $LOCALIZE[574]</label2>
-						<property name="ActionLeft">Container.PreviousSortMethod</property>
-						<property name="ActionRight">Container.NextSortMethod</property>
-						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[574])</visible>
-					</item>
-					<item>
-						<onclick>SetFocus(50)</onclick>
-						<label>‹ $LOCALIZE[570] ›</label>
-						<label2>$LOCALIZE[32118] / $LOCALIZE[570]</label2>
-						<property name="ActionLeft">Container.PreviousSortMethod</property>
-						<property name="ActionRight">Container.NextSortMethod</property>
-						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[570])</visible>
-					</item>
-					<item>
-						<onclick>SetFocus(50)</onclick>
 						<label>‹ $LOCALIZE[561] ›</label>
 						<label2>$LOCALIZE[32118] / $LOCALIZE[561]</label2>
 						<property name="ActionLeft">Container.PreviousSortMethod</property>
 						<property name="ActionRight">Container.NextSortMethod</property>
 						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[561])</visible>
 					</item>
-					<item>
-						<onclick>SetFocus(50)</onclick>
-						<label>‹ $LOCALIZE[563] ›</label>
-						<label2>$LOCALIZE[32118] / $LOCALIZE[563]</label2>
-						<property name="ActionLeft">Container.PreviousSortMethod</property>
-						<property name="ActionRight">Container.NextSortMethod</property>
-						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[563])</visible>
-					</item>
-					<item>
-						<onclick>SetFocus(50)</onclick>
-						<label>‹ $LOCALIZE[38018] ›</label>
-						<label2>$LOCALIZE[32118] / $LOCALIZE[38018]</label2>
-						<property name="ActionLeft">Container.PreviousSortMethod</property>
-						<property name="ActionRight">Container.NextSortMethod</property>
-						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[38018])</visible>
-					</item>
-					<item>
-						<onclick>SetFocus(50)</onclick>
-						<label>‹ $LOCALIZE[171] ›</label>
-						<label2>$LOCALIZE[32118] / $LOCALIZE[171]</label2>
-						<property name="ActionLeft">Container.PreviousSortMethod</property>
-						<property name="ActionRight">Container.NextSortMethod</property>
-						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[171])</visible>
-					</item>
-					<item>
-						<onclick>SetFocus(50)</onclick>
-						<label>‹ $LOCALIZE[562] ›</label>
-						<label2>$LOCALIZE[32118] / $LOCALIZE[562]</label2>
-						<property name="ActionLeft">Container.PreviousSortMethod</property>
-						<property name="ActionRight">Container.NextSortMethod</property>
-						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[562])</visible>
-					</item>
-					<item>
-						<onclick>SetFocus(50)</onclick>
-						<label>‹ $LOCALIZE[20368] ›</label>
-						<label2>$LOCALIZE[32118] / $LOCALIZE[20368]</label2>
-						<property name="ActionLeft">Container.PreviousSortMethod</property>
-						<property name="ActionRight">Container.NextSortMethod</property>
-						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[20368])</visible>
-					</item>
-					<item>
-						<onclick>SetFocus(50)</onclick>
-						<label>‹ $LOCALIZE[567] ›</label>
-						<label2>$LOCALIZE[32118] / $LOCALIZE[567]</label2>
-						<property name="ActionLeft">Container.PreviousSortMethod</property>
-						<property name="ActionRight">Container.NextSortMethod</property>
-						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[567])</visible>
-					</item>
-					<item>
-						<onclick>SetFocus(50)</onclick>
-						<label>‹ $LOCALIZE[559] ›</label>
-						<label2>$LOCALIZE[32118] / $LOCALIZE[559]</label2>
-						<property name="ActionLeft">Container.PreviousSortMethod</property>
-						<property name="ActionRight">Container.NextSortMethod</property>
-						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[559])</visible>
-					</item>
-					<item>
-						<onclick>SetFocus(50)</onclick>
-						<label>‹ $LOCALIZE[20074] ›</label>
-						<label2>$LOCALIZE[32118] / $LOCALIZE[20074]</label2>
-						<property name="ActionLeft">Container.PreviousSortMethod</property>
-						<property name="ActionRight">Container.NextSortMethod</property>
-						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[20074])</visible>
-					</item>
-					<item>
-						<onclick>SetFocus(50)</onclick>
-						<label>‹ $LOCALIZE[572] ›</label>
-						<label2>$LOCALIZE[32118] / $LOCALIZE[572]</label2>
-						<property name="ActionLeft">Container.PreviousSortMethod</property>
-						<property name="ActionRight">Container.NextSortMethod</property>
-						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[572])</visible>
-					</item>
+					<!-- Sort / Path -->
 					<item>
 						<onclick>SetFocus(50)</onclick>
 						<label>‹ $LOCALIZE[573] ›</label>
@@ -1050,54 +919,124 @@
 						<property name="ActionRight">Container.NextSortMethod</property>
 						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[573])</visible>
 					</item>
+					<!-- Sort / DriveType -->
 					<item>
 						<onclick>SetFocus(50)</onclick>
-						<label>‹ $LOCALIZE[568] ›</label>
-						<label2>$LOCALIZE[32118] / $LOCALIZE[568]</label2>
+						<label>‹ $LOCALIZE[155] ›</label>
+						<label2>$LOCALIZE[32118] / $LOCALIZE[155]</label2>
 						<property name="ActionLeft">Container.PreviousSortMethod</property>
 						<property name="ActionRight">Container.NextSortMethod</property>
-						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[568])</visible>
+						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[155])</visible>
 					</item>
+					<!--Sort / Title-->
 					<item>
 						<onclick>SetFocus(50)</onclick>
-						<label>‹ $LOCALIZE[20455] ›</label>
-						<label2>$LOCALIZE[32118] / $LOCALIZE[20455]</label2>
+						<label>‹ $LOCALIZE[556] ›</label>
+						<label2>$LOCALIZE[32118] / $LOCALIZE[556]</label2>
 						<property name="ActionLeft">Container.PreviousSortMethod</property>
 						<property name="ActionRight">Container.NextSortMethod</property>
-						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[20455])</visible>
+						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[556])</visible>
 					</item>
+					<!--Sort / TrackNumber-->
 					<item>
 						<onclick>SetFocus(50)</onclick>
-						<label>‹ $LOCALIZE[19029] ›</label>
-						<label2>$LOCALIZE[32118] / $LOCALIZE[19029]</label2>
+						<label>‹ $LOCALIZE[554] ›</label>
+						<label2>$LOCALIZE[32118] / $LOCALIZE[554]</label2>
 						<property name="ActionLeft">Container.PreviousSortMethod</property>
 						<property name="ActionRight">Container.NextSortMethod</property>
-						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[19029])</visible>
+						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[554])</visible>
 					</item>
+					<!--Sort / Time-->
 					<item>
 						<onclick>SetFocus(50)</onclick>
-						<label>‹ $LOCALIZE[549] ›</label>
-						<label2>$LOCALIZE[32118] / $LOCALIZE[549]</label2>
+						<label>‹ $LOCALIZE[555] ›</label>
+						<label2>$LOCALIZE[32118] / $LOCALIZE[555]</label2>
 						<property name="ActionLeft">Container.PreviousSortMethod</property>
 						<property name="ActionRight">Container.NextSortMethod</property>
-						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[549])</visible>
+						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[555])</visible>
 					</item>
+					<!--Sort / Artist-->
 					<item>
 						<onclick>SetFocus(50)</onclick>
-						<label>‹ $LOCALIZE[577] ›</label>
-						<label2>$LOCALIZE[32118] / $LOCALIZE[577]</label2>
+						<label>‹ $LOCALIZE[557] ›</label>
+						<label2>$LOCALIZE[32118] / $LOCALIZE[557]</label2>
 						<property name="ActionLeft">Container.PreviousSortMethod</property>
 						<property name="ActionRight">Container.NextSortMethod</property>
-						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[577])</visible>
+						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[557])</visible>
 					</item>
+					<!--Sort / Artist / Year-->
 					<item>
 						<onclick>SetFocus(50)</onclick>
-						<label>‹ $LOCALIZE[16018] ›</label>
-						<label2>$LOCALIZE[32118] / $LOCALIZE[16018]</label2>
+						<label>‹ $LOCALIZE[578] ›</label>
+						<label2>$LOCALIZE[32118] / $LOCALIZE[578]</label2>
 						<property name="ActionLeft">Container.PreviousSortMethod</property>
 						<property name="ActionRight">Container.NextSortMethod</property>
-						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[16018])</visible>
+						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[578])</visible>
 					</item>
+					<!--Sort / Album-->
+					<item>
+						<onclick>SetFocus(50)</onclick>
+						<label>‹ $LOCALIZE[558] ›</label>
+						<label2>$LOCALIZE[32118] / $LOCALIZE[558]</label2>
+						<property name="ActionLeft">Container.PreviousSortMethod</property>
+						<property name="ActionRight">Container.NextSortMethod</property>
+						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[558])</visible>
+					</item>
+					<!--Sort / Type (AlbumType?)-->
+					<item>
+						<onclick>SetFocus(50)</onclick>
+						<label>‹ $LOCALIZE[564] ›</label>
+						<label2>$LOCALIZE[32118] / $LOCALIZE[564]</label2>
+						<property name="ActionLeft">Container.PreviousSortMethod</property>
+						<property name="ActionRight">Container.NextSortMethod</property>
+						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[564])</visible>
+					</item>
+					<!--Sort / Genre-->
+					<item>
+						<onclick>SetFocus(50)</onclick>
+						<label>‹ $LOCALIZE[515] ›</label>
+						<label2>$LOCALIZE[32118] / $LOCALIZE[515]</label2>
+						<property name="ActionLeft">Container.PreviousSortMethod</property>
+						<property name="ActionRight">Container.NextSortMethod</property>
+						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[515])</visible>
+					</item>
+					<!--Sort / Country-->
+					<item>
+						<onclick>SetFocus(50)</onclick>
+						<label>‹ $LOCALIZE[574] ›</label>
+						<label2>$LOCALIZE[32118] / $LOCALIZE[574]</label2>
+						<property name="ActionLeft">Container.PreviousSortMethod</property>
+						<property name="ActionRight">Container.NextSortMethod</property>
+						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[574])</visible>
+					</item>
+					<!--Sort / Year-->
+					<item>
+						<onclick>SetFocus(50)</onclick>
+						<label>‹ $LOCALIZE[562] ›</label>
+						<label2>$LOCALIZE[32118] / $LOCALIZE[562]</label2>
+						<property name="ActionLeft">Container.PreviousSortMethod</property>
+						<property name="ActionRight">Container.NextSortMethod</property>
+						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[562])</visible>
+					</item>
+					<!--Sort / Rating-->
+					<item>
+						<onclick>SetFocus(50)</onclick>
+						<label>‹ $LOCALIZE[563] ›</label>
+						<label2>$LOCALIZE[32118] / $LOCALIZE[563]</label2>
+						<property name="ActionLeft">Container.PreviousSortMethod</property>
+						<property name="ActionRight">Container.NextSortMethod</property>
+						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[563])</visible>
+					</item>
+					<!--Sort / My rating-->
+					<item>
+						<onclick>SetFocus(50)</onclick>
+						<label>‹ $LOCALIZE[38018] ›</label>
+						<label2>$LOCALIZE[32118] / $LOCALIZE[38018]</label2>
+						<property name="ActionLeft">Container.PreviousSortMethod</property>
+						<property name="ActionRight">Container.NextSortMethod</property>
+						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[38018])</visible>
+					</item>
+					<!--Sort / Votes-->
 					<item>
 						<onclick>SetFocus(50)</onclick>
 						<label>‹ $LOCALIZE[205] ›</label>
@@ -1106,6 +1045,7 @@
 						<property name="ActionRight">Container.NextSortMethod</property>
 						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[205])</visible>
 					</item>
+					<!--Sort / Top 250-->
 					<item>
 						<onclick>SetFocus(50)</onclick>
 						<label>‹ $LOCALIZE[13409] ›</label>
@@ -1114,22 +1054,25 @@
 						<property name="ActionRight">Container.NextSortMethod</property>
 						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[13409])</visible>
 					</item>
+					<!--Sort / Playlist-->
 					<item>
 						<onclick>SetFocus(50)</onclick>
-						<label>‹ $LOCALIZE[20364] ›</label>
-						<label2>$LOCALIZE[32118] / $LOCALIZE[20364]</label2>
+						<label>‹ $LOCALIZE[559] ›</label>
+						<label2>$LOCALIZE[32118] / $LOCALIZE[559]</label2>
 						<property name="ActionLeft">Container.PreviousSortMethod</property>
 						<property name="ActionRight">Container.NextSortMethod</property>
-						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[20364])</visible>
+						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[559])</visible>
 					</item>
+					<!--Sort / Episode-->
 					<item>
 						<onclick>SetFocus(50)</onclick>
-						<label>‹ $LOCALIZE[126] ›</label>
-						<label2>$LOCALIZE[32118] / $LOCALIZE[126]</label2>
+						<label>‹ $LOCALIZE[20359] ›</label>
+						<label2>$LOCALIZE[32118] / $LOCALIZE[20359]</label2>
 						<property name="ActionLeft">Container.PreviousSortMethod</property>
 						<property name="ActionRight">Container.NextSortMethod</property>
-						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[126])</visible>
+						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[20359])</visible>
 					</item>
+					<!--Sort / Season-->
 					<item>
 						<onclick>SetFocus(50)</onclick>
 						<label>‹ $LOCALIZE[20373] ›</label>
@@ -1138,6 +1081,7 @@
 						<property name="ActionRight">Container.NextSortMethod</property>
 						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[20373])</visible>
 					</item>
+					<!--Sort / Episodes-->
 					<item>
 						<onclick>SetFocus(50)</onclick>
 						<label>‹ $LOCALIZE[20360] ›</label>
@@ -1146,6 +1090,7 @@
 						<property name="ActionRight">Container.NextSortMethod</property>
 						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[20360])</visible>
 					</item>
+					<!--Sort / Watched count-->
 					<item>
 						<onclick>SetFocus(50)</onclick>
 						<label>‹ $LOCALIZE[21441] ›</label>
@@ -1154,6 +1099,52 @@
 						<property name="ActionRight">Container.NextSortMethod</property>
 						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[21441])</visible>
 					</item>
+					<!--Sort / Status (TV Show Status)-->
+					<item>
+						<onclick>SetFocus(50)</onclick>
+						<label>‹ $LOCALIZE[126] ›</label>
+						<label2>$LOCALIZE[32118] / $LOCALIZE[126]</label2>
+						<property name="ActionLeft">Container.PreviousSortMethod</property>
+						<property name="ActionRight">Container.NextSortMethod</property>
+						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[126])</visible>
+					</item>
+					<!--Sort / TV show (TV Show Title)-->
+					<item>
+						<onclick>SetFocus(50)</onclick>
+						<label>‹ $LOCALIZE[20364] ›</label>
+						<label2>$LOCALIZE[32118] / $LOCALIZE[20364]</label2>
+						<property name="ActionLeft">Container.PreviousSortMethod</property>
+						<property name="ActionRight">Container.NextSortMethod</property>
+						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[20364])</visible>
+					</item>
+					<!--Sort / Sort title-->
+					<item>
+						<onclick>SetFocus(50)</onclick>
+						<label>‹ $LOCALIZE[171] ›</label>
+						<label2>$LOCALIZE[32118] / $LOCALIZE[171]</label2>
+						<property name="ActionLeft">Container.PreviousSortMethod</property>
+						<property name="ActionRight">Container.NextSortMethod</property>
+						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[171])</visible>
+					</item>
+					<!--Sort / Prod code-->
+					<item>
+						<onclick>SetFocus(50)</onclick>
+						<label>‹ $LOCALIZE[20368] ›</label>
+						<label2>$LOCALIZE[32118] / $LOCALIZE[20368]</label2>
+						<property name="ActionLeft">Container.PreviousSortMethod</property>
+						<property name="ActionRight">Container.NextSortMethod</property>
+						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[20368])</visible>
+					</item>
+					<!--Sort / MPAA Rating-->
+					<item>
+						<onclick>SetFocus(50)</onclick>
+						<label>‹ $LOCALIZE[20074] ›</label>
+						<label2>$LOCALIZE[32118] / $LOCALIZE[20074]</label2>
+						<property name="ActionLeft">Container.PreviousSortMethod</property>
+						<property name="ActionRight">Container.NextSortMethod</property>
+						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[20074])</visible>
+					</item>
+					<!--Sort / Video resolution-->
 					<item>
 						<onclick>SetFocus(50)</onclick>
 						<label>‹ $LOCALIZE[21443] ›</label>
@@ -1162,6 +1153,7 @@
 						<property name="ActionRight">Container.NextSortMethod</property>
 						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[21443])</visible>
 					</item>
+					<!--Sort / Video codec-->
 					<item>
 						<onclick>SetFocus(50)</onclick>
 						<label>‹ $LOCALIZE[21445] ›</label>
@@ -1170,6 +1162,7 @@
 						<property name="ActionRight">Container.NextSortMethod</property>
 						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[21445])</visible>
 					</item>
+					<!--Sort / Video aspect-->
 					<item>
 						<onclick>SetFocus(50)</onclick>
 						<label>‹ $LOCALIZE[21374] ›</label>
@@ -1178,6 +1171,7 @@
 						<property name="ActionRight">Container.NextSortMethod</property>
 						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[21374])</visible>
 					</item>
+					<!--Sort / Audio channels-->
 					<item>
 						<onclick>SetFocus(50)</onclick>
 						<label>‹ $LOCALIZE[21444] ›</label>
@@ -1186,6 +1180,7 @@
 						<property name="ActionRight">Container.NextSortMethod</property>
 						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[21444])</visible>
 					</item>
+					<!--Sort / Audio codec-->
 					<item>
 						<onclick>SetFocus(50)</onclick>
 						<label>‹ $LOCALIZE[21446] ›</label>
@@ -1194,6 +1189,7 @@
 						<property name="ActionRight">Container.NextSortMethod</property>
 						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[21446])</visible>
 					</item>
+					<!--Sort / Audio language-->
 					<item>
 						<onclick>SetFocus(50)</onclick>
 						<label>‹ $LOCALIZE[21447] ›</label>
@@ -1202,6 +1198,7 @@
 						<property name="ActionRight">Container.NextSortMethod</property>
 						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[21447])</visible>
 					</item>
+					<!--Sort / Subtitle language-->
 					<item>
 						<onclick>SetFocus(50)</onclick>
 						<label>‹ $LOCALIZE[21448] ›</label>
@@ -1210,6 +1207,61 @@
 						<property name="ActionRight">Container.NextSortMethod</property>
 						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[21448])</visible>
 					</item>
+					<!--Sort / Studio-->
+					<item>
+						<onclick>SetFocus(50)</onclick>
+						<label>‹ $LOCALIZE[572] ›</label>
+						<label2>$LOCALIZE[32118] / $LOCALIZE[572]</label2>
+						<property name="ActionLeft">Container.PreviousSortMethod</property>
+						<property name="ActionRight">Container.NextSortMethod</property>
+						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[572])</visible>
+					</item>
+					<!--Sort / Date added-->
+					<item>
+						<onclick>SetFocus(50)</onclick>
+						<label>‹ $LOCALIZE[570] ›</label>
+						<label2>$LOCALIZE[32118] / $LOCALIZE[570]</label2>
+						<property name="ActionLeft">Container.PreviousSortMethod</property>
+						<property name="ActionRight">Container.NextSortMethod</property>
+						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[570])</visible>
+					</item>
+					<!--Sort / Last played-->
+					<item>
+						<onclick>SetFocus(50)</onclick>
+						<label>‹ $LOCALIZE[568] ›</label>
+						<label2>$LOCALIZE[32118] / $LOCALIZE[568]</label2>
+						<property name="ActionLeft">Container.PreviousSortMethod</property>
+						<property name="ActionRight">Container.NextSortMethod</property>
+						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[568])</visible>
+					</item>
+					<!--Sort / Play count-->
+					<item>
+						<onclick>SetFocus(50)</onclick>
+						<label>‹ $LOCALIZE[567] ›</label>
+						<label2>$LOCALIZE[32118] / $LOCALIZE[567]</label2>
+						<property name="ActionLeft">Container.PreviousSortMethod</property>
+						<property name="ActionRight">Container.NextSortMethod</property>
+						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[567])</visible>
+					</item>
+					<!--Sort / Listeners-->
+					<item>
+						<onclick>SetFocus(50)</onclick>
+						<label>‹ $LOCALIZE[20455] ›</label>
+						<label2>$LOCALIZE[32118] / $LOCALIZE[20455]</label2>
+						<property name="ActionLeft">Container.PreviousSortMethod</property>
+						<property name="ActionRight">Container.NextSortMethod</property>
+						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[20455])</visible>
+					</item>
+					<!--Sort / Bitrate-->
+					<item>
+						<onclick>SetFocus(50)</onclick>
+						<label>‹ $LOCALIZE[623] ›</label>
+						<label2>$LOCALIZE[32118] / $LOCALIZE[623]</label2>
+						<property name="ActionLeft">Container.PreviousSortMethod</property>
+						<property name="ActionRight">Container.NextSortMethod</property>
+						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[623])</visible>
+					</item>
+					<!--Sort / Random-->
 					<item>
 						<onclick>SetFocus(50)</onclick>
 						<label>‹ $LOCALIZE[590] ›</label>
@@ -1218,8 +1270,66 @@
 						<property name="ActionRight">Container.NextSortMethod</property>
 						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[590])</visible>
 					</item>
+					<!--Sort / Channel-->
+					<item>
+						<onclick>SetFocus(50)</onclick>
+						<label>‹ $LOCALIZE[19029] ›</label>
+						<label2>$LOCALIZE[32118] / $LOCALIZE[19029]</label2>
+						<property name="ActionLeft">Container.PreviousSortMethod</property>
+						<property name="ActionRight">Container.NextSortMethod</property>
+						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[19029])</visible>
+					</item>
+					<!--Sort / Number-->
+					<item>
+						<onclick>SetFocus(50)</onclick>
+						<label>‹ $LOCALIZE[549] ›</label>
+						<label2>$LOCALIZE[32118] / $LOCALIZE[549]</label2>
+						<property name="ActionLeft">Container.PreviousSortMethod</property>
+						<property name="ActionRight">Container.NextSortMethod</property>
+						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[549])</visible>
+					</item>
+					<!--Sort / Date taken-->
+					<item>
+						<onclick>SetFocus(50)</onclick>
+						<label>‹ $LOCALIZE[577] ›</label>
+						<label2>$LOCALIZE[32118] / $LOCALIZE[577]</label2>
+						<property name="ActionLeft">Container.PreviousSortMethod</property>
+						<property name="ActionRight">Container.NextSortMethod</property>
+						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[577])</visible>
+					</item>
+<!--MISSING-->
+<!--https://kodi.wiki/view/List_of_built-in_functions#List_of_sort_methods-->
+<!--Sort / ProgramCount(21)-->
+<!--EXTRA-->
+					<!--Sort / Duration-->
+					<item>
+						<onclick>SetFocus(50)</onclick>
+						<label>‹ $LOCALIZE[180] ›</label>
+						<label2>$LOCALIZE[32118] / $LOCALIZE[180]</label2>
+						<property name="ActionLeft">Container.PreviousSortMethod</property>
+						<property name="ActionRight">Container.NextSortMethod</property>
+						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[180])</visible>
+					</item>
+					<!--Sort / Appearances-->
+					<item>
+						<onclick>SetFocus(50)</onclick>
+						<label>‹ $LOCALIZE[38026] ›</label>
+						<label2>$LOCALIZE[32118] / $LOCALIZE[38026]</label2>
+						<property name="ActionLeft">Container.PreviousSortMethod</property>
+						<property name="ActionRight">Container.NextSortMethod</property>
+						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[38026])</visible>
+					</item>
+					<!--Sort / Last Used-->
+					<item>
+						<onclick>SetFocus(50)</onclick>
+						<label>‹ $LOCALIZE[12012] ›</label>
+						<label2>$LOCALIZE[32118] / $LOCALIZE[12012]</label2>
+						<property name="ActionLeft">Container.PreviousSortMethod</property>
+						<property name="ActionRight">Container.NextSortMethod</property>
+						<visible>Control.IsEnabled(3) + String.IsEqual(Container.SortMethod,$LOCALIZE[12012])</visible>
+					</item>
 
-					<!-- Order -->
+<!--ORDER-->
 					<item>
 						<onclick>SetFocus(50)</onclick>
 						<label>‹ $LOCALIZE[584] ›</label>
@@ -1244,7 +1354,7 @@
 						<label2>$LOCALIZE[32120] / $LOCALIZE[16100]</label2>
 						<property name="ActionLeft">SendClick(14)</property>
 						<property name="ActionRight">SendClick(14)</property>
-						<visible>Control.IsEnabled(14) + !System.Setting(hidewatched)</visible>
+						<visible>Control.IsEnabled(14) + !System.Setting(hidewatched) + !$EXP[ListOnly_Containers] + !Container.Content(actors) + !Container.Content(sets)</visible>
 					</item>
 					<item>
 						<onclick>SetFocus(50)</onclick>
@@ -1252,7 +1362,7 @@
 						<label2>$LOCALIZE[32120] / $LOCALIZE[16101]</label2>
 						<property name="ActionLeft">SendClick(14)</property>
 						<property name="ActionRight">SendClick(14)</property>
-						<visible>Control.IsEnabled(14) + System.Setting(hidewatched)</visible>
+						<visible>Control.IsEnabled(14) + System.Setting(hidewatched)  + !$EXP[ListOnly_Containers] + !Container.Content(actors) + !Container.Content(sets)</visible>
 					</item>
 
 					<!-- Filter -->
