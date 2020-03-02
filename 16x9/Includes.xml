@@ -618,6 +618,7 @@
 		<param name="width" default="100%"/>
 		<param name="height" default="100%"/>
     <param name="visible" default="true"/>
+    <param name="fallbacklabel" default="$INFO[ListItem.Label]"/>
     <param name="animationtype" default=""/>
     <param name="animationeffect" default=""/>
     <param name="animationend" default=""/>
@@ -627,7 +628,13 @@
 		<param name="texture" default="$VAR[Thumbnail(0)Content]"/>
     <param name="fadetime" default="0"/>
     <param name="showgradient" default="false"/>
+    <param name="unfocusedoverlay" default="false"/>
+    <param name="fadein" default="false"/>
+    <param name="fadeout" default="false"/>
     <param name="bordervisible" default="false"/>
+    <param name="bordersize" default="2"/>
+    <param name="bordercolor" default="$VAR[PrimaryColor]"/>
+    <param name="bordertexture" default="views/border_1px_10.png"/>
 		<definition>
       <control type="group">
         <left>$PARAM[left]</left>
@@ -638,19 +645,20 @@
         <animation effect="$PARAM[animationeffect]" end="$PARAM[animationend]" condition="$PARAM[animationcondition]" time="380" tween="sine" easing="inout" reversible="false">$PARAM[animationtype]</animation>
         <!--Fallback-->
         <control type="group">
-          <visible>[!$EXP[GridView_IsVisible] + String.IsEqual(Control.GetLabel($PARAM[fallbackid]),FALLBACK)] | $EXP[GridView_IsVisible]</visible>
+          <visible>[[$EXP[ShowcaseView_IsVisible] | $EXP[StripView_IsVisible]] + String.IsEqual(Control.GetLabel($PARAM[fallbackid]),FALLBACK)] | $EXP[GridView_IsVisible]</visible>
           <control type="image">
             <texture colordiffuse="$VAR[AccentColor]">views/white_100.png</texture>
             <aspectratio>stretch</aspectratio>
           </control>
           <control type="label">
+            <visible>$EXP[GridView_IsVisible] | [$EXP[ShowcaseView_IsVisible] + Skin.String(ShowcaseView_Details,Off)] | [$EXP[StripView_IsVisible] + Skin.String(StripView_Details,Off)]</visible>
             <width>$PARAM[width]</width>
             <height>$PARAM[height]</height>
             <align>center</align>
             <aligny>center</aligny>
             <font>Body</font>
             <textcolor>$VAR[LightColor]</textcolor>
-            <label>$INFO[ListItem.Label]</label>
+            <label>$PARAM[fallbacklabel]</label>
           </control>
         </control>
         <!--Artwork-->
@@ -659,6 +667,11 @@
 				  <texture background="true">$PARAM[texture]</texture>
           <fadetime>$PARAM[fadetime]</fadetime>
 			  </control>
+        <!--Unfocused overlay-->
+        <control type="image">
+          <visible>$PARAM[unfocusedoverlay]</visible>
+          <texture colordiffuse="$VAR[SecondaryColor]">views/white_75.png</texture>
+        </control>
         <!--Progress Bar backing overlay-->
         <control type="image">
           <visible>$EXP[Video_Containers]</visible>
@@ -669,8 +682,10 @@
         <!--Border-->
         <control type="image">
           <visible>$PARAM[bordervisible]</visible>
+          <visible>!$EXP[Dialog_IsVisible]</visible>
+          <include>ContentFadeAnimation</include>
           <aspectratio>stretch</aspectratio>
-          <texture border="2" colordiffuse="$VAR[PrimaryColor]">views/border_1px_10.png</texture>
+          <texture border="$PARAM[bordersize]" colordiffuse="$PARAM[bordercolor]">$PARAM[bordertexture]</texture>
         </control>
        </control>
 		</definition>
@@ -1435,7 +1450,7 @@
 				<control type="textbox">
           <top>$PARAM[infoplotgap]</top>
 					<height max="$PARAM[plotmaxheight]">auto</height>
-          <visible>[$EXP[Video_Containers] + !String.IsEmpty(ListItem.Plot))] | [Container.Content(artists) + !String.IsEmpty(ListItem.Property(Artist_Description))] | [Container.Content(albums) + !String.IsEmpty(ListItem.Property(Album_Description))]</visible>
+          <visible>!String.IsEmpty(Control.GetLabel(916))</visible>
 					<visible>$PARAM[plotvisibility]</visible>
 					<font>$PARAM[plotfont]</font>
 					<textcolor>$PARAM[plotcolor]</textcolor>
