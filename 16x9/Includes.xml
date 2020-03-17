@@ -88,6 +88,7 @@
   <expression name="Icon_180_IsVisible">!$EXP[Icon_240_IsVisible]</expression>
   <expression name="Dialog_IsVisible">String.IsEqual(window(home).property(OptionsMenu),Active) | Window.IsVisible(contextmenu) | Window.IsVisible(shutdownmenu) | Window.IsVisible(okdialog) | Window.IsVisible(yesnodialog) | Window.IsVisible(progressdialog) | Window.IsVisible(selectdialog) | Window.IsVisible(movieinformation)</expression>
   <expression name="Notification_IsVisible">Window.IsActive(notification) | Window.IsActive(extendedprogressdialog)</expression>
+  <expression name="StandardViews_NowPlaying">$EXP[GridView_IsVisible] + [ListItem.IsPlaying | [Container.Content(tvshows) + String.IsEqual(VideoPlayer.TVShowTitle,ListItem.Title)] | [Container.Content(seasons) + String.IsEqual(VideoPlayer.TVShowTitle,ListItem.Title) + String.IsEqual(VideoPlayer.Season,ListItem.Season)] | [Container.Content(artists) + String.IsEqual(MusicPlayer.Artist, ListItem.Artist)] | [Container.Content(albums) + String.IsEqual(MusicPlayer.Artist, ListItem.Artist) + String.IsEqual(MusicPlayer.Album, ListItem.Album)]]</expression>
 
 	<!-- Fullscreen dimensions -->
 	<include name="FullscreenDimensions">
@@ -628,6 +629,11 @@
     <param name="fadetime" default="0"/>
     <param name="showgradient" default="false"/>
     <param name="unfocusedoverlay" default="false"/>
+    <param name="unfocusedoverlayanimationtype" default=""/>
+    <param name="unfocusedoverlayanimationeffect" default=""/>
+    <param name="unfocusedoverlayanimationstart" default=""/>
+    <param name="unfocusedoverlayanimationend" default=""/>
+    <param name="unfocusedoverlayanimationcondition" default="false"/>
     <param name="bordervisible" default="false"/>
     <param name="bordersize" default="2"/>
     <param name="bordercolor" default="$VAR[PrimaryColor]"/>
@@ -668,7 +674,8 @@
         <!--Unfocused overlay-->
         <control type="image">
           <visible>$PARAM[unfocusedoverlay]</visible>
-          <texture colordiffuse="$VAR[SecondaryColor]">views/white_50.png</texture>
+          <animation effect="$PARAM[unfocusedoverlayanimationeffect]" start="$PARAM[unfocusedoverlayanimationstart]" end="$PARAM[unfocusedoverlayanimationend]" condition="$PARAM[unfocusedoverlayanimationcondition]" time="380" tween="sine" easing="inout" reversible="false">$PARAM[unfocusedoverlayanimationtype]</animation>
+          <texture colordiffuse="$VAR[DarkColor]">views/white_75.png</texture>
         </control>
         <!--Progress Bar backing overlay-->
         <control type="image">
@@ -679,11 +686,11 @@
         </control>
         <!--Now Playing-->
         <control type="group">
-          <visible>[[Container.Content(movies) | Container.Content(episodes) | Container.Content(songs)] + String.IsEqual(ListItem($PARAM[position]).Filenameandpath,Player.Filenameandpath)] | [Container.Content(tvshows) + String.IsEqual(ListItem($PARAM[position]).Title,VideoPlayer.TVShowTitle)] | [Container.Content(seasons) + String.IsEqual(ListItem($PARAM[position]).Season,VideoPlayer.Season)] | [Container.Content(artists) + String.IsEqual(ListItem($PARAM[position]).Artist,MusicPlayer.Artist)] | [Container.Content(albums) + String.IsEqual(ListItem($PARAM[position]).Album,MusicPlayer.Album)]</visible>
+          <visible>[[$EXP[ShowcaseView_IsVisible] | $EXP[StripView_IsVisible]] + [ListItem($PARAM[position]).IsPlaying | [Container.Content(tvshows) + String.IsEqual(VideoPlayer.TVShowTitle,ListItem($PARAM[position]).Title)] | [Container.Content(seasons) + String.IsEqual(VideoPlayer.TVShowTitle,ListItem($PARAM[position]).Title) + String.IsEqual(VideoPlayer.Season,ListItem($PARAM[position]).Season)] | [Container.Content(artists) + String.IsEqual(MusicPlayer.Artist, ListItem($PARAM[position]).Artist)] | [Container.Content(albums) + String.IsEqual(MusicPlayer.Artist, ListItem($PARAM[position]).Artist) + String.IsEqual(MusicPlayer.Album, ListItem($PARAM[position]).Album)]]] | $EXP[StandardViews_NowPlaying]</visible>
           <visible>!$EXP[Background_IsFanart]</visible>
           <control type="image">
             <aspectratio>stretch</aspectratio>
-            <texture colordiffuse="$VAR[DarkColor]">views/white_85.png</texture>
+            <texture colordiffuse="$VAR[DarkColor]">views/white_75.png</texture>
             <fadetime>$PARAM[fadetime]</fadetime>
           </control>
           <control type="grouplist">
@@ -720,6 +727,8 @@
 		</definition>
 	</include>
 
+
+
   <include name="NowPlayingBar">
     <param name="width" default="35"/>
     <param name="height" default="10"/>
@@ -727,7 +736,7 @@
     <param name="delay" default="0"/>
     <definition>
       <control type="image">
-        <animation effect="zoom" end="100, $PARAM[maxheight]" time="180" delay="$PARAM[delay]" tween="sine" easing="out" pulse="true" condition="true">Conditional</animation>
+        <animation effect="zoom" end="100, $PARAM[maxheight]" time="180" delay="$PARAM[delay]" tween="sine" easing="out" pulse="true" condition="Player.Playing">Conditional</animation>
         <left>0</left>
         <top>10</top>
         <width>$PARAM[width]</width>
