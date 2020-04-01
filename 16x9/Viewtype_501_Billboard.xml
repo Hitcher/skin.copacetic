@@ -40,7 +40,7 @@
 						<preloaditems>2</preloaditems>
 						<orientation>horizontal</orientation>
 						<scrolltime tween="sine" easing="inout">380</scrolltime>
-						<visible>$EXP[All_Paths] + !$EXP[ListOnly_Containers] + !Container.Content(albums) + !Container.Content(songs) + !Container.Content(actors)</visible>
+						<visible>$EXP[BillboardView_Containers]</visible>
 						<focusedlayout width="1920" height="1080">
 							<include>HiddenFocusButton</include>
 						</focusedlayout>
@@ -52,7 +52,7 @@
 						<include>ProgressBarFadeAnimation</include>
 						<!--Details no logo-->
 						<include content="CommonViewDetails">
-							<param name="groupvisibility" value="[Skin.String(BillboardView_Logo,Off) | String.IsEmpty(ListItem.Art(clearlogo)) | String.IsEmpty(Skin.String(BillboardView_Details))]"/>
+							<param name="groupvisibility" value="!$EXP[BillboardView_Details_Off] + !$EXP[BillboardView_Details_Logo_IsVisible]"/>
 							<param name="left" value="120"/>
 							<param name="width" value="1680"/>
 							<param name="labeltype" value="textbox"/>
@@ -73,9 +73,9 @@
 						</include>
 						<!--Details with logo-->
 						<control type="group">
-							<animation effect="slide" end="-82,394" time="0" condition="Skin.String(BillboardView_Logo,On) + !String.IsEmpty(ListItem.Art(clearlogo)) + Skin.String(BillboardView_Details,Title)">Conditional</animation>
+							<animation effect="slide" end="-60,372" time="0" condition="!$EXP[BillboardView_Details_Off] + !$EXP[BillboardView_Details_Info_IsVisible] + !$EXP[BillboardView_Details_Plot_IsVisible] + $EXP[BillboardView_Details_Logo_IsVisible]">Conditional</animation>
 							<include content="CommonViewDetails">
-								<param name="groupvisibility" value="Skin.String(BillboardView_Logo,On) + !String.IsEmpty(ListItem.Art(clearlogo))"/>
+								<param name="groupvisibility" value="!$EXP[BillboardView_Details_Off] + $EXP[BillboardView_Details_Logo_IsVisible]"/>
 								<param name="left" value="120"/>
 								<param name="width" value="1680"/>
 								<param name="titlevisibility" value="false"/>
@@ -91,14 +91,17 @@
 							</include>
 						</control>
 						<!--NowPlaying-->
-						<include content="NowPlayingVisualization_Fill">
-							<param name="visible" value="$EXP[StandardViews_NowPlaying_Small] + $EXP[BillboardView_Details_NowPlaying_Left_IsVisible]"/>
-							<param name="top" value="480"/>
-						</include>
 						<control type="group">
-							<animation effect="slide" end="-180,0" time="0" condition="[Skin.String(BillboardView_Flags,Studio) + !String.IsEqual(Control.GetLabel(914),flags/blank.png)] | [Skin.String(BillboardView_Flags,Rating) + !String.IsEqual(Control.GetLabel(915),flags/blank.png)]">Conditional</animation>
-							<animation effect="slide" end="-180,0" time="0" condition="Skin.String(BillboardView_Flags,All) + [[!String.IsEqual(Control.GetLabel(914),flags/blank.png) + String.IsEqual(Control.GetLabel(915),flags/blank.png)] | [String.IsEqual(Control.GetLabel(914),flags/blank.png) + !String.IsEqual(Control.GetLabel(915),flags/blank.png)]]">Conditional</animation>
-							<animation effect="slide" end="-360,0" time="0" condition="Skin.String(BillboardView_Flags,All) + !String.IsEqual(Control.GetLabel(914),flags/blank.png) + !String.IsEqual(Control.GetLabel(915),flags/blank.png)">Conditional</animation>
+							<animation effect="slide" end="0,-16" time="0" condition="$EXP[BillboardView_Details_Info_IsVisible]">Conditional</animation>
+							<include content="NowPlayingVisualization_Fill">
+								<param name="visible" value="$EXP[StandardViews_NowPlaying_Small] + $EXP[BillboardView_Details_NowPlaying_Left_IsVisible]"/>
+								<param name="top" value="480"/>
+							</include>
+						</control>
+						<control type="group">
+							<animation effect="slide" end="-180,0" time="0" condition="[$EXP[BillboardView_Flags_Studio] + !String.IsEqual(Control.GetLabel(914),flags/blank.png)] | [$EXP[BillboardView_Flags_Rating] + !String.IsEqual(Control.GetLabel(915),flags/blank.png)]">Conditional</animation>
+							<animation effect="slide" end="-180,0" time="0" condition="$EXP[BillboardView_Flags_All] + [[!String.IsEqual(Control.GetLabel(914),flags/blank.png) + String.IsEqual(Control.GetLabel(915),flags/blank.png)] | [String.IsEqual(Control.GetLabel(914),flags/blank.png) + !String.IsEqual(Control.GetLabel(915),flags/blank.png)]]">Conditional</animation>
+							<animation effect="slide" end="-360,0" time="0" condition="$EXP[BillboardView_Flags_All] + !String.IsEqual(Control.GetLabel(914),flags/blank.png) + !String.IsEqual(Control.GetLabel(915),flags/blank.png)">Conditional</animation>
 							<include content="NowPlayingVisualization_Fill">
 								<param name="visible" value="$EXP[StandardViews_NowPlaying_Small] + !$EXP[BillboardView_Details_NowPlaying_Left_IsVisible]"/>
 								<param name="left" value="1740"/>
@@ -203,7 +206,7 @@
 						</include>
 					</control>
 					<include content="ViewtypeOverlay">
-						<param name="visible" value="[Control.IsVisible(5001) | Control.IsVisible(5002)] + !Skin.String(BillboardView_Details,Off)"/>
+						<param name="visible" value="[Control.IsVisible(5001) | Control.IsVisible(5002)] + !$EXP[BillboardView_Details_Off]"/>
 					</include>
 				</control>
 			</control>
