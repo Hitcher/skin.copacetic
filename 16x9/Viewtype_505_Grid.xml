@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <includes>
 	<include name="Viewtype_505_Grid">
+
+		<!--Info Label-->
 		<control type="group">
 			<visible>$EXP[GridView_IsVisible]</visible>
 			<include>ViewmodeCyclingAnimation</include>
 			<include>FullscreenDimensions</include>
 			<!--Fanart slides-->
-			<animation effect="slide" end="592,193" time="0" reversible="false" condition="[$EXP[GridView_Display_IsFanart] | $EXP[GridView_Display_IsFanart_Music]] + Integer.IsEqual(Container(505).NumItems,1)">Conditional</animation>
-			<animation effect="slide" end="296,193" time="0" reversible="false" condition="[$EXP[GridView_Display_IsFanart] | $EXP[GridView_Display_IsFanart_Music]] + Integer.IsEqual(Container(505).NumItems,2)">Conditional</animation>
-			<animation effect="slide" end="0,193" time="0" reversible="false" condition="[$EXP[GridView_Display_IsFanart] | $EXP[GridView_Display_IsFanart_Music]] + Integer.IsEqual(Container(505).NumItems,3)">Conditional</animation>
+			<animation effect="slide" end="592,193" time="0" reversible="false" condition="$EXP[GridView_Display_IsFanart] + Integer.IsEqual(Container(505).NumItems,1)">Conditional</animation>
+			<animation effect="slide" end="296,193" time="0" reversible="false" condition="$EXP[GridView_Display_IsFanart] + Integer.IsEqual(Container(505).NumItems,2)">Conditional</animation>
+			<animation effect="slide" end="0,193" time="0" reversible="false" condition="$EXP[GridView_Display_IsFanart] + Integer.IsEqual(Container(505).NumItems,3)">Conditional</animation>
 			<!--Posters slides-->
 			<animation effect="slide" end="720,90" time="0" reversible="false" condition="$EXP[GridView_Display_IsPosters] + Integer.IsEqual(Container(505).NumItems,1)">Conditional</animation>
 			<animation effect="slide" end="540,90" time="0" reversible="false" condition="$EXP[GridView_Display_IsPosters] + Integer.IsEqual(Container(505).NumItems,2)">Conditional</animation>
@@ -16,11 +18,72 @@
 			<animation effect="slide" end="180,90" time="0" reversible="false" condition="$EXP[GridView_Display_IsPosters] + Integer.IsEqual(Container(505).NumItems,4)">Conditional</animation>
 			<animation effect="slide" end="0,90" time="0" reversible="false" condition="$EXP[GridView_Display_IsPosters] + Integer.IsEqual(Container(505).NumItems,5)">Conditional</animation>
 			<!--Square slides-->
-			<animation effect="slide" end="720,180" time="0" reversible="false" condition="[$EXP[GridView_Display_IsSquare] | $EXP[GridView_Display_IsSquare_Music]] + Integer.IsEqual(Container(505).NumItems,1)">Conditional</animation>
-			<animation effect="slide" end="540,180" time="0" reversible="false" condition="[$EXP[GridView_Display_IsSquare] | $EXP[GridView_Display_IsSquare_Music]] + Integer.IsEqual(Container(505).NumItems,2)">Conditional</animation>
-			<animation effect="slide" end="360,180" time="0" reversible="false" condition="[$EXP[GridView_Display_IsSquare] | $EXP[GridView_Display_IsSquare_Music]] + Integer.IsEqual(Container(505).NumItems,3)">Conditional</animation>
-			<animation effect="slide" end="180,180" time="0" reversible="false" condition="[$EXP[GridView_Display_IsSquare] | $EXP[GridView_Display_IsSquare_Music]] + Integer.IsEqual(Container(505).NumItems,4)">Conditional</animation>
-			<animation effect="slide" end="0,180" time="0" reversible="false" condition="[$EXP[GridView_Display_IsSquare] | $EXP[GridView_Display_IsSquare_Music]] + Integer.IsEqual(Container(505).NumItems,5)">Conditional</animation>
+			<animation effect="slide" end="720,180" time="0" reversible="false" condition="$EXP[GridView_Display_IsSquare] + Integer.IsEqual(Container(505).NumItems,1)">Conditional</animation>
+			<animation effect="slide" end="540,180" time="0" reversible="false" condition="$EXP[GridView_Display_IsSquare] + Integer.IsEqual(Container(505).NumItems,2)">Conditional</animation>
+			<animation effect="slide" end="360,180" time="0" reversible="false" condition="$EXP[GridView_Display_IsSquare] + Integer.IsEqual(Container(505).NumItems,3)">Conditional</animation>
+			<animation effect="slide" end="180,180" time="0" reversible="false" condition="$EXP[GridView_Display_IsSquare] + Integer.IsEqual(Container(505).NumItems,4)">Conditional</animation>
+			<animation effect="slide" end="0,180" time="0" reversible="false" condition="$EXP[GridView_Display_IsSquare] + Integer.IsEqual(Container(505).NumItems,5)">Conditional</animation>
+			<control type="group">
+				<visible>!$EXP[ContainerCycling]</visible>
+				<include>ViewmodeCyclingAnimation</include>
+				<control type="group">
+					<visible>!Control.IsVisible(941)</visible>
+					<animation effect="fade" start="0" end="100" time="190" tween="sine" easing="out" reversible="false">Visible</animation>
+					<!--Fanart-->
+					<include content="GridViewInfoLabel"/>
+					<!--Posters-->
+					<include content="GridViewInfoLabel">
+						<param name="visible" value="$EXP[GridView_Display_IsPosters]"/>
+						<param name="left" value="60"/>
+						<param name="top" value="789"/>
+						<param name="width" value="360"/>
+						<param name="column3" value="720"/>
+						<param name="column4" value="1080"/>
+						<param name="column5" value="1440"/>
+					</include>
+					<!--Square-->
+					<include content="GridViewInfoLabel">
+						<param name="visible" value="$EXP[GridView_Display_IsSquare]"/>
+						<param name="left" value="60"/>
+						<param name="top" value="609"/>
+						<param name="width" value="360"/>
+						<param name="column3" value="720"/>
+						<param name="column4" value="1080"/>
+						<param name="column5" value="1440"/>
+					</include>
+				</control>
+			</control>
+		</control>
+
+		<!--Hide Info Label during animation interruption-->
+		<control type="group">
+			<visible>$EXP[GridView_IsVisible]</visible>
+			<visible>$EXP[ContentCycling]</visible>
+			<include>CustomViewsBackground</include>
+			<animation effect="slide" end="0,0" time="380" reversible="false">Hidden</animation>
+		</control>
+
+		<!--Main-->
+		<control type="group">
+			<visible>$EXP[GridView_IsVisible]</visible>
+			<include>ViewmodeCyclingAnimation</include>
+			<include>FullscreenDimensions</include>
+			<!--Fanart slides-->
+			<animation effect="slide" end="592,193" time="0" reversible="false" condition="$EXP[GridView_Display_IsFanart] + Integer.IsEqual(Container(505).NumItems,1)">Conditional</animation>
+			<animation effect="slide" end="296,193" time="0" reversible="false" condition="$EXP[GridView_Display_IsFanart] + Integer.IsEqual(Container(505).NumItems,2)">Conditional</animation>
+			<animation effect="slide" end="0,193" time="0" reversible="false" condition="$EXP[GridView_Display_IsFanart] + Integer.IsEqual(Container(505).NumItems,3)">Conditional</animation>
+			<!--Posters slides-->
+			<animation effect="slide" end="720,90" time="0" reversible="false" condition="$EXP[GridView_Display_IsPosters] + Integer.IsEqual(Container(505).NumItems,1)">Conditional</animation>
+			<animation effect="slide" end="540,90" time="0" reversible="false" condition="$EXP[GridView_Display_IsPosters] + Integer.IsEqual(Container(505).NumItems,2)">Conditional</animation>
+			<animation effect="slide" end="360,90" time="0" reversible="false" condition="$EXP[GridView_Display_IsPosters] + Integer.IsEqual(Container(505).NumItems,3)">Conditional</animation>
+			<animation effect="slide" end="180,90" time="0" reversible="false" condition="$EXP[GridView_Display_IsPosters] + Integer.IsEqual(Container(505).NumItems,4)">Conditional</animation>
+			<animation effect="slide" end="0,90" time="0" reversible="false" condition="$EXP[GridView_Display_IsPosters] + Integer.IsEqual(Container(505).NumItems,5)">Conditional</animation>
+			<!--Square slides-->
+			<animation effect="slide" end="720,180" time="0" reversible="false" condition="$EXP[GridView_Display_IsSquare] + Integer.IsEqual(Container(505).NumItems,1)">Conditional</animation>
+			<animation effect="slide" end="540,180" time="0" reversible="false" condition="$EXP[GridView_Display_IsSquare] + Integer.IsEqual(Container(505).NumItems,2)">Conditional</animation>
+			<animation effect="slide" end="360,180" time="0" reversible="false" condition="$EXP[GridView_Display_IsSquare] + Integer.IsEqual(Container(505).NumItems,3)">Conditional</animation>
+			<animation effect="slide" end="180,180" time="0" reversible="false" condition="$EXP[GridView_Display_IsSquare] + Integer.IsEqual(Container(505).NumItems,4)">Conditional</animation>
+			<animation effect="slide" end="0,180" time="0" reversible="false" condition="$EXP[GridView_Display_IsSquare] + Integer.IsEqual(Container(505).NumItems,5)">Conditional</animation>
 
 			<control type="group">
 				<visible>!$EXP[ContainerCycling]</visible>
@@ -39,26 +102,23 @@
 					<pagecontrol>60</pagecontrol>
 					<preloaditems>2</preloaditems>
 					<scrolltime tween="sine" easing="inout">380</scrolltime>
-					<visible>$EXP[All_Paths] + !$EXP[ListOnly_Containers] + !Container.Content(songs) + !Container.Content(actors)</visible>
+					<visible>$EXP[GridView_Containers]</visible>
 					<!--Fanart with No Titles-->
-					<itemlayout width="592" height="333" condition="[$EXP[GridView_Display_IsFanart] | $EXP[GridView_Display_IsFanart_Music]] + $EXP[GridView_Details_Disabled]">
+					<itemlayout width="592" height="333" condition="$EXP[GridView_Display_IsFanart] + $EXP[GridView_Details_Disabled]">
 						<control type="button" id="930"/>
 						<include>GridViewtItemLayout_Fanart</include>
 					</itemlayout>
-					<focusedlayout width="592" height="333" condition="[$EXP[GridView_Display_IsFanart] | $EXP[GridView_Display_IsFanart_Music]] + $EXP[GridView_Details_Disabled]">
+					<focusedlayout width="592" height="333" condition="$EXP[GridView_Display_IsFanart] + $EXP[GridView_Details_Disabled]">
 						<include>HiddenFocusButton</include>
 						<include>HiddenGridFocusButton</include>
 						<include>GridViewFocusLayout_Fanart</include>
 					</focusedlayout>
 
 					<!--Fanart with Title-->
-					<itemlayout width="592" height="453" condition="[$EXP[GridView_Display_IsFanart] | $EXP[GridView_Display_IsFanart_Music]] + $EXP[GridView_Details_Enabled]">
+					<itemlayout width="592" height="453" condition="$EXP[GridView_Display_IsFanart] + $EXP[GridView_Details_Enabled]">
 						<include>GridViewtItemLayout_Fanart</include>
 					</itemlayout>
-					<focusedlayout width="592" height="453" condition="[$EXP[GridView_Display_IsFanart] | $EXP[GridView_Display_IsFanart_Music]] + $EXP[GridView_Details_Enabled]">
-						<control type="button">
-							<onfocus>SetProperty(MovieSetInfo,[UPPERCASE]$INFO[Container(4500).ListItem(0).Year]$INFO[Container(4500).ListItem(-1).Year,-]$INFO[Container(4500).NumItems, / , Movies][/UPPERCASE],Home)</onfocus>
-						</control>
+					<focusedlayout width="592" height="453" condition="$EXP[GridView_Display_IsFanart] + $EXP[GridView_Details_Enabled]">
 						<include>HiddenFocusButton</include>
 						<include>HiddenGridFocusButton</include>
 						<include>GridViewFocusLayout_Fanart</include>
@@ -85,20 +145,20 @@
 					</focusedlayout>
 
 					<!--Square with No Titles-->
-					<itemlayout width="360" height="360" condition="[$EXP[GridView_Display_IsSquare] | $EXP[GridView_Display_IsSquare_Music]] + $EXP[GridView_Details_Disabled]">
+					<itemlayout width="360" height="360" condition="$EXP[GridView_Display_IsSquare] + $EXP[GridView_Details_Disabled]">
 						<include>GridViewItemLayout_Square</include>
 					</itemlayout>
-					<focusedlayout width="360" height="360" condition="[$EXP[GridView_Display_IsSquare] | $EXP[GridView_Display_IsSquare_Music]] + $EXP[GridView_Details_Disabled]">
+					<focusedlayout width="360" height="360" condition="$EXP[GridView_Display_IsSquare] + $EXP[GridView_Details_Disabled]">
 						<include>HiddenFocusButton</include>
 						<include>HiddenGridFocusButton</include>
 						<include>GridViewFocusLayout_Square</include>
 					</focusedlayout>
 
 					<!--Square with Titles-->
-					<itemlayout width="360" height="480"  condition="[$EXP[GridView_Display_IsSquare] | $EXP[GridView_Display_IsSquare_Music]] + $EXP[GridView_Details_Enabled]">
+					<itemlayout width="360" height="480"  condition="$EXP[GridView_Display_IsSquare] + $EXP[GridView_Details_Enabled]">
 						<include>GridViewItemLayout_Square</include>
 					</itemlayout>
-					<focusedlayout width="360" height="480" condition="[$EXP[GridView_Display_IsSquare] | $EXP[GridView_Display_IsSquare_Music]] + $EXP[GridView_Details_Enabled]">
+					<focusedlayout width="360" height="480" condition="$EXP[GridView_Display_IsSquare] + $EXP[GridView_Details_Enabled]">
 						<include>HiddenFocusButton</include>
 						<include>HiddenGridFocusButton</include>
 						<include>GridViewFocusLayout_Square</include>
@@ -205,7 +265,7 @@
 						<include>ContentFadeAnimation</include>
 						<!--Top border for Fanart/Episodes-->
 						<control type="image">
-							<visible>[$EXP[GridView_Display_IsFanart] | $EXP[GridView_Display_IsFanart_Music]]</visible>
+							<visible>$EXP[GridView_Display_IsFanart]</visible>
 							<visible>!Control.IsVisible(5003) + !Control.IsVisible(5004) + [Container.Position(0) | Container.Position(1) | Container.Position(2)] + !Control.HasFocus(60)</visible>
 							<animation effect="slide" end="592,0" time="0" condition="Container.Position(1)" reversible="false">Conditional</animation>
 							<animation effect="slide" end="1184,0" time="0" condition="Container.Position(2)" reversible="false">Conditional</animation>
@@ -217,7 +277,7 @@
 						</control>
 						<!--Top border for Posters and Square-->
 						<control type="image">
-							<visible>$EXP[GridView_Display_IsPosters] | $EXP[GridView_Display_IsSquare] | $EXP[GridView_Display_IsSquare_Music]</visible>
+							<visible>$EXP[GridView_Display_IsPosters] | $EXP[GridView_Display_IsSquare]</visible>
 							<visible>!Control.IsVisible(5003) + !Control.IsVisible(5004) + [Container.Position(0) | Container.Position(1) | Container.Position(2) | Container.Position(3) | Container.Position(4)] + !Control.HasFocus(60)</visible>
 							<animation effect="slide" end="360,0" time="0" condition="Container.Position(1)" reversible="false">Conditional</animation>
 							<animation effect="slide" end="720,0" time="0" condition="Container.Position(2)" reversible="false">Conditional</animation>
