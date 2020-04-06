@@ -16,29 +16,65 @@
 
   <expression name="All_Paths">String.Contains(Container.FolderPath,videodb://) | String.Contains(Container.FolderPath,special://) | String.Contains(Container.FolderPath,addons://) | String.Contains(Container.FolderPath,musicdb://) | String.Contains(Container.FolderPath,plugin://)</expression>
   <expression name="Video_Containers">Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | Container.Content(episodes) | Container.Content(musicvideos)</expression>
-  <expression name="Music_Containers">Container.Content(artists) } Container.Content(albums) | Container.Content(songs)</expression>
   <expression name="ListOnly_Containers">Container.Content() | Container.Content(files) | Container.Content(genres) | Container.Content(years) | Container.Content(playlists) | Container.Content(plugins) | Container.Content(studios) | Container.Content(directors) | Container.Content(tags) | Container.Content(countries) | Container.Content(roles) | Container.Content(images) | Container.Content(sources) | Container.Content(addons)</expression>
   <expression name="Fanart_Containers">Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | Container.Content(episodes) | Container.Content(artists) | Container.content(albums) | Container.Content(songs)</expression>
-  <expression name="Info_Containers">Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | Container.Content(episodes) | Container.Content(musicvideos) | Container.Content(artists) | Container.Content(albums) | Container.Content(songs) | Container.Content(files)</expression>
-  <expression name="Logo_Containers">[Container.Content(movies) | Container.Content(tvshows) | Container.Content(artists)]</expression>
-  <expression name="Flag_Containers">[Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | Container.Content(episodes)]</expression>
-  <expression name="Background_IsFanart">[[$EXP[ListView_IsVisible] + $EXP[Fanart_Containers] + [$EXP[ListView_Display_IsBackground] | $EXP[ListView_Display_IsBackground_Music]]] | $EXP[BillboardView_IsVisible]] + ![String.IsEmpty(ListItem.Art(fanart)) + String.IsEmpty(ListItem.Icon)]</expression>
+  <expression name="Background_IsFanart">[[$EXP[ListView_IsVisible] + $EXP[Fanart_Containers] + $EXP[ListView_Display_IsBackground]] | $EXP[BillboardView_IsVisible]] + ![String.IsEmpty(ListItem.Art(fanart)) + String.IsEmpty(ListItem.Icon)]</expression>
 
   <expression name="ContainerCycling">![[Container.Content(movies) + Control.IsVisible(951)] | [Container.Content(sets) + Control.IsVisible(952)] | [Container.Content(tvshows) + Control.IsVisible(953)] | [Container.Content(seasons) + Control.IsVisible(954)] | [Container.Content(episodes) + Control.IsVisible(955)] | [Container.Content(artists) + Control.IsVisible(956)] | [Container.Content(albums) + Control.IsVisible(957)] | [Container.Content(songs) + Control.IsVisible(958)] | [[Container.Content() | Container.Content(files) | Container.Content(genres) | Container.Content(years) | Container.Content(playlists) | Container.Content(plugins) | Container.Content(studios) | Container.Content(directors) | Container.Content(tags) | Container.Content(countries) | Container.Content(roles) | Container.Content(images) | Container.Content(sources)] + Control.IsVisible(959)] | [Container.Content(actors) + Control.IsVisible(960)] | [Container.Content(addons) + Control.IsVisible(961)]]</expression>
   <expression name="ContentCycling">Control.IsVisible(5001) | Control.IsVisible(5002)</expression>
 
   <expression name="ListView_IsVisible">Control.IsVisible(50) | String.IsEqual(Container.ViewMode,List)</expression>
-  <expression name="ListView_Display_IsBackground">Window.IsActive(videos) + [Skin.String(ListView_Display,Background) | String.IsEmpty(Skin.String(ListView_Display)) | Container.Content() | Container.Content(episodes)] + !Container.Content(files) + !Container.Content(actors) + !Container.Content(addons)</expression>
-  <expression name="ListView_Display_IsFanart">Window.IsActive(videos) + [Container.Content(files) | Container.Content(addons)]</expression>
-  <expression name="ListView_Display_IsPosters">Window.IsActive(videos) + [Skin.String(ListView_Display,Posters) | Container.Content(actors)] + !Container.Content(episodes) + !$EXP[ListOnly_Containers]</expression>
-  <expression name="ListView_Display_IsSquare">Window.IsActive(videos) + Skin.String(ListView_Display,Square) + !Container.Content(episodes) + !$EXP[ListOnly_Containers]</expression>
-  <expression name="ListView_Display_IsBackground_Music">Window.IsActive(music) + [Skin.String(ListView_Display_Music,Background) | String.IsEmpty(Skin.String(ListView_Display_Music)) | Container.Content()] + !Container.Content(albums) + !Container.Content(files) + !Container.Content(addons)</expression>
-  <expression name="ListView_Display_IsSquare_Music">Window.IsActive(music) + [Skin.String(ListView_Display_Music,Square) | Container.Content(files) | Container.Content(albums) | Container.Content(addons)]</expression>
-  <expression name="ListView_Details_Info_IsVisible">Skin.String(ListView_Details,TitleAndInfo)</expression>
-  <expression name="ListView_Flags_IsOn">$EXP[ListView_IsVisible] + !Skin.String(ListView_Flags,Off)</expression>
-  <expression name="ListView_Flags_Studio_IsVisible">$EXP[ListView_IsVisible] + [Skin.String(ListView_Flags,All) | Skin.String(ListView_Flags,Studio) | String.IsEmpty(Skin.String(ListView_Flags))]</expression>
-  <expression name="ListView_Flags_Rating_IsVisible">$EXP[ListView_IsVisible] + [Skin.String(ListView_Flags,All) | Skin.String(ListView_Flags,Rating) | String.IsEmpty(Skin.String(ListView_Flags))]</expression>
-  <expression name="ListView_Flags_Studio_Shift">Skin.String(ListView_Flags,Studio) | [Skin.String(ListView_Flags,All) + String.IsEqual(Control.GetLabel(915),flags/blank.png)]</expression>
+	<expression name="ListView_Display_IsBackground">$EXP[ListView_IsVisible] + [$EXP[ListView_Display_IsBackground_Movies] | $EXP[ListView_Display_IsBackground_Sets] | $EXP[ListView_Display_IsBackground_TVShows] | $EXP[ListView_Display_IsBackground_Seasons] | $EXP[ListView_Display_IsBackground_Episodes] | $EXP[ListView_Display_IsBackground_Artists] | $EXP[ListView_Display_IsBackground_Albums] | $EXP[ListView_Display_IsBackground_Songs]]</expression>
+	<expression name="ListView_Display_IsBackground_Movies">Container.Content(movies) + [Skin.String(ListView_Display_Movies,Background) | String.IsEmpty(Skin.String(ListView_Display_Movies))]</expression>
+	<expression name="ListView_Display_IsBackground_Sets">Container.Content(sets) + [Skin.String(ListView_Display_Sets,Background) | String.IsEmpty(Skin.String(ListView_Display_Sets))]</expression>
+	<expression name="ListView_Display_IsBackground_TVShows">Container.Content(tvshows) + [Skin.String(ListView_Display_TVShows,Background) | String.IsEmpty(Skin.String(ListView_Display_TVShows))]</expression>
+	<expression name="ListView_Display_IsBackground_Seasons">Container.Content(seasons) + [Skin.String(ListView_Display_Seasons,Background) | String.IsEmpty(Skin.String(ListView_Display_Seasons))]</expression>
+	<expression name="ListView_Display_IsBackground_Episodes">Container.Content(episodes) + [Skin.String(ListView_Display_Episodes,Background) | String.IsEmpty(Skin.String(ListView_Display_Episodes))]</expression>
+	<expression name="ListView_Display_IsBackground_Artists">Container.Content(artists) + [Skin.String(ListView_Display_Artists,Background) | String.IsEmpty(Skin.String(ListView_Display_Artists))]</expression>
+	<expression name="ListView_Display_IsBackground_Albums">Container.Content(albums) + [Skin.String(ListView_Display_Albums,Background) | String.IsEmpty(Skin.String(ListView_Display_Albums))]</expression>
+	<expression name="ListView_Display_IsBackground_Songs">Container.Content(songs) + [Skin.String(ListView_Display_Songs,Background) | String.IsEmpty(Skin.String(ListView_Display_Songs))]</expression>
+	<expression name="ListView_Display_IsThumbnails">$EXP[ListView_IsVisible] + [$EXP[ListView_Display_IsThumbnails_Movies] | $EXP[ListView_Display_IsThumbnails_Sets] | $EXP[ListView_Display_IsThumbnails_TVShows] | $EXP[ListView_Display_IsThumbnails_Seasons] | $EXP[ListView_Display_IsThumbnails_Episodes] | $EXP[ListView_Display_IsThumbnails_Artists] | $EXP[ListView_Display_IsThumbnails_Albums] | $EXP[ListView_Display_IsThumbnails_Songs] | Container.Content(files) | Container.Content(actors) | Container.Content(addons)]</expression>
+	<expression name="ListView_Display_IsThumbnails_Movies">Container.Content(movies) + Skin.String(ListView_Display_Movies,Thumbnails)</expression>
+	<expression name="ListView_Display_IsThumbnails_Sets">Container.Content(sets) + Skin.String(ListView_Display_Sets,Thumbnails)</expression>
+	<expression name="ListView_Display_IsThumbnails_TVShows">Container.Content(tvshows) + Skin.String(ListView_Display_TVShows,Thumbnails)</expression>
+	<expression name="ListView_Display_IsThumbnails_Seasons">Container.Content(seasons) + Skin.String(ListView_Display_Seasons,Thumbnails)</expression>
+	<expression name="ListView_Display_IsThumbnails_Episodes">Container.Content(episodes) + Skin.String(ListView_Display_Episodes,Thumbnails)</expression>
+	<expression name="ListView_Display_IsThumbnails_Artists">Container.Content(artists) + Skin.String(ListView_Display_Artists,Thumbnails)</expression>
+	<expression name="ListView_Display_IsThumbnails_Albums">Container.Content(albums) + Skin.String(ListView_Display_Albums,Thumbnails)</expression>
+	<expression name="ListView_Display_IsThumbnails_Songs">Container.Content(songs) + Skin.String(ListView_Display_Songs,Thumbnails)</expression>
+	<expression name="ListView_Details_Info_IsVisible">$EXP[ListView_IsVisible] + [$EXP[ListView_Details_Info_IsVisible_Movies] | $EXP[ListView_Details_Info_IsVisible_Sets] | $EXP[ListView_Details_Info_IsVisible_TVShows] | $EXP[ListView_Details_Info_IsVisible_Seasons] | $EXP[ListView_Details_Info_IsVisible_Episodes] | $EXP[ListView_Details_Info_IsVisible_Artists] | $EXP[ListView_Details_Info_IsVisible_Albums] | $EXP[ListView_Details_Info_IsVisible_Songs] | Container.Content(files)]</expression>
+	<expression name="ListView_Details_Info_IsVisible_Movies">Container.Content(movies) + [Skin.String(ListView_Details_Movies,TitleAndInfo) | String.IsEmpty(Skin.String(ListView_Details_Movies))]</expression>
+	<expression name="ListView_Details_Info_IsVisible_Sets">Container.Content(sets) + [Skin.String(ListView_Details_Sets,TitleAndInfo) | String.IsEmpty(Skin.String(ListView_Details_Sets))]</expression>
+	<expression name="ListView_Details_Info_IsVisible_TVShows">Container.Content(tvshows) + [Skin.String(ListView_Details_TVShows,TitleAndInfo) | String.IsEmpty(Skin.String(ListView_Details_TVShows))]</expression>
+	<expression name="ListView_Details_Info_IsVisible_Seasons">Container.Content(seasons) + [Skin.String(ListView_Details_Seasons,TitleAndInfo) | String.IsEmpty(Skin.String(ListView_Details_Seasons))]</expression>
+	<expression name="ListView_Details_Info_IsVisible_Episodes">Container.Content(episodes) + [Skin.String(ListView_Details_Episodes,TitleAndInfo) | String.IsEmpty(Skin.String(ListView_Details_Episodes))]</expression>
+	<expression name="ListView_Details_Info_IsVisible_Artists">Container.Content(artists) + [Skin.String(ListView_Details_Artists,TitleAndInfo) | String.IsEmpty(Skin.String(ListView_Details_Artists))]</expression>
+	<expression name="ListView_Details_Info_IsVisible_Albums">Container.Content(albums) + [Skin.String(ListView_Details_Albums,TitleAndInfo) | String.IsEmpty(Skin.String(ListView_Details_Albums))]</expression>
+	<expression name="ListView_Details_Info_IsVisible_Songs">Container.Content(songs) + [Skin.String(ListView_Details_Songs,TitleAndInfo) | String.IsEmpty(Skin.String(ListView_Details_Songs))]</expression>
+	<expression name="ListView_Flags_IsOn">$EXP[ListView_IsVisible] + [$EXP[ListView_Flags_IsOn_Movies] | $EXP[ListView_Flags_IsOn_Sets] | $EXP[ListView_Flags_IsOn_TVShows] | $EXP[ListView_Flags_IsOn_Seasons] | $EXP[ListView_Flags_IsOn_Episodes]]</expression>
+	<expression name="ListView_Flags_IsOn_Movies">Container.Content(movies) + !Skin.String(ListView_Flags_Movies,Off)</expression>
+	<expression name="ListView_Flags_IsOn_Sets">Container.Content(sets) + !Skin.String(ListView_Flags_Sets,Off)</expression>
+	<expression name="ListView_Flags_IsOn_TVShows">Container.Content(tvshows) + !Skin.String(ListView_Flags_TVShows,Off)</expression>
+	<expression name="ListView_Flags_IsOn_Seasons">Container.Content(seasons) + !Skin.String(ListView_Flags_Seasons,Off)</expression>
+	<expression name="ListView_Flags_IsOn_Episodes">Container.Content(episodes) + !Skin.String(ListView_Flags_Episodes,Off)</expression>
+	<expression name="ListView_Flags_Studio_IsVisible">$EXP[ListView_IsVisible] + [$EXP[ListView_Flags_Studio_IsVisible_Movies] | $EXP[ListView_Flags_Studio_IsVisible_Sets] | $EXP[ListView_Flags_Studio_IsVisible_TVShows] | $EXP[ListView_Flags_Studio_IsVisible_Seasons] | $EXP[ListView_Flags_Studio_IsVisible_Episodes]]</expression>
+	<expression name="ListView_Flags_Studio_IsVisible_Movies">Container.Content(movies) + [Skin.String(ListView_Flags_Movies,All) | Skin.String(ListView_Flags_Movies,Studio) | String.IsEmpty(Skin.String(ListView_Flags_Movies))]</expression>
+	<expression name="ListView_Flags_Studio_IsVisible_Sets">Container.Content(sets) + [Skin.String(ListView_Flags_Sets,All) | Skin.String(ListView_Flags_Sets,Studio) | String.IsEmpty(Skin.String(ListView_Flags_Sets))]</expression>
+	<expression name="ListView_Flags_Studio_IsVisible_TVShows">Container.Content(tvshows) + [Skin.String(ListView_Flags_TVShows,All) | Skin.String(ListView_Flags_TVShows,Studio) | String.IsEmpty(Skin.String(ListView_Flags_TVShows))]</expression>
+	<expression name="ListView_Flags_Studio_IsVisible_Seasons">Container.Content(seasons) + [Skin.String(ListView_Flags_Seasons,All) | Skin.String(ListView_Flags_Seasons,Studio) | String.IsEmpty(Skin.String(ListView_Flags_Seasons))]</expression>
+	<expression name="ListView_Flags_Studio_IsVisible_Episodes">Container.Content(episodes) + [Skin.String(ListView_Flags_Episodes,All) | Skin.String(ListView_Flags_Episodes,Studio) | String.IsEmpty(Skin.String(ListView_Flags_Episodes))]</expression>
+	<expression name="ListView_Flags_Rating_IsVisible">$EXP[ListView_IsVisible] + [$EXP[ListView_Flags_Rating_IsVisible_Movies] | $EXP[ListView_Flags_Rating_IsVisible_Sets] | $EXP[ListView_Flags_Rating_IsVisible_TVShows] | $EXP[ListView_Flags_Rating_IsVisible_Seasons] | $EXP[ListView_Flags_Rating_IsVisible_Episodes]]</expression>
+	<expression name="ListView_Flags_Rating_IsVisible_Movies">Container.Content(movies) + [Skin.String(ListView_Flags_Movies,All) | Skin.String(ListView_Flags_Movies,Rating) | String.IsEmpty(Skin.String(ListView_Flags_Movies))]</expression>
+	<expression name="ListView_Flags_Rating_IsVisible_Sets">Container.Content(sets) + [Skin.String(ListView_Flags_Sets,All) | Skin.String(ListView_Flags_Sets,Rating) | String.IsEmpty(Skin.String(ListView_Flags_Sets))]</expression>
+	<expression name="ListView_Flags_Rating_IsVisible_TVShows">Container.Content(tvshows) + [Skin.String(ListView_Flags_TVShows,All) | Skin.String(ListView_Flags_TVShows,Rating) | String.IsEmpty(Skin.String(ListView_Flags_TVShows))]</expression>
+	<expression name="ListView_Flags_Rating_IsVisible_Seasons">Container.Content(seasons) + [Skin.String(ListView_Flags_Seasons,All) | Skin.String(ListView_Flags_Seasons,Rating) | String.IsEmpty(Skin.String(ListView_Flags_Seasons))]</expression>
+	<expression name="ListView_Flags_Rating_IsVisible_Episodes">Container.Content(episodes) + [Skin.String(ListView_Flags_Episodes,All) | Skin.String(ListView_Flags_Episodes,Rating) | String.IsEmpty(Skin.String(ListView_Flags_Episodes))]</expression>
+	<expression name="ListView_Flags_Studio_Shift">$EXP[ListView_IsVisible] + [$EXP[ListView_Flags_Studio_Shift_Movies] | $EXP[ListView_Flags_Studio_Shift_Sets] | $EXP[ListView_Flags_Studio_Shift_TVShows] | $EXP[ListView_Flags_Studio_Shift_Seasons] | $EXP[ListView_Flags_Studio_Shift_Episodes]]</expression>
+	<expression name="ListView_Flags_Studio_Shift_Movies">Container.Content(movies) + [Skin.String(ListView_Flags_Movies,Studio) | [Skin.String(ListView_Flags_Movies,All) + String.IsEqual(Control.GetLabel(915),flags/blank.png)]]</expression>
+	<expression name="ListView_Flags_Studio_Shift_Sets">Container.Content(sets) + [Skin.String(ListView_Flags_Sets,Studio) | [Skin.String(ListView_Flags_Sets,All) + String.IsEqual(Control.GetLabel(915),flags/blank.png)]]</expression>
+	<expression name="ListView_Flags_Studio_Shift_TVShows">Container.Content(tvshows) + [Skin.String(ListView_Flags_TVShows,Studio) | [Skin.String(ListView_Flags_TVShows,All) + String.IsEqual(Control.GetLabel(915),flags/blank.png)]]</expression>
+	<expression name="ListView_Flags_Studio_Shift_Seasons">Container.Content(seasons) + [Skin.String(ListView_Flags_Seasons,Studio) | [Skin.String(ListView_Flags_Seasons,All) + String.IsEqual(Control.GetLabel(915),flags/blank.png)]]</expression>
+	<expression name="ListView_Flags_Studio_Shift_Episodes">Container.Content(episodes) + [Skin.String(ListView_Flags_Episodes,Studio) | [Skin.String(ListView_Flags_Episodes,All) + String.IsEqual(Control.GetLabel(915),flags/blank.png)]]</expression>
 
 	<expression name="BillboardView_IsVisible">Control.IsVisible(501) | String.IsEqual(Container.ViewMode,Billboard)</expression>
 	<expression name="BillboardView_Containers">$EXP[All_Paths] + !$EXP[ListOnly_Containers] + !Container.Content(albums) + !Container.Content(songs) + !Container.Content(actors)</expression>
@@ -149,7 +185,6 @@
   <expression name="ShowcaseView_Flags_Studio_Shift_TVShows">Container.Content(tvshows) + [Skin.String(ShowcaseView_Flags_TVShows,Studio) | [Skin.String(ShowcaseView_Flags_TVShows,All) + String.IsEqual(Control.GetLabel(915),flags/blank.png)]]</expression>
   <expression name="ShowcaseView_Flags_Studio_Shift_Seasons">Container.Content(seasons) + [Skin.String(ShowcaseView_Flags_Seasons,Studio) | [Skin.String(ShowcaseView_Flags_Seasons,All) + String.IsEqual(Control.GetLabel(915),flags/blank.png)]]</expression>
   <expression name="ShowcaseView_Flags_Studio_Shift_Episodes">Container.Content(episodes) + [Skin.String(ShowcaseView_Flags_Episodes,Studio) | [Skin.String(ShowcaseView_Flags_Episodes,All) + String.IsEqual(Control.GetLabel(915),flags/blank.png)]]</expression>
-
 
   <expression name="StripView_IsVisible">Control.IsVisible(504) | String.IsEqual(Container.ViewMode,Strip)</expression>
   <expression name="StripView_Containers">$EXP[All_Paths] + !$EXP[ListOnly_Containers] + !Container.Content(songs) + !Container.Content(actors)</expression>
@@ -782,6 +817,29 @@
   </definition>
 </include>
 
+
+	<include name="SimpleListIcon">
+		<param name="left" default="0"/>
+		<param name="top" default="0"/>
+		<param name="width" default="100%"/>
+		<param name="height" default="100%"/>
+    <param name="visible" default="true"/>
+		<param name="aspectratio" default="scale"/>
+    <param name="fadetime" default="0"/>
+		<definition>
+			<control type="image">
+				<left>$PARAM[left]</left>
+				<top>$PARAM[top]</top>
+				<width>$PARAM[width]</width>
+				<height>$PARAM[height]</height>
+				<visible>$PARAM[visible]</visible>
+				<aspectratio align="center" aligny="center">$PARAM[aspectratio]</aspectratio>
+				<texture background="true">$VAR[Thumbnail(0)Content]</texture>
+				<fadetime>$PARAM[fadetime]</fadetime>
+			</control>
+		</definition>
+	</include>
+
 	<!--ListIcon-->
 	<include name="ListIcon">
     <param name="position" default="0"/>
@@ -850,6 +908,7 @@
         <!--Progress Bar backing overlay-->
         <control type="image">
 					<visible>$PARAM[showgradient]</visible>
+					<visible>$EXP[Video_Continers]</visible>
 					<animation effect="fade" start="0" end="100" time="380" tween="sine" easing="out" reversible="false" condition="true">Visible</animation>
           <aspectratio>stretch</aspectratio>
           <texture colordiffuse="$VAR[DarkColor]">views/gradient_art-overlay.png</texture>
@@ -1151,8 +1210,8 @@
 			<control type="group">
         <visible>$EXP[Video_Containers] | Container.Content(files)</visible>
 				<visible>!$EXP[Dialog_IsVisible]</visible>
-        <include>ContentFadeAnimation</include>
 				<visible>$PARAM[visible]</visible>
+				<include>ContentFadeAnimation</include>
 				<left>$PARAM[left]</left>
 				<top>$PARAM[top]</top>
 				<width>$PARAM[width]</width>
@@ -1218,7 +1277,7 @@
 
 	<!--Media Flags-->
 	<include name="MediaFlags">
-		<param name="groupvisible" default="$EXP[BillboardView_Flags_IsOn] | $EXP[ShowcaseView_Flags_IsOn] | $EXP[StripView_Flags_IsOn]"/>
+		<param name="groupvisible" default="$EXP[ListView_Flags_IsOn] | $EXP[BillboardView_Flags_IsOn] | $EXP[ShowcaseView_Flags_IsOn] | $EXP[StripView_Flags_IsOn]"/>
 		<definition>
 			<control type="group">
 				<visible>!$EXP[Dialog_IsVisible]</visible>
@@ -1227,18 +1286,18 @@
 				<control type="group">
 					<!--Studio-->
 					<control type="image">
-						<visible>$EXP[BillboardView_Flags_Studio_IsVisible] | $EXP[ShowcaseView_Flags_Studio_IsVisible] | $EXP[StripView_Flags_Studio_IsVisible]</visible>
+						<visible>$EXP[ListView_Flags_Studio_IsVisible] | $EXP[BillboardView_Flags_Studio_IsVisible] | $EXP[ShowcaseView_Flags_Studio_IsVisible] | $EXP[StripView_Flags_Studio_IsVisible]</visible>
 						<left>1605</left>
 						<top>960</top>
 						<width>90</width>
 						<height>60</height>
 						<aspectratio>keep</aspectratio>
 						<texture colordiffuse="$VAR[FlagColor]" fallback="flags/blank.png">$VAR[Studio_Name]</texture>
-						<animation effect="slide" start="0,0" end="180,0" time="0" condition="$EXP[BillboardView_Flags_Studio_Shift] | $EXP[ShowcaseView_Flags_Studio_Shift] | $EXP[StripView_Flags_Studio_Shift]">Conditional</animation>
+						<animation effect="slide" start="0,0" end="180,0" time="0" condition="$EXP[ListView_Flags_Studio_Shift] | $EXP[BillboardView_Flags_Studio_Shift] | $EXP[ShowcaseView_Flags_Studio_Shift] | $EXP[StripView_Flags_Studio_Shift]">Conditional</animation>
 					</control>
 					<!--MPAA flag-->
 					<control type="image">
-						<visible>$EXP[BillboardView_Flags_Rating_IsVisible] | $EXP[ShowcaseView_Flags_Rating_IsVisible] | $EXP[StripView_Flags_Rating_IsVisible]</visible>
+						<visible>$EXP[ListView_Flags_Rating_IsVisible] | $EXP[BillboardView_Flags_Rating_IsVisible] | $EXP[ShowcaseView_Flags_Rating_IsVisible] | $EXP[StripView_Flags_Rating_IsVisible]</visible>
 						<left>1785</left>
 						<top>960</top>
 						<width>90</width>
