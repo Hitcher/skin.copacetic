@@ -17,22 +17,32 @@
 							<visible>!Control.IsVisible(941)</visible>
 							<animation effect="fade" start="0" end="100" time="190" tween="sine" easing="out" reversible="false">Visible</animation>
 							<include>CustomViewsBackground</include>
-							<!--Display_IsThumbnail-->
+							<!--Display_IsThumbnail_Poster-->
 							<include content="SimpleListIcon">
 								<param name="left" value="60"/>
-								<param name="top" value="135"/>
-								<param name="width" value="540"/>
-								<param name="height" value="810"/>
-								<param name="aspectratio" value="keep"/>
-								<param name="visible" value="$EXP[ListView_Display_IsThumbnails] + !Container.Content(actors)"/>
-							</include>
-							<include content="SimpleListIcon">
-								<param name="left" value="60"/>
-								<param name="top" value="135"/>
-								<param name="width" value="540"/>
-								<param name="height" value="810"/>
+								<param name="top" value="90"/>
+								<param name="width" value="600"/>
+								<param name="height" value="900"/>
 								<param name="aspectratio" value="scale"/>
-								<param name="visible" value="$EXP[ListView_Display_IsThumbnails] + Container.Content(actors)"/>
+								<param name="visible" value="$EXP[ListView_Display_Posters_IsVisible]"/>
+							</include>
+							<!--Display_IsThumbnail_Square-->
+							<include content="SimpleListIcon">
+								<param name="left" value="60"/>
+								<param name="top" value="210"/>
+								<param name="width" value="660"/>
+								<param name="height" value="660"/>
+								<param name="aspectratio" value="scale"/>
+								<param name="visible" value="$EXP[ListView_Display_Square_IsVisible]"/>
+							</include>
+							<!--Display_IsThumbnail_Fanart/Landscape-->
+							<include content="SimpleListIcon">
+								<param name="left" value="60"/>
+								<param name="top" value="240"/>
+								<param name="width" value="600"/>
+								<param name="height" value="600"/>
+								<param name="aspectratio" value="keep"/>
+								<param name="visible" value="$EXP[ListView_Display_Fanart_IsVisible]"/>
 							</include>
 							<!--Display_IsBackground-->
 							<control type="group">
@@ -57,39 +67,40 @@
 						<!--ProgressBar-->
 						<include content="ProgressBar"/>
 						<!--Details for Display_IsThumbnails-->
-						<control type="textbox">
-							<!--Videos falling back to 16:9 artwork-->
-							<animation effect="slide" end="0,-253" time="0" condition="[[Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons)] + String.IsEmpty(ListItem.Art(poster)] | Container.Content(episodes)">Conditional</animation>
-							<!--Videos falling back to 1.33 thumb-->
-							<animation effect="slide" end="0,-203" time="0" condition="Window.IsActive(videos) + String.IsEmpty(ListItem.Art(poster) + String.IsEmpty(ListItem.Art(fanart) + String.Contains(ListItem.Icon,image://) + String.IsEqual(ListItem.VideoAspect,1.33)">Conditional</animation>
-							<!--Videos falling back to 1.37 thumb-->
-							<animation effect="slide" end="0,-208" time="0" condition="Window.IsActive(videos) + String.IsEmpty(ListItem.Art(poster) + String.IsEmpty(ListItem.Art(fanart) + String.Contains(ListItem.Icon,image://) + String.IsEqual(ListItem.VideoAspect,1.37)">Conditional</animation>
-							<!--Videos falling back to 1.66 thumb-->
-							<animation effect="slide" end="0,-243" time="0" condition="Window.IsActive(videos) + String.IsEmpty(ListItem.Art(poster) + String.IsEmpty(ListItem.Art(fanart) + String.Contains(ListItem.Icon,image://) + String.IsEqual(ListItem.VideoAspect,1.66)">Conditional</animation>
-							<!--Videos falling back to 1.78 thumb-->
-							<animation effect="slide" end="0,-253" time="0" condition="Window.IsActive(videos) + String.IsEmpty(ListItem.Art(poster) + String.IsEmpty(ListItem.Art(fanart) + String.Contains(ListItem.Icon,image://) + String.IsEqual(ListItem.VideoAspect,1.78)">Conditional</animation>
-							<!--Videos falling back to 1.85 thumb-->
-							<animation effect="slide" end="0,-259" time="0" condition="Window.IsActive(videos) + String.IsEmpty(ListItem.Art(poster) + String.IsEmpty(ListItem.Art(fanart) + String.Contains(ListItem.Icon,image://) + String.IsEqual(ListItem.VideoAspect,1.85)">Conditional</animation>
-							<!--Videos falling back to 2.35 thumb-->
-							<animation effect="slide" end="0,-290" time="0" condition="Window.IsActive(videos) + String.IsEmpty(ListItem.Art(poster) + String.IsEmpty(ListItem.Art(fanart) + String.Contains(ListItem.Icon,image://) + String.IsEqual(ListItem.VideoAspect,2.35)">Conditional</animation>
-							<!--Videos falling back to 2.40 thumb-->
-							<animation effect="slide" end="0,-293" time="0" condition="Window.IsActive(videos) + String.IsEmpty(ListItem.Art(poster) + String.IsEmpty(ListItem.Art(fanart) + String.Contains(ListItem.Icon,image://) + String.IsEqual(ListItem.VideoAspect,2.4)">Conditional</animation>
-							<!--Videos falling back to blank aspect ratio-->
-							<animation effect="slide" end="0,-253" time="0" condition="Window.IsActive(videos) + String.IsEmpty(ListItem.Art(poster) + String.IsEmpty(ListItem.Art(fanart) + String.Contains(ListItem.Icon,image://) + String.IsEmpty(ListItem.VideoAspect)">Conditional</animation>
-							<!--Music falling back to 1:1 artwork-->
-							<animation effect="slide" end="0,-135" time="0" condition="[Container.Content(artists) | Container.Content(albums) | Container.Content(songs)] + !String.Contains(ListItem.Icon,Default)">Conditional</animation>
-							<!--Music falling back to 16:9 artwork-->
-							<animation effect="slide" end="0,-253" time="0" condition="[Container.Content(artists) | Container.Content(albums) | Container.Content(songs)] + String.Contains(ListItem.Icon,Default)">Conditional</animation>
-							<visible>$EXP[ListView_Display_IsThumbnails] + $EXP[ListView_Details_Info_IsVisible]</visible>
-							<visible>!$EXP[Dialog_IsVisible]</visible>
+						<control type="group">
 							<left>60</left>
-							<top>975</top>
-							<width>540</width>
-							<height>auto</height>
-							<font>Billboard_Info</font>
-							<textcolor>$VAR[ListUnfocusColor]</textcolor>
-							<align>center</align>
-							<label>$VAR[TitleInfo]</label>
+							<top>1000</top>
+							<width>660</width>
+							<height>70</height>
+							<animation effect="slide" end="0,-100" time="0" condition="$EXP[ListView_Display_Square_IsVisible]">Conditional</animation>
+							<animation effect="slide" end="0,-262" time="0" condition="$EXP[ListView_Display_Fanart_IsVisible] + !String.Contains(ListItem.Icon,image://)">Conditional</animation>
+							<animation effect="slide" end="0,-140" time="0" condition="$EXP[ListView_Display_Fanart_IsVisible] + String.Contains(ListItem.Icon,image://) + String.IsEmpty(ListItem.VideoAspect)">Conditional</animation>
+							<animation effect="slide" end="0,-205" time="0" condition="$EXP[ListView_Display_Fanart_IsVisible] + String.Contains(ListItem.Icon,image://) + String.IsEqual(ListItem.VideoAspect,1.33)">Conditional</animation>
+							<animation effect="slide" end="0,-211" time="0" condition="$EXP[ListView_Display_Fanart_IsVisible] + String.Contains(ListItem.Icon,image://) + String.IsEqual(ListItem.VideoAspect,1.37)">Conditional</animation>
+							<animation effect="slide" end="0,-250" time="0" condition="$EXP[ListView_Display_Fanart_IsVisible] + String.Contains(ListItem.Icon,image://) + String.IsEqual(ListItem.VideoAspect,1.66)">Conditional</animation>
+							<animation effect="slide" end="0,-262" time="0" condition="$EXP[ListView_Display_Fanart_IsVisible] + String.Contains(ListItem.Icon,image://) + String.IsEqual(ListItem.VideoAspect,1.78)">Conditional</animation>
+							<animation effect="slide" end="0,-268" time="0" condition="$EXP[ListView_Display_Fanart_IsVisible] + String.Contains(ListItem.Icon,image://) + String.IsEqual(ListItem.VideoAspect,1.85)">Conditional</animation>
+							<animation effect="slide" end="0,-303" time="0" condition="$EXP[ListView_Display_Fanart_IsVisible] + String.Contains(ListItem.Icon,image://) + String.IsEqual(ListItem.VideoAspect,2.35)">Conditional</animation>
+							<animation effect="slide" end="0,-305" time="0" condition="$EXP[ListView_Display_Fanart_IsVisible] + String.Contains(ListItem.Icon,image://) + String.IsEqual(ListItem.VideoAspect,2.4)">Conditional</animation>
+							<control type="textbox">
+								<visible>$EXP[ListView_Details_Info_IsVisible] + [$EXP[ListView_Display_Posters_IsVisible] | $EXP[ListView_Display_Fanart_IsVisible]]</visible>
+								<visible>!$EXP[Dialog_IsVisible]</visible>
+								<width>600</width>
+								<height>auto</height>
+								<font>Billboard_Info</font>
+								<textcolor>$VAR[ListUnfocusColor]</textcolor>
+								<align>center</align>
+								<label>$VAR[TitleInfo]</label>
+							</control>
+							<control type="textbox">
+								<visible>$EXP[ListView_Details_Info_IsVisible] + $EXP[ListView_Display_Square_IsVisible]</visible>
+								<visible>!$EXP[Dialog_IsVisible]</visible>
+								<height>auto</height>
+								<font>Billboard_Info</font>
+								<textcolor>$VAR[ListUnfocusColor]</textcolor>
+								<align>center</align>
+								<label>$VAR[TitleInfo]</label>
+							</control>
 						</control>
 						<!--Details for Display_IsBackground-->
 						<control type="grouplist">
@@ -132,22 +143,32 @@
 					<control type="group">
 						<visible>$EXP[ContentCycling]</visible>
 						<include>CustomViewsBackground</include>
-						<!--Display_IsThumbnail-->
-						<include content="ListIcon">
-							<param name="left" value="60"/>
-							<param name="top" value="135"/>
-							<param name="width" value="540"/>
-							<param name="height" value="810"/>
-							<param name="aspectratio" value="keep"/>
-							<param name="visible" value="$EXP[ListView_Display_IsThumbnails] + !Container.Content(actors)"/>
-						</include>
+						<!--Display_IsThumbnail_Poster-->
 						<include content="SimpleListIcon">
 							<param name="left" value="60"/>
-							<param name="top" value="135"/>
-							<param name="width" value="540"/>
-							<param name="height" value="810"/>
+							<param name="top" value="90"/>
+							<param name="width" value="600"/>
+							<param name="height" value="900"/>
 							<param name="aspectratio" value="scale"/>
-							<param name="visible" value="$EXP[ListView_Display_IsThumbnails] + Container.Content(actors)"/>
+							<param name="visible" value="$EXP[ListView_Display_Posters_IsVisible]"/>
+						</include>
+						<!--Display_IsThumbnail_Square-->
+						<include content="SimpleListIcon">
+							<param name="left" value="60"/>
+							<param name="top" value="210"/>
+							<param name="width" value="660"/>
+							<param name="height" value="660"/>
+							<param name="aspectratio" value="scale"/>
+							<param name="visible" value="$EXP[ListView_Display_Square_IsVisible]"/>
+						</include>
+						<!--Display_IsThumbnail_Fanart/Landscape-->
+						<include content="SimpleListIcon">
+							<param name="left" value="60"/>
+							<param name="top" value="240"/>
+							<param name="width" value="600"/>
+							<param name="height" value="600"/>
+							<param name="aspectratio" value="keep"/>
+							<param name="visible" value="$EXP[ListView_Display_Fanart_IsVisible]"/>
 						</include>
 						<!---Display_IsBackground-->
 						<control type="group">
@@ -164,7 +185,7 @@
 					</control>
 					<!-- List -->
 					<control type="group">
-						<animation effect="slide" end="600,0" time="0" condition="$EXP[ListView_Display_IsThumbnails]">Conditional</animation>
+						<animation effect="slide" end="660,0" time="0" condition="$EXP[ListView_Display_IsThumbnails]">Conditional</animation>
 						<include content="ListViewTemplate"/>
 					</control>
 				</control>
