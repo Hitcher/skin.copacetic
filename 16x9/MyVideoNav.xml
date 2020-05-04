@@ -239,6 +239,15 @@
 				<onleft condition="Container(3000).HasFocus(945)">Skin.SetString(StripView_Logo_Movies,Off)</onleft>
 				<onleft condition="Container(3000).HasFocus(945)">SetFocus(940)</onleft>
 				<onright condition="Container(3000).HasFocus(945)">SetFocus(940)</onright>
+				<!--Strip: Turn off Logos & transition on left only-->
+				<onleft condition="Container(3000).HasFocus(949)">Skin.SetString(StripView_Logo_Movies,Off)</onleft>
+				<onleft condition="Container(3000).HasFocus(949)">SetFocus(940)</onleft>
+				<!--Strip: Turn off Logos on left only-->
+				<onleft condition="Container(3000).HasFocus(950)">Skin.SetString(StripView_Logo_Movies,Off)</onleft>
+				<!--Strip: Turn off Logos on right only-->
+				<onright condition="Container(3000).HasFocus(951)">Skin.SetString(StripView_Logo_Movies,Off)</onright>
+
+
 
 
 				<orientation>vertical</orientation>
@@ -1167,7 +1176,19 @@
 					</item>
 
 					<!--Strip View Details-->
+
 					<!--Movies-->
+					<!--Off (when container position is 1)-->
+					<item>
+						<description>Details (movies) / Off</description>
+						<label>‹ Off ›</label>
+						<label2>$LOCALIZE[32109] ($INFO[Container.Content]) / Off</label2>
+						<onclick>SetFocus(504)</onclick>
+						<property name="ActionLeft">Skin.SetString(StripView_Details_Movies,All)</property>
+						<property name="ActionRight">Skin.SetString(StripView_Details_Movies,Title)</property>
+						<visible>$EXP[StripView_IsVisible] + Container.Content(movies) + String.IsEqual(Container(504).CurrentItem,1) + Skin.String(StripView_Details_Movies,Off)</visible>
+					</item>
+					<!--Off (when container position is not 1)-->
 					<item id="943">
 						<description>Details (movies) / Off</description>
 						<label>‹ Off ›</label>
@@ -1175,17 +1196,49 @@
 						<onclick>SetFocus(504)</onclick>
 						<property name="ActionLeft">Skin.SetString(StripView_Details_Movies,All)</property>
 						<property name="ActionRight">Skin.SetString(StripView_Details_Movies,Title)</property>
-						<visible>$EXP[StripView_IsVisible] + Container.Content(movies) + Skin.String(StripView_Details_Movies,Off)</visible>
+						<visible>$EXP[StripView_IsVisible] + Container.Content(movies) + !String.IsEqual(Container(504).CurrentItem,1) + Skin.String(StripView_Details_Movies,Off)</visible>
 					</item>
-					<item id="945">
+					<!--Title (when container position is 1)-->
+					<item id="950">
 						<description>Details (movies) / Title</description>
 						<label>‹ Title ›</label>
 						<label2>$LOCALIZE[32109] ($INFO[Container.Content]) / Title</label2>
 						<onclick>SetFocus(504)</onclick>
 						<property name="ActionLeft">Skin.SetString(StripView_Details_Movies,Off)</property>
 						<property name="ActionRight">Skin.SetString(StripView_Details_Movies,TitleAndInfo)</property>
-						<visible>$EXP[StripView_IsVisible] + Container.Content(movies) + Skin.String(StripView_Details_Movies,Title)</visible>
+						<visible>$EXP[StripView_IsVisible] + Container.Content(movies) + Skin.String(StripView_Details_Movies,Title) + String.IsEqual(Container(504).CurrentItem,1)</visible>
 					</item>
+					<!--Title (when container position is not 1 and logo is off)-->
+					<item id="944">
+						<description>Details (movies) / Title</description>
+						<label>‹ Title ›</label>
+						<label2>$LOCALIZE[32109] ($INFO[Container.Content]) / Title</label2>
+						<onclick>SetFocus(504)</onclick>
+						<property name="ActionLeft">Skin.SetString(StripView_Details_Movies,Off)</property>
+						<property name="ActionRight">Skin.SetString(StripView_Details_Movies,TitleAndInfo)</property>
+						<visible>$EXP[StripView_IsVisible] + Container.Content(movies) + Skin.String(StripView_Details_Movies,Title) + !String.IsEqual(Container(504).CurrentItem,1) + !$EXP[StripView_Details_Logo_IsOn]</visible>
+					</item>
+					<!--Title (when container position is not 1 and logo is on)-->
+					<item id="949">
+						<description>Details (movies) / Title</description>
+						<label>‹ Title ›</label>
+						<label2>$LOCALIZE[32109] ($INFO[Container.Content]) / Title</label2>
+						<onclick>SetFocus(504)</onclick>
+						<property name="ActionLeft">Skin.SetString(StripView_Details_Movies,Off)</property>
+						<property name="ActionRight">Skin.SetString(StripView_Details_Movies,TitleAndInfo)</property>
+						<visible>$EXP[StripView_IsVisible] + Container.Content(movies) + Skin.String(StripView_Details_Movies,Title) + !String.IsEqual(Container(504).CurrentItem,1) + $EXP[StripView_Details_Logo_IsOn]</visible>
+					</item>
+					<!--Title and Info (when container position is 1)-->
+					<item>
+						<description>Details (movies) / Title and Info</description>
+						<label>‹ Title and Info ›</label>
+						<label2>$LOCALIZE[32109] ($INFO[Container.Content]) / Title and Info</label2>
+						<onclick>SetFocus(504)</onclick>
+						<property name="ActionLeft">Skin.SetString(StripView_Details_Movies,Title)</property>
+						<property name="ActionRight">Skin.SetString(StripView_Details_Movies,TitleAndPlot)</property>
+						<visible>$EXP[StripView_IsVisible] + Container.Content(movies) + Skin.String(StripView_Details_Movies,TitleAndInfo) + String.IsEqual(Container(504).CurrentItem,1)</visible>
+					</item>
+					<!--Title and Info (when container position is not 1 and logo is off)-->
 					<item id="943">
 						<description>Details (movies) / Title and Info</description>
 						<label>‹ Title and Info ›</label>
@@ -1193,8 +1246,19 @@
 						<onclick>SetFocus(504)</onclick>
 						<property name="ActionLeft">Skin.SetString(StripView_Details_Movies,Title)</property>
 						<property name="ActionRight">Skin.SetString(StripView_Details_Movies,TitleAndPlot)</property>
-						<visible>$EXP[StripView_IsVisible] + Container.Content(movies) + Skin.String(StripView_Details_Movies,TitleAndInfo)</visible>
+						<visible>$EXP[StripView_IsVisible] + Container.Content(movies) + Skin.String(StripView_Details_Movies,TitleAndInfo) + !String.IsEqual(Container(504).CurrentItem,1) + !$EXP[StripView_Details_Logo_IsOn]</visible>
 					</item>
+					<!--Title and Info (when container position is not 1 and logo is on)-->
+					<item>
+						<description>Details (movies) / Title and Info</description>
+						<label>‹ Title and Info ›</label>
+						<label2>$LOCALIZE[32109] ($INFO[Container.Content]) / Title and Info</label2>
+						<onclick>SetFocus(504)</onclick>
+						<property name="ActionLeft">Skin.SetString(StripView_Details_Movies,Title)</property>
+						<property name="ActionRight">Skin.SetString(StripView_Details_Movies,TitleAndPlot)</property>
+						<visible>$EXP[StripView_IsVisible] + Container.Content(movies) + Skin.String(StripView_Details_Movies,TitleAndInfo) + !String.IsEqual(Container(504).CurrentItem,1) + $EXP[StripView_Details_Logo_IsOn]</visible>
+					</item>
+					<!--Title and Plot-->
 					<item>
 						<description>Details (movies) / Title and Plot</description>
 						<label>‹ Title and Plot ›</label>
@@ -1204,6 +1268,17 @@
 						<property name="ActionRight">Skin.SetString(StripView_Details_Movies,All)</property>
 						<visible>$EXP[StripView_IsVisible] + Container.Content(movies) + Skin.String(StripView_Details_Movies,TitleAndPlot)</visible>
 					</item>
+					<!--All (when container position is 1)-->
+					<item id="951">
+						<description>Details (movies) / All</description>
+						<label>‹ All ›</label>
+						<label2>$LOCALIZE[32109] ($INFO[Container.Content]) / All</label2>
+						<onclick>SetFocus(504)</onclick>
+						<property name="ActionLeft">Skin.SetString(StripView_Details_Movies,TitleAndPlot)</property>
+						<property name="ActionRight">Skin.SetString(StripView_Details_Movies,Off)</property>
+						<visible>$EXP[StripView_IsVisible] + Container.Content(movies) + [Skin.String(StripView_Details_Movies,All) | String.IsEmpty(Skin.String(StripView_Details_Movies))] + String.IsEqual(Container(504).CurrentItem,1)</visible>
+					</item>
+					<!--All (when container position is not 1)-->
 					<item id="946">
 						<description>Details (movies) / All</description>
 						<label>‹ All ›</label>
@@ -1211,9 +1286,21 @@
 						<onclick>SetFocus(504)</onclick>
 						<property name="ActionLeft">Skin.SetString(StripView_Details_Movies,TitleAndPlot)</property>
 						<property name="ActionRight">Skin.SetString(StripView_Details_Movies,Off)</property>
-						<visible>$EXP[StripView_IsVisible] + Container.Content(movies) + [Skin.String(StripView_Details_Movies,All) | String.IsEmpty(Skin.String(StripView_Details_Movies))]</visible>
+						<visible>$EXP[StripView_IsVisible] + Container.Content(movies) + [Skin.String(StripView_Details_Movies,All) | String.IsEmpty(Skin.String(StripView_Details_Movies))] + !String.IsEqual(Container(504).CurrentItem,1)</visible>
 					</item>
+
 					<!--Sets-->
+					<!--Off (when container position is 1)-->
+					<item>
+						<description>Details (sets) / Off</description>
+						<label>‹ Off ›</label>
+						<label2>$LOCALIZE[32109] ($INFO[Container.Content]) / Off</label2>
+						<onclick>SetFocus(504)</onclick>
+						<property name="ActionLeft">Skin.SetString(StripView_Details_Sets,All)</property>
+						<property name="ActionRight">Skin.SetString(StripView_Details_Sets,Title)</property>
+						<visible>$EXP[StripView_IsVisible] + Container.Content(sets) + String.IsEqual(Container(504).CurrentItem,1) + Skin.String(StripView_Details_Sets,Off)</visible>
+					</item>
+					<!--Off (when container position is not 1)-->
 					<item id="943">
 						<description>Details (sets) / Off</description>
 						<label>‹ Off ›</label>
@@ -1221,17 +1308,49 @@
 						<onclick>SetFocus(504)</onclick>
 						<property name="ActionLeft">Skin.SetString(StripView_Details_Sets,All)</property>
 						<property name="ActionRight">Skin.SetString(StripView_Details_Sets,Title)</property>
-						<visible>$EXP[StripView_IsVisible] + Container.Content(sets) + Skin.String(StripView_Details_Sets,Off)</visible>
+						<visible>$EXP[StripView_IsVisible] + Container.Content(sets) + !String.IsEqual(Container(504).CurrentItem,1) + Skin.String(StripView_Details_Sets,Off)</visible>
 					</item>
-					<item id="945">
+					<!--Title (when container position is 1)-->
+					<item id="950">
 						<description>Details (sets) / Title</description>
 						<label>‹ Title ›</label>
 						<label2>$LOCALIZE[32109] ($INFO[Container.Content]) / Title</label2>
 						<onclick>SetFocus(504)</onclick>
 						<property name="ActionLeft">Skin.SetString(StripView_Details_Sets,Off)</property>
 						<property name="ActionRight">Skin.SetString(StripView_Details_Sets,TitleAndInfo)</property>
-						<visible>$EXP[StripView_IsVisible] + Container.Content(sets) + Skin.String(StripView_Details_Sets,Title)</visible>
+						<visible>$EXP[StripView_IsVisible] + Container.Content(sets) + Skin.String(StripView_Details_Sets,Title) + String.IsEqual(Container(504).CurrentItem,1)</visible>
 					</item>
+					<!--Title (when container position is not 1 and logo is off)-->
+					<item id="944">
+						<description>Details (sets) / Title</description>
+						<label>‹ Title ›</label>
+						<label2>$LOCALIZE[32109] ($INFO[Container.Content]) / Title</label2>
+						<onclick>SetFocus(504)</onclick>
+						<property name="ActionLeft">Skin.SetString(StripView_Details_Sets,Off)</property>
+						<property name="ActionRight">Skin.SetString(StripView_Details_Sets,TitleAndInfo)</property>
+						<visible>$EXP[StripView_IsVisible] + Container.Content(sets) + Skin.String(StripView_Details_Sets,Title) + !String.IsEqual(Container(504).CurrentItem,1) + !$EXP[StripView_Details_Logo_IsOn]</visible>
+					</item>
+					<!--Title (when container position is not 1 and logo is on)-->
+					<item id="949">
+						<description>Details (sets) / Title</description>
+						<label>‹ Title ›</label>
+						<label2>$LOCALIZE[32109] ($INFO[Container.Content]) / Title</label2>
+						<onclick>SetFocus(504)</onclick>
+						<property name="ActionLeft">Skin.SetString(StripView_Details_Sets,Off)</property>
+						<property name="ActionRight">Skin.SetString(StripView_Details_Sets,TitleAndInfo)</property>
+						<visible>$EXP[StripView_IsVisible] + Container.Content(sets) + Skin.String(StripView_Details_Sets,Title) + !String.IsEqual(Container(504).CurrentItem,1) + $EXP[StripView_Details_Logo_IsOn]</visible>
+					</item>
+					<!--Title and Info (when container position is 1)-->
+					<item>
+						<description>Details (sets) / Title and Info</description>
+						<label>‹ Title and Info ›</label>
+						<label2>$LOCALIZE[32109] ($INFO[Container.Content]) / Title and Info</label2>
+						<onclick>SetFocus(504)</onclick>
+						<property name="ActionLeft">Skin.SetString(StripView_Details_Sets,Title)</property>
+						<property name="ActionRight">Skin.SetString(StripView_Details_Sets,TitleAndPlot)</property>
+						<visible>$EXP[StripView_IsVisible] + Container.Content(sets) + Skin.String(StripView_Details_Sets,TitleAndInfo) + String.IsEqual(Container(504).CurrentItem,1)</visible>
+					</item>
+					<!--Title and Info (when container position is not 1 and logo is off)-->
 					<item id="943">
 						<description>Details (sets) / Title and Info</description>
 						<label>‹ Title and Info ›</label>
@@ -1239,8 +1358,19 @@
 						<onclick>SetFocus(504)</onclick>
 						<property name="ActionLeft">Skin.SetString(StripView_Details_Sets,Title)</property>
 						<property name="ActionRight">Skin.SetString(StripView_Details_Sets,TitleAndPlot)</property>
-						<visible>$EXP[StripView_IsVisible] + Container.Content(sets) + Skin.String(StripView_Details_Sets,TitleAndInfo)</visible>
+						<visible>$EXP[StripView_IsVisible] + Container.Content(sets) + Skin.String(StripView_Details_Sets,TitleAndInfo) + !String.IsEqual(Container(504).CurrentItem,1) + !$EXP[StripView_Details_Logo_IsOn]</visible>
 					</item>
+					<!--Title and Info (when container position is not 1 and logo is on)-->
+					<item>
+						<description>Details (sets) / Title and Info</description>
+						<label>‹ Title and Info ›</label>
+						<label2>$LOCALIZE[32109] ($INFO[Container.Content]) / Title and Info</label2>
+						<onclick>SetFocus(504)</onclick>
+						<property name="ActionLeft">Skin.SetString(StripView_Details_Sets,Title)</property>
+						<property name="ActionRight">Skin.SetString(StripView_Details_Sets,TitleAndPlot)</property>
+						<visible>$EXP[StripView_IsVisible] + Container.Content(sets) + Skin.String(StripView_Details_Sets,TitleAndInfo) + !String.IsEqual(Container(504).CurrentItem,1) + $EXP[StripView_Details_Logo_IsOn]</visible>
+					</item>
+					<!--Title and Plot-->
 					<item>
 						<description>Details (sets) / Title and Plot</description>
 						<label>‹ Title and Plot ›</label>
@@ -1250,6 +1380,17 @@
 						<property name="ActionRight">Skin.SetString(StripView_Details_Sets,All)</property>
 						<visible>$EXP[StripView_IsVisible] + Container.Content(sets) + Skin.String(StripView_Details_Sets,TitleAndPlot)</visible>
 					</item>
+					<!--All (when container position is 1)-->
+					<item id="951">
+						<description>Details (sets) / All</description>
+						<label>‹ All ›</label>
+						<label2>$LOCALIZE[32109] ($INFO[Container.Content]) / All</label2>
+						<onclick>SetFocus(504)</onclick>
+						<property name="ActionLeft">Skin.SetString(StripView_Details_Sets,TitleAndPlot)</property>
+						<property name="ActionRight">Skin.SetString(StripView_Details_Sets,Off)</property>
+						<visible>$EXP[StripView_IsVisible] + Container.Content(sets) + [Skin.String(StripView_Details_Sets,All) | String.IsEmpty(Skin.String(StripView_Details_Sets))] + String.IsEqual(Container(504).CurrentItem,1)</visible>
+					</item>
+					<!--All (when container position is not 1)-->
 					<item id="946">
 						<description>Details (sets) / All</description>
 						<label>‹ All ›</label>
@@ -1257,38 +1398,93 @@
 						<onclick>SetFocus(504)</onclick>
 						<property name="ActionLeft">Skin.SetString(StripView_Details_Sets,TitleAndPlot)</property>
 						<property name="ActionRight">Skin.SetString(StripView_Details_Sets,Off)</property>
-						<visible>$EXP[StripView_IsVisible] + Container.Content(sets) + [Skin.String(StripView_Details_Sets,All) | String.IsEmpty(Skin.String(StripView_Details_Sets))]</visible>
+						<visible>$EXP[StripView_IsVisible] + Container.Content(sets) + [Skin.String(StripView_Details_Sets,All) | String.IsEmpty(Skin.String(StripView_Details_Sets))] + !String.IsEqual(Container(504).CurrentItem,1)</visible>
 					</item>
-					<!--TV Shows-->
-					<item id="943">
-						<description>Details (tvhsows) / Off</description>
+
+					<!--TVShows-->
+					<!--Off (when container position is 1)-->
+					<item>
+						<description>Details (tvshows) / Off</description>
 						<label>‹ Off ›</label>
 						<label2>$LOCALIZE[32109] ($INFO[Container.Content]) / Off</label2>
 						<onclick>SetFocus(504)</onclick>
 						<property name="ActionLeft">Skin.SetString(StripView_Details_TVShows,All)</property>
 						<property name="ActionRight">Skin.SetString(StripView_Details_TVShows,Title)</property>
-						<visible>$EXP[StripView_IsVisible] + Container.Content(tvshows) + Skin.String(StripView_Details_TVShows,Off)</visible>
+						<visible>$EXP[StripView_IsVisible] + Container.Content(tvshows) + String.IsEqual(Container(504).CurrentItem,1) + Skin.String(StripView_Details_TVShows,Off)</visible>
 					</item>
-					<item id="945">
+					<!--Off (when container position is not 1)-->
+					<item id="943">
+						<description>Details (tvshows) / Off</description>
+						<label>‹ Off ›</label>
+						<label2>$LOCALIZE[32109] ($INFO[Container.Content]) / Off</label2>
+						<onclick>SetFocus(504)</onclick>
+						<property name="ActionLeft">Skin.SetString(StripView_Details_TVShows,All)</property>
+						<property name="ActionRight">Skin.SetString(StripView_Details_TVShows,Title)</property>
+						<visible>$EXP[StripView_IsVisible] + Container.Content(tvshows) + !String.IsEqual(Container(504).CurrentItem,1) + Skin.String(StripView_Details_TVShows,Off)</visible>
+					</item>
+					<!--Title (when container position is 1)-->
+					<item id="950">
 						<description>Details (tvshows) / Title</description>
 						<label>‹ Title ›</label>
 						<label2>$LOCALIZE[32109] ($INFO[Container.Content]) / Title</label2>
 						<onclick>SetFocus(504)</onclick>
 						<property name="ActionLeft">Skin.SetString(StripView_Details_TVShows,Off)</property>
 						<property name="ActionRight">Skin.SetString(StripView_Details_TVShows,TitleAndInfo)</property>
-						<visible>$EXP[StripView_IsVisible] + Container.Content(tvshows) + Skin.String(StripView_Details_TVShows,Title)</visible>
+						<visible>$EXP[StripView_IsVisible] + Container.Content(tvshows) + Skin.String(StripView_Details_TVShows,Title) + String.IsEqual(Container(504).CurrentItem,1)</visible>
 					</item>
-					<item id="943">
-						<description>Details (tv shows) / Title and Info</description>
+					<!--Title (when container position is not 1 and logo is off)-->
+					<item id="944">
+						<description>Details (tvshows) / Title</description>
+						<label>‹ Title ›</label>
+						<label2>$LOCALIZE[32109] ($INFO[Container.Content]) / Title</label2>
+						<onclick>SetFocus(504)</onclick>
+						<property name="ActionLeft">Skin.SetString(StripView_Details_TVShows,Off)</property>
+						<property name="ActionRight">Skin.SetString(StripView_Details_TVShows,TitleAndInfo)</property>
+						<visible>$EXP[StripView_IsVisible] + Container.Content(tvshows) + Skin.String(StripView_Details_TVShows,Title) + !String.IsEqual(Container(504).CurrentItem,1) + !$EXP[StripView_Details_Logo_IsOn]</visible>
+					</item>
+					<!--Title (when container position is not 1 and logo is on)-->
+					<item id="949">
+						<description>Details (tvshows) / Title</description>
+						<label>‹ Title ›</label>
+						<label2>$LOCALIZE[32109] ($INFO[Container.Content]) / Title</label2>
+						<onclick>SetFocus(504)</onclick>
+						<property name="ActionLeft">Skin.SetString(StripView_Details_TVShows,Off)</property>
+						<property name="ActionRight">Skin.SetString(StripView_Details_TVShows,TitleAndInfo)</property>
+						<visible>$EXP[StripView_IsVisible] + Container.Content(tvshows) + Skin.String(StripView_Details_TVShows,Title) + !String.IsEqual(Container(504).CurrentItem,1) + $EXP[StripView_Details_Logo_IsOn]</visible>
+					</item>
+					<!--Title and Info (when container position is 1)-->
+					<item>
+						<description>Details (tvshows) / Title and Info</description>
 						<label>‹ Title and Info ›</label>
 						<label2>$LOCALIZE[32109] ($INFO[Container.Content]) / Title and Info</label2>
 						<onclick>SetFocus(504)</onclick>
 						<property name="ActionLeft">Skin.SetString(StripView_Details_TVShows,Title)</property>
 						<property name="ActionRight">Skin.SetString(StripView_Details_TVShows,TitleAndPlot)</property>
-						<visible>$EXP[StripView_IsVisible] + Container.Content(tvshows) + Skin.String(StripView_Details_TVShows,TitleAndInfo)</visible>
+						<visible>$EXP[StripView_IsVisible] + Container.Content(tvshows) + Skin.String(StripView_Details_TVShows,TitleAndInfo) + String.IsEqual(Container(504).CurrentItem,1)</visible>
 					</item>
+					<!--Title and Info (when container position is not 1 and logo is off)-->
+					<item id="943">
+						<description>Details (tvshows) / Title and Info</description>
+						<label>‹ Title and Info ›</label>
+						<label2>$LOCALIZE[32109] ($INFO[Container.Content]) / Title and Info</label2>
+						<onclick>SetFocus(504)</onclick>
+						<property name="ActionLeft">Skin.SetString(StripView_Details_TVShows,Title)</property>
+						<property name="ActionRight">Skin.SetString(StripView_Details_TVShows,TitleAndPlot)</property>
+						<visible>$EXP[StripView_IsVisible] + Container.Content(tvshows) + Skin.String(StripView_Details_TVShows,TitleAndInfo) + !String.IsEqual(Container(504).CurrentItem,1) + !$EXP[StripView_Details_Logo_IsOn]</visible>
+					</item>
+					<!--Title and Info (when container position is not 1 and logo is on)-->
 					<item>
-						<description>Details (tv shows) / Title and Plot</description>
+						<description>Details (tvshows) / Title and Info</description>
+						<label>‹ Title and Info ›</label>
+						<label2>$LOCALIZE[32109] ($INFO[Container.Content]) / Title and Info</label2>
+						<onclick>SetFocus(504)</onclick>
+						<property name="ActionLeft">Skin.SetString(StripView_Details_TVShows,Title)</property>
+						<property name="ActionRight">Skin.SetString(StripView_Details_TVShows,TitleAndPlot)</property>
+						<visible>$EXP[StripView_IsVisible] + Container.Content(tvshows) + Skin.String(StripView_Details_TVShows,TitleAndInfo) + !String.IsEqual(Container(504).CurrentItem,1) + $EXP[StripView_Details_Logo_IsOn]</visible>
+					</item>
+					<!--Title and Plot-->
+					<item>
+						<description>Details (tvshows) / Title and Plot</description>
 						<label>‹ Title and Plot ›</label>
 						<label2>$LOCALIZE[32109] ($INFO[Container.Content]) / Title and Plot</label2>
 						<onclick>SetFocus(504)</onclick>
@@ -1296,15 +1492,27 @@
 						<property name="ActionRight">Skin.SetString(StripView_Details_TVShows,All)</property>
 						<visible>$EXP[StripView_IsVisible] + Container.Content(tvshows) + Skin.String(StripView_Details_TVShows,TitleAndPlot)</visible>
 					</item>
-					<item id="946">
-						<description>Details (tv shows) / All</description>
+					<!--All (when container position is 1)-->
+					<item id="951">
+						<description>Details (tvshows) / All</description>
 						<label>‹ All ›</label>
 						<label2>$LOCALIZE[32109] ($INFO[Container.Content]) / All</label2>
 						<onclick>SetFocus(504)</onclick>
 						<property name="ActionLeft">Skin.SetString(StripView_Details_TVShows,TitleAndPlot)</property>
 						<property name="ActionRight">Skin.SetString(StripView_Details_TVShows,Off)</property>
-						<visible>$EXP[StripView_IsVisible] + Container.Content(tvshows) + [Skin.String(StripView_Details_TVShows,All) | String.IsEmpty(Skin.String(StripView_Details_TVShows))]</visible>
+						<visible>$EXP[StripView_IsVisible] + Container.Content(tvshows) + [Skin.String(StripView_Details_TVShows,All) | String.IsEmpty(Skin.String(StripView_Details_TVShows))] + String.IsEqual(Container(504).CurrentItem,1)</visible>
 					</item>
+					<!--All (when container position is not 1)-->
+					<item id="946">
+						<description>Details (tvshows) / All</description>
+						<label>‹ All ›</label>
+						<label2>$LOCALIZE[32109] ($INFO[Container.Content]) / All</label2>
+						<onclick>SetFocus(504)</onclick>
+						<property name="ActionLeft">Skin.SetString(StripView_Details_TVShows,TitleAndPlot)</property>
+						<property name="ActionRight">Skin.SetString(StripView_Details_TVShows,Off)</property>
+						<visible>$EXP[StripView_IsVisible] + Container.Content(tvshows) + [Skin.String(StripView_Details_TVShows,All) | String.IsEmpty(Skin.String(StripView_Details_TVShows))] + !String.IsEqual(Container(504).CurrentItem,1)</visible>
+					</item>
+
 					<!--Seasons-->
 					<item id="943">
 						<description>Details (seasons) / Off</description>
@@ -1601,7 +1809,9 @@
 					</item>
 
 					<!--Showcase View Logo-->
+
 					<!--Movies-->
+					<!--Keyart visible-->
 					<item id="942">
 						<description>Movie logos / Off</description>
 						<label>‹ Off ›</label>
@@ -1609,8 +1819,9 @@
 						<onclick>SetFocus(502)</onclick>
 						<property name="ActionLeft">Skin.SetString(ShowcaseView_Logo_Movies,On)</property>
 						<property name="ActionRight">Skin.SetString(ShowcaseView_Logo_Movies,On)</property>
-						<visible>$EXP[ShowcaseView_IsVisible] + Container.Content(movies) + !Skin.String(ShowcaseView_Details_Movies,Off) + [Skin.String(ShowcaseView_Logo_Movies,Off) | String.IsEmpty(Skin.String(ShowcaseView_Logo_Movies))]</visible>
+						<visible>$EXP[ShowcaseView_IsVisible] + Container.Content(movies) + !Skin.String(ShowcaseView_Details_Movies,Off) + [Skin.String(ShowcaseView_Logo_Movies,Off) | String.IsEmpty(Skin.String(ShowcaseView_Logo_Movies))] + $EXP[ShowcaseView_Display_Keyart_IsVisible]</visible>
 					</item>
+					<!--Keyart visible-->
 					<item id="942">
 						<description>Movie logos / On</description>
 						<label>‹ On ›</label>
@@ -1618,9 +1829,31 @@
 						<onclick>SetFocus(502)</onclick>
 						<property name="ActionLeft">Skin.SetString(ShowcaseView_Logo_Movies,Off)</property>
 						<property name="ActionRight">Skin.SetString(ShowcaseView_Logo_Movies,Off)</property>
-						<visible>$EXP[ShowcaseView_IsVisible] + Container.Content(movies) + !Skin.String(ShowcaseView_Details_Movies,Off) + Skin.String(ShowcaseView_Logo_Movies,On)</visible>
+						<visible>$EXP[ShowcaseView_IsVisible] + Container.Content(movies) + !Skin.String(ShowcaseView_Details_Movies,Off) + Skin.String(ShowcaseView_Logo_Movies,On) + $EXP[ShowcaseView_Display_Keyart_IsVisible]</visible>
 					</item>
+					<!--Keyart not visible-->
+					<item>
+						<description>Movie logos / Off</description>
+						<label>‹ Off ›</label>
+						<label2>Logos ($INFO[Container.Content]) / Off</label2>
+						<onclick>SetFocus(502)</onclick>
+						<property name="ActionLeft">Skin.SetString(ShowcaseView_Logo_Movies,On)</property>
+						<property name="ActionRight">Skin.SetString(ShowcaseView_Logo_Movies,On)</property>
+						<visible>$EXP[ShowcaseView_IsVisible] + Container.Content(movies) + !Skin.String(ShowcaseView_Details_Movies,Off) + [Skin.String(ShowcaseView_Logo_Movies,Off) | String.IsEmpty(Skin.String(ShowcaseView_Logo_Movies))] + !$EXP[ShowcaseView_Display_Keyart_IsVisible]</visible>
+					</item>
+					<!--Keyart not visible-->
+					<item>
+						<description>Movie logos / On</description>
+						<label>‹ On ›</label>
+						<label2>Logos ($INFO[Container.Content]) / On</label2>
+						<onclick>SetFocus(502)</onclick>
+						<property name="ActionLeft">Skin.SetString(ShowcaseView_Logo_Movies,Off)</property>
+						<property name="ActionRight">Skin.SetString(ShowcaseView_Logo_Movies,Off)</property>
+						<visible>$EXP[ShowcaseView_IsVisible] + Container.Content(movies) + !Skin.String(ShowcaseView_Details_Movies,Off) + Skin.String(ShowcaseView_Logo_Movies,On) + !$EXP[ShowcaseView_Display_Keyart_IsVisible]</visible>
+					</item>
+
 					<!--Sets-->
+					<!--Keyart visible-->
 					<item id="942">
 						<description>Set logos/ Off</description>
 						<label>‹ Off ›</label>
@@ -1628,8 +1861,9 @@
 						<onclick>SetFocus(502)</onclick>
 						<property name="ActionLeft">Skin.SetString(ShowcaseView_Logo_Sets,On)</property>
 						<property name="ActionRight">Skin.SetString(ShowcaseView_Logo_Sets,On)</property>
-						<visible>$EXP[ShowcaseView_IsVisible] + Container.Content(sets) + !Skin.String(ShowcaseView_Details_Sets,Off) + [Skin.String(ShowcaseView_Logo_Sets,Off) | String.IsEmpty(Skin.String(ShowcaseView_Logo_Sets))]</visible>
+						<visible>$EXP[ShowcaseView_IsVisible] + Container.Content(sets) + !Skin.String(ShowcaseView_Details_Sets,Off) + [Skin.String(ShowcaseView_Logo_Sets,Off) | String.IsEmpty(Skin.String(ShowcaseView_Logo_Sets))] + $EXP[ShowcaseView_Display_Keyart_IsVisible]</visible>
 					</item>
+					<!--Keyart visible-->
 					<item id="942">
 						<description>Set logos/ On</description>
 						<label>‹ On ›</label>
@@ -1637,9 +1871,31 @@
 						<onclick>SetFocus(502)</onclick>
 						<property name="ActionLeft">Skin.SetString(ShowcaseView_Logo_Sets,Off)</property>
 						<property name="ActionRight">Skin.SetString(ShowcaseView_Logo_Sets,Off)</property>
-						<visible>$EXP[ShowcaseView_IsVisible] + Container.Content(sets) + !Skin.String(ShowcaseView_Details_Sets,Off) + Skin.String(ShowcaseView_Logo_Sets,On)</visible>
+						<visible>$EXP[ShowcaseView_IsVisible] + Container.Content(sets) + !Skin.String(ShowcaseView_Details_Sets,Off) + Skin.String(ShowcaseView_Logo_Sets,On) + $EXP[ShowcaseView_Display_Keyart_IsVisible]</visible>
 					</item>
+					<!--Keyart not visible-->
+					<item>
+						<description>Set logos/ Off</description>
+						<label>‹ Off ›</label>
+						<label2>Logos ($INFO[Container.Content])/ Off</label2>
+						<onclick>SetFocus(502)</onclick>
+						<property name="ActionLeft">Skin.SetString(ShowcaseView_Logo_Sets,On)</property>
+						<property name="ActionRight">Skin.SetString(ShowcaseView_Logo_Sets,On)</property>
+						<visible>$EXP[ShowcaseView_IsVisible] + Container.Content(sets) + !Skin.String(ShowcaseView_Details_Sets,Off) + [Skin.String(ShowcaseView_Logo_Sets,Off) | String.IsEmpty(Skin.String(ShowcaseView_Logo_Sets))] + !$EXP[ShowcaseView_Display_Keyart_IsVisible]</visible>
+					</item>
+					<!--Keyart not visible-->
+					<item>
+						<description>Set logos/ On</description>
+						<label>‹ On ›</label>
+						<label2>Logos ($INFO[Container.Content])/ On</label2>
+						<onclick>SetFocus(502)</onclick>
+						<property name="ActionLeft">Skin.SetString(ShowcaseView_Logo_Sets,Off)</property>
+						<property name="ActionRight">Skin.SetString(ShowcaseView_Logo_Sets,Off)</property>
+						<visible>$EXP[ShowcaseView_IsVisible] + Container.Content(sets) + !Skin.String(ShowcaseView_Details_Sets,Off) + Skin.String(ShowcaseView_Logo_Sets,On) + !$EXP[ShowcaseView_Display_Keyart_IsVisible]</visible>
+					</item>
+
 					<!--TV Shows-->
+					<!--Keyart visible-->
 					<item id="942">
 						<description>TV show logos/ Off</description>
 						<label>‹ Off ›</label>
@@ -1647,8 +1903,9 @@
 						<onclick>SetFocus(502)</onclick>
 						<property name="ActionLeft">Skin.SetString(ShowcaseView_Logo_TVShows,On)</property>
 						<property name="ActionRight">Skin.SetString(ShowcaseView_Logo_TVShows,On)</property>
-						<visible>$EXP[ShowcaseView_IsVisible] + Container.Content(tvshows) + !Skin.String(ShowcaseView_Details_TVShows,Off) + [Skin.String(ShowcaseView_Logo_TVShows,Off) | String.IsEmpty(Skin.String(ShowcaseView_Logo_TVShows))]</visible>
+						<visible>$EXP[ShowcaseView_IsVisible] + Container.Content(tvshows) + !Skin.String(ShowcaseView_Details_TVShows,Off) + [Skin.String(ShowcaseView_Logo_TVShows,Off) | String.IsEmpty(Skin.String(ShowcaseView_Logo_TVShows))] + $EXP[ShowcaseView_Display_Keyart_IsVisible]</visible>
 					</item>
+					<!--Keyart visible-->
 					<item id="942">
 						<description>TV show logos/ On</description>
 						<label>‹ On ›</label>
@@ -1656,11 +1913,33 @@
 						<onclick>SetFocus(502)</onclick>
 						<property name="ActionLeft">Skin.SetString(ShowcaseView_Logo_TVShows,Off)</property>
 						<property name="ActionRight">Skin.SetString(ShowcaseView_Logo_TVShows,Off)</property>
-						<visible>$EXP[ShowcaseView_IsVisible] + Container.Content(tvshows) + !Skin.String(ShowcaseView_Details_TVShows,Off) + Skin.String(ShowcaseView_Logo_TVShows,On)</visible>
+						<visible>$EXP[ShowcaseView_IsVisible] + Container.Content(tvshows) + !Skin.String(ShowcaseView_Details_TVShows,Off) + Skin.String(ShowcaseView_Logo_TVShows,On) + $EXP[ShowcaseView_Display_Keyart_IsVisible]</visible>
+					</item>
+					<!--Keyart not visible-->
+					<item>
+						<description>TV show logos/ Off</description>
+						<label>‹ Off ›</label>
+						<label2>Logos ($INFO[Container.Content])/ Off</label2>
+						<onclick>SetFocus(502)</onclick>
+						<property name="ActionLeft">Skin.SetString(ShowcaseView_Logo_TVShows,On)</property>
+						<property name="ActionRight">Skin.SetString(ShowcaseView_Logo_TVShows,On)</property>
+						<visible>$EXP[ShowcaseView_IsVisible] + Container.Content(tvshows) + !Skin.String(ShowcaseView_Details_TVShows,Off) + [Skin.String(ShowcaseView_Logo_TVShows,Off) | String.IsEmpty(Skin.String(ShowcaseView_Logo_TVShows))] + !$EXP[ShowcaseView_Display_Keyart_IsVisible]</visible>
+					</item>
+					<!--Keyart not visible-->
+					<item>
+						<description>TV show logos/ On</description>
+						<label>‹ On ›</label>
+						<label2>Logos ($INFO[Container.Content])/ On</label2>
+						<onclick>SetFocus(502)</onclick>
+						<property name="ActionLeft">Skin.SetString(ShowcaseView_Logo_TVShows,Off)</property>
+						<property name="ActionRight">Skin.SetString(ShowcaseView_Logo_TVShows,Off)</property>
+						<visible>$EXP[ShowcaseView_IsVisible] + Container.Content(tvshows) + !Skin.String(ShowcaseView_Details_TVShows,Off) + Skin.String(ShowcaseView_Logo_TVShows,On) + !$EXP[ShowcaseView_Display_Keyart_IsVisible]</visible>
 					</item>
 
 					<!--StripView Logo-->
+
 					<!--Movies-->
+					<!--Keyart visible or title selected-->
 					<item id="942">
 						<description>Movie logos / Off</description>
 						<label>‹ Off ›</label>
@@ -1668,8 +1947,9 @@
 						<onclick>SetFocus(504)</onclick>
 						<property name="ActionLeft">Skin.SetString(StripView_Logo_Movies,On)</property>
 						<property name="ActionRight">Skin.SetString(StripView_Logo_Movies,On)</property>
-						<visible>$EXP[StripView_IsVisible] + Container.Content(movies) + !$EXP[StripView_Details_Off_Movies] + [Skin.String(StripView_Logo_Movies,Off) | String.IsEmpty(Skin.String(StripView_Logo_Movies))]</visible>
+						<visible>$EXP[StripView_IsVisible] + Container.Content(movies) + !$EXP[StripView_Details_Off_Movies] + [Skin.String(StripView_Logo_Movies,Off) | String.IsEmpty(Skin.String(StripView_Logo_Movies))] + $EXP[StripView_Display_Keyart_IsVisible]</visible>
 					</item>
+					<!--Keyart visible or title selected-->
 					<item id="942">
 						<description>Movie logos / On</description>
 						<label>‹ On ›</label>
@@ -1677,9 +1957,31 @@
 						<onclick>SetFocus(504)</onclick>
 						<property name="ActionLeft">Skin.SetString(StripView_Logo_Movies,Off)</property>
 						<property name="ActionRight">Skin.SetString(StripView_Logo_Movies,Off)</property>
-						<visible>$EXP[StripView_IsVisible] + Container.Content(movies) + !$EXP[StripView_Details_Off_Movies] + Skin.String(StripView_Logo_Movies,On)</visible>
+						<visible>$EXP[StripView_IsVisible] + Container.Content(movies) + !$EXP[StripView_Details_Off_Movies] + Skin.String(StripView_Logo_Movies,On) + $EXP[StripView_Display_Keyart_IsVisible]</visible>
 					</item>
+					<!--Keyart not visible and title not selected-->
+					<item>
+						<description>Movie logos / Off</description>
+						<label>‹ Off ›</label>
+						<label2>Logos ($INFO[Container.Content]) / Off</label2>
+						<onclick>SetFocus(504)</onclick>
+						<property name="ActionLeft">Skin.SetString(StripView_Logo_Movies,On)</property>
+						<property name="ActionRight">Skin.SetString(StripView_Logo_Movies,On)</property>
+						<visible>$EXP[StripView_IsVisible] + Container.Content(movies) + !$EXP[StripView_Details_Off_Movies] + [Skin.String(StripView_Logo_Movies,Off) | String.IsEmpty(Skin.String(StripView_Logo_Movies))] + !$EXP[StripView_Display_Keyart_IsVisible]</visible>
+					</item>
+					<!--Keyart not visible and Title not selected-->
+					<item>
+						<description>Movie logos / On</description>
+						<label>‹ On ›</label>
+						<label2>Logos ($INFO[Container.Content]) / On</label2>
+						<onclick>SetFocus(504)</onclick>
+						<property name="ActionLeft">Skin.SetString(StripView_Logo_Movies,Off)</property>
+						<property name="ActionRight">Skin.SetString(StripView_Logo_Movies,Off)</property>
+						<visible>$EXP[StripView_IsVisible] + Container.Content(movies) + !$EXP[StripView_Details_Off_Movies] + Skin.String(StripView_Logo_Movies,On) + !$EXP[StripView_Display_Keyart_IsVisible]</visible>
+					</item>
+
 					<!--Sets-->
+					<!--Keyart visible or title selected-->
 					<item id="942">
 						<description>Set logos/ Off</description>
 						<label>‹ Off ›</label>
@@ -1687,8 +1989,9 @@
 						<onclick>SetFocus(504)</onclick>
 						<property name="ActionLeft">Skin.SetString(StripView_Logo_Sets,On)</property>
 						<property name="ActionRight">Skin.SetString(StripView_Logo_Sets,On)</property>
-						<visible>$EXP[StripView_IsVisible] + Container.Content(sets) + !$EXP[StripView_Details_Off_Sets] + [Skin.String(StripView_Logo_Sets,Off) | String.IsEmpty(Skin.String(StripView_Logo_Sets))]</visible>
+						<visible>$EXP[StripView_IsVisible] + Container.Content(sets) + !$EXP[StripView_Details_Off_Sets] + [Skin.String(StripView_Logo_Sets,Off) | String.IsEmpty(Skin.String(StripView_Logo_Sets))] + $EXP[StripView_Display_Keyart_IsVisible]</visible>
 					</item>
+					<!--Keyart visible or title selected-->
 					<item id="942">
 						<description>Set logos/ On</description>
 						<label>‹ On ›</label>
@@ -1696,9 +1999,31 @@
 						<onclick>SetFocus(504)</onclick>
 						<property name="ActionLeft">Skin.SetString(StripView_Logo_Sets,Off)</property>
 						<property name="ActionRight">Skin.SetString(StripView_Logo_Sets,Off)</property>
-						<visible>$EXP[StripView_IsVisible] + Container.Content(sets) + !$EXP[StripView_Details_Off_Sets] + Skin.String(StripView_Logo_Sets,On)</visible>
+						<visible>$EXP[StripView_IsVisible] + Container.Content(sets) + !$EXP[StripView_Details_Off_Sets] + Skin.String(StripView_Logo_Sets,On) + $EXP[StripView_Display_Keyart_IsVisible]</visible>
 					</item>
+					<!--Keyart not visible and title not selected-->
+					<item>
+						<description>Set logos/ Off</description>
+						<label>‹ Off ›</label>
+						<label2>Logos ($INFO[Container.Content])/ Off</label2>
+						<onclick>SetFocus(504)</onclick>
+						<property name="ActionLeft">Skin.SetString(StripView_Logo_Sets,On)</property>
+						<property name="ActionRight">Skin.SetString(StripView_Logo_Sets,On)</property>
+						<visible>$EXP[StripView_IsVisible] + Container.Content(sets) + !$EXP[StripView_Details_Off_Sets] + [Skin.String(StripView_Logo_Sets,Off) | String.IsEmpty(Skin.String(StripView_Logo_Sets))] + !$EXP[StripView_Display_Keyart_IsVisible]</visible>
+					</item>
+					<!--Keyart not visible and title not selected-->
+					<item>
+						<description>Set logos/ On</description>
+						<label>‹ On ›</label>
+						<label2>Logos ($INFO[Container.Content])/ On</label2>
+						<onclick>SetFocus(504)</onclick>
+						<property name="ActionLeft">Skin.SetString(StripView_Logo_Sets,Off)</property>
+						<property name="ActionRight">Skin.SetString(StripView_Logo_Sets,Off)</property>
+						<visible>$EXP[StripView_IsVisible] + Container.Content(sets) + !$EXP[StripView_Details_Off_Sets] + Skin.String(StripView_Logo_Sets,On) + !$EXP[StripView_Display_Keyart_IsVisible]</visible>
+					</item>
+
 					<!--TV Shows-->
+					<!--Keyart visible or title selected-->
 					<item id="942">
 						<description>TV show logos/ Off</description>
 						<label>‹ Off ›</label>
@@ -1706,8 +2031,9 @@
 						<onclick>SetFocus(504)</onclick>
 						<property name="ActionLeft">Skin.SetString(StripView_Logo_TVShows,On)</property>
 						<property name="ActionRight">Skin.SetString(StripView_Logo_TVShows,On)</property>
-						<visible>$EXP[StripView_IsVisible] + Container.Content(tvshows) + !$EXP[StripView_Details_Off_TVShows] + [Skin.String(StripView_Logo_TVShows,Off) | String.IsEmpty(Skin.String(StripView_Logo_TVShows))]</visible>
+						<visible>$EXP[StripView_IsVisible] + Container.Content(tvshows) + !$EXP[StripView_Details_Off_TVShows] + [Skin.String(StripView_Logo_TVShows,Off) | String.IsEmpty(Skin.String(StripView_Logo_TVShows))] + $EXP[StripView_Display_Keyart_IsVisible]</visible>
 					</item>
+					<!--Keyart visible or title selected-->
 					<item id="942">
 						<description>TV show logos/ On</description>
 						<label>‹ On ›</label>
@@ -1715,7 +2041,27 @@
 						<onclick>SetFocus(504)</onclick>
 						<property name="ActionLeft">Skin.SetString(StripView_Logo_TVShows,Off)</property>
 						<property name="ActionRight">Skin.SetString(StripView_Logo_TVShows,Off)</property>
-						<visible>$EXP[StripView_IsVisible] + Container.Content(tvshows) + !$EXP[StripView_Details_Off_TVShows] + Skin.String(StripView_Logo_TVShows,On)</visible>
+						<visible>$EXP[StripView_IsVisible] + Container.Content(tvshows) + !$EXP[StripView_Details_Off_TVShows] + Skin.String(StripView_Logo_TVShows,On) + $EXP[StripView_Display_Keyart_IsVisible]</visible>
+					</item>
+					<!--Keyart not visible and title not selected-->
+					<item>
+						<description>TV show logos/ Off</description>
+						<label>‹ Off ›</label>
+						<label2>Logos ($INFO[Container.Content])/ Off</label2>
+						<onclick>SetFocus(504)</onclick>
+						<property name="ActionLeft">Skin.SetString(StripView_Logo_TVShows,On)</property>
+						<property name="ActionRight">Skin.SetString(StripView_Logo_TVShows,On)</property>
+						<visible>$EXP[StripView_IsVisible] + Container.Content(tvshows) + !$EXP[StripView_Details_Off_TVShows] + [Skin.String(StripView_Logo_TVShows,Off) | String.IsEmpty(Skin.String(StripView_Logo_TVShows))] + !$EXP[StripView_Display_Keyart_IsVisible]</visible>
+					</item>
+					<!--Keyart not visible and title not selected-->
+					<item>
+						<description>TV show logos/ On</description>
+						<label>‹ On ›</label>
+						<label2>Logos ($INFO[Container.Content])/ On</label2>
+						<onclick>SetFocus(504)</onclick>
+						<property name="ActionLeft">Skin.SetString(StripView_Logo_TVShows,Off)</property>
+						<property name="ActionRight">Skin.SetString(StripView_Logo_TVShows,Off)</property>
+						<visible>$EXP[StripView_IsVisible] + Container.Content(tvshows) + !$EXP[StripView_Details_Off_TVShows] + Skin.String(StripView_Logo_TVShows,On) + !$EXP[StripView_Display_Keyart_IsVisible]</visible>
 					</item>
 
 
