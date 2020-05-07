@@ -143,6 +143,46 @@
 				<visible>$EXP[BillboardView_IsVisible] | $EXP[ShowcaseView_IsVisible] | $EXP[StripView_IsVisible]</visible>
 				<include>ScrollBarAnimation</include>
 			</control>
+
+			<!--Horizontal Scrollbar [showcase square]-->
+			<control type="scrollbar" id="60">
+				<description>Scrollbar horizontal</description>
+				<left>1200</left>
+				<bottom>27</bottom>
+				<width>600</width>
+				<height>6</height>
+				<onup>50</onup>
+				<ondown>SetFocus(3000,0)</ondown>
+				<showonepage>false</showonepage>
+				<orientation>horizontal</orientation>
+				<texturesliderbackground colordiffuse="$VAR[ScrollBarColor]">views/white_10.png</texturesliderbackground>
+				<texturesliderbar colordiffuse="$VAR[ScrollBarColor]">views/white_50.png</texturesliderbar>
+				<texturesliderbarfocus colordiffuse="$VAR[ScrollBarColor]">views/white_100.png</texturesliderbarfocus>
+				<textureslidernib></textureslidernib>
+				<textureslidernibfocus></textureslidernibfocus>
+				<visible>$EXP[ShowcaseView_IsVisible] + $EXP[ShowcaseView_Display_IsSquare]</visible>
+				<include>ScrollBarAnimation</include>
+			</control>
+
+			<!--Horizontal Scrollbar [showcase posters]-->
+			<control type="scrollbar" id="60">
+				<description>Scrollbar horizontal</description>
+				<left>900</left>
+				<bottom>27</bottom>
+				<width>840</width>
+				<height>6</height>
+				<onup>50</onup>
+				<ondown>SetFocus(3000,0)</ondown>
+				<showonepage>false</showonepage>
+				<orientation>horizontal</orientation>
+				<texturesliderbackground colordiffuse="$VAR[ScrollBarColor]">views/white_10.png</texturesliderbackground>
+				<texturesliderbar colordiffuse="$VAR[ScrollBarColor]">views/white_50.png</texturesliderbar>
+				<texturesliderbarfocus colordiffuse="$VAR[ScrollBarColor]">views/white_100.png</texturesliderbarfocus>
+				<textureslidernib></textureslidernib>
+				<textureslidernibfocus></textureslidernibfocus>
+				<visible>$EXP[ShowcaseView_IsVisible] + $EXP[ShowcaseView_Display_IsPosters]</visible>
+				<include>ScrollBarAnimation</include>
+			</control>
 		</control>
 
 		<!--Viewtype Options Menu-->
@@ -162,9 +202,9 @@
 				<height>620</height>
 				<onup>0</onup>
 				<ondown>0</ondown>
+				<onback>50</onback>
 				<onfocus>SetProperty(OptionsMenu,Active,Home)</onfocus>
 				<onunfocus condition="!String.IsEmpty(window(Home).property(OptionsMenu))">ClearProperty(OptionsMenu,Home)</onunfocus>
-				<onback>50</onback>
 				<onleft condition="String.IsEmpty(Container(3000).ListItem.Property(ActionLeft))">50</onleft>
 				<onright condition="String.IsEmpty(Container(3000).ListItem.Property(ActionRight))">50</onright>
 				<onleft condition="!String.IsEmpty(Container(3000).ListItem.Property(ActionLeft))">$INFO[Container(3000).ListItem.Property(ActionLeft)]</onleft>
@@ -176,6 +216,22 @@
 				<onleft condition="Container(3000).HasFocus(943)">SetFocus(940)</onleft>
 				<!--Transition on right only-->
 				<onright condition="Container(3000).HasFocus(944)">SetFocus(940)</onright>
+				<!--Showcase: Turn off Logos & transition on left only-->
+				<onleft condition="Container(3000).HasFocus(947)">Skin.SetString(ShowcaseView_Logo_Artists,Off)</onleft>
+				<onleft condition="Container(3000).HasFocus(947)">SetFocus(940)</onleft>
+				<!--Showcase: Turn off Logos & transition on right only-->
+				<onright condition="Container(3000).HasFocus(948)">Skin.SetString(ShowcaseView_Logo_Artists,Off)</onright>
+				<onright condition="Container(3000).HasFocus(948)">SetFocus(940)</onright>
+				<!--Strip: Turn off Logos & transition on right only-->
+				<onright condition="Container(3000).HasFocus(946)">Skin.SetString(StripView_Logo_Artists,Off)</onright>
+				<onright condition="Container(3000).HasFocus(946)">SetFocus(940)</onright>
+				<!--Strip: Turn off Logos & transition on left only-->
+				<onleft condition="Container(3000).HasFocus(949)">Skin.SetString(StripView_Logo_Artists,Off)</onleft>
+				<onleft condition="Container(3000).HasFocus(949)">SetFocus(940)</onleft>
+				<!--Strip: Turn off Logos on left only-->
+				<onleft condition="Container(3000).HasFocus(950)">Skin.SetString(StripView_Logo_Artists,Off)</onleft>
+				<!--Strip: Turn off Logos on right only-->
+				<onright condition="Container(3000).HasFocus(945)">Skin.SetString(StripView_Logo_Artists,Off)</onright>
 				<orientation>vertical</orientation>
 				<focusposition>0</focusposition>
 				<movement>12</movement>
@@ -205,7 +261,7 @@
 					</include>
 				</focusedlayout>
 				<content>
-					<!--Viewtypes-->
+<!--VIEWTYPES-->
 					<item>
 						<description>View / List</description>
 						<onclick>SetFocus(50)</onclick>
@@ -252,9 +308,9 @@
 						<visible>$EXP[GridView_IsVisible] + Integer.IsGreater(Container.ViewCount,1)</visible>
 					</item>
 
-<!--DISPLAY-->
-					<!--List View Display-->
-					<!--Artists-->
+<!--LISTVIEW OPTIONS
+<!--LISTVIEW DISPLAY-->
+<!--ARTISTS-->
 					<item id="942">
 						<description>Display (artists) / Background</description>
 						<label>‹ Background ›</label>
@@ -273,7 +329,7 @@
 						<property name="ActionRight">Skin.SetString(ListView_Display_Artists,Background)</property>
 						<visible>$EXP[ListView_IsVisible] + $EXP[ListView_Display_IsThumbnails_Artists]</visible>
 					</item>
-					<!--Albums-->
+<!--ALBUMS-->
 					<item id="942">
 						<description>Display (albums) / Background</description>
 						<label>‹ Background ›</label>
@@ -292,7 +348,7 @@
 						<property name="ActionRight">Skin.SetString(ListView_Display_Albums,Background)</property>
 						<visible>$EXP[ListView_IsVisible] + $EXP[ListView_Display_IsThumbnails_Albums]</visible>
 					</item>
-					<!--Songs-->
+<!--SONGS-->
 					<item id="942">
 						<description>Display (songs) / Background</description>
 						<label>‹ Background ›</label>
@@ -311,53 +367,8 @@
 						<property name="ActionRight">Skin.SetString(ListView_Display_Songs,Background)</property>
 						<visible>$EXP[ListView_IsVisible] + $EXP[ListView_Display_IsThumbnails_Songs]</visible>
 					</item>
-
-					<!--Strip View Display-->
-					<!--Artists-->
-					<item>
-						<description>Display (artists) / Fanart</description>
-						<label>‹ Fanart ›</label>
-						<label2>Display ($INFO[Container.Content]) / Fanart</label2>
-						<onclick>SetFocus(504)</onclick>
-						<property name="ActionLeft">Skin.SetString(StripView_Display_Artists,Square)</property>
-						<property name="ActionRight">Skin.SetString(StripView_Display_Artists,Square)</property>
-						<visible>$EXP[StripView_IsVisible] + $EXP[StripView_Display_IsFanart_Artists]</visible>
-					</item>
-					<item>
-						<description>Display / Square</description>
-						<label>‹ Square ›</label>
-						<label2>Display ($INFO[Container.Content]) / Square</label2>
-						<onclick>SetFocus(504)</onclick>
-						<property name="ActionLeft">Skin.SetString(StripView_Display_Artists,Fanart)</property>
-						<property name="ActionRight">Skin.SetString(StripView_Display_Artists,Fanart)</property>
-						<visible>$EXP[StripView_IsVisible] + $EXP[StripView_Display_IsSquare_Artists]</visible>
-					</item>
-
-
-					<!--GridView Display-->
-					<!--Artists-->
-					<item id="942">
-						<description>Display (artists) / Fanart</description>
-						<label>‹ Fanart ›</label>
-						<label2>Display ($INFO[Container.Content]) / Fanart</label2>
-						<onclick>SetFocus(504)</onclick>
-						<property name="ActionLeft">Skin.SetString(GridView_Display_Artists,Square)</property>
-						<property name="ActionRight">Skin.SetString(GridView_Display_Artists,Square)</property>
-						<visible>$EXP[GridView_IsVisible] + $EXP[GridView_Display_IsFanart_Artists]</visible>
-					</item>
-					<item id="942">
-						<description>Display (artists) / Square</description>
-						<label>‹ Square ›</label>
-						<label2>Display ($INFO[Container.Content]) / Square</label2>
-						<onclick>SetFocus(504)</onclick>
-						<property name="ActionLeft">Skin.SetString(GridView_Display_IsFanart_Artists,Fanart)</property>
-						<property name="ActionRight">Skin.SetString(GridView_Display_Artists,Fanart)</property>
-						<visible>$EXP[GridView_IsVisible] + $EXP[GridView_Display_IsSquare_Artists]</visible>
-					</item>
-
-<!--DETAILS-->
-					<!--List View Details -->
-					<!--Artists-->
+<!--LISTVIEW DETAILS-->
+<!--ARTISTS-->
 					<item>
 						<description>Details (artists) / Title</description>
 						<label>‹ Title ›</label>
@@ -376,7 +387,7 @@
 						<property name="ActionRight">Skin.SetString(ListView_Details_Artists,Title)</property>
 						<visible>$EXP[ListView_IsVisible] + Container.Content(artists) + Skin.String(ListView_Details_Artists,TitleAndInfo)</visible>
 					</item>
-					<!--Albums-->
+<!--ALBUMS-->
 					<item>
 						<description>Details (albums) / Title</description>
 						<label>‹ Title ›</label>
@@ -395,7 +406,7 @@
 						<property name="ActionRight">Skin.SetString(ListView_Details_Albums,Title)</property>
 						<visible>$EXP[ListView_IsVisible] + Container.Content(albums) + Skin.String(ListView_Details_Albums,TitleAndInfo)</visible>
 					</item>
-					<!--Songs-->
+<!--SONGS-->
 					<item>
 						<description>Details (songs) / Title</description>
 						<label>‹ Title ›</label>
@@ -415,8 +426,10 @@
 						<visible>$EXP[ListView_IsVisible] + Container.Content(songs) + Skin.String(ListView_Details_Songs,TitleAndInfo)</visible>
 					</item>
 
-					<!--Billboard View Details-->
-					<!--Artists-->
+
+<!--BILLBOARDVIEW OPTIONS-->
+<!--BILLBOARDVIEW DETAILS-->
+<!--ARTISTS-->
 					<item id="943">
 						<description>Details (artists) / Title</description>
 						<label>‹ Title ›</label>
@@ -453,9 +466,31 @@
 						<property name="ActionRight">Skin.SetString(BillboardView_Details_Artists,Title)</property>
 						<visible>$EXP[BillboardView_IsVisible] + Container.Content(artists) + [Skin.String(BillboardView_Details_Artists,All) | String.IsEmpty(Skin.String(BillboardView_Details_Artists))]</visible>
 					</item>
+<!--BILLBOARDVIEW LOGOS-->
+<!--ARTISTS-->
+					<item>
+						<description>Artist logos/ Off</description>
+						<label>‹ Off ›</label>
+						<label2>Logos ($INFO[Container.Content])/ Off</label2>
+						<onclick>SetFocus(501)</onclick>
+						<property name="ActionLeft">Skin.SetString(BillboardView_Logo_Artists,On)</property>
+						<property name="ActionRight">Skin.SetString(BillboardView_Logo_Artists,On)</property>
+						<visible>$EXP[BillboardView_IsVisible] + Container.Content(artists) + !Skin.String(BillboardView_Details_Artists,Off) + [Skin.String(BillboardView_Logo_Artists,Off) | String.IsEmpty(Skin.String(BillboardView_Logo_Artists))]</visible>
+					</item>
+					<item>
+						<description>Artist logos/ On</description>
+						<label>‹ On ›</label>
+						<label2>Logos ($INFO[Container.Content])/ On</label2>
+						<onclick>SetFocus(501)</onclick>
+						<property name="ActionLeft">Skin.SetString(BillboardView_Logo_Artists,Off)</property>
+						<property name="ActionRight">Skin.SetString(BillboardView_Logo_Artists,Off)</property>
+						<visible>$EXP[BillboardView_IsVisible] + Container.Content(artists) + !Skin.String(BillboardView_Details_Artists,Off) + Skin.String(BillboardView_Logo_Artists,On)</visible>
+					</item>
 
-					<!--Showcase View Details-->
-					<!--Artists-->
+
+<!--SHOWCASEVIEW OPTIONS-->
+<!--SHOWCASEVIEW DETAILS-->
+<!--ARTISTS-->
 					<item id="942">
 						<description>Artist Details / Off</description>
 						<label>‹ Off ›</label>
@@ -501,7 +536,7 @@
 						<property name="ActionRight">Skin.SetString(ShowcaseView_Details_Artists,Off)</property>
 						<visible>$EXP[ShowcaseView_IsVisible] + Container.Content(artists) + [Skin.String(ShowcaseView_Details_Artists,All) | String.IsEmpty(Skin.String(ShowcaseView_Details_Artists))]</visible>
 					</item>
-					<!--Albums-->
+<!--ALBUMS-->
 					<item id="942">
 						<description>Album Details / Off</description>
 						<label>‹ Off ›</label>
@@ -547,9 +582,62 @@
 						<property name="ActionRight">Skin.SetString(ShowcaseView_Details_Albums,Off)</property>
 						<visible>$EXP[ShowcaseView_IsVisible] + Container.Content(albums) + [Skin.String(ShowcaseView_Details_Albums,All) | String.IsEmpty(Skin.String(ShowcaseView_Details_Albums))]</visible>
 					</item>
+<!--SHOWCASEVIEW LOGOS-->
+<!--ARTISTS-->
+					<item>
+						<description>Artist logos/ Off</description>
+						<label>‹ Off ›</label>
+						<label2>Logos ($INFO[Container.Content])/ Off</label2>
+						<onclick>SetFocus(504)</onclick>
+						<property name="ActionLeft">Skin.SetString(ShowcaseView_Logo_Artists,On)</property>
+						<property name="ActionRight">Skin.SetString(ShowcaseView_Logo_Artists,On)</property>
+						<visible>$EXP[ShowcaseView_IsVisible] + Container.Content(artists) + !Skin.String(ShowcaseView_Details_Artists,Off) + [Skin.String(ShowcaseView_Logo_Artists,Off) | String.IsEmpty(Skin.String(ShowcaseView_Logo_Artists))]</visible>
+					</item>
+					<item>
+						<description>Artist logos/ On</description>
+						<label>‹ On ›</label>
+						<label2>Logos ($INFO[Container.Content])/ On</label2>
+						<onclick>SetFocus(504)</onclick>
+						<property name="ActionLeft">Skin.SetString(ShowcaseView_Logo_Artists,Off)</property>
+						<property name="ActionRight">Skin.SetString(ShowcaseView_Logo_Artists,Off)</property>
+						<visible>$EXP[ShowcaseView_IsVisible] + Container.Content(artists) + !Skin.String(ShowcaseView_Details_Artists,Off) + Skin.String(ShowcaseView_Logo_Artists,On)</visible>
+					</item>
 
-					<!--Strip View Details-->
-					<!--Artists-->
+<!--STRIPVIEW OPTIONS-->
+<!--STRIPVIEW DISPLAY-->
+<!--ARTISTS-->
+					<item>
+						<description>Display (artists) / Fanart</description>
+						<label>‹ Fanart ›</label>
+						<label2>Display ($INFO[Container.Content]) / Fanart</label2>
+						<onclick>SetFocus(504)</onclick>
+						<property name="ActionLeft">Skin.SetString(StripView_Display_Artists,Square)</property>
+						<property name="ActionRight">Skin.SetString(StripView_Display_Artists,Square)</property>
+						<visible>$EXP[StripView_IsVisible] + $EXP[StripView_Display_IsFanart_Artists]</visible>
+					</item>
+					<item>
+						<description>Display / Square</description>
+						<label>‹ Square ›</label>
+						<label2>Display ($INFO[Container.Content]) / Square</label2>
+						<onclick>SetFocus(504)</onclick>
+						<property name="ActionLeft">Skin.SetString(StripView_Display_Artists,Fanart)</property>
+						<property name="ActionRight">Skin.SetString(StripView_Display_Artists,Fanart)</property>
+						<visible>$EXP[StripView_IsVisible] + $EXP[StripView_Display_IsSquare_Artists]</visible>
+					</item>
+<!--STRIPVIEW DETAILS-->
+<!--ARTISTS-->
+					<!--OFF-->
+					<!--[Square + !Logo + !Currentitem:1]-->
+					<item id="942">
+						<description>Details (artists) / Off</description>
+						<label>‹ Off ›</label>
+						<label2>$LOCALIZE[32109] ($INFO[Container.Content]) / Off</label2>
+						<onclick>SetFocus(504)</onclick>
+						<property name="ActionLeft">Skin.SetString(StripView_Details_Artists,All)</property>
+						<property name="ActionRight">Skin.SetString(StripView_Details_Artists,Title)</property>
+						<visible>$EXP[StripView_IsVisible] + Container.Content(artists) + Skin.String(StripView_Details_Artists,Off) + [$EXP[StripView_Display_IsSquare_Artists] + !$EXP[StripView_Details_Logo_IsOn] + !String.IsEqual(Container(504).CurrentItem,1)]</visible>
+					</item>
+					<!--[Square + !Logo + !Currentitem:1]-->
 					<item id="943">
 						<description>Details (artists) / Off</description>
 						<label>‹ Off ›</label>
@@ -557,8 +645,20 @@
 						<onclick>SetFocus(504)</onclick>
 						<property name="ActionLeft">Skin.SetString(StripView_Details_Artists,All)</property>
 						<property name="ActionRight">Skin.SetString(StripView_Details_Artists,Title)</property>
-						<visible>$EXP[StripView_IsVisible] + Container.Content(artists) + Skin.String(StripView_Details_Artists,Off)</visible>
+						<visible>$EXP[StripView_IsVisible] + Container.Content(artists) + Skin.String(StripView_Details_Artists,Off) + ![$EXP[StripView_Display_IsSquare_Artists] + !$EXP[StripView_Details_Logo_IsOn] + !String.IsEqual(Container(504).CurrentItem,1)]</visible>
 					</item>
+					<!--TITLE-->
+					<!--Logo-->
+					<item id="949">
+						<description>Details (artists) / Title</description>
+						<label>‹ Title ›</label>
+						<label2>$LOCALIZE[32109] ($INFO[Container.Content]) / Title</label2>
+						<onclick>SetFocus(504)</onclick>
+						<property name="ActionLeft">Skin.SetString(StripView_Details_Artists,Off)</property>
+						<property name="ActionRight">Skin.SetString(StripView_Details_Artists,TitleAndInfo)</property>
+						<visible>$EXP[StripView_IsVisible] + Container.Content(artists) + Skin.String(StripView_Details_Artists,Title) + $EXP[StripView_Details_Logo_IsOn]</visible>
+					</item>
+					<!--!Logo-->
 					<item id="944">
 						<description>Details (artists) / Title</description>
 						<label>‹ Title ›</label>
@@ -566,36 +666,51 @@
 						<onclick>SetFocus(504)</onclick>
 						<property name="ActionLeft">Skin.SetString(StripView_Details_Artists,Off)</property>
 						<property name="ActionRight">Skin.SetString(StripView_Details_Artists,TitleAndInfo)</property>
-						<visible>$EXP[StripView_IsVisible] + Container.Content(artists) + Skin.String(StripView_Details_Artists,Title)</visible>
+						<visible>$EXP[StripView_IsVisible] + Container.Content(artists) + Skin.String(StripView_Details_Artists,Title) + !$EXP[StripView_Details_Logo_IsOn]</visible>
 					</item>
-					<item id="943">
-						<description>Artist Details / Title And Info</description>
-						<label>‹ Title And Info ›</label>
-						<label2>Details ($INFO[Container.Content]) / Title And Info</label2>
+					<!--TITLE AND INFO-->
+					<!--Logo-->
+					<item>
+						<description>Details (artists) / Title and Info</description>
+						<label>‹ Title and Info ›</label>
+						<label2>$LOCALIZE[32109] ($INFO[Container.Content]) / Title and Info</label2>
 						<onclick>SetFocus(504)</onclick>
 						<property name="ActionLeft">Skin.SetString(StripView_Details_Artists,Title)</property>
 						<property name="ActionRight">Skin.SetString(StripView_Details_Artists,TitleAndPlot)</property>
-						<visible>$EXP[StripView_IsVisible] + Container.Content(artists) + Skin.String(StripView_Details_Artists,TitleAndInfo)</visible>
+						<visible>$EXP[StripView_IsVisible] + Container.Content(artists) + Skin.String(StripView_Details_Artists,TitleAndInfo) + $EXP[StripView_Details_Logo_IsOn]</visible>
 					</item>
+					<!--!Logo-->
+					<item id="943">
+						<description>Details (artists) / Title and Info</description>
+						<label>‹ Title and Info ›</label>
+						<label2>$LOCALIZE[32109] ($INFO[Container.Content]) / Title and Info</label2>
+						<onclick>SetFocus(504)</onclick>
+						<property name="ActionLeft">Skin.SetString(StripView_Details_Artists,Title)</property>
+						<property name="ActionRight">Skin.SetString(StripView_Details_Artists,TitleAndPlot)</property>
+						<visible>$EXP[StripView_IsVisible] + Container.Content(artists) + Skin.String(StripView_Details_Artists,TitleAndInfo) + !$EXP[StripView_Details_Logo_IsOn]</visible>
+					</item>
+					<!--TITLE AND PLOT-->
 					<item>
-						<description>Artist Details / Title And Plot</description>
+						<description>Details (artists) / Title and Plot</description>
 						<label>‹ Title and Plot ›</label>
-						<label2>Details ($INFO[Container.Content]) / Title and Plot</label2>
+						<label2>$LOCALIZE[32109] ($INFO[Container.Content]) / Title and Plot</label2>
 						<onclick>SetFocus(504)</onclick>
 						<property name="ActionLeft">Skin.SetString(StripView_Details_Artists,TitleAndInfo)</property>
 						<property name="ActionRight">Skin.SetString(StripView_Details_Artists,All)</property>
 						<visible>$EXP[StripView_IsVisible] + Container.Content(artists) + Skin.String(StripView_Details_Artists,TitleAndPlot)</visible>
 					</item>
-					<item id="944">
-						<description>Artist Details / All</description>
-						<label>‹ All ›</label>
-						<label2>Details ($INFO[Container.Content]) / All</label2>
+					<!--ALL-->
+					<item id="946">
+						<description>Details (artists) / All</description>
+						<label>‹ All›</label>
+						<label2>$LOCALIZE[32109] ($INFO[Container.Content]) / All</label2>
 						<onclick>SetFocus(504)</onclick>
 						<property name="ActionLeft">Skin.SetString(StripView_Details_Artists,TitleAndPlot)</property>
 						<property name="ActionRight">Skin.SetString(StripView_Details_Artists,Off)</property>
 						<visible>$EXP[StripView_IsVisible] + Container.Content(artists) + [Skin.String(StripView_Details_Artists,All) | String.IsEmpty(Skin.String(StripView_Details_Artists))]</visible>
 					</item>
-					<!--Albums-->
+<!--ALBUMS-->
+					<!--OFF-->
 					<item id="943">
 						<description>Details (albums) / Off</description>
 						<label>‹ Off ›</label>
@@ -605,6 +720,7 @@
 						<property name="ActionRight">Skin.SetString(StripView_Details_Albums,Title)</property>
 						<visible>$EXP[StripView_IsVisible] + Container.Content(albums) + Skin.String(StripView_Details_Albums,Off)</visible>
 					</item>
+					<!--TITLE-->
 					<item id="944">
 						<description>Details (albums) / Title</description>
 						<label>‹ Title ›</label>
@@ -614,36 +730,105 @@
 						<property name="ActionRight">Skin.SetString(StripView_Details_Albums,TitleAndInfo)</property>
 						<visible>$EXP[StripView_IsVisible] + Container.Content(albums) + Skin.String(StripView_Details_Albums,Title)</visible>
 					</item>
+					<!--TITLE AND INFO-->
 					<item id="943">
-						<description>Album Details / Title And Info</description>
-						<label>‹ Title And Info ›</label>
-						<label2>Details ($INFO[Container.Content]) / Title And Info</label2>
+						<description>Details (albums) / Title and Info</description>
+						<label>‹ Title and Info ›</label>
+						<label2>$LOCALIZE[32109] ($INFO[Container.Content]) / Title and Info</label2>
 						<onclick>SetFocus(504)</onclick>
 						<property name="ActionLeft">Skin.SetString(StripView_Details_Albums,Title)</property>
 						<property name="ActionRight">Skin.SetString(StripView_Details_Albums,TitleAndPlot)</property>
 						<visible>$EXP[StripView_IsVisible] + Container.Content(albums) + Skin.String(StripView_Details_Albums,TitleAndInfo)</visible>
 					</item>
+					<!--TITLE AND PLOT-->
 					<item>
-						<description>Album Details / Title And Plot</description>
+						<description>Details (albums) / Title and Plot</description>
 						<label>‹ Title and Plot ›</label>
-						<label2>Details ($INFO[Container.Content]) / Title and Plot</label2>
+						<label2>$LOCALIZE[32109] ($INFO[Container.Content]) / Title and Plot</label2>
 						<onclick>SetFocus(504)</onclick>
 						<property name="ActionLeft">Skin.SetString(StripView_Details_Albums,TitleAndInfo)</property>
 						<property name="ActionRight">Skin.SetString(StripView_Details_Albums,All)</property>
 						<visible>$EXP[StripView_IsVisible] + Container.Content(albums) + Skin.String(StripView_Details_Albums,TitleAndPlot)</visible>
 					</item>
+					<!--ALL-->
 					<item id="944">
-						<description>Album Details / All</description>
-						<label>‹ All ›</label>
-						<label2>Details ($INFO[Container.Content]) / All</label2>
+						<description>Details (albums) / All</description>
+						<label>‹ All›</label>
+						<label2>$LOCALIZE[32109] ($INFO[Container.Content]) / All</label2>
 						<onclick>SetFocus(504)</onclick>
 						<property name="ActionLeft">Skin.SetString(StripView_Details_Albums,TitleAndPlot)</property>
 						<property name="ActionRight">Skin.SetString(StripView_Details_Albums,Off)</property>
 						<visible>$EXP[StripView_IsVisible] + Container.Content(albums) + [Skin.String(StripView_Details_Albums,All) | String.IsEmpty(Skin.String(StripView_Details_Albums))]</visible>
 					</item>
+<!--STRIPVIEW LOGO-->
+<!--ARTISTS-->
+					<!--OFF-->
+					<!--Title-->
+					<item id="942">
+						<description>Artist logos/ Off</description>
+						<label>‹ Off ›</label>
+						<label2>Logos ($INFO[Container.Content])/ Off</label2>
+						<onclick>SetFocus(504)</onclick>
+						<property name="ActionLeft">Skin.SetString(StripView_Logo_Artists,On)</property>
+						<property name="ActionRight">Skin.SetString(StripView_Logo_Artists,On)</property>
+						<visible>$EXP[StripView_IsVisible] + Container.Content(artists) + !$EXP[StripView_Details_Off_Artists] + [Skin.String(StripView_Logo_Artists,Off) | String.IsEmpty(Skin.String(StripView_Logo_Artists))] + $EXP[StripView_Details_Title_Artists]</visible>
+					</item>
+					<!--!Title-->
+					<item>
+						<description>Artist logos/ Off</description>
+						<label>‹ Off ›</label>
+						<label2>Logos ($INFO[Container.Content])/ Off</label2>
+						<onclick>SetFocus(504)</onclick>
+						<property name="ActionLeft">Skin.SetString(StripView_Logo_Artists,On)</property>
+						<property name="ActionRight">Skin.SetString(StripView_Logo_Artists,On)</property>
+						<visible>$EXP[StripView_IsVisible] + Container.Content(artists) + !$EXP[StripView_Details_Off_Artists] + [Skin.String(StripView_Logo_Artists,Off) | String.IsEmpty(Skin.String(StripView_Logo_Artists))] + !$EXP[StripView_Details_Title_Artists]</visible>
+					</item>
+					<!--ON-->
+					<!--Title-->
+					<item id="942">
+						<description>Artist logos/ On</description>
+						<label>‹ On ›</label>
+						<label2>Logos ($INFO[Container.Content])/ On</label2>
+						<onclick>SetFocus(504)</onclick>
+						<property name="ActionLeft">Skin.SetString(StripView_Logo_Artists,Off)</property>
+						<property name="ActionRight">Skin.SetString(StripView_Logo_Artists,Off)</property>
+						<visible>$EXP[StripView_IsVisible] + Container.Content(artists) + !$EXP[StripView_Details_Off_Artists] + Skin.String(StripView_Logo_Artists,On) + $EXP[StripView_Details_Title_Artists]</visible>
+					</item>
+					<!--!Title-->
+					<item>
+						<description>Artist logos/ On</description>
+						<label>‹ On ›</label>
+						<label2>Logos ($INFO[Container.Content])/ On</label2>
+						<onclick>SetFocus(504)</onclick>
+						<property name="ActionLeft">Skin.SetString(StripView_Logo_Artists,Off)</property>
+						<property name="ActionRight">Skin.SetString(StripView_Logo_Artists,Off)</property>
+						<visible>$EXP[StripView_IsVisible] + Container.Content(artists) + !$EXP[StripView_Details_Off_Artists] + Skin.String(StripView_Logo_Artists,On) + !$EXP[StripView_Details_Title_Artists]</visible>
+					</item>
 
-					<!--Grid View Details-->
-					<!--Artists-->
+
+<!--GRIDVIEW OPTIONS-->
+<!--GRIDVIEW DISPLAY-->
+<!--ARTISTS-->
+					<item id="942">
+						<description>Display (artists) / Fanart</description>
+						<label>‹ Fanart ›</label>
+						<label2>Display ($INFO[Container.Content]) / Fanart</label2>
+						<onclick>SetFocus(504)</onclick>
+						<property name="ActionLeft">Skin.SetString(GridView_Display_Artists,Square)</property>
+						<property name="ActionRight">Skin.SetString(GridView_Display_Artists,Square)</property>
+						<visible>$EXP[GridView_IsVisible] + $EXP[GridView_Display_IsFanart_Artists]</visible>
+					</item>
+					<item id="942">
+						<description>Display (artists) / Square</description>
+						<label>‹ Square ›</label>
+						<label2>Display ($INFO[Container.Content]) / Square</label2>
+						<onclick>SetFocus(504)</onclick>
+						<property name="ActionLeft">Skin.SetString(GridView_Display_IsFanart_Artists,Fanart)</property>
+						<property name="ActionRight">Skin.SetString(GridView_Display_Artists,Fanart)</property>
+						<visible>$EXP[GridView_IsVisible] + $EXP[GridView_Display_IsSquare_Artists]</visible>
+					</item>
+<!--GRIDVIEW DETAILS-->
+<!--ARTISTS-->
 					<item id="942">
 						<description>Details (artists) / Off</description>
 						<label>‹ Off ›</label>
@@ -671,7 +856,7 @@
 						<property name="ActionRight">Skin.SetString(GridView_Details_Artists,Off)</property>
 						<visible>$EXP[GridView_IsVisible] + Container.Content(artists) + [Skin.String(GridView_Details_Artists,TitleAndInfo) | String.IsEmpty(Skin.String(GridView_Details_Artists))]</visible>
 					</item>
-					<!--Albums-->
+<!--ALBUMS-->
 					<item id="942">
 						<description>Details (albums) / Off</description>
 						<label>‹ Off ›</label>
@@ -698,70 +883,6 @@
 						<property name="ActionLeft">Skin.SetString(GridView_Details_Albums,Title)</property>
 						<property name="ActionRight">Skin.SetString(GridView_Details_Albums,Off)</property>
 						<visible>$EXP[GridView_IsVisible] + Container.Content(albums) + [Skin.String(GridView_Details_Albums,TitleAndInfo) | String.IsEmpty(Skin.String(GridView_Details_Albums))]</visible>
-					</item>
-
-<!--LOGO-->
-					<!--Billboard View Logo-->
-					<!--Artists-->
-					<item>
-						<description>Artist logos/ Off</description>
-						<label>‹ Off ›</label>
-						<label2>Logos ($INFO[Container.Content])/ Off</label2>
-						<onclick>SetFocus(501)</onclick>
-						<property name="ActionLeft">Skin.SetString(BillboardView_Logo_Artists,On)</property>
-						<property name="ActionRight">Skin.SetString(BillboardView_Logo_Artists,On)</property>
-						<visible>$EXP[BillboardView_IsVisible] + Container.Content(artists) + !Skin.String(BillboardView_Details_Artists,Off) + [Skin.String(BillboardView_Logo_Artists,Off) | String.IsEmpty(Skin.String(BillboardView_Logo_Artists))]</visible>
-					</item>
-					<item>
-						<description>Artist logos/ On</description>
-						<label>‹ On ›</label>
-						<label2>Logos ($INFO[Container.Content])/ On</label2>
-						<onclick>SetFocus(501)</onclick>
-						<property name="ActionLeft">Skin.SetString(BillboardView_Logo_Artists,Off)</property>
-						<property name="ActionRight">Skin.SetString(BillboardView_Logo_Artists,Off)</property>
-						<visible>$EXP[BillboardView_IsVisible] + Container.Content(artists) + !Skin.String(BillboardView_Details_Artists,Off) + Skin.String(BillboardView_Logo_Artists,On)</visible>
-					</item>
-
-					<!--Showcase View Logo-->
-					<!--Artists-->
-					<item>
-						<description>Artist logos/ Off</description>
-						<label>‹ Off ›</label>
-						<label2>Logos ($INFO[Container.Content])/ Off</label2>
-						<onclick>SetFocus(504)</onclick>
-						<property name="ActionLeft">Skin.SetString(ShowcaseView_Logo_Artists,On)</property>
-						<property name="ActionRight">Skin.SetString(ShowcaseView_Logo_Artists,On)</property>
-						<visible>$EXP[ShowcaseView_IsVisible] + Container.Content(artists) + !Skin.String(ShowcaseView_Details_Artists,Off) + [Skin.String(ShowcaseView_Logo_Artists,Off) | String.IsEmpty(Skin.String(ShowcaseView_Logo_Artists))]</visible>
-					</item>
-					<item>
-						<description>Artist logos/ On</description>
-						<label>‹ On ›</label>
-						<label2>Logos ($INFO[Container.Content])/ On</label2>
-						<onclick>SetFocus(504)</onclick>
-						<property name="ActionLeft">Skin.SetString(ShowcaseView_Logo_Artists,Off)</property>
-						<property name="ActionRight">Skin.SetString(ShowcaseView_Logo_Artists,Off)</property>
-						<visible>$EXP[ShowcaseView_IsVisible] + Container.Content(artists) + !Skin.String(ShowcaseView_Details_Artists,Off) + Skin.String(ShowcaseView_Logo_Artists,On)</visible>
-					</item>
-
-					<!--StripView Logo-->
-					<!--Artists-->
-					<item>
-						<description>Artist logos/ Off</description>
-						<label>‹ Off ›</label>
-						<label2>Logos ($INFO[Container.Content])/ Off</label2>
-						<onclick>SetFocus(504)</onclick>
-						<property name="ActionLeft">Skin.SetString(StripView_Logo_Artists,On)</property>
-						<property name="ActionRight">Skin.SetString(StripView_Logo_Artists,On)</property>
-						<visible>$EXP[StripView_IsVisible] + Container.Content(artists) + !$EXP[StripView_Details_Off_Artists] + [Skin.String(StripView_Logo_Artists,Off) | String.IsEmpty(Skin.String(StripView_Logo_Artists))]</visible>
-					</item>
-					<item>
-						<description>Artist logos/ On</description>
-						<label>‹ On ›</label>
-						<label2>Logos ($INFO[Container.Content])/ On</label2>
-						<onclick>SetFocus(504)</onclick>
-						<property name="ActionLeft">Skin.SetString(StripView_Logo_Artists,Off)</property>
-						<property name="ActionRight">Skin.SetString(StripView_Logo_Artists,Off)</property>
-						<visible>$EXP[StripView_IsVisible] + Container.Content(artists) + !$EXP[StripView_Details_Off_Artists] + Skin.String(StripView_Logo_Artists,On)</visible>
 					</item>
 
 <!--SORT-->

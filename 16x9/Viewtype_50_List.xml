@@ -11,7 +11,14 @@
 				<control type="group">
 					<visible>!$EXP[ContainerCycling]</visible>
 					<include>ViewmodeCyclingAnimation</include>
-
+					<!--Display_IsBackground: Title Length Checker-->
+					<control type="textbox" id="2020">
+						<width>768</width>
+						<height>70</height>
+						<font>List_Title_Focused</font>
+						<textcolor>$VAR[LightColor]</textcolor>
+						<label>$VAR[Title]</label>
+					</control>
 					<!--Background for Display_IsBackground-->
 					<control type="group">
 						<visible>!Control.IsVisible(941)</visible>
@@ -53,12 +60,12 @@
 								<visible>$EXP[ListView_Details_Info_IsVisible] + $EXP[ListView_Display_Square_IsVisible]</visible>
 								<left>60</left>
 								<top>870</top>
-								<width>660</width>
+								<width>600</width>
 								<height>210</height>
 								<font>Billboard_Info</font>
 								<textcolor>$VAR[ListUnfocusColor]</textcolor>
 								<align>left</align>
-								<aligny>center</aligny>
+								<aligny>top</aligny>
 								<label>$VAR[TitleInfo]</label>
 							</control>
 							<control type="textbox">
@@ -82,28 +89,61 @@
 							<!--Details for Display_IsBackground-->
 							<control type="grouplist">
 								<left>120</left>
-								<top>505</top>
-								<height>70</height>
-								<itemgap>10</itemgap>
+								<top>497</top>
+								<height>105</height>
+								<itemgap>8</itemgap>
 								<orientation>horizontal</orientation>
 								<usecontrolcoords>true</usecontrolcoords>
 								<visible>$EXP[ListView_Display_IsBackground] + $EXP[ListView_Details_Info_IsVisible]</visible>
+								<!--Title Spacer-->
 								<control type="label">
 									<width max="1080">auto</width>
-									<height>100%</height>
+									<top>8</top>
+									<height>70</height>
+									<aligny>center</aligny>
 									<font>List_Title_Focused</font>
 									<textcolor>$VAR[Blank]</textcolor>
 									<label>$VAR[Title]</label>
 								</control>
+								<!--Spacer and Info Label if Title < 768 pixels-->
 								<control type="label">
-									<width>600</width>
-									<top>27</top>
+									<visible>!Container(2020).HasNext</visible>
+									<width>20</width>
+									<top>35</top>
 									<height>35</height>
-									<font>LIST_Info</font>
+									<font>List_Info</font>
 									<textcolor>$VAR[ListUnfocusColor]</textcolor>
-									<label>$VAR[TitleInfo, / ]</label>
+									<label>/</label>
+									<align>center</align>
+									<aligny>center</aligny>
+								</control>
+								<control type="label">
+									<visible>!Container(2020).HasNext</visible>
+									<width>600</width>
+									<top>35</top>
+									<height>35</height>
+									<font>List_Info</font>
+									<textcolor>$VAR[ListUnfocusColor]</textcolor>
+									<label>$VAR[TitleInfo]</label>
+									<aligny>center</aligny>
 									<scroll>true</scroll>
 									<scrollsuffix></scrollsuffix>
+								</control>
+								<!--Invisible Spacer and Info Label if Title > 768 pixels-->
+								<control type="image">
+									<visible>Container(2020).HasNext</visible>
+									<width>20</width>
+									<height>100%</height>
+									<texture></texture>
+								</control>
+								<control type="textbox">
+									<visible>Container(2020).HasNext</visible>
+									<width>600</width>
+									<height>100%</height>
+									<font>List_Info</font>
+									<textcolor>$VAR[ListUnfocusColor]</textcolor>
+									<aligny>center</aligny>
+									<label>$VAR[TitleInfo]</label>
 								</control>
 							</control>
 						</control>
@@ -180,9 +220,9 @@
 					<!--Display_IsThumbnail_Square-->
 					<include content="SimpleListIcon">
 						<param name="left" value="60"/>
-						<param name="top" value="210"/>
-						<param name="width" value="660"/>
-						<param name="height" value="660"/>
+						<param name="top" value="240"/>
+						<param name="width" value="600"/>
+						<param name="height" value="600"/>
 						<param name="aspectratio" value="scale"/>
 						<param name="visible" value="$EXP[ListView_Display_Square_IsVisible]"/>
 						<param name="fadetime" value="190"/>
