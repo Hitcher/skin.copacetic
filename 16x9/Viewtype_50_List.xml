@@ -4,89 +4,117 @@
 		<control type="group">
 			<include>FullscreenDimensions</include>
 
+			<!--Hidden Label length checkers-->
+			<control type="group">
+				<top>-70</top>
+				<control type="textbox" id="965">
+					<width>720</width>
+					<height>70</height>
+					<font>List_Title_Focused</font>
+					<textcolor>$VAR[Blank]</textcolor>
+					<label>$VAR[Title]</label>
+				</control>
+				<control type="textbox" id="966">
+					<width>900</width>
+					<height>70</height>
+					<font>List_Title_Focused</font>
+					<textcolor>$VAR[Blank]</textcolor>
+					<label>$VAR[Title]</label>
+				</control>
+				<control type="textbox" id="967">
+					<width>1080</width>
+					<height>70</height>
+					<font>List_Title_Focused</font>
+					<textcolor>$VAR[Blank]</textcolor>
+					<label>$VAR[Title]</label>
+				</control>
+				<control type="textbox" id="968">
+					<width>600</width>
+					<height>35</height>
+					<font>List_Info</font>
+					<textcolor>$VAR[Blank]</textcolor>
+					<label>$VAR[TitleInfo]</label>
+				</control>
+			</control>
 
+			<!--LISTVIEW-->
 			<control type="group">
 				<visible>$EXP[ListView_IsVisible]</visible>
-				<include>ViewmodeCyclingAnimation</include>
+				<include>ViewSwitchingAnimation</include>
+
+				<!--STATIC BACKGROUND ARTWORK-->
 				<control type="group">
-					<visible>!$EXP[ContainerCycling]</visible>
-					<include>ViewmodeCyclingAnimation</include>
-					<!--Display_IsBackground: Title Length Checker-->
-					<control type="textbox" id="2020">
-						<width>768</width>
-						<height>70</height>
-						<font>List_Title_Focused</font>
-						<textcolor>$VAR[LightColor]</textcolor>
-						<label>$VAR[Title]</label>
-					</control>
-					<!--Background for Display_IsBackground-->
+					<visible>$EXP[ListView_Display_IsBackground]</visible>
+					<include>DisplaySwitchingAnimation</include>
 					<control type="group">
-						<visible>!Control.IsVisible(941)</visible>
-						<animation effect="fade" start="0" end="100" time="190" tween="sine" easing="out" reversible="false">Visible</animation>
-						<include>CustomViewsBackground</include>
+						<visible>!$EXP[ContainerSwitching]</visible>
+						<include>ContainerSwitchingAnimation</include>
 						<control type="group">
-							<visible>$EXP[ListView_Display_IsBackground] + !String.IsEmpty(ListItem.Art(fanart))</visible>
-							<include content="SimpleListIcon">
+							<visible>!$EXP[ContentSwitching]</visible>
+							<include content="ListIcon">
 								<param name="left" value="0"/>
 								<param name="top" value="0"/>
 								<param name="width" value="1920"/>
 								<param name="height" value="1080"/>
+								<param name="visible" value="!String.IsEmpty(ListItem.Art(fanart))"/>
+								<param name="unfocusedoverlay" value="!String.IsEmpty(ListItem.Art(fanart))"/>
 							</include>
-							<include content="ViewtypeOverlay"/>
 						</control>
 					</control>
+				</control>
 
-					<!--Static Content-->
+				<!--STATIC THUMBNAIL ARTWORK-->
+				<control type="group">
+					<visible>$EXP[ListView_Display_IsThumbnails]</visible>
+					<include>DisplaySwitchingAnimation</include>
 					<control type="group">
-						<visible>!$EXP[ContentCycling]</visible>
+						<visible>!$EXP[ContainerSwitching]</visible>
+						<include>ContainerSwitchingAnimation</include>
+						<control type="group">
+							<visible>!Control.IsVisible(941)</visible>
+							<animation effect="fade" start="0" end="100" time="190" tween="sine" easing="out" reversible="false">Visible</animation>
+							<control type="group">
+								<visible>!$EXP[ContentSwitching]</visible>
+								<animation effect="slide" end="0,-60" condition="$EXP[ListView_Details_Info_IsVisible] + $EXP[ListView_Display_Posters_IsVisible]">Conditional</animation>
+								<include content="SimpleListIcon">
+									<param name="left" value="0"/>
+									<param name="top" value="60"/>
+									<param name="width" value="640"/>
+									<param name="height" value="960"/>
+									<param name="aspectratio" value="scale"/>
+									<param name="visible" value="$EXP[ListView_Display_Posters_IsVisible]"/>
+								</include>
+								<include content="SimpleListIcon">
+									<param name="left" value="0"/>
+									<param name="top" value="210"/>
+									<param name="width" value="660"/>
+									<param name="height" value="660"/>
+									<param name="aspectratio" value="scale"/>
+									<param name="visible" value="$EXP[ListView_Display_Square_IsVisible]"/>
+								</include>
+								<include content="SimpleListIcon">
+									<param name="left" value="0"/>
+									<param name="top" value="210"/>
+									<param name="width" value="660"/>
+									<param name="height" value="660"/>
+									<param name="aspectratio" value="keep"/>
+									<param name="visible" value="$EXP[ListView_Display_Fanart_IsVisible]"/>
+								</include>
+							</control>
+						</control>
+					</control>
+				</control>
+
+				<!--STATIC BACKGROUND DETAILS-->
+				<control type="group">
+					<visible>!$EXP[ContainerSwitching]</visible>
+					<include>DelayedContainerSwitchingAnimation</include>
+					<control type="group">
+						<visible>!$EXP[ContentSwitching]</visible>
+						<include>DelayedContentSwitchingAnimation</include>
 						<control type="group">
 							<visible>!$EXP[Dialog_IsVisible]</visible>
-							<include>ViewmodeCyclingAnimation</include>
-							<include>MediaFlags</include>
-							<!--Details for Display_IsThumbnails-->
-							<control type="textbox">
-								<visible>$EXP[ListView_Details_Info_IsVisible] + $EXP[ListView_Display_Posters_IsVisible]</visible>
-								<left>60</left>
-								<top>990</top>
-								<width>600</width>
-								<height>90</height>
-								<font>Billboard_Info</font>
-								<textcolor>$VAR[ListUnfocusColor]</textcolor>
-								<align>left</align>
-								<aligny>center</aligny>
-								<label>$VAR[TitleInfo]</label>
-							</control>
-							<control type="textbox">
-								<visible>$EXP[ListView_Details_Info_IsVisible] + $EXP[ListView_Display_Square_IsVisible]</visible>
-								<left>60</left>
-								<top>870</top>
-								<width>600</width>
-								<height>210</height>
-								<font>Billboard_Info</font>
-								<textcolor>$VAR[ListUnfocusColor]</textcolor>
-								<align>left</align>
-								<aligny>top</aligny>
-								<label>$VAR[TitleInfo]</label>
-							</control>
-							<control type="textbox">
-								<animation effect="slide" end="0,57" time="0" condition="$EXP[ListView_Display_Fanart_IsVisible] + String.Contains(ListItem.Icon,image://) + String.IsEqual(ListItem.VideoAspect,1.33)">Conditional</animation>
-								<animation effect="slide" end="0,51" time="0" condition="$EXP[ListView_Display_Fanart_IsVisible] + String.Contains(ListItem.Icon,image://) + String.IsEqual(ListItem.VideoAspect,1.37)">Conditional</animation>
-								<animation effect="slide" end="0,12" time="0" condition="$EXP[ListView_Display_Fanart_IsVisible] + String.Contains(ListItem.Icon,image://) + String.IsEqual(ListItem.VideoAspect,1.66)">Conditional</animation>
-								<animation effect="slide" end="0,-6" time="0" condition="$EXP[ListView_Display_Fanart_IsVisible] + String.Contains(ListItem.Icon,image://) + String.IsEqual(ListItem.VideoAspect,1.85)">Conditional</animation>
-								<animation effect="slide" end="0,-41" time="0" condition="$EXP[ListView_Display_Fanart_IsVisible] + String.Contains(ListItem.Icon,image://) + String.IsEqual(ListItem.VideoAspect,2.35)">Conditional</animation>
-								<animation effect="slide" end="0,-43" time="0" condition="$EXP[ListView_Display_Fanart_IsVisible] + String.Contains(ListItem.Icon,image://) + String.IsEqual(ListItem.VideoAspect,2.4)">Conditional</animation>
-								<visible>$EXP[ListView_Details_Info_IsVisible] + $EXP[ListView_Display_Fanart_IsVisible]</visible>
-								<left>60</left>
-								<top>738</top>
-								<width>600</width>
-								<height>210</height>
-								<font>Billboard_Info</font>
-								<textcolor>$VAR[ListUnfocusColor]</textcolor>
-								<align>left</align>
-								<aligny>top</aligny>
-								<label>$VAR[TitleInfo]</label>
-							</control>
-							<!--Details for Display_IsBackground-->
+							<include>ContentFadeAnimation</include>
 							<control type="grouplist">
 								<left>120</left>
 								<top>497</top>
@@ -95,7 +123,7 @@
 								<orientation>horizontal</orientation>
 								<usecontrolcoords>true</usecontrolcoords>
 								<visible>$EXP[ListView_Display_IsBackground] + $EXP[ListView_Details_Info_IsVisible]</visible>
-								<!--Title Spacer-->
+								<!--Title Gap-->
 								<control type="label">
 									<width max="1080">auto</width>
 									<top>8</top>
@@ -105,9 +133,9 @@
 									<textcolor>$VAR[Blank]</textcolor>
 									<label>$VAR[Title]</label>
 								</control>
-								<!--Spacer and Info Label if Title < 768 pixels-->
+								<!--Spacer-->
 								<control type="label">
-									<visible>!Container(2020).HasNext</visible>
+									<visible>!Control.IsVisible(969)</visible>
 									<width>20</width>
 									<top>35</top>
 									<height>35</height>
@@ -117,8 +145,35 @@
 									<align>center</align>
 									<aligny>center</aligny>
 								</control>
+								<!--Info Label if Title < 720 pixels-->
 								<control type="label">
-									<visible>!Container(2020).HasNext</visible>
+									<visible>!Container(965).HasNext</visible>
+									<width>960</width>
+									<top>35</top>
+									<height>35</height>
+									<font>List_Info</font>
+									<textcolor>$VAR[ListUnfocusColor]</textcolor>
+									<label>$VAR[TitleInfo]</label>
+									<aligny>center</aligny>
+									<scroll>true</scroll>
+									<scrollsuffix></scrollsuffix>
+								</control>
+								<!--Info Label if Title < 900 pixels-->
+								<control type="label">
+									<visible>Container(965).HasNext + !Container(966).HasNext</visible>
+									<width>780</width>
+									<top>35</top>
+									<height>35</height>
+									<font>List_Info</font>
+									<textcolor>$VAR[ListUnfocusColor]</textcolor>
+									<label>$VAR[TitleInfo]</label>
+									<aligny>center</aligny>
+									<scroll>true</scroll>
+									<scrollsuffix></scrollsuffix>
+								</control>
+								<!--Info Label if Title < 1080 pixels or Title > 1080 and Info < 600-->
+								<control type="label">
+									<visible>[Container(966).HasNext + !Container(967).HasNext] | [Container(967).HasNext + !Container(968).HasNext]</visible>
 									<width>600</width>
 									<top>35</top>
 									<height>35</height>
@@ -129,115 +184,410 @@
 									<scroll>true</scroll>
 									<scrollsuffix></scrollsuffix>
 								</control>
-								<!--Invisible Spacer and Info Label if Title > 768 pixels-->
-								<control type="image">
-									<visible>Container(2020).HasNext</visible>
-									<width>20</width>
-									<height>100%</height>
-									<texture></texture>
-								</control>
-								<control type="textbox">
-									<visible>Container(2020).HasNext</visible>
+								<!--Info Label if Title > 1080 pixels and Info > 600-->
+								<control type="textbox" id="969">
+									<left>28</left>
+									<visible>Container(967).HasNext + Container(968).HasNext</visible>
 									<width>600</width>
-									<height>100%</height>
+									<top>0</top>
+									<height>105</height>
 									<font>List_Info</font>
 									<textcolor>$VAR[ListUnfocusColor]</textcolor>
+									<label>$VAR[TitleInfo]</label>
 									<aligny>center</aligny>
+								</control>
+							</control>
+						</control>
+					</control>
+				</control>
+
+				<!--STATIC THUMBNAIL DETAILS-->
+				<control type="group">
+					<visible>!$EXP[ContainerSwitching]</visible>
+					<include>DelayedContainerSwitchingAnimation</include>
+					<control type="group">
+						<visible>!$EXP[ContentSwitching]</visible>
+						<include>DelayedContentSwitchingAnimation</include>
+						<control type="group">
+							<visible>!$EXP[Dialog_IsVisible]</visible>
+							<include>ContentFadeAnimation</include>
+							<control type="textbox" id="962">
+								<visible>$EXP[ListView_Display_Posters_IsVisible] + $EXP[ListView_Details_Info_IsVisible] + !Container(962).HasNext</visible>
+								<left>30</left>
+								<top>1002</top>
+								<width>580</width>
+								<height>35</height>
+								<font>Billboard_Info</font>
+								<textcolor>$VAR[ListUnfocusColor]</textcolor>
+								<align>center</align>
+								<aligny>center</aligny>
+								<label>$VAR[TitleInfo]</label>
+							</control>
+							<control type="textbox">
+								<visible>$EXP[ListView_Display_Posters_IsVisible] + $EXP[ListView_Details_Info_IsVisible] + Container(962).HasNext</visible>
+								<left>30</left>
+								<top>984</top>
+								<width>590</width>
+								<height>70</height>
+								<font>Billboard_Info</font>
+								<textcolor>$VAR[ListUnfocusColor]</textcolor>
+								<align>left</align>
+								<aligny>center</aligny>
+								<label>$VAR[TitleInfo]</label>
+							</control>
+							<control type="textbox" id="963">
+								<visible>$EXP[ListView_Display_Square_IsVisible] + $EXP[ListView_Details_Info_IsVisible] + !Container(963).HasNext</visible>
+								<left>30</left>
+								<top>900</top>
+								<width>600</width>
+								<height>35</height>
+								<font>Billboard_Info</font>
+								<textcolor>$VAR[ListUnfocusColor]</textcolor>
+								<align>center</align>
+								<aligny>center</aligny>
+								<label>$VAR[TitleInfo]</label>
+							</control>
+							<control type="textbox">
+								<visible>$EXP[ListView_Display_Square_IsVisible] + $EXP[ListView_Details_Info_IsVisible] + Container(963).HasNext</visible>
+								<left>30</left>
+								<top>900</top>
+								<width>600</width>
+								<height>180</height>
+								<font>Billboard_Info</font>
+								<textcolor>$VAR[ListUnfocusColor]</textcolor>
+								<align>left</align>
+								<aligny>top</aligny>
+								<label>$VAR[TitleInfo]</label>
+							</control>
+							<control type="group">
+								<visible>$EXP[ListView_Display_Fanart_IsVisible] + $EXP[ListView_Details_Info_IsVisible]</visible>
+								<animation effect="slide" end="0,57" time="0" condition="$EXP[ListView_Display_Fanart_IsVisible] + String.Contains(ListItem.Icon,image://) + String.IsEqual(ListItem.VideoAspect,1.33)">Conditional</animation>
+								<animation effect="slide" end="0,51" time="0" condition="$EXP[ListView_Display_Fanart_IsVisible] + String.Contains(ListItem.Icon,image://) + String.IsEqual(ListItem.VideoAspect,1.37)">Conditional</animation>
+								<animation effect="slide" end="0,12" time="0" condition="$EXP[ListView_Display_Fanart_IsVisible] + String.Contains(ListItem.Icon,image://) + String.IsEqual(ListItem.VideoAspect,1.66)">Conditional</animation>
+								<animation effect="slide" end="0,-6" time="0" condition="$EXP[ListView_Display_Fanart_IsVisible] + String.Contains(ListItem.Icon,image://) + String.IsEqual(ListItem.VideoAspect,1.85)">Conditional</animation>
+								<animation effect="slide" end="0,-41" time="0" condition="$EXP[ListView_Display_Fanart_IsVisible] + String.Contains(ListItem.Icon,image://) + String.IsEqual(ListItem.VideoAspect,2.35)">Conditional</animation>
+								<animation effect="slide" end="0,-43" time="0" condition="$EXP[ListView_Display_Fanart_IsVisible] + String.Contains(ListItem.Icon,image://) + String.IsEqual(ListItem.VideoAspect,2.4)">Conditional</animation>
+								<control type="textbox" id="964">
+									<visible>!Container(964).HasNext</visible>
+									<left>30</left>
+									<top>755</top>
+									<width>600</width>
+									<height>35</height>
+									<font>Billboard_Info</font>
+									<textcolor>$VAR[ListUnfocusColor]</textcolor>
+									<align>center</align>
+									<aligny>center</aligny>
+									<label>$VAR[TitleInfo]</label>
+								</control>
+								<control type="textbox">
+									<visible>Container(964).HasNext</visible>
+									<left>30</left>
+									<top>755</top>
+									<width>600</width>
+									<height>180</height>
+									<font>Billboard_Info</font>
+									<textcolor>$VAR[ListUnfocusColor]</textcolor>
+									<align>left</align>
+									<aligny>top</aligny>
 									<label>$VAR[TitleInfo]</label>
 								</control>
 							</control>
 						</control>
 					</control>
 				</control>
-			</control>
 
-			<!--Progress bar-->
-			<control type="group">
-				<visible>$EXP[ListView_IsVisible]</visible>
-				<visible>!String.IsEqual(ListItem.Overlay,OverlayWatched.png)</visible>
+				<!--STATIC SHARED DETAILS-->
 				<control type="group">
-					<visible>!$EXP[ContainerCycling]</visible>
-					<include>ContainerSwitchingProgressBarAnimation</include>
+					<visible>!$EXP[ContainerSwitching]</visible>
+					<include>DelayedContainerSwitchingAnimation</include>
 					<control type="group">
-						<visible>!$EXP[ContentCycling]</visible>
-						<include>ContentFadeAnimation</include>
-						<include content="ProgressBar"/>
-					</control>
-				</control>
-			</control>
-
-			<!--List & Scrolling-->
-			<control type="group">
-				<visible>$EXP[ListView_IsVisible]</visible>
-				<include>ViewmodeCyclingAnimation</include>
-				<control type="group">
-					<visible>!$EXP[ContainerCycling]</visible>
-					<include>ViewmodeCyclingAnimation</include>
-					<control type="group">
-						<visible>$EXP[ContentCycling]</visible>
-						<include>CustomViewsBackground</include>
-						<animation effect="slide" end="0,0" time="380" reversible="false">Hidden</animation>
-						<!---Display_IsBackground-->
+						<visible>!$EXP[ContentSwitching]</visible>
+						<include>DelayedContentSwitchingAnimation</include>
+						<include>MediaFlags</include>
 						<control type="group">
-							<visible>$EXP[ListView_Display_IsBackground] + !String.IsEmpty(ListItem.Art(fanart))</visible>
-							<include content="SimpleListIcon">
-								<param name="left" value="0"/>
-								<param name="top" value="0"/>
-								<param name="width" value="1920"/>
-								<param name="height" value="1080"/>
-								<param name="fadetime" value="190"/>
-								<param name="visible" value="![Container.Content(movies) | Container.Content(seasons) | Container.Content(episodes) | Container.Content(albums) | Container.Content(songs)]"/>
-							</include>
-							<include content="SimpleListIcon">
-								<param name="left" value="0"/>
-								<param name="top" value="0"/>
-								<param name="width" value="1920"/>
-								<param name="height" value="1080"/>
-								<param name="fadetime" value="190"/>
-								<param name="visible" value="Container.Content(movies) | Container.Content(seasons) | Container.Content(albums)"/>
-							</include>
-							<include content="SimpleListIcon">
-								<param name="left" value="0"/>
-								<param name="top" value="0"/>
-								<param name="width" value="1920"/>
-								<param name="height" value="1080"/>
-								<param name="fadetime" value="190"/>
-								<param name="visible" value="Container.Content(episodes) | Container.Content(songs)"/>
-							</include>
-							<include content="ViewtypeOverlay"/>
+							<include content="ProgressBar"/>
 						</control>
 					</control>
-					<!--Display_IsThumbnail_Poster-->
-					<include content="SimpleListIcon">
-						<param name="left" value="60"/>
-						<param name="top" value="90"/>
-						<param name="width" value="600"/>
-						<param name="height" value="900"/>
-						<param name="aspectratio" value="scale"/>
-						<param name="visible" value="$EXP[ListView_Display_Posters_IsVisible]"/>
-						<param name="fadetime" value="190"/>
-					</include>
-					<!--Display_IsThumbnail_Square-->
-					<include content="SimpleListIcon">
-						<param name="left" value="60"/>
-						<param name="top" value="240"/>
-						<param name="width" value="600"/>
-						<param name="height" value="600"/>
-						<param name="aspectratio" value="scale"/>
-						<param name="visible" value="$EXP[ListView_Display_Square_IsVisible]"/>
-						<param name="fadetime" value="190"/>
-					</include>
-					<!--Display_IsThumbnail_Fanart/Landscape-->
-					<include content="SimpleListIcon">
-						<param name="left" value="60"/>
-						<param name="top" value="240"/>
-						<param name="width" value="600"/>
-						<param name="height" value="600"/>
-						<param name="aspectratio" value="keep"/>
-						<param name="visible" value="$EXP[ListView_Display_Fanart_IsVisible]"/>
-						<param name="fadetime" value="190"/>
-					</include>
-					<!-- List -->
+				</control>
+
+				<!--SCROLLING BACKGROUND ARTWORK-->
+				<control type="group">
+					<visible>$EXP[ListView_Display_IsBackground]</visible>
+					<include>DisplaySwitchingAnimation</include>
+					<control type="group">
+						<visible>!$EXP[ContainerSwitching]</visible>
+						<include>ContainerSwitchingAnimation</include>
+						<!--ONPREVIOUS-->
+						<control type="group">
+							<visible>Control.IsVisible(5001)</visible>
+							<include>CustomViewsBackground</include>
+							<!--FADE OUT ICON 1-->
+							<include content="ListIcon">
+								<param name="position" value="1"/>
+								<param name="left" value="0"/>
+								<param name="top" value="0"/>
+								<param name="width" value="1920"/>
+								<param name="height" value="1080"/>
+								<param name="visible" value="Container(50).OnPrevious"/>
+								<param name="animationeffect" value="fade"/>
+								<param name="animationend" value="0"/>
+								<param name="animationcondition" value="true"/>
+								<param name="animationtype" value="Hidden"/>
+								<param name="unfocusedoverlay" value="Container(50).OnPrevious + !String.IsEmpty(ListItem(1).Art(fanart))"/>
+								<param name="unfocusedoverlayanimationeffect" value="fade"/>
+								<param name="unfocusedoverlayanimationstart" value="100"/>
+								<param name="unfocusedoverlayanimationend" value="0"/>
+								<param name="unfocusedoverlayanimationcondition" value="true"/>
+								<param name="unfocusedoverlayanimationtype" value="Hidden"/>
+							</include>
+							<!--FADE IN ICON 0-->
+							<include content="ListIcon">
+								<param name="left" value="0"/>
+								<param name="top" value="0"/>
+								<param name="width" value="1920"/>
+								<param name="height" value="1080"/>
+								<param name="visible" value="!Container(50).OnPrevious"/>
+								<param name="animationeffect" value="fade"/>
+								<param name="animationend" value="100"/>
+								<param name="animationcondition" value="true"/>
+								<param name="animationtype" value="Visible"/>
+								<param name="unfocusedoverlay" value="!Container(50).OnPrevious + !String.IsEmpty(ListItem.Art(fanart))"/>
+								<param name="unfocusedoverlayanimationeffect" value="fade"/>
+								<param name="unfocusedoverlayanimationstart" value="0"/>
+								<param name="unfocusedoverlayanimationend" value="100"/>
+								<param name="unfocusedoverlayanimationcondition" value="true"/>
+								<param name="unfocusedoverlayanimationtype" value="Visible"/>
+							</include>
+						</control>
+						<!--ONNEXT-->
+						<control type="group">
+							<visible>Control.IsVisible(5002)</visible>
+							<include>CustomViewsBackground</include>
+							<!--FADE OUT ICON -1-->
+							<include content="ListIcon">
+								<param name="position" value="-1"/>
+								<param name="left" value="0"/>
+								<param name="top" value="0"/>
+								<param name="width" value="1920"/>
+								<param name="height" value="1080"/>
+								<param name="visible" value="Container(50).OnNext"/>
+								<param name="animationeffect" value="fade"/>
+								<param name="animationend" value="0"/>
+								<param name="animationcondition" value="true"/>
+								<param name="animationtype" value="Hidden"/>
+								<param name="unfocusedoverlay" value="Container(50).OnNext + !String.IsEmpty(ListItem(-1).Art(fanart))"/>
+								<param name="unfocusedoverlayanimationtype" value="Hidden"/>
+								<param name="unfocusedoverlayanimationcondition" value="true"/>
+								<param name="unfocusedoverlayanimationeffect" value="fade"/>
+								<param name="unfocusedoverlayanimationstart" value="100"/>
+								<param name="unfocusedoverlayanimationend" value="0"/>
+							</include>
+							<!--FADE IN ICON 0-->
+							<include content="ListIcon">
+								<param name="left" value="0"/>
+								<param name="top" value="0"/>
+								<param name="width" value="1920"/>
+								<param name="height" value="1080"/>
+								<param name="visible" value="!Container(50).OnNext"/>
+								<param name="animationeffect" value="fade"/>
+								<param name="animationend" value="100"/>
+								<param name="animationcondition" value="true"/>
+								<param name="animationtype" value="Visible"/>
+								<param name="unfocusedoverlay" value="!Container(50).OnNext + !String.IsEmpty(ListItem.Art(fanart))"/>
+								<param name="unfocusedoverlayanimationtype" value="Visible"/>
+								<param name="unfocusedoverlayanimationcondition" value="true"/>
+								<param name="unfocusedoverlayanimationeffect" value="fade"/>
+								<param name="unfocusedoverlayanimationstart" value="0"/>
+								<param name="unfocusedoverlayanimationend" value="100"/>
+							</include>
+						</control>
+					</control>
+				</control>
+
+				<!--SCROLLING THUMBNAIL ARTWORK-->
+				<control type="group">
+					<visible>$EXP[ListView_Display_IsThumbnails]</visible>
+					<include>DisplaySwitchingAnimation</include>
+					<control type="group">
+						<visible>!$EXP[ContainerSwitching]</visible>
+						<include>ContainerSwitchingAnimation</include>
+						<!--ONPREVIOUS-->
+						<control type="group">
+							<visible>Control.IsVisible(5001)</visible>
+							<include>CustomViewsBackground</include>
+							<control type="group">
+								<animation effect="slide" end="0,-60" condition="$EXP[ListView_Details_Info_IsVisible] + $EXP[ListView_Display_Posters_IsVisible]">Conditional</animation>
+								<!--FADE OUT ICON 1-->
+								<include content="ListIcon">
+									<param name="position" value="1"/>
+									<param name="left" value="0"/>
+									<param name="top" value="60"/>
+									<param name="width" value="640"/>
+									<param name="height" value="960"/>
+									<param name="aspectratio" value="scale"/>
+									<param name="visible" value="$EXP[ListView_Display_Posters_IsVisible] + Container(50).OnPrevious"/>
+									<param name="animationeffect" value="fade"/>
+									<param name="animationend" value="0"/>
+									<param name="animationcondition" value="true"/>
+									<param name="animationtype" value="Hidden"/>
+								</include>
+								<include content="ListIcon">
+									<param name="position" value="1"/>
+									<param name="left" value="0"/>
+									<param name="top" value="210"/>
+									<param name="width" value="660"/>
+									<param name="height" value="660"/>
+									<param name="aspectratio" value="scale"/>
+									<param name="visible" value="$EXP[ListView_Display_Square_IsVisible] + Container(50).OnPrevious"/>
+									<param name="animationeffect" value="fade"/>
+									<param name="animationend" value="0"/>
+									<param name="animationcondition" value="true"/>
+									<param name="animationtype" value="Hidden"/>
+								</include>
+								<include content="ListIcon">
+									<param name="position" value="1"/>
+									<param name="left" value="0"/>
+									<param name="top" value="210"/>
+									<param name="width" value="660"/>
+									<param name="height" value="660"/>
+									<param name="aspectratio" value="keep"/>
+									<param name="visible" value="$EXP[ListView_Display_Fanart_IsVisible] + Container(50).OnPrevious"/>
+									<param name="animationeffect" value="fade"/>
+									<param name="animationend" value="0"/>
+									<param name="animationcondition" value="true"/>
+									<param name="animationtype" value="Hidden"/>
+								</include>
+								<!--FADE IN ICON 0-->
+								<include content="ListIcon">
+									<param name="left" value="0"/>
+									<param name="top" value="60"/>
+									<param name="width" value="640"/>
+									<param name="height" value="960"/>
+									<param name="aspectratio" value="scale"/>
+									<param name="visible" value="$EXP[ListView_Display_Posters_IsVisible] + !Container(50).OnPrevious"/>
+									<param name="animationeffect" value="fade"/>
+									<param name="animationend" value="100"/>
+									<param name="animationcondition" value="true"/>
+									<param name="animationtype" value="Visible"/>
+								</include>
+								<include content="ListIcon">
+									<param name="left" value="0"/>
+									<param name="top" value="210"/>
+									<param name="width" value="660"/>
+									<param name="height" value="660"/>
+									<param name="aspectratio" value="scale"/>
+									<param name="visible" value="$EXP[ListView_Display_Square_IsVisible] + !Container(50).OnPrevious"/>
+									<param name="animationeffect" value="fade"/>
+									<param name="animationend" value="100"/>
+									<param name="animationcondition" value="true"/>
+									<param name="animationtype" value="Visible"/>
+								</include>
+								<include content="ListIcon">
+									<param name="left" value="0"/>
+									<param name="top" value="210"/>
+									<param name="width" value="660"/>
+									<param name="height" value="660"/>
+									<param name="aspectratio" value="keep"/>
+									<param name="visible" value="	$EXP[ListView_Display_Fanart_IsVisible] + !Container(50).OnPrevious"/>
+									<param name="animationeffect" value="fade"/>
+									<param name="animationend" value="100"/>
+									<param name="animationcondition" value="true"/>
+									<param name="animationtype" value="Visible"/>
+								</include>
+							</control>
+						</control>
+						<!--ONNEXT-->
+						<control type="group">
+							<visible>Control.IsVisible(5002)</visible>
+							<include>CustomViewsBackground</include>
+							<control type="group">
+								<animation effect="slide" end="0,-60" condition="$EXP[ListView_Details_Info_IsVisible] + $EXP[ListView_Display_Posters_IsVisible]">Conditional</animation>
+								<!--FADE OUT ICON -1-->
+								<include content="ListIcon">
+									<param name="position" value="-1"/>
+									<param name="left" value="0"/>
+									<param name="top" value="60"/>
+									<param name="width" value="640"/>
+									<param name="height" value="960"/>
+									<param name="aspectratio" value="scale"/>
+									<param name="visible" value="$EXP[ListView_Display_Posters_IsVisible] + Container(50).OnNext"/>
+									<param name="animationeffect" value="fade"/>
+									<param name="animationend" value="0"/>
+									<param name="animationcondition" value="true"/>
+									<param name="animationtype" value="Hidden"/>
+								</include>
+								<include content="ListIcon">
+									<param name="position" value="-1"/>
+									<param name="left" value="0"/>
+									<param name="top" value="210"/>
+									<param name="width" value="660"/>
+									<param name="height" value="660"/>
+									<param name="aspectratio" value="scale"/>
+									<param name="visible" value="$EXP[ListView_Display_Square_IsVisible] + Container(50).OnNext"/>
+									<param name="animationeffect" value="fade"/>
+									<param name="animationend" value="0"/>
+									<param name="animationcondition" value="true"/>
+									<param name="animationtype" value="Hidden"/>
+								</include>
+								<include content="ListIcon">
+									<param name="position" value="-1"/>
+									<param name="left" value="0"/>
+									<param name="top" value="210"/>
+									<param name="width" value="660"/>
+									<param name="height" value="660"/>
+									<param name="aspectratio" value="keep"/>
+									<param name="visible" value="$EXP[ListView_Display_Fanart_IsVisible] + Container(50).OnNext"/>
+									<param name="animationeffect" value="fade"/>
+									<param name="animationend" value="0"/>
+									<param name="animationcondition" value="true"/>
+									<param name="animationtype" value="Hidden"/>
+								</include>
+								<!--FADE IN ICON 0-->
+								<include content="ListIcon">
+									<param name="left" value="0"/>
+									<param name="top" value="60"/>
+									<param name="width" value="640"/>
+									<param name="height" value="960"/>
+									<param name="aspectratio" value="scale"/>
+									<param name="visible" value="$EXP[ListView_Display_Posters_IsVisible] + !Container(50).OnNext"/>
+									<param name="animationeffect" value="fade"/>
+									<param name="animationend" value="100"/>
+									<param name="animationcondition" value="true"/>
+									<param name="animationtype" value="Visible"/>
+								</include>
+								<include content="ListIcon">
+									<param name="left" value="0"/>
+									<param name="top" value="210"/>
+									<param name="width" value="660"/>
+									<param name="height" value="660"/>
+									<param name="aspectratio" value="scale"/>
+									<param name="visible" value="$EXP[ListView_Display_Square_IsVisible] + !Container(50).OnNext"/>
+									<param name="animationeffect" value="fade"/>
+									<param name="animationend" value="100"/>
+									<param name="animationcondition" value="true"/>
+									<param name="animationtype" value="Visible"/>
+								</include>
+								<include content="ListIcon">
+									<param name="left" value="0"/>
+									<param name="top" value="210"/>
+									<param name="width" value="660"/>
+									<param name="height" value="660"/>
+									<param name="aspectratio" value="keep"/>
+									<param name="visible" value="$EXP[ListView_Display_Fanart_IsVisible] + !Container(50).OnNext"/>
+									<param name="animationeffect" value="fade"/>
+									<param name="animationend" value="100"/>
+									<param name="animationcondition" value="true"/>
+									<param name="animationtype" value="Visible"/>
+								</include>
+							</control>
+						</control>
+					</control>
+				</control>
+
+				<!--CONTAINER-->
+				<control type="group">
+					<visible>!$EXP[ContainerSwitching]</visible>
+					<include>ContainerSwitchingAnimation</include>
 					<control type="group">
 						<animation effect="slide" end="660,0" time="0" condition="$EXP[ListView_Display_IsThumbnails]">Conditional</animation>
 						<include content="ListViewTemplate"/>

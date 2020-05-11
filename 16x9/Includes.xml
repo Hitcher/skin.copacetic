@@ -18,10 +18,11 @@
   <expression name="Video_Containers">Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | Container.Content(episodes) | Container.Content(musicvideos)</expression>
   <expression name="ListOnly_Containers">Container.Content() | Container.Content(files) | Container.Content(genres) | Container.Content(years) | Container.Content(playlists) | Container.Content(plugins) | Container.Content(studios) | Container.Content(directors) | Container.Content(tags) | Container.Content(countries) | Container.Content(roles) | Container.Content(images) | Container.Content(sources) | Container.Content(addons)</expression>
   <expression name="Fanart_Containers">Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | Container.Content(episodes) | Container.Content(artists) | Container.content(albums) | Container.Content(songs)</expression>
-  <expression name="Background_IsFanart">[[$EXP[ListView_IsVisible] + $EXP[Fanart_Containers] + $EXP[ListView_Display_IsBackground]] | $EXP[BillboardView_IsVisible]] + ![String.IsEmpty(ListItem.Art(fanart)) + String.IsEmpty(ListItem.Icon)]</expression>
+  <expression name="Background_IsFanart">[[$EXP[ListView_IsVisible] + $EXP[Fanart_Containers] + $EXP[ListView_Display_IsBackground]] | $EXP[BillboardView_IsVisible]] + ![String.IsEmpty(ListItem.Art(fanart))]</expression>
 
-  <expression name="ContainerCycling">![[Container.Content(movies) + Control.IsVisible(951)] | [Container.Content(sets) + Control.IsVisible(952)] | [Container.Content(tvshows) + Control.IsVisible(953)] | [Container.Content(seasons) + Control.IsVisible(954)] | [Container.Content(episodes) + Control.IsVisible(955)] | [Container.Content(artists) + Control.IsVisible(956)] | [Container.Content(albums) + Control.IsVisible(957)] | [Container.Content(songs) + Control.IsVisible(958)] | [[Container.Content() | Container.Content(files) | Container.Content(genres) | Container.Content(years) | Container.Content(playlists) | Container.Content(plugins) | Container.Content(studios) | Container.Content(directors) | Container.Content(tags) | Container.Content(countries) | Container.Content(roles) | Container.Content(images) | Container.Content(sources)] + Control.IsVisible(959)] | [Container.Content(actors) + Control.IsVisible(960)] | [Container.Content(addons) + Control.IsVisible(961)]]</expression>
-  <expression name="ContentCycling">[Control.IsVisible(5001) | Control.IsVisible(5002)]</expression>
+  <expression name="ContainerSwitching">![[Container.Content(movies) + Control.IsVisible(951)] | [Container.Content(sets) + Control.IsVisible(952)] | [Container.Content(tvshows) + Control.IsVisible(953)] | [Container.Content(seasons) + Control.IsVisible(954)] | [Container.Content(episodes) + Control.IsVisible(955)] | [Container.Content(artists) + Control.IsVisible(956)] | [Container.Content(albums) + Control.IsVisible(957)] | [Container.Content(songs) + Control.IsVisible(958)] | [[Container.Content() | Container.Content(files) | Container.Content(genres) | Container.Content(years) | Container.Content(playlists) | Container.Content(plugins) | Container.Content(studios) | Container.Content(directors) | Container.Content(tags) | Container.Content(countries) | Container.Content(roles) | Container.Content(images) | Container.Content(sources)] + Control.IsVisible(959)] | [Container.Content(actors) + Control.IsVisible(960)] | [Container.Content(addons) + Control.IsVisible(961)]]</expression>
+  <expression name="ContentSwitching">[Control.IsVisible(5001) | Control.IsVisible(5002)]</expression>
+	<expression name="OptionsSwitching">Control.IsVisible(914)</expression>
 
   <expression name="ListView_IsVisible">[Control.IsVisible(50) | String.IsEqual(Container.ViewMode,List)]</expression>
 	<expression name="ListView_Display_IsBackground">$EXP[ListView_IsVisible] + [$EXP[ListView_Display_IsBackground_Movies] | $EXP[ListView_Display_IsBackground_Sets] | $EXP[ListView_Display_IsBackground_TVShows] | $EXP[ListView_Display_IsBackground_Seasons] | $EXP[ListView_Display_IsBackground_Episodes] | $EXP[ListView_Display_IsBackground_Artists] | $EXP[ListView_Display_IsBackground_Albums] | $EXP[ListView_Display_IsBackground_Songs]]</expression>
@@ -383,7 +384,7 @@
         <texture colordiffuse="$VAR[BackgroundColor]">views/white_100.png</texture>
       </control>
       <control type="image">
-        <visible>Skin.String(Theme,Light)</visible>
+        <visible>Skin.String(Theme,Light) + !$EXP[Background_IsFanart]</visible>
         <aspectratio>stretch</aspectratio>
         <texture colordiffuse="$VAR[DarkColor]">views/gradient_light-background.png</texture>
       </control>
@@ -879,6 +880,10 @@
     <param name="animationeffect" default=""/>
     <param name="animationend" default=""/>
     <param name="animationcondition" default="false"/>
+		<param name="animationtime" default="380"/>
+		<param name="animationtween" default="sine"/>
+		<param name="animationeasing" default="inout"/>
+		<param name="fallbackcolor" default="$VAR[AccentColor]"/>
     <param name="aspectratio" default="scale"/>
     <param name="fadetime" default="0"/>
     <param name="showgradient" default="false"/>
@@ -888,6 +893,8 @@
     <param name="unfocusedoverlayanimationstart" default=""/>
     <param name="unfocusedoverlayanimationend" default=""/>
     <param name="unfocusedoverlayanimationcondition" default="false"/>
+		<param name="unfocusedoverlayanimationtween" default="sine"/>
+		<param name="unfocusedoverlayanimationeasing" default="inout"/>
     <param name="bordervisible" default="false"/>
     <param name="bordersize" default="2"/>
     <param name="bordercolor" default="$VAR[PrimaryColor]"/>
@@ -898,14 +905,14 @@
         <top>$PARAM[top]</top>
         <width>$PARAM[width]</width>
         <height>$PARAM[height]</height>
-        <visible>$EXP[BillboardView_IsVisible] | !String.IsEmpty(Container.ListItemNoWrap($PARAM[position]).Label)</visible>
+        <visible>$EXP[ListView_IsVisible] | $EXP[BillboardView_IsVisible] | !String.IsEmpty(Container.ListItemNoWrap($PARAM[position]).Label)</visible>
         <visible>$PARAM[visible]</visible>
-        <animation effect="$PARAM[animationeffect]" end="$PARAM[animationend]" condition="$PARAM[animationcondition]" time="380" tween="sine" easing="inout" reversible="false">$PARAM[animationtype]</animation>
+        <animation effect="$PARAM[animationeffect]" end="$PARAM[animationend]" condition="$PARAM[animationcondition]" time="$PARAM[animationtime]" tween="$PARAM[animationtween]" easing="$PARAM[animationeasing]" reversible="false">$PARAM[animationtype]</animation>
         <!--Fallback-->
         <control type="group">
           <visible>[[$EXP[StripView_Display_IsFanart] | $EXP[GridView_Display_IsFanart]] + String.IsEmpty(ListItem($PARAM[position]).Art(fanart)) + String.Contains(ListItem($PARAM[position]).Icon,Default)] | [[$EXP[ShowcaseView_Display_IsPosters] | $EXP[StripView_Display_IsPosters] | $EXP[GridView_Display_IsPosters]] + String.IsEmpty(ListItem($PARAM[position]).Art(poster)) + String.Contains(ListItem($PARAM[position]).Icon,Default)] | [[$EXP[ShowcaseView_Display_IsSquare] | $EXP[StripView_Display_IsSquare] | $EXP[GridView_Display_IsSquare]] + String.IsEmpty(ListItem($PARAM[position]).Art(fanart)) + String.IsEmpty(ListItem($PARAM[position]).Art(square)) + String.Contains(ListItem($PARAM[position]).Icon,Default)]</visible>
           <control type="image">
-            <texture colordiffuse="$VAR[AccentColor]">views/white_100.png</texture>
+            <texture colordiffuse="$PARAM[fallbackcolor]">views/white_100.png</texture>
             <aspectratio>stretch</aspectratio>
           </control>
           <control type="label">
@@ -929,7 +936,7 @@
         <!--Unfocused overlay-->
         <control type="image">
           <visible>$PARAM[unfocusedoverlay]</visible>
-          <animation effect="$PARAM[unfocusedoverlayanimationeffect]" start="$PARAM[unfocusedoverlayanimationstart]" end="$PARAM[unfocusedoverlayanimationend]" condition="$PARAM[unfocusedoverlayanimationcondition]" time="380" tween="sine" easing="inout" reversible="false">$PARAM[unfocusedoverlayanimationtype]</animation>
+          <animation effect="$PARAM[unfocusedoverlayanimationeffect]" start="$PARAM[unfocusedoverlayanimationstart]" end="$PARAM[unfocusedoverlayanimationend]" condition="$PARAM[unfocusedoverlayanimationcondition]" time="380" tween="$PARAM[unfocusedoverlayanimationtween]" easing="$PARAM[unfocusedoverlayanimationeasing]" reversible="false">$PARAM[unfocusedoverlayanimationtype]</animation>
           <texture colordiffuse="$VAR[DarkColor]">views/white_50.png</texture>
         </control>
         <!--Progress Bar backing overlay-->
@@ -1223,7 +1230,7 @@
 
 	<!--Progress bar-->
 	<include name="ProgressBar">
-		<param name="visible" default="![Control.HasFocus(60) + [[$EXP[ListView_IsVisible] + $EXP[ListView_Display_IsBackground]] | $EXP[BillboardView_IsVisible] | $EXP[ShowcaseView_IsVisible] | $EXP[StripView_IsVisible]]]"/>
+		<param name="visible" default="![Control.HasFocus(60) + [$EXP[BillboardView_IsVisible] | $EXP[ShowcaseView_IsVisible] | $EXP[StripView_IsVisible]]]"/>
 		<param name="left" default="780"/>
 		<param name="top" default="1047"/>
     <param name="bottom"/>
@@ -1259,7 +1266,7 @@
 				<control type="image">
 					<width>$PARAM[width]</width>
 					<height>$PARAM[height]</height>
-					<visible>!ListItem.IsResumable + String.IsEqual(ListItem.Overlay,OverlayWatched.png) + ![$EXP[ListView_IsVisible]]</visible>
+					<visible>!ListItem.IsResumable + String.IsEqual(ListItem.Overlay,OverlayWatched.png) + !$EXP[ListView_IsVisible]</visible>
 					<texture colordiffuse="$PARAM[focuscolor]">$PARAM[focustexture]</texture>
 				</control>
         <!--Sets, TVshows and Episodes-->
@@ -1677,7 +1684,7 @@
         </control>
         <!--ProgressBar-->
         <control type="group">
-          <visible>!$EXP[ContainerCycling]</visible>
+          <visible>!$EXP[ContainerSwitching]</visible>
           <include>ContainerSwitchingProgressBarAnimation</include>
           <control type="group">
             <left>$PARAM[progressbarleft]</left>
@@ -1737,7 +1744,7 @@
       <param name="showgradient" value="true"/>
       <param name="watchedstatusvisibility" value="false"/>
       <param name="bordervisible" value="true"/>
-      <param name="progressbarvisible" value="!$EXP[ContentCycling]"/>
+      <param name="progressbarvisible" value="!$EXP[ContentSwitching]"/>
       <param name="fadecondition" value="true"/>
       <param name="gridtitlescroll" value="true"/>
 			<param name="gridtitleleft" value="0"/>
@@ -1860,7 +1867,7 @@
 		<param name="column5" default="232"/>
 		<definition>
 			<control type="label">
-				<visible>!$EXP[Dialog_IsVisible]</visible>
+				<visible>!$EXP[Dialog_IsVisible] + !Control.HasFocus(60)</visible>
 				<visible>$EXP[GridView_Details_Info_IsVisible] + $PARAM[visible]</visible>
 				<animation effect="fade" start="0" end="100" time="380" tween="sine" easing="out" delay="1100">Visible</animation>
 				<animation effect="slide" end="$PARAM[width],0" time="0" condition="Container.Position(1)" reversible="false">Conditional</animation>
