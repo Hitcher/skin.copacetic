@@ -4,36 +4,65 @@
 		<control type="group">
 			<include>FullscreenDimensions</include>
 
-			<!--Hidden Label length checkers-->
 			<control type="group">
-				<top>-70</top>
-				<control type="textbox" id="965">
-					<width>720</width>
-					<height>70</height>
-					<font>List_Title_Focused</font>
+				<visible>$EXP[ListView_IsVisible]</visible>
+				<!--Hidden missing artwork checker-->
+				<control type="textbox" id="970">
 					<textcolor>$VAR[Blank]</textcolor>
-					<label>$VAR[Title]</label>
+					<label>$VAR[Thumbnail(0)Content]</label>
 				</control>
-				<control type="textbox" id="966">
-					<width>900</width>
-					<height>70</height>
-					<font>List_Title_Focused</font>
-					<textcolor>$VAR[Blank]</textcolor>
-					<label>$VAR[Title]</label>
+				<control type="image" id="971">
+					<left>-10</left>
+					<top>-10</top>
+					<width>1</width>
+					<height>1</height>
+					<texture fallback="EMPTY">$INFO[ListItem(-1).FolderPath,,poster.jpg]</texture>
 				</control>
-				<control type="textbox" id="967">
-					<width>1080</width>
-					<height>70</height>
-					<font>List_Title_Focused</font>
-					<textcolor>$VAR[Blank]</textcolor>
-					<label>$VAR[Title]</label>
+				<control type="image" id="972">
+					<left>-10</left>
+					<top>-10</top>
+					<width>1</width>
+					<height>1</height>
+					<texture fallback="EMPTY">$INFO[ListItem(0).FolderPath,,poster.jpg]</texture>
 				</control>
-				<control type="textbox" id="968">
-					<width>600</width>
-					<height>35</height>
-					<font>List_Info</font>
-					<textcolor>$VAR[Blank]</textcolor>
-					<label>$VAR[TitleInfo]</label>
+				<control type="image" id="973">
+					<left>-10</left>
+					<top>-10</top>
+					<width>1</width>
+					<height>1</height>
+					<texture fallback="EMPTY">$INFO[ListItem(1).FolderPath,,poster.jpg]</texture>
+				</control>
+				<!--Hidden Label length checkers-->
+				<control type="group">
+					<top>-70</top>
+					<control type="textbox" id="965">
+						<width>720</width>
+						<height>70</height>
+						<font>List_Title_Focused</font>
+						<textcolor>$VAR[Blank]</textcolor>
+						<label>$VAR[Title]</label>
+					</control>
+					<control type="textbox" id="966">
+						<width>900</width>
+						<height>70</height>
+						<font>List_Title_Focused</font>
+						<textcolor>$VAR[Blank]</textcolor>
+						<label>$VAR[Title]</label>
+					</control>
+					<control type="textbox" id="967">
+						<width>1080</width>
+						<height>70</height>
+						<font>List_Title_Focused</font>
+						<textcolor>$VAR[Blank]</textcolor>
+						<label>$VAR[Title]</label>
+					</control>
+					<control type="textbox" id="968">
+						<width>600</width>
+						<height>35</height>
+						<font>List_Info</font>
+						<textcolor>$VAR[Blank]</textcolor>
+						<label>$VAR[TitleInfo]</label>
+					</control>
 				</control>
 			</control>
 
@@ -214,8 +243,9 @@
 						<control type="group">
 							<visible>!$EXP[Dialog_IsVisible]</visible>
 							<include>ContentFadeAnimation</include>
+							<!--Posters-->
 							<control type="textbox">
-								<visible>$EXP[ListView_Display_Posters_IsVisible] + $EXP[ListView_Details_Info_IsVisible]</visible>
+								<visible>$EXP[ListView_Display_Posters_IsVisible] + $EXP[ListView_Details_Info_IsVisible] + !String.IsEqual(Control.GetLabel(970),FALLBACK)</visible>
 								<left>0</left>
 								<top>1033</top>
 								<width>640</width>
@@ -226,8 +256,21 @@
 								<aligny>center</aligny>
 								<label>$VAR[TitleInfo]</label>
 							</control>
+							<control type="textbox">
+								<visible>$EXP[ListView_Display_Posters_IsVisible] + $EXP[ListView_Details_Info_IsVisible] + String.IsEqual(Control.GetLabel(970),FALLBACK)</visible>
+								<left>0</left>
+								<top>532</top>
+								<width>640</width>
+								<height>35</height>
+								<font>Billboard_Info</font>
+								<textcolor>$VAR[ListUnfocusColor]</textcolor>
+								<align>right</align>
+								<aligny>center</aligny>
+								<label>$VAR[TitleInfo]</label>
+							</control>
+							<!--Square-->
 							<control type="textbox" id="963">
-								<visible>$EXP[ListView_Display_Square_IsVisible] + $EXP[ListView_Details_Info_IsVisible] + !Container(963).HasNext</visible>
+								<visible>$EXP[ListView_Display_Square_IsVisible] + $EXP[ListView_Details_Info_IsVisible] + !Container(963).HasNext + !String.IsEqual(Control.GetLabel(970),FALLBACK)</visible>
 								<left>30</left>
 								<top>900</top>
 								<width>600</width>
@@ -238,8 +281,20 @@
 								<aligny>center</aligny>
 								<label>$VAR[TitleInfo]</label>
 							</control>
+							<control type="textbox" id="963">
+								<visible>$EXP[ListView_Display_Square_IsVisible] + $EXP[ListView_Details_Info_IsVisible] + !Container(963).HasNext + String.IsEqual(Control.GetLabel(970),FALLBACK)</visible>
+								<left>30</left>
+								<top>532</top>
+								<width>630</width>
+								<height>35</height>
+								<font>Billboard_Info</font>
+								<textcolor>$VAR[ListUnfocusColor]</textcolor>
+								<align>right</align>
+								<aligny>center</aligny>
+								<label>$VAR[TitleInfo]</label>
+							</control>
 							<control type="textbox">
-								<visible>$EXP[ListView_Display_Square_IsVisible] + $EXP[ListView_Details_Info_IsVisible] + Container(963).HasNext</visible>
+								<visible>$EXP[ListView_Display_Square_IsVisible] + $EXP[ListView_Details_Info_IsVisible] + Container(963).HasNext + !String.IsEqual(Control.GetLabel(970),FALLBACK)</visible>
 								<left>30</left>
 								<top>900</top>
 								<width>600</width>
@@ -250,11 +305,24 @@
 								<aligny>top</aligny>
 								<label>$VAR[TitleInfo]</label>
 							</control>
+							<control type="textbox">
+								<visible>$EXP[ListView_Display_Square_IsVisible] + $EXP[ListView_Details_Info_IsVisible] + Container(963).HasNext + String.IsEqual(Control.GetLabel(970),FALLBACK)</visible>
+								<left>30</left>
+								<top>459</top>
+								<width>630</width>
+								<height>180</height>
+								<font>Billboard_Info</font>
+								<textcolor>$VAR[ListUnfocusColor]</textcolor>
+								<align>right</align>
+								<aligny>center</aligny>
+								<label>$VAR[TitleInfo]</label>
+							</control>
+							<!--Fanart-->
 							<control type="group">
 								<visible>$EXP[ListView_Display_Fanart_IsVisible] + $EXP[ListView_Details_Info_IsVisible]</visible>
-								<animation effect="slide" end="0,62" time="0" condition="!$EXP[Video_Is_Widescreen]">Conditional</animation>
 								<control type="textbox" id="964">
-									<visible>!Container(964).HasNext</visible>
+									<animation effect="slide" end="0,62" time="0" condition="!$EXP[Video_Is_Widescreen]">Conditional</animation>
+									<visible>!Container(964).HasNext + !String.IsEqual(Control.GetLabel(970),FALLBACK)</visible>
 									<left>30</left>
 									<top>755</top>
 									<width>600</width>
@@ -265,8 +333,21 @@
 									<aligny>center</aligny>
 									<label>$VAR[TitleInfo]</label>
 								</control>
+								<control type="textbox" id="964">
+									<visible>!Container(964).HasNext + String.IsEqual(Control.GetLabel(970),FALLBACK)</visible>
+									<left>30</left>
+									<top>532</top>
+									<width>626</width>
+									<height>35</height>
+									<font>Billboard_Info</font>
+									<textcolor>$VAR[ListUnfocusColor]</textcolor>
+									<align>right</align>
+									<aligny>center</aligny>
+									<label>$VAR[TitleInfo]</label>
+								</control>
 								<control type="textbox">
-									<visible>Container(964).HasNext</visible>
+									<animation effect="slide" end="0,62" time="0" condition="!$EXP[Video_Is_Widescreen]">Conditional</animation>
+									<visible>Container(964).HasNext + !String.IsEqual(Control.GetLabel(970),FALLBACK)</visible>
 									<left>30</left>
 									<top>755</top>
 									<width>600</width>
@@ -275,6 +356,18 @@
 									<textcolor>$VAR[ListUnfocusColor]</textcolor>
 									<align>left</align>
 									<aligny>top</aligny>
+									<label>$VAR[TitleInfo]</label>
+								</control>
+								<control type="textbox">
+									<visible>Container(964).HasNext + String.IsEqual(Control.GetLabel(970),FALLBACK)</visible>
+									<left>30</left>
+									<top>459</top>
+									<width>626</width>
+									<height>180</height>
+									<font>Billboard_Info</font>
+									<textcolor>$VAR[ListUnfocusColor]</textcolor>
+									<align>right</align>
+									<aligny>center</aligny>
 									<label>$VAR[TitleInfo]</label>
 								</control>
 							</control>
@@ -427,7 +520,7 @@
 									<param name="width" value="640"/>
 									<param name="height" value="960"/>
 									<param name="aspectratio" value="scale"/>
-									<param name="visible" value="$EXP[ListView_Display_Posters_IsVisible] + !String.IsEmpty(ListItem(0).Art(thumb))"/>
+									<param name="visible" value="$EXP[ListView_Display_Posters_IsVisible] + [!String.IsEmpty(ListItem(0).Art(thumb)) | [Container.Content(episodes) + ListItem(1).IsFolder]]"/>
 								</include>
 								<include content="ListIcon">
 									<param name="position" value="1"/>
@@ -436,7 +529,7 @@
 									<param name="width" value="640"/>
 									<param name="height" value="960"/>
 									<param name="aspectratio" value="scale"/>
-									<param name="visible" value="$EXP[ListView_Display_Posters_IsVisible] + String.IsEmpty(ListItem(0).Art(thumb)) + Container(50).OnPrevious"/>
+									<param name="visible" value="$EXP[ListView_Display_Posters_IsVisible] + String.IsEmpty(ListItem(0).Art(thumb)) + ![Container.Content(episodes) + ListItem(1).IsFolder] + Container(50).OnPrevious"/>
 									<param name="animationeffect" value="fade"/>
 									<param name="animationend" value="0"/>
 									<param name="animationcondition" value="true"/>
@@ -473,7 +566,7 @@
 									<param name="width" value="656"/>
 									<param name="height" value="369"/>
 									<param name="aspectratio" value="scale"/>
-									<param name="visible" value="$EXP[ListView_Display_Fanart_IsVisible] + $EXP[Video_Is_Widescreen] + !String.IsEmpty(ListItem(0).Art(thumb))"/>
+									<param name="visible" value="$EXP[ListView_Display_Fanart_IsVisible] + $EXP[Video_Is_Widescreen(1)] + !String.IsEmpty(ListItem(0).Art(thumb)) + $EXP[Video_Is_Widescreen]"/>
 								</include>
 								<include content="ListIcon">
 									<param name="position" value="1"/>
@@ -482,7 +575,7 @@
 									<param name="width" value="656"/>
 									<param name="height" value="369"/>
 									<param name="aspectratio" value="scale"/>
-									<param name="visible" value="$EXP[ListView_Display_Fanart_IsVisible] + $EXP[Video_Is_Widescreen] + String.IsEmpty(ListItem(0).Art(thumb)) + Container(50).OnPrevious"/>
+									<param name="visible" value="$EXP[ListView_Display_Fanart_IsVisible] + $EXP[Video_Is_Widescreen(1)] + [String.IsEmpty(ListItem(0).Art(thumb)) | !$EXP[Video_Is_Widescreen]] + Container(50).OnPrevious"/>
 									<param name="animationeffect" value="fade"/>
 									<param name="animationend" value="0"/>
 									<param name="animationcondition" value="true"/>
@@ -496,7 +589,7 @@
 									<param name="width" value="660"/>
 									<param name="height" value="495"/>
 									<param name="aspectratio" value="scale"/>
-									<param name="visible" value="$EXP[ListView_Display_Fanart_IsVisible] + !$EXP[Video_Is_Widescreen] + !String.IsEmpty(ListItem(0).Art(thumb))"/>
+									<param name="visible" value="$EXP[ListView_Display_Fanart_IsVisible] + !$EXP[Video_Is_Widescreen(1)] + !String.IsEmpty(ListItem(0).Art(thumb)) + !$EXP[Video_Is_Widescreen]"/>
 								</include>
 								<include content="ListIcon">
 									<param name="position" value="1"/>
@@ -505,7 +598,7 @@
 									<param name="width" value="660"/>
 									<param name="height" value="495"/>
 									<param name="aspectratio" value="scale"/>
-									<param name="visible" value="$EXP[ListView_Display_Fanart_IsVisible] + !$EXP[Video_Is_Widescreen] + String.IsEmpty(ListItem(0).Art(thumb)) + Container(50).OnPrevious"/>
+									<param name="visible" value="$EXP[ListView_Display_Fanart_IsVisible] + !$EXP[Video_Is_Widescreen(1)] + [String.IsEmpty(ListItem(0).Art(thumb)) | $EXP[Video_Is_Widescreen]] + Container(50).OnPrevious"/>
 									<param name="animationeffect" value="fade"/>
 									<param name="animationend" value="0"/>
 									<param name="animationcondition" value="true"/>
@@ -580,7 +673,7 @@
 									<param name="width" value="640"/>
 									<param name="height" value="960"/>
 									<param name="aspectratio" value="scale"/>
-									<param name="visible" value="$EXP[ListView_Display_Posters_IsVisible] + !String.IsEmpty(ListItem(0).Art(thumb))"/>
+									<param name="visible" value="$EXP[ListView_Display_Posters_IsVisible] + [!String.IsEmpty(ListItem(0).Art(thumb)) | [Container.Content(episodes) + ListItem(-1).IsFolder]]"/>
 								</include>
 								<include content="ListIcon">
 									<param name="position" value="-1"/>
@@ -589,7 +682,7 @@
 									<param name="width" value="640"/>
 									<param name="height" value="960"/>
 									<param name="aspectratio" value="scale"/>
-									<param name="visible" value="$EXP[ListView_Display_Posters_IsVisible] + String.IsEmpty(ListItem(0).Art(thumb)) + Container(50).OnNext"/>
+									<param name="visible" value="$EXP[ListView_Display_Posters_IsVisible] + String.IsEmpty(ListItem(0).Art(thumb)) + ![Container.Content(episodes) + ListItem(-1).IsFolder] + Container(50).OnNext"/>
 									<param name="animationeffect" value="fade"/>
 									<param name="animationend" value="0"/>
 									<param name="animationcondition" value="true"/>
@@ -626,7 +719,7 @@
 									<param name="width" value="656"/>
 									<param name="height" value="369"/>
 									<param name="aspectratio" value="scale"/>
-									<param name="visible" value="$EXP[ListView_Display_Fanart_IsVisible] + $EXP[Video_Is_Widescreen] + !String.IsEmpty(ListItem(0).Art(thumb))"/>
+									<param name="visible" value="$EXP[ListView_Display_Fanart_IsVisible] + $EXP[Video_Is_Widescreen(-1)] + !String.IsEmpty(ListItem(0).Art(thumb)) + $EXP[Video_Is_Widescreen]"/>
 								</include>
 								<include content="ListIcon">
 									<param name="position" value="-1"/>
@@ -635,7 +728,7 @@
 									<param name="width" value="656"/>
 									<param name="height" value="369"/>
 									<param name="aspectratio" value="scale"/>
-									<param name="visible" value="$EXP[ListView_Display_Fanart_IsVisible] + $EXP[Video_Is_Widescreen] + String.IsEmpty(ListItem(0).Art(thumb)) + Container(50).OnNext"/>
+									<param name="visible" value="$EXP[ListView_Display_Fanart_IsVisible] + $EXP[Video_Is_Widescreen(-1)] + [String.IsEmpty(ListItem(0).Art(thumb)) | !$EXP[Video_Is_Widescreen]] + Container(50).OnNext"/>
 									<param name="animationeffect" value="fade"/>
 									<param name="animationend" value="0"/>
 									<param name="animationcondition" value="true"/>
@@ -649,7 +742,7 @@
 									<param name="width" value="660"/>
 									<param name="height" value="495"/>
 									<param name="aspectratio" value="scale"/>
-									<param name="visible" value="$EXP[ListView_Display_Fanart_IsVisible] + !$EXP[Video_Is_Widescreen] + !String.IsEmpty(ListItem(0).Art(thumb))"/>
+									<param name="visible" value="$EXP[ListView_Display_Fanart_IsVisible] + !$EXP[Video_Is_Widescreen(-1)] + !String.IsEmpty(ListItem(0).Art(thumb)) + !$EXP[Video_Is_Widescreen]"/>
 								</include>
 								<include content="ListIcon">
 									<param name="position" value="-1"/>
@@ -658,7 +751,7 @@
 									<param name="width" value="660"/>
 									<param name="height" value="495"/>
 									<param name="aspectratio" value="scale"/>
-									<param name="visible" value="$EXP[ListView_Display_Fanart_IsVisible] + !$EXP[Video_Is_Widescreen] + String.IsEmpty(ListItem(0).Art(thumb)) + Container(50).OnNext"/>
+									<param name="visible" value="$EXP[ListView_Display_Fanart_IsVisible] + !$EXP[Video_Is_Widescreen(-1)] + [String.IsEmpty(ListItem(0).Art(thumb)) | $EXP[Video_Is_Widescreen]] + Container(50).OnNext"/>
 									<param name="animationeffect" value="fade"/>
 									<param name="animationend" value="0"/>
 									<param name="animationcondition" value="true"/>
@@ -733,20 +826,21 @@
 				</control>
 			</control>
 
+<!--
 			<control type="label">
-				<label>$INFO[Container.Content]</label>
+				<label>$VAR[Thumbnail(0)Content]</label>
 				<font>body</font>
 				<textcolor>$VAR[ListUnfocusColor]</textcolor>
 				<visible>$EXP[ListView_IsVisible]</visible>
 			</control>
 			<control type="label">
 				<top>30</top>
-				<label>$VAR[Thumbnail(0)Content]</label>
+				<label>$INFO[Control.GetLabel(972)]</label>
 				<font>body</font>
 				<textcolor>$VAR[ListUnfocusColor]</textcolor>
 				<visible>$EXP[ListView_IsVisible]</visible>
 			</control>
-
+-->
 		</control>
 	</include>
 </includes>
