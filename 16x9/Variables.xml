@@ -83,6 +83,8 @@
 	<variable name="Thumbnail(0)Content">
 		<!--Dialog Favourites-->
 		<value condition="Control.IsVisible(450) + !String.IsEmpty(ListItem.Art(poster))">$INFO[ListItem.Art(poster)]</value>
+		<value condition="Control.IsVisible(450) + !String.IsEmpty(ListItem.Art(fanart))">$INFO[ListItem.Art(fanart)]</value>
+		<value condition="Control.IsVisible(450) + !String.IsEmpty(ListItem.Art(thumb))">$INFO[ListItem.Art(thumb)]</value>
 		<!--Files-->
 		<value condition="Container.Content(episodes) + String.IsEmpty(ListItem.TVShowTitle) + !ListItem.IsFolder + !String.IsEmpty(ListItem.Art(fanart))">$INFO[ListItem.Art(fanart)]</value>
 		<value condition="Container.Content(episodes) + String.IsEmpty(ListItem.TVShowTitle) + !ListItem.IsFolder">$INFO[ListItem.Path,,fanart.jpg]</value>
@@ -98,7 +100,7 @@
 		<value condition="$EXP[ListView_IsVisible] + $EXP[ListView_Display_IsThumbnails] + !String.IsEmpty(ListItem.Art(fanart))">$INFO[ListItem.Art(fanart)]</value>
 		<value condition="$EXP[ListView_IsVisible] + $EXP[ListView_Display_IsBackground] + !String.IsEmpty(ListItem.Art(fanart))">$INFO[ListItem.Art(fanart)]</value>
 		<value condition="$EXP[BillboardView_IsVisible] + !String.IsEmpty(ListItem.Art(fanart))">$INFO[ListItem.Art(fanart)]</value>
-		<value condition="$EXP[ShowcaseView_IsVisible] + $EXP[ShowcaseView_Display_IsSquare] + Container.Content(artists) + !String.IsEmpty(ListItem.Art(thumb))">$INFO[ListItem.Art(thumb)</value>
+		<value condition="$EXP[ShowcaseView_IsVisible] + $EXP[ShowcaseView_Display_IsSquare] + Container.Content(artists) + !String.IsEmpty(ListItem.Art(thumb))">$INFO[ListItem.Art(thumb)]</value>
 		<value condition="$EXP[ShowcaseView_IsVisible] + $EXP[ShowcaseView_Display_IsSquare] + !String.IsEmpty(ListItem.Art(square))">$INFO[ListItem.Art(square)]</value>
 		<value condition="$EXP[ShowcaseView_IsVisible] + $EXP[ShowcaseView_Display_IsSquare] + !String.IsEmpty(ListItem.Art(fanart))">$INFO[ListItem.Art(fanart)]</value>
 		<value condition="$EXP[ShowcaseView_IsVisible] + $EXP[ShowcaseView_Display_IsPosters] + $EXP[ShowcaseView_Details_Logo_IsOn] + !String.IsEmpty(ListItem.Art(keyart))">$INFO[ListItem.Art(keyart)]</value>
@@ -257,16 +259,18 @@
 		<value condition="Container.Content(albums) + !String.IsEmpty(ListItem.AlbumArtist)">[UPPERCASE]$INFO[ListItem.AlbumArtist]$INFO[ListItem.Year, / ][/UPPERCASE]</value>
 		<value condition="Container.Content(albums) + !String.IsEmpty(ListItem.Artist)">[UPPERCASE]$INFO[ListItem.Artist]$INFO[ListItem.Year, / ][/UPPERCASE]</value>
 		<value condition="Container.Content(albums) + !String.IsEmpty(ListItem.Year)">[UPPERCASE]$INFO[ListItem.Year][/UPPERCASE]</value>
-		<!--Songs (Album view): David Bowie / The Platinum Collection / 4:32-->
-		<value condition="Container.Content(songs) + !String.Contains(Container.FolderPath,musicdb://songs) + $EXP[ListView_IsVisible] + $EXP[ListView_Display_IsThumbnails] + !String.IsEmpty(ListItem.Artist)">[UPPERCASE]$INFO[ListItem.Artist][CR]$INFO[ListItem.Album]$INFO[ListItem.Duration(mm:ss), / ][/UPPERCASE]</value>
-		<value condition="Container.Content(songs) + !String.Contains(Container.FolderPath,musicdb://songs) + !String.IsEmpty(ListItem.Artist)">[UPPERCASE]$INFO[ListItem.Artist]$INFO[ListItem.Album, / ]$INFO[ListItem.Duration(mm:ss), / ][/UPPERCASE]</value>
-		<value condition="Container.Content(songs) + !String.Contains(Container.FolderPath,musicdb://songs) + !String.IsEmpty(ListItem.Album)">[UPPERCASE]$INFO[ListItem.Album]$INFO[ListItem.Duration(mm:ss), / ][/UPPERCASE]</value>
+		<!--Songs (Album view): David Bowie / The Platinum Collection / 1990 / 4:32-->
+		<value condition="Container.Content(songs) + !String.Contains(Container.FolderPath,musicdb://songs) + $EXP[ListView_IsVisible] + $EXP[ListView_Display_IsThumbnails] + !String.IsEmpty(ListItem.Artist)">[UPPERCASE]$INFO[ListItem.Artist][CR]$INFO[ListItem.Album]$INFO[ListItem.Year, / ]$INFO[ListItem.Duration(mm:ss), / ][/UPPERCASE]</value>
+		<value condition="Container.Content(songs) + !String.Contains(Container.FolderPath,musicdb://songs) + !String.IsEmpty(ListItem.Artist)">[UPPERCASE]$INFO[ListItem.Artist]$INFO[ListItem.Album, / ]$INFO[ListItem.Year, / ]$INFO[ListItem.Duration(mm:ss), / ][/UPPERCASE]</value>
+		<value condition="Container.Content(songs) + !String.Contains(Container.FolderPath,musicdb://songs) + !String.IsEmpty(ListItem.Album)">[UPPERCASE]$INFO[ListItem.Album]$INFO[ListItem.Year, / ]$INFO[ListItem.Duration(mm:ss), / ][/UPPERCASE]</value>
+		<value condition="Container.Content(songs) + !String.Contains(Container.FolderPath,musicdb://songs) + !String.IsEmpty(ListItem.Year)">[UPPERCASE]$INFO[ListItem.Year]$INFO[ListItem.Duration(mm:ss), / ][/UPPERCASE]</value>
 		<value condition="Container.Content(songs) + !String.Contains(Container.FolderPath,musicdb://songs) + !String.IsEmpty(ListItem.Duration)">[UPPERCASE]$INFO[ListItem.Duration(mm:ss)][/UPPERCASE]</value>
-		<!--Songs (Song or Files view): David Bowie / Track 1 / The Platinum Collection / 4:32-->
-		<value condition="Container.Content(songs) + String.Contains(Container.FolderPath,musicdb://songs) + $EXP[ListView_IsVisible] + $EXP[ListView_Display_IsThumbnails] + !String.IsEmpty(ListItem.Artist)">[UPPERCASE]$INFO[ListItem.Artist][CR]$INFO[ListItem.TrackNumber]$INFO[ListItem.Album, / ]$INFO[ListItem.Duration(mm:ss), / ][/UPPERCASE]</value>
-		<value condition="Container.Content(songs) + String.Contains(Container.FolderPath,musicdb://songs) + !String.IsEmpty(ListItem.Artist)">[UPPERCASE]$INFO[ListItem.Artist]$INFO[ListItem.TrackNumber, / ]$INFO[ListItem.Album, / ]$INFO[ListItem.Duration(mm:ss), / ][/UPPERCASE]</value>
-		<value condition="Container.Content(songs) + String.Contains(Container.FolderPath,musicdb://songs) + !String.IsEmpty(ListItem.TrackNumber)">[UPPERCASE]$INFO[ListItem.TrackNumber]$INFO[ListItem.Album, / ]$INFO[ListItem.Duration(mm:ss), / ][/UPPERCASE]</value>
-		<value condition="Container.Content(songs) + String.Contains(Container.FolderPath,musicdb://songs) + !String.IsEmpty(ListItem.Album)">[UPPERCASE]$INFO[ListItem.Album]$INFO[ListItem.Duration(mm:ss), / ][/UPPERCASE]</value>
+		<!--Songs (Song or Files view): David Bowie / The Platinum Collection / 1990 / 01 / 4:32-->
+		<value condition="Container.Content(songs) + String.Contains(Container.FolderPath,musicdb://songs) + $EXP[ListView_IsVisible] + $EXP[ListView_Display_IsThumbnails] + !String.IsEmpty(ListItem.Artist)">[UPPERCASE]$INFO[ListItem.Artist][CR]$INFO[ListItem.Album]$INFO[ListItem.Year, / ]$INFO[ListItem.TrackNumber, / ]$INFO[ListItem.Duration(mm:ss), / ][/UPPERCASE]</value>
+		<value condition="Container.Content(songs) + String.Contains(Container.FolderPath,musicdb://songs) + !String.IsEmpty(ListItem.Artist)">[UPPERCASE]$INFO[ListItem.Artist]$INFO[ListItem.Album, / ]$INFO[ListItem.Year, / ]$INFO[ListItem.TrackNumber, / ]$INFO[ListItem.Duration(mm:ss), / ][/UPPERCASE]</value>
+		<value condition="Container.Content(songs) + String.Contains(Container.FolderPath,musicdb://songs) + !String.IsEmpty(ListItem.Album)">[UPPERCASE]$INFO[ListItem.Album]$INFO[ListItem.Year, / ]$INFO[ListItem.TrackNumber, / ]$INFO[ListItem.Duration(mm:ss), / ][/UPPERCASE]</value>
+		<value condition="Container.Content(songs) + String.Contains(Container.FolderPath,musicdb://songs) + !String.IsEmpty(ListItem.Year)">[UPPERCASE]$INFO[ListItem.Year]$INFO[ListItem.TrackNumber, / ]$INFO[ListItem.Duration(mm:ss), / ][/UPPERCASE]</value>
+		<value condition="Container.Content(songs) + String.Contains(Container.FolderPath,musicdb://songs) + !String.IsEmpty(ListItem.TrackNumber)">[UPPERCASE]$INFO[ListItem.TrackNumber]$INFO[ListItem.Duration(mm:ss), / ][/UPPERCASE]</value>
 		<value condition="Container.Content(songs) + String.Contains(Container.FolderPath,musicdb://songs) + !String.IsEmpty(ListItem.Duration)">[UPPERCASE]$INFO[ListItem.Duration(mm:ss)][/UPPERCASE]</value>
 		<!--Actors: 23 Appearances inc xxx-->
 		<value condition="Container.Content(actors) + !String.IsEmpty(ListItem.Appearances)">[UPPERCASE]$INFO[ListItem.Appearances]$VAR[AppearancesLabel, ]$INFO[Container(4501).ListItem(-1).Title, ][/UPPERCASE]</value>

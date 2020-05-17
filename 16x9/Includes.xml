@@ -25,7 +25,7 @@
 
   <expression name="ContainerSwitching">![[Container.Content(movies) + Control.IsVisible(951)] | [Container.Content(sets) + Control.IsVisible(952)] | [Container.Content(tvshows) + Control.IsVisible(953)] | [Container.Content(seasons) + Control.IsVisible(954)] | [Container.Content(episodes) + Control.IsVisible(955)] | [Container.Content(artists) + Control.IsVisible(956)] | [Container.Content(albums) + Control.IsVisible(957)] | [Container.Content(songs) + Control.IsVisible(958)] | [[Container.Content(files) | Container.Content(genres) | Container.Content(years) | Container.Content(playlists) | Container.Content(plugins) | Container.Content(studios) | Container.Content(directors) | Container.Content(tags) | Container.Content(countries) | Container.Content(roles) | Container.Content(images) | Container.Content(sources)] + Control.IsVisible(959)] | [Container.Content(actors) + Control.IsVisible(960)] | [Container.Content(addons) + Control.IsVisible(961)] | [Container.Content() + Control.IsVisible(962)]]</expression>
   <expression name="ContentSwitching">[Control.IsVisible(5001) | Control.IsVisible(5002)]</expression>
-	<expression name="OptionsSwitching">Control.IsVisible(914)</expression>
+	<expression name="OptionsSwitching">!Control.IsVisible(914)</expression>
 
   <expression name="ListView_IsVisible">[Control.IsVisible(50) | String.IsEqual(Container.ViewMode,List)]</expression>
 	<expression name="ListView_Display_IsBackground">$EXP[ListView_IsVisible] + [$EXP[ListView_Display_IsBackground_Movies] | $EXP[ListView_Display_IsBackground_Sets] | $EXP[ListView_Display_IsBackground_TVShows] | $EXP[ListView_Display_IsBackground_Seasons] | $EXP[ListView_Display_IsBackground_Episodes] | $EXP[ListView_Display_IsBackground_Artists] | $EXP[ListView_Display_IsBackground_Albums] | $EXP[ListView_Display_IsBackground_Songs]]</expression>
@@ -46,13 +46,15 @@
 	<expression name="ListView_Display_IsThumbnails_Artists">Container.Content(artists) + Skin.String(ListView_Display_Artists,Thumbnails)</expression>
 	<expression name="ListView_Display_IsThumbnails_Albums">Container.Content(albums) + Skin.String(ListView_Display_Albums,Thumbnails)</expression>
 	<expression name="ListView_Display_IsThumbnails_Songs">Container.Content(songs) + Skin.String(ListView_Display_Songs,Thumbnails)</expression>
-	<expression name="ListView_Display_Posters(-1)_IsVisible">Window.IsActive(videos) + [Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | [ListItem(-1).IsFolder + [Container.Content(episodes) | Container.Content(files)]]]</expression>
-	<expression name="ListView_Display_Posters_IsVisible">Window.IsActive(videos) + [Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | [ListItem(0).IsFolder + [Container.Content(episodes) | Container.Content(files)]]]</expression>
-	<expression name="ListView_Display_Posters(1)_IsVisible">Window.IsActive(videos) + [Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | [ListItem(1).IsFolder + [Container.Content(episodes) | Container.Content(files)]]]</expression>
+
+	<expression name="ListView_Display_Posters(-1)_IsVisible">Window.IsActive(videos) + [Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | [ListItem(-1).IsFolder + Container.Content(episodes)] | [ListItem(-1).IsFolder + Container.Content(files) + !String.IsEqual(Control.GetLabel(971),EMPTY)]]</expression>
+	<expression name="ListView_Display_Posters_IsVisible">Window.IsActive(videos) + [Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | [ListItem(0).IsFolder + Container.Content(episodes)] | [ListItem(0).IsFolder + Container.Content(files) + !String.IsEqual(Control.GetLabel(972),EMPTY)]]</expression>
+	<expression name="ListView_Display_Posters(1)_IsVisible">Window.IsActive(videos) + [Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | [ListItem(1).IsFolder + Container.Content(episodes)] | [ListItem(1).IsFolder + Container.Content(files) + !String.IsEqual(Control.GetLabel(973),EMPTY)]]</expression>
 	<expression name="ListView_Display_Square_IsVisible">Window.IsActive(music) + [Container.Content(artists) | Container.Content(albums) | Container.Content(songs) | Container.Content(actors) | Container.Content(files)]</expression>
-	<expression name="ListView_Display_Fanart(-1)_IsVisible">Window.IsActive(videos) + [!ListItem(-1).IsFolder + [Container.Content(episodes) | Container.Content(files)]]</expression>
-	<expression name="ListView_Display_Fanart_IsVisible">Window.IsActive(videos) + [!ListItem(0).IsFolder + [Container.Content(episodes) | Container.Content(files)]]</expression>
-	<expression name="ListView_Display_Fanart(1)_IsVisible">Window.IsActive(videos) + [!ListItem(1).IsFolder + [Container.Content(episodes) | Container.Content(files)]]</expression>
+	<expression name="ListView_Display_Fanart(-1)_IsVisible">Window.IsActive(videos) + !ListItem(-1).IsFolder + [Container.Content(episodes) | Container.Content(files)]</expression>
+	<expression name="ListView_Display_Fanart_IsVisible">Window.IsActive(videos) + !ListItem(0).IsFolder + [Container.Content(episodes) | Container.Content(files)]</expression>
+	<expression name="ListView_Display_Fanart(1)_IsVisible">Window.IsActive(videos) + !ListItem(1).IsFolder + [Container.Content(episodes) | Container.Content(files)]</expression>
+
 	<expression name="ListView_Details_Info_IsVisible">$EXP[ListView_IsVisible] + [$EXP[ListView_Details_Info_IsVisible_Movies] | $EXP[ListView_Details_Info_IsVisible_Sets] | $EXP[ListView_Details_Info_IsVisible_TVShows] | $EXP[ListView_Details_Info_IsVisible_Seasons] | $EXP[ListView_Details_Info_IsVisible_Episodes] | $EXP[ListView_Details_Info_IsVisible_Artists] | $EXP[ListView_Details_Info_IsVisible_Albums] | $EXP[ListView_Details_Info_IsVisible_Songs] | Container.Content(files) | Container.Content(actors)]</expression>
 	<expression name="ListView_Details_Info_IsVisible_Movies">Container.Content(movies) + [Skin.String(ListView_Details_Movies,TitleAndInfo) | String.IsEmpty(Skin.String(ListView_Details_Movies))]</expression>
 	<expression name="ListView_Details_Info_IsVisible_Sets">Container.Content(sets) + [Skin.String(ListView_Details_Sets,TitleAndInfo) | String.IsEmpty(Skin.String(ListView_Details_Sets))]</expression>
@@ -892,6 +894,7 @@
 		<param name="animationeasing" default="inout"/>
 		<param name="fallbackcolor" default="$VAR[AccentColor]"/>
     <param name="aspectratio" default="scale"/>
+		<param name="diffuse" default=""/>
     <param name="fadetime" default="0"/>
     <param name="showgradient" default="false"/>
     <param name="unfocusedoverlay" default="false"/>
@@ -936,7 +939,7 @@
         <!--Artwork-->
         <control type="image">
 				  <aspectratio align="center" aligny="center">$PARAM[aspectratio]</aspectratio>
-				  <texture background="true">$VAR[Thumbnail($PARAM[position])Content]</texture>
+				  <texture background="true" diffuse="$PARAM[diffuse]">$VAR[Thumbnail($PARAM[position])Content]</texture>
 					<!--<texture background="true" colordiffuse="$VAR[AccentColor]">views/white_100.png</texture>-->
           <fadetime>$PARAM[fadetime]</fadetime>
 			  </control>
@@ -1250,7 +1253,6 @@
 		<definition>
 			<control type="group">
         <visible>$EXP[Video_Containers] | Container.Content(files)</visible>
-				<visible>!$EXP[Dialog_IsVisible]</visible>
 				<visible>$PARAM[visible]</visible>
 				<include>ContentFadeAnimation</include>
 				<left>$PARAM[left]</left>
@@ -1321,7 +1323,7 @@
 		<param name="groupvisible" default="$EXP[ListView_Flags_IsOn] | $EXP[BillboardView_Flags_IsOn] | $EXP[ShowcaseView_Flags_IsOn] | $EXP[StripView_Flags_IsOn]"/>
 		<definition>
 			<control type="group">
-				<visible>!$EXP[Dialog_IsVisible] + !Control.HasFocus(60)</visible>
+				<visible>!Control.HasFocus(60)</visible>
 				<visible>$PARAM[groupvisible]</visible>
         <include>ContentFadeAnimation</include>
 				<control type="group">
@@ -1923,7 +1925,6 @@
     <param name="plotcolor" default="$VAR[ListUnfocusColor]"/>
 		<definition>
 			<control type="grouplist">
-				<visible>!$EXP[Dialog_IsVisible]</visible>
         <visible>!Container.IsUpdating</visible>
 				<visible>$PARAM[groupvisibility]</visible>
         <include>ContentFadeAnimation</include>

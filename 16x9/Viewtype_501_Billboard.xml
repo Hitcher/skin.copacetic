@@ -4,148 +4,142 @@
 		<control type="group">
 			<include>FullscreenDimensions</include>
 
-			<!--List & Static-->
+			<!--BILLBOARD-->
 			<control type="group">
 				<visible>$EXP[BillboardView_IsVisible]</visible>
 				<include>ViewSwitchingAnimation</include>
+
+				<!--CONTAINER-->
+				<control type="list" id="501">
+					<viewtype label="Billboard">wide</viewtype>
+					<left>0</left>
+					<top>0</top>
+					<onup>SetFocus(3000,0)</onup>
+					<ondown>60</ondown>
+					<onleft>501</onleft>
+					<onright>501</onright>
+					<pagecontrol>60</pagecontrol>
+					<preloaditems>2</preloaditems>
+					<orientation>horizontal</orientation>
+					<scrolltime tween="sine" easing="inout">380</scrolltime>
+					<visible>$EXP[BillboardView_Containers]</visible>
+					<focusedlayout width="1920" height="1080">
+						<include>HiddenFocusButton</include>
+					</focusedlayout>
+					<itemlayout width="1920" height="1080"/>
+				</control>
+
+				<!--STATIC ARTWORK-->
 				<control type="group">
 					<visible>!$EXP[ContainerSwitching]</visible>
-					<include>ViewSwitchingAnimation</include>
-					<!--Background-->
+					<include>ContainerSwitchingAnimation</include>
 					<control type="group">
 						<visible>!$EXP[ContentSwitching]</visible>
-						<include>CustomViewsBackground</include>
 						<include content="ListIcon">
-								<param name="left" value="0"/>
-								<param name="top" value="0"/>
-								<param name="width" value="1920"/>
-								<param name="height" value="1080"/>
+							<param name="left" value="0"/>
+							<param name="top" value="0"/>
+							<param name="width" value="1920"/>
+							<param name="height" value="1080"/>
+							<param name="unfocusedoverlay" value="true"/>
 						</include>
-						<include content="ViewtypeOverlay"/>
 					</control>
-					<!--Container-->
-					<control type="list" id="501">
-						<viewtype label="Billboard">wide</viewtype>
-						<left>0</left>
-						<top>0</top>
-						<onup>SetFocus(3000,0)</onup>
-						<ondown>60</ondown>
-						<onleft>501</onleft>
-						<onright>501</onright>
-						<pagecontrol>60</pagecontrol>
-						<preloaditems>2</preloaditems>
-						<orientation>horizontal</orientation>
-						<scrolltime tween="sine" easing="inout">380</scrolltime>
-						<visible>$EXP[BillboardView_Containers]</visible>
-						<focusedlayout width="1920" height="1080">
-							<include>HiddenFocusButton</include>
-						</focusedlayout>
-						<itemlayout width="1920" height="1080"/>
-					</control>
-					<!--Static Content-->
+				</control>
+
+				<!--STATIC DETAILS-->
+				<control type="group">
+					<visible>!$EXP[ContainerSwitching]</visible>
+					<include>DelayedContainerSwitchingAnimation</include>
 					<control type="group">
 						<visible>!$EXP[ContentSwitching]</visible>
-						<include>ProgressBarFadeAnimation</include>
-						<!--Details no logo-->
-						<include content="CommonViewDetails">
-							<param name="groupvisibility" value="!$EXP[BillboardView_Details_Off] + !$EXP[BillboardView_Details_Logo_IsVisible]"/>
-							<param name="left" value="120"/>
-							<param name="width" value="1680"/>
-							<param name="labeltype" value="textbox"/>
-							<param name="titlevisibility" value="true"/>
-							<param name="titleheight" value="146"/>
-							<param name="titlefont" value="Billboard_Title"/>
-							<param name="titlecolor" value="$VAR[LightColor]"/>
-							<param name="titlealign" value="left"/>
-							<param name="logovisibility" value="false"/>
-							<param name="infovisibility" value="$EXP[BillboardView_Details_Info_IsVisible]"/>
-							<param name="titleinfogap" value="0"/>
-							<param name="infoheight" value="35"/>
-							<param name="infofont" value="Billboard_Info"/>
-							<param name="plotvisibility"  value="$EXP[BillboardView_Details_Plot_IsVisible]"/>
-							<param name="plotfont" value="Body"/>
-							<param name="plotmaxheight" value="103"/>
-							<param name="plotcolor" value="$VAR[LightColor]"/>
-						</include>
-						<!--Details with logo-->
+						<include>DelayedContentSwitchingAnimation</include>
 						<control type="group">
-							<animation effect="slide" end="-60,372" time="0" condition="!$EXP[BillboardView_Details_Off] + !$EXP[BillboardView_Details_Info_IsVisible] + !$EXP[BillboardView_Details_Plot_IsVisible] + $EXP[BillboardView_Details_Logo_IsVisible]">Conditional</animation>
+							<visible>!$EXP[Dialog_IsVisible]</visible>
+							<include>ContentFadeAnimation</include>
+							<!--Media Flags-->
+							<include>MediaFlags</include>
+							<!--Progress Bar-->
+							<include content="ProgressBar"/>
+							<!--Details no logo-->
 							<include content="CommonViewDetails">
-								<param name="groupvisibility" value="!$EXP[BillboardView_Details_Off] + $EXP[BillboardView_Details_Logo_IsVisible]"/>
+								<param name="groupvisibility" value="!$EXP[BillboardView_Details_Off] + !$EXP[BillboardView_Details_Logo_IsVisible]"/>
 								<param name="left" value="120"/>
 								<param name="width" value="1680"/>
-								<param name="titlevisibility" value="false"/>
+								<param name="labeltype" value="textbox"/>
+								<param name="titlevisibility" value="true"/>
+								<param name="titleheight" value="146"/>
+								<param name="titlefont" value="Billboard_Title"/>
 								<param name="titlecolor" value="$VAR[LightColor]"/>
-								<param name="logovisibility" value="true"/>
+								<param name="titlealign" value="left"/>
+								<param name="logovisibility" value="false"/>
 								<param name="infovisibility" value="$EXP[BillboardView_Details_Info_IsVisible]"/>
-								<param name="titleinfogap" value="20"/>
+								<param name="titleinfogap" value="0"/>
 								<param name="infoheight" value="35"/>
 								<param name="infofont" value="Billboard_Info"/>
 								<param name="plotvisibility"  value="$EXP[BillboardView_Details_Plot_IsVisible]"/>
+								<param name="plotfont" value="Body"/>
 								<param name="plotmaxheight" value="103"/>
 								<param name="plotcolor" value="$VAR[LightColor]"/>
 							</include>
+							<!--Details with logo-->
+							<control type="group">
+								<animation effect="slide" end="-60,372" time="0" condition="!$EXP[BillboardView_Details_Off] + !$EXP[BillboardView_Details_Info_IsVisible] + !$EXP[BillboardView_Details_Plot_IsVisible] + $EXP[BillboardView_Details_Logo_IsVisible]">Conditional</animation>
+								<include content="CommonViewDetails">
+									<param name="groupvisibility" value="!$EXP[BillboardView_Details_Off] + $EXP[BillboardView_Details_Logo_IsVisible]"/>
+									<param name="left" value="120"/>
+									<param name="width" value="1680"/>
+									<param name="titlevisibility" value="false"/>
+									<param name="titlecolor" value="$VAR[LightColor]"/>
+									<param name="logovisibility" value="true"/>
+									<param name="infovisibility" value="$EXP[BillboardView_Details_Info_IsVisible]"/>
+									<param name="titleinfogap" value="20"/>
+									<param name="infoheight" value="35"/>
+									<param name="infofont" value="Billboard_Info"/>
+									<param name="plotvisibility"  value="$EXP[BillboardView_Details_Plot_IsVisible]"/>
+									<param name="plotmaxheight" value="103"/>
+									<param name="plotcolor" value="$VAR[LightColor]"/>
+								</include>
+							</control>
+							<!--NowPlaying-->
+							<control type="group">
+								<animation effect="slide" end="0,-16" time="0" condition="$EXP[BillboardView_Details_Info_IsVisible]">Conditional</animation>
+								<include content="NowPlayingVisualization_Fill">
+									<param name="visible" value="$EXP[StandardViews_NowPlaying_Small] + $EXP[BillboardView_Details_NowPlaying_Left_IsVisible]"/>
+									<param name="top" value="480"/>
+								</include>
+							</control>
+							<control type="group">
+								<animation effect="slide" end="-180,0" time="0" condition="[$EXP[BillboardView_Flags_Studio] + !String.IsEqual(Control.GetLabel(914),flags/blank.png)] | [$EXP[BillboardView_Flags_Rating] + !String.IsEqual(Control.GetLabel(915),flags/blank.png)]">Conditional</animation>
+								<animation effect="slide" end="-180,0" time="0" condition="$EXP[BillboardView_Flags_All] + [[!String.IsEqual(Control.GetLabel(914),flags/blank.png) + String.IsEqual(Control.GetLabel(915),flags/blank.png)] | [String.IsEqual(Control.GetLabel(914),flags/blank.png) + !String.IsEqual(Control.GetLabel(915),flags/blank.png)]]">Conditional</animation>
+								<animation effect="slide" end="-360,0" time="0" condition="$EXP[BillboardView_Flags_All] + !String.IsEqual(Control.GetLabel(914),flags/blank.png) + !String.IsEqual(Control.GetLabel(915),flags/blank.png)">Conditional</animation>
+								<include content="NowPlayingVisualization_Fill">
+									<param name="visible" value="$EXP[StandardViews_NowPlaying_Small] + !$EXP[BillboardView_Details_NowPlaying_Left_IsVisible]"/>
+									<param name="left" value="1740"/>
+									<param name="top" value="900"/>
+									<param name="width" value="180"/>
+									<param name="height" value="180"/>
+									<param name="charttop" value="112"/>
+									<param name="itemgap" value="6"/>
+									<param name="barwidth" value="16"/>
+									<param name="barheight1" value="540"/>
+									<param name="barheight2" value="1200/"/>
+									<param name="barheight3" value="800"/>
+									<param name="pausewidth" value="14"/>
+									<param name="pauseheight" value="800"/>
+									<param name="pauseshift" value="-4"/>
+								</include>
+							</control>
 						</control>
-						<!--NowPlaying-->
-						<control type="group">
-							<animation effect="slide" end="0,-16" time="0" condition="$EXP[BillboardView_Details_Info_IsVisible]">Conditional</animation>
-							<include content="NowPlayingVisualization_Fill">
-								<param name="visible" value="$EXP[StandardViews_NowPlaying_Small] + $EXP[BillboardView_Details_NowPlaying_Left_IsVisible]"/>
-								<param name="top" value="480"/>
-							</include>
-						</control>
-						<control type="group">
-							<animation effect="slide" end="-180,0" time="0" condition="[$EXP[BillboardView_Flags_Studio] + !String.IsEqual(Control.GetLabel(914),flags/blank.png)] | [$EXP[BillboardView_Flags_Rating] + !String.IsEqual(Control.GetLabel(915),flags/blank.png)]">Conditional</animation>
-							<animation effect="slide" end="-180,0" time="0" condition="$EXP[BillboardView_Flags_All] + [[!String.IsEqual(Control.GetLabel(914),flags/blank.png) + String.IsEqual(Control.GetLabel(915),flags/blank.png)] | [String.IsEqual(Control.GetLabel(914),flags/blank.png) + !String.IsEqual(Control.GetLabel(915),flags/blank.png)]]">Conditional</animation>
-							<animation effect="slide" end="-360,0" time="0" condition="$EXP[BillboardView_Flags_All] + !String.IsEqual(Control.GetLabel(914),flags/blank.png) + !String.IsEqual(Control.GetLabel(915),flags/blank.png)">Conditional</animation>
-							<include content="NowPlayingVisualization_Fill">
-								<param name="visible" value="$EXP[StandardViews_NowPlaying_Small] + !$EXP[BillboardView_Details_NowPlaying_Left_IsVisible]"/>
-								<param name="left" value="1740"/>
-								<param name="top" value="900"/>
-								<param name="width" value="180"/>
-								<param name="height" value="180"/>
-								<param name="charttop" value="112"/>
-								<param name="itemgap" value="6"/>
-								<param name="barwidth" value="16"/>
-								<param name="barheight1" value="540"/>
-								<param name="barheight2" value="1200/"/>
-								<param name="barheight3" value="800"/>
-								<param name="pausewidth" value="14"/>
-								<param name="pauseheight" value="800"/>
-								<param name="pauseshift" value="-4"/>
-							</include>
-						</control>
-						<!--Media Flags-->
-						<include>MediaFlags</include>
 					</control>
 				</control>
-			</control>
 
-			<!--Progress bar-->
-			<control type="group">
-				<visible>$EXP[BillboardView_IsVisible]</visible>
-				<include>ContainerSwitchingProgressBarAnimation</include>
+				<!--SCROLLING BACKGROUND ARTWORK-->
 				<control type="group">
 					<visible>!$EXP[ContainerSwitching]</visible>
-					<include>ContainerSwitchingProgressBarAnimation</include>
-					<control type="group">
-						<visible>!$EXP[ContentSwitching]</visible>
-						<include>ProgressBarFadeAnimation</include>
-						<include content="ProgressBar"/>
-					</control>
-				</control>
-			</control>
-
-			<!--Scrolling-->
-			<control type="group">
-				<visible>$EXP[BillboardView_IsVisible]</visible>
-				<include>ViewSwitchingAnimation</include>
-				<control type="group">
-					<visible>!$EXP[ContainerSwitching]</visible>
-					<include>ViewSwitchingAnimation</include>
-					<!--On Previous Thumbs-->
+					<include>ContainerSwitchingAnimation</include>
+					<!--ONPREVIOUS-->
 					<control type="group">
 						<visible>Control.IsVisible(5001)</visible>
+						<include>CustomViewsBackground</include>
 						<!--Move Icon -1 to 0-->
 						<include content="ListIcon">
 							<param name="left" value="-1920"/>
@@ -157,6 +151,7 @@
 							<param name="animationcondition" value="true"/>
 							<param name="animationeffect" value="slide"/>
 							<param name="animationend" value="1920,0"/>
+							<param name="unfocusedoverlay" value="true"/>
 						</include>
 						<!--Move Icon 0 to 1-->
 						<include content="ListIcon">
@@ -170,11 +165,13 @@
 							<param name="animationcondition" value="true"/>
 							<param name="animationeffect" value="slide"/>
 							<param name="animationend" value="1920,0"/>
+							<param name="unfocusedoverlay" value="true"/>
 						</include>
 					</control>
-					<!--On Next Thumbs-->
+					<!--ONNEXT-->
 					<control type="group">
 						<visible>Control.IsVisible(5002)</visible>
+						<include>CustomViewsBackground</include>
 						<!--Move Icon 0 to -1-->
 						<include content="ListIcon">
 							<param name="position" value="-1"/>
@@ -187,6 +184,7 @@
 							<param name="animationcondition" value="true"/>
 							<param name="animationeffect" value="slide"/>
 							<param name="animationend" value="-1920,0"/>
+							<param name="unfocusedoverlay" value="true"/>
 						</include>
 						<!--Move Icon 1 to 0-->
 						<include content="ListIcon">
@@ -199,14 +197,11 @@
 							<param name="animationcondition" value="true"/>
 							<param name="animationeffect" value="slide"/>
 							<param name="animationend" value="-1920,0"/>
+							<param name="unfocusedoverlay" value="true"/>
 						</include>
 					</control>
-					<include content="ViewtypeOverlay">
-						<param name="visible" value="[Control.IsVisible(5001) | Control.IsVisible(5002)] + !$EXP[BillboardView_Details_Off]"/>
-					</include>
 				</control>
 			</control>
-
 		</control>
 	</include>
 </includes>
