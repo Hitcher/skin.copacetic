@@ -46,12 +46,13 @@
 	<expression name="ListView_Display_IsThumbnails_Artists">Container.Content(artists) + Skin.String(ListView_Display_Artists,Thumbnails)</expression>
 	<expression name="ListView_Display_IsThumbnails_Albums">Container.Content(albums) + Skin.String(ListView_Display_Albums,Thumbnails)</expression>
 	<expression name="ListView_Display_IsThumbnails_Songs">Container.Content(songs) + Skin.String(ListView_Display_Songs,Thumbnails)</expression>
-
-	<expression name="ListView_Display_Posters_IsVisible">Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | [Container.Content(files) + String.Contains(ListItem.Art(thumb),poster.jpg)] | [Container.Content(episodes) + String.IsEmpty(ListItem.TVShowTitle) + ListItem.IsFolder]</expression>
-	<expression name="ListView_Display_Square_IsVisible">Container.Content(artists) | Container.Content(albums) | Container.Content(songs) | Container.Content(actors) | [Window.IsActive(music) + Container.Content(files) + [String.Contains(ListItem.Art(thumb),folder.jpg) | String.Contains(ListItem.Art(thumb),thumb.jpg)]]</expression>
-	<expression name="ListView_Display_Fanart_IsVisible">[Container.Content(episodes) + !ListItem.IsFolder] | [Container.Content(files) + ![Window.IsActive(music) | String.Contains(ListItem.Art(thumb),poster.jpg)]]</expression>
-
-
+	<expression name="ListView_Display_Posters(-1)_IsVisible">Window.IsActive(videos) + [Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | [ListItem(-1).IsFolder + [Container.Content(episodes) | Container.Content(files)]]]</expression>
+	<expression name="ListView_Display_Posters_IsVisible">Window.IsActive(videos) + [Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | [ListItem(0).IsFolder + [Container.Content(episodes) | Container.Content(files)]]]</expression>
+	<expression name="ListView_Display_Posters(1)_IsVisible">Window.IsActive(videos) + [Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | [ListItem(1).IsFolder + [Container.Content(episodes) | Container.Content(files)]]]</expression>
+	<expression name="ListView_Display_Square_IsVisible">Window.IsActive(music) + [Container.Content(artists) | Container.Content(albums) | Container.Content(songs) | Container.Content(actors) | Container.Content(files)]</expression>
+	<expression name="ListView_Display_Fanart(-1)_IsVisible">Window.IsActive(videos) + [!ListItem(-1).IsFolder + [Container.Content(episodes) | Container.Content(files)]]</expression>
+	<expression name="ListView_Display_Fanart_IsVisible">Window.IsActive(videos) + [!ListItem(0).IsFolder + [Container.Content(episodes) | Container.Content(files)]]</expression>
+	<expression name="ListView_Display_Fanart(1)_IsVisible">Window.IsActive(videos) + [!ListItem(1).IsFolder + [Container.Content(episodes) | Container.Content(files)]]</expression>
 	<expression name="ListView_Details_Info_IsVisible">$EXP[ListView_IsVisible] + [$EXP[ListView_Details_Info_IsVisible_Movies] | $EXP[ListView_Details_Info_IsVisible_Sets] | $EXP[ListView_Details_Info_IsVisible_TVShows] | $EXP[ListView_Details_Info_IsVisible_Seasons] | $EXP[ListView_Details_Info_IsVisible_Episodes] | $EXP[ListView_Details_Info_IsVisible_Artists] | $EXP[ListView_Details_Info_IsVisible_Albums] | $EXP[ListView_Details_Info_IsVisible_Songs] | Container.Content(files) | Container.Content(actors)]</expression>
 	<expression name="ListView_Details_Info_IsVisible_Movies">Container.Content(movies) + [Skin.String(ListView_Details_Movies,TitleAndInfo) | String.IsEmpty(Skin.String(ListView_Details_Movies))]</expression>
 	<expression name="ListView_Details_Info_IsVisible_Sets">Container.Content(sets) + [Skin.String(ListView_Details_Sets,TitleAndInfo) | String.IsEmpty(Skin.String(ListView_Details_Sets))]</expression>
