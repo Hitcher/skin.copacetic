@@ -25,7 +25,7 @@
 
   <expression name="ContainerSwitching">![[Container.Content(movies) + Control.IsVisible(951)] | [Container.Content(sets) + Control.IsVisible(952)] | [Container.Content(tvshows) + Control.IsVisible(953)] | [Container.Content(seasons) + Control.IsVisible(954)] | [Container.Content(episodes) + Control.IsVisible(955)] | [Container.Content(artists) + Control.IsVisible(956)] | [Container.Content(albums) + Control.IsVisible(957)] | [Container.Content(songs) + Control.IsVisible(958)] | [[Container.Content(files) | Container.Content(genres) | Container.Content(years) | Container.Content(playlists) | Container.Content(plugins) | Container.Content(studios) | Container.Content(directors) | Container.Content(tags) | Container.Content(countries) | Container.Content(roles) | Container.Content(images) | Container.Content(sources)] + Control.IsVisible(959)] | [Container.Content(actors) + Control.IsVisible(960)] | [Container.Content(addons) + Control.IsVisible(961)] | [Container.Content() + Control.IsVisible(962)]]</expression>
   <expression name="ContentSwitching">[Control.IsVisible(5001) | Control.IsVisible(5002)]</expression>
-	<expression name="OptionsSwitching">!Control.IsVisible(914)</expression>
+	<expression name="OptionsSwitching">Control.IsVisible(941)</expression>
 
   <expression name="ListView_IsVisible">[Control.IsVisible(50) | String.IsEqual(Container.ViewMode,List)]</expression>
 	<expression name="ListView_Display_IsBackground">$EXP[ListView_IsVisible] + [$EXP[ListView_Display_IsBackground_Movies] | $EXP[ListView_Display_IsBackground_Sets] | $EXP[ListView_Display_IsBackground_TVShows] | $EXP[ListView_Display_IsBackground_Seasons] | $EXP[ListView_Display_IsBackground_Episodes] | $EXP[ListView_Display_IsBackground_Artists] | $EXP[ListView_Display_IsBackground_Albums] | $EXP[ListView_Display_IsBackground_Songs]]</expression>
@@ -338,12 +338,15 @@
 
 	<!-- Fanart-->
 	<include name="Fanart">
-		<control type="image">
-			<visible>Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | Container.Content(episodes) | Container.Content(artists)</visible>
-			<aspectratio>scale</aspectratio>
-			<fadetime>380</fadetime>
-			<texture background="true">$VAR[Thumbnail(0)Content]</texture>
-		</control>
+		<param name="texture" default="$VAR[Thumbnail(0)Content]"/>
+		<definition>
+			<control type="image">
+				<visible>Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | Container.Content(episodes) | Container.Content(artists)</visible>
+				<aspectratio>scale</aspectratio>
+				<fadetime>380</fadetime>
+				<texture background="true">$PARAM[texture]</texture>
+			</control>
+	</definition>
 	</include>
 
 	<!-- Random Fanart-->
@@ -759,68 +762,68 @@
 		</definition>
 	</include>
 
-  <include name="ButtonLayout">
+	<include name="ButtonLayout">
     <param name="buttonid" default=""/>
-    <param name="left" default="0"/>
-    <param name="top" default="0"/>
-    <param name="width" default="120"/>
-    <param name="height" default="120"/>
-    <param name="symbolwidth" default="60"/>
-    <param name="symbolleft" default="30"/>
-    <param name="unfocusedcolor" default="$VAR[PrimaryColor]"/>
+    <param name="buttonwidth" default="120"/>
+		<param name="iconwidth" default="60"/>
+    <param name="PrimaryColor" default="$VAR[PrimaryColor]"/>
     <param name="unfocusedtexture" default=""/>
-    <param name="focusedcolor" default="$VAR[PrimaryColor]"/>
+    <param name="AccentColor" default="$VAR[PrimaryColor]"/>
     <param name="focusedtexture" default=""/>
     <definition>
-      <control type="group">
-        <visible>Control.IsVisible($PARAM[buttonid])</visible>
-        <left>$PARAM[left]</left>
-        <top>$PARAM[top]</top>
-        <width>$PARAM[width]</width>
-        <height>$PARAM[height]</height>
-        <!--Unfocused-->
-        <control type="image">
-          <left>$PARAM[symbolleft]</left>
-          <top>$PARAM[symbolleft]</top>
-          <width>$PARAM[symbolwidth]</width>
-          <height>$PARAM[symbolwidth]</height>
-          <aspectratio>keep</aspectratio>
-  				<texture colordiffuse="$PARAM[unfocusedcolor]">$PARAM[unfocusedtexture]</texture>
-  				<visible>Control.IsVisible($PARAM[buttonid]) + !Control.HasFocus($PARAM[buttonid])</visible>
-  			</control>
-        <!--Focused-->
-        <control type="image">
-          <left>$PARAM[symbolleft]</left>
-          <top>$PARAM[symbolleft]</top>
-          <width>$PARAM[symbolwidth]</width>
-          <height>$PARAM[symbolwidth]</height>
-          <aspectratio>keep</aspectratio>
-          <texture colordiffuse="$PARAM[focusedcolor]">$PARAM[focusedtexture]</texture>
-          <visible>Control.IsVisible($PARAM[buttonid]) + Control.HasFocus($PARAM[buttonid])</visible>
-        </control>
-      </control>
+			<control type="group">
+				<visible>Control.IsVisible($PARAM[buttonid])</visible>
+				<width>$PARAM[buttonwidth]</width>
+				<height>$PARAM[buttonwidth]</height>
+				<control type="grouplist">
+					<orientation>horizontal</orientation>
+					<align>center</align>
+					<control type="grouplist">
+						<width>$PARAM[iconwidth]</width>
+						<height>$PARAM[buttonwidth]</height>
+						<orientation>vertical</orientation>
+						<align>center</align>
+						<!--Unfocused-->
+						<control type="image">
+							<width>$PARAM[iconwidth]</width>
+							<height>$PARAM[iconwidth]</height>
+							<aspectratio>keep</aspectratio>
+							<texture colordiffuse="$PARAM[PrimaryColor]">$PARAM[unfocusedtexture]</texture>
+							<visible>Control.IsVisible($PARAM[buttonid]) + !Control.HasFocus($PARAM[buttonid])</visible>
+						</control>
+						<!--Focused-->
+						<control type="image">
+							<width>$PARAM[iconwidth]</width>
+							<height>$PARAM[iconwidth]</height>
+							<aspectratio>keep</aspectratio>
+							<texture colordiffuse="$PARAM[AccentColor]">$PARAM[focusedtexture]</texture>
+							<visible>Control.IsVisible($PARAM[buttonid]) + Control.HasFocus($PARAM[buttonid])</visible>
+						</control>
+					</control>
+				</control>
+			</control>
     </definition>
   </include>
 
 <include name="ButtonGroup">
   <param name="id" default=""/>
-  <param name="left" default="1680"/>
-  <param name="top" default="960"/>
-  <param name="width" default="240"/>
-  <param name="height" default="120"/>
+  <param name="groupright" default="0"/>
+  <param name="grouptop" default="960"/>
+  <param name="groupwidth" default="240"/>
+  <param name="buttonheight" default="120"/>
+	<param name="iconheight" default="60"/>
+	<param name="align" default="right"/>
   <param name="button1id" default=""/>
 	<param name="button2id" default=""/>
-	<param name="texturebuttonsvisible" default="true"/>
-  <param name="texturebutton1unfocused" default=""/>
-  <param name="texturebutton1focused" default=""/>
-  <param name="texturebutton2unfocused" default=""/>
-  <param name="texturebutton2focused" default=""/>
+	<param name="texturebuttonsvisible" default="[String.IsEqual(Control.GetLabel(11),Yes) | String.IsEqual(Control.GetLabel(11),Ok)]"/>
+	<param name="texturebutton1unfocused" default="views/cross-large_unfocused.png"/>
+	<param name="texturebutton1focused" default="views/cross-large_focused.png"/>
+	<param name="texturebutton2unfocused" default="views/check-large_unfocused.png"/>
+	<param name="texturebutton2focused" default="views/check-large_focused.png"/>
   <definition>
 		<control type="group">
 	    <control type="grouplist" id="$PARAM[id]">
 	      <visible allowhiddenfocus="true">false</visible>
-	      <width>$PARAM[width]</width>
-	      <height>$PARAM[height]</height>
 	      <itemgap>0</itemgap>
 	      <onleft>0</onleft>
 	      <onright>0</onright>
@@ -830,22 +833,27 @@
 	      <control type="button" id="$PARAM[button1id]"/>
 	      <control type="button" id="$PARAM[button2id]"/>
 	    </control>
+			<!-- tick/cross buttons for yes/no or ok/cancel-->
 	    <control type="grouplist">
 				<visible>$PARAM[texturebuttonsvisible]</visible>
-	      <left>$PARAM[left]</left>
-	      <top>$PARAM[top]</top>
-	      <width>$PARAM[width]</width>
-	      <height>$PARAM[height]</height>
+	      <right>$PARAM[groupright]</right>
+	      <top>$PARAM[grouptop]</top>
+	      <width>$PARAM[groupwidth]</width>
+	      <height>$PARAM[buttonheight]</height>
 	      <itemgap>0</itemgap>
-				<align>right</align>
+				<align>$PARAM[align]</align>
 				<orientation>horizontal</orientation>
 	      <include content="ButtonLayout">
 	        <param name="buttonid" value="$PARAM[button1id]"/>
+					<param name="buttonwidth" value="$PARAM[buttonheight]"/>
+					<param name="iconwidth" value="$PARAM[iconheight]"/>
 	        <param name="unfocusedtexture" value="$PARAM[texturebutton1unfocused]"/>
 	        <param name="focusedtexture" value="$PARAM[texturebutton1focused]"/>
 	      </include>
 	      <include content="ButtonLayout">
 	        <param name="buttonid" value="$PARAM[button2id]"/>
+					<param name="buttonwidth" value="$PARAM[buttonheight]"/>
+					<param name="iconwidth" value="$PARAM[iconheight]"/>
 	        <param name="unfocusedtexture" value="$PARAM[texturebutton2unfocused]"/>
 	        <param name="focusedtexture" value="$PARAM[texturebutton2focused]"/>
 	      </include>

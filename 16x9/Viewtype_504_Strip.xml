@@ -4,329 +4,328 @@
 		<control type="group">
 			<include>FullscreenDimensions</include>
 
-			<!--Progress bar-->
-			<control type="group">
-				<visible>$EXP[StripView_IsVisible]</visible>
-				<include>ContainerSwitchingProgressBarAnimation</include>
-				<control type="group">
-					<visible>!$EXP[ContainerSwitching]</visible>
-					<include>ContainerSwitchingProgressBarAnimation</include>
-					<control type="group">
-						<visible>!$EXP[ContentSwitching]</visible>
-						<include>ProgressBarFadeAnimation</include>
-						<control type="group">
-							<animation effect="slide" end="0,-30" time="0" condition="$EXP[StripView_Display_IsSquare] | $EXP[StripView_Display_IsFanart]">Conditional</animation>
-							<animation effect="slide" end="75,0" time="0" condition="$EXP[StripView_Display_IsSquare] + !$EXP[StripView_FullWidth]">Conditional</animation>
-							<animation effect="slide" end="320,0" time="0" condition="$EXP[StripView_Display_IsFanart] + !$EXP[StripView_FullWidth]">Conditional</animation>
-							<include content="ProgressBar">
-								<param name="top" value="930"/>
-							</include>
-						</control>
-					</control>
-				</control>
-			</control>
-
-			<!--Hide Progress slide during animation-->
-			<control type="group">
-				<visible>$EXP[StripView_IsVisible]</visible>
-				<visible>$EXP[ContainerSwitching]</visible>
-				<include>CustomViewsBackground</include>
-				<animation effect="slide" end="0,0" time="380" reversible="false">Hidden</animation>
-			</control>
-
-			<!--List & Static-->
+			<!--STRIPVIEW-->
 			<control type="group">
 				<visible>$EXP[StripView_IsVisible]</visible>
 				<include>ViewSwitchingAnimation</include>
+
+				<!--CONTAINER-->
+				<control type="fixedlist" id="504">
+					<viewtype label="Strip">wrap</viewtype>
+					<onup>SetFocus(3000,0)</onup>
+					<ondown>60</ondown>
+					<onleft>504</onleft>
+					<onright>504</onright>
+					<pagecontrol>60</pagecontrol>
+					<preloaditems>2</preloaditems>
+					<focusposition>0</focusposition>
+					<orientation>horizontal</orientation>
+					<visible>$EXP[StripView_Containers]</visible>
+					<scrolltime tween="sine" easing="inout">380</scrolltime>
+					<!--Poster layout-->
+					<focusedlayout width="480" height="720" condition="$EXP[StripView_Display_IsPosters]">
+						<include>HiddenFocusButton</include>
+					</focusedlayout>
+					<itemlayout width="480" height="720" condition="$EXP[StripView_Display_IsPosters]"/>
+					<!--Fanart layout-->
+					<focusedlayout width="1120" height="630" condition="$EXP[StripView_Display_IsFanart]">
+						<include>HiddenFocusButton</include>
+					</focusedlayout>
+					<itemlayout width="960" height="540"  condition="$EXP[StripView_Display_IsFanart]"/>
+					<!--Square layout-->
+					<focusedlayout width="540" height="540"  condition="$EXP[StripView_Display_IsSquare]">
+						<include>HiddenFocusButton</include>
+					</focusedlayout>
+					<itemlayout width="540" height="540"  condition="$EXP[StripView_Display_IsSquare]"/>
+				</control>
+
+				<!--STATIC DETAILS-->
 				<control type="group">
 					<visible>!$EXP[ContainerSwitching]</visible>
-					<include>ViewSwitchingAnimation</include>
-					<!--Container-->
-					<control type="fixedlist" id="504">
-						<viewtype label="Strip">wrap</viewtype>
-						<onup>SetFocus(3000,0)</onup>
-						<ondown>60</ondown>
-						<onleft>504</onleft>
-						<onright>504</onright>
-						<pagecontrol>60</pagecontrol>
-						<preloaditems>2</preloaditems>
-						<focusposition>0</focusposition>
-						<orientation>horizontal</orientation>
-						<visible>$EXP[StripView_Containers]</visible>
-						<scrolltime tween="sine" easing="inout">380</scrolltime>
-						<!--Poster layout-->
-						<focusedlayout width="480" height="720" condition="$EXP[StripView_Display_IsPosters]">
-							<include>HiddenFocusButton</include>
-						</focusedlayout>
-						<itemlayout width="480" height="720" condition="$EXP[StripView_Display_IsPosters]"/>
-						<!--Fanart layout-->
-						<focusedlayout width="1120" height="630" condition="$EXP[StripView_Display_IsFanart]">
-							<include>HiddenFocusButton</include>
-						</focusedlayout>
-						<itemlayout width="960" height="540"  condition="$EXP[StripView_Display_IsFanart]"/>
-						<!--Square layout-->
-						<focusedlayout width="540" height="540"  condition="$EXP[StripView_Display_IsSquare]">
-							<include>HiddenFocusButton</include>
-						</focusedlayout>
-						<itemlayout width="540" height="540"  condition="$EXP[StripView_Display_IsSquare]"/>
-					</control>
-					<!--Static Content-->
+					<include>DelayedContainerSwitchingAnimation</include>
 					<control type="group">
 						<visible>!$EXP[ContentSwitching]</visible>
-						<include>ProgressBarFadeAnimation</include>
-						<!--Include Bottom Details-->
-						<include>MediaFlags</include>
-						<control type="label">
-							<animation effect="slide" end="0,-15" time="0" condition="$EXP[StripView_Display_IsSquare] | [$EXP[StripView_Display_IsFanart] + !$EXP[StripView_Flags_IsOn]]">Conditional</animation>
-							<visible>$EXP[StripView_Details_Title] + !$EXP[StripView_Details_Logo_IsOn]</visible>
+						<include>DelayedContentSwitchingAnimation</include>
+						<control type="group">
 							<visible>!$EXP[Dialog_IsVisible]</visible>
 							<include>ContentFadeAnimation</include>
-							<left>240</left>
-							<top>964</top>
-							<width>1440</width>
-							<height>52</height>
-							<font>Showcase_Title</font>
-							<textcolor>$VAR[PrimaryColor]</textcolor>
-							<label>$VAR[Title]</label>
-							<align>center</align>
-							<aligny>center</aligny>
-							<scroll>true</scroll>
-							<scrollsuffix> / </scrollsuffix>
-						</control>
-						<!--Left-Hand Details no logo-->
-						<control type="group">
-							<include content="CommonViewDetails">
-								<param name="groupvisibility" value="!$EXP[StripView_FullWidth] + !$EXP[StripView_Details_Logo_IsVisible]"/>
-								<param name="left" value="60"/>
-								<param name="width" value="600"/>
-								<param name="infovisibility" value="$EXP[StripView_Details_Info_IsVisible]"/>
-								<param name="plotvisibility" value="$EXP[StripView_Details_Plot_IsVisible]"/>
-							</include>
-							<!--Left-Hand Details with logo-->
-							<include content="CommonViewDetails">
-								<param name="groupvisibility" value="!$EXP[StripView_FullWidth] + $EXP[StripView_Details_Logo_IsVisible]"/>
-								<param name="left" value="60"/>
-								<param name="width" value="600"/>
-								<param name="titlevisibility" value="false"/>
-								<param name="logovisibility" value="true"/>
-								<param name="titleinfogap" value="20"/>
-								<param name="infovisibility" value="$EXP[StripView_Details_Info_IsVisible]"/>
-								<param name="plotvisibility" value="$EXP[StripView_Details_Plot_IsVisible]"/>
-							</include>
-						</control>
-					</control>
-				</control>
-			</control>
-
-			<!--Static thumbnails-->
-			<control type="group">
-				<visible>$EXP[StripView_IsVisible]</visible>
-				<include>ViewSwitchingAnimation</include>
-				<control type="group">
-					<visible>!$EXP[ContentSwitching]</visible>
-					<!--Posters-->
-					<control type="group">
-						<visible>$EXP[StripView_Display_IsPosters] + !$EXP[ContainerSwitching]</visible>
-						<include>ViewSwitchingAnimation</include>
-						<control type="group">
-							<visible>!Control.IsVisible(941)</visible>
-							<animation effect="fade" start="0" end="100" time="190" tween="sine" easing="out" reversible="false">Visible</animation>
-							<!--Icon -2-->
-							<include content="ListIcon">
-								<param name="position" value="-2"/>
-								<param name="left" value="-80"/>
-								<param name="top" value="240"/>
-								<param name="width" value="400"/>
-								<param name="height" value="600"/>
-								<param name="visible" value="$EXP[StripView_FullWidth]"/>
-							</include>
-							<!--Icon -1-->
-							<include content="ListIcon">
-								<param name="position" value="-1"/>
-								<param name="left" value="320"/>
-								<param name="top" value="240"/>
-								<param name="width" value="400"/>
-								<param name="height" value="600"/>
-								<param name="visible" value="$EXP[StripView_FullWidth]"/>
-							</include>
-							<!--Icon 0-->
-							<include content="ListIcon">
-								<param name="left" value="720"/>
-								<param name="top" value="180"/>
-								<param name="width" value="480"/>
-								<param name="height" value="720"/>
-								<param name="bordervisible" value="true"/>
-							</include>
-							<!--Icon 1-->
-							<include content="ListIcon">
-								<param name="position" value="1"/>
-								<param name="left" value="1200"/>
-								<param name="top" value="240"/>
-								<param name="width" value="400"/>
-								<param name="height" value="600"/>
-							</include>
-							<!--Icon 2-->
-							<include content="ListIcon">
-								<param name="position" value="2"/>
-								<param name="left" value="1600"/>
-								<param name="top" value="240"/>
-								<param name="width" value="400"/>
-								<param name="height" value="600"/>
-							</include>
-							<!--Dropshadow-->
-							<!--Left Side-->
-							<include content="DropShadow">
-								<param name="left" value="600"/>
-								<param name="top" value="240"/>
-								<param name="height" value="600"/>
-								<param name="visible" value="!String.IsEmpty(Container.ListItemNoWrap(-1).Label) + $EXP[StripView_FullWidth]"/>
-							</include>
-							<!--Right Side-->
-							<include content="DropShadow">
-								<param name="left" value="1200"/>
-								<param name="top" value="240"/>
-								<param name="height" value="600"/>
-								<param name="flipx" value="true"/>
-								<param name="visible" value="!String.IsEmpty(Container.ListItemNoWrap(1).Label)"/>
-							</include>
-						</control>
-					</control>
-					<!--Fanart-->
-					<control type="group">
-						<visible>$EXP[StripView_Display_IsFanart] + !$EXP[ContainerSwitching]</visible>
-						<include>ViewSwitchingAnimation</include>
-						<animation effect="slide" end="320,0" time="190" tween="sine" easing="out" reversible="true" condition="!$EXP[StripView_FullWidth]">Conditional</animation>
-						<control type="group">
-							<visible>!Control.IsVisible(941)</visible>
-							<animation effect="fade" start="0" end="100" time="190" tween="sine" easing="out" reversible="false">Visible</animation>
-							<!--Icon -1-->
-							<include content="ListIcon">
-								<param name="position" value="-1"/>
-								<param name="left" value="-560"/>
-								<param name="top" value="285"/>
-								<param name="width" value="960"/>
-								<param name="height" value="540"/>
-								<param name="visible" value="$EXP[StripView_FullWidth]"/>
-							</include>
-							<!--Icon 0-->
-							<include content="ListIcon">
-								<param name="left" value="400"/>
-								<param name="top" value="240"/>
-								<param name="width" value="1120"/>
-								<param name="height" value="630"/>
-								<param name="bordervisible" value="true"/>
-							</include>
-							<!--Icon 1-->
-							<include content="ListIcon">
-								<param name="position" value="1"/>
-								<param name="left" value="1520"/>
-								<param name="top" value="285"/>
-								<param name="width" value="960"/>
-								<param name="height" value="540"/>
-							</include>
-							<!--Dropshadow-->
-							<!--Left Side-->
-							<include content="DropShadow">
-								<param name="left" value="280"/>
-								<param name="top" value="285"/>
-								<param name="height" value="540"/>
-								<param name="visible" value="!String.IsEmpty(Container.ListItemNoWrap(-1).Label) + $EXP[StripView_FullWidth]"/>
-							</include>
-							<!--Right Side-->
-							<include content="DropShadow">
-								<param name="left" value="1520"/>
-								<param name="top" value="285"/>
-								<param name="height" value="540"/>
-								<param name="flipx" value="true"/>
-								<param name="visible" value="!String.IsEmpty(Container.ListItemNoWrap(1).Label)"/>
-							</include>
-						</control>
-					</control>
-					<!--Square-->
-					<control type="group">
-						<visible>$EXP[StripView_Display_IsSquare] + !$EXP[ContainerSwitching]</visible>
-						<include>ViewSwitchingAnimation</include>
-						<animation effect="slide" end="75,0" time="190" tween="sine" easing="out" reversible="true" condition="!$EXP[StripView_FullWidth]">Conditional</animation>
-						<control type="group">
-							<visible>!Control.IsVisible(941)</visible>
-							<animation effect="fade" start="0" end="100" time="190" tween="sine" easing="out" reversible="false">Visible</animation>
-							<!--Icon -2-->
-							<include content="ListIcon">
-								<param name="position" value="-2"/>
-								<param name="left" value="-435"/>
-								<param name="top" value="285"/>
-								<param name="width" value="540"/>
-								<param name="height" value="540"/>
-								<param name="visible" value="$EXP[StripView_FullWidth]"/>
-							</include>
-							<!--Icon -1-->
-							<include content="ListIcon">
-								<param name="position" value="-1"/>
-								<param name="left" value="105"/>
-								<param name="top" value="285"/>
-								<param name="width" value="540"/>
-								<param name="height" value="540"/>
-								<param name="visible" value="$EXP[StripView_FullWidth]"/>
-							</include>
-							<!--Icon 0-->
-							<include content="ListIcon">
-								<param name="left" value="645"/>
-								<param name="top" value="240"/>
-								<param name="width" value="630"/>
-								<param name="height" value="630"/>
-								<param name="bordervisible" value="true"/>
-							</include>
-							<!--Icon 1-->
-							<include content="ListIcon">
-								<param name="position" value="1"/>
-								<param name="left" value="1275"/>
-								<param name="top" value="285"/>
-								<param name="width" value="540"/>
-								<param name="height" value="540"/>
-							</include>
-							<!--Icon 2-->
-							<include content="ListIcon">
-								<param name="position" value="2"/>
-								<param name="left" value="1815"/>
-								<param name="top" value="285"/>
-								<param name="width" value="540"/>
-								<param name="height" value="540"/>
-							</include>
-							<!--Dropshadow-->
-							<!--Left Side-->
-							<include content="DropShadow">
-								<param name="left" value="525"/>
-								<param name="top" value="285"/>
-								<param name="height" value="540"/>
-								<param name="visible" value="!String.IsEmpty(Container.ListItemNoWrap(-1).Label) + $EXP[StripView_FullWidth]"/>
-							</include>
-							<!--Right Side-->
-							<include content="DropShadow">
-								<param name="left" value="1275"/>
-								<param name="top" value="285"/>
-								<param name="height" value="540"/>
-								<param name="flipx" value="true"/>
-								<param name="visible" value="!String.IsEmpty(Container.ListItemNoWrap(1).Label)"/>
-							</include>
+							<!--Media Flags-->
+							<include>MediaFlags</include>
+							<!--Progress Bar-->
+							<control type="group">
+								<animation effect="slide" end="0,-30" time="0" condition="$EXP[StripView_Display_IsSquare] | $EXP[StripView_Display_IsFanart]">Conditional</animation>
+								<animation effect="slide" end="75,0" time="0" condition="$EXP[StripView_Display_IsSquare] + !$EXP[StripView_FullWidth]">Conditional</animation>
+								<animation effect="slide" end="320,0" time="0" condition="$EXP[StripView_Display_IsFanart] + !$EXP[StripView_FullWidth]">Conditional</animation>
+								<include content="ProgressBar">
+									<param name="top" value="930"/>
+								</include>
+							</control>
+							<!--Details-->
+							<!--Include Bottom Details-->
+							<control type="label">
+								<animation effect="slide" end="0,-15" time="0" condition="$EXP[StripView_Display_IsSquare] | [$EXP[StripView_Display_IsFanart] + !$EXP[StripView_Flags_IsOn]]">Conditional</animation>
+								<visible>$EXP[StripView_Details_Title] + !$EXP[StripView_Details_Logo_IsOn]</visible>
+								<visible>!$EXP[Dialog_IsVisible]</visible>
+								<include>ContentFadeAnimation</include>
+								<left>240</left>
+								<top>964</top>
+								<width>1440</width>
+								<height>52</height>
+								<font>Showcase_Title</font>
+								<textcolor>$VAR[PrimaryColor]</textcolor>
+								<label>$VAR[Title]</label>
+								<align>center</align>
+								<aligny>center</aligny>
+								<scroll>true</scroll>
+								<scrollsuffix> / </scrollsuffix>
+							</control>
+							<!--Left-Hand Details no logo-->
+							<control type="group">
+								<include content="CommonViewDetails">
+									<param name="groupvisibility" value="!$EXP[StripView_FullWidth] + !$EXP[StripView_Details_Logo_IsVisible]"/>
+									<param name="left" value="60"/>
+									<param name="width" value="600"/>
+									<param name="infovisibility" value="$EXP[StripView_Details_Info_IsVisible]"/>
+									<param name="plotvisibility" value="$EXP[StripView_Details_Plot_IsVisible]"/>
+								</include>
+								<!--Left-Hand Details with logo-->
+								<include content="CommonViewDetails">
+									<param name="groupvisibility" value="!$EXP[StripView_FullWidth] + $EXP[StripView_Details_Logo_IsVisible]"/>
+									<param name="left" value="60"/>
+									<param name="width" value="600"/>
+									<param name="titlevisibility" value="false"/>
+									<param name="logovisibility" value="true"/>
+									<param name="titleinfogap" value="20"/>
+									<param name="infovisibility" value="$EXP[StripView_Details_Info_IsVisible]"/>
+									<param name="plotvisibility" value="$EXP[StripView_Details_Plot_IsVisible]"/>
+								</include>
+							</control>
 						</control>
 					</control>
 				</control>
-			</control>
 
-			<!--Scrolling-->
-			<control type="group">
-				<visible>$EXP[StripView_IsVisible]</visible>
-				<include>ViewSwitchingAnimation</include>
+				<!--STATIC POSTERS ARTWORK-->
 				<control type="group">
-					<visible>!$EXP[ContainerSwitching]</visible>
-					<include>ViewSwitchingAnimation</include>
-					<!--On Previous Thumbs-->
+					<visible>$EXP[StripView_Display_IsPosters]</visible>
+					<include>DisplaySwitchingAnimation</include>
 					<control type="group">
-						<visible>Control.IsVisible(5001)</visible>
-						<include>CustomViewsBackground</include>
-						<!--Posters-->
+						<visible>!$EXP[ContainerSwitching]</visible>
+						<include>ContainerSwitchingAnimation</include>
 						<control type="group">
-							<visible>$EXP[StripView_Display_IsPosters]</visible>
+							<visible>!$EXP[ContentSwitching]</visible>
+							<control type="group">
+								<visible>!$EXP[OptionsSwitching]</visible>
+								<include>OptionsMenuSwitchingAnimation</include>
+								<!--Icon -2-->
+								<include content="ListIcon">
+									<param name="position" value="-2"/>
+									<param name="left" value="-80"/>
+									<param name="top" value="240"/>
+									<param name="width" value="400"/>
+									<param name="height" value="600"/>
+									<param name="visible" value="$EXP[StripView_FullWidth]"/>
+								</include>
+								<!--Icon -1-->
+								<include content="ListIcon">
+									<param name="position" value="-1"/>
+									<param name="left" value="320"/>
+									<param name="top" value="240"/>
+									<param name="width" value="400"/>
+									<param name="height" value="600"/>
+									<param name="visible" value="$EXP[StripView_FullWidth]"/>
+								</include>
+								<!--Icon 0-->
+								<include content="ListIcon">
+									<param name="left" value="720"/>
+									<param name="top" value="180"/>
+									<param name="width" value="480"/>
+									<param name="height" value="720"/>
+									<param name="bordervisible" value="true"/>
+								</include>
+								<!--Icon 1-->
+								<include content="ListIcon">
+									<param name="position" value="1"/>
+									<param name="left" value="1200"/>
+									<param name="top" value="240"/>
+									<param name="width" value="400"/>
+									<param name="height" value="600"/>
+								</include>
+								<!--Icon 2-->
+								<include content="ListIcon">
+									<param name="position" value="2"/>
+									<param name="left" value="1600"/>
+									<param name="top" value="240"/>
+									<param name="width" value="400"/>
+									<param name="height" value="600"/>
+								</include>
+								<!--Dropshadow-->
+								<!--Left Side-->
+								<include content="DropShadow">
+									<param name="left" value="600"/>
+									<param name="top" value="240"/>
+									<param name="height" value="600"/>
+									<param name="visible" value="!String.IsEmpty(Container.ListItemNoWrap(-1).Label) + $EXP[StripView_FullWidth]"/>
+								</include>
+								<!--Right Side-->
+								<include content="DropShadow">
+									<param name="left" value="1200"/>
+									<param name="top" value="240"/>
+									<param name="height" value="600"/>
+									<param name="flipx" value="true"/>
+									<param name="visible" value="!String.IsEmpty(Container.ListItemNoWrap(1).Label)"/>
+								</include>
+							</control>
+						</control>
+					</control>
+				</control>
+
+
+				<!--STATIC FANART ARTWORK-->
+				<control type="group">
+					<animation effect="slide" end="320,0" time="190" tween="sine" easing="out" reversible="true" condition="!$EXP[StripView_FullWidth]">Conditional</animation>
+					<visible>$EXP[StripView_Display_IsFanart]</visible>
+					<include>DisplaySwitchingAnimation</include>
+					<control type="group">
+						<visible>!$EXP[ContainerSwitching]</visible>
+						<include>ContainerSwitchingAnimation</include>
+						<control type="group">
+							<visible>!$EXP[ContentSwitching]</visible>
+							<control type="group">
+								<visible>!$EXP[OptionsSwitching]</visible>
+								<include>OptionsMenuSwitchingAnimation</include>
+								<!--Icon -1-->
+								<include content="ListIcon">
+									<param name="position" value="-1"/>
+									<param name="left" value="-560"/>
+									<param name="top" value="285"/>
+									<param name="width" value="960"/>
+									<param name="height" value="540"/>
+									<param name="visible" value="$EXP[StripView_FullWidth]"/>
+								</include>
+								<!--Icon 0-->
+								<include content="ListIcon">
+									<param name="left" value="400"/>
+									<param name="top" value="240"/>
+									<param name="width" value="1120"/>
+									<param name="height" value="630"/>
+									<param name="bordervisible" value="true"/>
+								</include>
+								<!--Icon 1-->
+								<include content="ListIcon">
+									<param name="position" value="1"/>
+									<param name="left" value="1520"/>
+									<param name="top" value="285"/>
+									<param name="width" value="960"/>
+									<param name="height" value="540"/>
+								</include>
+								<!--Dropshadow-->
+								<!--Left Side-->
+								<include content="DropShadow">
+									<param name="left" value="280"/>
+									<param name="top" value="285"/>
+									<param name="height" value="540"/>
+									<param name="visible" value="!String.IsEmpty(Container.ListItemNoWrap(-1).Label) + $EXP[StripView_FullWidth]"/>
+								</include>
+								<!--Right Side-->
+								<include content="DropShadow">
+									<param name="left" value="1520"/>
+									<param name="top" value="285"/>
+									<param name="height" value="540"/>
+									<param name="flipx" value="true"/>
+									<param name="visible" value="!String.IsEmpty(Container.ListItemNoWrap(1).Label)"/>
+								</include>
+							</control>
+						</control>
+					</control>
+				</control>
+
+				<!--STATIC SQUARE ARTWORK-->
+				<control type="group">
+					<animation effect="slide" end="75,0" time="190" tween="sine" easing="out" reversible="true" condition="!$EXP[StripView_FullWidth]">Conditional</animation>
+					<visible>$EXP[StripView_Display_IsSquare]</visible>
+					<include>DisplaySwitchingAnimation</include>
+					<control type="group">
+						<visible>!$EXP[ContainerSwitching]</visible>
+						<include>ContainerSwitchingAnimation</include>
+						<control type="group">
+							<visible>!$EXP[ContentSwitching]</visible>
+							<control type="group">
+								<visible>!$EXP[OptionsSwitching]</visible>
+								<include>OptionsMenuSwitchingAnimation</include>
+								<!--Icon -2-->
+								<include content="ListIcon">
+									<param name="position" value="-2"/>
+									<param name="left" value="-435"/>
+									<param name="top" value="285"/>
+									<param name="width" value="540"/>
+									<param name="height" value="540"/>
+									<param name="visible" value="$EXP[StripView_FullWidth]"/>
+								</include>
+								<!--Icon -1-->
+								<include content="ListIcon">
+									<param name="position" value="-1"/>
+									<param name="left" value="105"/>
+									<param name="top" value="285"/>
+									<param name="width" value="540"/>
+									<param name="height" value="540"/>
+									<param name="visible" value="$EXP[StripView_FullWidth]"/>
+								</include>
+								<!--Icon 0-->
+								<include content="ListIcon">
+									<param name="left" value="645"/>
+									<param name="top" value="240"/>
+									<param name="width" value="630"/>
+									<param name="height" value="630"/>
+									<param name="bordervisible" value="true"/>
+								</include>
+								<!--Icon 1-->
+								<include content="ListIcon">
+									<param name="position" value="1"/>
+									<param name="left" value="1275"/>
+									<param name="top" value="285"/>
+									<param name="width" value="540"/>
+									<param name="height" value="540"/>
+								</include>
+								<!--Icon 2-->
+								<include content="ListIcon">
+									<param name="position" value="2"/>
+									<param name="left" value="1815"/>
+									<param name="top" value="285"/>
+									<param name="width" value="540"/>
+									<param name="height" value="540"/>
+								</include>
+								<!--Dropshadow-->
+								<!--Left Side-->
+								<include content="DropShadow">
+									<param name="left" value="525"/>
+									<param name="top" value="285"/>
+									<param name="height" value="540"/>
+									<param name="visible" value="!String.IsEmpty(Container.ListItemNoWrap(-1).Label) + $EXP[StripView_FullWidth]"/>
+								</include>
+								<!--Right Side-->
+								<include content="DropShadow">
+									<param name="left" value="1275"/>
+									<param name="top" value="285"/>
+									<param name="height" value="540"/>
+									<param name="flipx" value="true"/>
+									<param name="visible" value="!String.IsEmpty(Container.ListItemNoWrap(1).Label)"/>
+								</include>
+							</control>
+						</control>
+					</control>
+				</control>
+
+				<!--SCROLLING POSTERS ARTWORK-->
+				<control type="group">
+					<visible>$EXP[StripView_Display_IsPosters]</visible>
+					<include>DisplaySwitchingAnimation</include>
+					<control type="group">
+						<visible>!$EXP[ContainerSwitching]</visible>
+						<include>ContainerSwitchingAnimation</include>
+						<!--ONPREVIOUS-->
+						<control type="group">
+							<visible>Control.IsVisible(5001)</visible>
+							<include>CustomViewsBackground</include>
 							<!--Move Icon -3 to -2-->
 							<include content="ListIcon">
 								<param name="position" value="-2"/>
@@ -488,319 +487,10 @@
 								<param name="animation2time" value="170"/>
 							</include>
 						</control>
-						<!--Fanart-->
+						<!--ONNEXT-->
 						<control type="group">
-							<visible>$EXP[StripView_Display_IsFanart]</visible>
-							<animation effect="slide" end="320,0" time="0" condition="!$EXP[StripView_FullWidth]">Conditional</animation>
-							<!--Move Icon -2 to -1-->
-							<include content="ListIcon">
-								<param name="position" value="-1"/>
-								<param name="left" value="-1520"/>
-								<param name="top" value="285"/>
-								<param name="width" value="960"/>
-								<param name="height" value="540"/>
-								<param name="visible" value="Container(504).OnPrevious + $EXP[StripView_FullWidth]"/>
-								<param name="animationtype" value="Hidden"/>
-								<param name="animationcondition" value="true"/>
-								<param name="animationeffect" value="slide"/>
-								<param name="animationend" value="960,0"/>
-							</include>
-							<!--Move Icon -1 to 0-->
-							<include content="ListIcon">
-								<param name="left" value="-560"/>
-								<param name="top" value="285"/>
-								<param name="width" value="960"/>
-								<param name="height" value="540"/>
-								<param name="visible" value="Container(504).OnPrevious  + $EXP[StripView_FullWidth]"/>
-								<param name="animationtype" value="Hidden"/>
-								<param name="animationcondition" value="true"/>
-								<param name="animationeffect" value="zoom"/>
-								<param name="animationend" value="400,240,1120,630"/>
-							</include>
-							<!--Alternative Animation if Details On-->
-							<include content="ListIcon">
-								<param name="left" value="-1360"/>
-								<param name="top" value="240"/>
-								<param name="width" value="1120"/>
-								<param name="height" value="630"/>
-								<param name="visible" value="Container(504).OnPrevious  + !$EXP[StripView_FullWidth]"/>
-								<param name="animationtype" value="Hidden"/>
-								<param name="animationcondition" value="true"/>
-								<param name="animationeffect" value="slide"/>
-								<param name="animationend" value="1760,0"/>
-							</include>
-							<!--Move Icon 0 to 1-->
-							<include content="ListIcon">
-								<param name="position" value="1"/>
-								<param name="left" value="400"/>
-								<param name="top" value="240"/>
-								<param name="width" value="1120"/>
-								<param name="height" value="630"/>
-								<param name="visible" value="Container(504).OnPrevious"/>
-								<param name="animationtype" value="Hidden"/>
-								<param name="animationcondition" value="true"/>
-								<param name="animationeffect" value="zoom"/>
-								<param name="animationend" value="1520,285,960,540"/>
-							</include>
-							<!--Move Icon 1 to 2-->
-							<include content="ListIcon">
-								<param name="position" value="2"/>
-								<param name="left" value="1520"/>
-								<param name="top" value="285"/>
-								<param name="width" value="960"/>
-								<param name="height" value="540"/>
-								<param name="visible" value="Container(504).OnPrevious"/>
-								<param name="animationtype" value="Hidden"/>
-								<param name="animationcondition" value="true"/>
-								<param name="animationeffect" value="slide"/>
-								<param name="animationend" value="960,0"/>
-							</include>
-							<!--Dropshadow for icon 0 to 1-->
-							<!--Left Side-->
-							<include content="DropShadow">
-								<param name="left" value="280"/>
-								<param name="top" value="285"/>
-								<param name="height" value="540"/>
-								<param name="visible" value="Container(504).OnPrevious + $EXP[StripView_FullWidth] + !String.IsEmpty(Container.ListItemNoWrap(1).Label)"/>
-								<param name="animationtype" value="Hidden"/>
-								<param name="animationcondition" value="true"/>
-								<param name="animationeffect" value="zoom"/>
-								<param name="animationend" value="1520,240,0,630"/>
-								<param name="animation2effect" value="zoom"/>
-								<param name="animation2end" value="0,100"/>
-								<param name="animation2time" value="210"/>
-								<param name="animation2center" value="400,540"/>
-								<param name="animation3effect" value="fade"/>
-								<param name="animation3end" value="0"/>
-								<param name="animation3time" value="210"/>
-							</include>
-							<!--Right Side-->
-							<include content="DropShadow">
-								<param name="left" value="1520"/>
-								<param name="top" value="285"/>
-								<param name="height" value="540"/>
-								<param name="flipx" value="true"/>
-								<param name="visible" value="Container(504).OnPrevious + !String.IsEmpty(Container.ListItemNoWrap(2).Label)"/>
-								<param name="animationtype" value="Hidden"/>
-								<param name="animationcondition" value="true"/>
-								<param name="animationeffect" value="zoom"/>
-								<param name="animationend" value="2480,285,0,540"/>
-								<param name="animation2effect" value="fade"/>
-								<param name="animation2end" value="0"/>
-								<param name="animation2delay" value="20"/>
-								<param name="animation2time" value="360"/>
-							</include>
-							<!--Dropshadow for icon -1 to 0-->
-							<!--Left Side-->
-							<include content="DropShadow">
-								<param name="left" value="-560"/>
-								<param name="top" value="285"/>
-								<param name="width" value="1"/>
-								<param name="height" value="540"/>
-								<param name="visible" value="Container(504).OnPrevious + !String.IsEmpty(Container.ListItemNoWrap(-1).Label) + $EXP[StripView_FullWidth]"/>
-								<param name="animationtype" value="Hidden"/>
-								<param name="animationcondition" value="true"/>
-								<param name="animationeffect" value="zoom"/>
-								<param name="animationend" value="280,285,120,540"/>
-								<param name="animation2effect" value="fade"/>
-								<param name="animation2start" value="0"/>
-								<param name="animation2end" value="100"/>
-								<param name="animation2delay" value="20"/>
-								<param name="animation2time" value="360"/>
-							</include>
-							<!--Right Side-->
-							<include content="DropShadow">
-								<param name="left" value="400"/>
-								<param name="top" value="240"/>
-								<param name="width" value="1"/>
-								<param name="height" value="630"/>
-								<param name="flipx" value="true"/>
-								<param name="visible" value="Container(504).OnPrevious + !String.IsEmpty(Container.ListItemNoWrap(1).Label)"/>
-								<param name="animationtype" value="Hidden"/>
-								<param name="animationcondition" value="true"/>
-								<param name="animationeffect" value="zoom"/>
-								<param name="animationend" value="1520,285,120,540"/>
-								<param name="animation2effect" value="fade"/>
-								<param name="animation2start" value="0"/>
-								<param name="animation2end" value="100"/>
-								<param name="animation2delay" value="210"/>
-								<param name="animation2time" value="170"/>
-							</include>
-						</control>
-						<!--Square-->
-						<control type="group">
-							<visible>$EXP[StripView_Display_IsSquare]</visible>
-							<animation effect="slide" end="75,0" time="0" condition="!$EXP[StripView_FullWidth]">Conditional</animation>
-							<!--Move Icon -3 to -2-->
-							<include content="ListIcon">
-								<param name="position" value="-2"/>
-								<param name="left" value="-975"/>
-								<param name="top" value="285"/>
-								<param name="width" value="540"/>
-								<param name="height" value="540"/>
-								<param name="visible" value="Container(504).OnPrevious + $EXP[StripView_FullWidth]"/>
-								<param name="animationtype" value="Hidden"/>
-								<param name="animationcondition" value="true"/>
-								<param name="animationeffect" value="slide"/>
-								<param name="animationend" value="540,0"/>
-							</include>
-							<!--Move Icon -2 to -1-->
-							<include content="ListIcon">
-								<param name="position" value="-1"/>
-								<param name="left" value="-435"/>
-								<param name="top" value="285"/>
-								<param name="width" value="540"/>
-								<param name="height" value="540"/>
-								<param name="visible" value="Container(504).OnPrevious + $EXP[StripView_FullWidth]"/>
-								<param name="animationtype" value="Hidden"/>
-								<param name="animationcondition" value="true"/>
-								<param name="animationeffect" value="slide"/>
-								<param name="animationend" value="540,0"/>
-							</include>
-							<!--Move Icon -1 to 0-->
-							<include content="ListIcon">
-								<param name="left" value="105"/>
-								<param name="top" value="285"/>
-								<param name="width" value="540"/>
-								<param name="height" value="540"/>
-								<param name="visible" value="Container(504).OnPrevious  + $EXP[StripView_FullWidth]"/>
-								<param name="animationtype" value="Hidden"/>
-								<param name="animationcondition" value="true"/>
-								<param name="animationeffect" value="zoom"/>
-								<param name="animationend" value="645,240,630,630"/>
-							</include>
-							<!--Alternative Animation if Details On-->
-							<include content="ListIcon">
-								<param name="left" value="-630"/>
-								<param name="top" value="240"/>
-								<param name="width" value="630"/>
-								<param name="height" value="630"/>
-								<param name="visible" value="Container(504).OnPrevious  + !$EXP[StripView_FullWidth]"/>
-								<param name="animationtype" value="Hidden"/>
-								<param name="animationcondition" value="true"/>
-								<param name="animationeffect" value="slide"/>
-								<param name="animationend" value="1275,0"/>
-							</include>
-							<!--Move Icon 0 to 1-->
-							<include content="ListIcon">
-								<param name="position" value="1"/>
-								<param name="left" value="645"/>
-								<param name="top" value="240"/>
-								<param name="width" value="630"/>
-								<param name="height" value="630"/>
-								<param name="visible" value="Container(504).OnPrevious"/>
-								<param name="animationtype" value="Hidden"/>
-								<param name="animationcondition" value="true"/>
-								<param name="animationeffect" value="zoom"/>
-								<param name="animationend" value="1275,285,540,540"/>
-							</include>
-							<!--Move Icon 1 to 2-->
-							<include content="ListIcon">
-								<param name="position" value="2"/>
-								<param name="left" value="1275"/>
-								<param name="top" value="285"/>
-								<param name="width" value="540"/>
-								<param name="height" value="540"/>
-								<param name="visible" value="Container(504).OnPrevious"/>
-								<param name="animationtype" value="Hidden"/>
-								<param name="animationcondition" value="true"/>
-								<param name="animationeffect" value="slide"/>
-								<param name="animationend" value="540,0"/>
-							</include>
-							<!--Move Icon 2 to 3-->
-							<include content="ListIcon">
-								<param name="position" value="3"/>
-								<param name="left" value="1815"/>
-								<param name="top" value="285"/>
-								<param name="width" value="540"/>
-								<param name="height" value="540"/>
-								<param name="visible" value="Container(504).OnPrevious"/>
-								<param name="animationtype" value="Hidden"/>
-								<param name="animationcondition" value="true"/>
-								<param name="animationeffect" value="slide"/>
-								<param name="animationend" value="540,0"/>
-							</include>
-							<!--Dropshadow for icon 0 to 1-->
-							<!--Left Side-->
-							<include content="DropShadow">
-								<param name="left" value="525"/>
-								<param name="top" value="285"/>
-								<param name="height" value="540"/>
-								<param name="visible" value="Container(504).OnPrevious + $EXP[StripView_FullWidth] + !String.IsEmpty(Container.ListItemNoWrap(1).Label)"/>
-								<param name="animationtype" value="Hidden"/>
-								<param name="animationcondition" value="true"/>
-								<param name="animationeffect" value="zoom"/>
-								<param name="animationend" value="1275,240,0,630"/>
-								<param name="animation2effect" value="zoom"/>
-								<param name="animation2end" value="0,100"/>
-								<param name="animation2time" value="210"/>
-								<param name="animation2center" value="645,540"/>
-								<param name="animation3effect" value="fade"/>
-								<param name="animation3end" value="0"/>
-								<param name="animation3time" value="210"/>
-							</include>
-							<!--Right Side-->
-							<include content="DropShadow">
-								<param name="left" value="1275"/>
-								<param name="top" value="285"/>
-								<param name="height" value="540"/>
-								<param name="flipx" value="true"/>
-								<param name="visible" value="Container(504).OnPrevious + !String.IsEmpty(Container.ListItemNoWrap(2).Label)"/>
-								<param name="animationtype" value="Hidden"/>
-								<param name="animationcondition" value="true"/>
-								<param name="animationeffect" value="zoom"/>
-								<param name="animationend" value="1815,285,0,540"/>
-								<param name="animation2effect" value="fade"/>
-								<param name="animation2end" value="0"/>
-								<param name="animation2delay" value="20"/>
-								<param name="animation2time" value="360"/>
-							</include>
-							<!--Dropshadow for icon -1 to 0-->
-							<!--Left Side-->
-							<include content="DropShadow">
-								<param name="left" value="105"/>
-								<param name="top" value="285"/>
-								<param name="width" value="1"/>
-								<param name="height" value="540"/>
-								<param name="visible" value="Container(504).OnPrevious + !String.IsEmpty(Container.ListItemNoWrap(-1).Label) + $EXP[StripView_FullWidth]"/>
-								<param name="animationtype" value="Hidden"/>
-								<param name="animationcondition" value="true"/>
-								<param name="animationeffect" value="zoom"/>
-								<param name="animationend" value="525,285,120,540"/>
-								<param name="animation2effect" value="fade"/>
-								<param name="animation2start" value="0"/>
-								<param name="animation2end" value="100"/>
-								<param name="animation2delay" value="20"/>
-								<param name="animation2time" value="360"/>
-							</include>
-							<!--Right Side-->
-							<include content="DropShadow">
-								<param name="left" value="645"/>
-								<param name="top" value="240"/>
-								<param name="width" value="1"/>
-								<param name="height" value="630"/>
-								<param name="flipx" value="true"/>
-								<param name="visible" value="Container(504).OnPrevious + !String.IsEmpty(Container.ListItemNoWrap(1).Label)"/>
-								<param name="animationtype" value="Hidden"/>
-								<param name="animationcondition" value="true"/>
-								<param name="animationeffect" value="zoom"/>
-								<param name="animationend" value="1275,285,120,540"/>
-								<param name="animation2effect" value="fade"/>
-								<param name="animation2start" value="0"/>
-								<param name="animation2end" value="100"/>
-								<param name="animation2delay" value="210"/>
-								<param name="animation2time" value="170"/>
-							</include>
-						</control>
-					</control>
-
-					<!--On Next Thumbs-->
-					<control type="group">
-						<visible>Control.IsVisible(5002)</visible>
-						<include>CustomViewsBackground</include>
-						<!--Posters-->
-						<control type="group">
-							<visible>$EXP[StripView_Display_IsPosters]</visible>
+							<visible>Control.IsVisible(5002)</visible>
+							<include>CustomViewsBackground</include>
 							<!--Move Icon -2 to -3-->
 							<include content="ListIcon">
 								<param name="position" value="-3"/>
@@ -963,313 +653,651 @@
 								<param name="animation2time" value="360"/>
 							</include>
 						</control>
-						<!--Fanart-->
+					</control>
+				</control>
+
+
+				<!--SCROLLING FANART ARTWORK-->
+				<control type="group">
+					<visible>$EXP[StripView_Display_IsFanart]</visible>
+					<include>DisplaySwitchingAnimation</include>
+					<control type="group">
+						<visible>!$EXP[ContainerSwitching]</visible>
+						<include>ContainerSwitchingAnimation</include>
+						<!--ONPREVIOUS-->
 						<control type="group">
-							<visible>$EXP[StripView_Display_IsFanart]</visible>
-							<animation effect="slide" end="320,0" time="0" condition="!$EXP[StripView_FullWidth]">Conditional</animation>
-							<!--Move Icon -1 to -2-->
-							<include content="ListIcon">
-								<param name="position" value="-2"/>
-								<param name="left" value="-560"/>
-								<param name="top" value="285"/>
-								<param name="width" value="960"/>
-								<param name="height" value="540"/>
-								<param name="visible" value="Container(504).OnNext + $EXP[StripView_FullWidth]"/>
-								<param name="animationtype" value="Hidden"/>
-								<param name="animationcondition" value="true"/>
-								<param name="animationeffect" value="slide"/>
-								<param name="animationend" value="-960,0"/>
-							</include>
-							<!--Move Icon 0 to -1-->
-							<include content="ListIcon">
-								<param name="position" value="-1"/>
-								<param name="left" value="400"/>
-								<param name="top" value="240"/>
-								<param name="width" value="1120"/>
-								<param name="height" value="630"/>
-								<param name="visible" value="Container(504).OnNext + $EXP[StripView_FullWidth]"/>
-								<param name="animationtype" value="Hidden"/>
-								<param name="animationcondition" value="true"/>
-								<param name="animationeffect" value="zoom"/>
-								<param name="animationend" value="-560,285,960,540"/>
-							</include>
-							<!--Alternative Animation if Details On-->
-							<include content="ListIcon">
-								<param name="position" value="-1"/>
-								<param name="left" value="400"/>
-								<param name="top" value="240"/>
-								<param name="width" value="1120"/>
-								<param name="height" value="630"/>
-								<param name="visible" value="Container(504).OnNext + !$EXP[StripView_FullWidth]"/>
-								<param name="animationtype" value="Hidden"/>
-								<param name="animationcondition" value="true"/>
-								<param name="animationeffect" value="slide"/>
-								<param name="animationend" value="-1760,0"/>
-							</include>
-							<!--Move Icon 1 to 0-->
-							<include content="ListIcon">
-								<param name="left" value="1520"/>
-								<param name="top" value="285"/>
-								<param name="width" value="960"/>
-								<param name="height" value="540"/>
-								<param name="visible" value="Container(504).OnNext"/>
-								<param name="animationtype" value="Hidden"/>
-								<param name="animationcondition" value="true"/>
-								<param name="animationeffect" value="zoom"/>
-								<param name="animationend" value="400,240,1120,630"/>
-							</include>
-							<!--Move Icon 2 to 1-->
-							<include content="ListIcon">
-								<param name="position" value="1"/>
-								<param name="left" value="2480"/>
-								<param name="top" value="285"/>
-								<param name="width" value="960"/>
-								<param name="height" value="540"/>
-								<param name="visible" value="Container(504).OnNext"/>
-								<param name="animationtype" value="Hidden"/>
-								<param name="animationcondition" value="true"/>
-								<param name="animationeffect" value="slide"/>
-								<param name="animationend" value="-960,0"/>
-							</include>
-							<!--Dropshadow for icon 0 to -1-->
-							<!--Left Side-->
-							<include content="DropShadow">
-								<param name="left" value="280"/>
-								<param name="top" value="285"/>
-								<param name="height" value="540"/>
-								<param name="visible" value="Container(504).OnNext + $EXP[StripView_FullWidth] + !String.IsEmpty(Container.ListItemNoWrap(-2).Label)"/>
-								<param name="animationtype" value="Hidden"/>
-								<param name="animationcondition" value="true"/>
-								<param name="animationeffect" value="zoom"/>
-								<param name="animationend" value="-560,285,0,540"/>
-								<param name="animation2effect" value="fade"/>
-								<param name="animation2end" value="0"/>
-								<param name="animation2delay" value="20"/>
-								<param name="animation2time" value="360"/>
-							</include>
-							<!--Right Side-->
-							<include content="DropShadow">
-								<param name="left" value="1520"/>
-								<param name="top" value="285"/>
-								<param name="height" value="540"/>
-								<param name="flipx" value="true"/>
-								<param name="visible" value="Container(504).OnNext + !String.IsEqual(Container.CurrentItem,1)"/>
-								<param name="animationtype" value="Hidden"/>
-								<param name="animationcondition" value="true"/>
-								<param name="animationeffect" value="zoom"/>
-								<param name="animationend" value="400,240,0,630"/>
-								<param name="animation2effect" value="zoom"/>
-								<param name="animation2end" value="0,100"/>
-								<param name="animation2time" value="210"/>
-								<param name="animation2center" value="1520,540"/>
-								<param name="animation3effect" value="fade"/>
-								<param name="animation3end" value="0"/>
-								<param name="animation3time" value="210"/>
-							</include>
-							<!--Dropshadow for icon 1 to 0-->
-							<!--Left Side-->
-							<include content="DropShadow">
-								<param name="left" value="1520"/>
-								<param name="top" value="240"/>
-								<param name="width" value="1"/>
-								<param name="height" value="630"/>
-								<param name="visible" value="Container(504).OnNext + $EXP[StripView_FullWidth] + !String.IsEqual(Container.CurrentItem,1)"/>
-								<param name="animationtype" value="Hidden"/>
-								<param name="animationcondition" value="true"/>
-								<param name="animationeffect" value="zoom"/>
-								<param name="animationend" value="280,285,120,540"/>
-								<param name="animation2effect" value="fade"/>
-								<param name="animation2start" value="0"/>
-								<param name="animation2end" value="100"/>
-								<param name="animation2delay" value="210"/>
-								<param name="animation2time" value="170"/>
-							</include>
-							<!--Right Side-->
-							<include content="DropShadow">
-								<param name="left" value="2480"/>
-								<param name="top" value="285"/>
-								<param name="width" value="1"/>
-								<param name="height" value="540"/>
-								<param name="flipx" value="true"/>
-								<param name="visible" value="Container(504).OnNext + !String.IsEmpty(Container.ListItemNoWrap(1).Label)"/>
-								<param name="animationtype" value="Hidden"/>
-								<param name="animationcondition" value="true"/>
-								<param name="animationeffect" value="zoom"/>
-								<param name="animationend" value="1520,285,120,540"/>
-								<param name="animation2effect" value="fade"/>
-								<param name="animation2start" value="0"/>
-								<param name="animation2end" value="100"/>
-								<param name="animation2delay" value="20"/>
-								<param name="animation2time" value="360"/>
-							</include>
+							<visible>Control.IsVisible(5001)</visible>
+							<include>CustomViewsBackground</include>
+							<control type="group">
+								<animation effect="slide" end="320,0" time="0" condition="!$EXP[StripView_FullWidth]">Conditional</animation>
+								<!--Move Icon -2 to -1-->
+								<include content="ListIcon">
+									<param name="position" value="-1"/>
+									<param name="left" value="-1520"/>
+									<param name="top" value="285"/>
+									<param name="width" value="960"/>
+									<param name="height" value="540"/>
+									<param name="visible" value="Container(504).OnPrevious + $EXP[StripView_FullWidth]"/>
+									<param name="animationtype" value="Hidden"/>
+									<param name="animationcondition" value="true"/>
+									<param name="animationeffect" value="slide"/>
+									<param name="animationend" value="960,0"/>
+								</include>
+								<!--Move Icon -1 to 0-->
+								<include content="ListIcon">
+									<param name="left" value="-560"/>
+									<param name="top" value="285"/>
+									<param name="width" value="960"/>
+									<param name="height" value="540"/>
+									<param name="visible" value="Container(504).OnPrevious  + $EXP[StripView_FullWidth]"/>
+									<param name="animationtype" value="Hidden"/>
+									<param name="animationcondition" value="true"/>
+									<param name="animationeffect" value="zoom"/>
+									<param name="animationend" value="400,240,1120,630"/>
+								</include>
+								<!--Alternative Animation if Details On-->
+								<include content="ListIcon">
+									<param name="left" value="-1360"/>
+									<param name="top" value="240"/>
+									<param name="width" value="1120"/>
+									<param name="height" value="630"/>
+									<param name="visible" value="Container(504).OnPrevious  + !$EXP[StripView_FullWidth]"/>
+									<param name="animationtype" value="Hidden"/>
+									<param name="animationcondition" value="true"/>
+									<param name="animationeffect" value="slide"/>
+									<param name="animationend" value="1760,0"/>
+								</include>
+								<!--Move Icon 0 to 1-->
+								<include content="ListIcon">
+									<param name="position" value="1"/>
+									<param name="left" value="400"/>
+									<param name="top" value="240"/>
+									<param name="width" value="1120"/>
+									<param name="height" value="630"/>
+									<param name="visible" value="Container(504).OnPrevious"/>
+									<param name="animationtype" value="Hidden"/>
+									<param name="animationcondition" value="true"/>
+									<param name="animationeffect" value="zoom"/>
+									<param name="animationend" value="1520,285,960,540"/>
+								</include>
+								<!--Move Icon 1 to 2-->
+								<include content="ListIcon">
+									<param name="position" value="2"/>
+									<param name="left" value="1520"/>
+									<param name="top" value="285"/>
+									<param name="width" value="960"/>
+									<param name="height" value="540"/>
+									<param name="visible" value="Container(504).OnPrevious"/>
+									<param name="animationtype" value="Hidden"/>
+									<param name="animationcondition" value="true"/>
+									<param name="animationeffect" value="slide"/>
+									<param name="animationend" value="960,0"/>
+								</include>
+								<!--Dropshadow for icon 0 to 1-->
+								<!--Left Side-->
+								<include content="DropShadow">
+									<param name="left" value="280"/>
+									<param name="top" value="285"/>
+									<param name="height" value="540"/>
+									<param name="visible" value="Container(504).OnPrevious + $EXP[StripView_FullWidth] + !String.IsEmpty(Container.ListItemNoWrap(1).Label)"/>
+									<param name="animationtype" value="Hidden"/>
+									<param name="animationcondition" value="true"/>
+									<param name="animationeffect" value="zoom"/>
+									<param name="animationend" value="1520,240,0,630"/>
+									<param name="animation2effect" value="zoom"/>
+									<param name="animation2end" value="0,100"/>
+									<param name="animation2time" value="210"/>
+									<param name="animation2center" value="400,540"/>
+									<param name="animation3effect" value="fade"/>
+									<param name="animation3end" value="0"/>
+									<param name="animation3time" value="210"/>
+								</include>
+								<!--Right Side-->
+								<include content="DropShadow">
+									<param name="left" value="1520"/>
+									<param name="top" value="285"/>
+									<param name="height" value="540"/>
+									<param name="flipx" value="true"/>
+									<param name="visible" value="Container(504).OnPrevious + !String.IsEmpty(Container.ListItemNoWrap(2).Label)"/>
+									<param name="animationtype" value="Hidden"/>
+									<param name="animationcondition" value="true"/>
+									<param name="animationeffect" value="zoom"/>
+									<param name="animationend" value="2480,285,0,540"/>
+									<param name="animation2effect" value="fade"/>
+									<param name="animation2end" value="0"/>
+									<param name="animation2delay" value="20"/>
+									<param name="animation2time" value="360"/>
+								</include>
+								<!--Dropshadow for icon -1 to 0-->
+								<!--Left Side-->
+								<include content="DropShadow">
+									<param name="left" value="-560"/>
+									<param name="top" value="285"/>
+									<param name="width" value="1"/>
+									<param name="height" value="540"/>
+									<param name="visible" value="Container(504).OnPrevious + !String.IsEmpty(Container.ListItemNoWrap(-1).Label) + $EXP[StripView_FullWidth]"/>
+									<param name="animationtype" value="Hidden"/>
+									<param name="animationcondition" value="true"/>
+									<param name="animationeffect" value="zoom"/>
+									<param name="animationend" value="280,285,120,540"/>
+									<param name="animation2effect" value="fade"/>
+									<param name="animation2start" value="0"/>
+									<param name="animation2end" value="100"/>
+									<param name="animation2delay" value="20"/>
+									<param name="animation2time" value="360"/>
+								</include>
+								<!--Right Side-->
+								<include content="DropShadow">
+									<param name="left" value="400"/>
+									<param name="top" value="240"/>
+									<param name="width" value="1"/>
+									<param name="height" value="630"/>
+									<param name="flipx" value="true"/>
+									<param name="visible" value="Container(504).OnPrevious + !String.IsEmpty(Container.ListItemNoWrap(1).Label)"/>
+									<param name="animationtype" value="Hidden"/>
+									<param name="animationcondition" value="true"/>
+									<param name="animationeffect" value="zoom"/>
+									<param name="animationend" value="1520,285,120,540"/>
+									<param name="animation2effect" value="fade"/>
+									<param name="animation2start" value="0"/>
+									<param name="animation2end" value="100"/>
+									<param name="animation2delay" value="210"/>
+									<param name="animation2time" value="170"/>
+								</include>
+							</control>
 						</control>
-						<!--Square-->
+						<!--ONNEXT-->
 						<control type="group">
-							<visible>$EXP[StripView_Display_IsSquare]</visible>
-							<animation effect="slide" end="75,0" time="0" condition="!$EXP[StripView_FullWidth]">Conditional</animation>
-							<!--Move Icon -2 to -3-->
-							<include content="ListIcon">
-								<param name="position" value="-3"/>
-								<param name="left" value="-435"/>
-								<param name="top" value="285"/>
-								<param name="width" value="540"/>
-								<param name="height" value="540"/>
-								<param name="visible" value="Container(504).OnNext + $EXP[StripView_FullWidth]"/>
-								<param name="animationtype" value="Hidden"/>
-								<param name="animationcondition" value="true"/>
-								<param name="animationeffect" value="slide"/>
-								<param name="animationend" value="-540,0"/>
-							</include>
-							<!--Move Icon -1 to -2-->
-							<include content="ListIcon">
-								<param name="position" value="-2"/>
-								<param name="left" value="105"/>
-								<param name="top" value="285"/>
-								<param name="width" value="540"/>
-								<param name="height" value="540"/>
-								<param name="visible" value="Container(504).OnNext + $EXP[StripView_FullWidth]"/>
-								<param name="animationtype" value="Hidden"/>
-								<param name="animationcondition" value="true"/>
-								<param name="animationeffect" value="slide"/>
-								<param name="animationend" value="-540,0"/>
-							</include>
-							<!--Move Icon 0 to -1-->
-							<include content="ListIcon">
-								<param name="position" value="-1"/>
-								<param name="left" value="645"/>
-								<param name="top" value="240"/>
-								<param name="width" value="630"/>
-								<param name="height" value="630"/>
-								<param name="visible" value="Container(504).OnNext + $EXP[StripView_FullWidth]"/>
-								<param name="animationtype" value="Hidden"/>
-								<param name="animationcondition" value="true"/>
-								<param name="animationeffect" value="zoom"/>
-								<param name="animationend" value="105,285,540,540"/>
-							</include>
-							<!--Alternative Animation if Details On-->
-							<include content="ListIcon">
-								<param name="position" value="-1"/>
-								<param name="left" value="645"/>
-								<param name="top" value="240"/>
-								<param name="width" value="630"/>
-								<param name="height" value="630"/>
-								<param name="visible" value="Container(504).OnNext + !$EXP[StripView_FullWidth]"/>
-								<param name="animationtype" value="Hidden"/>
-								<param name="animationcondition" value="true"/>
-								<param name="animationeffect" value="slide"/>
-								<param name="animationend" value="-1275,0"/>
-							</include>
-							<!--Move Icon 1 to 0-->
-							<include content="ListIcon">
-								<param name="left" value="1275"/>
-								<param name="top" value="285"/>
-								<param name="width" value="540"/>
-								<param name="height" value="540"/>
-								<param name="visible" value="Container(504).OnNext"/>
-								<param name="animationtype" value="Hidden"/>
-								<param name="animationcondition" value="true"/>
-								<param name="animationeffect" value="zoom"/>
-								<param name="animationend" value="645,240,630,630"/>
-							</include>
-							<!--Move Icon 2 to 1-->
-							<include content="ListIcon">
-								<param name="position" value="1"/>
-								<param name="left" value="1815"/>
-								<param name="top" value="285"/>
-								<param name="width" value="540"/>
-								<param name="height" value="540"/>
-								<param name="visible" value="Container(504).OnNext"/>
-								<param name="animationtype" value="Hidden"/>
-								<param name="animationcondition" value="true"/>
-								<param name="animationeffect" value="slide"/>
-								<param name="animationend" value="-540,0"/>
-							</include>
-							<!--Move Icon 3 to 2-->
-							<include content="ListIcon">
-								<param name="position" value="2"/>
-								<param name="left" value="2355"/>
-								<param name="top" value="285"/>
-								<param name="width" value="540"/>
-								<param name="height" value="540"/>
-								<param name="visible" value="Container(504).OnNext"/>
-								<param name="animationtype" value="Hidden"/>
-								<param name="animationcondition" value="true"/>
-								<param name="animationeffect" value="slide"/>
-								<param name="animationend" value="-540,0"/>
-							</include>
-							<!--Dropshadow for icon 0 to -1-->
-							<!--Left Side-->
-							<include content="DropShadow">
-								<param name="left" value="525"/>
-								<param name="top" value="285"/>
-								<param name="height" value="540"/>
-								<param name="visible" value="Container(504).OnNext + $EXP[StripView_FullWidth] + !String.IsEmpty(Container.ListItemNoWrap(-2).Label)"/>
-								<param name="animationtype" value="Hidden"/>
-								<param name="animationcondition" value="true"/>
-								<param name="animationeffect" value="zoom"/>
-								<param name="animationend" value="105,285,0,540"/>
-								<param name="animation2effect" value="fade"/>
-								<param name="animation2end" value="0"/>
-								<param name="animation2time" value="360"/>
-							</include>
-							<!--Right Side-->
-							<include content="DropShadow">
-								<param name="left" value="1275"/>
-								<param name="top" value="285"/>
-								<param name="height" value="540"/>
-								<param name="flipx" value="true"/>
-								<param name="visible" value="Container(504).OnNext + !String.IsEqual(Container.CurrentItem,1)"/>
-								<param name="animationtype" value="Hidden"/>
-								<param name="animationcondition" value="true"/>
-								<param name="animationeffect" value="zoom"/>
-								<param name="animationend" value="645,240,0,630"/>
-								<param name="animation2effect" value="zoom"/>
-								<param name="animation2end" value="0,100"/>
-								<param name="animation2time" value="210"/>
-								<param name="animation2center" value="1275,540"/>
-								<param name="animation3effect" value="fade"/>
-								<param name="animation3end" value="0"/>
-								<param name="animation3time" value="210"/>
-							</include>
-							<!--Dropshadow for icon 1 to 0-->
-							<!--Left Side-->
-							<include content="DropShadow">
-								<param name="left" value="1275"/>
-								<param name="top" value="240"/>
-								<param name="width" value="1"/>
-								<param name="height" value="630"/>
-								<param name="visible" value="Container(504).OnNext + $EXP[StripView_FullWidth] + !String.IsEqual(Container.CurrentItem,1)"/>
-								<param name="animationtype" value="Hidden"/>
-								<param name="animationcondition" value="true"/>
-								<param name="animationeffect" value="zoom"/>
-								<param name="animationend" value="525,285,120,540"/>
-								<param name="animation2effect" value="fade"/>
-								<param name="animation2start" value="0"/>
-								<param name="animation2end" value="100"/>
-								<param name="animation2delay" value="210"/>
-								<param name="animation2time" value="170"/>
-							</include>
-							<!--Right Side-->
-							<include content="DropShadow">
-								<param name="left" value="1815"/>
-								<param name="top" value="285"/>
-								<param name="width" value="1"/>
-								<param name="height" value="540"/>
-								<param name="flipx" value="true"/>
-								<param name="visible" value="Container(504).OnNext + !String.IsEmpty(Container.ListItemNoWrap(1).Label)"/>
-								<param name="animationtype" value="Hidden"/>
-								<param name="animationcondition" value="true"/>
-								<param name="animationeffect" value="zoom"/>
-								<param name="animationend" value="1275,285,120,540"/>
-								<param name="animation2effect" value="fade"/>
-								<param name="animation2start" value="0"/>
-								<param name="animation2end" value="100"/>
-								<param name="animation2delay" value="20"/>
-								<param name="animation2time" value="360"/>
-							</include>
+							<visible>Control.IsVisible(5002)</visible>
+							<include>CustomViewsBackground</include>
+							<control type="group">
+								<animation effect="slide" end="320,0" time="0" condition="!$EXP[StripView_FullWidth]">Conditional</animation>
+								<!--Move Icon -1 to -2-->
+								<include content="ListIcon">
+									<param name="position" value="-2"/>
+									<param name="left" value="-560"/>
+									<param name="top" value="285"/>
+									<param name="width" value="960"/>
+									<param name="height" value="540"/>
+									<param name="visible" value="Container(504).OnNext + $EXP[StripView_FullWidth]"/>
+									<param name="animationtype" value="Hidden"/>
+									<param name="animationcondition" value="true"/>
+									<param name="animationeffect" value="slide"/>
+									<param name="animationend" value="-960,0"/>
+								</include>
+								<!--Move Icon 0 to -1-->
+								<include content="ListIcon">
+									<param name="position" value="-1"/>
+									<param name="left" value="400"/>
+									<param name="top" value="240"/>
+									<param name="width" value="1120"/>
+									<param name="height" value="630"/>
+									<param name="visible" value="Container(504).OnNext + $EXP[StripView_FullWidth]"/>
+									<param name="animationtype" value="Hidden"/>
+									<param name="animationcondition" value="true"/>
+									<param name="animationeffect" value="zoom"/>
+									<param name="animationend" value="-560,285,960,540"/>
+								</include>
+								<!--Alternative Animation if Details On-->
+								<include content="ListIcon">
+									<param name="position" value="-1"/>
+									<param name="left" value="400"/>
+									<param name="top" value="240"/>
+									<param name="width" value="1120"/>
+									<param name="height" value="630"/>
+									<param name="visible" value="Container(504).OnNext + !$EXP[StripView_FullWidth]"/>
+									<param name="animationtype" value="Hidden"/>
+									<param name="animationcondition" value="true"/>
+									<param name="animationeffect" value="slide"/>
+									<param name="animationend" value="-1760,0"/>
+								</include>
+								<!--Move Icon 1 to 0-->
+								<include content="ListIcon">
+									<param name="left" value="1520"/>
+									<param name="top" value="285"/>
+									<param name="width" value="960"/>
+									<param name="height" value="540"/>
+									<param name="visible" value="Container(504).OnNext"/>
+									<param name="animationtype" value="Hidden"/>
+									<param name="animationcondition" value="true"/>
+									<param name="animationeffect" value="zoom"/>
+									<param name="animationend" value="400,240,1120,630"/>
+								</include>
+								<!--Move Icon 2 to 1-->
+								<include content="ListIcon">
+									<param name="position" value="1"/>
+									<param name="left" value="2480"/>
+									<param name="top" value="285"/>
+									<param name="width" value="960"/>
+									<param name="height" value="540"/>
+									<param name="visible" value="Container(504).OnNext"/>
+									<param name="animationtype" value="Hidden"/>
+									<param name="animationcondition" value="true"/>
+									<param name="animationeffect" value="slide"/>
+									<param name="animationend" value="-960,0"/>
+								</include>
+								<!--Dropshadow for icon 0 to -1-->
+								<!--Left Side-->
+								<include content="DropShadow">
+									<param name="left" value="280"/>
+									<param name="top" value="285"/>
+									<param name="height" value="540"/>
+									<param name="visible" value="Container(504).OnNext + $EXP[StripView_FullWidth] + !String.IsEmpty(Container.ListItemNoWrap(-2).Label)"/>
+									<param name="animationtype" value="Hidden"/>
+									<param name="animationcondition" value="true"/>
+									<param name="animationeffect" value="zoom"/>
+									<param name="animationend" value="-560,285,0,540"/>
+									<param name="animation2effect" value="fade"/>
+									<param name="animation2end" value="0"/>
+									<param name="animation2delay" value="20"/>
+									<param name="animation2time" value="360"/>
+								</include>
+								<!--Right Side-->
+								<include content="DropShadow">
+									<param name="left" value="1520"/>
+									<param name="top" value="285"/>
+									<param name="height" value="540"/>
+									<param name="flipx" value="true"/>
+									<param name="visible" value="Container(504).OnNext + !String.IsEqual(Container.CurrentItem,1)"/>
+									<param name="animationtype" value="Hidden"/>
+									<param name="animationcondition" value="true"/>
+									<param name="animationeffect" value="zoom"/>
+									<param name="animationend" value="400,240,0,630"/>
+									<param name="animation2effect" value="zoom"/>
+									<param name="animation2end" value="0,100"/>
+									<param name="animation2time" value="210"/>
+									<param name="animation2center" value="1520,540"/>
+									<param name="animation3effect" value="fade"/>
+									<param name="animation3end" value="0"/>
+									<param name="animation3time" value="210"/>
+								</include>
+								<!--Dropshadow for icon 1 to 0-->
+								<!--Left Side-->
+								<include content="DropShadow">
+									<param name="left" value="1520"/>
+									<param name="top" value="240"/>
+									<param name="width" value="1"/>
+									<param name="height" value="630"/>
+									<param name="visible" value="Container(504).OnNext + $EXP[StripView_FullWidth] + !String.IsEqual(Container.CurrentItem,1)"/>
+									<param name="animationtype" value="Hidden"/>
+									<param name="animationcondition" value="true"/>
+									<param name="animationeffect" value="zoom"/>
+									<param name="animationend" value="280,285,120,540"/>
+									<param name="animation2effect" value="fade"/>
+									<param name="animation2start" value="0"/>
+									<param name="animation2end" value="100"/>
+									<param name="animation2delay" value="210"/>
+									<param name="animation2time" value="170"/>
+								</include>
+								<!--Right Side-->
+								<include content="DropShadow">
+									<param name="left" value="2480"/>
+									<param name="top" value="285"/>
+									<param name="width" value="1"/>
+									<param name="height" value="540"/>
+									<param name="flipx" value="true"/>
+									<param name="visible" value="Container(504).OnNext + !String.IsEmpty(Container.ListItemNoWrap(1).Label)"/>
+									<param name="animationtype" value="Hidden"/>
+									<param name="animationcondition" value="true"/>
+									<param name="animationeffect" value="zoom"/>
+									<param name="animationend" value="1520,285,120,540"/>
+									<param name="animation2effect" value="fade"/>
+									<param name="animation2start" value="0"/>
+									<param name="animation2end" value="100"/>
+									<param name="animation2delay" value="20"/>
+									<param name="animation2time" value="360"/>
+								</include>
+							</control>
 						</control>
 					</control>
 				</control>
+
+				<!--SCROLLING SQUARE ARTWORK-->
+				<control type="group">
+					<visible>$EXP[StripView_Display_IsSquare]</visible>
+					<include>DisplaySwitchingAnimation</include>
+					<control type="group">
+						<visible>!$EXP[ContainerSwitching]</visible>
+						<include>ContainerSwitchingAnimation</include>
+						<!--ONPREVIOUS-->
+						<control type="group">
+							<visible>Control.IsVisible(5001)</visible>
+							<include>CustomViewsBackground</include>
+							<control type="group">
+								<animation effect="slide" end="75,0" time="0" condition="!$EXP[StripView_FullWidth]">Conditional</animation>
+								<!--Move Icon -3 to -2-->
+								<include content="ListIcon">
+									<param name="position" value="-2"/>
+									<param name="left" value="-975"/>
+									<param name="top" value="285"/>
+									<param name="width" value="540"/>
+									<param name="height" value="540"/>
+									<param name="visible" value="Container(504).OnPrevious + $EXP[StripView_FullWidth]"/>
+									<param name="animationtype" value="Hidden"/>
+									<param name="animationcondition" value="true"/>
+									<param name="animationeffect" value="slide"/>
+									<param name="animationend" value="540,0"/>
+								</include>
+								<!--Move Icon -2 to -1-->
+								<include content="ListIcon">
+									<param name="position" value="-1"/>
+									<param name="left" value="-435"/>
+									<param name="top" value="285"/>
+									<param name="width" value="540"/>
+									<param name="height" value="540"/>
+									<param name="visible" value="Container(504).OnPrevious + $EXP[StripView_FullWidth]"/>
+									<param name="animationtype" value="Hidden"/>
+									<param name="animationcondition" value="true"/>
+									<param name="animationeffect" value="slide"/>
+									<param name="animationend" value="540,0"/>
+								</include>
+								<!--Move Icon -1 to 0-->
+								<include content="ListIcon">
+									<param name="left" value="105"/>
+									<param name="top" value="285"/>
+									<param name="width" value="540"/>
+									<param name="height" value="540"/>
+									<param name="visible" value="Container(504).OnPrevious  + $EXP[StripView_FullWidth]"/>
+									<param name="animationtype" value="Hidden"/>
+									<param name="animationcondition" value="true"/>
+									<param name="animationeffect" value="zoom"/>
+									<param name="animationend" value="645,240,630,630"/>
+								</include>
+								<!--Alternative Animation if Details On-->
+								<include content="ListIcon">
+									<param name="left" value="-630"/>
+									<param name="top" value="240"/>
+									<param name="width" value="630"/>
+									<param name="height" value="630"/>
+									<param name="visible" value="Container(504).OnPrevious  + !$EXP[StripView_FullWidth]"/>
+									<param name="animationtype" value="Hidden"/>
+									<param name="animationcondition" value="true"/>
+									<param name="animationeffect" value="slide"/>
+									<param name="animationend" value="1275,0"/>
+								</include>
+								<!--Move Icon 0 to 1-->
+								<include content="ListIcon">
+									<param name="position" value="1"/>
+									<param name="left" value="645"/>
+									<param name="top" value="240"/>
+									<param name="width" value="630"/>
+									<param name="height" value="630"/>
+									<param name="visible" value="Container(504).OnPrevious"/>
+									<param name="animationtype" value="Hidden"/>
+									<param name="animationcondition" value="true"/>
+									<param name="animationeffect" value="zoom"/>
+									<param name="animationend" value="1275,285,540,540"/>
+								</include>
+								<!--Move Icon 1 to 2-->
+								<include content="ListIcon">
+									<param name="position" value="2"/>
+									<param name="left" value="1275"/>
+									<param name="top" value="285"/>
+									<param name="width" value="540"/>
+									<param name="height" value="540"/>
+									<param name="visible" value="Container(504).OnPrevious"/>
+									<param name="animationtype" value="Hidden"/>
+									<param name="animationcondition" value="true"/>
+									<param name="animationeffect" value="slide"/>
+									<param name="animationend" value="540,0"/>
+								</include>
+								<!--Move Icon 2 to 3-->
+								<include content="ListIcon">
+									<param name="position" value="3"/>
+									<param name="left" value="1815"/>
+									<param name="top" value="285"/>
+									<param name="width" value="540"/>
+									<param name="height" value="540"/>
+									<param name="visible" value="Container(504).OnPrevious"/>
+									<param name="animationtype" value="Hidden"/>
+									<param name="animationcondition" value="true"/>
+									<param name="animationeffect" value="slide"/>
+									<param name="animationend" value="540,0"/>
+								</include>
+								<!--Dropshadow for icon 0 to 1-->
+								<!--Left Side-->
+								<include content="DropShadow">
+									<param name="left" value="525"/>
+									<param name="top" value="285"/>
+									<param name="height" value="540"/>
+									<param name="visible" value="Container(504).OnPrevious + $EXP[StripView_FullWidth] + !String.IsEmpty(Container.ListItemNoWrap(1).Label)"/>
+									<param name="animationtype" value="Hidden"/>
+									<param name="animationcondition" value="true"/>
+									<param name="animationeffect" value="zoom"/>
+									<param name="animationend" value="1275,240,0,630"/>
+									<param name="animation2effect" value="zoom"/>
+									<param name="animation2end" value="0,100"/>
+									<param name="animation2time" value="210"/>
+									<param name="animation2center" value="645,540"/>
+									<param name="animation3effect" value="fade"/>
+									<param name="animation3end" value="0"/>
+									<param name="animation3time" value="210"/>
+								</include>
+								<!--Right Side-->
+								<include content="DropShadow">
+									<param name="left" value="1275"/>
+									<param name="top" value="285"/>
+									<param name="height" value="540"/>
+									<param name="flipx" value="true"/>
+									<param name="visible" value="Container(504).OnPrevious + !String.IsEmpty(Container.ListItemNoWrap(2).Label)"/>
+									<param name="animationtype" value="Hidden"/>
+									<param name="animationcondition" value="true"/>
+									<param name="animationeffect" value="zoom"/>
+									<param name="animationend" value="1815,285,0,540"/>
+									<param name="animation2effect" value="fade"/>
+									<param name="animation2end" value="0"/>
+									<param name="animation2delay" value="20"/>
+									<param name="animation2time" value="360"/>
+								</include>
+								<!--Dropshadow for icon -1 to 0-->
+								<!--Left Side-->
+								<include content="DropShadow">
+									<param name="left" value="105"/>
+									<param name="top" value="285"/>
+									<param name="width" value="1"/>
+									<param name="height" value="540"/>
+									<param name="visible" value="Container(504).OnPrevious + !String.IsEmpty(Container.ListItemNoWrap(-1).Label) + $EXP[StripView_FullWidth]"/>
+									<param name="animationtype" value="Hidden"/>
+									<param name="animationcondition" value="true"/>
+									<param name="animationeffect" value="zoom"/>
+									<param name="animationend" value="525,285,120,540"/>
+									<param name="animation2effect" value="fade"/>
+									<param name="animation2start" value="0"/>
+									<param name="animation2end" value="100"/>
+									<param name="animation2delay" value="20"/>
+									<param name="animation2time" value="360"/>
+								</include>
+								<!--Right Side-->
+								<include content="DropShadow">
+									<param name="left" value="645"/>
+									<param name="top" value="240"/>
+									<param name="width" value="1"/>
+									<param name="height" value="630"/>
+									<param name="flipx" value="true"/>
+									<param name="visible" value="Container(504).OnPrevious + !String.IsEmpty(Container.ListItemNoWrap(1).Label)"/>
+									<param name="animationtype" value="Hidden"/>
+									<param name="animationcondition" value="true"/>
+									<param name="animationeffect" value="zoom"/>
+									<param name="animationend" value="1275,285,120,540"/>
+									<param name="animation2effect" value="fade"/>
+									<param name="animation2start" value="0"/>
+									<param name="animation2end" value="100"/>
+									<param name="animation2delay" value="210"/>
+									<param name="animation2time" value="170"/>
+								</include>
+							</control>
+						</control>
+						<!--ONNEXT-->
+						<control type="group">
+							<visible>Control.IsVisible(5002)</visible>
+							<include>CustomViewsBackground</include>
+							<control type="group">
+								<animation effect="slide" end="75,0" time="0" condition="!$EXP[StripView_FullWidth]">Conditional</animation>
+								<!--Move Icon -2 to -3-->
+								<include content="ListIcon">
+									<param name="position" value="-3"/>
+									<param name="left" value="-435"/>
+									<param name="top" value="285"/>
+									<param name="width" value="540"/>
+									<param name="height" value="540"/>
+									<param name="visible" value="Container(504).OnNext + $EXP[StripView_FullWidth]"/>
+									<param name="animationtype" value="Hidden"/>
+									<param name="animationcondition" value="true"/>
+									<param name="animationeffect" value="slide"/>
+									<param name="animationend" value="-540,0"/>
+								</include>
+								<!--Move Icon -1 to -2-->
+								<include content="ListIcon">
+									<param name="position" value="-2"/>
+									<param name="left" value="105"/>
+									<param name="top" value="285"/>
+									<param name="width" value="540"/>
+									<param name="height" value="540"/>
+									<param name="visible" value="Container(504).OnNext + $EXP[StripView_FullWidth]"/>
+									<param name="animationtype" value="Hidden"/>
+									<param name="animationcondition" value="true"/>
+									<param name="animationeffect" value="slide"/>
+									<param name="animationend" value="-540,0"/>
+								</include>
+								<!--Move Icon 0 to -1-->
+								<include content="ListIcon">
+									<param name="position" value="-1"/>
+									<param name="left" value="645"/>
+									<param name="top" value="240"/>
+									<param name="width" value="630"/>
+									<param name="height" value="630"/>
+									<param name="visible" value="Container(504).OnNext + $EXP[StripView_FullWidth]"/>
+									<param name="animationtype" value="Hidden"/>
+									<param name="animationcondition" value="true"/>
+									<param name="animationeffect" value="zoom"/>
+									<param name="animationend" value="105,285,540,540"/>
+								</include>
+								<!--Alternative Animation if Details On-->
+								<include content="ListIcon">
+									<param name="position" value="-1"/>
+									<param name="left" value="645"/>
+									<param name="top" value="240"/>
+									<param name="width" value="630"/>
+									<param name="height" value="630"/>
+									<param name="visible" value="Container(504).OnNext + !$EXP[StripView_FullWidth]"/>
+									<param name="animationtype" value="Hidden"/>
+									<param name="animationcondition" value="true"/>
+									<param name="animationeffect" value="slide"/>
+									<param name="animationend" value="-1275,0"/>
+								</include>
+								<!--Move Icon 1 to 0-->
+								<include content="ListIcon">
+									<param name="left" value="1275"/>
+									<param name="top" value="285"/>
+									<param name="width" value="540"/>
+									<param name="height" value="540"/>
+									<param name="visible" value="Container(504).OnNext"/>
+									<param name="animationtype" value="Hidden"/>
+									<param name="animationcondition" value="true"/>
+									<param name="animationeffect" value="zoom"/>
+									<param name="animationend" value="645,240,630,630"/>
+								</include>
+								<!--Move Icon 2 to 1-->
+								<include content="ListIcon">
+									<param name="position" value="1"/>
+									<param name="left" value="1815"/>
+									<param name="top" value="285"/>
+									<param name="width" value="540"/>
+									<param name="height" value="540"/>
+									<param name="visible" value="Container(504).OnNext"/>
+									<param name="animationtype" value="Hidden"/>
+									<param name="animationcondition" value="true"/>
+									<param name="animationeffect" value="slide"/>
+									<param name="animationend" value="-540,0"/>
+								</include>
+								<!--Move Icon 3 to 2-->
+								<include content="ListIcon">
+									<param name="position" value="2"/>
+									<param name="left" value="2355"/>
+									<param name="top" value="285"/>
+									<param name="width" value="540"/>
+									<param name="height" value="540"/>
+									<param name="visible" value="Container(504).OnNext"/>
+									<param name="animationtype" value="Hidden"/>
+									<param name="animationcondition" value="true"/>
+									<param name="animationeffect" value="slide"/>
+									<param name="animationend" value="-540,0"/>
+								</include>
+								<!--Dropshadow for icon 0 to -1-->
+								<!--Left Side-->
+								<include content="DropShadow">
+									<param name="left" value="525"/>
+									<param name="top" value="285"/>
+									<param name="height" value="540"/>
+									<param name="visible" value="Container(504).OnNext + $EXP[StripView_FullWidth] + !String.IsEmpty(Container.ListItemNoWrap(-2).Label)"/>
+									<param name="animationtype" value="Hidden"/>
+									<param name="animationcondition" value="true"/>
+									<param name="animationeffect" value="zoom"/>
+									<param name="animationend" value="105,285,0,540"/>
+									<param name="animation2effect" value="fade"/>
+									<param name="animation2end" value="0"/>
+									<param name="animation2time" value="360"/>
+								</include>
+								<!--Right Side-->
+								<include content="DropShadow">
+									<param name="left" value="1275"/>
+									<param name="top" value="285"/>
+									<param name="height" value="540"/>
+									<param name="flipx" value="true"/>
+									<param name="visible" value="Container(504).OnNext + !String.IsEqual(Container.CurrentItem,1)"/>
+									<param name="animationtype" value="Hidden"/>
+									<param name="animationcondition" value="true"/>
+									<param name="animationeffect" value="zoom"/>
+									<param name="animationend" value="645,240,0,630"/>
+									<param name="animation2effect" value="zoom"/>
+									<param name="animation2end" value="0,100"/>
+									<param name="animation2time" value="210"/>
+									<param name="animation2center" value="1275,540"/>
+									<param name="animation3effect" value="fade"/>
+									<param name="animation3end" value="0"/>
+									<param name="animation3time" value="210"/>
+								</include>
+								<!--Dropshadow for icon 1 to 0-->
+								<!--Left Side-->
+								<include content="DropShadow">
+									<param name="left" value="1275"/>
+									<param name="top" value="240"/>
+									<param name="width" value="1"/>
+									<param name="height" value="630"/>
+									<param name="visible" value="Container(504).OnNext + $EXP[StripView_FullWidth] + !String.IsEqual(Container.CurrentItem,1)"/>
+									<param name="animationtype" value="Hidden"/>
+									<param name="animationcondition" value="true"/>
+									<param name="animationeffect" value="zoom"/>
+									<param name="animationend" value="525,285,120,540"/>
+									<param name="animation2effect" value="fade"/>
+									<param name="animation2start" value="0"/>
+									<param name="animation2end" value="100"/>
+									<param name="animation2delay" value="210"/>
+									<param name="animation2time" value="170"/>
+								</include>
+								<!--Right Side-->
+								<include content="DropShadow">
+									<param name="left" value="1815"/>
+									<param name="top" value="285"/>
+									<param name="width" value="1"/>
+									<param name="height" value="540"/>
+									<param name="flipx" value="true"/>
+									<param name="visible" value="Container(504).OnNext + !String.IsEmpty(Container.ListItemNoWrap(1).Label)"/>
+									<param name="animationtype" value="Hidden"/>
+									<param name="animationcondition" value="true"/>
+									<param name="animationeffect" value="zoom"/>
+									<param name="animationend" value="1275,285,120,540"/>
+									<param name="animation2effect" value="fade"/>
+									<param name="animation2start" value="0"/>
+									<param name="animation2end" value="100"/>
+									<param name="animation2delay" value="20"/>
+									<param name="animation2time" value="360"/>
+								</include>
+							</control>
+						</control>
+					</control>
+				</control>
+
 			</control>
 		</control>
 	</include>
