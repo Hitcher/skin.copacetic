@@ -23,8 +23,10 @@
 	<expression name="Video_Is_Widescreen">[String.IsEqual(ListItem.VideoAspect,) | String.IsEqual(ListItem.VideoAspect,1.66) | String.IsEqual(ListItem.VideoAspect,1.78) | String.IsEqual(ListItem.VideoAspect,1.85) | String.IsEqual(ListItem.VideoAspect,2.35) | String.IsEqual(ListItem.VideoAspect,2.40)]</expression>
 	<expression name="Video_Is_Widescreen(1)">[String.IsEqual(ListItem(1).VideoAspect,) | String.IsEqual(ListItem(1).VideoAspect,1.66) | String.IsEqual(ListItem(1).VideoAspect,1.78) | String.IsEqual(ListItem(1).VideoAspect,1.85) | String.IsEqual(ListItem(1).VideoAspect,2.35) | String.IsEqual(ListItem(1).VideoAspect,2.40)]</expression>
 
-  <expression name="ContainerSwitching">![[Container.Content(movies) + Control.IsVisible(951)] | [Container.Content(sets) + Control.IsVisible(952)] | [Container.Content(tvshows) + Control.IsVisible(953)] | [Container.Content(seasons) + Control.IsVisible(954)] | [Container.Content(episodes) + Control.IsVisible(955)] | [Container.Content(artists) + Control.IsVisible(956)] | [Container.Content(albums) + Control.IsVisible(957)] | [Container.Content(songs) + Control.IsVisible(958)] | [[Container.Content(files) | Container.Content(genres) | Container.Content(years) | Container.Content(playlists) | Container.Content(plugins) | Container.Content(studios) | Container.Content(directors) | Container.Content(tags) | Container.Content(countries) | Container.Content(roles) | Container.Content(images) | Container.Content(sources)] + Control.IsVisible(959)] | [Container.Content(actors) + Control.IsVisible(960)] | [Container.Content(addons) + Control.IsVisible(961)] | [Container.Content() + Control.IsVisible(962)]]</expression>
-  <expression name="ContentSwitching">[Control.IsVisible(5001) | Control.IsVisible(5002)]</expression>
+  <expression name="ContainerSwitching">![[Container.Content(movies) + Control.IsVisible(951)] | [Container.Content(sets) + Control.IsVisible(952)] | [Container.Content(tvshows) + Control.IsVisible(953)] | [Container.Content(seasons) + Control.IsVisible(954)] | [Container.Content(episodes) + Control.IsVisible(955)]  | [Container.Content(episodes) + Control.IsVisible(963)]| [Container.Content(artists) + Control.IsVisible(956)] | [Container.Content(albums) + Control.IsVisible(957)] | [Container.Content(songs) + Control.IsVisible(958)] | [[Container.Content(files) | Container.Content(genres) | Container.Content(years) | Container.Content(playlists) | Container.Content(plugins) | Container.Content(studios) | Container.Content(directors) | Container.Content(tags) | Container.Content(countries) | Container.Content(roles) | Container.Content(images) | Container.Content(sources)] + Control.IsVisible(959)] | [Container.Content(actors) + Control.IsVisible(960)] | [Container.Content(addons) + Control.IsVisible(961)] | [Container.Content() + Control.IsVisible(962)]]</expression>
+  <expression name="ContentSwitching">[[Control.IsVisible(5001) | Control.IsVisible(5002)] + !String.IsEqual(Container.NumItems,1)]</expression>
+	<expression name="ContentPrevious">[Control.IsVisible(5001) + !String.IsEqual(Container.NumItems,1)]</expression>
+	<expression name="ContentNext">[Control.IsVisible(5002) + !String.IsEqual(Container.NumItems,1)]</expression>
 	<expression name="OptionsSwitching">Control.IsVisible(941)</expression>
 
   <expression name="ListView_IsVisible">[Control.IsVisible(50) | String.IsEqual(Container.ViewMode,List)]</expression>
@@ -50,7 +52,7 @@
 	<expression name="ListView_Display_Posters(-1)_IsVisible">Window.IsActive(videos) + [Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | [ListItem(-1).IsFolder + Container.Content(episodes)] | [ListItem(-1).IsFolder + Container.Content(files) + !String.IsEqual(Control.GetLabel(971),EMPTY)]]</expression>
 	<expression name="ListView_Display_Posters_IsVisible">Window.IsActive(videos) + [Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | [ListItem(0).IsFolder + Container.Content(episodes)] | [ListItem(0).IsFolder + Container.Content(files) + !String.IsEqual(Control.GetLabel(972),EMPTY)]]</expression>
 	<expression name="ListView_Display_Posters(1)_IsVisible">Window.IsActive(videos) + [Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | [ListItem(1).IsFolder + Container.Content(episodes)] | [ListItem(1).IsFolder + Container.Content(files) + !String.IsEqual(Control.GetLabel(973),EMPTY)]]</expression>
-	<expression name="ListView_Display_Square_IsVisible">Window.IsActive(music) + [Container.Content(artists) | Container.Content(albums) | Container.Content(songs) | Container.Content(actors) | Container.Content(files)]</expression>
+	<expression name="ListView_Display_Square_IsVisible">[Window.IsActive(music) + [Container.Content(artists) | Container.Content(albums) | Container.Content(songs) | Container.Content(files)]] | [Window.IsActive(movies) + Container.Content(actors)]</expression>
 	<expression name="ListView_Display_Fanart(-1)_IsVisible">Window.IsActive(videos) + !ListItem(-1).IsFolder + [Container.Content(episodes) | Container.Content(files)]</expression>
 	<expression name="ListView_Display_Fanart_IsVisible">Window.IsActive(videos) + !ListItem(0).IsFolder + [Container.Content(episodes) | Container.Content(files)]</expression>
 	<expression name="ListView_Display_Fanart(1)_IsVisible">Window.IsActive(videos) + !ListItem(1).IsFolder + [Container.Content(episodes) | Container.Content(files)]</expression>
@@ -1433,7 +1435,7 @@
 				<viewtype label="List">list</viewtype>
 				<left>$PARAM[left]</left>
 				<top>175</top>
-				<width>1200</width>
+				<width>1920</width>
 				<height>730</height>
 				<onleft>$PARAM[onleft]</onleft>
 				<onright>$PARAM[onright]</onright>
@@ -1442,7 +1444,8 @@
 				<focusposition>6</focusposition>
 				<orientation>vertical</orientation>
 				<scrolltime tween="sine" easing="inout">380</scrolltime>
-				<itemlayout height="55" width="720">
+				<!--Details visible-->
+				<itemlayout height="55" width="720" condition="$EXP[ListView_Details_Info_IsVisible] | $EXP[ListView_Display_IsThumbnails]">
 					<include content="ListViewLayout">
             <param name="label" value="$PARAM[label]"/>
             <param name="textcolor" value="$PARAM[textcolor]"/>
@@ -1451,7 +1454,7 @@
             <param name="iconvisible" value="$PARAM[unfocusediconvisible]"/>
           </include>
 				</itemlayout>
-				<focusedlayout height="70" width="1200">
+				<focusedlayout height="70" width="1200" condition="$EXP[ListView_Details_Info_IsVisible] | $EXP[ListView_Display_IsThumbnails]">
 					<include>HiddenFocusButton</include>
 					<include content="ListViewLayout">
             <param name="nowplayingtop" value="-25"/>
@@ -1464,6 +1467,32 @@
 						<param name="scroll" value="true"/>
             <param name="icontexture" value="$PARAM[focusedicontexture]"/>
             <param name="iconvisible" value="$PARAM[focusediconvisible]"/>
+					</include>
+				</focusedlayout>
+				<!--Details Hidden-->
+				<itemlayout height="55" width="1080" condition="!$EXP[ListView_Details_Info_IsVisible] + $EXP[ListView_Display_IsBackground]">
+					<include content="ListViewLayout">
+						<param name="label" value="$PARAM[label]"/>
+						<param name="labelmaxwidth" value="1080"/>
+						<param name="textcolor" value="$PARAM[textcolor]"/>
+						<param name="icontop" value="-3"/>
+						<param name="icontexture" value="$PARAM[unfocusedicontexture]"/>
+						<param name="iconvisible" value="$PARAM[unfocusediconvisible]"/>
+					</include>
+				</itemlayout>
+				<focusedlayout height="70" width="1920" condition="!$EXP[ListView_Details_Info_IsVisible] + $EXP[ListView_Display_IsBackground]">
+					<include>HiddenFocusButton</include>
+					<include content="ListViewLayout">
+						<param name="nowplayingtop" value="-25"/>
+						<param name="checktop" value="7"/>
+						<param name="checktexture" value="views/check_focused.png"/>
+						<param name="label" value="$PARAM[label]"/>
+						<param name="labelmaxwidth" value="1740"/>
+						<param name="font" value="List_Title_Focused"/>
+						<param name="textcolor" value="$PARAM[textcolor]"/>
+						<param name="scroll" value="true"/>
+						<param name="icontexture" value="$PARAM[focusedicontexture]"/>
+						<param name="iconvisible" value="$PARAM[focusediconvisible]"/>
 					</include>
 				</focusedlayout>
 			</control>
