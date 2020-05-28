@@ -15,27 +15,6 @@
 					<textcolor>$VAR[Blank]</textcolor>
 					<label>$VAR[Thumbnail(0)Content]</label>
 				</control>
-				<control type="image" id="971">
-					<left>-10</left>
-					<top>-10</top>
-					<width>1</width>
-					<height>1</height>
-					<texture fallback="EMPTY">$INFO[ListItem(-1).FolderPath,,poster.jpg]</texture>
-				</control>
-				<control type="image" id="972">
-					<left>-10</left>
-					<top>-10</top>
-					<width>1</width>
-					<height>1</height>
-					<texture fallback="EMPTY">$INFO[ListItem(0).FolderPath,,poster.jpg]</texture>
-				</control>
-				<control type="image" id="973">
-					<left>-10</left>
-					<top>-10</top>
-					<width>1</width>
-					<height>1</height>
-					<texture fallback="EMPTY">$INFO[ListItem(1).FolderPath,,poster.jpg]</texture>
-				</control>
 				<!--Hidden Label length checkers-->
 				<control type="group">
 					<top>-70</top>
@@ -117,17 +96,17 @@
 							</include>
 							<include content="SimpleListIcon">
 								<param name="left" value="0"/>
-								<param name="top" value="354"/>
-								<param name="width" value="660"/>
-								<param name="height" value="371"/>
+								<param name="top" value="360"/>
+								<param name="width" value="640"/>
+								<param name="height" value="360"/>
 								<param name="aspectratio" value="scale"/>
 								<param name="visible" value="$EXP[ListView_Display_Fanart_IsVisible] + $EXP[Video_Is_Widescreen]"/>
 							</include>
 							<include content="SimpleListIcon">
 								<param name="left" value="0"/>
-								<param name="top" value="292"/>
-								<param name="width" value="660"/>
-								<param name="height" value="495"/>
+								<param name="top" value="300"/>
+								<param name="width" value="640"/>
+								<param name="height" value="480"/>
 								<param name="aspectratio" value="scale"/>
 								<param name="visible" value="$EXP[ListView_Display_Fanart_IsVisible] + !$EXP[Video_Is_Widescreen]"/>
 							</include>
@@ -526,7 +505,7 @@
 							<control type="group">
 								<!--FADE OUT ICON 1-->
 								<!--Poster-->
-								<!--Display for duration of transition as long as destination artwork is present-->
+								<!--Display for duration of transition as long as destination artwork is also poster-->
 								<include content="ListIcon">
 									<param name="position" value="1"/>
 									<param name="left" value="0"/>
@@ -534,9 +513,9 @@
 									<param name="width" value="640"/>
 									<param name="height" value="960"/>
 									<param name="aspectratio" value="scale"/>
-									<param name="visible" value="$EXP[ListView_Display_Posters(1)_IsVisible] + [[!String.IsEmpty(ListItem(0).Art(keyart)) | !String.IsEmpty(ListItem(0).Art(poster)) | !String.IsEmpty(ListItem(0).Art(thumb))] | [Container.Content(episodes) + ListItem(0).IsFolder + String.IsEmpty(ListItem(0).TVShowTitle)]]"/>
+									<param name="visible" value="$EXP[ListView_Display_Posters(1)_IsVisible] + $EXP[ListView_Display_Posters_IsVisible]"/>
 								</include>
-								<!--Fade out as long as destination artwork is empty-->
+								<!--Fade out as long as destination artwork is empty or fanart-->
 								<include content="ListIcon">
 									<param name="position" value="1"/>
 									<param name="left" value="0"/>
@@ -544,7 +523,7 @@
 									<param name="width" value="640"/>
 									<param name="height" value="960"/>
 									<param name="aspectratio" value="scale"/>
-									<param name="visible" value="$EXP[ListView_Display_Posters(1)_IsVisible] + Container(50).OnPrevious + [String.IsEmpty(ListItem(0).Art(keyart)) + String.IsEmpty(ListItem(0).Art(poster)) + String.IsEmpty(ListItem(0).Art(thumb))] + ![Container.Content(episodes) + ListItem(0).IsFolder + String.IsEmpty(ListItem(0).TVShowTitle)]"/>
+									<param name="visible" value="$EXP[ListView_Display_Posters(1)_IsVisible] + Container(50).OnPrevious + !$EXP[ListView_Display_Posters_IsVisible]"/>
 									<param name="animationeffect" value="fade"/>
 									<param name="animationend" value="0"/>
 									<param name="animationcondition" value="true"/>
@@ -576,50 +555,50 @@
 									<param name="animationtype" value="Hidden"/>
 								</include>
 								<!--Fanart (16:9)-->
-								<!--Display for duration of transition as long as destination artwork is present-->
+								<!--Display for duration of transition as long as destination artwork is Fanart(16:9)-->
 								<include content="ListIcon">
 									<param name="position" value="1"/>
 									<param name="left" value="0"/>
-									<param name="top" value="354"/>
-									<param name="width" value="660"/>
-									<param name="height" value="371"/>
+									<param name="top" value="360"/>
+									<param name="width" value="640"/>
+									<param name="height" value="360"/>
 									<param name="aspectratio" value="scale"/>
-									<param name="visible" value="$EXP[ListView_Display_Fanart(1)_IsVisible] + $EXP[Video_Is_Widescreen(1)] + !String.IsEmpty(ListItem(0).Art(thumb)) + $EXP[Video_Is_Widescreen]"/>
+									<param name="visible" value="$EXP[ListView_Display_Fanart(1)_IsVisible] + $EXP[Video_Is_Widescreen(1)] + $EXP[ListView_Display_Fanart_IsVisible] + $EXP[Video_Is_Widescreen]"/>
 								</include>
-								<!--Fade out as long as destination artwork is empty-->
+								<!--Fade out as long as destination artwork is empty or not Fanart(16:9)-->
 								<include content="ListIcon">
 									<param name="position" value="1"/>
 									<param name="left" value="0"/>
-									<param name="top" value="354"/>
-									<param name="width" value="660"/>
-									<param name="height" value="371"/>
+									<param name="top" value="360"/>
+									<param name="width" value="640"/>
+									<param name="height" value="360"/>
 									<param name="aspectratio" value="scale"/>
-									<param name="visible" value="$EXP[ListView_Display_Fanart(1)_IsVisible] + Container(50).OnPrevious + $EXP[Video_Is_Widescreen(1)] + [String.IsEmpty(ListItem(0).Art(thumb)) | !$EXP[Video_Is_Widescreen]]"/>
+									<param name="visible" value="Container(50).OnPrevious + $EXP[ListView_Display_Fanart(1)_IsVisible] + $EXP[Video_Is_Widescreen(1)] + ![$EXP[ListView_Display_Fanart_IsVisible] + $EXP[Video_Is_Widescreen]]"/>
 									<param name="animationeffect" value="fade"/>
 									<param name="animationend" value="0"/>
 									<param name="animationcondition" value="true"/>
 									<param name="animationtype" value="Hidden"/>
 								</include>
 								<!--Fanart (4:3)-->
-								<!--Display for duration of transition as long as destination artwork is present-->
+								<!--Display for duration of transition as long as destination artwork is Fanart(4:3)-->
 								<include content="ListIcon">
 									<param name="position" value="1"/>
 									<param name="left" value="0"/>
-									<param name="top" value="292"/>
-									<param name="width" value="660"/>
-									<param name="height" value="495"/>
+									<param name="top" value="300"/>
+									<param name="width" value="640"/>
+									<param name="height" value="480"/>
 									<param name="aspectratio" value="scale"/>
-									<param name="visible" value="$EXP[ListView_Display_Fanart(1)_IsVisible] + !$EXP[Video_Is_Widescreen(1)] + !String.IsEmpty(ListItem(0).Art(thumb)) + !$EXP[Video_Is_Widescreen]"/>
+									<param name="visible" value="$EXP[ListView_Display_Fanart(1)_IsVisible] + !$EXP[Video_Is_Widescreen(1)] + $EXP[ListView_Display_Fanart_IsVisible] + !$EXP[Video_Is_Widescreen]"/>
 								</include>
-								<!--Fade out as long as destination artwork is empty-->
+								<!--Fade out as long as destination artwork is empty or not Fanart (4:3)-->
 								<include content="ListIcon">
 									<param name="position" value="1"/>
 									<param name="left" value="0"/>
-									<param name="top" value="292"/>
-									<param name="width" value="660"/>
-									<param name="height" value="495"/>
+									<param name="top" value="300"/>
+									<param name="width" value="640"/>
+									<param name="height" value="480"/>
 									<param name="aspectratio" value="scale"/>
-									<param name="visible" value="$EXP[ListView_Display_Fanart(1)_IsVisible] + Container(50).OnPrevious + !$EXP[Video_Is_Widescreen(1)] + [String.IsEmpty(ListItem(0).Art(thumb)) | $EXP[Video_Is_Widescreen]]"/>
+									<param name="visible" value="Container(50).OnPrevious + $EXP[ListView_Display_Fanart(1)_IsVisible] + !$EXP[Video_Is_Widescreen(1)] + ![$EXP[ListView_Display_Fanart_IsVisible] + !$EXP[Video_Is_Widescreen]]"/>
 									<param name="animationeffect" value="fade"/>
 									<param name="animationend" value="0"/>
 									<param name="animationcondition" value="true"/>
@@ -633,7 +612,7 @@
 									<param name="width" value="640"/>
 									<param name="height" value="960"/>
 									<param name="aspectratio" value="scale"/>
-									<param name="visible" value="$EXP[ListView_Display_Posters_IsVisible] + !Container(50).OnPrevious + ![Container.Content(episodes) + ListItem(0).IsFolder + String.IsEmpty(ListItem(0).TVShowTitle)] + !String.IsEqual(Container(50).NumItems,1)"/>
+									<param name="visible" value="$EXP[ListView_Display_Posters_IsVisible] + !Container(50).OnPrevious + ![Container.Content(episodes) + ListItem(0).IsFolder] + !String.IsEqual(Container(50).NumItems,1)"/>
 									<param name="animationeffect" value="fade"/>
 									<param name="animationend" value="100"/>
 									<param name="animationcondition" value="true"/>
@@ -655,9 +634,9 @@
 								<!--Fanart (16:9)-->
 								<include content="ListIcon">
 									<param name="left" value="0"/>
-									<param name="top" value="354"/>
-									<param name="width" value="660"/>
-									<param name="height" value="371"/>
+									<param name="top" value="360"/>
+									<param name="width" value="640"/>
+									<param name="height" value="360"/>
 									<param name="aspectratio" value="scale"/>
 									<param name="visible" value="$EXP[ListView_Display_Fanart_IsVisible] + $EXP[Video_Is_Widescreen] + !Container(50).OnPrevious + !String.IsEqual(Container(50).NumItems,1)"/>
 									<param name="animationeffect" value="fade"/>
@@ -668,9 +647,9 @@
 								<!--Fanart(4:3)-->
 								<include content="ListIcon">
 									<param name="left" value="0"/>
-									<param name="top" value="292"/>
-									<param name="width" value="660"/>
-									<param name="height" value="495"/>
+									<param name="top" value="300"/>
+									<param name="width" value="640"/>
+									<param name="height" value="480"/>
 									<param name="aspectratio" value="scale"/>
 									<param name="visible" value="$EXP[ListView_Display_Fanart_IsVisible] + !$EXP[Video_Is_Widescreen] + !Container(50).OnPrevious + !String.IsEqual(Container(50).NumItems,1)"/>
 									<param name="animationeffect" value="fade"/>
@@ -687,7 +666,7 @@
 							<control type="group">
 								<!--FADE OUT ICON -1-->
 								<!--Poster-->
-								<!--Display for duration of transition as long as destination artwork is present-->
+								<!--Display for duration of transition as long as destination artwork is poster-->
 								<include content="ListIcon">
 									<param name="position" value="-1"/>
 									<param name="left" value="0"/>
@@ -695,9 +674,9 @@
 									<param name="width" value="640"/>
 									<param name="height" value="960"/>
 									<param name="aspectratio" value="scale"/>
-									<param name="visible" value="$EXP[ListView_Display_Posters(-1)_IsVisible] + [[!String.IsEmpty(ListItem(0).Art(keyart)) | !String.IsEmpty(ListItem(0).Art(poster)) | !String.IsEmpty(ListItem(0).Art(thumb))] | [Container.Content(episodes) + ListItem(0).IsFolder + String.IsEmpty(ListItem(0).TVShowTitle)]]"/>
+									<param name="visible" value="$EXP[ListView_Display_Posters(-1)_IsVisible] + $EXP[ListView_Display_Posters_IsVisible]"/>
 								</include>
-								<!--Fade out as long as destination artwork is empty-->
+								<!--Fade out as long as destination artwork is empty or not poster-->
 								<include content="ListIcon">
 									<param name="position" value="-1"/>
 									<param name="left" value="0"/>
@@ -705,7 +684,7 @@
 									<param name="width" value="640"/>
 									<param name="height" value="960"/>
 									<param name="aspectratio" value="scale"/>
-									<param name="visible" value="$EXP[ListView_Display_Posters(-1)_IsVisible] + Container(50).OnNext + [String.IsEmpty(ListItem(0).Art(keyart)) + String.IsEmpty(ListItem(0).Art(poster)) + String.IsEmpty(ListItem(0).Art(thumb))] + ![Container.Content(episodes) + ListItem(0).IsFolder + String.IsEmpty(ListItem(0).TVShowTitle)]"/>
+									<param name="visible" value="$EXP[ListView_Display_Posters(-1)_IsVisible] + Container(50).OnNext + !$EXP[ListView_Display_Posters_IsVisible]"/>
 									<param name="animationeffect" value="fade"/>
 									<param name="animationend" value="0"/>
 									<param name="animationcondition" value="true"/>
@@ -737,50 +716,50 @@
 									<param name="animationtype" value="Hidden"/>
 								</include>
 								<!--Fanart (16:9)-->
-								<!--Display for duration of transition as long as destination artwork is present-->
+								<!--Display for duration of transition as long as destination artwork is fanart (16:9)-->
 								<include content="ListIcon">
 									<param name="position" value="-1"/>
 									<param name="left" value="0"/>
-									<param name="top" value="354"/>
-									<param name="width" value="660"/>
-									<param name="height" value="371"/>
+									<param name="top" value="360"/>
+									<param name="width" value="640"/>
+									<param name="height" value="360"/>
 									<param name="aspectratio" value="scale"/>
-									<param name="visible" value="$EXP[ListView_Display_Fanart(-1)_IsVisible] + $EXP[Video_Is_Widescreen(-1)] + !String.IsEmpty(ListItem(0).Art(thumb)) + $EXP[Video_Is_Widescreen]"/>
+									<param name="visible" value="$EXP[ListView_Display_Fanart(-1)_IsVisible] + $EXP[Video_Is_Widescreen(-1)] + $EXP[ListView_Display_Fanart_IsVisible] + $EXP[Video_Is_Widescreen]"/>
 								</include>
-								<!--Fade out as long as destination artwork is empty-->
+								<!--Fade out as long as destination artwork is empty or not fanart (16:9)-->
 								<include content="ListIcon">
 									<param name="position" value="-1"/>
 									<param name="left" value="0"/>
-									<param name="top" value="354"/>
-									<param name="width" value="660"/>
-									<param name="height" value="371"/>
+									<param name="top" value="360"/>
+									<param name="width" value="640"/>
+									<param name="height" value="360"/>
 									<param name="aspectratio" value="scale"/>
-									<param name="visible" value="$EXP[ListView_Display_Fanart(-1)_IsVisible] + Container(50).OnNext + $EXP[Video_Is_Widescreen(-1)] + [String.IsEmpty(ListItem(0).Art(thumb)) | !$EXP[Video_Is_Widescreen]]"/>
+									<param name="visible" value="Container(50).OnNext + $EXP[ListView_Display_Fanart(-1)_IsVisible] + $EXP[Video_Is_Widescreen(-1)] + ![$EXP[ListView_Display_Fanart_IsVisible] + $EXP[Video_Is_Widescreen]]"/>
 									<param name="animationeffect" value="fade"/>
 									<param name="animationend" value="0"/>
 									<param name="animationcondition" value="true"/>
 									<param name="animationtype" value="Hidden"/>
 								</include>
 								<!--Fanart(4:3)-->
-								<!--Display for duration of transition as long as destination artwork is present-->
+								<!--Display for duration of transition as long as destination artwork is not fanart(4:3)-->
 								<include content="ListIcon">
 									<param name="position" value="-1"/>
 									<param name="left" value="0"/>
-									<param name="top" value="292"/>
-									<param name="width" value="660"/>
-									<param name="height" value="495"/>
+									<param name="top" value="300"/>
+									<param name="width" value="640"/>
+									<param name="height" value="480"/>
 									<param name="aspectratio" value="scale"/>
-									<param name="visible" value="$EXP[ListView_Display_Fanart(-1)_IsVisible] + !$EXP[Video_Is_Widescreen(-1)] + !String.IsEmpty(ListItem(0).Art(thumb)) + !$EXP[Video_Is_Widescreen]"/>
+									<param name="visible" value="$EXP[ListView_Display_Fanart(-1)_IsVisible] + !$EXP[Video_Is_Widescreen(-1)] + $EXP[ListView_Display_Fanart_IsVisible] + !$EXP[Video_Is_Widescreen]"/>
 								</include>
-								<!--Fade out as long as destination artwork is empty-->
+								<!--Fade out as long as destination artwork is empty or not fanart(4:3)-->
 								<include content="ListIcon">
 									<param name="position" value="-1"/>
 									<param name="left" value="0"/>
-									<param name="top" value="292"/>
-									<param name="width" value="660"/>
-									<param name="height" value="495"/>
+									<param name="top" value="300"/>
+									<param name="width" value="640"/>
+									<param name="height" value="480"/>
 									<param name="aspectratio" value="scale"/>
-									<param name="visible" value="$EXP[ListView_Display_Fanart(-1)_IsVisible] + Container(50).OnNext + !$EXP[Video_Is_Widescreen(-1)] + [String.IsEmpty(ListItem(0).Art(thumb)) | $EXP[Video_Is_Widescreen]]"/>
+									<param name="visible" value="Container(50).OnNext + $EXP[ListView_Display_Fanart(-1)_IsVisible] + !$EXP[Video_Is_Widescreen(-1)] + ![$EXP[ListView_Display_Fanart_IsVisible] + !$EXP[Video_Is_Widescreen]]"/>
 									<param name="animationeffect" value="fade"/>
 									<param name="animationend" value="0"/>
 									<param name="animationcondition" value="true"/>
@@ -794,7 +773,7 @@
 									<param name="width" value="640"/>
 									<param name="height" value="960"/>
 									<param name="aspectratio" value="scale"/>
-									<param name="visible" value="$EXP[ListView_Display_Posters_IsVisible] + !Container(50).OnNext + ![Container.Content(episodes) + ListItem(0).IsFolder + String.IsEmpty(ListItem(0).TVShowTitle)] + !String.IsEqual(Container(50).NumItems,1)"/>
+									<param name="visible" value="$EXP[ListView_Display_Posters_IsVisible] + !Container(50).OnNext + ![Container.Content(episodes) + ListItem(0).IsFolder] + !String.IsEqual(Container(50).NumItems,1)"/>
 									<param name="animationeffect" value="fade"/>
 									<param name="animationend" value="100"/>
 									<param name="animationcondition" value="true"/>
@@ -816,9 +795,9 @@
 								<!--Fanart(16:9)-->
 								<include content="ListIcon">
 									<param name="left" value="0"/>
-									<param name="top" value="354"/>
-									<param name="width" value="660"/>
-									<param name="height" value="371"/>
+									<param name="top" value="360"/>
+									<param name="width" value="640"/>
+									<param name="height" value="360"/>
 									<param name="aspectratio" value="scale"/>
 									<param name="visible" value="$EXP[ListView_Display_Fanart_IsVisible] + $EXP[Video_Is_Widescreen] + !Container(50).OnNext + !String.IsEqual(Container(50).NumItems,1)"/>
 									<param name="animationeffect" value="fade"/>
@@ -829,9 +808,9 @@
 								<!--Fanart(4:3)-->
 								<include content="ListIcon">
 									<param name="left" value="0"/>
-									<param name="top" value="292"/>
-									<param name="width" value="660"/>
-									<param name="height" value="495"/>
+									<param name="top" value="300"/>
+									<param name="width" value="640"/>
+									<param name="height" value="480"/>
 									<param name="aspectratio" value="scale"/>
 									<param name="visible" value="$EXP[ListView_Display_Fanart_IsVisible] + !$EXP[Video_Is_Widescreen] + !Container(50).OnNext + !String.IsEqual(Container(50).NumItems,1)"/>
 									<param name="animationeffect" value="fade"/>
@@ -854,6 +833,7 @@
 					</control>
 				</control>
 			</control>
+
 		</control>
 	</include>
 </includes>
