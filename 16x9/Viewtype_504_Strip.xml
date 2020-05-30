@@ -13,9 +13,14 @@
 				<control type="fixedlist" id="504">
 					<viewtype label="Strip">wrap</viewtype>
 					<onup>SetFocus(3000,0)</onup>
-					<ondown>60</ondown>
-					<onleft>504</onleft>
-					<onright>504</onright>
+					<ondown conditon="Integer.IsGreater(Container.NumItems,1)">60</ondown>
+					<ondown condition="Integer.IsEqual(Container.NumItems,1)">SetFocus(3000,0)</ondown>
+					<onleft condition="Integer.IsGreater(Container.NumItems,10)">504</onleft>
+					<onleft condition="Integer.IsLessOrEqual(Container.NumItems,10) + Integer.IsGreater(Container.NumItems,1)">0</onleft>
+					<onleft condition="Integer.IsEqual(Container.NumItems,1)">SetFocus(3000,0)</onleft>
+					<onright condition="Integer.IsGreater(Container.NumItems,10)">504</onright>
+					<onright condition="Integer.IsLessOrEqual(Container.NumItems,10) + Integer.IsGreater(Container.NumItems,1)">0</onright>
+					<onright condition="Integer.IsEqual(Container.NumItems,1)">SetFocus(3000,0)</onright>
 					<pagecontrol>60</pagecontrol>
 					<preloaditems>2</preloaditems>
 					<focusposition>0</focusposition>
@@ -457,7 +462,7 @@
 								<param name="top" value="240"/>
 								<param name="width" value="1"/>
 								<param name="height" value="600"/>
-								<param name="visible" value="Container(504).OnPrevious + !String.IsEmpty(Container.ListItemNoWrap(-1).Label) + $EXP[StripView_FullWidth]"/>
+								<param name="visible" value="Container(504).OnPrevious + $EXP[StripView_FullWidth] + !String.IsEmpty(Container.ListItemNoWrap(-1).Label)"/>
 								<param name="animationtype" value="Hidden"/>
 								<param name="animationcondition" value="true"/>
 								<param name="animationeffect" value="zoom"/>
@@ -468,6 +473,42 @@
 								<param name="animation2delay" value="20"/>
 								<param name="animation2time" value="360"/>
 							</include>
+
+							<!--Interlude-->
+							<!--Move Icon -1 to 0 - Cover Dropshadow animation when fast-scrolling at end of list-->
+							<include content="ListIcon">
+								<param name="left" value="320"/>
+								<param name="top" value="240"/>
+								<param name="width" value="400"/>
+								<param name="height" value="600"/>
+								<param name="visible" value="Container(504).OnPrevious + $EXP[StripView_FullWidth] + String.IsEmpty(Container.ListItemNoWrap(-1).Label)"/>
+								<param name="animationtype" value="Hidden"/>
+								<param name="animationcondition" value="true"/>
+								<param name="animationeffect" value="zoom"/>
+								<param name="animationend" value="720,180,480,720"/>
+							</include>
+							<!--Dropshadow for icon 0 to 1 - Cover icon above-->
+							<!--Left Side-->
+							<include content="DropShadow">
+								<param name="left" value="600"/>
+								<param name="top" value="240"/>
+								<param name="height" value="600"/>
+								<param name="visible" value="Container(504).OnPrevious + $EXP[StripView_FullWidth] + String.IsEmpty(Container.ListItemNoWrap(-1).Label)"/>
+								<param name="animationtype" value="Hidden"/>
+								<param name="animationcondition" value="true"/>
+								<param name="animationeffect" value="zoom"/>
+								<param name="animationend" value="1200,180,0,720"/>
+								<param name="animation2effect" value="zoom"/>
+								<param name="animation2end" value="0,100"/>
+								<param name="animation2time" value="210"/>
+								<param name="animation2center" value="720,540"/>
+								<param name="animation3effect" value="fade"/>
+								<param name="animation3end" value="0"/>
+								<param name="animation3time" value="210"/>
+							</include>
+							<!--End of Interlude-->
+
+							<!--Dropshadow for icon -1 to 0-->
 							<!--Right Side-->
 							<include content="DropShadow">
 								<param name="left" value="720"/>
@@ -652,6 +693,37 @@
 								<param name="animation2delay" value="20"/>
 								<param name="animation2time" value="360"/>
 							</include>
+							<!--Move Icon 1 to 0 - Cover Dropshadow animation when fast-scrolling at end of list-->
+							<include content="ListIcon">
+								<param name="left" value="1200"/>
+								<param name="top" value="240"/>
+								<param name="width" value="400"/>
+								<param name="height" value="600"/>
+								<param name="visible" value="Container(504).OnNext + String.IsEmpty(Container.ListItemNoWrap(1).Label)"/>
+								<param name="animationtype" value="Hidden"/>
+								<param name="animationcondition" value="true"/>
+								<param name="animationeffect" value="zoom"/>
+								<param name="animationend" value="720,180,480,720"/>
+							</include>
+							<!--Right Side-->
+							<include content="DropShadow">
+								<param name="left" value="1200"/>
+								<param name="top" value="240"/>
+								<param name="height" value="600"/>
+								<param name="flipx" value="true"/>
+								<param name="visible" value="Container(504).OnNext + String.IsEmpty(Container.ListItemNoWrap(1).Label)"/>
+								<param name="animationtype" value="Hidden"/>
+								<param name="animationcondition" value="true"/>
+								<param name="animationeffect" value="zoom"/>
+								<param name="animationend" value="720,180,0,720"/>
+								<param name="animation2effect" value="zoom"/>
+								<param name="animation2end" value="0,100"/>
+								<param name="animation2time" value="210"/>
+								<param name="animation2center" value="1200,540"/>
+								<param name="animation3effect" value="fade"/>
+								<param name="animation3end" value="0"/>
+								<param name="animation3time" value="210"/>
+							</include>-->
 						</control>
 					</control>
 				</control>
@@ -786,6 +858,42 @@
 									<param name="animation2delay" value="20"/>
 									<param name="animation2time" value="360"/>
 								</include>
+
+								<!--Interlude-->
+								<!--Move Icon -1 to 0 - Cover Dropshadow animation when fast-scrolling at end of list-->
+								<include content="ListIcon">
+									<param name="left" value="-560"/>
+									<param name="top" value="285"/>
+									<param name="width" value="960"/>
+									<param name="height" value="540"/>
+									<param name="visible" value="Container(504).OnPrevious + $EXP[StripView_FullWidth] + String.IsEmpty(Container.ListItemNoWrap(-1).Label)"/>
+									<param name="animationtype" value="Hidden"/>
+									<param name="animationcondition" value="true"/>
+									<param name="animationeffect" value="zoom"/>
+									<param name="animationend" value="400,240,1120,630"/>
+								</include>
+								<!--Dropshadow for icon 0 to 1 - Cover icon above-->
+								<!--Left Side-->
+								<include content="DropShadow">
+									<param name="left" value="280"/>
+									<param name="top" value="285"/>
+									<param name="height" value="540"/>
+									<param name="visible" value="Container(504).OnPrevious + $EXP[StripView_FullWidth] + String.IsEmpty(Container.ListItemNoWrap(-1).Label)"/>
+									<param name="animationtype" value="Hidden"/>
+									<param name="animationcondition" value="true"/>
+									<param name="animationeffect" value="zoom"/>
+									<param name="animationend" value="1520,240,0,630"/>
+									<param name="animation2effect" value="zoom"/>
+									<param name="animation2end" value="0,100"/>
+									<param name="animation2time" value="210"/>
+									<param name="animation2center" value="400,540"/>
+									<param name="animation3effect" value="fade"/>
+									<param name="animation3end" value="0"/>
+									<param name="animation3time" value="210"/>
+								</include>
+								<!--End of Interlude-->
+
+								<!--Dropshadow for icon -1 to 0-->
 								<!--Right Side-->
 								<include content="DropShadow">
 									<param name="left" value="400"/>
@@ -947,6 +1055,38 @@
 									<param name="animation2delay" value="20"/>
 									<param name="animation2time" value="360"/>
 								</include>
+								<!--Move Icon 1 to 0 - Cover Dropshadow animation when fast-scrolling at end of list-->
+								<include content="ListIcon">
+									<param name="left" value="1520"/>
+									<param name="top" value="285"/>
+									<param name="width" value="960"/>
+									<param name="height" value="540"/>
+									<param name="visible" value="Container(504).OnNext + String.IsEmpty(Container.ListItemNoWrap(1).Label)"/>
+									<param name="animationtype" value="Hidden"/>
+									<param name="animationcondition" value="true"/>
+									<param name="animationeffect" value="zoom"/>
+									<param name="animationend" value="400,240,1120,630"/>
+								</include>
+								<!--Right Side-->
+								<include content="DropShadow">
+									<param name="left" value="1520"/>
+									<param name="top" value="285"/>
+									<param name="height" value="540"/>
+									<param name="flipx" value="true"/>
+									<param name="visible" value="Container(504).OnNext + String.IsEmpty(Container.ListItemNoWrap(1).Label)"/>
+									<param name="animationtype" value="Hidden"/>
+									<param name="animationcondition" value="true"/>
+									<param name="animationeffect" value="zoom"/>
+									<param name="animationend" value="400,240,0,630"/>
+									<param name="animation2effect" value="zoom"/>
+									<param name="animation2end" value="0,100"/>
+									<param name="animation2time" value="210"/>
+									<param name="animation2center" value="1520,540"/>
+									<param name="animation3effect" value="fade"/>
+									<param name="animation3end" value="0"/>
+									<param name="animation3time" value="210"/>
+								</include>
+
 							</control>
 						</control>
 					</control>
@@ -1107,6 +1247,42 @@
 									<param name="animation2delay" value="20"/>
 									<param name="animation2time" value="360"/>
 								</include>
+
+								<!--Interlude-->
+								<!--Move Icon -1 to 0 - Cover Dropshadow animation when fast-scrolling at end of list-->
+								<include content="ListIcon">
+									<param name="left" value="105"/>
+									<param name="top" value="285"/>
+									<param name="width" value="540"/>
+									<param name="height" value="540"/>
+									<param name="visible" value="Container(504).OnPrevious  + $EXP[StripView_FullWidth] + String.IsEmpty(Container.ListItemNoWrap(-1).Label)"/>
+									<param name="animationtype" value="Hidden"/>
+									<param name="animationcondition" value="true"/>
+									<param name="animationeffect" value="zoom"/>
+									<param name="animationend" value="645,240,630,630"/>
+								</include>
+								<!--Dropshadow for icon 0 to 1 - Cover icon above-->
+								<!--Left Side-->
+								<include content="DropShadow">
+									<param name="left" value="525"/>
+									<param name="top" value="285"/>
+									<param name="height" value="540"/>
+									<param name="visible" value="Container(504).OnPrevious + $EXP[StripView_FullWidth] + String.IsEmpty(Container.ListItemNoWrap(-1).Label)"/>
+									<param name="animationtype" value="Hidden"/>
+									<param name="animationcondition" value="true"/>
+									<param name="animationeffect" value="zoom"/>
+									<param name="animationend" value="1275,240,0,630"/>
+									<param name="animation2effect" value="zoom"/>
+									<param name="animation2end" value="0,100"/>
+									<param name="animation2time" value="210"/>
+									<param name="animation2center" value="645,540"/>
+									<param name="animation3effect" value="fade"/>
+									<param name="animation3end" value="0"/>
+									<param name="animation3time" value="210"/>
+								</include>
+								<!--End of Interlude-->
+
+								<!--Dropshadow for icon -1 to 0-->
 								<!--Right Side-->
 								<include content="DropShadow">
 									<param name="left" value="645"/>
@@ -1293,11 +1469,41 @@
 									<param name="animation2delay" value="20"/>
 									<param name="animation2time" value="360"/>
 								</include>
+								<!--Move Icon 1 to 0 - Cover Dropshadow animation when fast-scrolling at end of list-->
+								<include content="ListIcon">
+									<param name="left" value="1275"/>
+									<param name="top" value="285"/>
+									<param name="width" value="540"/>
+									<param name="height" value="540"/>
+									<param name="visible" value="Container(504).OnNext + String.IsEmpty(Container.ListItemNoWrap(1).Label)"/>
+									<param name="animationtype" value="Hidden"/>
+									<param name="animationcondition" value="true"/>
+									<param name="animationeffect" value="zoom"/>
+									<param name="animationend" value="645,240,630,630"/>
+								</include>
+								<!--Right Side-->
+								<include content="DropShadow">
+									<param name="left" value="1275"/>
+									<param name="top" value="285"/>
+									<param name="height" value="540"/>
+									<param name="flipx" value="true"/>
+									<param name="visible" value="Container(504).OnNext + String.IsEmpty(Container.ListItemNoWrap(1).Label"/>
+									<param name="animationtype" value="Hidden"/>
+									<param name="animationcondition" value="true"/>
+									<param name="animationeffect" value="zoom"/>
+									<param name="animationend" value="645,240,0,630"/>
+									<param name="animation2effect" value="zoom"/>
+									<param name="animation2end" value="0,100"/>
+									<param name="animation2time" value="210"/>
+									<param name="animation2center" value="1275,540"/>
+									<param name="animation3effect" value="fade"/>
+									<param name="animation3end" value="0"/>
+									<param name="animation3time" value="210"/>
+								</include>
 							</control>
 						</control>
 					</control>
 				</control>
-
 			</control>
 		</control>
 	</include>
