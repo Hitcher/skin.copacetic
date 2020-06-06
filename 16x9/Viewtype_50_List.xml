@@ -3,51 +3,53 @@
 	<include name="Viewtype_50_List">
 		<control type="group">
 			<include>FullscreenDimensions</include>
-
+			<visible>$EXP[ListView_IsVisible]</visible>
 			<!--HIDDEN LABELS-->
-			<!--Hidden missing artwork checker-->
-			<control type="textbox" id="969">
-				<textcolor>$VAR[Blank]</textcolor>
-				<label>$VAR[Thumbnail(-1)Content]</label>
-			</control>
-			<control type="textbox" id="970">
-				<textcolor>$VAR[Blank]</textcolor>
-				<label>$VAR[Thumbnail(0)Content]</label>
-			</control>
-			<control type="textbox" id="971">
-				<textcolor>$VAR[Blank]</textcolor>
-				<label>$VAR[Thumbnail(1)Content]</label>
-			</control>
-			<!--Hidden Label length checkers-->
 			<control type="group">
-				<top>-70</top>
-				<control type="textbox" id="974">
-					<width>720</width>
-					<height>70</height>
-					<font>List_Title_Focused</font>
+				<!--Hidden missing artwork checker-->
+				<control type="textbox" id="969">
 					<textcolor>$VAR[Blank]</textcolor>
-					<label>$VAR[Title]</label>
+					<label>$VAR[Thumbnail(-1)Content]</label>
 				</control>
-				<control type="textbox" id="975">
-					<width>900</width>
-					<height>70</height>
-					<font>List_Title_Focused</font>
+				<control type="textbox" id="970">
 					<textcolor>$VAR[Blank]</textcolor>
-					<label>$VAR[Title]</label>
+					<label>$VAR[Thumbnail(0)Content]</label>
 				</control>
-				<control type="textbox" id="976">
-					<width>1080</width>
-					<height>70</height>
-					<font>List_Title_Focused</font>
+				<control type="textbox" id="971">
 					<textcolor>$VAR[Blank]</textcolor>
-					<label>$VAR[Title]</label>
+					<label>$VAR[Thumbnail(1)Content]</label>
 				</control>
-				<control type="textbox" id="977">
-					<width>600</width>
-					<height>35</height>
-					<font>List_Info</font>
-					<textcolor>$VAR[Blank]</textcolor>
-					<label>$VAR[TitleInfo]</label>
+				<!--Hidden Label length checkers-->
+				<control type="group">
+					<top>-70</top>
+					<control type="textbox" id="974">
+						<width>720</width>
+						<height>70</height>
+						<font>List_Title_Focused</font>
+						<textcolor>$VAR[Blank]</textcolor>
+						<label>$VAR[Title]</label>
+					</control>
+					<control type="textbox" id="975">
+						<width>900</width>
+						<height>70</height>
+						<font>List_Title_Focused</font>
+						<textcolor>$VAR[Blank]</textcolor>
+						<label>$VAR[Title]</label>
+					</control>
+					<control type="textbox" id="976">
+						<width>1080</width>
+						<height>70</height>
+						<font>List_Title_Focused</font>
+						<textcolor>$VAR[Blank]</textcolor>
+						<label>$VAR[Title]</label>
+					</control>
+					<control type="textbox" id="977">
+						<width>600</width>
+						<height>35</height>
+						<font>List_Info</font>
+						<textcolor>$VAR[Blank]</textcolor>
+						<label>$VAR[TitleInfo]</label>
+					</control>
 				</control>
 			</control>
 
@@ -124,13 +126,15 @@
 				</control>
 			</control>
 
-			<!--STATIC BACKGROUND DETAILS-->
+			<!--STATIC DETAILS-->
 			<control type="group">
 				<visible>$EXP[ListView_IsVisible]</visible>
 				<include>DelayedViewSwitchingAnimation</include>
+
+				<!--STATIC BACKGROUND DETAILS-->
 				<control type="group">
 					<visible>$EXP[ListView_Display_IsBackground]</visible>
-					<include>DisplaySwitchingAnimation</include>
+					<include>DelayedDisplaySwitchingAnimation</include>
 					<control type="group">
 						<visible>!$EXP[ContainerSwitching]</visible>
 						<include>DelayedContainerSwitchingAnimation</include>
@@ -138,7 +142,7 @@
 							<visible>!$EXP[ContentSwitching]</visible>
 							<include>DelayedContentSwitchingAnimation</include>
 							<control type="group">
-								<visible>!$EXP[Dialog_IsVisible]</visible>
+								<visible>!$EXP[Dialog_IsVisible] + !Control.HasFocus(60)</visible>
 								<include>ContentFadeAnimation</include>
 								<control type="grouplist">
 									<left>120</left>
@@ -230,7 +234,7 @@
 				<!--STATIC THUMBNAIL DETAILS-->
 				<control type="group">
 					<visible>$EXP[ListView_Display_IsThumbnails]</visible>
-					<include>DisplaySwitchingAnimation</include>
+					<include>DelayedDisplaySwitchingAnimation</include>
 					<control type="group">
 						<visible>!$EXP[ContainerSwitching]</visible>
 						<include>DelayedContainerSwitchingAnimation</include>
@@ -238,7 +242,7 @@
 							<visible>!$EXP[ContentSwitching]</visible>
 							<include>DelayedContentSwitchingAnimation</include>
 							<control type="group">
-								<visible>!$EXP[Dialog_IsVisible]</visible>
+								<visible>!$EXP[Dialog_IsVisible] + !Control.HasFocus(60)</visible>
 								<include>ContentFadeAnimation</include>
 								<control type="group">
 									<visible>$EXP[ListView_Display_IsThumbnails]</visible>
@@ -378,17 +382,25 @@
 
 				<!--STATIC SHARED DETAILS-->
 				<control type="group">
-					<visible>!$EXP[ContainerSwitching]</visible>
-					<include>DelayedContainerSwitchingAnimation</include>
+					<visible>$EXP[ListView_Display_IsThumbnails] | $EXP[ListView_Display_IsBackground]</visible>
+					<include>DelayedDisplaySwitchingAnimation</include>
 					<control type="group">
-						<visible>!$EXP[ContentSwitching]</visible>
-						<include>DelayedContentSwitchingAnimation</include>
+						<visible>!$EXP[ContainerSwitching]</visible>
+						<include>DelayedContainerSwitchingAnimation</include>
 						<control type="group">
-							<visible>!$EXP[Dialog_IsVisible]</visible>
-							<include>ContentFadeAnimation</include>
-							<include>MediaFlags</include>
-							<include content="ProgressBar"/>
+							<visible>!$EXP[ContentSwitching]</visible>
+							<include>DelayedContentSwitchingAnimation</include>
+							<control type="group">
+								<visible>!$EXP[Dialog_IsVisible] + !Control.HasFocus(60)</visible>
+								<include>ContentFadeAnimation</include>
+								<include>MediaFlags</include>
+								<include content="ProgressBar"/>
+							</control>
 						</control>
+					</control>
+					<control type="group">
+						<visible>$EXP[ContainerSwitching]</visible>
+						<include>CustomViewsBackground</include>
 					</control>
 				</control>
 			</control>
@@ -402,7 +414,7 @@
 					<include>DisplaySwitchingAnimation</include>
 					<control type="group">
 						<visible>!$EXP[ContainerSwitching]</visible>
-						<include>ContainerSwitchingAn	imation</include>
+						<include>ContainerSwitchingAnimation</include>
 						<!--ONPREVIOUS-->
 						<control type="group">
 							<visible>$EXP[ContentPrevious]</visible>
