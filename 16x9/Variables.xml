@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <includes>
 
+
+	<variable name="Test">
+		<value>$INFO[window(Home).property(InfoScreenYear), videodb://tvshows/titles/?year=]</value>
+	</variable>
+
 	<variable name="SlideshowSource">
 		<value condition="Window.IsActive(home) + String.Contains(Container(9000).ListItem.Property(path),tv)">videodb://tvshows/titles/</value>
 		<value condition="Window.IsActive(home) + String.Contains(Container(9000).ListItem.Property(path),music)">musicdb://artists/?albumartistsonly=true</value>
@@ -248,6 +253,7 @@
 	<variable name="MovieSetsPath">
 		<value condition="ListItem.IsCollection">$INFO[ListItem.FolderPath]</value>
 		<value condition="Container.Content(actors)">$INFO[ListItem.FolderPath]</value>
+		<value condition="Container.Content(files)">$INFO[ListItem.FolderPath]</value>
 	</variable>
 
 	<!--Title-->
@@ -331,6 +337,72 @@
 		<value></value>
 	</variable>
 
+	<!-- Seasons Label -->
+	<variable name="SeasonsLabel">
+		<value condition="Container.Content(tvshows) + !String.IsEmpty(ListItem.Property(TotalSeasons)) + String.IsEqual(ListItem.Property(TotalSeasons),1)">$LOCALIZE[32121]</value>
+		<value>$LOCALIZE[32122]</value>
+	</variable>
+
+	<!--Dialog Info Label-->
+	<variable name="DialogInfo">
+		<!--Movies-->
+		<!--2019 / Todd Philips / 4KUHD / ENG / 132 MINS / ENDS 12:04 -->
+		<value condition="Container.Content(movies) + !String.IsEmpty(ListItem.Year)">[UPPERCASE]$INFO[ListItem.Year]$INFO[ListItem.Director, / ]$VAR[ResolutionLabel, / ]$INFO[ListItem.AudioLanguage, / ]$INFO[ListItem.Duration(mins), / , $LOCALIZE[31138]]$INFO[ListItem.EndTime, / ENDS ][/UPPERCASE]</value>
+		<value condition="Container.Content(movies) + !String.IsEmpty(ListItem.Director)">[UPPERCASE]$INFO[ListItem.Director]$VAR[ResolutionLabel, / ]$INFO[ListItem.AudioLanguage, / ]$INFO[ListItem.Duration(mins), / , $LOCALIZE[31138]]$INFO[ListItem.EndTime, / ENDS ][/UPPERCASE]</value>
+		<value condition="Container.Content(movies) + !String.IsEmpty(ListItem.VideoResolution)">[UPPERCASE]$VAR[ResolutionLabel]$INFO[ListItem.AudioLanguage, / ]$INFO[ListItem.Duration(mins), / , $LOCALIZE[31138]]$INFO[ListItem.EndTime, / ENDS ][/UPPERCASE]</value>
+		<value condition="Container.Content(movies) + !String.IsEmpty(ListItem.AudioLanguage)">$INFO[ListItem.AudioLanguage]$INFO[ListItem.Duration(mins), / , $LOCALIZE[31138]]$INFO[ListItem.EndTime, / ENDS ][/UPPERCASE]</value>
+		<value condition="Container.Content(movies) + !String.IsE(ListItem.Duration)">[UPPERCASE]$INFO[ListItem.Duration(mins),, $LOCALIZE[31138]]$INFO[ListItem.EndTime, / ENDS ][/UPPERCASE]</value>
+		<value condition="Container.Content(movies) + !String.IsEmpty(ListItem.EndTime)">[UPPERCASE]$INFO[ListItem.EndTime, ENDS ][/UPPERCASE]</value>
+
+		<!--Dialog paths-->
+
+
+		<!--TV Shows-->
+		<value condition="Container.Content(tvshows) + !String.IsEmpty(ListItem.Year) + String.IsEqual(ListItem.Property(TotalSeasons),1)">[UPPERCASE]$INFO[ListItem.Year]$INFO[ListItem.Property(TotalSeasons), / , $LOCALIZE[32121]]$INFO[ListItem.Property(WatchedEpisodes), / ,/]$INFO[ListItem.Property(NumEpisodes),, $LOCALIZE[32001]][/UPPERCASE]</value>
+		<value condition="Container.Content(tvshows) + !String.IsEmpty(ListItem.Year)">[UPPERCASE]$INFO[ListItem.Year]$INFO[ListItem.Property(TotalSeasons), / , $LOCALIZE[32122]]$INFO[ListItem.Property(WatchedEpisodes), / ,/]$INFO[ListItem.Property(NumEpisodes),, $LOCALIZE[32001]][/UPPERCASE]</value>
+		<value condition="Container.Content(tvshows) + !String.IsEmpty(ListItem.Property(TotalSeasons)) + String.IsEqual(ListItem.Property(TotalSeasons),1)">[UPPERCASE]$INFO[ListItem.Property(TotalSeasons),, $LOCALIZE[32121]]$INFO[ListItem.Property(WatchedEpisodes), / ,/]$INFO[ListItem.Property(NumEpisodes),, $LOCALIZE[32001]][/UPPERCASE]</value>
+		<value condition="Container.Content(tvshows) + !String.IsEmpty(ListItem.Property(TotalSeasons))">[UPPERCASE]$INFO[ListItem.Property(TotalSeasons),, $LOCALIZE[32122]]$INFO[ListItem.Property(WatchedEpisodes), / ,/]$INFO[ListItem.Property(NumEpisodes),, $LOCALIZE[32001]][/UPPERCASE]</value>
+		<value condition="Container.Content(tvshows) + !String.IsEmpty(ListItem.Property(WatchedEpisodes))">[UPPERCASE]$INFO[ListItem.Property(WatchedEpisodes),,/]$INFO[ListItem.Property(NumEpisodes),, $LOCALIZE[32001]][/UPPERCASE]</value>
+		<!-- Seasons: 2019 / 0/9 Watched -->
+		<value condition="Container.Content(seasons) + !String.IsEmpty(ListItem.Year)">[UPPERCASE]$INFO[ListItem.Year]$INFO[ListItem.Property(WatchedEpisodes), / ,/]$INFO[ListItem.Property(NumEpisodes),, ]$LOCALIZE[32001][/UPPERCASE]</value>
+		<value condition="Container.Content(seasons) + !String.IsEmpty(ListItem.Property(WatchedEpisodes))">[UPPERCASE]$INFO[ListItem.Property(WatchedEpisodes),,/]$INFO[ListItem.Property(NumEpisodes),, ]$LOCALIZE[32001][/UPPERCASE]</value>
+		<!--Episodes (50,501,502,504): 1x01 / Legion / 42 mins / -->
+		<value condition="Container.Content(episodes) + $EXP[ListView_IsVisible] + $EXP[ListView_Display_IsThumbnails] + !String.IsEmpty(ListItem.TVShowTitle) + !Integer.IsGreater(ListItem.Episode,9)">[UPPERCASE]$INFO[ListItem.TVShowTitle][/UPPERCASE][CR]$INFO[ListItem.Season]$INFO[ListItem.Episode,x0][UPPERCASE]$INFO[ListItem.Year, / ]$INFO[ListItem.Duration(mins), / , $LOCALIZE[31138]][/UPPERCASE]</value>
+		<value condition="Container.Content(episodes) + $EXP[ListView_IsVisible] + $EXP[ListView_Display_IsThumbnails] + !String.IsEmpty(ListItem.TVShowTitle)">[UPPERCASE]$INFO[ListItem.TVShowTitle][/UPPERCASE][CR]$INFO[ListItem.Season]$INFO[ListItem.Episode,x][UPPERCASE]$INFO[ListItem.Year, / ]$INFO[ListItem.Duration(mins), / , $LOCALIZE[31138]][/UPPERCASE]</value>
+		<value condition="Container.Content(episodes) + !$EXP[GridView_IsVisible] + !String.IsEmpty(ListItem.TVShowTitle) + !Integer.IsGreater(ListItem.Episode,9)">[UPPERCASE]$INFO[ListItem.TVShowTitle][/UPPERCASE]$INFO[ListItem.Season, / ]$INFO[ListItem.Episode,x0][UPPERCASE]$INFO[ListItem.Year, / ]$INFO[ListItem.Duration(mins), / , $LOCALIZE[31138]][/UPPERCASE]</value>
+		<value condition="Container.Content(episodes) + !$EXP[GridView_IsVisible] + !String.IsEmpty(ListItem.TVShowTitle)">[UPPERCAE]$INFO[ListItem.TVShowTitle][/UPPERCASE]$INFO[ListItem.Season, / ]$INFO[ListItem.Episode,x][UPPERCASE]$INFO[ListItem.Year, / ]$INFO[ListItem.Duration(mins), / , $LOCALIZE[31138]][/UPPERCASE]</value>
+		<value condition="Container.Content(episodes) + !$EXP[GridView_IsVisible] + !String.IsEmpty(ListItem.Year)">[UPPERCASE]$INFO[ListItem.Year]$INFO[ListItem.Duration(mins), / , $LOCALIZE[31138]][/UPPERCASE]</value>
+		<value condition="Container.Content(episodes) + !$EXP[GridView_IsVisible] + !String.IsEmpty(ListItem.Duration)">[UPPERCASE]$INFO[ListItem.Duration(mins),, $LOCALIZE[31138]][/UPPERCASE]</value>
+		<!--Episodes (500,505): Legion / 42 mins / -->
+		<value condition="Container.Content(episodes) + !String.IsEmpty(ListItem.TVShowTitle)">[UPPERCASE]$INFO[ListItem.TVShowTitle]$INFO[ListItem.Duration(mins), / , $LOCALIZE[31138]][/UPPERCASE]</value>
+		<value condition="Container.Content(episodes) + !String.IsEmpty(ListItem.Duration)">[UPPERCASE]$INFO[ListItem.Duration(mins),, $LOCALIZE[31138]][/UPPERCASE]</value>
+		<!--Artists (All Views): Jazz / 1980-90s-->
+		<value condition="Container.Content(artists) + !String.IsEmpty(ListItem.Property(Artist_Genre))">[UPPERCASE]$INFO[ListItem.Property(Artist_Genre)][/UPPERCASE]$INFO[ListItem.Property(Artist_YearsActive), / ]</value>
+		<value condition="Container.Content(artists) + !String.IsEmpty(ListItem.Property(Artist_YearsActive))">$INFO[ListItem.Property(Artist_YearsActive)]</value>
+		<!--Albumns: FKA Twigs / 2014-->
+		<value condition="Container.Content(albums) + !String.IsEmpty(ListItem.AlbumArtist)">[UPPERCASE]$INFO[ListItem.AlbumArtist]$INFO[ListItem.Year, / ][/UPPERCASE]</value>
+		<value condition="Container.Content(albums) + !String.IsEmpty(ListItem.Artist)">[UPPERCASE]$INFO[ListItem.Artist]$INFO[ListItem.Year, / ][/UPPERCASE]</value>
+		<value condition="Container.Content(albums) + !String.IsEmpty(ListItem.Year)">[UPPERCASE]$INFO[ListItem.Year][/UPPERCASE]</value>
+		<!--Songs (Album view): David Bowie / The Platinum Collection / 1990 / 4:32-->
+		<value condition="Container.Content(songs) + !String.Contains(Container.FolderPath,musicdb://songs) + $EXP[ListView_IsVisible] + $EXP[ListView_Display_IsThumbnails] + !String.IsEmpty(ListItem.Artist)">[UPPERCASE]$INFO[ListItem.Artist][CR]$INFO[ListItem.Album]$INFO[ListItem.Year, / ]$INFO[ListItem.Duration(mm:ss), / ][/UPPERCASE]</value>
+		<value condition="Container.Content(songs) + !String.Contains(Container.FolderPath,musicdb://songs) + !String.IsEmpty(ListItem.Artist)">[UPPERCASE]$INFO[ListItem.Artist]$INFO[ListItem.Album, / ]$INFO[ListItem.Year, / ]$INFO[ListItem.Duration(mm:ss), / ][/UPPERCASE]</value>
+		<value condition="Container.Content(songs) + !String.Contains(Container.FolderPath,musicdb://songs) + !String.IsEmpty(ListItem.Album)">[UPPERCASE]$INFO[ListItem.Album]$INFO[ListItem.Year, / ]$INFO[ListItem.Duration(mm:ss), / ][/UPPERCASE]</value>
+		<value condition="Container.Content(songs) + !String.Contains(Container.FolderPath,musicdb://songs) + !String.IsEmpty(ListItem.Year)">[UPPERCASE]$INFO[ListItem.Year]$INFO[ListItem.Duration(mm:ss), / ][/UPPERCASE]</value>
+		<value condition="Container.Content(songs) + !String.Contains(Container.FolderPath,musicdb://songs) + !String.IsEmpty(ListItem.Duration)">[UPPERCASE]$INFO[ListItem.Duration(mm:ss)][/UPPERCASE]</value>
+		<!--Songs (Song or Files view): David Bowie / The Platinum Collection / 1990 / 01 / 4:32-->
+		<value condition="Container.Content(songs) + String.Contains(Container.FolderPath,musicdb://songs) + $EXP[ListView_IsVisible] + $EXP[ListView_Display_IsThumbnails] + !String.IsEmpty(ListItem.Artist)">[UPPERCASE]$INFO[ListItem.Artist][CR]$INFO[ListItem.Album]$INFO[ListItem.Year, / ]$INFO[ListItem.TrackNumber, / ]$INFO[ListItem.Duration(mm:ss), / ][/UPPERCASE]</value>
+		<value condition="Container.Content(songs) + String.Contains(Container.FolderPath,musicdb://songs) + !String.IsEmpty(ListItem.Artist)">[UPPERCASE]$INFO[ListItem.Artist]$INFO[ListItem.Album, / ]$INFO[ListItem.Year, / ]$INFO[ListItem.TrackNumber, / ]$INFO[ListItem.Duration(mm:ss), / ][/UPPERCASE]</value>
+		<value condition="Container.Content(songs) + String.Contains(Container.FolderPath,musicdb://songs) + !String.IsEmpty(ListItem.Album)">[UPPERCASE]$INFO[ListItem.Album]$INFO[ListItem.Year, / ]$INFO[ListItem.TrackNumber, / ]$INFO[ListItem.Duration(mm:ss), / ][/UPPERCASE]</value>
+		<value condition="Container.Content(songs) + String.Contains(Container.FolderPath,musicdb://songs) + !String.IsEmpty(ListItem.Year)">[UPPERCASE]$INFO[ListItem.Year]$INFO[ListItem.TrackNumber, / ]$INFO[ListItem.Duration(mm:ss), / ][/UPPERCASE]</value>
+		<value condition="Container.Content(songs) + String.Contains(Container.FolderPath,musicdb://songs) + !String.IsEmpty(ListItem.TrackNumber)">[UPPERCASE]$INFO[ListItem.TrackNumber]$INFO[ListItem.Duration(mm:ss), / ][/UPPERCASE]</value>
+		<value condition="Container.Content(songs) + String.Contains(Container.FolderPath,musicdb://songs) + !String.IsEmpty(ListItem.Duration)">[UPPERCASE]$INFO[ListItem.Duration(mm:ss)][/UPPERCASE]</value>
+		<!--Actors: 23 Appearances inc xxx-->
+		<value condition="Container.Content(actors) + !String.IsEmpty(ListItem.Appearances)">[UPPERCASE]$INFO[ListItem.Appearances]$VAR[AppearancesLabel, ]$INFO[Container(4501).ListItem(-1).Title, ][/UPPERCASE]</value>
+		<!--File views: 23 mins / Ends 13:32-->
+		<value condition="Container.Content(files) + !String.IsEmpty(ListItem.Duration)">[UPPERCASE]$INFO[ListItem.Duration(mins),, $LOCALIZE[31138]]$INFO[ListItem.EndTime, / $LOCALIZE[32000] ][/UPPERCASE]</value>
+		<!--Empty-->
+		<value></value>
+	</variable>
 
 	<!--Plot-->
 	<variable name="Plot">
@@ -370,32 +442,38 @@
 		<value condition="String.Contains(ListItem.FilenameAndPath,vhs)">flags/source/vhs.png</value>
 		<value condition="String.Contains(ListItem.FilenameAndPath,dvhs)">flags/source/dvhs.png</value>
 		<value condition="String.Contains(ListItem.FilenameAndPath,dtheater)">flags/source/dtheater.png</value>
-		<value condition="!String.IsEmpty(ListItem.VideoCodec)">flags/videocodec/$INFO[ListItem.VideoCodec].png</value>
+		<value condition="!String.IsEmpty(ListItem.VideoCodec)">flags/source/$INFO[ListItem.VideoCodec].png</value>
+		<value>flags/blank.png</value>
+	</variable>
+
+	<!--Audio Source Flag-->
+	<variable name="Audio_Source">
+		<value condition="!String.IsEmpty(ListItem.VideoCodec)">flags/audio/$INFO[ListItem.AudioCodec].png</value>
 		<value>flags/blank.png</value>
 	</variable>
 
 <!--Star Rating-->
 	<variable name="StarRating">
-		<value condition="!Container.Content(songs) + Integer.IsGreater(ListItem.Rating,9.5)">views/rating_10.png</value>
-		<value condition="!Container.Content(songs) + Integer.IsGreater(ListItem.Rating,8.5)">views/rating_9.png</value>
-		<value condition="!Container.Content(songs) + Integer.IsGreater(ListItem.Rating,7.5)">views/rating_8.png</value>
-		<value condition="!Container.Content(songs) + Integer.IsGreater(ListItem.Rating,6.5)">views/rating_7.png</value>
-		<value condition="!Container.Content(songs) + Integer.IsGreater(ListItem.Rating,5.5)">views/rating_6.png</value>
-		<value condition="!Container.Content(songs) + Integer.IsGreater(ListItem.Rating,4.5)">views/rating_5.png</value>
-		<value condition="!Container.Content(songs) + Integer.IsGreater(ListItem.Rating,3.5)">views/rating_4.png</value>
-		<value condition="!Container.Content(songs) + Integer.IsGreater(ListItem.Rating,2.5)">views/rating_3.png</value>
-		<value condition="!Container.Content(songs) + Integer.IsGreater(ListItem.Rating,1.5)">views/rating_2.png</value>
-		<value condition="!Container.Content(songs) + Integer.IsGreater(ListItem.Rating,0.5)">views/rating_1.png</value>
-		<value condition="Container.Content(songs) + Integer.IsGreater(ListItem.UserRating,9.5)">views/rating_10.png</value>
-		<value condition="Container.Content(songs) + Integer.IsGreater(ListItem.UserRating,8.5)">views/rating_9.png</value>
-		<value condition="Container.Content(songs) + Integer.IsGreater(ListItem.UserRating,7.5)">views/rating_8.png</value>
-		<value condition="Container.Content(songs) + Integer.IsGreater(ListItem.UserRating,6.5)">views/rating_7.png</value>
-		<value condition="Container.Content(songs) + Integer.IsGreater(ListItem.UserRating,5.5)">views/rating_6.png</value>
-		<value condition="Container.Content(songs) + Integer.IsGreater(ListItem.UserRating,4.5)">views/rating_5.png</value>
-		<value condition="Container.Content(songs) + Integer.IsGreater(ListItem.UserRating,3.5)">views/rating_4.png</value>
-		<value condition="Container.Content(songs) + Integer.IsGreater(ListItem.UserRating,2.5)">views/rating_3.png</value>
-		<value condition="Container.Content(songs) + Integer.IsGreater(ListItem.UserRating,1.5)">views/rating_2.png</value>
-		<value condition="Container.Content(songs) + Integer.IsGreater(ListItem.UserRating,0.5)">views/rating_1.png</value>
+		<value condition="Integer.IsGreater(ListItem.UserRating,9.5)">views/rating_10.png</value>
+		<value condition="Integer.IsGreater(ListItem.UserRating,8.5)">views/rating_9.png</value>
+		<value condition="Integer.IsGreater(ListItem.UserRating,7.5)">views/rating_8.png</value>
+		<value condition="Integer.IsGreater(ListItem.UserRating,6.5)">views/rating_7.png</value>
+		<value condition="Integer.IsGreater(ListItem.UserRating,5.5)">views/rating_6.png</value>
+		<value condition="Integer.IsGreater(ListItem.UserRating,4.5)">views/rating_5.png</value>
+		<value condition="Integer.IsGreater(ListItem.UserRating,3.5)">views/rating_4.png</value>
+		<value condition="Integer.IsGreater(ListItem.UserRating,2.5)">views/rating_3.png</value>
+		<value condition="Integer.IsGreater(ListItem.UserRating,1.5)">views/rating_2.png</value>
+		<value condition="Integer.IsGreater(ListItem.UserRating,0.5)">views/rating_1.png</value>
+		<value condition="Integer.IsGreater(ListItem.Rating,9.5)">views/rating_10.png</value>
+		<value condition="Integer.IsGreater(ListItem.Rating,8.5)">views/rating_9.png</value>
+		<value condition="Integer.IsGreater(ListItem.Rating,7.5)">views/rating_8.png</value>
+		<value condition="Integer.IsGreater(ListItem.Rating,6.5)">views/rating_7.png</value>
+		<value condition="Integer.IsGreater(ListItem.Rating,5.5)">views/rating_6.png</value>
+		<value condition="Integer.IsGreater(ListItem.Rating,4.5)">views/rating_5.png</value>
+		<value condition="Integer.IsGreater(ListItem.Rating,3.5)">views/rating_4.png</value>
+		<value condition="Integer.IsGreater(ListItem.Rating,2.5)">views/rating_3.png</value>
+		<value condition="Integer.IsGreater(ListItem.Rating,1.5)">views/rating_2.png</value>
+		<value condition="Integer.IsGreater(ListItem.Rating,0.5)">views/rating_1.png</value>
 		<value>views/rating0.png</value>
 	</variable>
 

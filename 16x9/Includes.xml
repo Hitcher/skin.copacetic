@@ -18,10 +18,11 @@
   <expression name="Video_Containers">Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | Container.Content(episodes) | Container.Content(musicvideos)</expression>
   <expression name="ListOnly_Containers">Container.Content() | Container.Content(files) | Container.Content(genres) | Container.Content(years) | Container.Content(playlists) | Container.Content(plugins) | Container.Content(studios) | Container.Content(directors) | Container.Content(tags) | Container.Content(countries) | Container.Content(roles) | Container.Content(images) | Container.Content(sources) | Container.Content(addons)</expression>
   <expression name="Fanart_Containers">Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | Container.Content(episodes) | Container.Content(artists) | Container.content(albums) | Container.Content(songs)</expression>
-  <expression name="Background_IsFanart">[[$EXP[ListView_IsVisible] + $EXP[Fanart_Containers] + $EXP[ListView_Display_IsBackground]] | $EXP[BillboardView_IsVisible]] + ![String.IsEmpty(ListItem.Art(fanart))]</expression>
+  <expression name="Background_IsFanart">[[$EXP[ListView_IsVisible] + $EXP[Fanart_Containers] + $EXP[ListView_Display_IsBackground]] | [$EXP[BillboardView_IsVisible]] + ![String.IsEmpty(ListItem.Art(fanart))]]</expression>
 	<expression name="Video_Is_Widescreen(-1)">[String.IsEqual(ListItem(-1).VideoAspect,) | String.IsEqual(ListItem(-1).VideoAspect,1.66) | String.IsEqual(ListItem(-1).VideoAspect,1.78) | String.IsEqual(ListItem(-1).VideoAspect,1.85) | String.IsEqual(ListItem(-1).VideoAspect,2.35) | String.IsEqual(ListItem(-1).VideoAspect,2.40)]</expression>
 	<expression name="Video_Is_Widescreen">[String.IsEqual(ListItem.VideoAspect,) | String.IsEqual(ListItem.VideoAspect,1.66) | String.IsEqual(ListItem.VideoAspect,1.78) | String.IsEqual(ListItem.VideoAspect,1.85) | String.IsEqual(ListItem.VideoAspect,2.35) | String.IsEqual(ListItem.VideoAspect,2.40)]</expression>
 	<expression name="Video_Is_Widescreen(1)">[String.IsEqual(ListItem(1).VideoAspect,) | String.IsEqual(ListItem(1).VideoAspect,1.66) | String.IsEqual(ListItem(1).VideoAspect,1.78) | String.IsEqual(ListItem(1).VideoAspect,1.85) | String.IsEqual(ListItem(1).VideoAspect,2.35) | String.IsEqual(ListItem(1).VideoAspect,2.40)]</expression>
+	<expression naame="DialogInformation_IsVisible">Window.IsActive(movieinformation) | Window.IsActive(musicinformation) | Window.IsActive(songinformation) | Window.IsActive(addoninformation)</expression>
 
   <expression name="ContainerSwitching">![[Container.Content(movies) + Control.IsVisible(951)] | [Container.Content(sets) + Control.IsVisible(952)] | [Container.Content(tvshows) + Control.IsVisible(953)] | [Container.Content(seasons) + Control.IsVisible(954)] | [Container.Content(episodes) + Control.IsVisible(955)]  | [Container.Content(episodes) + Control.IsVisible(963)]| [Container.Content(artists) + Control.IsVisible(956)] | [Container.Content(albums) + Control.IsVisible(957)] | [Container.Content(songs) + Control.IsVisible(958)] | [[Container.Content(files) | Container.Content(genres) | Container.Content(years) | Container.Content(playlists) | Container.Content(plugins) | Container.Content(studios) | Container.Content(directors) | Container.Content(tags) | Container.Content(countries) | Container.Content(roles) | Container.Content(images) | Container.Content(sources)] + Control.IsVisible(959)] | [Container.Content(actors) + Control.IsVisible(960)] | [Container.Content(addons) + Control.IsVisible(961)] | [Container.Content() + Control.IsVisible(962)]]</expression>
   <expression name="ContentSwitching">[[Control.IsVisible(5001) | Control.IsVisible(5002)] + !String.IsEqual(Container.NumItems,1)]</expression>
@@ -547,7 +548,7 @@
 		<param name="height" default="80"/>
 		<param name="itemgap" default="0"/>
 		<param name="focusedtop" default="0"/>
-		<param name="focusedheight" default="70"/>
+		<param name="focusedheight" default="8"/>
 		<param name="focusedfont" default="List_Title_Focused"/>
 		<param name="focusedtextcolor" default="$VAR[PrimaryColor]"/>
 		<param name="unfocusedtop" default="18"/>
@@ -873,16 +874,30 @@
 		<param name="aspectratio" default="scale"/>
 		<param name="texture" default="$VAR[Thumbnail(0)Content]"/>
     <param name="fadetime" default="0"/>
+		<param name="bordervisible" default="false"/>
+		<param name="bordersize" default="2"/>
+		<param name="bordercolor" default="$VAR[PrimaryColor]"/>
+		<param name="bordertexture" default="views/border_1px_10.png"/>
 		<definition>
-			<control type="image">
+			<control type="group">
 				<left>$PARAM[left]</left>
 				<top>$PARAM[top]</top>
 				<width>$PARAM[width]</width>
 				<height>$PARAM[height]</height>
 				<visible>$PARAM[visible]</visible>
-				<aspectratio align="center" aligny="center">$PARAM[aspectratio]</aspectratio>
-				<texture background="true">$PARAM[texture]</texture>
-				<fadetime>$PARAM[fadetime]</fadetime>
+				<control type="image">
+					<aspectratio align="center" aligny="center">$PARAM[aspectratio]</aspectratio>
+					<texture background="true">$PARAM[texture]</texture>
+					<fadetime>$PARAM[fadetime]</fadetime>
+				</control>
+				<!--Border-->
+				<control type="image">
+					<visible>$PARAM[bordervisible]</visible>
+					<visible>!$EXP[Dialog_IsVisible]</visible>
+					<include>ContentFadeAnimation</include>
+					<aspectratio>stretch</aspectratio>
+					<texture border="$PARAM[bordersize]" colordiffuse="$PARAM[bordercolor]">$PARAM[bordertexture]</texture>
+				</control>
 			</control>
 		</definition>
 	</include>
@@ -1250,7 +1265,7 @@
 
 	<!--Progress bar-->
 	<include name="ProgressBar">
-		<param name="visible" default="[$EXP[Video_Containers] | Container.Content(files)]"/>
+		<param name="visible" default="[$EXP[Video_Containers] | Container.Content(files) | Window.IsActive(movieinformation)]"/>
 		<param name="left" default="780"/>
 		<param name="top" default="1047"/>
     <param name="bottom"/>
@@ -1326,6 +1341,30 @@
 			</control>
 		</definition>
 	</include>
+
+
+	<!--FlagLayout-->
+	<include name="FlagLayout">
+		<param name="id" default=""/>
+		<param name="content" default=""/>
+		<param name="colordiffuse" default="$VAR[PrimaryColor]"/>
+		<definition>
+			<control type="group">
+				<visible>!String.IsEqual(Control.GetLabel($PARAM[id]),flags/blank.png)</visible>
+				<width>180</width>
+				<height>180</height>
+				<control type="image" id="$PARAM[id]">
+					<centerleft>50%</centerleft>
+					<centertop>50%</centertop>
+					<width>90</width>
+					<height>60</height>
+					<aspectratio>keep</aspectratio>
+					<texture colordiffuse="$PARAM[colordiffuse]" fallback="flags/blank.png">$PARAM[content]</texture>
+				</control>
+			</control>
+		</definition>
+	</include>
+
 
 	<!--Media Flags-->
 	<include name="MediaFlags">
