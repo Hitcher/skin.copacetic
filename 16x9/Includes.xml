@@ -22,7 +22,8 @@
 	<expression name="Video_Is_Widescreen(-1)">[String.IsEqual(ListItem(-1).VideoAspect,) | String.IsEqual(ListItem(-1).VideoAspect,1.66) | String.IsEqual(ListItem(-1).VideoAspect,1.78) | String.IsEqual(ListItem(-1).VideoAspect,1.85) | String.IsEqual(ListItem(-1).VideoAspect,2.35) | String.IsEqual(ListItem(-1).VideoAspect,2.40)]</expression>
 	<expression name="Video_Is_Widescreen">[String.IsEqual(ListItem.VideoAspect,) | String.IsEqual(ListItem.VideoAspect,1.66) | String.IsEqual(ListItem.VideoAspect,1.78) | String.IsEqual(ListItem.VideoAspect,1.85) | String.IsEqual(ListItem.VideoAspect,2.35) | String.IsEqual(ListItem.VideoAspect,2.40)]</expression>
 	<expression name="Video_Is_Widescreen(1)">[String.IsEqual(ListItem(1).VideoAspect,) | String.IsEqual(ListItem(1).VideoAspect,1.66) | String.IsEqual(ListItem(1).VideoAspect,1.78) | String.IsEqual(ListItem(1).VideoAspect,1.85) | String.IsEqual(ListItem(1).VideoAspect,2.35) | String.IsEqual(ListItem(1).VideoAspect,2.40)]</expression>
-	<expression naame="DialogInformation_IsVisible">Window.IsActive(movieinformation) | Window.IsActive(musicinformation) | Window.IsActive(songinformation) | Window.IsActive(addoninformation)</expression>
+	<expression name="OpaqueDialog_IsVisible">Window.IsVisible(movieinformation)</expression>
+	<expression name="TransparentDialog_IsVisible">[String.IsEqual(window(home).property(OptionsMenu),Active) | Window.IsVisible(contextmenu) | Window.IsVisible(shutdownmenu) | Window.IsVisible(okdialog) | Window.IsVisible(yesnodialog) | Window.IsVisible(progressdialog) | Window.IsVisible(selectdialog)]</expression>
 
   <expression name="ContainerSwitching">![[Container.Content(movies) + Control.IsVisible(951)] | [Container.Content(sets) + Control.IsVisible(952)] | [Container.Content(tvshows) + Control.IsVisible(953)] | [Container.Content(seasons) + Control.IsVisible(954)] | [Container.Content(episodes) + Control.IsVisible(955)]  | [Container.Content(episodes) + Control.IsVisible(963)]| [Container.Content(artists) + Control.IsVisible(956)] | [Container.Content(albums) + Control.IsVisible(957)] | [Container.Content(songs) + Control.IsVisible(958)] | [[Container.Content(files) | Container.Content(genres) | Container.Content(years) | Container.Content(playlists) | Container.Content(plugins) | Container.Content(studios) | Container.Content(directors) | Container.Content(tags) | Container.Content(countries) | Container.Content(roles) | Container.Content(images) | Container.Content(sources)] + Control.IsVisible(959)] | [Container.Content(actors) + Control.IsVisible(960)] | [Container.Content(addons) + Control.IsVisible(961)] | [Container.Content() + Control.IsVisible(962)]]</expression>
   <expression name="ContentSwitching">[[Control.IsVisible(5001) | Control.IsVisible(5002)] + !String.IsEqual(Container.NumItems,1)]</expression>
@@ -326,7 +327,6 @@
 
   <expression name="Icon_240_IsVisible">String.IsEqual(Container.ViewMode,Strip)</expression>
   <expression name="Icon_180_IsVisible">!$EXP[Icon_240_IsVisible]</expression>
-  <expression name="Dialog_IsVisible">String.IsEqual(window(home).property(OptionsMenu),Active) | Window.IsVisible(contextmenu) | Window.IsVisible(shutdownmenu) | Window.IsVisible(okdialog) | Window.IsVisible(yesnodialog) | Window.IsVisible(progressdialog) | Window.IsVisible(selectdialog) | Window.IsVisible(movieinformation)</expression>
   <expression name="Notification_IsVisible">Window.IsActive(notification) | Window.IsActive(extendedprogressdialog)</expression>
   <expression name="StandardViews_NowPlaying">$EXP[GridView_IsVisible] + [ListItem.IsPlaying | [Container.Content(tvshows) + String.IsEqual(VideoPlayer.TVShowTitle,ListItem.Title)] | [Container.Content(seasons) + String.IsEqual(VideoPlayer.TVShowTitle,ListItem.TVShowTitle) + String.IsEqual(VideoPlayer.Season,ListItem.Season)] | [Container.Content(artists) + String.IsEqual(MusicPlayer.Artist, ListItem.Artist)] | [Container.Content(albums) + String.IsEqual(MusicPlayer.Artist, ListItem.Artist) + String.IsEqual(MusicPlayer.Album, ListItem.Album)]]</expression>
     <expression name="StandardViews_NowPlaying_Small">[$EXP[ListView_IsVisible] | $EXP[BillboardView_IsVisible]] + [ListItem.IsPlaying | [Container.Content(tvshows) + String.IsEqual(VideoPlayer.TVShowTitle,ListItem.Title)] | [Container.Content(seasons) + String.IsEqual(VideoPlayer.TVShowTitle,ListItem.TVShowTitle) + String.IsEqual(VideoPlayer.Season,ListItem.Season)] | [Container.Content(artists) + String.IsEqual(MusicPlayer.Artist, ListItem.Artist)] | [Container.Content(albums) + String.IsEqual(MusicPlayer.Artist, ListItem.Artist) + String.IsEqual(MusicPlayer.Album, ListItem.Album)]]</expression>
@@ -893,7 +893,7 @@
 				<!--Border-->
 				<control type="image">
 					<visible>$PARAM[bordervisible]</visible>
-					<visible>!$EXP[Dialog_IsVisible]</visible>
+					<visible>!$EXP[TransparentDialog_IsVisible]</visible>
 					<include>ContentFadeAnimation</include>
 					<aspectratio>stretch</aspectratio>
 					<texture border="$PARAM[bordersize]" colordiffuse="$PARAM[bordercolor]">$PARAM[bordertexture]</texture>
@@ -997,7 +997,7 @@
         <!--Border-->
         <control type="image">
           <visible>$PARAM[bordervisible]</visible>
-          <visible>!$EXP[Dialog_IsVisible]</visible>
+          <visible>!$EXP[TransparentDialog_IsVisible]</visible>
           <include>ContentFadeAnimation</include>
           <aspectratio>stretch</aspectratio>
           <texture border="$PARAM[bordersize]" colordiffuse="$PARAM[bordercolor]">$PARAM[bordertexture]</texture>
@@ -1065,7 +1065,7 @@
         <animation effect="slide" end="0,-30" time="0" condition="Player.Paused">Conditional</animation>
         <visible>$PARAM[visible]</visible>
         <visible>!$EXP[Background_IsFanart]</visible>
-        <visible>!$EXP[Dialog_IsVisible] + !Window.IsActive(busydialog)</visible>
+        <visible>!$EXP[TransparentDialog_IsVisible] + !Window.IsActive(busydialog)</visible>
         <include>ContentFadeAnimation</include>
         <centertop>$PARAM[centerpoint]</centertop>
         <centerleft>$PARAM[centerpoint]</centerleft>
@@ -1164,7 +1164,7 @@
       <control type="group">
         <animation effect="slide" end="0,$PARAM[pauseshift]" time="0" condition="Player.Paused">Conditional</animation>
         <visible>$PARAM[visible]</visible>
-        <visible>!$EXP[Dialog_IsVisible] + !Window.IsActive(busydialog)</visible>
+        <visible>!$EXP[TransparentDialog_IsVisible] + !Window.IsActive(busydialog)</visible>
         <include>ContentFadeAnimation</include>
         <left>$PARAM[left]</left>
         <top>$PARAM[top]</top>
@@ -1403,7 +1403,7 @@
 
   <!--ListView Layout-->
   <include name="ListViewLayout">
-    <param name="groupvisible" default="!$EXP[Dialog_IsVisible]"/>
+    <param name="groupvisible" default="!$EXP[TransparentDialog_IsVisible]"/>
     <param name="animation" default="ContentFadeAnimation"/>
     <param name="nowplayingtop" default="-33"/>
     <param name="iconleft" default="30"/>
@@ -1587,7 +1587,7 @@
 				<height>$PARAM[height]</height>
 				<!--Dropshadow-->
 				<control type="group">
-					<visible>!$EXP[Dialog_IsVisible]</visible>
+					<visible>!$EXP[TransparentDialog_IsVisible]</visible>
 					<visible>$PARAM[dropshadowvisible]</visible>
 					<include>ContentFadeAnimation</include>
 					<!--Left Side-->
@@ -1765,7 +1765,7 @@
 				</control>
 				<!--GridTitle-->
 				<control type="label">
-					<visible>!$EXP[Dialog_IsVisible]</visible>
+					<visible>!$EXP[TransparentDialog_IsVisible]</visible>
 					<visible>$EXP[GridView_Details_Enabled]</visible>
 					<include>ContentFadeAnimation</include>
 					<left>$PARAM[gridtitleleft]</left>
@@ -1781,7 +1781,7 @@
 				</control>
 				<!--Border-->
 				<control type="group">
-					<visible>!$EXP[Dialog_IsVisible] + !Control.HasFocus(60)</visible>
+					<visible>!$EXP[TransparentDialog_IsVisible] + !Control.HasFocus(60)</visible>
 					<include>ContentFadeAnimation</include>
 					<control type="image">
 						<left>$PARAM[borderleft]</left>
@@ -1936,9 +1936,6 @@
 		</definition>
 	</include>
 
-
-
-
 	<!--Common View Details-->
 	<include name="CommonViewDetails">
 		<param name="groupvisibility" default="!$EXP[ShowcaseView_Details_Off] + !$EXP[ShowcaseView_Details_Logo_IsVisible]"/>
@@ -2024,6 +2021,130 @@
 			</control>
 		</definition>
 	</include>
+
+<!--Widget/Infoscreen lists-->
+<!--List 1-->
+<include name="WidgetList">
+	<param name="id" default="4503"/>
+	<param name="visible" default="Container.Content(Movies)"/>
+	<param name="top" default="1640"/>
+	<param name="height" default="470"/>
+	<param name="onup" default="50"/>
+	<param name="ondown" default="65001"/>
+	<param name="onclick" default="noop"/>
+	<param name="target" default="videos"/>
+	<param name="limit" default="20"/>
+	<param name="sortby" default="year"/>
+	<param name="sortorder" default="ascending"/>
+	<param name="path" default="videodb://movies/titles/"/>
+	<param name="hiddenlabelid" default="9700"/>
+	<definition>
+		<control type="fixedlist" id="4503">
+			<viewtype label="Strip">wrap</viewtype>
+			<top>$PARAM[top]</top>
+			<left>0</left>
+			<width>2160</width>
+			<height>$PARAM[height]</height>
+			<onup>$PARAM[onup]</onup>
+			<ondown>$PARAM[ondown]</ondown>
+<!--			<onunfocus condition="!String.IsEqual(Container($PARAM[id]).CurrentItem,1)">Control.Move($PARAM[id],$INFO[Container($PARAM[id]).CurrentItem,-])</onunfocus>
+			<onunfocus condition="!String.IsEqual(Container($PARAM[id]).CurrentItem,1)">Control.Move($PARAM[id],1)</onunfocus>-->
+			<onclick>Close</onclick>
+			<onclick>$PARAM[onclick]</onclick>
+			<pagecontrol>60</pagecontrol>
+			<preloaditems>2</preloaditems>
+			<scrolltime tween="sine" easing="inout">380</scrolltime>
+			<orientation>horizontal</orientation>
+			<visible>$PARAM[visible]</visible>
+			<animation effect="zoom" end="85" time="190" tween="sine" easing="out" reversible ="true" condition="!Control.HasFocus($PARAM[id])">Conditional</animation>
+			<content target="$PARAM[target]" limit="$PARAM[limit]" sortby="$PARAM[sortby]" sortorder="$PARAM[sortorder]">$PARAM[path]</content>
+			<itemlayout width="300" height="450">
+				<control type="group">
+					<left>60</left>
+					<top>10</top>
+					<width>300</width>
+					<height>450</height>
+					<control type="image">
+						<texture diffuse="views/white_20.png">$VAR[InfoScreenThumb]</texture>
+						<aspectratio>scale</aspectratio>
+					</control>
+					<control type="image">
+						<texture>$VAR[InfoScreenThumb]</texture>
+						<aspectratio>scale</aspectratio>
+						<visible>Control.HasFocus($PARAM[id])</visible>
+						<include>QuickContentFadeAnimation</include>
+					</control>
+				</control>
+			</itemlayout>
+			<focusedlayout width="300" height="450">
+				<!--Dropshadow Overlay left-->
+				<include content="DropShadow">
+					<param name="left" value="-60"/>
+					<param name="top" value="10"/>
+					<param name="width" value="120"/>
+					<param name="height" value="450"/>
+					<param name="visible" value="Control.HasFocus(4503) + Container(4503).HasPrevious"/>
+					<param name="animationtype" value="Visible"/>
+					<param name="animationcondition" value="true"/>
+					<param name="animationeffect" value="fade"/>
+					<param name="animationend" value="100"/>
+					<param name="animationtime" value="190"/>
+				</include>
+				<!--Dropshadow Overlay right-->
+				<include content="DropShadow">
+					<param name="left" value="360"/>
+					<param name="top" value="10"/>
+					<param name="width" value="120"/>
+					<param name="height" value="450"/>
+					<param name="flipx" value="true"/>
+					<param name="texture" value="views/dropshadow_left_120.png"/>
+					<param name="visible" value="Control.HasFocus(4503) + !String.IsEmpty(Control.GetLabel(9700))"/>
+					<param name="animationtype" value="Visible"/>
+					<param name="animationcondition" value="true"/>
+					<param name="animationeffect" value="fade"/>
+					<param name="animationend" value="100"/>
+					<param name="animationtime" value="190"/>
+				</include>
+				<!--Thumb-->
+				<control type="group">
+					<left>60</left>
+					<top>10</top>
+					<width>300</width>
+					<height>450</height>
+					<control type="image">
+						<texture diffuse="views/white_20.png">$VAR[InfoScreenThumb]</texture>
+						<aspectratio>scale</aspectratio>
+					</control>
+					<control type="image">
+						<texture>$VAR[InfoScreenThumb]</texture>
+						<aspectratio>scale</aspectratio>
+						<visible>Control.HasFocus(4503)</visible>
+						<include>QuickContentFadeAnimation</include>
+					</control>
+				</control>
+				<!--Border-->
+				<control type="image">
+					<visible>Control.HasFocus(4503)</visible>
+					<include>QuickContentFadeAnimation</include>
+					<left>50</left>
+					<width>320</width>
+					<height>470</height>
+					<aspectratio>stretch</aspectratio>
+					<texture border="11" colordiffuse="$VAR[AccentColor]">views/border_10px.png</texture>
+				</control>
+			</focusedlayout>
+		</control>
+	</definition>
+</include>
+
+
+
+
+
+
+
+
+
 
   <!-- IconLayout -->
   <include name="IconLayout">
@@ -2608,7 +2729,7 @@
 	<!-- Dialog background image -->
 	<include name="DialogBackgroundImage">
 		<control type="group">
-			<include>DialogWindowFadeAnimation</include>
+			<include>TransparentDialogWindowFadeAnimation</include>
 			<control type="image">
 				<include>FullscreenDimensions</include>
 				<texture colordiffuse="$VAR[AccentColor]">views/white_100.png</texture>
