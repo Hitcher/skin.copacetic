@@ -365,7 +365,7 @@
     			<focusedlayout />
     		</control>
     		<control type="multiimage">
-    			<imagepath background="true">$INFO[Container($PARAM[listid]).ListItem.Art(fanart)]</imagepath>
+    			<imagepath diffuse="views/white_20.png" background="true">$INFO[Container($PARAM[listid]).ListItem.Art(fanart)]</imagepath>
     			<aspectratio>scale</aspectratio>
     			<fadetime>1800</fadetime>
     			<pauseatend>10000</pauseatend>
@@ -1239,6 +1239,7 @@
     <definition>
       <control type="image">
         <left>$PARAM[left]</left>
+				<right>$PARAM[right]</right>
         <top>$PARAM[top]</top>
         <width>$PARAM[width]</width>
         <height>$PARAM[height]</height>
@@ -1535,6 +1536,7 @@
 			</control>
     </definition>
   </include>
+
 
 	<!--Grid View Layout-->
 	<include name="GridViewLayout">
@@ -2022,120 +2024,233 @@
 		</definition>
 	</include>
 
-<!--Widget/Infoscreen lists-->
-<!--List 1-->
-<include name="WidgetList">
-	<param name="id" default="4503"/>
-	<param name="visible" default="Container.Content(Movies)"/>
-	<param name="top" default="1640"/>
-	<param name="height" default="470"/>
-	<param name="onup" default="50"/>
-	<param name="ondown" default="65001"/>
-	<param name="onclick" default="noop"/>
-	<param name="target" default="videos"/>
-	<param name="limit" default="20"/>
-	<param name="sortby" default="year"/>
-	<param name="sortorder" default="ascending"/>
-	<param name="path" default="videodb://movies/titles/"/>
-	<param name="hiddenlabelid" default="9700"/>
-	<definition>
-		<control type="fixedlist" id="4503">
-			<viewtype label="Strip">wrap</viewtype>
-			<top>$PARAM[top]</top>
-			<left>0</left>
-			<width>2160</width>
-			<height>$PARAM[height]</height>
-			<onup>$PARAM[onup]</onup>
-			<ondown>$PARAM[ondown]</ondown>
-<!--			<onunfocus condition="!String.IsEqual(Container($PARAM[id]).CurrentItem,1)">Control.Move($PARAM[id],$INFO[Container($PARAM[id]).CurrentItem,-])</onunfocus>
-			<onunfocus condition="!String.IsEqual(Container($PARAM[id]).CurrentItem,1)">Control.Move($PARAM[id],1)</onunfocus>-->
-			<onclick>Close</onclick>
-			<onclick>$PARAM[onclick]</onclick>
-			<pagecontrol>60</pagecontrol>
-			<preloaditems>2</preloaditems>
-			<scrolltime tween="sine" easing="inout">380</scrolltime>
-			<orientation>horizontal</orientation>
-			<visible>$PARAM[visible]</visible>
-			<animation effect="zoom" end="85" time="190" tween="sine" easing="out" reversible ="true" condition="!Control.HasFocus($PARAM[id])">Conditional</animation>
-			<content target="$PARAM[target]" limit="$PARAM[limit]" sortby="$PARAM[sortby]" sortorder="$PARAM[sortorder]">$PARAM[path]</content>
-			<itemlayout width="300" height="450">
+
+	<include name="CommonIconLayout">
+		<param name="height" default="450"/>
+		<param name="width" default="300"/>
+		<param name="id" default=""/>
+		<param name="focusedlayout" default="false"/>
+		<param name="texture" default="$VAR[InfoScreenPosterThumb]"/>
+		<param name="hiddenid" default="9700"/>
+		<definition>
+			<control type="group">
+				<left>60</left>
+				<top>10</top>
+				<width>$PARAM[width]</width>
+				<height>$PARAM[height]</height>
+				<!--Dropshadow-->
 				<control type="group">
-					<left>60</left>
-					<top>10</top>
-					<width>300</width>
-					<height>450</height>
+					<visible>$PARAM[focusedlayout]</visible>
+					<!--Left-->
+					<include content="DropShadow">
+						<param name="left" value="-120"/>
+						<param name="top" value="0"/>
+						<param name="width" value="120"/>
+						<param name="height" value="$PARAM[height]"/>
+						<param name="visible" value="Control.HasFocus($PARAM[id]) + Container($PARAM[id]).HasPrevious"/>
+						<param name="animationtype" value="Visible"/>
+						<param name="animationcondition" value="true"/>
+						<param name="animationeffect" value="fade"/>
+						<param name="animationend" value="100"/>
+						<param name="animationtime" value="190"/>
+					</include>
+					<!--Right-->
+					<include content="DropShadow">
+						<param name="left" value="$PARAM[width]"/>
+						<param name="top" value="0"/>
+						<param name="width" value="120"/>
+						<param name="height" value="$PARAM[height]"/>
+						<param name="flipx" value="true"/>
+						<param name="texture" value="views/dropshadow_left_120.png"/>
+						<param name="visible" value="Control.HasFocus($PARAM[id]) + !String.IsEmpty(Control.GetLabel($PARAM[hiddenid]))"/>
+						<param name="animationtype" value="Visible"/>
+						<param name="animationcondition" value="true"/>
+						<param name="animationeffect" value="fade"/>
+						<param name="animationend" value="100"/>
+						<param name="animationtime" value="190"/>
+					</include>
+				</control>
+				<!--Thumb-->
+				<control type="group">
 					<control type="image">
-						<texture diffuse="views/white_20.png">$VAR[InfoScreenThumb]</texture>
+						<texture diffuse="views/white_20.png">$PARAM[texture]</texture>
 						<aspectratio>scale</aspectratio>
+						<visible>!Control.HasFocus($PARAM[id])</visible>
 					</control>
 					<control type="image">
-						<texture>$VAR[InfoScreenThumb]</texture>
+						<texture>$PARAM[texture]</texture>
 						<aspectratio>scale</aspectratio>
 						<visible>Control.HasFocus($PARAM[id])</visible>
 						<include>QuickContentFadeAnimation</include>
 					</control>
-				</control>
-			</itemlayout>
-			<focusedlayout width="300" height="450">
-				<!--Dropshadow Overlay left-->
-				<include content="DropShadow">
-					<param name="left" value="-60"/>
-					<param name="top" value="10"/>
-					<param name="width" value="120"/>
-					<param name="height" value="450"/>
-					<param name="visible" value="Control.HasFocus(4503) + Container(4503).HasPrevious"/>
-					<param name="animationtype" value="Visible"/>
-					<param name="animationcondition" value="true"/>
-					<param name="animationeffect" value="fade"/>
-					<param name="animationend" value="100"/>
-					<param name="animationtime" value="190"/>
-				</include>
-				<!--Dropshadow Overlay right-->
-				<include content="DropShadow">
-					<param name="left" value="360"/>
-					<param name="top" value="10"/>
-					<param name="width" value="120"/>
-					<param name="height" value="450"/>
-					<param name="flipx" value="true"/>
-					<param name="texture" value="views/dropshadow_left_120.png"/>
-					<param name="visible" value="Control.HasFocus(4503) + !String.IsEmpty(Control.GetLabel(9700))"/>
-					<param name="animationtype" value="Visible"/>
-					<param name="animationcondition" value="true"/>
-					<param name="animationeffect" value="fade"/>
-					<param name="animationend" value="100"/>
-					<param name="animationtime" value="190"/>
-				</include>
-				<!--Thumb-->
-				<control type="group">
-					<left>60</left>
-					<top>10</top>
-					<width>300</width>
-					<height>450</height>
+					<!--Frame-->
 					<control type="image">
-						<texture diffuse="views/white_20.png">$VAR[InfoScreenThumb]</texture>
-						<aspectratio>scale</aspectratio>
-					</control>
-					<control type="image">
-						<texture>$VAR[InfoScreenThumb]</texture>
-						<aspectratio>scale</aspectratio>
-						<visible>Control.HasFocus(4503)</visible>
+						<include>FrameFocusBounceAnimation</include>
+						<visible>$PARAM[focusedlayout]</visible>
+						<visible>Control.HasFocus($PARAM[id])</visible>
 						<include>QuickContentFadeAnimation</include>
+						<left>-10</left>
+						<right>-10</right>
+						<top>-10</top>
+						<bottom>-10</bottom>
+						<aspectratio>stretch</aspectratio>
+						<texture border="11" colordiffuse="$VAR[AccentColor]">views/border_10px.png</texture>
 					</control>
 				</control>
-				<!--Border-->
-				<control type="image">
-					<visible>Control.HasFocus(4503)</visible>
-					<include>QuickContentFadeAnimation</include>
-					<left>50</left>
-					<width>320</width>
-					<height>470</height>
-					<aspectratio>stretch</aspectratio>
-					<texture border="11" colordiffuse="$VAR[AccentColor]">views/border_10px.png</texture>
+			</control>
+		</definition>
+	</include>
+
+	<include name="DynamicContent">
+	<content target="$PARAM[target]" limit="$PARAM[limit]" sortby="$PARAM[sortby]" sortorder="$PARAM[sortorder]">$PARAM[path]</content>
+	</include>
+
+	<include name="ClickOverride">
+		<onclick>$PARAM[onclick1]</onclick>
+		<onclick>$PARAM[onclick2]</onclick>
+	</include>
+
+	<!--Common List Layout-->
+	<include name="CommonListLayout">
+		<param name="groupid" default="4502"/>
+		<param name="groupheight" default="605"/>
+		<param name="listid" default="4503"/>
+		<param name="leftindent" default="-300"/>
+		<param name="visible" default="!Control.IsVisible(65001)"/>
+		<param name="animation" default="ContentFadeAnimation"/>
+		<param name="onup" default="50"/>
+		<param name="ondown" default="65001"/>
+		<param name="dynamiccontent" default="DynamicContent"/>
+		<param name="target" default="videos"/>
+		<param name="limit" default="30"/>
+		<param name="sortby" default="year"/>
+		<param name="sortorder" default="ascending"/>
+		<param name="path" default="videodb://movies/titles/?setid=$INFO[ListItem.SetID]"/>
+		<param name="clickoverride" default=""/>
+		<param name="onclick1" default="Close"/>
+		<param name="onclick2" default="noop"/>
+		<param name="posters" default="true"/>
+		<param name="fanart" default="false"/>
+		<param name="hiddenid" default="9700"/>
+		<param name="texture" default="$VAR[InfoScreenPosterThumb]"/>
+		<param name="toplabel" default="$INFO[ListItem.Set]"/>
+		<param name="bottomlabelprimary" default="$INFO[Container($PARAM[listid]).ListItem.Label]"/>
+		<param name="bottomlabelsecondary" default="$INFO[Container($PARAM[listid]).ListItem.Year, / ]"/>
+	<definition>
+		<control type="group" id="$PARAM[groupid]">
+			<top>0</top>
+			<left>0</left>
+			<width>2160</width>
+			<height>$PARAM[groupheight]</height>
+			<defaultcontrol>$PARAM[listid]</defaultcontrol>
+			<visible>$PARAM[visible]</visible>
+			<include>$PARAM[animation]</include>
+			<!--Hidden label for dropshadow check-->
+			<control type="label" id="9700">
+				<label>$INFO[Container($PARAM[listid]).ListItemNoWrap(1).Label]</label>
+				<visible allowhiddenfocus="true">false</visible>
+			</control>
+			<!--Top Label-->
+			<control type="label">
+				<left>60</left>
+				<top>0</top>
+				<height>45</height>
+				<label>$PARAM[toplabel]</label>
+				<font>Dialog_Menu_Unfocused</font>
+				<textcolor>$VAR[MediumGreyColor]</textcolor>
+			</control>
+			<!--List-->
+			<control type="fixedlist" id="$PARAM[listid]">
+				<viewtype label="Strip">wrap</viewtype>
+				<left>$PARAM[leftindent]</left>
+				<top>60</top>
+				<onup>$PARAM[onup]</onup>
+				<ondown>$PARAM[ondown]</ondown>
+				<pagecontrol>60</pagecontrol>
+				<preloaditems>2</preloaditems>
+				<focusposition>1</focusposition>
+				<scrolltime tween="sine" easing="inout">380</scrolltime>
+				<orientation>horizontal</orientation>
+				<animation effect="zoom" end="80" time="380" tween="back" easing="in" reversible="true" condition="!Control.HasFocus($PARAM[listid])">Conditional</animation>
+				<include content="$PARAM[dynamiccontent]">
+					<param name="target" value="$PARAM[target]"/>
+					<param name="limit" value="$PARAM[limit]"/>
+					<param name="sortby" value="$PARAM[sortby]"/>
+					<param name="sortorder" value="$PARAM[sortorder]"/>
+					<param name="path" value="$PARAM[path]"/>
+				</include>
+				<include content="$PARAM[clickoverride]">
+					<param name="onclick1" value="$PARAM[onclick1]"/>
+					<param name="onclick2" value="$PARAM[onclick2]"/>
+				</include>
+				<itemlayout width="300" height="450" condition="$PARAM[posters]">
+					<include content="CommonIconLayout">
+						<param name="id" value="$PARAM[listid]"/>
+						<param name="texture" value="$PARAM[texture]"/>
+						<param name="hiddenid" value="$PARAM[hiddenid]"/>
+					</include>
+				</itemlayout>
+				<focusedlayout width="300" height="450" condition="$PARAM[posters]">
+					<include content="CommonIconLayout">
+						<param name="id" value="$PARAM[listid]"/>
+						<param name="focusedlayout" value="true"/>
+						<param name="texture" value="$PARAM[texture]"/>
+						<param name="hiddenid" value="$PARAM[hiddenid]"/>
+					</include>
+				</focusedlayout>
+				<itemlayout width="464" height="261" condition="$PARAM[fanart]">
+					<include content="CommonIconLayout">
+						<param name="id" value="$PARAM[listid]"/>
+						<param name="width" value="464"/>
+						<param name="height" value="261"/>
+						<param name="texture" value="$PARAM[texture]"/>
+						<param name="hiddenid" value="$PARAM[hiddenid]"/>
+					</include>
+				</itemlayout>
+				<focusedlayout width="464" height="261" condition="$PARAM[fanart]">
+					<include content="CommonIconLayout">
+						<param name="id" value="$PARAM[listid]"/>
+						<param name="width" value="464"/>
+						<param name="height" value="261"/>
+						<param name="focusedlayout" value="true"/>
+						<param name="texture" value="$PARAM[texture]"/>
+						<param name="hiddenid" value="$PARAM[hiddenid]"/>
+					</include>
+				</focusedlayout>
+			</control>
+			<!--Bottom Label-->
+			<control type="grouplist">
+				<visible>Control.HasFocus($PARAM[listid])</visible>
+				<include>ContentFadeAnimation</include>
+				<left>60</left>
+				<bottom>0</bottom>
+				<height>60</height>
+				<orientation>horizontal</orientation>
+				<align>left</align>
+				<usecontrolcoords>true</usecontrolcoords>
+				<control type="label">
+					<width>auto</width>
+					<height>60</height>
+					<font>Dialog_Menu_Focused</font>
+					<textcolor>$VAR[PrimaryColor]</textcolor>
+					<label>$PARAM[bottomlabelprimary]</label>
 				</control>
-			</focusedlayout>
+				<control type="label">
+					<top>12</top>
+					<width>auto</width>
+					<height>45</height>
+					<font>Dialog_Menu_Unfocused</font>
+					<textcolor>$VAR[PrimaryColor]</textcolor>
+					<label>$PARAM[bottomlabelsecondary]</label>
+				</control>
+			</control>
 		</control>
 	</definition>
 </include>
+
+
+
+
 
 
 

@@ -1,9 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <window>
 	<!-- movieinformation -->
-		<onload condition="String.IsEmpty(Skin.String(Info_Movies_Director))">Skin.SetString(Info_Movies_Director,$INFO[Listitem.Director])</onload>
+	<onload condition="String.IsEmpty(window(movieinformation).property(FirstDown))">SetProperty(FirstDown,true,movieinformation)</onload>
+	<onload condition="Container.Content(tvshows) + String.IsEmpty(window(movieinformation).property(TVShowPath))">SetProperty(TVShowPath,videodb://tvshows/titles/$INFO[ListItem.DBID]/,movieinformation)</onload>
+	<onunload condition="!String.IsEmpty(window(movieinformation).property(TVShowPath))">ClearProperty(TVShowPath,movieinformation)</onunload>
 
-	<defaultcontrol always="true">65001</defaultcontrol>
+	<onload condition="!String.IsEqual(Container(4503).CurrentItem,1)">Control.Move(4503,$INFO[Container(4503).CurrentItem,-])</onload>
+	<onload condition="!String.IsEqual(Container(4503).CurrentItem,1)">Control.Move(4503,1)</onload>
+	<onload condition="!String.IsEqual(Container(4505).CurrentItem,1)">Control.Move(4505,$INFO[Container(4505).CurrentItem,-])</onload>
+	<onload condition="!String.IsEqual(Container(4505).CurrentItem,1)">Control.Move(4505,1)</onload>
+
+	<defaultcontrol always="true">65000</defaultcontrol>
 	<include>OpaqueDialogWindowFadeAnimation</include>
 
 	<controls>
@@ -11,7 +18,7 @@
 
 		<!--BACKGROUND-->
 		<control type="image">
-			<visible>Control.HasFocus(65001)</visible>
+			<visible>Control.HasFocus(65002)</visible>
 			<include>OptionsMenuFadeAnimation</include>
 			<aspectratio>scale</aspectratio>
 			<texture diffuse="views/white_20.png" background="true">$VAR[InfoScreenBackground]</texture>
@@ -19,6 +26,17 @@
 
 		<!--HIDDEN-->
 		<control type="group">
+
+			<!--Widget Delayed Load timer-->
+			<control type="button" id="65000">
+				<visible allowhiddenfocus="true">false</visible>
+				<onfocus>SetFocus(65002)</onfocus>
+			</control>
+
+			<control type="group" id="65001">
+				<visible>Control.HasFocus(65000)</visible>
+				<animation effect="slide" end="0,0" time="570" reversible="false">Hidden</animation>
+			</control>
 
 			<!-- Hidden Buttons -->
 			<control type="grouplist">
@@ -57,71 +75,30 @@
 			</control>
 
 			<!--Hidden Labels-->
-			<!--First List-->
+			<!--First List Dropshadow checker-->
 			<control type="label" id="9700">
 				<label>$INFO[Container(4503).ListItemNoWrap(1).Label]</label>
 				<visible allowhiddenfocus="true">false</visible>
 			</control>
-			<!--Second List-->
+			<!--Second List Dropshadow checker-->
 			<control type="label" id="9701">
-				<label>$INFO[Container(4504).ListItemNoWrap(1).Label]</label>
+				<label>$INFO[Container(4505).ListItemNoWrap(1).Label]</label>
 				<visible allowhiddenfocus="true">false</visible>
 			</control>
 
-			<!--Hidden List -->
-			<control type="list" id="65001">
-				<viewtype label="535">list</viewtype>
-				<width>600</width>
-				<height>1</height>
-				<top>-10</top>
-				<orientation>horizontal</orientation>
-				<ondown>SetFocus(50,0)</ondown>
-				<itemlayout width="100"/>
-				<focusedlayout width="100"/>
-				<content>
-					<item>
-						<onclick>SendClick(8)</onclick>
-						<label>$INFO[Control.GetLabel(8)]</label>
-						<visible>Control.IsVisible(8)</visible>
-					</item>
-					<item>
-						<onclick>SendClick(11)</onclick>
-						<label>$INFO[Control.GetLabel(11)]</label>
-						<visible>Control.IsVisible(11)</visible>
-					</item>
-					<item>
-						<onclick>SendClick(98)</onclick>
-						<label>$INFO[Control.GetLabel(98)]</label>
-						<visible>Control.IsVisible(98)</visible>
-					</item>
-					<item>
-						<onclick>SendClick(7)</onclick>
-						<label>$INFO[Control.GetLabel(7)]</label>
-						<visible>Control.IsVisible(7)</visible>
-					</item>
-					<item>
-						<onclick>SendClick(6)</onclick>
-						<label>$INFO[Control.GetLabel(6)]</label>
-					</item>
-					<item>
-						<onclick>SendClick(10)</onclick>
-						<label>$INFO[Control.GetLabel(10)]</label>
-					</item>
-				</content>
-			</control>
+
 		</control>
 
 		<!--CONTENT-->
 		<control type="group">
-			<animation effect="slide" end="0,-1080" time="380" condition="Control.HasFocus(50) | Control.HasFocus(4503)" reversible="true" tween="sine" easing="out" >Conditional</animation>
-			<animation effect="slide" end="0,-469" time="380" condition="Control.HasFocus(4503)" reversible="true" tween="sine" easing="out" >Conditional</animation>
-
-			<!--DETAILS-->
+			<animation effect="slide" end="0,-1080" time="380" condition="Control.HasFocus(50) | Control.HasFocus(4503) | Control.HasFocus(4505)" reversible="true" tween="sine" easing="out" >Conditional</animation>
+			<animation effect="slide" end="0,-665" time="380" condition="Control.HasFocus(4503) | Control.HasFocus(4505)" reversible="true" tween="sine" easing="out" >Conditional</animation>
+			<animation effect="slide" end="0,-665" time="380" condition="!Container.Content(tvshows) + Control.HasFocus(4505)" reversible="true" tween="sine" easing="out" >Conditional</animation>
+			<animation effect="slide" end="0,-476" time="380" condition="Container.Content(tvshows) + Control.HasFocus(4505)" reversible="true" tween="sine" easing="out" >Conditional</animation>
+			<!--TOP DETAILS-->
 			<control type="group">
-				<!--Movie Details-->
+				<include>OptionsMenuFadeAnimation</include>
 				<control type="grouplist">
-					<visible>Control.HasFocus(65001)</visible>
-					<include>OptionsMenuFadeAnimation</include>
 					<left>120</left>
 					<top>120</top>
 					<width>1680</width>
@@ -207,7 +184,7 @@
 							<param name="id" value="922"/>
 							<param name="content" value="$VAR[Video_Source]"/>
 						</include>
-						<!--Video Source-->
+						<!--Audio Source-->
 						<include content="FlagLayout">
 							<param name="id" value="923"/>
 							<param name="content" value="$VAR[Audio_Source]"/>
@@ -217,8 +194,8 @@
 
 				<!--Dummy Horizontal List-->
 				<include content="DummyHorizontalList">
-					<param name="dummyid" value="65002"/>
-					<param name="hiddenid" value="65001"/>
+					<param name="dummyid" value="65003"/>
+					<param name="hiddenid" value="65002"/>
 					<param name="height" value="60"/>
 					<param name="top" value="810"/>
 					<param name="itemgap" value="7"/>
@@ -230,217 +207,138 @@
 					<param name="unfocusedfont" value="Dialog_Menu_Unfocused"/>
 					<param name="unfocusedtextcolor" value="$VAR[PrimaryColor]"/>
 				</include>
-
-				<!--Top Label-->
-				<control type="label">
-					<left>60</left>
-					<top>1106</top>
-					<width>auto</width>
-					<height>45</height>
-					<font>Dialog_Menu_Unfocused</font>
-					<textcolor>$VAR[PrimaryColor]</textcolor>
-					<label>$VAR[InfoScreenFirstListLabel]</label>
-					<visible>Control.HasFocus(50)</visible>
-					<include>QuickContentFadeAnimation</include>
-				</control>
-				<!--Second Label-->
-				<control type="grouplist">
-					<left>60</left>
-					<top>1481</top>
-					<width>1800</width>
-					<height>60</height>
-					<orientation>horizontal</orientation>
-					<align>left</align>
-					<usecontrolcoords>true</usecontrolcoords>
-					<control type="label">
-						<visible>Control.HasFocus(50)</visible>
-						<include>QuickContentFadeAnimation</include>
-						<width>auto</width>
-						<height>60</height>
-						<font>Dialog_Menu_Focused</font>
-						<textcolor>$VAR[PrimaryColor]</textcolor>
-						<label>$INFO[Container(50).ListItem.Label]</label>
-					</control>
-					<control type="label">
-						<visible>Control.HasFocus(50)</visible>
-						<top>12</top>
-						<width>auto</width>
-						<height>45</height>
-						<font>Dialog_Menu_Unfocused</font>
-						<textcolor>$VAR[PrimaryColor]</textcolor>
-						<label>$INFO[Container(50).ListItem.Label2, / ]</label>
-						<include>QuickContentFadeAnimation</include>
-					</control>
-				</control>
-				<!--Third Label-->
-				<control type="label">
-					<left>60</left>
-					<top>1575</top>
-					<width>auto</width>
-					<height>45</height>
-					<font>Dialog_Menu_Unfocused</font>
-					<textcolor>$VAR[PrimaryColor]</textcolor>
-					<label>$VAR[InfoScreenFirstListLabel]</label>
-					<visible>Control.HasFocus(4503)</visible>
-					<include>QuickContentFadeAnimation</include>
-				</control>
-
-				<!--Fourth List Label-->
-				<control type="grouplist">
-					<left>60</left>
-					<top>2130</top>
-					<width>1800</width>
-					<height>60</height>
-					<orientation>horizontal</orientation>
-					<align>left</align>
-					<usecontrolcoords>true</usecontrolcoords>
-					<control type="label">
-						<visible>Control.HasFocus(4503)</visible>
-						<include>QuickContentFadeAnimation</include>
-						<width>auto</width>
-						<height>60</height>
-						<font>Dialog_Menu_Focused</font>
-						<textcolor>$VAR[PrimaryColor]</textcolor>
-						<label>$INFO[Container(4503).ListItem.Label]</label>
-					</control>
-					<control type="label">
-						<visible>Control.HasFocus(4503)</visible>
-						<include>QuickContentFadeAnimation</include>
-						<top>12</top>
-						<width>auto</width>
-						<height>45</height>
-						<font>Dialog_Menu_Unfocused</font>
-						<textcolor>$VAR[PrimaryColor]</textcolor>
-						<label>$INFO[Container(4503).ListItem.Year, / ]</label>
-					</control>
-				</control>
-
 			</control>
 
-			<!--THUMBNAILS-->
-			<control type="group">
+			<!--MAIN GROUPLIST-->
+			<control type="grouplist">
+				<orientation>vertical</orientation>
+				<align>left</align>
+				<left>0</left>
+				<top>1140</top>
+				<width>2160</width>
+				<height>2160</height>
+				<itemgap>60</itemgap>
+				<usecontrolcoords>true</usecontrolcoords>
 
-				<!--Cast List-->
-				<control type="fixedlist" id="50">
-					<viewtype label="Grid">icon</viewtype>
-					<animation effect="zoom" end="85" center="auto" time="190" tween="sine" easing="out" reversible ="true" condition="!Control.HasFocus(50)">Conditional</animation>
-					<top>1173</top>
-					<left>0</left>
-					<width>2160</width>
-					<height>300</height>
-					<onup>65001</onup>
-					<ondown>SetFocus(4503)</ondown>
-					<pagecontrol>60</pagecontrol>
-					<preloaditems>2</preloaditems>
-					<scrolltime tween="sine" easing="inout">380</scrolltime>
+				<!--Hidden List -->
+				<control type="list" id="65002">
+					<onup>4505</onup>
+					<ondown>65004</ondown>
+					<viewtype label="535">list</viewtype>
+					<width>600</width>
+					<visible allowhiddenfocus="true">false</visible>
 					<orientation>horizontal</orientation>
-					<!--<onunfocus condition="!String.IsEqual(Container(50).CurrentItem,1)">Control.Move(50,$INFO[Container(50).CurrentItem,-])</onunfocus>
-					<onunfocus condition="!String.IsEqual(Container(50).CurrentItem,1)">Control.Move(50,1)</onunfocus>-->
-					<itemlayout width="300" height="300">
-						<control type="group">
-							<left>75</left>
-							<top>15</top>
-							<width>270</width>
-							<height>270</height>
-							<control type="image">
-								<texture diffuse="views/circle_20.png">$INFO[ListItem.Icon]</texture>
-								<aspectratio scalediffuse="false" aligny="top">scale</aspectratio>
-							</control>
-						</control>
-					</itemlayout>
-					<focusedlayout width="300" height="300">
-						<control type="image">
-							<visible>Control.HasFocus(50)</visible>
-							<include>QuickContentFadeAnimation</include>
-							<left>67</left>
-							<top>7</top>
-							<width>286</width>
-							<height>286</height>
-							<texture colordiffuse="$VAR[AccentColor]">views/circle.png</texture>
-							<aspectratio>scale</aspectratio>
-						</control>
-						<control type="group">
-							<left>75</left>
-							<top>15</top>
-							<width>270</width>
-							<height>270</height>
-							<control type="image">
-								<texture diffuse="views/circle_20.png">$INFO[ListItem.Icon]</texture>
-								<aspectratio scalediffuse="false" aligny="top">scale</aspectratio>
-							</control>
-						</control>
-						<control type="image">
-							<visible>Control.HasFocus(50)</visible>
-							<include>QuickContentFadeAnimation</include>
-							<left>75</left>
-							<top>15</top>
-							<width>270</width>
-							<height>270</height>
-							<texture diffuse="views/circle.png">$INFO[ListItem.Icon]</texture>
-							<aspectratio scalediffuse="false" aligny="top">scale</aspectratio>
-						</control>
-					</focusedlayout>
+					<itemlayout width="100"/>
+					<focusedlayout width="100"/>
+					<content>
+						<item>
+							<onclick>SendClick(8)</onclick>
+							<label>$INFO[Control.GetLabel(8)]</label>
+							<visible>Control.IsVisible(8)</visible>
+						</item>
+						<item>
+							<onclick>SendClick(11)</onclick>
+							<label>$INFO[Control.GetLabel(11)]</label>
+							<visible>Control.IsVisible(11)</visible>
+						</item>
+						<item>
+							<onclick>SendClick(98)</onclick>
+							<label>$INFO[Control.GetLabel(98)]</label>
+							<visible>Control.IsVisible(98)</visible>
+						</item>
+						<item>
+							<onclick>SendClick(7)</onclick>
+							<label>$INFO[Control.GetLabel(7)]</label>
+							<visible>Control.IsVisible(7)</visible>
+						</item>
+						<item>
+							<onclick>SendClick(6)</onclick>
+							<label>$INFO[Control.GetLabel(6)]</label>
+						</item>
+						<item>
+							<onclick>SendClick(10)</onclick>
+							<label>$INFO[Control.GetLabel(10)]</label>
+						</item>
+					</content>
 				</control>
 
-				<!--First List-->
-				<!--<include content="WidgetList"/>-->
-				<!--Movie set list if applicable-->
-				<include content="WidgetList">
-					<param name="visible" value="Container.Content(Movies) + !String.IsEmpty(ListItem.SetID)"/>
-					<param name="path" value="videodb://movies/titles/?setid=$INFO[ListItem.SetID]"/>
-				</include>
-				<!--TVShow unwatched
-				<include content="WidgetList">
-					<param name="visible" value="Container.Content(tvshows)"/>
-					<param name="path" value="videodb://tvshows/titles/$INFO[ListItem.DBID]/-1/?xsp=%7B%22rules%22%3A%7B%22and%22%3A%5B%7B%22field%22%3A%22playcount%22%2C%22operator%22%3A%22is%22%2C%22value%22%3A%5B%220%22%5D%7D%5D%7D%7D"/>
+				<!--Hidden Button to reset cast list on first down and avoid conflict with videonav listview 50-->
+				<control type="button" id="65004">
+					<visible allowhiddenfocus="true">false</visible>
+					<onfocus condition="String.IsEqual(window(movieinformation).property(FirstDown),true) + !String.IsEqual(Container(50).CurrentItem,1)">Control.Move(50,$INFO[Container(50).CurrentItem,-])</onfocus>
+					<onfocus condition="String.IsEqual(window(movieinformation).property(FirstDown),true) + !String.IsEqual(Container(50).CurrentItem,1)">Control.Move(50,1)</onfocus>
+					<onfocus condition="String.IsEqual(window(movieinformation).property(FirstDown),true)">ClearProperty(FirstDown,movieinformation)</onfocus>
+					<onfocus>SetFocus(50)</onfocus>
+				</control>
+
+				<!--Cast-->
+				<include content="CommonListLayout">
+					<param name="groupid" value="49"/>
+					<param name="listid" value="50"/>
+					<param name="onup" value="65002"/>
+					<param name="ondown" value="4503"/>
+					<param name="dynamiccontent" value=""/>
+					<param name="texture" value="$INFO[ListItem.Icon]"/>
+					<param name="toplabel" value="$INFO[ListItem.Label,, Cast]"/>
+					<param name="bottomlabelprimary" value="$INFO[Container(50).ListItem.Label]"/>
+					<param name="bottomlabelsecondary" value="$INFO[Container(50).ListItem.Label2, / ]"/>
 				</include>
 
+				<!--Movie Widgets-->
+				<include content="CommonListLayout" condition="Container.Content(movies) + !String.IsEmpty(ListItem.SetID)"/>
 
-				<!--TV show season list-->
-				<include content="WidgetList">
-					<param name="visible" value="Container.Content(tvshows)"/>
+				<!--TVShow Widgets-->
+				<!--Next unplayed-->
+				<include content="CommonListLayout" condition="Container.Content(tvshows)">
+					<param name="groupid" value="4502"/>
+					<param name="groupheight" value="416"/>
+					<param name="listid" value="4503"/>
+					<param name="leftindent" value="-464"/>
+					<param name="onup" value="50"/>
+					<param name="ondown" value="4505"/>
+					<param name="path" value="videodb://tvshows/titles/$INFO[ListItem.DBID]/-1/"/>
+					<param name="clickoverride" value=""/>
+					<param name="posters" value="false"/>
+					<param name="fanart" value="true"/>
+					<param name="toplabel" value="Next Episodes"/>
+					<param name="bottomlabelprimary" value="$INFO[Container($PARAM[listid]).ListItem.Label]"/>
+					<param name="bottomlabelsecondary" value="$INFO[Container($PARAM[listid]).ListItem.Duration, / , mins]"/>
+				</include>
+				<!--seaasons-->
+				<include content="CommonListLayout" condition="Container.Content(tvshows)">
+					<param name="groupid" value="4504"/>
+					<param name="listid" value="4505"/>
+					<param name="onup" value="4503"/>
+					<param name="ondown" value="65002"/>
 					<param name="path" value="videodb://tvshows/titles/$INFO[ListItem.DBID]/"/>
-					<param name="onclick" value="ActivateWindow(videos,$INFO[window(movieinformation).property(TVShowPath)]/$INFO[ListItem.Season]/)"/>
+					<param name="clickoverride" value="ClickOverride"/>
+					<param name="onclick1" value="Close"/>
+					<param name="onclick2" value="ActivateWindow(videos,$INFO[window(movieinformation).property(TVShowPath)]$INFO[ListItem.Season,,/])"/>
+					<param name="hiddenid" value="9701"/>
+					<param name="toplabel" value="$INFO[ListItem.Label]"/>
+					<param name="bottomlabelprimary" value="$INFO[Container($PARAM[listid]).ListItem.Season,Season ]"/>
 				</include>
 
+				<control type="label">
+					<font>body</font>
+					<textcolor>white</textcolor>
+					<label>$INFO[Container(4503).ListItem.Label]</label>
+				</control>
+				<control type="label">
+					<font>body</font>
+					<textcolor>white</textcolor>
+					<label>$INFO[Container(4505).ListItem.Label]</label>
+				</control>
+				<control type="label">
+					<font>body</font>
+					<textcolor>white</textcolor>
+					<label>4. $INFO[Container.FolderPath]</label>
+				</control>
+
 			</control>
 		</control>
 
 
-<!--
-		<control type="label">
-			<top>900</top>
-			<label>$INFO[ListItem.Director]</label>
-			<textcolor>white</textcolor>
-			<font>body</font>
-		</control>
-		<control type="label">
-			<top>950</top>
-			<label>$INFO[Container.FolderPath]</label>
-			<textcolor>white</textcolor>
-			<font>body</font>
-		</control>
-
-		<!--
-			<control type="label">
-				<top>2000</top>
-				<font>body</font>
-				<textcolor>white</textcolor>
-				<label>2. $INFO[Container(4503).ListItem(0).Label]</label>
-			</control>
-			<control type="label">
-				<top>2050</top>
-				<font>body</font>
-				<textcolor>white</textcolor>
-				<label>3. $INFO[ListItem.FolderPath]</label>
-			</control>
-			<control type="label">
-				<top>2100</top>
-				<font>body</font>
-				<textcolor>white</textcolor>
-				<label>4. $INFO[Container.FolderPath]</label>
-			</control>
-		-->
 
 
 	</controls>
