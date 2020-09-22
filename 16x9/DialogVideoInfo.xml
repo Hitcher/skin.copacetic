@@ -1,40 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <window>
 	<!-- movieinformation -->
-	<onload condition="String.IsEmpty(window(movieinformation).property(FirstDown))">SetProperty(FirstDown,true,movieinformation)</onload>
 	<onload condition="Container.Content(tvshows) + String.IsEmpty(window(movieinformation).property(TVShowPath))">SetProperty(TVShowPath,videodb://tvshows/titles/$INFO[ListItem.DBID]/,movieinformation)</onload>
 	<onunload condition="!String.IsEmpty(window(movieinformation).property(TVShowPath))">ClearProperty(TVShowPath,movieinformation)</onunload>
-
-	<onload condition="!String.IsEqual(Container(4503).CurrentItem,1)">Control.Move(4503,$INFO[Container(4503).CurrentItem,-])</onload>
-	<onload condition="!String.IsEqual(Container(4503).CurrentItem,1)">Control.Move(4503,1)</onload>
-	<onload condition="!String.IsEqual(Container(4505).CurrentItem,1)">Control.Move(4505,$INFO[Container(4505).CurrentItem,-])</onload>
-	<onload condition="!String.IsEqual(Container(4505).CurrentItem,1)">Control.Move(4505,1)</onload>
-
-	<defaultcontrol always="true">65000</defaultcontrol>
+	<defaultcontrol always="true">64999</defaultcontrol>
 	<include>OpaqueDialogWindowFadeAnimation</include>
 
 	<controls>
 		<include>FullscreenDimensions</include>
 
-		<!--BACKGROUND-->
-		<control type="image">
-			<visible>Control.HasFocus(65002)</visible>
-			<include>OptionsMenuFadeAnimation</include>
-			<aspectratio>scale</aspectratio>
-			<texture diffuse="views/white_20.png" background="true">$VAR[InfoScreenBackground]</texture>
-		</control>
-
 		<!--HIDDEN-->
 		<control type="group">
 
 			<!--Widget Delayed Load timer-->
-			<control type="button" id="65000">
+			<control type="button" id="64999">
 				<visible allowhiddenfocus="true">false</visible>
 				<onfocus>SetFocus(65002)</onfocus>
 			</control>
-
-			<control type="group" id="65001">
-				<visible>Control.HasFocus(65000)</visible>
+			<control type="group" id="65000">
+				<visible>Control.HasFocus(64999)</visible>
 				<animation effect="slide" end="0,0" time="570" reversible="false">Hidden</animation>
 			</control>
 
@@ -72,9 +56,26 @@
 				<control type="button" id="10">
 					<label>$LOCALIZE[31142]</label>
 				</control>
+
+				<!--Hidden Button to reset lists before closing dialog-->
+				<control type="button" id="65004">
+					<visible allowhiddenfocus="true">false</visible>
+					<onfocus>Close</onfocus>
+					<onfocus condition="!String.IsEqual(Container(50).CurrentItem,1)">Control.Move(50,$INFO[Container(50).CurrentItem,-])</onfocus>
+					<onfocus condition="!String.IsEqual(Container(50).CurrentItem,1)">Control.Move(50,1)</onfocus>
+					<onfocus condition="!String.IsEqual(Container(4503).CurrentItem,1)">Control.Move(4503,$INFO[Container(4503).CurrentItem,-])</onfocus>
+					<onfocus condition="!String.IsEqual(Container(4503).CurrentItem,1)">Control.Move(4503,1)</onfocus>
+					<onfocus condition="!String.IsEqual(Container(4505).CurrentItem,1)">Control.Move(4505,$INFO[Container(4505).CurrentItem,-])</onfocus>
+					<onfocus condition="!String.IsEqual(Container(4505).CurrentItem,1)">Control.Move(4505,1)</onfocus>
+				</control>
 			</control>
 
 			<!--Hidden Labels-->
+			<!--Cast List Dropshadow checker-->
+			<control type="label" id="9699">
+				<label>$INFO[Container(50).ListItemNoWrap(1).Label]</label>
+				<visible allowhiddenfocus="true">false</visible>
+			</control>
 			<!--First List Dropshadow checker-->
 			<control type="label" id="9700">
 				<label>$INFO[Container(4503).ListItemNoWrap(1).Label]</label>
@@ -85,8 +86,14 @@
 				<label>$INFO[Container(4505).ListItemNoWrap(1).Label]</label>
 				<visible allowhiddenfocus="true">false</visible>
 			</control>
+		</control>
 
-
+		<!--BACKGROUND-->
+		<control type="image">
+			<visible>Control.HasFocus(65002)</visible>
+			<include>OptionsMenuFadeAnimation</include>
+			<aspectratio>scale</aspectratio>
+			<texture diffuse="views/white_20.png" background="true">$VAR[InfoScreenBackground]</texture>
 		</control>
 
 		<!--CONTENT-->
@@ -97,7 +104,8 @@
 			<animation effect="slide" end="0,-476" time="380" condition="Container.Content(tvshows) + Control.HasFocus(4505)" reversible="true" tween="sine" easing="out" >Conditional</animation>
 			<!--TOP DETAILS-->
 			<control type="group">
-				<include>OptionsMenuFadeAnimation</include>
+				<visible>!$EXP[TransparentDialog_IsVisible]</visible>
+				<include>ContentFadeAnimation</include>
 				<control type="grouplist">
 					<left>120</left>
 					<top>120</top>
@@ -138,14 +146,9 @@
 						<top>20</top>
 						<centerleft>50%</centerleft>
 						<width>185</width>
-						<height>33</height>
+						<height>30</height>
 						<control type="image">
 							<width>100%</width>
-							<aspectratio>keep</aspectratio>
-							<texture colordiffuse="$VAR[StarColor]">views/rating-background.png</texture>
-							<visible>!Listitem.DBType(season)</visible>
-						</control>
-						<control type="image">
 							<aspectratio>keep</aspectratio>
 							<texture colordiffuse="$VAR[StarColor]">$VAR[StarRating]</texture>
 							<visible>!Listitem.DBType(season)</visible>
@@ -210,7 +213,7 @@
 			</control>
 
 			<!--MAIN GROUPLIST-->
-			<control type="grouplist">
+			<control type="grouplist" id="65001">
 				<orientation>vertical</orientation>
 				<align>left</align>
 				<left>0</left>
@@ -222,10 +225,11 @@
 
 				<!--Hidden List -->
 				<control type="list" id="65002">
-					<onup>4505</onup>
-					<ondown>65004</ondown>
 					<viewtype label="535">list</viewtype>
 					<width>600</width>
+					<onup>close</onup>
+					<ondown>49</ondown>
+					<onback>65004</onback>
 					<visible allowhiddenfocus="true">false</visible>
 					<orientation>horizontal</orientation>
 					<itemlayout width="100"/>
@@ -262,23 +266,18 @@
 					</content>
 				</control>
 
-				<!--Hidden Button to reset cast list on first down and avoid conflict with videonav listview 50-->
-				<control type="button" id="65004">
-					<visible allowhiddenfocus="true">false</visible>
-					<onfocus condition="String.IsEqual(window(movieinformation).property(FirstDown),true) + !String.IsEqual(Container(50).CurrentItem,1)">Control.Move(50,$INFO[Container(50).CurrentItem,-])</onfocus>
-					<onfocus condition="String.IsEqual(window(movieinformation).property(FirstDown),true) + !String.IsEqual(Container(50).CurrentItem,1)">Control.Move(50,1)</onfocus>
-					<onfocus condition="String.IsEqual(window(movieinformation).property(FirstDown),true)">ClearProperty(FirstDown,movieinformation)</onfocus>
-					<onfocus>SetFocus(50)</onfocus>
-				</control>
-
 				<!--Cast-->
 				<include content="CommonListLayout">
 					<param name="groupid" value="49"/>
 					<param name="listid" value="50"/>
-					<param name="onup" value="65002"/>
-					<param name="ondown" value="4503"/>
+					<param name="previousitem" value="65002"/>
+					<param name="itemnumber" value="1"/>
+					<param name="firstitem" value="65002"/>
+					<param name="nextitem" value="4502"/>
 					<param name="dynamiccontent" value=""/>
-					<param name="texture" value="$INFO[ListItem.Icon]"/>
+					<param name="texture" value="$INFO[ListItem.Art(thumb)]"/>
+					<param name="fallback" value="fallback.png"/>
+					<param name="hiddenid" value="9699"/>
 					<param name="toplabel" value="$INFO[ListItem.Label,, Cast]"/>
 					<param name="bottomlabelprimary" value="$INFO[Container(50).ListItem.Label]"/>
 					<param name="bottomlabelsecondary" value="$INFO[Container(50).ListItem.Label2, / ]"/>
@@ -294,22 +293,23 @@
 					<param name="groupheight" value="416"/>
 					<param name="listid" value="4503"/>
 					<param name="leftindent" value="-464"/>
-					<param name="onup" value="50"/>
-					<param name="ondown" value="4505"/>
 					<param name="path" value="videodb://tvshows/titles/$INFO[ListItem.DBID]/-1/"/>
 					<param name="clickoverride" value=""/>
 					<param name="posters" value="false"/>
 					<param name="fanart" value="true"/>
+					<param name="texture" value="$VAR[InfoScreenLandscape]"/>
 					<param name="toplabel" value="Next Episodes"/>
 					<param name="bottomlabelprimary" value="$INFO[Container($PARAM[listid]).ListItem.Label]"/>
-					<param name="bottomlabelsecondary" value="$INFO[Container($PARAM[listid]).ListItem.Duration(mins),, / , mins]"/>
+					<param name="bottomlabelsecondary" value="$INFO[Container($PARAM[listid]).ListItem.Duration(mins), / , mins]"/>
 				</include>
-				<!--seaasons-->
+				<!--seasons-->
 				<include content="CommonListLayout" condition="Container.Content(tvshows)">
 					<param name="groupid" value="4504"/>
 					<param name="listid" value="4505"/>
-					<param name="onup" value="4503"/>
-					<param name="ondown" value="65002"/>
+					<param name="previousitem" value="4502"/>
+					<param name="itemnumber" value="3"/>
+					<param name="firstitem" value="65002"/>
+					<param name="nextitem" value="4506"/>
 					<param name="path" value="videodb://tvshows/titles/$INFO[ListItem.DBID]/"/>
 					<param name="clickoverride" value="ClickOverride"/>
 					<param name="onclick1" value="Close"/>
@@ -319,10 +319,11 @@
 					<param name="bottomlabelprimary" value="$INFO[Container($PARAM[listid]).ListItem.Season,Season ]"/>
 				</include>
 
+<!--
 				<control type="label">
 					<font>body</font>
 					<textcolor>white</textcolor>
-					<label>$INFO[Container(505).Column]</label>
+					<label>$INFO[Container(50).CurrentItem]</label>
 				</control>
 				<control type="label">
 					<font>body</font>
@@ -334,6 +335,7 @@
 					<textcolor>white</textcolor>
 					<label>4. $INFO[Container.FolderPath]</label>
 				</control>
+			-->
 
 			</control>
 		</control>

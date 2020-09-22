@@ -22,7 +22,7 @@
 	<expression name="Video_Is_Widescreen(-1)">[String.IsEqual(ListItem(-1).VideoAspect,) | String.IsEqual(ListItem(-1).VideoAspect,1.66) | String.IsEqual(ListItem(-1).VideoAspect,1.78) | String.IsEqual(ListItem(-1).VideoAspect,1.85) | String.IsEqual(ListItem(-1).VideoAspect,2.35) | String.IsEqual(ListItem(-1).VideoAspect,2.40)]</expression>
 	<expression name="Video_Is_Widescreen">[String.IsEqual(ListItem.VideoAspect,) | String.IsEqual(ListItem.VideoAspect,1.66) | String.IsEqual(ListItem.VideoAspect,1.78) | String.IsEqual(ListItem.VideoAspect,1.85) | String.IsEqual(ListItem.VideoAspect,2.35) | String.IsEqual(ListItem.VideoAspect,2.40)]</expression>
 	<expression name="Video_Is_Widescreen(1)">[String.IsEqual(ListItem(1).VideoAspect,) | String.IsEqual(ListItem(1).VideoAspect,1.66) | String.IsEqual(ListItem(1).VideoAspect,1.78) | String.IsEqual(ListItem(1).VideoAspect,1.85) | String.IsEqual(ListItem(1).VideoAspect,2.35) | String.IsEqual(ListItem(1).VideoAspect,2.40)]</expression>
-	<expression name="OpaqueDialog_IsVisible">Window.IsVisible(movieinformation)</expression>
+	<expression name="OpaqueDialog_IsVisible">[Window.IsVisible(movieinformation) | Window.IsVisible(musicinformation)]</expression>
 	<expression name="TransparentDialog_IsVisible">[String.IsEqual(window(home).property(OptionsMenu),Active) | Window.IsVisible(contextmenu) | Window.IsVisible(shutdownmenu) | Window.IsVisible(okdialog) | Window.IsVisible(yesnodialog) | Window.IsVisible(progressdialog) | Window.IsVisible(selectdialog)]</expression>
 
   <expression name="ContainerSwitching">![[Container.Content(movies) + Control.IsVisible(951)] | [Container.Content(sets) + Control.IsVisible(952)] | [Container.Content(tvshows) + Control.IsVisible(953)] | [Container.Content(seasons) + Control.IsVisible(954)] | [Container.Content(episodes) + Control.IsVisible(955)]  | [Container.Content(episodes) + Control.IsVisible(963)]| [Container.Content(artists) + Control.IsVisible(956)] | [Container.Content(albums) + Control.IsVisible(957)] | [Container.Content(songs) + Control.IsVisible(958)] | [[Container.Content(files) | Container.Content(genres) | Container.Content(years) | Container.Content(playlists) | Container.Content(plugins) | Container.Content(studios) | Container.Content(directors) | Container.Content(tags) | Container.Content(countries) | Container.Content(roles) | Container.Content(images) | Container.Content(sources)] + Control.IsVisible(959)] | [Container.Content(actors) + Control.IsVisible(960)] | [Container.Content(addons) + Control.IsVisible(961)] | [Container.Content() + Control.IsVisible(962)]]</expression>
@@ -387,6 +387,7 @@
 
   <include name="DialogBackground">
     <control type="image">
+			<visible>!$EXP[OpaqueDialog_IsVisible]</visible>
       <texture colordiffuse="$VAR[SecondaryColor]">$VAR[DialogBackgroundTexture]</texture>
     </control>
   </include>
@@ -2057,7 +2058,7 @@
 		<param name="width" default="300"/>
 		<param name="id" default=""/>
 		<param name="focusedlayout" default="false"/>
-		<param name="texture" default="$VAR[InfoScreenPosterThumb]"/>
+		<param name="texture" default="$VAR[InfoScreenPortrait]"/>
 		<param name="hiddenid" default="9700"/>
 		<definition>
 			<control type="group">
@@ -2068,13 +2069,15 @@
 				<!--Dropshadow-->
 				<control type="group">
 					<visible>$PARAM[focusedlayout]</visible>
+					<visible>!$EXP[TransparentDialog_IsVisible]</visible>
+					<include>ContentFadeAnimation</include>
 					<!--Left-->
 					<include content="DropShadow">
 						<param name="left" value="-120"/>
 						<param name="top" value="0"/>
 						<param name="width" value="120"/>
 						<param name="height" value="$PARAM[height]"/>
-						<param name="visible" value="Control.HasFocus($PARAM[id]) + Container($PARAM[id]).HasPrevious"/>
+						<param name="visible" value="Control.HasFocus($PARAM[id]) + !String.IsEqual(Container($PARAM[id]).CurrentItem,1)"/>
 						<param name="animationtype" value="Visible"/>
 						<param name="animationcondition" value="true"/>
 						<param name="animationeffect" value="fade"/>
@@ -2099,29 +2102,36 @@
 				</control>
 				<!--Thumb-->
 				<control type="group">
+					<include>FocusBounceAnimation</include>
 					<control type="image">
-						<texture diffuse="views/white_20.png">$PARAM[texture]</texture>
+						<texture colordiffuse="$VAR[DarkGreyColor]">fallback.png</texture>
 						<aspectratio>scale</aspectratio>
-						<visible>!Control.HasFocus($PARAM[id])</visible>
 					</control>
 					<control type="image">
 						<texture>$PARAM[texture]</texture>
 						<aspectratio>scale</aspectratio>
-						<visible>Control.HasFocus($PARAM[id])</visible>
+					</control>
+					<control type="image">
+						<texture colordiffuse="$VAR[SecondaryColor]">views/white_75.png</texture>
+						<aspectratio>scale</aspectratio>
+						<visible>!Control.HasFocus($PARAM[id])</visible>
 						<include>QuickContentFadeAnimation</include>
-						<include>FocusBounceAnimation</include>
 					</control>
 					<!--Frame-->
-					<control type="image">
-						<visible>$PARAM[focusedlayout]</visible>
-						<visible>Control.HasFocus($PARAM[id])</visible>
-						<include>QuickContentFadeAnimation</include>
-						<left>-10</left>
-						<right>-10</right>
-						<top>-10</top>
-						<bottom>-10</bottom>
-						<aspectratio>stretch</aspectratio>
-						<texture border="11" colordiffuse="$VAR[AccentColor]">views/border_10px.png</texture>
+					<control type="group">
+						<visible>!$EXP[TransparentDialog_IsVisible]</visible>
+						<include>ContentFadeAnimation</include>
+						<control type="image">
+							<visible>$PARAM[focusedlayout]</visible>
+							<visible>Control.HasFocus($PARAM[id])</visible>
+							<include>QuickContentFadeAnimation</include>
+							<left>-10</left>
+							<right>-10</right>
+							<top>-10</top>
+							<bottom>-10</bottom>
+							<aspectratio>stretch</aspectratio>
+							<texture border="11" colordiffuse="$VAR[AccentColor]">views/border_10px.png</texture>
+						</control>
 					</control>
 				</control>
 			</control>
@@ -2143,13 +2153,14 @@
 		<param name="groupheight" default="605"/>
 		<param name="listid" default="4503"/>
 		<param name="leftindent" default="-300"/>
-		<param name="visible" default="!Control.IsVisible(65001)"/>
+		<param name="previousitem" default="49"/>
+		<param name="itemnumber" default="2"/>
+		<param name="firstitem" default="65002"/>
+		<param name="nextitem" default="4504"/>
 		<param name="animation" default="ContentFadeAnimation"/>
-		<param name="onup" default="50"/>
-		<param name="ondown" default="65001"/>
 		<param name="dynamiccontent" default="DynamicContent"/>
 		<param name="target" default="videos"/>
-		<param name="limit" default="30"/>
+		<param name="limit" default="25"/>
 		<param name="sortby" default="year"/>
 		<param name="sortorder" default="ascending"/>
 		<param name="path" default="videodb://movies/titles/?setid=$INFO[ListItem.SetID]"/>
@@ -2159,7 +2170,7 @@
 		<param name="posters" default="true"/>
 		<param name="fanart" default="false"/>
 		<param name="hiddenid" default="9700"/>
-		<param name="texture" default="$VAR[InfoScreenPosterThumb]"/>
+		<param name="texture" default="$VAR[InfoScreenPortrait]"/>
 		<param name="toplabel" default="$INFO[ListItem.Set]"/>
 		<param name="bottomlabelprimary" default="$INFO[Container($PARAM[listid]).ListItem.Label]"/>
 		<param name="bottomlabelsecondary" default="$INFO[Container($PARAM[listid]).ListItem.Year, / ]"/>
@@ -2170,44 +2181,50 @@
 			<width>2160</width>
 			<height>$PARAM[groupheight]</height>
 			<defaultcontrol>$PARAM[listid]</defaultcontrol>
-			<visible>$PARAM[visible]</visible>
-			<include>$PARAM[animation]</include>
 			<!--Hidden label for dropshadow check-->
-			<control type="label" id="9700">
+			<control type="label" id="$PARAM[hiddenid]">
 				<label>$INFO[Container($PARAM[listid]).ListItemNoWrap(1).Label]</label>
 				<visible allowhiddenfocus="true">false</visible>
 			</control>
 			<!--Top Label-->
-			<control type="label">
-				<left>60</left>
-				<top>0</top>
-				<height>45</height>
-				<label>$PARAM[toplabel]</label>
-				<font>Dialog_Menu_Unfocused</font>
-				<textcolor>$VAR[MediumGreyColor]</textcolor>
-				<visible>!Control.HasFocus($PARAM[listid])</visible>
-			</control>
-			<control type="label">
-				<left>60</left>
-				<top>0</top>
-				<height>45</height>
-				<label>$PARAM[toplabel]</label>
-				<font>Dialog_Menu_Unfocused</font>
-				<textcolor>$VAR[PrimaryColor]</textcolor>
-				<visible>Control.HasFocus($PARAM[listid])</visible>
+			<control type="group">
+				<visible>!$EXP[TransparentDialog_IsVisible]</visible>
+				<include>ContentFadeAnimation</include>
+				<control type="label">
+					<left>60</left>
+					<top>0</top>
+					<height>45</height>
+					<label>$PARAM[toplabel]</label>
+					<font>Dialog_Menu_Unfocused</font>
+					<textcolor>$VAR[MediumGreyColor]</textcolor>
+					<visible>!Control.HasFocus($PARAM[listid])</visible>
+				</control>
+				<control type="label">
+					<left>60</left>
+					<top>0</top>
+					<height>45</height>
+					<label>$PARAM[toplabel]</label>
+					<font>Dialog_Menu_Unfocused</font>
+					<textcolor>$VAR[PrimaryColor]</textcolor>
+					<visible>Control.HasFocus($PARAM[listid])</visible>
+				</control>
 			</control>
 			<!--List-->
 			<control type="fixedlist" id="$PARAM[listid]">
 				<viewtype label="Strip">wrap</viewtype>
 				<left>$PARAM[leftindent]</left>
 				<top>60</top>
-				<onup>$PARAM[onup]</onup>
-				<ondown>$PARAM[ondown]</ondown>
+				<onup>$PARAM[previousitem]</onup>
+				<ondown condition="String.IsEqual(Container(65001).NumItems,$PARAM[itemnumber])">$PARAM[firstitem]</ondown>
+				<ondown condition="!String.IsEqual(Container(65001).NumItems,$PARAM[itemnumber])">$PARAM[nextitem]</ondown>
+				<onback>$PARAM[firstitem]</onback>
 				<pagecontrol>60</pagecontrol>
 				<preloaditems>2</preloaditems>
 				<focusposition>1</focusposition>
 				<scrolltime tween="sine" easing="inout">380</scrolltime>
 				<orientation>horizontal</orientation>
+				<visible allowhiddenfocus="true">![Control.IsVisible(65000) | Container($PARAM[listid]).IsUpdating]</visible>
+				<include>$PARAM[animation]</include>
 				<animation effect="zoom" end="80" time="380" tween="back" easing="in" reversible="true" condition="!Control.HasFocus($PARAM[listid])">Conditional</animation>
 				<include content="$PARAM[dynamiccontent]">
 					<param name="target" value="$PARAM[target]"/>
@@ -2258,6 +2275,7 @@
 			<!--Bottom Label-->
 			<control type="grouplist">
 				<visible>Control.HasFocus($PARAM[listid])</visible>
+				<visible>!$EXP[TransparentDialog_IsVisible]</visible>
 				<include>ContentFadeAnimation</include>
 				<left>60</left>
 				<bottom>0</bottom>

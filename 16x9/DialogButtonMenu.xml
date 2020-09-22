@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <window>
 	<!-- shutdownmenu -->
-	<defaultcontrol always="true">6002</defaultcontrol>
+	<defaultcontrol always="true">6001</defaultcontrol>
 	<include>TransparentDialogWindowFadeAnimation</include>
 	<controls>
 		<!-- Background -->
@@ -14,11 +14,25 @@
 					</include>
 				</control>
 
+				<!--Dummy Timer-->
+				<control type="button" id="6001">
+					<visible allowhiddenfocus="true">false</visible>
+					<onfocus>SetFocus(6002)</onfocus>
+				</control>
+				<control type="group" id="6004">
+					<visible>Control.HasFocus(6001)</visible>
+					<animation effect="slide" end="0,0" time="380" reversible="false">Hidden</animation>
+				</control>
+
 				<!--Dummy Grouplist-->
-				<include content="DummyHorizontalList">
-					<param name="dummyid" value="6003"/>
-					<param name="hiddenid" value="6002"/>
-				</include>
+				<control type="group">
+					<visible>!Control.IsVisible(6004)</visible>
+					<include>ContentFadeAnimation</include>
+					<include content="DummyHorizontalList">
+						<param name="dummyid" value="6003"/>
+						<param name="hiddenid" value="6002"/>
+					</include>
+				</control>
 
 				<!-- Hidden List-->
 				<control type="list" id="6002">
@@ -47,13 +61,14 @@
 						<item>
 							<description>Home</description>
 							<label>Home</label>
-							<onclick>Close</onclick>
+							<onclick>Dialog.Close(all)</onclick>
 							<onclick>ActivateWindow(home)</onclick>
 							<visible>!Window.IsActive(home)</visible>
 						</item>
 						<item>
 							<description>Settings</description>
 							<label>Settings</label>
+							<onclick>Dialog.Close(all)</onclick>
 							<onclick>Close</onclick>
 							<onclick>ActivateWindow(Settings)</onclick>
 							<visible>true</visible>
