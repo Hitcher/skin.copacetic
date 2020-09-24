@@ -3,7 +3,7 @@
 	<!-- movieinformation -->
 	<onload condition="Container.Content(tvshows) + String.IsEmpty(window(movieinformation).property(TVShowPath))">SetProperty(TVShowPath,videodb://tvshows/titles/$INFO[ListItem.DBID]/,movieinformation)</onload>
 	<onunload condition="!String.IsEmpty(window(movieinformation).property(TVShowPath))">ClearProperty(TVShowPath,movieinformation)</onunload>
-	<defaultcontrol always="true">64999</defaultcontrol>
+	<defaultcontrol always="true">65002</defaultcontrol>
 	<include>OpaqueDialogWindowFadeAnimation</include>
 
 	<controls>
@@ -11,16 +11,6 @@
 
 		<!--HIDDEN-->
 		<control type="group">
-
-			<!--Widget Delayed Load timer-->
-			<control type="button" id="64999">
-				<visible allowhiddenfocus="true">false</visible>
-				<onfocus>SetFocus(65002)</onfocus>
-			</control>
-			<control type="group" id="65000">
-				<visible>Control.HasFocus(64999)</visible>
-				<animation effect="slide" end="0,0" time="570" reversible="false">Hidden</animation>
-			</control>
 
 			<!-- Hidden Buttons -->
 			<control type="grouplist">
@@ -67,24 +57,9 @@
 					<onfocus condition="!String.IsEqual(Container(4503).CurrentItem,1)">Control.Move(4503,1)</onfocus>
 					<onfocus condition="!String.IsEqual(Container(4505).CurrentItem,1)">Control.Move(4505,$INFO[Container(4505).CurrentItem,-])</onfocus>
 					<onfocus condition="!String.IsEqual(Container(4505).CurrentItem,1)">Control.Move(4505,1)</onfocus>
+					<onfocus condition="!String.IsEqual(Container(4507).CurrentItem,1)">Control.Move(4507,$INFO[Container(4507).CurrentItem,-])</onfocus>
+					<onfocus condition="!String.IsEqual(Container(4507).CurrentItem,1)">Control.Move(4507,1)</onfocus>
 				</control>
-			</control>
-
-			<!--Hidden Labels-->
-			<!--Cast List Dropshadow checker-->
-			<control type="label" id="9699">
-				<label>$INFO[Container(50).ListItemNoWrap(1).Label]</label>
-				<visible allowhiddenfocus="true">false</visible>
-			</control>
-			<!--First List Dropshadow checker-->
-			<control type="label" id="9700">
-				<label>$INFO[Container(4503).ListItemNoWrap(1).Label]</label>
-				<visible allowhiddenfocus="true">false</visible>
-			</control>
-			<!--Second List Dropshadow checker-->
-			<control type="label" id="9701">
-				<label>$INFO[Container(4505).ListItemNoWrap(1).Label]</label>
-				<visible allowhiddenfocus="true">false</visible>
 			</control>
 		</control>
 
@@ -98,10 +73,10 @@
 
 		<!--CONTENT-->
 		<control type="group">
-			<animation effect="slide" end="0,-1080" time="380" condition="Control.HasFocus(50) | Control.HasFocus(4503) | Control.HasFocus(4505)" reversible="true" tween="sine" easing="out" >Conditional</animation>
-			<animation effect="slide" end="0,-665" time="380" condition="Control.HasFocus(4503) | Control.HasFocus(4505)" reversible="true" tween="sine" easing="out" >Conditional</animation>
-			<animation effect="slide" end="0,-665" time="380" condition="!Container.Content(tvshows) + Control.HasFocus(4505)" reversible="true" tween="sine" easing="out" >Conditional</animation>
-			<animation effect="slide" end="0,-476" time="380" condition="Container.Content(tvshows) + Control.HasFocus(4505)" reversible="true" tween="sine" easing="out" >Conditional</animation>
+			<animation effect="slide" end="0,-1080" time="380" condition="Control.HasFocus(50) | Control.HasFocus(4503) | Control.HasFocus(4505) | Control.HasFocus(4507)" reversible="true" tween="sine" easing="out" >Conditional</animation>
+			<animation effect="slide" end="0,-665" time="380" condition="Control.HasFocus(4503) | Control.HasFocus(4505) | Control.HasFocus(4507)" reversible="true" tween="sine" easing="out" >Conditional</animation>
+			<animation effect="slide" end="0,-665" time="380" condition="Control.HasFocus(4505) | Control.HasFocus(4507)" reversible="true" tween="sine" easing="out" >Conditional</animation>
+			<animation effect="slide" end="0,-665" time="380" condition="Control.HasFocus(4507)" reversible="true" tween="sine" easing="out" >Conditional</animation>
 			<!--TOP DETAILS-->
 			<control type="group">
 				<visible>!$EXP[TransparentDialog_IsVisible]</visible>
@@ -219,7 +194,7 @@
 				<left>0</left>
 				<top>1140</top>
 				<width>2160</width>
-				<height>2160</height>
+				<height>2800</height>
 				<itemgap>60</itemgap>
 				<usecontrolcoords>true</usecontrolcoords>
 
@@ -227,7 +202,7 @@
 				<control type="list" id="65002">
 					<viewtype label="535">list</viewtype>
 					<width>600</width>
-					<onup>close</onup>
+					<onup>49</onup>
 					<ondown>49</ondown>
 					<onback>65004</onback>
 					<visible allowhiddenfocus="true">false</visible>
@@ -267,34 +242,89 @@
 				</control>
 
 				<!--Cast-->
-				<include content="CommonListLayout">
+				<include content="InfoScreen_Widget">
+					<param name="widgetname" value="Cast"/>
+					<param name="orientation" value="Poster"/>
+					<param name="customcontent" value="false"/>
 					<param name="groupid" value="49"/>
 					<param name="listid" value="50"/>
+					<param name="shadowcheckerid" value="9700"/>
 					<param name="previousitem" value="65002"/>
-					<param name="itemnumber" value="1"/>
-					<param name="firstitem" value="65002"/>
 					<param name="nextitem" value="4502"/>
-					<param name="dynamiccontent" value=""/>
-					<param name="texture" value="$INFO[ListItem.Art(thumb)]"/>
-					<param name="fallback" value="fallback.png"/>
-					<param name="hiddenid" value="9699"/>
-					<param name="toplabel" value="$INFO[ListItem.Label,, Cast]"/>
+					<param name="toplabel" value="$INFO[ListItem.Label,Cast of ]"/>
 					<param name="bottomlabelprimary" value="$INFO[Container(50).ListItem.Label]"/>
 					<param name="bottomlabelsecondary" value="$INFO[Container(50).ListItem.Label2, / ]"/>
 				</include>
 
 				<!--Movie Widgets-->
-				<include content="CommonListLayout" condition="Container.Content(movies) + !String.IsEmpty(ListItem.SetID)"/>
+				<!--More from Selected Actor-->
+				<include content="InfoScreen_Widget" condition="Container.Content(movies) + !String.IsEmpty(ListItem.Cast)">
+					<param name="widgetname" value="Actor"/>
+					<param name="orientation" value="Poster"/>
+					<param name="customcontent" value="true"/>
+					<param name="groupid" value="4502"/>
+					<param name="listid" value="4503"/>
+					<param name="shadowcheckerid" value="9702"/>
+					<param name="previousitem" value="49"/>
+					<param name="nextitem" value="4504"/>
+					<param name="toplabel" value="$INFO[Container(50).ListItem.Label,More Featuring ]"/>
+					<param name="bottomlabelprimary" value="$INFO[Container($PARAM[listid]).ListItem.Label]"/>
+					<param name="bottomlabelsecondary" value="$INFO[Container($PARAM[listid]).ListItem.Year, / ]"/>
+				</include>
+				<!--More from Set-->
+				<include content="InfoScreen_Widget" condition="Container.Content(movies) + !String.IsEmpty(ListItem.SetID)">
+					<param name="widgetname" value="MovieSets"/>
+					<param name="orientation" value="Poster"/>
+					<param name="customcontent" value="true"/>
+					<param name="groupid" value="4504"/>
+					<param name="listid" value="4505"/>
+					<param name="shadowcheckerid" value="9702"/>
+					<param name="previousitem" value="49"/>
+					<param name="nextitem" value="4506"/>
+					<param name="toplabel" value="$INFO[ListItem.Set,More from ]"/>
+					<param name="bottomlabelprimary" value="$INFO[Container($PARAM[listid]).ListItem.Label]"/>
+					<param name="bottomlabelsecondary" value="$INFO[Container($PARAM[listid]).ListItem.Year, / ]"/>
+				</include>
+				<!--More from Director-->
+				<include content="InfoScreen_Widget" condition="Container.Content(movies) + !String.IsEmpty(ListItem.Director)">
+					<param name="widgetname" value="MovieDirector"/>
+					<param name="orientation" value="Poster"/>
+					<param name="customcontent" value="true"/>
+					<param name="groupid" value="4506"/>
+					<param name="listid" value="4507"/>
+					<param name="shadowcheckerid" value="9703"/>
+					<param name="previousitem" value="4504"/>
+					<param name="nextitem" value="65002"/>
+					<param name="toplabel" value="$INFO[ListItem.Director,More Directed by ]"/>
+					<param name="bottomlabelprimary" value="$INFO[Container($PARAM[listid]).ListItem.Label]"/>
+					<param name="bottomlabelsecondary" value="$INFO[Container($PARAM[listid]).ListItem.Year, / ]"/>
+				</include>
+
+
+
+
+				<!--Cast
+				<include content="CommonListLayout" condition="Container.Content(movies)">
+					<param name="groupid" value="4504"/>
+					<param name="listid" value="4505"/>
+					<param name="previousitem" value="4502"/>
+					<param name="itemnumber" value="3"/>
+					<param name="firstitem" value="65002"/>
+					<param name="nextitem" value="4506"/>
+					<param name="path" value="videodb%3A%2F%2Fmovies%2Ftitles%2F%3Fxsp%3D%7B%22rules%22%3A%7B%22and%22%3A%5B%7B%22field%22%3A%22actor%22%2C%22operator%22%3A%22is%22%2C%22value%22%3A%5B%22%24INFO%5BContainer(50).ListItem.Label%5D%22%5D%7D%5D%7D%2C%22type%22%3A%22movies%22%7D"/>
+					<param name="hiddenid" value="9701"/>
+					<param name="toplabel" value="$INFO[Container(50).ListItem.Label,Starring ]"/>
+				</include>-->
+
 
 				<!--TVShow Widgets-->
-				<!--Next unplayed-->
+				<!--Next unplayed
 				<include content="CommonListLayout" condition="Container.Content(tvshows)">
 					<param name="groupid" value="4502"/>
 					<param name="groupheight" value="416"/>
 					<param name="listid" value="4503"/>
 					<param name="leftindent" value="-464"/>
 					<param name="path" value="videodb://tvshows/titles/$INFO[ListItem.DBID]/-1/"/>
-					<param name="clickoverride" value=""/>
 					<param name="posters" value="false"/>
 					<param name="fanart" value="true"/>
 					<param name="texture" value="$VAR[InfoScreenLandscape]"/>
@@ -302,7 +332,7 @@
 					<param name="bottomlabelprimary" value="$INFO[Container($PARAM[listid]).ListItem.Label]"/>
 					<param name="bottomlabelsecondary" value="$INFO[Container($PARAM[listid]).ListItem.Duration(mins), / , mins]"/>
 				</include>
-				<!--seasons-->
+				<!--seasons
 				<include content="CommonListLayout" condition="Container.Content(tvshows)">
 					<param name="groupid" value="4504"/>
 					<param name="listid" value="4505"/>
@@ -311,8 +341,8 @@
 					<param name="firstitem" value="65002"/>
 					<param name="nextitem" value="4506"/>
 					<param name="path" value="videodb://tvshows/titles/$INFO[ListItem.DBID]/"/>
-					<param name="clickoverride" value="ClickOverride"/>
-					<param name="onclick1" value="Close"/>
+					<param name="CustomClick" value="CustomClick"/>
+					<param name="onclick1" value="Dialog.Close(all)"/>
 					<param name="onclick2" value="ActivateWindow(videos,$INFO[window(movieinformation).property(TVShowPath)]$INFO[ListItem.Season,,/])"/>
 					<param name="hiddenid" value="9701"/>
 					<param name="toplabel" value="$INFO[ListItem.Label]"/>
