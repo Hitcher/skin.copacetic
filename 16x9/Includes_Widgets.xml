@@ -17,8 +17,8 @@
 				<height>$PARAM[height]</height>
 				<control type="button">
 					<visible allowhiddenfocus="true">false</visible>
-					<onfocus condition="Control.HasFocus(50) + !String.IsEqual(Container(4500).CurrentItem,1)">Control.Move(4500,$INFO[Container(4500).CurrentItem,-])</onfocus>
-					<onfocus condition="Control.HasFocus(50) + !String.IsEqual(Container(4500).CurrentItem,1)">Control.Move(4500,1)</onfocus>
+					<onfocus condition="Container.Content(movies) + Control.HasFocus(50) + !String.IsEqual(Container(4500).CurrentItem,1)">Control.Move(4500,$INFO[Container(4500).CurrentItem,-])</onfocus>
+					<onfocus condition="Container.Content(movies) + Control.HasFocus(50) + !String.IsEqual(Container(4500).CurrentItem,1)">Control.Move(4500,1)</onfocus>
 				</control>
 				<!--Dropshadow-->
 				<control type="group">
@@ -99,9 +99,9 @@
 	</include>
 
 	<include name="WidgetDimensions_Fanart">
-		<left>-464</left>
+		<left>-448</left>
 		<width>2384</width>
-		<height>281</height>
+		<height>272</height>
 	</include>
 
 	<include name="WidgetLayout_Poster">
@@ -135,13 +135,13 @@
 	</include>
 
 	<include name="WidgetLayout_Fanart">
-		<param name="width" default="464"/>
-		<param name="height" default="261"/>
+		<param name="width" default="448"/>
+		<param name="height" default="252"/>
 		<param name="listid" default=""/>
 		<param name="texture" default="$VAR[WidgetIcon_Fanart]"/>
 		<param name="shadowcheckerid" default=""/>
 		<definition>
-			<itemlayout width="464" height="261">
+			<itemlayout width="448" height="252">
 				<include content="WidgetLayout_Icon">
 					<param name="width" value="$PARAM[width]"/>
 					<param name="height" value="$PARAM[height]"/>
@@ -151,7 +151,7 @@
 					<param name="shadowcheckerid" value="$PARAM[shadowcheckerid]"/>
 				</include>
 			</itemlayout>
-			<focusedlayout width="464" height="261">
+			<focusedlayout width="448" height="252">
 				<include content="WidgetLayout_Icon">
 					<param name="width" value="$PARAM[width]"/>
 					<param name="height" value="$PARAM[height]"/>
@@ -210,8 +210,9 @@
 			<!--List-->
 			<control type="fixedlist" id="$PARAM[listid]">
 				<viewtype label="Strip">wrap</viewtype>
+				<visible allowhiddenfocus="true">!Control.HasFocus(65002)</visible>
 				<visible>Integer.IsGreater(Container($PARAM[listid]).NumItems,$PARAM[minimumitems]) | Container($PARAM[listid]).IsUpdating</visible>
-				<animation effect="slide" end="-60" time="380" tween="back" easing="in" reversible="true" condition="!Control.HasFocus($PARAM[listid])">Conditional</animation>
+				<animation effect="slide" end="-60" time="190" tween="sine" easing="out" reversible="true" condition="!Control.HasFocus($PARAM[listid])">Conditional</animation>
 				<include>WidgetDimensions_$PARAM[orientation]</include>
 				<onback>65002</onback>
 				<preloaditems>2</preloaditems>
@@ -227,6 +228,7 @@
 			</control>
 			<!--Bottom Label-->
 			<control type="grouplist" id="$PARAM[listid]5">
+				<visible>Integer.IsGreater(Container($PARAM[listid]).NumItems,$PARAM[minimumitems]) | Container($PARAM[listid]).IsUpdating</visible>
 				<left>60</left>
 				<height>120</height>
 				<orientation>horizontal</orientation>
@@ -263,18 +265,35 @@
 		<onclick>Dialog.Close(all)</onclick>
 		<onclick>PlayMedia($INFO[ListItem.FilenameAndPath])</onclick>
 	</include>
+
 	<include name="CustomContent_MovieSets">
 		<content target="videos" limit="20" sortby="year" sortorder="ascending">videodb://movies/titles/?setid=$INFO[ListItem.SetID]</content>
 	</include>
 	<include name="CustomAction_MovieSets">
-		<onclick>Dialog.Close(all)</onclick>
-		<onclick>ActivateWindow(movieinformation)</onclick>
-		<!-- <onclick>PlayMedia($INFO[ListItem.FilenameAndPath])</onclick> -->
+		<onclick>Container.Update(videodb://movies/titles/?xsp=%7B%22order%22%3A%7B%22direction%22%3A%22ascending%22%2C%22ignorefolders%22%3A0%2C%22method%22%3A%22sorttitle%22%7D%2C%22rules%22%3A%7B%22and%22%3A%5B%7B%22field%22%3A%22title%22%2C%22operator%22%3A%22contains%22%2C%22value%22%3A%5B%22$INFO[ListItem.Title]%22%5D%7D%5D%7D%2C%22type%22%3A%22movies%22%7D, replace)</onclick>
+		<onclick>SetFocus(65002)</onclick>
 	</include>
+
 	<include name="CustomContent_MovieDirector">
 		<content target="videos" limit="20" sortby="year" sortorder="ascending">videodb://movies/titles/?xsp=%7b%22rules%22%3a%7b%22and%22%3a%5b%7b%22field%22%3a%22director%22%2c%22operator%22%3a%22is%22%2c%22value%22%3a%5b%22$INFO[ListItem.Director]%22%5d%7d%5d%7d%2c%22type%22%3a%22movies%22%7d</content>
 	</include>
 	<include name="CustomAction_MovieDirector">
+		<onclick>Dialog.Close(all)</onclick>
+		<onclick>PlayMedia($INFO[ListItem.FilenameAndPath])</onclick>
+	</include>
+
+	<include name="CustomContent_TVUnplayed">
+		<content target="videos" limit="3" sortby="episode" sortorder="ascending">videodb://tvshows/titles/-1/-1/?xsp=%7B%22rules%22%3A%7B%22and%22%3A%5B%7B%22field%22%3A%22tvshow%22%2C%22operator%22%3A%22is%22%2C%22value%22%3A%5B%22$INFO[ListItem.TVShowTitle]%22%5D%7D%2C%7B%22field%22%3A%22playcount%22%2C%22operator%22%3A%22is%22%2C%22value%22%3A%5B%220%22%5D%7D%5D%7D%2C%22type%22%3A%22episodes%22%7D</content>
+	</include>
+	<include name="CustomAction_TVUnplayed">
+		<onclick>Dialog.Close(all)</onclick>
+		<onclick>PlayMedia($INFO[ListItem.FilenameAndPath])</onclick>
+	</include>
+
+	<include name="CustomContent_TVSeasons">
+		<content target="videos" limit="20" sortby="year" sortorder="ascending">videodb://tvshows/titles/$INFO[ListItem.DBID]/</content>
+	</include>
+	<include name="CustomAction_TVSeasons">
 		<onclick>Dialog.Close(all)</onclick>
 		<onclick>PlayMedia($INFO[ListItem.FilenameAndPath])</onclick>
 	</include>
