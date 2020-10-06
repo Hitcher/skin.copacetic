@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <window>
 	<!-- movieinformation -->
-	<onload condition="!String.IsEqual(Container(50).CurrentItem,1)">Control.Move(50,$INFO[Container(50).CurrentItem,-])</onload>
-	<onload condition="!String.IsEqual(Container(50).CurrentItem,1)">Control.Move(50,1)</onload>
+	<onload condition="String.IsEmpty(window(movieinformation).property(ContainerPath))">SetProperty(ContainerPath,$INFO[Container.FolderPath],movieinformation)</onload>
+	<onunload condition="!String.IsEmpty(window(movieinformation).property(ContainerPath))">ClearProperty(ContainerPath,movieinformation)</onunload>
 	<onload condition="!String.IsEqual(Container(4500).CurrentItem,1)">Control.Move(4500,$INFO[Container(4500).CurrentItem,-])</onload>
 	<onload condition="!String.IsEqual(Container(4500).CurrentItem,1)">Control.Move(4500,1)</onload>
 	<onload condition="!String.IsEqual(Container(4510).CurrentItem,1)">Control.Move(4510,$INFO[Container(4510).CurrentItem,-])</onload>
@@ -13,9 +13,10 @@
 	<onload condition="!String.IsEqual(Container(4530).CurrentItem,1)">Control.Move(4530,1)</onload>
 	<onload condition="!String.IsEqual(Container(4540).CurrentItem,1)">Control.Move(4540,$INFO[Container(4540).CurrentItem,-])</onload>
 	<onload condition="!String.IsEqual(Container(4540).CurrentItem,1)">Control.Move(4540,1)</onload>
+
 	<onload condition="Container.Content(tvshows) + String.IsEmpty(window(movieinformation).property(TVShowPath))">SetProperty(TVShowPath,videodb://tvshows/titles/$INFO[ListItem.DBID]/,movieinformation)</onload>
 	<onunload condition="!String.IsEmpty(window(movieinformation).property(TVShowPath))">ClearProperty(TVShowPath,movieinformation)</onunload>
-	<defaultcontrol always="true">65002</defaultcontrol>
+	<defaultcontrol always="true">65000</defaultcontrol>
 	<include>OpaqueDialogWindowFadeAnimation</include>
 
 	<controls>
@@ -23,6 +24,21 @@
 
 		<!--HIDDEN-->
 		<control type="group">
+
+			<control type="button" id="65000">
+				<visible allowhiddenfocus="true">false</visible>
+				<onfocus>SetFocus(65002)</onfocus>
+			</control>
+
+			<control type="group" id="65004">
+				<visible>Control.HasFocus(65000)</visible>
+				<animation effect="slide" end="0,0" time="760" reversible="false">Hidden</animation>
+			</control>
+
+			<control type="group" id="65006">
+				<visible>Container(50).OnNext | Container(50).OnPrevious</visible>
+				<animation effect="slide" end="0,0" time="760" reversible="false">Hidden</animation>
+			</control>
 
 			<!-- Hidden Buttons -->
 			<control type="grouplist">
@@ -60,21 +76,11 @@
 				</control>
 
 				<!--Hidden Button to reset lists before closing dialog-->
-				<control type="button" id="65004">
+				<control type="button" id="65005">
 					<visible allowhiddenfocus="true">false</visible>
 					<onfocus>Close</onfocus>
 					<onfocus condition="!String.IsEqual(Container(50).CurrentItem,1)">Control.Move(50,$INFO[Container(50).CurrentItem,-])</onfocus>
 					<onfocus condition="!String.IsEqual(Container(50).CurrentItem,1)">Control.Move(50,1)</onfocus>
-					<onfocus condition="!String.IsEqual(Container(4500).CurrentItem,1)">Control.Move(4500,$INFO[Container(4500).CurrentItem,-])</onfocus>
-					<onfocus condition="!String.IsEqual(Container(4500).CurrentItem,1)">Control.Move(4500,1)</onfocus>
-					<onfocus condition="!String.IsEqual(Container(4510).CurrentItem,1)">Control.Move(4510,$INFO[Container(4510).CurrentItem,-])</onfocus>
-					<onfocus condition="!String.IsEqual(Container(4510).CurrentItem,1)">Control.Move(4510,1)</onfocus>
-					<onfocus condition="!String.IsEqual(Container(4520).CurrentItem,1)">Control.Move(4520,$INFO[Container(4520).CurrentItem,-])</onfocus>
-					<onfocus condition="!String.IsEqual(Container(4520).CurrentItem,1)">Control.Move(4520,1)</onfocus>
-					<onfocus condition="!String.IsEqual(Container(4530).CurrentItem,1)">Control.Move(4530,$INFO[Container(4530).CurrentItem,-])</onfocus>
-					<onfocus condition="!String.IsEqual(Container(4530).CurrentItem,1)">Control.Move(4530,1)</onfocus>
-					<onfocus condition="!String.IsEqual(Container(4540).CurrentItem,1)">Control.Move(4540,$INFO[Container(4540).CurrentItem,-])</onfocus>
-					<onfocus condition="!String.IsEqual(Container(4540).CurrentItem,1)">Control.Move(4540,1)</onfocus>
 				</control>
 			</control>
 		</control>
@@ -99,7 +105,7 @@
 			<animation effect="slide" end="0,-710" time="380" condition="Control.IsVisible(4530) + String.IsEqual(Control.GetLabel(45302),Poster) + Control.HasFocus(4540)" reversible="true" tween="sine" easing="out" >Conditional</animation>
 
 			<animation effect="slide" end="0,-521" time="380" condition="Control.IsVisible(50) + String.IsEqual(Control.GetLabel(502),Fanart) + [Control.HasFocus(4500) | Control.HasFocus(4510) | Control.HasFocus(4520) | Control.HasFocus(4530) | Control.HasFocus(4540)]" reversible="true" tween="sine" easing="out" >Conditional</animation>
-			<animation effect="slide" end="0,-521" time="380" condition="Control.IsVisible(4500) + String.IsEqual(Control.GetLabel(45002),Fanart) + [Control.HasFocus(4510) | Control.HasFocus(4520) | Control.HasFocus(4530) | Control.HasFocus(4540)]" reversible="true" tween="sine" easing="out" >Conditional</animation>
+			<animation effect="slide" end="0,-521" time="380" condition="[Control.IsVisible(4500) | Control.IsVisible(65008)] + String.IsEqual(Control.GetLabel(45002),Fanart) + [Control.HasFocus(4510) | Control.HasFocus(4520) | Control.HasFocus(4530) | Control.HasFocus(4540)]" reversible="true" tween="sine" easing="out" >Conditional</animation>
 			<animation effect="slide" end="0,-521" time="380" condition="Control.IsVisible(4510) + String.IsEqual(Control.GetLabel(45102),Fanart) + [Control.HasFocus(4520) | Control.HasFocus(4530) | Control.HasFocus(4540)]" reversible="true" tween="sine" easing="out" >Conditional</animation>
 			<animation effect="slide" end="0,-521" time="380" condition="Control.IsVisible(4520) + String.IsEqual(Control.GetLabel(45202),Fanart) + [Control.HasFocus(4530) | Control.HasFocus(4540)]" reversible="true" tween="sine" easing="out" >Conditional</animation>
 			<animation effect="slide" end="0,-521" time="380" condition="Control.IsVisible(4530) + String.IsEqual(Control.GetLabel(45302),Fanart) + Control.HasFocus(4540)" reversible="true" tween="sine" easing="out" >Conditional</animation>
@@ -216,6 +222,7 @@
 
 			<!--MAIN GROUPLIST-->
 			<control type="grouplist" id="65001">
+				<visible>!Control.IsVisible(65004)</visible>
 				<orientation>vertical</orientation>
 				<align>left</align>
 				<left>0</left>
@@ -229,7 +236,7 @@
 				<control type="list" id="65002">
 					<viewtype label="535">list</viewtype>
 					<width>600</width>
-					<onback>65004</onback>
+					<onback>65005</onback>
 					<visible allowhiddenfocus="true">false</visible>
 					<orientation>horizontal</orientation>
 					<itemlayout width="100"/>
@@ -281,6 +288,7 @@
 				<!--More from Selected Actor-->
 				<include content="InfoScreen_Widget" condition="Container.Content(movies) + !String.IsEmpty(ListItem.Cast)">
 					<param name="listid" value="4500"/>
+					<param name="visible" value="!Control.IsVisible(65006)"/>
 					<param name="minimumitems" value="0"/>
 					<param name="widgetname" value="MovieActor"/>
 					<param name="orientation" value="Fanart"/>
@@ -289,6 +297,24 @@
 					<param name="bottomlabelprimary" value="$INFO[Container($PARAM[listid]).ListItem.Label]"/>
 					<param name="bottomlabelsecondary" value="$INFO[Container($PARAM[listid]).ListItem.Year, / ]"/>
 				</include>
+
+				<!--Spacer-->
+				<control type="image" id="65007">
+					<height>23</height>
+					<left>60</left>
+					<texture colordiffuse="$VAR[secondaryColor]">views/white_100.png</texture>
+					<visible>Control.IsVisible(65006)</visible>
+				</control>
+				<!--Fake spinner-->
+				<control type="image" id="65008">
+					<animation effect="rotate" start="0" end="-360" center="180,60" time="1800" loop="true" tween="cubic" easing="out" condition="true">Conditional</animation>
+					<height>369</height>
+					<left>120</left>
+					<width>120</width>
+					<texture colordiffuse="$VAR[PrimaryColor]">views/busy.png</texture>
+					<aspectratio aligny="top">keep</aspectratio>
+					<visible>Control.IsVisible(65006)</visible>
+				</control>
 
 				<!--More from Set-->
 				<include content="InfoScreen_Widget" condition="Container.Content(movies) + !String.IsEmpty(ListItem.SetID)">
@@ -335,7 +361,6 @@
 					<param name="bottomlabelprimary" value="$INFO[Container($PARAM[listid]).ListItem.Season,Season ]"/>
 					<param name="bottomlabelsecondary" value="$INFO[Container($PARAM[listid]).ListItem.Year, / ]"/>
 				</include>
--->
 
 			</control>
 		</control>
