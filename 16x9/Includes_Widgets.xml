@@ -17,8 +17,9 @@
 				<height>$PARAM[height]</height>
 				<control type="button">
 					<visible allowhiddenfocus="true">false</visible>
-					<onfocus condition="Container.Content(movies) + Control.HasFocus(50) + !String.IsEqual(Container(4500).CurrentItem,1)">Control.Move(4500,$INFO[Container(4500).CurrentItem,-])</onfocus>
-					<onfocus condition="Container.Content(movies) + Control.HasFocus(50) + !String.IsEqual(Container(4500).CurrentItem,1)">Control.Move(4500,1)</onfocus>
+					<animation effect="slide" end="0,0" time="760" reversible="false">Focus</animation>
+					<onfocus condition="Control.HasFocus(50) + !String.IsEqual(Container(4500).CurrentItem,1)">Control.Move(4500,$INFO[Container(4500).CurrentItem,-])</onfocus>
+					<onfocus condition="Control.HasFocus(50) + !String.IsEqual(Container(4500).CurrentItem,1)">Control.Move(4500,1)</onfocus>
 				</control>
 				<!--Dropshadow-->
 				<control type="group">
@@ -104,6 +105,18 @@
 		<height>272</height>
 	</include>
 
+	<include name="FakeLoaderDimensions_Poster">
+		<left>0</left>
+		<width>1920</width>
+		<height>615</height>
+	</include>
+
+	<include name="FakeLoaderDimensions_Fanart">
+		<left>0</left>
+		<width>1920</width>
+		<height>417</height>
+	</include>
+
 	<include name="WidgetLayout_Poster">
 		<param name="width" default="300"/>
 		<param name="height" default="450"/>
@@ -169,6 +182,7 @@
 		<param name="listid"/>
 		<param name="minimumitems" default="1"/>
 		<param name="visible" default="true"/>
+		<param name="fakeloader" default="false"/>
 		<param name="widgetname"/>
 		<param name="orientation" default="Poster"/>
 		<param name="customcontent"/>
@@ -207,12 +221,19 @@
 				<font>Dialog_Menu_Unfocused</font>
 				<textcolor>$VAR[WidgetUnfocusedColor]</textcolor>
 			</control>
+			<!--FakeLoader-->
+			<control type="image" id="$PARAM[listid]5">
+				<visible>!$PARAM[visible]</visible>
+				<visible>$PARAM[fakeloader]</visible>
+				<include>FakeLoaderDimensions_$PARAM[orientation]</include>
+				<texture colordiffuse="$VAR[SecondaryColor]">views/white_100.png</texture>
+			</control>
 			<!--List-->
 			<control type="fixedlist" id="$PARAM[listid]">
 				<viewtype label="Strip">wrap</viewtype>
 				<visible>$PARAM[visible]</visible>
 				<visible>Integer.IsGreater(Container($PARAM[listid]).NumItems,$PARAM[minimumitems]) | Container($PARAM[listid]).IsUpdating</visible>
-				<animation effect="slide" end="-60" time="190" tween="sine" easing="out" reversible="true" condition="!Control.HasFocus($PARAM[listid])">Conditional</animation>
+				<!-- <animation effect="slide" end="-60" time="190" tween="sine" easing="out" reversible="true" condition="!Control.HasFocus($PARAM[listid])">Conditional</animation> -->
 				<include>WidgetDimensions_$PARAM[orientation]</include>
 				<onback>65002</onback>
 				<preloaditems>2</preloaditems>
@@ -224,10 +245,11 @@
 				<include content="WidgetLayout_$PARAM[orientation]">
 					<param name="listid" value="$PARAM[listid]"/>
 					<param name="shadowcheckerid" value="$PARAM[listid]1"/>
+					<param name="texture" value="$PARAM[texture]"/>
 				</include>
 			</control>
 			<!--Bottom Label-->
-			<control type="grouplist" id="$PARAM[listid]5">
+			<control type="grouplist" id="$PARAM[listid]6">
 				<visible>$PARAM[visible]</visible>
 				<visible>Integer.IsGreater(Container($PARAM[listid]).NumItems,$PARAM[minimumitems]) | Container($PARAM[listid]).IsUpdating</visible>
 				<left>60</left>
@@ -259,10 +281,15 @@
 
 
 	<!--Custom Paths and Clicks-->
-	<include name="CustomContent_MovieActor">
-		<content target="videos" limit="20" sortby="year" sortorder="descending">videodb://movies/titles/?xsp=%7B%22rules%22%3A%7B%22and%22%3A%5B%7B%22field%22%3A%22actor%22%2C%22operator%22%3A%22is%22%2C%22value%22%3A%5B%22$INFO[Container(50).ListItem.Label]%22%5D%7D%5D%7D%2C%22type%22%3A%22movies%22%7D</content>
+	<variable name="CustomContent_Actor_Path">
+		<value condition="System.HasAddon(script.embuary.helper)">plugin://script.embuary.helper/?info=getitemsbyactor&label='$ESCINFO[Container(50).ListItem.Label]'</value>
+		<value condition="container.content(movies)">videodb://movies/titles/?xsp=%7B%22rules%22%3A%7B%22and%22%3A%5B%7B%22field%22%3A%22actor%22%2C%22operator%22%3A%22is%22%2C%22value%22%3A%5B%22$INFO[Container(50).ListItem.Label]%22%5D%7D%5D%7D%2C%22type%22%3A%22movies%22%7D</value>
+		<value condition="container.content(tvshows)">videodb://tvshows/titles/?xsp=%7B%22rules%22%3A%7B%22and%22%3A%5B%7B%22field%22%3A%22actor%22%2C%22operator%22%3A%22is%22%2C%22value%22%3A%5B%22$INFO[Container(50).ListItem.Label]%22%5D%7D%5D%7D%2C%22type%22%3A%22tvshows%22%7D</value>
+	</variable>
+	<include name="CustomContent_Actor">
+		<content target="videos" limit="20" sortby="year" sortorder="descending">$VAR[CustomContent_Actor_Path]</content>
 	</include>
-	<include name="CustomAction_MovieActor">
+	<include name="CustomAction_Actor">
 		<onclick>Container.Update(videodb://movies/titles/?xsp=%7B%22order%22%3A%7B%22direction%22%3A%22ascending%22%2C%22ignorefolders%22%3A0%2C%22method%22%3A%22sorttitle%22%7D%2C%22rules%22%3A%7B%22and%22%3A%5B%7B%22field%22%3A%22title%22%2C%22operator%22%3A%22is%22%2C%22value%22%3A%5B%22$INFO[ListItem.Title]%22%5D%7D%5D%7D%2C%22type%22%3A%22movies%22%7D)</onclick>
 		<onclick>Action(ContextMenu)</onclick>
 		<onclick>Container.Update($INFO[window(movieinformation).property(ContainerPath)],replace)</onclick>

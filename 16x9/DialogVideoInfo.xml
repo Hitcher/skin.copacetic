@@ -27,17 +27,28 @@
 
 			<control type="button" id="65000">
 				<visible allowhiddenfocus="true">false</visible>
+				<animation effect="slide" end="0,0" time="380" reversible="false">Focus</animation>
+				<onload condition="!String.IsEqual(Container(50).CurrentItem,1)">Control.Move(50,$INFO[Container(50).CurrentItem,-])</onload>
+				<onload condition="!String.IsEqual(Container(50).CurrentItem,1)">Control.Move(50,1)</onload>
 				<onfocus>SetFocus(65002)</onfocus>
 			</control>
 
+			<!--Hide Grouplist Widgets until initial load complete-->
 			<control type="group" id="65004">
 				<visible>Control.HasFocus(65000)</visible>
 				<animation effect="slide" end="0,0" time="760" reversible="false">Hidden</animation>
 			</control>
 
+			<!--Hide More Featuring Widget during Cast scroll-->
 			<control type="group" id="65006">
 				<visible>Container(50).OnNext | Container(50).OnPrevious</visible>
-				<animation effect="slide" end="0,0" time="760" reversible="false">Hidden</animation>
+				<animation effect="slide" end="0,0" time="380" reversible="false">Hidden</animation>
+			</control>
+
+			<!--Timer for Fake Spinner on More Featuring Widget during Refresh-->
+			<control type="group" id="65007">
+				<visible>Container(50).OnNext | Container(50).OnPrevious</visible>
+				<animation effect="slide" end="0,0" time="1220" reversible="false">Hidden</animation>
 			</control>
 
 			<!-- Hidden Buttons -->
@@ -99,13 +110,13 @@
 			<animation effect="slide" end="0,-1080" time="380" condition="Integer.IsGreater(Container(65001).CurrentItem,0)" reversible="true" tween="sine" easing="out" >Conditional</animation>
 
 			<animation effect="slide" end="0,-710" time="380" condition="Control.IsVisible(50) + String.IsEqual(Control.GetLabel(502),Poster) + [Control.HasFocus(4500) | Control.HasFocus(4510) | Control.HasFocus(4520) | Control.HasFocus(4530) | Control.HasFocus(4540)]" reversible="true" tween="sine" easing="out" >Conditional</animation>
-			<animation effect="slide" end="0,-710" time="380" condition="Control.IsVisible(4500) + String.IsEqual(Control.GetLabel(45002),Poster) + [Control.HasFocus(4510) | Control.HasFocus(4520) | Control.HasFocus(4530) | Control.HasFocus(4540)]" reversible="true" tween="sine" easing="out" >Conditional</animation>
+			<animation effect="slide" end="0,-710" time="380" condition="[Control.IsVisible(4500) | Control.IsVisible(45005)] + String.IsEqual(Control.GetLabel(45002),Poster) + [Control.HasFocus(4510) | Control.HasFocus(4520) | Control.HasFocus(4530) | Control.HasFocus(4540)]" reversible="true" tween="sine" easing="out" >Conditional</animation>
 			<animation effect="slide" end="0,-710" time="380" condition="Control.IsVisible(4510) + String.IsEqual(Control.GetLabel(45102),Poster) + [Control.HasFocus(4520) | Control.HasFocus(4530) | Control.HasFocus(4540)]" reversible="true" tween="sine" easing="out" >Conditional</animation>
 			<animation effect="slide" end="0,-710" time="380" condition="Control.IsVisible(4520) + String.IsEqual(Control.GetLabel(45202),Poster) + [Control.HasFocus(4530) | Control.HasFocus(4540)]" reversible="true" tween="sine" easing="out" >Conditional</animation>
 			<animation effect="slide" end="0,-710" time="380" condition="Control.IsVisible(4530) + String.IsEqual(Control.GetLabel(45302),Poster) + Control.HasFocus(4540)" reversible="true" tween="sine" easing="out" >Conditional</animation>
 
 			<animation effect="slide" end="0,-521" time="380" condition="Control.IsVisible(50) + String.IsEqual(Control.GetLabel(502),Fanart) + [Control.HasFocus(4500) | Control.HasFocus(4510) | Control.HasFocus(4520) | Control.HasFocus(4530) | Control.HasFocus(4540)]" reversible="true" tween="sine" easing="out" >Conditional</animation>
-			<animation effect="slide" end="0,-521" time="380" condition="[Control.IsVisible(4500) | Control.IsVisible(65008)] + String.IsEqual(Control.GetLabel(45002),Fanart) + [Control.HasFocus(4510) | Control.HasFocus(4520) | Control.HasFocus(4530) | Control.HasFocus(4540)]" reversible="true" tween="sine" easing="out" >Conditional</animation>
+			<animation effect="slide" end="0,-521" time="380" condition="[Control.IsVisible(4500) | Control.IsVisible(45005)] + String.IsEqual(Control.GetLabel(45002),Fanart) + [Control.HasFocus(4510) | Control.HasFocus(4520) | Control.HasFocus(4530) | Control.HasFocus(4540)]" reversible="true" tween="sine" easing="out" >Conditional</animation>
 			<animation effect="slide" end="0,-521" time="380" condition="Control.IsVisible(4510) + String.IsEqual(Control.GetLabel(45102),Fanart) + [Control.HasFocus(4520) | Control.HasFocus(4530) | Control.HasFocus(4540)]" reversible="true" tween="sine" easing="out" >Conditional</animation>
 			<animation effect="slide" end="0,-521" time="380" condition="Control.IsVisible(4520) + String.IsEqual(Control.GetLabel(45202),Fanart) + [Control.HasFocus(4530) | Control.HasFocus(4540)]" reversible="true" tween="sine" easing="out" >Conditional</animation>
 			<animation effect="slide" end="0,-521" time="380" condition="Control.IsVisible(4530) + String.IsEqual(Control.GetLabel(45302),Fanart) + Control.HasFocus(4540)" reversible="true" tween="sine" easing="out" >Conditional</animation>
@@ -284,38 +295,21 @@
 					<param name="bottomlabelsecondary" value="$INFO[Container(50).ListItem.Label2, / ]"/>
 				</include>
 
-				<!--Movie Widgets-->
 				<!--More from Selected Actor-->
-				<include content="InfoScreen_Widget" condition="Container.Content(movies) + !String.IsEmpty(ListItem.Cast)">
+				<include content="InfoScreen_Widget" condition="!String.IsEmpty(ListItem.Cast)">
 					<param name="listid" value="4500"/>
 					<param name="visible" value="!Control.IsVisible(65006)"/>
+					<param name="fakeloader" value="true"/>
 					<param name="minimumitems" value="0"/>
-					<param name="widgetname" value="MovieActor"/>
+					<param name="widgetname" value="Actor"/>
 					<param name="orientation" value="Fanart"/>
 					<param name="customcontent" value="true"/>
-					<param name="toplabel" value="$INFO[Container(50).ListItem.Label,More Featuring ]"/>
+					<param name="toplabel" value="$INFO[Container(50).ListItem.Label,More From ]"/>
 					<param name="bottomlabelprimary" value="$INFO[Container($PARAM[listid]).ListItem.Label]"/>
 					<param name="bottomlabelsecondary" value="$INFO[Container($PARAM[listid]).ListItem.Year, / ]"/>
 				</include>
 
-				<!--Spacer-->
-				<control type="image" id="65007">
-					<height>23</height>
-					<left>60</left>
-					<texture colordiffuse="$VAR[secondaryColor]">views/white_100.png</texture>
-					<visible>Control.IsVisible(65006)</visible>
-				</control>
-				<!--Fake spinner-->
-				<control type="image" id="65008">
-					<animation effect="rotate" start="0" end="-360" center="180,60" time="1800" loop="true" tween="cubic" easing="out" condition="true">Conditional</animation>
-					<height>369</height>
-					<left>120</left>
-					<width>120</width>
-					<texture colordiffuse="$VAR[PrimaryColor]">views/busy.png</texture>
-					<aspectratio aligny="top">keep</aspectratio>
-					<visible>Control.IsVisible(65006)</visible>
-				</control>
-
+				<!--Movie Widgets-->
 				<!--More from Set-->
 				<include content="InfoScreen_Widget" condition="Container.Content(movies) + !String.IsEmpty(ListItem.SetID)">
 					<param name="listid" value="4510"/>
@@ -341,10 +335,11 @@
 				<!--TVShow Widgets-->
 				<!--Next Up-->
 				<include content="InfoScreen_Widget" condition="Container.Content(tvshows) + !String.IsEqual(ListItem.Overlay,Watched)">
-					<param name="listid" value="4500"/>
+					<param name="listid" value="4510"/>
 					<param name="widgetname" value="TVUnplayed"/>
 					<param name="minimumitems" value="0"/>
 					<param name="orientation" value="Fanart"/>
+					<param name="texture" value="$VAR[WidgetIcon_Thumb]"/>
 					<param name="customcontent" value="true"/>
 					<param name="toplabel" value="Next Up"/>
 					<param name="bottomlabelprimary" value="$INFO[Container($PARAM[listid]).ListItem.Label]"/>
@@ -353,7 +348,7 @@
 
 				<!--Seasons-->
 				<include content="InfoScreen_Widget" condition="Container.Content(tvshows)">
-					<param name="listid" value="4510"/>
+					<param name="listid" value="4520"/>
 					<param name="widgetname" value="TVSeasons"/>
 					<param name="orientation" value="Poster"/>
 					<param name="customcontent" value="true"/>
@@ -363,6 +358,29 @@
 				</include>
 
 			</control>
+
+			<!--Fake spinner-->
+			<control type="group">
+				<left>0</left>
+				<top>1930</top>
+				<width>1920</width>
+				<height>272</height>
+				<visible>Control.IsVisible(65007)</visible>
+				<!--Background for Fake spinner-->
+				<control type="image">
+					<texture colordiffuse="$VAR[SecondaryColor]">views/white_100.png</texture>
+				</control>
+				<!--Fake spinner-->
+				<control type="image">
+					<animation effect="rotate" start="0" end="-360" center="284,115" time="1800" loop="true" tween="cubic" easing="out" condition="true">Conditional</animation>
+					<top>55</top>
+					<left>224</left>
+					<width>120</width>
+					<texture colordiffuse="$VAR[PrimaryColor]">views/busy.png</texture>
+					<aspectratio aligny="top">keep</aspectratio>
+				</control>
+			</control>
+
 		</control>
 
 	</controls>
