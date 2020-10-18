@@ -149,16 +149,58 @@
 			<animation effect="slide" end="0,0" time="380" reversible="false">Hidden</animation>
 		</control>
 
+		<!--Container Update Bounce Test For DialogInfo-->
+		<control type="button" id="5003">
+			<visible allowhiddenfocus="true">false</visible>
+			<onfocus condition="Container.IsUpdating">SetFocus(5004)</onfocus>
+			<onfocus condition="!Container.IsUpdating">SetFocus(50)</onfocus>
+			<onfocus condition="!Container.IsUpdating">Action(Info)</onfocus>
+		</control>
+
+		<control type="button" id="5004">
+			<visible allowhiddenfocus="true">false</visible>
+			<onfocus condition="Container.IsUpdating">SetFocus(5003)</onfocus>
+			<onfocus condition="!Container.IsUpdating">SetFocus(50)</onfocus>
+			<onfocus condition="!Container.IsUpdating">Action(Info)</onfocus>
+		</control>
+
+		<!--Container Update Bounce Test for Back to DialogInfo-->
+		<control type="button" id="5005">
+			<visible allowhiddenfocus="true">false</visible>
+			<onfocus condition="String.IsEqual(window(movieinformation).property(SentFromInfo),true) + String.IsEqual(window(movieinformation).property(Breadcrumb_Level),1)">Container.Update($INFO[window(movieinformation).property(ContainerPath_1)],replace)</onfocus>
+			<onfocus condition="String.IsEqual(window(movieinformation).property(SentFromInfo),true) + String.IsEqual(window(movieinformation).property(Breadcrumb_Level),2)">Container.Update($INFO[window(movieinformation).property(ContainerPath_2)],replace)</onfocus>
+			<onfocus condition="String.IsEqual(window(movieinformation).property(SentFromInfo),true) + String.IsEqual(window(movieinformation).property(Breadcrumb_Level),3)">Container.Update($INFO[window(movieinformation).property(ContainerPath_3)],replace)</onfocus>
+			<onfocus condition="String.IsEqual(window(movieinformation).property(SentFromInfo),true) + String.IsEqual(window(movieinformation).property(Breadcrumb_Level),4)">Container.Update($INFO[window(movieinformation).property(ContainerPath_4)],replace)</onfocus>
+			<onfocus condition="String.IsEqual(window(movieinformation).property(SentFromInfo),true) + String.IsEqual(window(movieinformation).property(Breadcrumb_Level),5)">Container.Update($INFO[window(movieinformation).property(ContainerPath_5)],replace)</onfocus>
+			<onfocus condition="String.IsEqual(window(movieinformation).property(SentFromInfo),true) + String.IsEqual(window(movieinformation).property(Breadcrumb_Level),6)">Container.Update($INFO[window(movieinformation).property(ContainerPath_6)],replace)</onfocus>
+			<onfocus condition="String.IsEqual(window(movieinformation).property(SentFromInfo),true) + String.IsEqual(window(movieinformation).property(Breadcrumb_Level),7)">Container.Update($INFO[window(movieinformation).property(ContainerPath_7)],replace)</onfocus>
+			<onfocus condition="String.IsEqual(window(movieinformation).property(SentFromInfo),true) + String.IsEqual(window(movieinformation).property(Breadcrumb_Level),8)">Container.Update($INFO[window(movieinformation).property(ContainerPath_8)],replace)</onfocus>
+			<onfocus condition="String.IsEqual(window(movieinformation).property(SentFromInfo),true) + String.IsEqual(window(movieinformation).property(Breadcrumb_Level),9)">Container.Update($INFO[window(movieinformation).property(ContainerPath_9)],replace)</onfocus>
+			<onfocus condition="String.IsEqual(window(movieinformation).property(SentFromInfo),true) + String.IsEqual(window(movieinformation).property(Breadcrumb_Level),10)">Container.Update($INFO[window(movieinformation).property(ContainerPath_10)],replace)</onfocus>
+			<onfocus condition="String.IsEqual(window(movieinformation).property(SentFromInfo),true) + String.IsEqual(window(movieinformation).property(SentFromInfo),true)">ClearProperty(SentFromInfo,movieinformation)</onfocus>
+			<onfocus condition="Container.IsUpdating">SetFocus(5006)</onfocus>
+			<onfocus condition="!Container.IsUpdating">SetFocus(50)</onfocus>
+			<onfocus condition="!Container.IsUpdating">Action(Info)</onfocus>
+		</control>
+
+		<control type="button" id="5006">
+			<visible allowhiddenfocus="true">false</visible>
+			<onfocus condition="Container.IsUpdating">SetFocus(5005)</onfocus>
+			<onfocus condition="!Container.IsUpdating">SetFocus(50)</onfocus>
+			<onfocus condition="!Container.IsUpdating">Action(Info)</onfocus>
+		</control>
+
+		<!--Background gradient for Light mode-->
+		<control type="image">
+			<visible>Skin.String(Theme,Light)</visible>
+			<aspectratio>stretch</aspectratio>
+			<texture colordiffuse="$VAR[DarkColor]">views/gradient_light-background.png</texture>
+		</control>
+
 		<!-- Main group -->
 		<control type="group">
 			<visible>!$EXP[OpaqueDialog_IsVisible]</visible>
 			<include>MyWindowFadeAnimation</include>
-			<!--Background gradient for Light mode-->
-			<control type="image">
-        <visible>Skin.String(Theme,Light)</visible>
-        <aspectratio>stretch</aspectratio>
-        <texture colordiffuse="$VAR[DarkColor]">views/gradient_light-background.png</texture>
-      </control>
 
 			<!--Viewtypes-->
 			<description>Include the following views in MyVideoNav</description>
@@ -261,6 +303,12 @@
 				<visible>$EXP[ShowcaseView_IsVisible] + $EXP[ShowcaseView_Display_IsPosters] + !$EXP[ShowcaseView_Details_Off]</visible>
 				<include>ScrollBarAnimation</include>
 			</control>
+		</control>
+
+		<control type="group">
+			<visible>Control.HasFocus(5003) | Control.HasFocus(5004) | Control.HasFocus(5005) | Control.HasFocus(5006)</visible>
+			<animation effect="fade" start="0" end="100" time="0" delay="380" reversible="false">Hidden</animation>
+			<include>CustomViewsBackground</include>
 		</control>
 
 		<!--Viewtype Options Menu-->

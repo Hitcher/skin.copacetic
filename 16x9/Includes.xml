@@ -919,7 +919,6 @@
 		<param name="animationtime" default="380"/>
 		<param name="animationtween" default="sine"/>
 		<param name="animationeasing" default="inout"/>
-		<param name="fallbackcolor" default="$VAR[AccentColor]"/>
     <param name="aspectratio" default="scale"/>
 		<param name="texture" default="views/white_100.png"/>
 		<param name="diffuse" default=""/>
@@ -947,28 +946,23 @@
         <visible>$PARAM[visible]</visible>
         <animation effect="$PARAM[animationeffect]" end="$PARAM[animationend]" condition="$PARAM[animationcondition]" time="$PARAM[animationtime]" tween="$PARAM[animationtween]" easing="$PARAM[animationeasing]" reversible="false">$PARAM[animationtype]</animation>
 				<!--Fallback-->
-				<control type="image">
-					<texture colordiffuse="$VAR[DarkGreyColor]">fallback.png</texture>
-					<aspectratio>scale</aspectratio>
-				</control>
-				<!--Fallback
-        <control type="group">
-          <visible>[[$EXP[StripView_Display_IsFanart] | $EXP[GridView_Display_IsFanart]] + String.IsEmpty(ListItem($PARAM[position]).Art(fanart)) + String.Contains(ListItem($PARAM[position]).Icon,Default)] | [[$EXP[ShowcaseView_Display_IsPosters] | $EXP[StripView_Display_IsPosters] | $EXP[GridView_Display_IsPosters]] + String.IsEmpty(ListItem($PARAM[position]).Art(poster)) + String.Contains(ListItem($PARAM[position]).Icon,Default)] | [[$EXP[ShowcaseView_Display_IsSquare] | $EXP[StripView_Display_IsSquare] | $EXP[GridView_Display_IsSquare]] + String.IsEmpty(ListItem($PARAM[position]).Art(fanart)) + String.IsEmpty(ListItem($PARAM[position]).Art(square)) + String.Contains(ListItem($PARAM[position]).Icon,Default)]</visible>
-          <control type="image">
-            <texture colordiffuse="$PARAM[fallbackcolor]">views/white_100.png</texture>
-            <aspectratio>stretch</aspectratio>
-          </control>
-          <control type="label">
-            <visible>$EXP[GridView_IsVisible] | [$EXP[ShowcaseView_IsVisible] + $EXP[ShowcaseView_Details_Off]] | [$EXP[StripView_IsVisible] + $EXP[StripView_Details_Off]]</visible>
-            <width>$PARAM[width]</width>
-            <height>$PARAM[height]</height>
-            <align>center</align>
-            <aligny>center</aligny>
-            <font>Body</font>
-            <textcolor>$VAR[LightColor]</textcolor>
-            <label>$INFO[ListItem($PARAM[position]).Label]</label>
-          </control>
-        </control>
+				<control type="group">
+					<visible>[[$EXP[StripView_Display_IsFanart] | $EXP[GridView_Display_IsFanart]] + String.IsEmpty(ListItem($PARAM[position]).Art(fanart)) + String.Contains(ListItem($PARAM[position]).Icon,Default)] | [[$EXP[ShowcaseView_Display_IsPosters] | $EXP[StripView_Display_IsPosters] | $EXP[GridView_Display_IsPosters]] + String.IsEmpty(ListItem($PARAM[position]).Art(poster)) + String.Contains(ListItem($PARAM[position]).Icon,Default)] | [[$EXP[ShowcaseView_Display_IsSquare] | $EXP[StripView_Display_IsSquare] | $EXP[GridView_Display_IsSquare]] + String.IsEmpty(ListItem($PARAM[position]).Art(fanart)) + String.IsEmpty(ListItem($PARAM[position]).Art(square)) + String.Contains(ListItem($PARAM[position]).Icon,Default)]</visible>
+					<control type="image">
+						<texture colordiffuse="$VAR[DarkGreyColor]">fallback.png</texture>
+						<aspectratio>scale</aspectratio>
+					</control>
+					<control type="label">
+						<visible>!$EXP[OpaqueDialog_IsVisible] + [[$EXP[GridView_IsVisible] + $EXP[GridView_Details_Disabled]] | [$EXP[ShowcaseView_IsVisible] + $EXP[ShowcaseView_Details_Off]] | [$EXP[StripView_IsVisible] + $EXP[StripView_Details_Off]]]</visible>
+						<width>$PARAM[width]</width>
+						<height>$PARAM[height]</height>
+						<align>center</align>
+						<aligny>center</aligny>
+						<font>Body</font>
+						<textcolor>$VAR[LightColor]</textcolor>
+						<label>$INFO[ListItem($PARAM[position]).Label]</label>
+					</control>
+			</control>
         <!--Artwork-->
         <control type="image">
 				  <texture background="true" diffuse="$PARAM[diffuse]">$VAR[Thumbnail($PARAM[position])Content]</texture>
@@ -1467,8 +1461,6 @@
   <include name="ListViewTemplate">
     <param name="id" default="50"/>
     <param name="left" default="0"/>
-    <param name="onleft" default="SetFocus(3000,0)"/>
-    <param name="onright" default="60"/>
     <param name="label" default="$VAR[Title]"/>
     <param name="unfocusedicontexture" default="views/check_unfocused.png"/>
     <param name="unfocusediconvisible" default="String.IsEqual(ListItem.Overlay,OverlayWatched.png)"/>
@@ -1482,12 +1474,18 @@
 				<top>175</top>
 				<width>1920</width>
 				<height>730</height>
-				<onleft>$PARAM[onleft]</onleft>
-				<onright>$PARAM[onright]</onright>
 				<preloaditems>2</preloaditems>
 				<pagecontrol>60</pagecontrol>
 				<focusposition>6</focusposition>
 				<orientation>vertical</orientation>
+				<ondown condition="Integer.IsGreater(Container.NumItems,1)">50</ondown>
+				<ondown condition="Integer.IsEqual(Container.NumItems,1)">SetFocus(3000,0)</ondown>
+				<onup condition="Integer.IsGreater(Container.NumItems,1)">50</onup>
+				<onup condition="Integer.IsEqual(Container.NumItems,1)">SetFocus(3000,0)</onup>
+				<onleft>SetFocus(3000,0)</onleft>
+				<onright condition="Integer.IsGreater(Container.NumItems,12)">60</onright>
+				<onright condition="Integer.IsLessOrEqual(Container.NumItems,11)">SetFocus(3000,0)</onright>
+				<onback condition="String.IsEqual(window(movieinformation).property(SentFromInfo),true)">SetFocus(5005)</onback>
 				<scrolltime tween="sine" easing="inout">380</scrolltime>
 				<!--Details visible-->
 				<itemlayout height="55" width="720" condition="$EXP[ListView_Details_Info_IsVisible] | $EXP[ListView_Display_IsThumbnails]">

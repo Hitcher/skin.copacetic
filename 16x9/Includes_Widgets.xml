@@ -15,6 +15,12 @@
 				<top>10</top>
 				<width>$PARAM[width]</width>
 				<height>$PARAM[height]</height>
+				<!--Reset list position on More Featuring... widget when navigating to Cast List or when scrolling through cast list (with delay)-->
+				<control type="button">
+					<visible allowhiddenfocus="true">false</visible>
+					<onfocus condition="Control.HasFocus(50) + !String.IsEqual(Container(4500).CurrentItem,1)">Control.Move(4500,$INFO[Container(4500).CurrentItem,-])</onfocus>
+					<onfocus condition="Control.HasFocus(50) + !String.IsEqual(Container(4500).CurrentItem,1)">Control.Move(4500,1)</onfocus>
+				</control>
 				<control type="button">
 					<visible allowhiddenfocus="true">false</visible>
 					<animation effect="slide" end="0,0" time="760" reversible="false">Focus</animation>
@@ -235,7 +241,7 @@
 				<visible>Integer.IsGreater(Container($PARAM[listid]).NumItems,$PARAM[minimumitems]) | Container($PARAM[listid]).IsUpdating</visible>
 				<!-- <animation effect="slide" end="-60" time="190" tween="sine" easing="out" reversible="true" condition="!Control.HasFocus($PARAM[listid])">Conditional</animation> -->
 				<include>WidgetDimensions_$PARAM[orientation]</include>
-				<onback>65002</onback>
+				<onback>65005</onback>
 				<preloaditems>2</preloaditems>
 				<focusposition>1</focusposition>
 				<scrolltime tween="sine" easing="inout">380</scrolltime>
@@ -279,46 +285,54 @@
 		</definition>
 	</include>
 
+	<!--Default Actions-->
+	<include name="DefaultActions">
+		<onclick condition="!String.IsEqual(ListItem.Title,window(movieinformation).property(SelectedItem))">SetProperty(Refresh,true,movieinformation)</onclick>
+		<onclick condition="!String.IsEqual(ListItem.Title,window(movieinformation).property(SelectedItem))">SetProperty(Breadcrumb_GoToNext,true,movieinformation)</onclick>
+		<onclick condition="!String.IsEqual(ListItem.Title,window(movieinformation).property(SelectedItem))">Dialog.Close(all,true)</onclick>
+		<onclick condition="!String.IsEqual(ListItem.Title,window(movieinformation).property(SelectedItem))">SetFocus(5003)</onclick>
+		<onclick condition="String.IsEqual(ListItem.Title,window(movieinformation).property(SelectedItem))">SetFocus(65002)</onclick>
+	</include>
 
 	<!--Custom Paths and Clicks-->
 	<variable name="CustomContent_Actor_Path">
 		<value condition="System.HasAddon(script.embuary.helper)">plugin://script.embuary.helper/?info=getitemsbyactor&label='$ESCINFO[Container(50).ListItem.Label]'</value>
-		<value condition="container.content(movies)">videodb://movies/titles/?xsp=%7B%22rules%22%3A%7B%22and%22%3A%5B%7B%22field%22%3A%22actor%22%2C%22operator%22%3A%22is%22%2C%22value%22%3A%5B%22$INFO[Container(50).ListItem.Label]%22%5D%7D%5D%7D%2C%22type%22%3A%22movies%22%7D</value>
 		<value condition="container.content(tvshows)">videodb://tvshows/titles/?xsp=%7B%22rules%22%3A%7B%22and%22%3A%5B%7B%22field%22%3A%22actor%22%2C%22operator%22%3A%22is%22%2C%22value%22%3A%5B%22$INFO[Container(50).ListItem.Label]%22%5D%7D%5D%7D%2C%22type%22%3A%22tvshows%22%7D</value>
+		<value>videodb://movies/titles/?xsp=%7B%22rules%22%3A%7B%22and%22%3A%5B%7B%22field%22%3A%22actor%22%2C%22operator%22%3A%22is%22%2C%22value%22%3A%5B%22$INFO[Container(50).ListItem.Label]%22%5D%7D%5D%7D%2C%22type%22%3A%22movies%22%7D</value>
 	</variable>
+
 	<include name="CustomContent_Actor">
 		<content target="videos" limit="20" sortby="year" sortorder="descending">$VAR[CustomContent_Actor_Path]</content>
 	</include>
+
 	<include name="CustomAction_Actor">
-		<onclick>Container.Update(videodb://movies/titles/?xsp=%7B%22order%22%3A%7B%22direction%22%3A%22ascending%22%2C%22ignorefolders%22%3A0%2C%22method%22%3A%22sorttitle%22%7D%2C%22rules%22%3A%7B%22and%22%3A%5B%7B%22field%22%3A%22title%22%2C%22operator%22%3A%22is%22%2C%22value%22%3A%5B%22$INFO[ListItem.Title]%22%5D%7D%5D%7D%2C%22type%22%3A%22movies%22%7D)</onclick>
-		<onclick>Action(ContextMenu)</onclick>
-		<onclick>Container.Update($INFO[window(movieinformation).property(ContainerPath)],replace)</onclick>
-		<onclick>SetFocus(65002)</onclick>
+		<onclick condition="!String.IsEqual(ListItem.Title,window(movieinformation).property(SelectedItem) + String.IsEqual(Container(4500).ListItem.DBTYPE,tvshow)">Container.Update(videodb://tvshows/titles/?xsp=%7B%22order%22%3A%7B%22direction%22%3A%22ascending%22%2C%22ignorefolders%22%3A0%2C%22method%22%3A%22sorttitle%22%7D%2C%22rules%22%3A%7B%22and%22%3A%5B%7B%22field%22%3A%22title%22%2C%22operator%22%3A%22is%22%2C%22value%22%3A%5B%22$INFO[ListItem.Title]%22%5D%7D%5D%7D%2C%22type%22%3A%22tvshows%22%7D)</onclick> -->
+		<onclick condition="!String.IsEqual(ListItem.Title,window(movieinformation).property(SelectedItem) + String.IsEqual(Container(4500).ListItem.DBTYPE,movie)">Container.Update(videodb://movies/titles/?xsp=%7B%22order%22%3A%7B%22direction%22%3A%22ascending%22%2C%22ignorefolders%22%3A0%2C%22method%22%3A%22sorttitle%22%7D%2C%22rules%22%3A%7B%22and%22%3A%5B%7B%22field%22%3A%22title%22%2C%22operator%22%3A%22is%22%2C%22value%22%3A%5B%22$INFO[ListItem.Title]%22%5D%7D%5D%7D%2C%22type%22%3A%22movies%22%7D)</onclick>
+		<include>DefaultActions</include>
 	</include>
 
 	<include name="CustomContent_MovieSets">
 		<content target="videos" limit="20" sortby="year" sortorder="ascending">videodb://movies/titles/?setid=$INFO[ListItem.SetID]</content>
 	</include>
+
 	<include name="CustomAction_MovieSets">
-		<onclick>Container.Update(videodb://movies/titles/?xsp=%7B%22order%22%3A%7B%22direction%22%3A%22ascending%22%2C%22ignorefolders%22%3A0%2C%22method%22%3A%22sorttitle%22%7D%2C%22rules%22%3A%7B%22and%22%3A%5B%7B%22field%22%3A%22title%22%2C%22operator%22%3A%22is%22%2C%22value%22%3A%5B%22$INFO[ListItem.Title]%22%5D%7D%5D%7D%2C%22type%22%3A%22movies%22%7D)</onclick>
-		<onclick>Action(ContextMenu)</onclick>
-		<onclick>Container.Update($INFO[window(movieinformation).property(ContainerPath)],replace)</onclick>
-		<onclick>SetFocus(65002)</onclick>
+		<onclick condition="!String.IsEqual(ListItem.Title,window(movieinformation).property(SelectedItem))">Container.Update(videodb://movies/titles/?xsp=%7B%22order%22%3A%7B%22direction%22%3A%22ascending%22%2C%22ignorefolders%22%3A0%2C%22method%22%3A%22sorttitle%22%7D%2C%22rules%22%3A%7B%22and%22%3A%5B%7B%22field%22%3A%22title%22%2C%22operator%22%3A%22is%22%2C%22value%22%3A%5B%22$INFO[ListItem.Title]%22%5D%7D%5D%7D%2C%22type%22%3A%22movies%22%7D)</onclick>
+		<include>DefaultActions</include>
 	</include>
 
 	<include name="CustomContent_MovieDirector">
 		<content target="videos" limit="20" sortby="year" sortorder="ascending">videodb://movies/titles/?xsp=%7b%22rules%22%3a%7b%22and%22%3a%5b%7b%22field%22%3a%22director%22%2c%22operator%22%3a%22is%22%2c%22value%22%3a%5b%22$INFO[ListItem.Director]%22%5d%7d%5d%7d%2c%22type%22%3a%22movies%22%7d</content>
 	</include>
+
 	<include name="CustomAction_MovieDirector">
-		<onclick>Container.Update(videodb://movies/titles/?xsp=%7B%22order%22%3A%7B%22direction%22%3A%22ascending%22%2C%22ignorefolders%22%3A0%2C%22method%22%3A%22sorttitle%22%7D%2C%22rules%22%3A%7B%22and%22%3A%5B%7B%22field%22%3A%22title%22%2C%22operator%22%3A%22is%22%2C%22value%22%3A%5B%22$INFO[ListItem.Title]%22%5D%7D%5D%7D%2C%22type%22%3A%22movies%22%7D)</onclick>
-		<onclick>Action(ContextMenu)</onclick>
-		<onclick>Container.Update($INFO[window(movieinformation).property(ContainerPath)],replace)</onclick>
-		<onclick>SetFocus(65002)</onclick>
+		<onclick condition="!String.IsEqual(ListItem.Title,window(movieinformation).property(SelectedItem))">Container.Update(videodb://movies/titles/?xsp=%7B%22order%22%3A%7B%22direction%22%3A%22ascending%22%2C%22ignorefolders%22%3A0%2C%22method%22%3A%22sorttitle%22%7D%2C%22rules%22%3A%7B%22and%22%3A%5B%7B%22field%22%3A%22title%22%2C%22operator%22%3A%22is%22%2C%22value%22%3A%5B%22$INFO[ListItem.Title]%22%5D%7D%5D%7D%2C%22type%22%3A%22movies%22%7D)</onclick>
+		<include>DefaultActions</include>
 	</include>
 
 	<include name="CustomContent_TVUnplayed">
 		<content target="videos" limit="3" sortby="episode" sortorder="ascending">videodb://tvshows/titles/-1/-1/?xsp=%7B%22rules%22%3A%7B%22and%22%3A%5B%7B%22field%22%3A%22tvshow%22%2C%22operator%22%3A%22is%22%2C%22value%22%3A%5B%22$INFO[ListItem.TVShowTitle]%22%5D%7D%2C%7B%22field%22%3A%22playcount%22%2C%22operator%22%3A%22is%22%2C%22value%22%3A%5B%220%22%5D%7D%5D%7D%2C%22type%22%3A%22episodes%22%7D</content>
 	</include>
+
 	<include name="CustomAction_TVUnplayed">
 		<onclick>Dialog.Close(all)</onclick>
 		<onclick>PlayMedia($INFO[ListItem.FilenameAndPath])</onclick>
@@ -327,8 +341,10 @@
 	<include name="CustomContent_TVSeasons">
 		<content target="videos" limit="20" sortby="year" sortorder="ascending">videodb://tvshows/titles/$INFO[ListItem.DBID]/</content>
 	</include>
+
 	<include name="CustomAction_TVSeasons">
 		<onclick>Dialog.Close(all)</onclick>
+		<onclick>SetProperty(SentFromInfo,true,movieinformation)</onclick>
 		<onclick>ActivateWindow(videos,$INFO[window(movieinformation).property(TVShowPath)]/$INFO[ListItem.Season]/)</onclick>
 	</include>
 
