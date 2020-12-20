@@ -304,33 +304,41 @@
 
 	<!--Title Info Label-->
 	<variable name="TitleInfo">
-		<!--  Movies (All Views): 2019 / 152 mins / Ends 14:32-->
+		<!--  Movies: 2019 / 152 mins / Ends 14:32-->
+		<value condition="Container.Content(movies) + $EXP[ListView_IsVisible] + $EXP[ListView_Display_IsThumbnails] + !String.IsEmpty(ListItem.Year)">[UPPERCASE]$INFO[ListItem.Year][/UPPERCASE]</value>
 		<value condition="Container.Content(movies) + !String.IsEmpty(ListItem.Year)">[UPPERCASE]$INFO[ListItem.Year]$INFO[ListItem.Duration(mins), / , $LOCALIZE[31138]][/UPPERCASE]</value>
 		<value condition="Container.Content(movies) + !String.IsEmpty(ListItem.Duration)">[UPPERCASE]$INFO[ListItem.Duration(mins),, $LOCALIZE[31138]][/UPPERCASE]</value>
 		<!-- Sets: 2005-2012 / 3 Movies -->
+		<value condition="ListItem.IsCollection + $EXP[ListView_IsVisible] + $EXP[ListView_Display_IsThumbnails] + !String.IsEmpty(Container(4500).ListItem(0).Year)">[UPPERCASE]$INFO[Container(4500).NumItems][/UPPERCASE]</value>
+		<value condition="ListItem.IsCollection + $EXP[ListView_IsVisible] + !String.IsEmpty(Container(4500).ListItem(0).Year)">[UPPERCASE]$INFO[Container(4500).NumItems,, Movies][/UPPERCASE]</value>
 		<value condition="ListItem.IsCollection + !String.IsEmpty(Container(4500).ListItem(0).Year)">[UPPERCASE]$INFO[Container(4500).ListItem(0).Year]$INFO[Container(4500).ListItem(-1).Year,-]$INFO[Container(4500).NumItems, / , Movies][/UPPERCASE]</value>
 		<value condition="ListItem.IsCollection + !String.IsEmpty(Container(4500).NumItems)">[UPPERCASE]$INFO[Container(4500).NumItems,, Movies][/UPPERCASE]</value>
-		<!-- TV Shows (Views 505): 2019 / 5 Seasons -->
+		<!-- TV Shows (Remaining Views): 2019 / 5 Seasons / 7/8 Watched-->
+		<value condition="Container.Content(tvshows) + $EXP[ListView_IsVisible] + $EXP[ListView_Display_IsThumbnails] + !String.IsEmpty(ListItem.Year)">[UPPERCASE]$INFO[ListItem.Year][/UPPERCASE]</value>
+		<value condition="Container.Content(tvshows) + $EXP[ListView_IsVisible] + !String.IsEmpty(ListItem.Year)">[UPPERCASE]$INFO[ListItem.Year]$INFO[ListItem.Property(TotalSeasons), / , ]$VAR[SeasonsLabel][/UPPERCASE]</value>
 		<value condition="Container.Content(tvshows) + $EXP[GridView_IsVisible] + !String.IsEmpty(ListItem.Year)">[UPPERCASE]$INFO[ListItem.Year]$INFO[ListItem.Property(TotalSeasons), / , ]$VAR[SeasonsLabel][/UPPERCASE]</value>
 		<value condition="Container.Content(tvshows) + $EXP[GridView_IsVisible] + !String.IsEmpty(ListItem.Property(TotalSeasons))">[UPPERCASE]$INFO[ListItem.Property(TotalSeasons),, ]$VAR[SeasonsLabel][/UPPERCASE]</value>
-		<!-- TV Shows (Remaining Views): 2019 / 5 Seasons / 7/8 Watched-->
 		<value condition="Container.Content(tvshows) + !String.IsEmpty(ListItem.Year)">[UPPERCASE]$INFO[ListItem.Year]$INFO[ListItem.Property(TotalSeasons), / , ]$VAR[SeasonsLabel]$INFO[ListItem.Property(WatchedEpisodes), / ,/]$INFO[ListItem.Property(NumEpisodes),, $LOCALIZE[32001]][/UPPERCASE]</value>
 		<value condition="Container.Content(tvshows) + !String.IsEmpty(ListItem.Property(TotalSeasons))">[UPPERCASE]$INFO[ListItem.Property(TotalSeasons),, ]$VAR[SeasonsLabel]$INFO[ListItem.Property(WatchedEpisodes), / ,/]$INFO[ListItem.Property(NumEpisodes),, $LOCALIZE[32001]][/UPPERCASE]</value>
 		<value condition="Container.Content(tvshows) + !String.IsEmpty(ListItem.Property(WatchedEpisodes))">[UPPERCASE]$INFO[ListItem.Property(WatchedEpisodes),,/]$INFO[ListItem.Property(NumEpisodes),, $LOCALIZE[32001]][/UPPERCASE]</value>
 		<!-- Seasons: 2019 / 0/9 Watched -->
+		<value condition="Container.Content(seasons) + $EXP[ListView_IsVisible] + $EXP[ListView_Display_IsThumbnails] + !String.IsEmpty(ListItem.Year)">[UPPERCASE]$INFO[ListItem.Year][/UPPERCASE]</value>
 		<value condition="Container.Content(seasons) + !String.IsEmpty(ListItem.Year)">[UPPERCASE]$INFO[ListItem.Year][/UPPERCASE]$INFO[ListItem.Property(WatchedEpisodes), / ,/]$INFO[ListItem.Property(NumEpisodes),, ]$LOCALIZE[32001]</value>
 		<value condition="Container.Content(seasons) + !String.IsEmpty(ListItem.Property(WatchedEpisodes))">[UPPERCASE]$INFO[ListItem.Property(WatchedEpisodes),,/]$INFO[ListItem.Property(NumEpisodes),, ]$LOCALIZE[32001][/UPPERCASE]</value>
-		<!--Episodes (50,501,502,504): 1x01 / Legion / 42 mins / -->
-		<value condition="Container.Content(episodes) + $EXP[ListView_IsVisible] + $EXP[ListView_Display_IsThumbnails] + !String.IsEmpty(ListItem.TVShowTitle) + !Integer.IsGreater(ListItem.Episode,9)">[UPPERCASE]$INFO[ListItem.TVShowTitle][/UPPERCASE][CR]$INFO[ListItem.Season]$INFO[ListItem.Episode,x0][UPPERCASE]$INFO[ListItem.Year, / ]$INFO[ListItem.Duration(mins), / , $LOCALIZE[31138]][/UPPERCASE]</value>
-		<value condition="Container.Content(episodes) + $EXP[ListView_IsVisible] + $EXP[ListView_Display_IsThumbnails] + !String.IsEmpty(ListItem.TVShowTitle)">[UPPERCASE]$INFO[ListItem.TVShowTitle][/UPPERCASE][CR]$INFO[ListItem.Season]$INFO[ListItem.Episode,x][UPPERCASE]$INFO[ListItem.Year, / ]$INFO[ListItem.Duration(mins), / , $LOCALIZE[31138]][/UPPERCASE]</value>
+		<!--Episodes: 1x01 / Legion / 42 mins / -->
+		<value condition="Container.Content(episodes) + $EXP[ListView_IsVisible] + $EXP[ListView_Display_IsThumbnails] + !String.IsEmpty(ListItem.TVShowTitle) + !Integer.IsGreater(ListItem.Episode,9)">$INFO[ListItem.Season]$INFO[ListItem.Episode,x0]</value>
+		<value condition="Container.Content(episodes) + $EXP[ListView_IsVisible] + $EXP[ListView_Display_IsThumbnails] + !String.IsEmpty(ListItem.TVShowTitle)">$INFO[ListItem.Season]$INFO[ListItem.Episode,x]</value>
+		<value condition="Container.Content(episodes) + $EXP[ListView_IsVisible] + $EXP[ListView_Display_IsBackground] + !String.IsEmpty(ListItem.TVShowTitle) + !Integer.IsGreater(ListItem.Episode,9)">$INFO[ListItem.Season]$INFO[ListItem.Episode,x0]$INFO[ListItem.Year, / ][UPPERCASE]$INFO[ListItem.Duration(mins), / , $LOCALIZE[31138]][/UPPERCASE]</value>
+		<value condition="Container.Content(episodes) + $EXP[ListView_IsVisible] + $EXP[ListView_Display_IsBackground] + !String.IsEmpty(ListItem.TVShowTitle)">$INFO[ListItem.Season]$INFO[ListItem.Episode,x]$INFO[ListItem.Year, / ][UPPERCASE]$INFO[ListItem.Duration(mins), / , $LOCALIZE[31138]][/UPPERCASE]</value>
 		<value condition="Container.Content(episodes) + !$EXP[GridView_IsVisible] + !String.IsEmpty(ListItem.TVShowTitle) + !Integer.IsGreater(ListItem.Episode,9)">[UPPERCASE]$INFO[ListItem.TVShowTitle][/UPPERCASE]$INFO[ListItem.Season, / ]$INFO[ListItem.Episode,x0][UPPERCASE]$INFO[ListItem.Year, / ]$INFO[ListItem.Duration(mins), / , $LOCALIZE[31138]][/UPPERCASE]</value>
-		<value condition="Container.Content(episodes) + !$EXP[GridView_IsVisible] + !String.IsEmpty(ListItem.TVShowTitle)">[UPPERCAE]$INFO[ListItem.TVShowTitle][/UPPERCASE]$INFO[ListItem.Season, / ]$INFO[ListItem.Episode,x][UPPERCASE]$INFO[ListItem.Year, / ]$INFO[ListItem.Duration(mins), / , $LOCALIZE[31138]][/UPPERCASE]</value>
+		<value condition="Container.Content(episodes) + !$EXP[GridView_IsVisible] + !String.IsEmpty(ListItem.TVShowTitle)">[UPPERCASE]$INFO[ListItem.TVShowTitle][/UPPERCASE]$INFO[ListItem.Season, / ]$INFO[ListItem.Episode,x][UPPERCASE]$INFO[ListItem.Year, / ]$INFO[ListItem.Duration(mins), / , $LOCALIZE[31138]][/UPPERCASE]</value>
 		<value condition="Container.Content(episodes) + !$EXP[GridView_IsVisible] + !String.IsEmpty(ListItem.Year)">[UPPERCASE]$INFO[ListItem.Year]$INFO[ListItem.Duration(mins), / , $LOCALIZE[31138]][/UPPERCASE]</value>
-		<value condition="Container.Content(episodes) + !$EXP[GridView_IsVisible] + !String.IsEmpty(ListItem.Duration)">[UPPERCASE]$INFO[ListItem.Duration(mins),, $LOCALIZE[31138]][/UPPERCASE]</value>
-		<!--Episodes (500,505): Legion / 42 mins / -->
+		<value condition="Container.Content(episodes) + !$EXP[GridView_IsVisible] + !String.IsEmpty(ListItem.Duration)">[UPPERCASE]$INFO[ListItem.Duration(mins),, $LOCALIZE[31138]][/UPPERCASE]</value> S
 		<value condition="Container.Content(episodes) + !String.IsEmpty(ListItem.TVShowTitle)">[UPPERCASE]$INFO[ListItem.TVShowTitle]$INFO[ListItem.Duration(mins), / , $LOCALIZE[31138]][/UPPERCASE]</value>
 		<value condition="Container.Content(episodes) + !String.IsEmpty(ListItem.Duration)">[UPPERCASE]$INFO[ListItem.Duration(mins),, $LOCALIZE[31138]][/UPPERCASE]</value>
-		<!--Artists (All Views): Jazz / 1980-90s-->
+
+		<!--Artists: Jazz / 1980-90s-->
+		<value condition="Container.Content(artists) + $EXP[ListView_IsVisible] + $EXP[ListView_Display_IsThumbnails] + !String.IsEmpty(ListItem.Property(Artist_Genre))">$INFO[ListItem.Property(Artist_YearsActive)]</value>
 		<value condition="Container.Content(artists) + !String.IsEmpty(ListItem.Property(Artist_Genre))">[UPPERCASE]$INFO[ListItem.Property(Artist_Genre)][/UPPERCASE]$INFO[ListItem.Property(Artist_YearsActive), / ]</value>
 		<value condition="Container.Content(artists) + !String.IsEmpty(ListItem.Property(Artist_YearsActive))">$INFO[ListItem.Property(Artist_YearsActive)]</value>
 		<!--Albumns: FKA Twigs / 2014-->

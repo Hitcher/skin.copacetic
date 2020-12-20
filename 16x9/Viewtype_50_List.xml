@@ -1,6 +1,141 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <includes>
-	<include name="Viewtype_50_List">
+
+	<include name="List_View">
+		<param name="id" default="50"/>
+		<param name="viewtype_label" default="List"/>
+		<definition>
+			<!--ART (Background)-->
+			<control type="group">
+				<include>FullscreenDimensions</include>
+				<visible>$EXP[$PARAM[viewtype_label]View_IsVisible] + !$EXP[ContainerSwitching] + $EXP[$PARAM[viewtype_label]View_Display_IsBackground]</visible>
+				<include>View_Transition_Fade_Animation</include>
+				<include content="ListIcon">
+					<param name="unfocusedoverlay" value="![String.IsEmpty(ListItem.Art(fanart)) + String.IsEmpty(LIstItem.Art(thumb))]"/>
+				</include>
+				<include content="ListIcon">
+					<param name="unfocusedoverlay" value="![String.IsEmpty(ListItem.Art(fanart)) + String.IsEmpty(LIstItem.Art(thumb))]"/>
+					<param name="fadetime" value="360"/>
+					<param name="visible" value="!$EXP[TransparentDialog_IsVisible]"/>
+				</include>
+			</control>
+			<!--ART (Thumbnails)-->
+			<control type="group">
+				<left>0</left>
+				<top>0</top>
+				<width>720</width>
+				<height>100%</height>
+				<visible>$EXP[$PARAM[viewtype_label]View_IsVisible] + !$EXP[ContainerSwitching] + $EXP[$PARAM[viewtype_label]View_Display_IsThumbnails]</visible>
+				<include>View_Transition_Fade_Animation</include>
+				<include content="SimpleListIcon">
+					<param name="aspectratio" value="keep"/>
+				</include>
+				<include content="SimpleListIcon">
+					<param name="aspectratio" value="keep"/>
+					<param name="fadetime" value="360"/>
+					<param name="visible" value="!$EXP[TransparentDialog_IsVisible]"/>
+				</include>
+			</control>
+			<!--DETAILS-->
+			<control type="group">
+				<visible>$EXP[$PARAM[viewtype_label]View_IsVisible] + !$EXP[ContainerSwitching]</visible>
+				<include>View_Transition_Content_Fade_Animation</include>
+				<control type="group">
+					<visible>![$EXP[ContentSwitching] | $EXP[TransparentDialog_IsVisible] | Control.HasFocus(60)]</visible>
+					<include>Content_Transition_Fade_Animation</include>
+					<control type="group">
+						<visible>!$EXP[ContentSwitching]</visible>
+						<include content="MediaFlags"/>
+						<include content="ProgressBar"/>
+					</control>
+					<!--DETAILS (Background)-->
+					<control type="grouplist">
+						<left>120</left>
+						<top>510</top>
+						<width>1740</width>
+						<height>60</height>
+						<itemgap>8</itemgap>
+						<orientation>horizontal</orientation>
+						<usecontrolcoords>true</usecontrolcoords>
+						<visible>$EXP[$PARAM[viewtype_label]View_Display_IsBackground] + $EXP[$PARAM[viewtype_label]View_Details_Info_IsVisible] + !$EXP[ContentSwitching]</visible>
+						<!--Title Gap-->
+						<control type="label">
+							<width max="1200">auto</width>
+							<height>60</height>
+							<aligny>center</aligny>
+							<font>List_Title_Focused</font>
+							<textcolor>$VAR[Blank]</textcolor>
+							<label>$VAR[Title]</label>
+						</control>
+						<!--Abbreviated Details-->
+						<control type="label">
+							<width>480</width>
+							<top>22</top>
+							<height>35</height>
+							<font>List_Info</font>
+							<textcolor>$VAR[ListFocusColor]</textcolor>
+							<label>$VAR[TitleInfo,/ ]</label>
+							<aligny>center</aligny>
+						</control>
+					</control>
+					<!--DETAILS (Thumbnails)-->
+					<control type="grouplist">
+						<left>840</left>
+						<top>510</top>
+						<width>1020</width>
+						<height>60</height>
+						<itemgap>8</itemgap>
+						<orientation>horizontal</orientation>
+						<usecontrolcoords>true</usecontrolcoords>
+						<visible>$EXP[$PARAM[viewtype_label]View_Display_IsThumbnails] + $EXP[$PARAM[viewtype_label]View_Details_Info_IsVisible] + !$EXP[ContentSwitching]</visible>
+						<!--Title Gap-->
+						<control type="label">
+							<width max="900">auto</width>
+							<height>60</height>
+							<aligny>center</aligny>
+							<font>List_Title_Focused</font>
+							<textcolor>$VAR[Blank]</textcolor>
+							<label>$VAR[Title]</label>
+						</control>
+						<!--Abbreviated Details-->
+						<control type="label">
+							<width>120</width>
+							<top>22</top>
+							<height>35</height>
+							<font>List_Info</font>
+							<textcolor>$VAR[ListFocusColor]</textcolor>
+							<label>$VAR[TitleInfo,/ ]</label>
+							<aligny>center</aligny>
+						</control>
+					</control>
+				</control>
+			</control>
+		</definition>
+	</include>
+
+	<include name="List_Container">
+		<param name="id" default="50"/>
+		<param name="viewtype_label" default="List"/>
+		<definition>
+			<control type="group">
+				<visible>$EXP[$PARAM[viewtype_label]View_IsVisible] + !$EXP[ContainerSwitching]</visible>
+				<include>View_Transition_Content_Fade_Animation</include>
+				<control type="group">
+					<visible>![$EXP[TransparentDialog_IsVisible] | Control.HasFocus(60)]</visible>
+					<include>Content_Transition_Fade_Animation</include>
+					<animation effect="slide" end="720,0" time="0" condition="$EXP[ListView_Display_IsThumbnails]">Conditional</animation>
+					<include content="Common_List">
+						<param name="id" value="$PARAM[id]"/>
+						<param name="viewtype_label" value="$PARAM[viewtype_label]"/>
+					</include>
+				</control>
+			</control>
+		</definition>
+	</include>
+
+</includes>
+
+	<!-- <include name="Viewtype_50_List">
 		<control type="group">
 			<include>FullscreenDimensions</include>
 
@@ -144,7 +279,7 @@
 							<include>DelayedContentSwitchingAnimation</include>
 							<control type="group">
 								<visible>!$EXP[TransparentDialog_IsVisible] + !Control.HasFocus(60)</visible>
-								<include>ContentFadeAnimation</include>
+								<include>Content_Fade_Animation</include>
 								<control type="grouplist">
 									<left>120</left>
 									<top>497</top>
@@ -244,7 +379,7 @@
 							<include>DelayedContentSwitchingAnimation</include>
 							<control type="group">
 								<visible>!$EXP[TransparentDialog_IsVisible] + !Control.HasFocus(60)</visible>
-								<include>ContentFadeAnimation</include>
+								<include>Content_Fade_Animation</include>
 								<control type="group">
 									<visible>$EXP[ListView_Display_IsThumbnails]</visible>
 									<!--Posters-->
@@ -393,7 +528,7 @@
 							<include>DelayedContentSwitchingAnimation</include>
 							<control type="group">
 								<visible>!$EXP[TransparentDialog_IsVisible] + !Control.HasFocus(60)</visible>
-								<include>ContentFadeAnimation</include>
+								<include>Content_Fade_Animation</include>
 								<include>MediaFlags</include>
 								<include content="ProgressBar"/>
 							</control>
@@ -858,7 +993,7 @@
 					<include>ContainerSwitchingAnimation</include>
 					<control type="group">
 						<animation effect="slide" end="660,0" time="0" condition="$EXP[ListView_Display_IsThumbnails]">Conditional</animation>
-						<include content="ListViewTemplate"/>
+						<include content="Common_List"/>
 					</control>
 				</control>
 
@@ -874,5 +1009,4 @@
 
 			</control>
 		</control>
-	</include>
-</includes>
+	</include> -->

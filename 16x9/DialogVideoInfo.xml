@@ -36,6 +36,8 @@
 	<onload condition="String.IsEqual(window(movieinformation).property(Breadcrumb_GoToPrevious),true)">ClearProperty(Breadcrumb_GoToPrevious,movieinformation)</onload>
 	<onload condition="String.IsEqual(window(movieinformation).property(Breadcrumb_GoToNext),true)">ClearProperty(Breadcrumb_GoToNext,movieinformation)</onload>
 
+	<onload condition="!String.IsEqual(Container(65002).CurrentItem,1)">Control.Move(65002,$INFO[Container(65002).CurrentItem,-])</onload>
+	<onload condition="!String.IsEqual(Container(65002).CurrentItem,1)">Control.Move(65002,1)</onload>
 	<onload condition="!String.IsEqual(Container(4500).CurrentItem,1)">Control.Move(4500,$INFO[Container(4500).CurrentItem,-])</onload>
 	<onload condition="!String.IsEqual(Container(4500).CurrentItem,1)">Control.Move(4500,1)</onload>
 	<onload condition="!String.IsEqual(Container(4510).CurrentItem,1)">Control.Move(4510,$INFO[Container(4510).CurrentItem,-])</onload>
@@ -62,7 +64,7 @@
 
 			<control type="button" id="65000">
 				<visible allowhiddenfocus="true">false</visible>
-				<animation effect="slide" end="0,0" time="380" reversible="false">Focus</animation>
+				<animation effect="slide" end="0,0" time="360" reversible="false">Focus</animation>
 				<onfocus condition="!String.IsEqual(Container(50).CurrentItem,1)">Control.Move(50,$INFO[Container(50).CurrentItem,-])</onfocus>
 				<onfocus condition="!String.IsEqual(Container(50).CurrentItem,1)">Control.Move(50,1)</onfocus>
 				<onfocus>SetFocus(65002)</onfocus>
@@ -71,13 +73,13 @@
 			<!--Hide Grouplist Widgets until initial load complete-->
 			<control type="group" id="65004">
 				<visible>Control.HasFocus(65000)</visible>
-				<animation effect="slide" end="0,0" time="760" reversible="false">Hidden</animation>
+				<animation effect="slide" end="0,0" time="720" reversible="false">Hidden</animation>
 			</control>
 
 			<!--Hide More Featuring Widget during Cast scroll-->
 			<control type="group" id="65006">
 				<visible>Container(50).OnNext | Container(50).OnPrevious</visible>
-				<animation effect="slide" end="0,0" time="380" reversible="false">Hidden</animation>
+				<animation effect="slide" end="0,0" time="360" reversible="false">Hidden</animation>
 			</control>
 
 			<!--Timer for Fake Spinner on More Featuring Widget during Refresh-->
@@ -105,6 +107,7 @@
 					<label>$LOCALIZE[32123]</label>
 				</control>
 				<control type="button" id="99">
+					<onclick>SetFocus(65002)</onclick>
 					<onback>65002</onback>
 					<onup>65002</onup>
 					<ondown>65002</ondown>
@@ -191,47 +194,57 @@
 			<texture diffuse="views/white_20.png" background="true">$VAR[InfoScreenBackground]</texture>
 		</control>
 		<control type="image">
-			<visible>!Control.HasFocus(65002)</visible>
+			<visible>Control.HasFocus(99)</visible>
 			<include>OptionsMenuFadeAnimation</include>
 			<aspectratio>scale</aspectratio>
 			<texture diffuse="views/white_5.png" background="true">$VAR[InfoScreenBackground]</texture>
 		</control>
 
 		<!--PLOT VIEW-->
-		<control type="textbox" id="4">
+		<control type="group">
 			<visible>!$EXP[TransparentDialog_IsVisible] + Control.HasFocus(99)</visible>
-			<include>ContentFadeAnimation</include>
-			<centerleft>50%</centerleft>
-			<centertop>50%</centertop>
-			<width>1440</width>
-			<height>720</height>
-			<aligny>center</aligny>
-			<align>center</align>
-			<font>Plot</font>
-			<textcolor>$VAR[PrimaryColor]</textcolor>
+			<include>Content_Fade_Animation</include>
+			<control type="textbox" id="4">
+				<centerleft>50%</centerleft>
+				<centertop>50%</centertop>
+				<width>1440</width>
+				<height>720</height>
+				<aligny>center</aligny>
+				<align>center</align>
+				<font>Plot</font>
+				<textcolor>$VAR[PrimaryColor]</textcolor>
+			</control>
+			<control type="image">
+				<right>30</right>
+				<bottom>30</bottom>
+				<width>60</width>
+				<height>60</height>
+				<aspectratio>keep</aspectratio>
+				<texture colordiffuse="$VAR[PrimaryColor]">views/check-large_focused.png</texture>
+			</control>
 		</control>
 
-		<!--CONTENT-->
+		<!--CONTENT VIEW-->
 		<control type="group">
 
-			<animation effect="slide" end="0,-1080" time="380" condition="Integer.IsGreater(Container(65001).CurrentItem,0)" reversible="true" tween="sine" easing="out" >Conditional</animation>
+			<animation effect="slide" end="0,-1080" time="360" condition="Integer.IsGreater(Container(65001).CurrentItem,0)" reversible="true" tween="sine" easing="out" >Conditional</animation>
 
-			<animation effect="slide" end="0,-710" time="380" condition="Control.IsVisible(50) + String.IsEqual(Control.GetLabel(502),Poster) + [Control.HasFocus(4500) | Control.HasFocus(4510) | Control.HasFocus(4520) | Control.HasFocus(4530) | Control.HasFocus(4540)]" reversible="true" tween="sine" easing="out" >Conditional</animation>
-			<animation effect="slide" end="0,-710" time="380" condition="[Control.IsVisible(4500) | Control.IsVisible(45005)] + String.IsEqual(Control.GetLabel(45002),Poster) + [Control.HasFocus(4510) | Control.HasFocus(4520) | Control.HasFocus(4530) | Control.HasFocus(4540)]" reversible="true" tween="sine" easing="out" >Conditional</animation>
-			<animation effect="slide" end="0,-710" time="380" condition="Control.IsVisible(4510) + String.IsEqual(Control.GetLabel(45102),Poster) + [Control.HasFocus(4520) | Control.HasFocus(4530) | Control.HasFocus(4540)]" reversible="true" tween="sine" easing="out" >Conditional</animation>
-			<animation effect="slide" end="0,-710" time="380" condition="Control.IsVisible(4520) + String.IsEqual(Control.GetLabel(45202),Poster) + [Control.HasFocus(4530) | Control.HasFocus(4540)]" reversible="true" tween="sine" easing="out" >Conditional</animation>
-			<animation effect="slide" end="0,-710" time="380" condition="Control.IsVisible(4530) + String.IsEqual(Control.GetLabel(45302),Poster) + Control.HasFocus(4540)" reversible="true" tween="sine" easing="out" >Conditional</animation>
+			<animation effect="slide" end="0,-710" time="360" condition="Control.IsVisible(50) + String.IsEqual(Control.GetLabel(502),Poster) + [Control.HasFocus(4500) | Control.HasFocus(4510) | Control.HasFocus(4520) | Control.HasFocus(4530) | Control.HasFocus(4540)]" reversible="true" tween="sine" easing="out" >Conditional</animation>
+			<animation effect="slide" end="0,-710" time="360" condition="[Control.IsVisible(4500) | Control.IsVisible(45005)] + String.IsEqual(Control.GetLabel(45002),Poster) + [Control.HasFocus(4510) | Control.HasFocus(4520) | Control.HasFocus(4530) | Control.HasFocus(4540)]" reversible="true" tween="sine" easing="out" >Conditional</animation>
+			<animation effect="slide" end="0,-710" time="360" condition="Control.IsVisible(4510) + String.IsEqual(Control.GetLabel(45102),Poster) + [Control.HasFocus(4520) | Control.HasFocus(4530) | Control.HasFocus(4540)]" reversible="true" tween="sine" easing="out" >Conditional</animation>
+			<animation effect="slide" end="0,-710" time="360" condition="Control.IsVisible(4520) + String.IsEqual(Control.GetLabel(45202),Poster) + [Control.HasFocus(4530) | Control.HasFocus(4540)]" reversible="true" tween="sine" easing="out" >Conditional</animation>
+			<animation effect="slide" end="0,-710" time="360" condition="Control.IsVisible(4530) + String.IsEqual(Control.GetLabel(45302),Poster) + Control.HasFocus(4540)" reversible="true" tween="sine" easing="out" >Conditional</animation>
 
-			<animation effect="slide" end="0,-521" time="380" condition="Control.IsVisible(50) + String.IsEqual(Control.GetLabel(502),Fanart) + [Control.HasFocus(4500) | Control.HasFocus(4510) | Control.HasFocus(4520) | Control.HasFocus(4530) | Control.HasFocus(4540)]" reversible="true" tween="sine" easing="out" >Conditional</animation>
-			<animation effect="slide" end="0,-521" time="380" condition="[Control.IsVisible(4500) | Control.IsVisible(45005)] + String.IsEqual(Control.GetLabel(45002),Fanart) + [Control.HasFocus(4510) | Control.HasFocus(4520) | Control.HasFocus(4530) | Control.HasFocus(4540)]" reversible="true" tween="sine" easing="out" >Conditional</animation>
-			<animation effect="slide" end="0,-521" time="380" condition="Control.IsVisible(4510) + String.IsEqual(Control.GetLabel(45102),Fanart) + [Control.HasFocus(4520) | Control.HasFocus(4530) | Control.HasFocus(4540)]" reversible="true" tween="sine" easing="out" >Conditional</animation>
-			<animation effect="slide" end="0,-521" time="380" condition="Control.IsVisible(4520) + String.IsEqual(Control.GetLabel(45202),Fanart) + [Control.HasFocus(4530) | Control.HasFocus(4540)]" reversible="true" tween="sine" easing="out" >Conditional</animation>
-			<animation effect="slide" end="0,-521" time="380" condition="Control.IsVisible(4530) + String.IsEqual(Control.GetLabel(45302),Fanart) + Control.HasFocus(4540)" reversible="true" tween="sine" easing="out" >Conditional</animation>
+			<animation effect="slide" end="0,-521" time="360" condition="Control.IsVisible(50) + String.IsEqual(Control.GetLabel(502),Fanart) + [Control.HasFocus(4500) | Control.HasFocus(4510) | Control.HasFocus(4520) | Control.HasFocus(4530) | Control.HasFocus(4540)]" reversible="true" tween="sine" easing="out" >Conditional</animation>
+			<animation effect="slide" end="0,-521" time="360" condition="[Control.IsVisible(4500) | Control.IsVisible(45005)] + String.IsEqual(Control.GetLabel(45002),Fanart) + [Control.HasFocus(4510) | Control.HasFocus(4520) | Control.HasFocus(4530) | Control.HasFocus(4540)]" reversible="true" tween="sine" easing="out" >Conditional</animation>
+			<animation effect="slide" end="0,-521" time="360" condition="Control.IsVisible(4510) + String.IsEqual(Control.GetLabel(45102),Fanart) + [Control.HasFocus(4520) | Control.HasFocus(4530) | Control.HasFocus(4540)]" reversible="true" tween="sine" easing="out" >Conditional</animation>
+			<animation effect="slide" end="0,-521" time="360" condition="Control.IsVisible(4520) + String.IsEqual(Control.GetLabel(45202),Fanart) + [Control.HasFocus(4530) | Control.HasFocus(4540)]" reversible="true" tween="sine" easing="out" >Conditional</animation>
+			<animation effect="slide" end="0,-521" time="360" condition="Control.IsVisible(4530) + String.IsEqual(Control.GetLabel(45302),Fanart) + Control.HasFocus(4540)" reversible="true" tween="sine" easing="out" >Conditional</animation>
 
 			<!--TOP DETAILS-->
 			<control type="group">
 				<visible>!$EXP[TransparentDialog_IsVisible] + !Control.HasFocus(99)</visible>
-				<include>ContentFadeAnimation</include>
+				<include>Content_Fade_Animation</include>
 				<control type="grouplist">
 					<left>120</left>
 					<top>120</top>
@@ -331,8 +344,8 @@
 					<aspectratio>keep</aspectratio>
 					<visible>Control.HasFocus(65002)</visible>
 					<animation type="Visible" reversible="false">
-						<effect type="fade" start="0" end="100" time="380" tween="sine" easing="out" delay="190"/>
-						<effect type="slide" start="0,-60" end="0,0" time="760" tween="bounce" easing="out" delay="190"/>
+						<effect type="fade" start="0" end="100" time="360" tween="sine" easing="out" delay="180"/>
+						<effect type="slide" start="0,-60" end="0,0" time="720" tween="bounce" easing="out" delay="180"/>
 					</animation>
 				</control>
 
