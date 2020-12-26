@@ -9,13 +9,12 @@
 		<param name="orientation" default="horizontal"/>
 		<definition>
 			<control type="group">
-				<visible>true</visible>
 				<include content="Custom_List">
 					<param name="type" value="$PARAM[type]"/>
 					<param name="id" value="$PARAM[id]"/>
 					<param name="viewtype_label" value="$PARAM[viewtype_label]"/>
 					<param name="viewtype" value="$PARAM[viewtype]"/>
-					<param name="visible" value="true"/>
+					<param name="visible" value="$EXP[$PARAM[viewtype_label]View_Containers]"/>
 					<param name="orientation" value="$PARAM[orientation]"/>
 				</include>
 			</control>
@@ -26,38 +25,47 @@
 		<param name="id" default="502"/>
 		<param name="viewtype_label" default="Showcase"/>
 		<definition>
-			<!--ART (Poster)-->
-			<include content="Artwork_Static">
-				<param name="viewtype_label" value="Showcase"/>
-				<param name="displaytype_label" value="Posters"/>
-				<param name="itemwidth" value="720"/>
-				<param name="focuswidth" value="720"/>
-				<param name="focusbordervisible" value="$EXP[$PARAM[viewtype_label]View_Details_Off] + !Control.HasFocus(60)"/>
-				<param name="unfocusedoverlay" value="true"/>
-			</include>
-			<include content="Artwork_Transition_Slide_Showcase">
-				<param name="displaytype_label" value="Posters"/>
-				<param name="groupwidth" value="2640"/>
-				<param name="width" value="720"/>
-				<param name="2xwidth" value="1440"/>
-				<param name="3xwidth" value="2160"/>
-			</include>
-			<!--ART (Square)-->
-			<include content="Artwork_Static">
-				<param name="viewtype_label" value="Showcase"/>
-				<param name="displaytype_label" value="Square"/>
-				<param name="itemwidth" value="1080"/>
-				<param name="focuswidth" value="1080"/>
-				<param name="focusbordervisible" value="$EXP[$PARAM[viewtype_label]View_Details_Off] + !Control.HasFocus(60)"/>
-				<param name="unfocusedoverlay" value="true"/>
-			</include>
-			<include content="Artwork_Transition_Slide_Showcase">
-				<param name="displaytype_label" value="Square"/>
-				<param name="groupwidth" value="3240"/>
-				<param name="width" value="1080"/>
-				<param name="2xwidth" value="2160"/>
-				<param name="3xwidth" value="3240"/>
-			</include>
+			<control type="group">
+				<!--ART (Poster)-->
+				<include content="Artwork_Static">
+					<param name="viewtype_label" value="Showcase"/>
+					<param name="displaytype_label" value="Posters"/>
+					<param name="item_width" value="720"/>
+					<param name="focus_width" value="720"/>
+					<param name="focus_border_visible" value="$EXP[ShowcaseView_Details_Off] + !Control.HasFocus(60)"/>
+					<param name="show_gradient" value="true"/>
+					<param name="unfocused_overlay" value="true"/>
+					<param name="2x_item_width" value="1440"/>
+					<param name="2x_item_width_plus_focus_width" value="2160"/>
+					<param name="2x_item_width_minus_dropshadow_width" value="1320"/>
+					<param name="3x_item_width_plus_focus_width" value="2880"/>
+				</include>
+				<include content="Artwork_Transition_Slide">
+					<param name="displaytype_label" value="Posters"/>
+					<param name="item_width" value="720"/>
+					<param name="2x_item_width" value="1440"/>
+					<param name="3x_item_width" value="2160"/>
+				</include>
+				<!--ART (Square)-->
+				<include content="Artwork_Static">
+					<param name="viewtype_label" value="Showcase"/>
+					<param name="displaytype_label" value="Square"/>
+					<param name="item_width" value="1080"/>
+					<param name="focus_width" value="1080"/>
+					<param name="focus_border_visible" value="$EXP[ShowcaseView_Details_Off] + !Control.HasFocus(60)"/>
+					<param name="show_gradient" value="true"/>
+					<param name="unfocused_overlay" value="true"/>
+					<param name="2x_item_width" value="2160"/>
+					<param name="2x_item_width_plus_focus_width" value="3240"/>
+					<param name="2x_item_width_minus_dropshadow_width" value="2040"/>
+				</include>
+				<include content="Artwork_Transition_Slide">
+					<param name="displaytype_label" value="Square"/>
+					<param name="item_width" value="1080"/>
+					<param name="2x_item_width" value="2160"/>
+					<param name="3x_item_width" value="3240"/>
+				</include>
+			</control>
 			<!--DETAILS-->
 			<control type="group">
 				<visible>$EXP[$PARAM[viewtype_label]View_IsVisible] + !$EXP[ContainerSwitching]</visible>
@@ -67,27 +75,22 @@
 					<include>Content_Transition_Fade_Animation</include>
 					<control type="group">
 						<visible>!$EXP[ContentSwitching]</visible>
-						<control type="group">
-							<include content="ProgressBar">
-								<param name="left" value="180"/>
-							</include>
-						</control>
-						<control type="group">
-							<visible>!$EXP[ShowcaseView_Details_Off]</visible>
-							<include content="MediaFlags"/>
-							<include content="CommonDetails">
-								<param name="viewtype" value="Showcase"/>
-								<param name="left" value="960"/>
-								<param name="width" value="720"/>
-								<param name="labeltype" value="textbox"/>
-								<param name="titleheight" value="156"/>
-								<param name="titlecolor" value="$VAR[ListFocusColor]"/>
-								<param name="titlealign" value="left"/>
-								<param name="infogap" value="5"/>
-								<param name="infoheight" value="70"/>
-								<param name="plotmaxheight" value="165"/>
-							</include>
-						</control>
+						<include content="MediaFlags"/>
+						<include content="ProgressBar">
+							<param name="left" value="180"/>
+						</include>
+						<include content="CommonDetails">
+							<param name="viewtype" value="Showcase"/>
+							<param name="left" value="960"/>
+							<param name="width" value="720"/>
+							<param name="labeltype" value="textbox"/>
+							<param name="titleheight" value="156"/>
+							<param name="titlecolor" value="$VAR[ListFocusColor]"/>
+							<param name="titlealign" value="left"/>
+							<param name="infogap" value="5"/>
+							<param name="infoheight" value="70"/>
+							<param name="plotmaxheight" value="165"/>
+						</include>
 					</control>
 				</control>
 			</control>

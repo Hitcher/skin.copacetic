@@ -11,10 +11,10 @@
 				<visible>$EXP[$PARAM[viewtype_label]View_IsVisible] + $EXP[$PARAM[viewtype_label]View_Display_IsBackground] + !$EXP[ContainerSwitching]</visible>
 				<include>View_Transition_Fade_Animation</include>
 				<include content="ListIcon">
-					<param name="unfocusedoverlay" value="![String.IsEmpty(ListItem.Art(fanart)) + String.IsEmpty(LIstItem.Art(thumb))]"/>
+					<param name="unfocusedoverlay" value="true"/>
 				</include>
 				<include content="Artwork_Transition_Fade">
-					<param name="targetid" value="$PARAM[id]"/>
+					<param name="target_id" value="$PARAM[id]"/>
 					<param name="viewtype_label" value="$PARAM[viewtype_label]"/>
 				</include>
 			</control>
@@ -26,6 +26,12 @@
 				<height>100%</height>
 				<visible>$EXP[$PARAM[viewtype_label]View_IsVisible] + $EXP[$PARAM[viewtype_label]View_Display_IsThumbnails] + !$EXP[ContainerSwitching]</visible>
 				<include>View_Transition_Fade_Animation</include>
+				<!--Static/Scroll for files view-->
+				<include content="ListIcon">
+					<param name="aspectratio" value="keep"/>
+					<param name="visible" value="Container.Content(files)"/>
+					<param name="fadetime" value="360"/>
+				</include>
 				<!--Static-->
 				<control type="group">
 					<visible>!$EXP[ContentSwitching]</visible>
@@ -42,12 +48,12 @@
 					</include>
 					<include content="ListIcon">
 						<param name="aspectratio" value="keep"/>
-						<param name="visible" value="![$EXP[Poster_Containers] | $EXP[Square_Containers]]"/>
+						<param name="visible" value="![$EXP[Poster_Containers] | $EXP[Square_Containers] | Container.Content(files)]"/>
 					</include>
 				</control>
 				<!--Scrolling-->
 				<include content="Artwork_Transition_Fade">
-					<param name="targetid" value="$PARAM[id]"/>
+					<param name="target_id" value="$PARAM[id]"/>
 					<param name="viewtype_label" value="$PARAM[viewtype_label]"/>
 					<param name="aspectratio" value="scale"/>
 					<param name="showgradient" value="!Container.Content(sets)"/>
@@ -55,7 +61,7 @@
 					<param name="visible" value="$EXP[Poster_Containers]"/>
 				</include>
 				<include content="Artwork_Transition_Fade">
-					<param name="targetid" value="$PARAM[id]"/>
+					<param name="target_id" value="$PARAM[id]"/>
 					<param name="top" value="180"/>
 					<param name="height" value="720"/>
 					<param name="viewtype_label" value="$PARAM[viewtype_label]"/>
@@ -65,11 +71,11 @@
 				</include>
 				<include content="Artwork_Transition_Fade">
 					<param name="id" value="50991"/>
-					<param name="targetid" value="$PARAM[id]"/>
+					<param name="target_id" value="$PARAM[id]"/>
 					<param name="viewtype_label" value="$PARAM[viewtype_label]"/>
 					<param name="aspectratio" value="keep"/>
 					<param name="unfocusedoverlay" value="false"/>
-					<param name="visible" value="![$EXP[Poster_Containers] | $EXP[Square_Containers]]"/>
+					<param name="visible" value="![$EXP[Poster_Containers] | $EXP[Square_Containers] | Container.Content(files)]"/>
 				</include>
 			</control>
 			<!--DETAILS-->
@@ -109,16 +115,16 @@
 							<aligny>center</aligny>
 							<font>List_Title_Focused</font>
 							<textcolor>$VAR[Blank]</textcolor>
-							<label>$VAR[Title]</label>
+							<label>$VAR[Title_Label]</label>
 						</control>
 						<!--Abbreviated Details-->
 						<control type="label">
 							<width>468</width>
-							<top>25</top>
+							<top>23</top>
 							<height>35</height>
 							<font>List_Info</font>
 							<textcolor>$VAR[ListFocusColor]</textcolor>
-							<label>$VAR[TitleInfo,/ ]</label>
+							<label>$VAR[Info_Label,/ ]</label>
 							<aligny>center</aligny>
 						</control>
 					</control>
@@ -131,7 +137,7 @@
 						<itemgap>12</itemgap>
 						<orientation>horizontal</orientation>
 						<usecontrolcoords>true</usecontrolcoords>
-						<visible>$EXP[$PARAM[viewtype_label]View_Display_IsThumbnails] + $EXP[$PARAM[viewtype_label]View_Details_Info_IsVisible] + !$EXP[ContentSwitching]</visible>
+						<visible>$EXP[$PARAM[viewtype_label]View_Display_IsThumbnails] + !Container.Content(artists) + $EXP[$PARAM[viewtype_label]View_Details_Info_IsVisible] + !$EXP[ContentSwitching]</visible>
 						<!--Title Gap-->
 						<control type="label">
 							<width max="900">auto</width>
@@ -139,16 +145,16 @@
 							<aligny>center</aligny>
 							<font>List_Title_Focused</font>
 							<textcolor>$VAR[Blank]</textcolor>
-							<label>$VAR[Title]</label>
+							<label>$VAR[Title_Label]</label>
 						</control>
 						<!--Abbreviated Details-->
 						<control type="label">
 							<width>120</width>
-							<top>25</top>
+							<top>23</top>
 							<height>35</height>
 							<font>List_Info</font>
 							<textcolor>$VAR[ListFocusColor]</textcolor>
-							<label>$VAR[TitleInfo,/ ]</label>
+							<label>$VAR[Info_Label,/ ]</label>
 							<aligny>center</aligny>
 						</control>
 					</control>
