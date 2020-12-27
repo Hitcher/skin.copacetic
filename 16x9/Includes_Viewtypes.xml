@@ -94,7 +94,7 @@
 				<orientation>$PARAM[orientation]</orientation>
 				<scrolltime tween="sine" easing="inout">360</scrolltime>
 				<itemlayout height="55" width="720">
-					<include content="Common_List_Layout">
+					<include content="Common_$PARAM[viewtype_label]_Layout">
             <param name="label" value="$PARAM[label]"/>
             <param name="textcolor" value="$PARAM[textcolor]"/>
             <param name="icontop" value="-3"/>
@@ -103,9 +103,9 @@
           </include>
 				</itemlayout>
 				<!--Background + !Details-->
-				<focusedlayout height="60" width="1740" condition="$EXP[ListView_Display_IsBackground] + !$EXP[ListView_Details_Info_IsVisible]">
+				<focusedlayout height="60" width="1740" condition="$EXP[$PARAM[viewtype_label]View_Display_IsBackground] + !$EXP[$PARAM[viewtype_label]View_Details_Info_IsVisible]">
 					<include>HiddenFocusButton</include>
-					<include content="Common_List_Layout">
+					<include content="Common_$PARAM[viewtype_label]_Layout">
 						<param name="nowplayingtop" value="-30"/>
 						<param name="checktop" value="7"/>
 						<param name="checktexture" value="views/check_focused.png"/>
@@ -120,9 +120,9 @@
 					</include>
 				</focusedlayout>
 				<!--Background + Details-->
-				<focusedlayout height="60" width="1200" condition="$EXP[ListView_Display_IsBackground] + $EXP[ListView_Details_Info_IsVisible]">
+				<focusedlayout height="60" width="1200" condition="$EXP[$PARAM[viewtype_label]View_Display_IsBackground] + $EXP[$PARAM[viewtype_label]View_Details_Info_IsVisible]">
 					<include>HiddenFocusButton</include>
-					<include content="Common_List_Layout">
+					<include content="Common_$PARAM[viewtype_label]_Layout">
 						<param name="nowplayingtop" value="-30"/>
 						<param name="checktop" value="7"/>
 						<param name="checktexture" value="views/check_focused.png"/>
@@ -137,9 +137,9 @@
 					</include>
 				</focusedlayout>
 				<!--Thumbnails + !Details-->
-				<focusedlayout height="60" width="1020" condition="$EXP[ListView_Display_IsThumbnails] + !$EXP[ListView_Details_Info_IsVisible]">
+				<focusedlayout height="60" width="1020" condition="$EXP[$PARAM[viewtype_label]View_Display_IsThumbnails] + !$EXP[$PARAM[viewtype_label]View_Details_Info_IsVisible]">
 					<include>HiddenFocusButton</include>
-					<include content="Common_List_Layout">
+					<include content="Common_$PARAM[viewtype_label]_Layout">
             <param name="nowplayingtop" value="-30"/>
 						<param name="checktop" value="7"/>
 						<param name="checktexture" value="views/check_focused.png"/>
@@ -154,9 +154,9 @@
 					</include>
 				</focusedlayout>
 				<!--Thumbnails + Details-->
-				<focusedlayout height="60" width="900" condition="$EXP[ListView_Display_IsThumbnails] + $EXP[ListView_Details_Info_IsVisible]">
+				<focusedlayout height="60" width="900" condition="$EXP[$PARAM[viewtype_label]View_Display_IsThumbnails] + $EXP[$PARAM[viewtype_label]View_Details_Info_IsVisible]">
 					<include>HiddenFocusButton</include>
-					<include content="Common_List_Layout">
+					<include content="Common_$PARAM[viewtype_label]_Layout">
             <param name="nowplayingtop" value="-30"/>
 						<param name="checktop" value="7"/>
 						<param name="checktexture" value="views/check_focused.png"/>
@@ -197,6 +197,247 @@
 					<include>HiddenFocusButton</include>
 				</focusedlayout>
 				<itemlayout/>
+			</control>
+		</definition>
+	</include>
+
+	<include name="Grid_List_Item_Layout">
+		<definition>
+			<control type="group">
+				<include content="ListIcon">
+					<param name="left" value="72"/>
+					<param name="width" value="592"/>
+					<param name="height" value="333"/>
+					<param name="visible" value="$EXP[GridView_Display_IsFanart]"/>
+					<param name="showgradient" value="false"/>
+					<param name="aspectratio" value="scale"/>
+					<param name="unfocusedoverlay" value="String.IsEqual(ListItem.Overlay,OverlayWatched.png)"/>
+					<param name="unfocusedoverlaydiffuse" value="$VAR[SecondaryColor]"/>
+				</include>
+				<include content="ListIcon">
+					<param name="left" value="60"/>
+					<param name="width" value="360"/>
+					<param name="height" value="540"/>
+					<param name="visible" value="$EXP[GridView_Display_IsPosters]"/>
+					<param name="showgradient" value="false"/>
+					<param name="aspectratio" value="scale"/>
+					<param name="unfocusedoverlay" value="String.IsEqual(ListItem.Overlay,OverlayWatched.png)"/>
+					<param name="unfocusedoverlaydiffuse" value="$VAR[SecondaryColor]"/>
+				</include>
+				<include content="ListIcon">
+					<param name="left" value="60"/>
+					<param name="width" value="360"/>
+					<param name="height" value="360"/>
+					<param name="visible" value="$EXP[GridView_Display_IsSquare]"/>
+					<param name="showgradient" value="false"/>
+					<param name="aspectratio" value="scale"/>
+					<param name="unfocusedoverlay" value="String.IsEqual(ListItem.Overlay,OverlayWatched.png)"/>
+					<param name="unfocusedoverlaydiffuse" value="$VAR[SecondaryColor]"/>
+				</include>
+			</control>
+		</definition>
+	</include>
+
+	<include name="Grid_List_Focus_Layout">
+		<definition>
+			<control type="group">
+				<include>HiddenFocusButton</include>
+				<!--Dropshadow-->
+				<control type="group">
+					<visible>!$EXP[TransparentDialog_IsVisible]</visible>
+					<include>Content_Fade_Animation</include>
+					<!--Left Side-->
+					<include content="DropShadow">
+						<param name="left" value="-120"/>
+						<param name="top" value="0"/>
+						<param name="width" value="120"/>
+						<param name="height" value="100%"/>
+						<param name="visible" value="$EXP[Grid_Shadow_Left_Visible] + !$EXP[Grid_Shadow_Left_Watched]"/>
+					</include>
+					<include content="DropShadow">
+						<param name="left" value="-120"/>
+						<param name="top" value="0"/>
+						<param name="width" value="120"/>
+						<param name="height" value="100%"/>
+						<param name="colordiffuse" value="$VAR[ShadowColorWatched]"/>
+						<param name="visible" value="$EXP[Grid_Shadow_Left_Visible] + $EXP[Grid_Shadow_Left_Watched]"/>
+					</include>
+					<!--Top Left Corner-->
+					<include content="DropShadow">
+						<param name="left" value="-120"/>
+						<param name="top" value="-120"/>
+						<param name="width" value="120"/>
+						<param name="height" value="120"/>
+						<param name="texture" value="views/dropshadow_topleftcorner_120.png"/>
+						<param name="visible" value="$EXP[Grid_Shadow_Top-Left_Visible] + !$EXP[Grid_Shadow_Top-Left_Watched]"/>
+					</include>
+					<include content="DropShadow">
+						<param name="left" value="-120"/>
+						<param name="top" value="-120"/>
+						<param name="width" value="120"/>
+						<param name="height" value="120"/>
+						<param name="texture" value="views/dropshadow_topleftcorner_120.png"/>
+						<param name="colordiffuse" value="$VAR[ShadowColorWatched]"/>
+						<param name="visible" value="$EXP[Grid_Shadow_Top-Left_Visible] + $EXP[Grid_Shadow_Top-Left_Watched]"/>
+					</include>
+					<!--Top Side-->
+					<include content="DropShadow">
+						<param name="left" value="0"/>
+						<param name="top" value="-120"/>
+						<param name="width" value="100%"/>
+						<param name="height" value="120"/>
+						<param name="texture" value="views/dropshadow_top_120.png"/>
+						<param name="visible" value="$EXP[Grid_Shadow_Top_Visible] + !$EXP[Grid_Shadow_Top_Watched]"/>
+					</include>
+					<include content="DropShadow">
+						<param name="left" value="0"/>
+						<param name="top" value="-120"/>
+						<param name="width" value="100%"/>
+						<param name="height" value="120"/>
+						<param name="texture" value="views/dropshadow_top_120.png"/>
+						<param name="colordiffuse" value="$VAR[ShadowColorWatched]"/>
+						<param name="visible" value="$EXP[Grid_Shadow_Top_Visible] + $EXP[Grid_Shadow_Top_Watched]"/>
+					</include>
+					<!--Top Right Corner-->
+					<include content="DropShadow">
+						<param name="left" value="100%"/>
+						<param name="top" value="-120"/>
+						<param name="width" value="120"/>
+						<param name="height" value="120"/>
+						<param name="flipx" value="true"/>
+						<param name="texture" value="views/dropshadow_topleftcorner_120.png"/>
+						<param name="visible" value="$EXP[Grid_Shadow_Top-Right_Visible] + !$EXP[Grid_Shadow_Top-Right_Watched]"/>
+					</include>
+					<include content="DropShadow">
+						<param name="left" value="100%"/>
+						<param name="top" value="-120"/>
+						<param name="width" value="120"/>
+						<param name="height" value="120"/>
+						<param name="flipx" value="true"/>
+						<param name="texture" value="views/dropshadow_topleftcorner_120.png"/>
+						<param name="colordiffuse" value="$VAR[ShadowColorWatched]"/>
+						<param name="visible" value="$EXP[Grid_Shadow_Top-Right_Visible] + $EXP[Grid_Shadow_Top-Right_Watched]"/>
+					</include>-->
+					<!--Rigt Side-->
+					<include content="DropShadow">
+						<param name="left" value="100%"/>
+						<param name="top" value="0"/>
+						<param name="width" value="120"/>
+						<param name="height" value="100%"/>
+						<param name="flipx" value="true"/>
+						<param name="visible" value="$EXP[Grid_Shadow_Right_Visible] + !$EXP[Grid_Shadow_Right_Watched]"/>
+					</include>
+					<include content="DropShadow">
+						<param name="left" value="100%"/>
+						<param name="top" value="0"/>
+						<param name="width" value="120"/>
+						<param name="height" value="100%"/>
+						<param name="flipx" value="true"/>
+						<param name="colordiffuse" value="$VAR[ShadowColorWatched]"/>
+						<param name="visible" value="$EXP[Grid_Shadow_Right_Visible] + $EXP[Grid_Shadow_Right_Watched]"/>
+					</include>
+					<!--Bottom Right Corner-->
+					<include content="DropShadow">
+						<param name="left" value="100%"/>
+						<param name="top" value="100%"/>
+						<param name="width" value="120"/>
+						<param name="height" value="120"/>
+						<param name="flipx" value="true"/>
+						<param name="flipy" value="true"/>
+						<param name="texture" value="views/dropshadow_topleftcorner_120.png"/>
+						<param name="visible" value="$EXP[Grid_Shadow_Bottom-Right_Visible] + !$EXP[Grid_Shadow_Bottom-Right_Watched]"/>
+					</include>
+					<include content="DropShadow">
+						<param name="left" value="100%"/>
+						<param name="top" value="100%"/>
+						<param name="width" value="120"/>
+						<param name="height" value="120"/>
+						<param name="flipx" value="true"/>
+						<param name="flipy" value="true"/>
+						<param name="texture" value="views/dropshadow_topleftcorner_120.png"/>
+						<param name="colordiffuse" value="$VAR[ShadowColorWatched]"/>
+						<param name="visible" value="$EXP[Grid_Shadow_Bottom-Right_Visible] + $EXP[Grid_Shadow_Bottom-Right_Watched]"/>
+					</include>
+					<!--Bottom Side-->
+					<include content="DropShadow">
+						<param name="left" value="0"/>
+						<param name="top" value="100%"/>
+						<param name="width" value="100%"/>
+						<param name="height" value="120"/>
+						<param name="flipy" value="true"/>
+						<param name="texture" value="views/dropshadow_top_120.png"/>
+						<param name="visible" value="$EXP[Grid_Shadow_Bottom_Visible] + !$EXP[Grid_Shadow_Bottom_Watched]"/>
+					</include>
+					<include content="DropShadow">
+						<param name="left" value="0"/>
+						<param name="top" value="100%"/>
+						<param name="width" value="100%"/>
+						<param name="height" value="120"/>
+						<param name="flipy" value="true"/>
+						<param name="texture" value="views/dropshadow_top_120.png"/>
+						<param name="colordiffuse" value="$VAR[ShadowColorWatched]"/>
+						<param name="visible" value="$EXP[Grid_Shadow_Bottom_Visible] + $EXP[Grid_Shadow_Bottom_Watched]"/>
+					</include>
+					<!--Bottom Left Corner-->
+					<include content="DropShadow">
+						<param name="left" value="-120"/>
+						<param name="top" value="100%"/>
+						<param name="width" value="120"/>
+						<param name="height" value="120"/>
+						<param name="flipy" value="true"/>
+						<param name="texture" value="views/dropshadow_topleftcorner_120.png"/>
+						<param name="visible" value="$EXP[Grid_Shadow_Bottom-Left_Visible] + !$EXP[Grid_Shadow_Bottom-Left_Watched]"/>
+					</include>
+					<include content="DropShadow">
+						<param name="left" value="-120"/>
+						<param name="top" value="100%"/>
+						<param name="width" value="120"/>
+						<param name="height" value="120"/>
+						<param name="flipy" value="true"/>
+						<param name="texture" value="views/dropshadow_topleftcorner_120.png"/>
+						<param name="colordiffuse" value="$VAR[ShadowColorWatched]"/>
+						<param name="visible" value="$EXP[Grid_Shadow_Bottom-Left_Visible] + $EXP[Grid_Shadow_Bottom-Left_Watched]"/>
+					</include>
+				</control>
+				<include content="ListIcon">
+					<param name="left" value="72"/>
+					<param name="width" value="592"/>
+					<param name="height" value="333"/>
+					<param name="visible" value="$EXP[GridView_Display_IsFanart]"/>
+					<param name="showgradient" value="true"/>
+					<param name="aspectratio" value="scale"/>
+					<param name="bordervisible" value="true"/>
+					<param name="borderedge" value="-10"/>
+					<param name="bordersize" value="11"/>
+					<param name="bordercolor" value="$VAR[AccentColor]"/>
+					<param name="bordertexture" value="views/border_10px.png"/>
+				</include>
+				<include content="ListIcon">
+					<param name="left" value="60"/>
+					<param name="width" value="360"/>
+					<param name="height" value="540"/>
+					<param name="visible" value="$EXP[GridView_Display_IsPosters]"/>
+					<param name="showgradient" value="true"/>
+					<param name="aspectratio" value="scale"/>
+					<param name="bordervisible" value="true"/>
+					<param name="borderedge" value="-10"/>
+					<param name="bordersize" value="11"/>
+					<param name="bordercolor" value="$VAR[AccentColor]"/>
+					<param name="bordertexture" value="views/border_10px.png"/>
+				</include>
+				<include content="ListIcon">
+					<param name="left" value="60"/>
+					<param name="width" value="360"/>
+					<param name="height" value="360"/>
+					<param name="visible" value="$EXP[GridView_Display_IsSquare]"/>
+					<param name="showgradient" value="true"/>
+					<param name="aspectratio" value="scale"/>
+					<param name="bordervisible" value="true"/>
+					<param name="borderedge" value="-10"/>
+					<param name="bordersize" value="11"/>
+					<param name="bordercolor" value="$VAR[AccentColor]"/>
+					<param name="bordertexture" value="views/border_10px.png"/>
+				</include>
 			</control>
 		</definition>
 	</include>
@@ -255,6 +496,22 @@
 			<onright condition="Integer.IsGreater(Container.NumItems,10)">504</onright>
 			<onright condition="Integer.IsLessOrEqual(Container.NumItems,10) + Integer.IsGreater(Container.NumItems,1)">0</onright>
 			<onright condition="Integer.IsEqual(Container.NumItems,1)">SetFocus(3000,0)</onright>
+			<onback condition="String.IsEqual(window(movieinformation).property(SentFromInfo),true)">SetFocus(5005)</onback>
+		</definition>
+	</include>
+
+	<include name="Grid_Navigation">
+		<definition>
+			<onleft>SetFocus(3000,0)</onleft>
+			<onright>60</onright>
+			<onup condition="$EXP[GridView_Display_IsFanart] + Integer.IsGreater(Container.NumItems,3)">505</onup>
+			<onup condition="!$EXP[GridView_Display_IsFanart] + Integer.IsGreater(Container.NumItems,5)">505</onup>
+			<onup condition="$EXP[GridView_Display_IsFanart] + Integer.IsLessorEqual(Container.NumItems,3)">SetFocus(3000,0)</onup>
+			<onup condition="!$EXP[GridView_Display_IsFanart] + Integer.IsLessorEqual(Container.NumItems,5)">SetFocus(3000,0)</onup>
+			<ondown condition="$EXP[GridView_Display_IsFanart] + Integer.IsGreater(Container.NumItems,3)">505</ondown>
+			<ondown condition="!$EXP[GridView_Display_IsFanart] + Integer.IsGreater(Container.NumItems,5)">505</ondown>
+			<ondown condition="$EXP[GridView_Display_IsFanart] + Integer.IsLessorEqual(Container.NumItems,3)">SetFocus(3000,0)</ondown>
+			<ondown condition="!$EXP[GridView_Display_IsFanart] + Integer.IsLessorEqual(Container.NumItems,5)">SetFocus(3000,0)</ondown>
 			<onback condition="String.IsEqual(window(movieinformation).property(SentFromInfo),true)">SetFocus(5005)</onback>
 		</definition>
 	</include>
@@ -324,6 +581,7 @@
 		<param name="fadetime" default="0"/>
 		<param name="showgradient" default="false"/>
 		<param name="unfocusedoverlay" default="false"/>
+		<param name="unfocusedoverlaydiffuse" default="$VAR[DarkColor]"/>
 		<param name="unfocusedoverlayanimationtype" default=""/>
 		<param name="unfocusedoverlayanimationeffect" default=""/>
 		<param name="unfocusedoverlayanimationstart" default=""/>
@@ -332,6 +590,7 @@
 		<param name="unfocusedoverlayanimationtween" default="sine"/>
 		<param name="unfocusedoverlayanimationeasing" default="inout"/>
 		<param name="bordervisible" default="false"/>
+		<param name="borderedge" default="0"/>
 		<param name="bordersize" default="2"/>
 		<param name="bordercolor" default="$VAR[PrimaryColor]"/>
 		<param name="bordertexture" default="views/border_1px_10.png"/>
@@ -355,7 +614,7 @@
 				<control type="image">
 					<visible>$PARAM[unfocusedoverlay]</visible>
 					<animation effect="$PARAM[unfocusedoverlayanimationeffect]" start="$PARAM[unfocusedoverlayanimationstart]" end="$PARAM[unfocusedoverlayanimationend]" condition="$PARAM[unfocusedoverlayanimationcondition]" time="360" tween="$PARAM[unfocusedoverlayanimationtween]" easing="$PARAM[unfocusedoverlayanimationeasing]" reversible="false">$PARAM[unfocusedoverlayanimationtype]</animation>
-					<texture colordiffuse="$VAR[DarkColor]">views/white_50.png</texture>
+					<texture colordiffuse="$PARAM[unfocusedoverlaydiffuse]">views/white_50.png</texture>
 				</control>
 				<!--Progress Bar backing overlay-->
 				<control type="image">
@@ -378,6 +637,10 @@
 				</control>
 				<!--Border-->
 				<control type="image">
+					<left>$PARAM[borderedge]</left>
+					<top>$PARAM[borderedge]</top>
+					<right>$PARAM[borderedge]</right>
+					<bottom>$PARAM[borderedge]</bottom>
 					<visible>$PARAM[bordervisible]</visible>
 					<visible>!$EXP[TransparentDialog_IsVisible]</visible>
 					<include>Content_Fade_Animation</include>
@@ -387,6 +650,52 @@
 			</control>
 		</definition>
 	</include>
+
+	<include name="DropShadow">
+    <param name="left" default="0"/>
+    <param name="top" default="0"/>
+    <param name="width" default="120"/>
+    <param name="height" default="120"/>
+    <param name="flipx" default="false"/>
+    <param name="flipy" default="false"/>
+    <param name="texture" default="views/dropshadow_left_120.png"/>
+    <param name="colordiffuse" default="$VAR[ShadowColor]"/>
+    <param name="visible" default="true"/>
+    <param name="animationtype" default=""/>
+    <param name="animationcondition" default="false"/>
+    <param name="animationeffect" default=""/>
+    <param name="animationend" default=""/>
+    <param name="animationtime" default="360"/>
+    <param name="animation2effect" default=""/>
+    <param name="animation2start" default=""/>
+    <param name="animation2end" default=""/>
+    <param name="animation2time" default=""/>
+    <param name="animation2delay" default=""/>
+    <param name="animation2center" default=""/>
+    <param name="animation3effect" default=""/>
+    <param name="animation3start" default=""/>
+    <param name="animation3end" default=""/>
+    <param name="animation3time" default=""/>
+    <param name="animation3delay" default=""/>
+    <definition>
+      <control type="image">
+				<animation effect="slide" start="0,0" end="72,0" time="0" reversible="false" condition="$EXP[GridView_Display_IsFanart]">Conditional</animation>
+				<animation effect="slide" start="0,0" end="60,0" time="0" reversible="false" condition="$EXP[GridView_Display_IsPosters] | $EXP[GridView_Display_IsSquare]">Conditional</animation>
+        <left>$PARAM[left]</left>
+				<right>$PARAM[right]</right>
+        <top>$PARAM[top]</top>
+        <width>$PARAM[width]</width>
+        <height>$PARAM[height]</height>
+        <texture colordiffuse="$PARAM[colordiffuse]" flipx="$PARAM[flipx]" flipy="$PARAM[flipy]">$PARAM[texture]</texture>
+        <visible>$PARAM[visible]</visible>
+        <animation type="$PARAM[animationtype]" condition="$PARAM[animationcondition]" reversible="false">
+          <effect type="$PARAM[animationeffect]" end="$PARAM[animationend]" time="$PARAM[animationtime]" tween="sine" easing="inout"/>
+          <effect type="$PARAM[animation2effect]" start="$PARAM[animation2start]" end="$PARAM[animation2end]" center="$PARAM[animation2center]" time="$PARAM[animation2time]" delay="$PARAM[animation2delay]" tween="sine" easing="inout"/>
+          <effect type="$PARAM[animation3effect]" start="$PARAM[animation3start]" end="$PARAM[animation3end]" time="$PARAM[animation3time]" delay="$PARAM[animation3delay]" tween="sine" easing="inout"/>
+        </animation>
+      </control>
+    </definition>
+  </include>
 
 	<include name="Artwork_Static">
 		<param name="viewtype_label" default=""/>
@@ -398,18 +707,20 @@
 		<param name="focus_width" default=""/>
 		<param name="focus_height" default="100%"/>
 		<param name="focus_border_visible" default="false"/>
+		<param name="focus_border_size" default="2"/>
+		<param name="focus_border_color" default="$VAR[PrimaryColor]"/>
+		<param name="focus_border_texture" default="views/border_1px_10.png"/>
 		<param name="show_gradient" default="false"/>
 		<param name="unfocused_overlay" default="false"/>
 		<param name="2x_item_width" default="0"/>
 		<param name="2x_item_width_plus_focus_width" default=""/>
 		<param name="3x_item_width_plus_focus_width" default=""/>
 		<param name="2x_item_width_minus_dropshadow_width" default=""/>
-		<param name="2x_item_width_plus_focus_width" default=""/>
 		<definition>
 			<control type="group">
 				<left>$PARAM[left]</left>
 				<top>$PARAM[top]</top>
-				<visible>$EXP[$PARAM[viewtype_label]View_IsVisible] + $EXP[$PARAM[viewtype_label]View_Display_Is$PARAM[displaytype_label]] + !$EXP[ContainerSwitching]</visible>
+				<visible>$EXP[$PARAM[viewtype_label]View_Display_Is$PARAM[displaytype_label]] + !$EXP[ContainerSwitching]</visible>
 				<include>View_Transition_Fade_Animation</include>
 				<control type="group">
 					<visible>!$EXP[OptionsSwitching]</visible>
@@ -422,7 +733,7 @@
 							<param name="top" value="$PARAM[item_top]"/>
 							<param name="width" value="$PARAM[item_width]"/>
 							<param name="height" value="$PARAM[item_height]"/>
-							<param name="visible" value="$EXP[StripView_IsVisible] + !$EXP[StripView_Display_IsFanart] + $EXP[StripView_Details_Off]"/>
+							<param name="visible" value="!$EXP[StripView_Display_IsFanart] + $EXP[StripView_Details_Off]"/>
 							<param name="showgradient" value="$PARAM[show_gradient]"/>
 							<param name="unfocusedoverlay" value="$PARAM[unfocused_overlay]"/>
 						</include>
@@ -434,7 +745,7 @@
 								<param name="top" value="$PARAM[item_top]"/>
 								<param name="width" value="$PARAM[item_width]"/>
 								<param name="height" value="$PARAM[item_height]"/>
-								<param name="visible" value="$EXP[StripView_IsVisible] + $EXP[StripView_Details_Off]"/>
+								<param name="visible" value="$EXP[StripView_Details_Off]"/>
 								<param name="showgradient" value="$PARAM[show_gradient]"/>
 								<param name="unfocusedoverlay" value="$PARAM[unfocused_overlay]"/>
 							</include>
@@ -448,9 +759,9 @@
 								<param name="height" value="$PARAM[focus_height]"/>
 								<param name="showgradient" value="$PARAM[show_gradient]"/>
 								<param name="bordervisible" value="$PARAM[focus_border_visible]"/>
-								<param name="bordersize" value="11"/>
-								<param name="bordercolor" value="$VAR[LightColor]"/>
-								<param name="bordertexture" value="views/border_10px.png"/>
+								<param name="bordersize" value="$PARAM[focus_border_size]"/>
+								<param name="bordercolor" value="$PARAM[focus_border_color]"/>
+								<param name="bordertexture" value="$PARAM[focus_border_texture]"/>
 							</include>
 							<include content="ListIcon">
 								<param name="position" value="1"/>
@@ -468,7 +779,7 @@
 								<param name="top" value="$PARAM[item_top]"/>
 								<param name="width" value="$PARAM[item_width]"/>
 								<param name="height" value="$PARAM[item_height]"/>
-								<param name="visible" value="[$EXP[ShowcaseView_IsVisible] + $EXP[ShowcaseView_Display_IsPosters] + $EXP[ShowcaseView_Details_Off]] | [$EXP[StripView_IsVisible] + !$EXP[StripView_Display_IsFanart]]"/>
+								<param name="visible" value="[$EXP[ShowcaseView_Display_IsPosters] + $EXP[ShowcaseView_Details_Off]] | [$EXP[StripView_IsVisible] + !$EXP[StripView_Display_IsFanart]]"/>
 								<param name="showgradient" value="$PARAM[show_gradient]"/>
 								<param name="unfocusedoverlay" value="$PARAM[unfocused_overlay]"/>
 							</include>
@@ -554,11 +865,11 @@
 		<param name="displaytype_label" default="Posters"/>
 		<param name="item_width" default="720"/>
 		<param name="2x_item_width" default="1440"/>
-		<param name="3x_item_width" default="2160"/>
+		<param name="2x_item_width_plus_focus_width" default="2160"/>
 		<param name="aspectratio" default="scale"/>
 		<definition>
 			<control type="group">
-				<visible>$EXP[$PARAM[viewtype_label]View_IsVisible] + $EXP[$PARAM[viewtype_label]View_Display_Is$PARAM[displaytype_label]] + !$EXP[ContainerSwitching]</visible>
+				<visible>$EXP[$PARAM[viewtype_label]View_Display_Is$PARAM[displaytype_label]] + !$EXP[ContainerSwitching]</visible>
 				<include>View_Transition_Fade_Animation</include>
 				<!--PREVIOUS SCROLL-->
 				<control type="group">
@@ -667,7 +978,7 @@
 							<param name="top" value="0"/>
 							<param name="height" value="100%"/>
 							<param name="flipx" value="true"/>
-							<param name="visible" value="Container($PARAM[target_id]).OnPrevious + !String.IsEmpty(Container.ListItemNoWrap(2).Label) + $EXP[$PARAM[viewtype_label]ViewView_Details_Off]"/>
+							<param name="visible" value="Container($PARAM[target_id]).OnPrevious + !String.IsEmpty(Container.ListItemNoWrap(2).Label) + $EXP[$PARAM[viewtype_label]View_Details_Off]"/>
 							<param name="animationtype" value="Hidden"/>
 							<param name="animationcondition" value="true"/>
 							<param name="animationeffect" value="zoom"/>
@@ -768,7 +1079,7 @@
 					</include>
 					<!--Move Icon 3 to 2-->
 					<include content="ListIcon">
-						<param name="left" value="$PARAM[3x_item_width]"/>
+						<param name="left" value="$PARAM[2x_item_width_plus_focus_width]"/>
 						<param name="position" value="2"/>
 						<param name="width" value="$PARAM[item_width]"/>
 						<param name="visible" value="Container($PARAM[target_id]).OnNext + !String.IsEmpty(Container.ListItemNoWrap(2).Label) + $EXP[$PARAM[viewtype_label]View_Details_Off]"/>
@@ -869,7 +1180,7 @@
 		<definition>
 			<control type="group">
 				<top>$PARAM[top]</top>
-				<visible>$EXP[$PARAM[viewtype_label]View_IsVisible] + $EXP[$PARAM[viewtype_label]View_Display_Is$PARAM[displaytype_label]] + !$EXP[ContainerSwitching]</visible>
+				<visible>$EXP[$PARAM[viewtype_label]View_Display_Is$PARAM[displaytype_label]] + !$EXP[ContainerSwitching]</visible>
 				<include>View_Transition_Fade_Animation</include>
 				<animation effect="slide" start="0,0" end="-960,0" time="0" condition="$EXP[StripView_Display_IsFanart]">Conditional</animation>
 				<!--PREVIOUS SCROLL-->
@@ -1206,7 +1517,50 @@
 		</definition>
 	</include>
 
-	<include name="StripView_Display">
+	<include name="ShowcaseView_Art">
+		<param name="target_id" default="502"/>
+		<param name="viewtype_label" default="Showcase"/>
+		<param name="displaytype_label" default="Posters"/>
+		<param name="item_width" default="720"/>
+		<param name="item_height" default="100%"/>
+		<param name="2x_item_width" default="1440"/>
+		<param name="2x_item_width_plus_focus_width" default="2160"/>
+		<param name="3x_item_width_plus_focus_width" default="2880"/>
+		<param name="2x_item_width_minus_dropshadow_width" default=""/>
+		<definition>
+			<include content="Artwork_Static">
+				<param name="viewtype_label" value="$PARAM[viewtype_label]"/>
+				<param name="displaytype_label" value="$PARAM[displaytype_label]"/>
+				<param name="item_width" value="$PARAM[item_width]"/>
+				<param name="item_height" value="$PARAM[item_height]"/>
+				<param name="focus_width" value="$PARAM[item_width]"/>
+				<param name="focus_height" value="$PARAM[item_height]"/>
+				<param name="focus_border_visible" value="$EXP[ShowcaseView_Details_Off] + !Control.HasFocus(60)"/>
+				<param name="focus_border_size" value="11"/>
+				<param name="focus_border_color" value="$VAR[LightColor]"/>
+				<param name="focus_border_texture" value="views/border_10px.png"/>
+				<param name="show_gradient" value="true"/>
+				<param name="unfocused_overlay" value="true"/>
+				<param name="2x_item_width" value="$PARAM[2x_item_width]"/>
+				<param name="2x_item_width_plus_focus_width" value="$PARAM[2x_item_width_plus_focus_width]"/>
+				<param name="2x_item_width_minus_dropshadow_width" value="$PARAM[3x_item_width_plus_focus_width]"/>
+				<param name="3x_item_width_plus_focus_width" value="$PARAM[3x_item_width_plus_focus_width]"/>
+			</include>
+			<include content="Artwork_Transition_Slide">
+				<param name="target_id" value="$PARAM[target_id]"/>
+				<param name="viewtype_label" value="$PARAM[viewtype_label]"/>
+				<param name="displaytype_label" value="$PARAM[displaytype_label]"/>
+				<param name="item_width" value="$PARAM[item_width]"/>
+				<param name="item_height" value="$PARAM[item_height]"/>
+				<param name="focus_width" value="$PARAM[item_width]"/>
+				<param name="focus_height" value="$PARAM[item_height]"/>
+				<param name="2x_item_width" value="$PARAM[2x_item_width]"/>
+				<param name="2x_item_width_plus_focus_width" value="$PARAM[2x_item_width_plus_focus_width]"/>
+			</include>
+		</definition>
+	</include>
+
+	<include name="StripView_Art">
 		<param name="target_id" default="504"/>
 		<param name="viewtype_label" default="Strip"/>
 		<param name="displaytype_label" default="Posters"/>
@@ -1231,7 +1585,7 @@
 				<param name="item_height" value="$PARAM[item_height]"/>
 				<param name="focus_width" value="$PARAM[focus_width]"/>
 				<param name="focus_height" value="$PARAM[focus_height]"/>
-				<param name="focus_border_visible" value="false"/>
+				<param name="focus_border_visible" value="true"/>
 				<param name="show_gradient" value="false"/>
 				<param name="unfocused_overlay" value="false"/>
 				<param name="2x_item_width" value="$PARAM[2x_item_width]"/>
@@ -1258,52 +1612,8 @@
 		</definition>
 	</include>
 
-  <include name="DropShadow">
-    <param name="left" default="0"/>
-    <param name="top" default="0"/>
-    <param name="width" default="120"/>
-    <param name="height" default="120"/>
-    <param name="flipx" default="false"/>
-    <param name="flipy" default="false"/>
-    <param name="texture" default="views/dropshadow_left_120.png"/>
-    <param name="colordiffuse" default="$VAR[ShadowColor]"/>
-    <param name="visible" default="true"/>
-    <param name="animationtype" default=""/>
-    <param name="animationcondition" default="false"/>
-    <param name="animationeffect" default=""/>
-    <param name="animationend" default=""/>
-    <param name="animationtime" default="360"/>
-    <param name="animation2effect" default=""/>
-    <param name="animation2start" default=""/>
-    <param name="animation2end" default=""/>
-    <param name="animation2time" default=""/>
-    <param name="animation2delay" default=""/>
-    <param name="animation2center" default=""/>
-    <param name="animation3effect" default=""/>
-    <param name="animation3start" default=""/>
-    <param name="animation3end" default=""/>
-    <param name="animation3time" default=""/>
-    <param name="animation3delay" default=""/>
-    <definition>
-      <control type="image">
-        <left>$PARAM[left]</left>
-				<right>$PARAM[right]</right>
-        <top>$PARAM[top]</top>
-        <width>$PARAM[width]</width>
-        <height>$PARAM[height]</height>
-        <texture colordiffuse="$PARAM[colordiffuse]" flipx="$PARAM[flipx]" flipy="$PARAM[flipy]">$PARAM[texture]</texture>
-        <visible>$PARAM[visible]</visible>
-        <animation type="$PARAM[animationtype]" condition="$PARAM[animationcondition]" reversible="false">
-          <effect type="$PARAM[animationeffect]" end="$PARAM[animationend]" time="$PARAM[animationtime]" tween="sine" easing="inout"/>
-          <effect type="$PARAM[animation2effect]" start="$PARAM[animation2start]" end="$PARAM[animation2end]" center="$PARAM[animation2center]" time="$PARAM[animation2time]" delay="$PARAM[animation2delay]" tween="sine" easing="inout"/>
-          <effect type="$PARAM[animation3effect]" start="$PARAM[animation3start]" end="$PARAM[animation3end]" time="$PARAM[animation3time]" delay="$PARAM[animation3delay]" tween="sine" easing="inout"/>
-        </animation>
-      </control>
-    </definition>
-  </include>
-
 	<include name="CommonDetails">
-		<param name="viewtype" default="Billboard"/>
+		<param name="viewtype_label" default="Billboard"/>
 		<param name="left" default="120"/>
 		<param name="bottom" default="0"/>
 		<param name="width" default="1680"/>
@@ -1332,12 +1642,12 @@
 				<align>$PARAM[align]</align>
 				<itemgap>$PARAM[itemgap]</itemgap>
         <usecontrolcoords>true</usecontrolcoords>
-				<visible>!$EXP[$PARAM[viewtype]View_Details_Off]</visible>
+				<visible>!$EXP[$PARAM[viewtype_label]View_Details_Off] + ![$EXP[StripView_IsVisible] + $EXP[StripView_Details_Title] + !$EXP[StripView_Details_Logo_IsOn]]</visible>
 				<!--Logo-->
 				<control type="image">
 					<animation effect="slide" start="0,0" end="-60,371" time="0" condition="$EXP[BillboardView_IsVisible] + !$EXP[BillboardView_Details_Info_IsVisible] + !$EXP[BillboardView_Details_Plot_IsVisible]">Conditional</animation>
-					<animation effect="slide" start="0,0" end="0,-10" time="0" condition="$EXP[$PARAM[viewtype]View_Details_Info_IsVisible] | $EXP[$PARAM[viewtype]View_Details_Plot_IsVisible]">Conditional</animation>
-					<visible>$EXP[$PARAM[viewtype]View_Details_Logo_IsVisible]</visible>
+					<animation effect="slide" start="0,0" end="0,-10" time="0" condition="$EXP[$PARAM[viewtype_label]View_Details_Info_IsVisible] | $EXP[$PARAM[viewtype_label]View_Details_Plot_IsVisible]">Conditional</animation>
+					<visible>$EXP[$PARAM[viewtype_label]View_Details_Logo_IsVisible]</visible>
 					<width>560</width>
 					<height>237</height>
 					<aspectratio>keep</aspectratio>
@@ -1345,9 +1655,9 @@
 				</control>
 				<!--Title-->
 				<control type="$PARAM[labeltype]">
-					<visible>!$EXP[$PARAM[viewtype]View_Details_Logo_IsVisible]</visible>
+					<visible>!$EXP[$PARAM[viewtype_label]View_Details_Logo_IsVisible]</visible>
 					<height max="$PARAM[titleheight]">auto</height>
-					<font>$PARAM[viewtype]_Title</font>
+					<font>$PARAM[viewtype_label]_Title</font>
 					<textcolor>$PARAM[titlecolor]</textcolor>
 					<label>$VAR[Title_Label]</label>
 					<align>$PARAM[titlealign]</align>
@@ -1357,10 +1667,10 @@
 				<!--Info-->
 				<control type="$PARAM[labeltype]">
           <top>$PARAM[infogap]</top>
-          <visible>$EXP[$PARAM[viewtype]View_Details_Info_IsVisible]</visible>
+          <visible>$EXP[$PARAM[viewtype_label]View_Details_Info_IsVisible]</visible>
 					<visible>!String.IsEqual(Control.GetLabel(916),EMPTY)</visible>
           <height max="$PARAM[infoheight]">auto</height>
-					<font>$PARAM[viewtype]_Info</font>
+					<font>$PARAM[viewtype_label]_Info</font>
 					<textcolor>$PARAM[titlecolor]</textcolor>
 					<label>$VAR[Info_Label]</label>
 					<align>$PARAM[titlealign]</align>
@@ -1371,7 +1681,7 @@
 				<control type="textbox">
           <top>$PARAM[plotgap]</top>
 					<height max="$PARAM[plotmaxheight]">auto</height>
-					<visible>$EXP[$PARAM[viewtype]View_Details_Plot_IsVisible]</visible>
+					<visible>$EXP[$PARAM[viewtype_label]View_Details_Plot_IsVisible]</visible>
 					<font>$PARAM[plotfont]</font>
 					<textcolor>$PARAM[plotcolor]</textcolor>
 					<label>$VAR[Plot_Label]</label>
@@ -1386,7 +1696,7 @@
 		<control type="grouplist">
 			<left>60</left>
 			<top>60</top>
-			<width>960</width>
+			<width>1800</width>
 			<height>60</height>
 			<orientation>horizontal</orientation>
 			<align>left</align>

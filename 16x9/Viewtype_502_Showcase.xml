@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <includes>
 
-	<include name="Showcase_Container">
+	<include name="ShowcaseView_Container">
 		<param name="type" default="fixedlist"/>
 		<param name="id" default="502"/>
 		<param name="viewtype_label" default="Showcase"/>
@@ -21,49 +21,29 @@
 		</definition>
 	</include>
 
-	<include name="Showcase_View">
+	<include name="ShowcaseView_Display">
 		<param name="id" default="502"/>
 		<param name="viewtype_label" default="Showcase"/>
 		<definition>
+			<!--ARTWORK-->
 			<control type="group">
-				<!--ART (Poster)-->
-				<include content="Artwork_Static">
-					<param name="viewtype_label" value="Showcase"/>
+				<include content="ShowcaseView_Art">
+					<param name="target_id" value="$PARAM[id]"/>
+					<param name="viewtype_label" value="$PARAM[viewtype_label]"/>
 					<param name="displaytype_label" value="Posters"/>
 					<param name="item_width" value="720"/>
-					<param name="focus_width" value="720"/>
-					<param name="focus_border_visible" value="$EXP[ShowcaseView_Details_Off] + !Control.HasFocus(60)"/>
-					<param name="show_gradient" value="true"/>
-					<param name="unfocused_overlay" value="true"/>
 					<param name="2x_item_width" value="1440"/>
 					<param name="2x_item_width_plus_focus_width" value="2160"/>
-					<param name="2x_item_width_minus_dropshadow_width" value="1320"/>
 					<param name="3x_item_width_plus_focus_width" value="2880"/>
 				</include>
-				<include content="Artwork_Transition_Slide">
-					<param name="displaytype_label" value="Posters"/>
-					<param name="item_width" value="720"/>
-					<param name="2x_item_width" value="1440"/>
-					<param name="3x_item_width" value="2160"/>
-				</include>
-				<!--ART (Square)-->
-				<include content="Artwork_Static">
-					<param name="viewtype_label" value="Showcase"/>
+				<include content="ShowcaseView_Art">
+					<param name="target_id" value="$PARAM[id]"/>
+					<param name="viewtype_label" value="$PARAM[viewtype_label]"/>
 					<param name="displaytype_label" value="Square"/>
 					<param name="item_width" value="1080"/>
-					<param name="focus_width" value="1080"/>
-					<param name="focus_border_visible" value="$EXP[ShowcaseView_Details_Off] + !Control.HasFocus(60)"/>
-					<param name="show_gradient" value="true"/>
-					<param name="unfocused_overlay" value="true"/>
 					<param name="2x_item_width" value="2160"/>
 					<param name="2x_item_width_plus_focus_width" value="3240"/>
-					<param name="2x_item_width_minus_dropshadow_width" value="2040"/>
-				</include>
-				<include content="Artwork_Transition_Slide">
-					<param name="displaytype_label" value="Square"/>
-					<param name="item_width" value="1080"/>
-					<param name="2x_item_width" value="2160"/>
-					<param name="3x_item_width" value="3240"/>
+					<param name="3x_item_width_plus_focus_width" value="2880"/>
 				</include>
 			</control>
 			<!--DETAILS-->
@@ -76,19 +56,19 @@
 					<control type="group">
 						<visible>!$EXP[ContentSwitching]</visible>
 						<include content="MediaFlags"/>
-						<include content="ProgressBar">
-							<param name="left" value="180"/>
-						</include>
+						<control type="group">
+							<animation effect="slide" start="0,0" end="180,0" time="0" condition="$EXP[$PARAM[viewtype_label]View_Display_IsSquare]">Conditional</animation>
+							<include content="ProgressBar">
+								<param name="left" value="180"/>
+							</include>
+						</control>
 						<include content="CommonDetails">
-							<param name="viewtype" value="Showcase"/>
+							<param name="viewtype_label" value="$PARAM[viewtype_label]"/>
 							<param name="left" value="960"/>
 							<param name="width" value="720"/>
-							<param name="labeltype" value="textbox"/>
 							<param name="titleheight" value="156"/>
-							<param name="titlecolor" value="$VAR[ListFocusColor]"/>
-							<param name="titlealign" value="left"/>
-							<param name="infogap" value="5"/>
-							<param name="infoheight" value="70"/>
+					    <param name="infogap" value="5"/>
+					    <param name="infoheight" value="70"/>
 							<param name="plotmaxheight" value="165"/>
 						</include>
 					</control>
