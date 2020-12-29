@@ -348,6 +348,7 @@
 		<!--ALBUMS-->
 		<!--ListView/GridView: 2014-->
 		<!--Others: FKA Twigs / 2014-->
+		<value condition="Container.Content(albums) + $EXP[GridView_IsVisible] + $EXP[GridView_Details_Info] + !String.IsEmpty(ListItem.Year)">[UPPERCASE]$INFO[ListItem.Year][/UPPERCASE]</value>
 		<value condition="Container.Content(albums) + !$EXP[ListView_IsVisible] + !String.IsEmpty(ListItem.AlbumArtist)">[UPPERCASE]$INFO[ListItem.AlbumArtist]$INFO[ListItem.Year, / ][/UPPERCASE]</value>
 		<value condition="Container.Content(albums) + !$EXP[ListView_IsVisible] + !String.IsEmpty(ListItem.Artist)">[UPPERCASE]$INFO[ListItem.Artist]$INFO[ListItem.Year, / ][/UPPERCASE]</value>
 		<value condition="Container.Content(albums) + !String.IsEmpty(ListItem.Year)">[UPPERCASE]$INFO[ListItem.Year][/UPPERCASE]</value>
@@ -373,8 +374,11 @@
 	</variable>
 
 	<variable name="Breadcrumb_Title_Label">
-		<value condition="Container.Content(seasons) + $EXP[Breadcrumb_Enabled_View] + !String.IsEmpty(ListItem.TVShowTitle)">$INFO[ListItem.TVShowTitle]</value>
+		<value condition="Container.Content(tvshows) + $EXP[GridView_IsVisible] + $EXP[GridView_Details_Breadcrumb] + !String.IsEmpty(ListItem.TVShowTitle)">$INFO[ListItem.TVShowTitle]</value>
+		<value condition="Container.Content(seasons) + $EXP[Breadcrumb_Enabled_View] + !$EXP[ListView_Display_IsThumbnails] + !String.IsEmpty(ListItem.TVShowTitle)">$INFO[ListItem.TVShowTitle]</value>
 		<value condition="Container.Content(episodes) + $EXP[Breadcrumb_Enabled_View] + !String.IsEmpty(ListItem.TVShowTitle)">$INFO[ListItem.TVShowTitle]</value>
+		<value condition="Container.Content(artists) + $EXP[GridView_IsVisible] + $EXP[GridView_Details_Breadcrumb] + !String.IsEmpty(ListItem.Artist)">$INFO[ListItem.Artist]</value>
+		<value condition="Container.Content(albums) + $EXP[Breadcrumb_Enabled_View] + !String.IsEmpty(ListItem.Artist)">$INFO[ListItem.Artist]</value>
 		<value condition="Container.Content(albums) + $EXP[Breadcrumb_Enabled_View] + !String.IsEmpty(ListItem.Artist)">$INFO[ListItem.Artist]</value>
 		<value condition="Container.Content(songs) + $EXP[Breadcrumb_Enabled_View] + !String.IsEmpty(ListItem.Album)">$INFO[ListItem.Album]</value>
 		<value condition="Container.Content(files) + String.IsEmpty(ListItem.Art(Poster))">$INFO[ListItem.FolderName]</value>
@@ -382,14 +386,15 @@
 	</variable>
 
 	<variable name="Breadcrumb_Info_Label">
-		<value condition="Container.Content(seasons) + $EXP[GridView_IsVisible] + !$EXP[GridView_Details_Info_IsVisible] + !String.IsEmpty(ListItem.Season)">$INFO[ListItem.Season,/ $LOCALIZE[32121] ]$INFO[ListItem.Year, / ]</value>
-		<value condition="Container.Content(seasons) + $EXP[Breadcrumb_Enabled_View] + !$EXP[GridView_Details_Info_IsVisible] + !String.IsEmpty(ListItem.Year)">$INFO[ListItem.Year,/ ]</value>
-		<value condition="Container.Content(episodes) + $EXP[GridView_IsVisible] + !$EXP[GridView_Details_Info_IsVisible] + !String.IsEmpty(ListItem.Year) + !Integer.IsGreater(ListItem.Episode,9)">$INFO[ListItem.Year,/ ]$INFO[ListItem.Season, / ]$INFO[ListItem.Episode,x0]</value>
-		<value condition="Container.Content(episodes) + $EXP[GridView_IsVisible] + !$EXP[GridView_Details_Info_IsVisible] + !String.IsEmpty(ListItem.Year)">$INFO[ListItem.Year,/ ]$INFO[ListItem.Season, / ]$INFO[ListItem.Episode,x,]</value>
-		<value condition="Container.Content(episodes) + $EXP[Breadcrumb_Enabled_View] + !String.IsEmpty(ListItem.Season)">$INFO[ListItem.Season,/ $LOCALIZE[32121] ]$INFO[ListItem.Year, / ]</value>
+		<value condition="Container.Content(tvshows) + $EXP[GridView_IsVisible] + $EXP[GridView_Details_Breadcrumb] + !String.IsEmpty(ListItem.Year)">$INFO[Listitem.Year,/ ]$INFO[ListItem.Property(TotalSeasons), / , ]$VAR[Seasons_Label]</value>
+		<value condition="Container.Content(seasons) + $EXP[GridView_IsVisible] + $EXP[GridView_Details_Breadcrumb] + !String.IsEmpty(ListItem.Season)">$INFO[ListItem.Season,/ $LOCALIZE[32121] ]$INFO[ListItem.Year, / ]</value>
+		<value condition="Container.Content(seasons) + $EXP[GridView_IsVisible] + $EXP[GridView_Details_Title] + !String.IsEmpty(ListItem.Year)">$INFO[ListItem.Year,/ ]</value>
+		<value condition="Container.Content(episodes) + $EXP[GridView_IsVisible] + !$EXP[GridView_Details_Info] + !String.IsEmpty(ListItem.Year) + !Integer.IsGreater(ListItem.Episode,9)">$INFO[ListItem.Year,/ ]$INFO[ListItem.Season, / ]$INFO[ListItem.Episode,x0]</value>
+		<value condition="Container.Content(episodes) + $EXP[GridView_IsVisible] + !$EXP[GridView_Details_Info] + !String.IsEmpty(ListItem.Year)">$INFO[ListItem.Year,/ ]$INFO[ListItem.Season, / ]$INFO[ListItem.Episode,x,]</value>
 		<value condition="Container.Content(episodes) + $EXP[Breadcrumb_Enabled_View] + !String.IsEmpty(ListItem.Year)">$INFO[ListItem.Year,/ ]</value>
-		<value condition="Container.Content(albums) + $EXP[GridView_IsVisible] + $EXP[GridView_Details_Breadcrumb_IsVisible] + !String.IsEmpty(ListItem.Album)">$INFO[ListItem.Album,/ ]$INFO[ListItem.Year, / ]</value>
-		<value condition="Container.Content(albums) + $EXP[GridView_IsVisible] + $EXP[GridView_Details_Breadcrumb_IsVisible] + !String.IsEmpty(ListItem.Year)">$INFO[ListItem.Year,/ ]</value>
+		<value condition="Container.Content(albums) + $EXP[GridView_IsVisible] + $EXP[GridView_Details_Breadcrumb] + !String.IsEmpty(ListItem.Album)">$INFO[ListItem.Album,/ ]$INFO[ListItem.Year, / ]</value>
+		<value condition="Container.Content(albums) + $EXP[GridView_IsVisible] + $EXP[GridView_Details_Breadcrumb] + !String.IsEmpty(ListItem.Year)">$INFO[ListItem.Year,/ ]</value>
+		<value condition="Container.Content(albums) + $EXP[GridView_IsVisible] + $EXP[GridView_Details_Title] + !String.IsEmpty(ListItem.Year)">$INFO[ListItem.Year,/ ]</value>
 		<value condition="Container.Content(songs) + $EXP[Breadcrumb_Enabled_View] + !String.IsEmpty(ListItem.Artist)">$INFO[ListItem.Artist,/ ]$INFO[ListItem.Year, / ]</value>
 		<value condition="Container.Content(songs) + $EXP[Breadcrumb_Enabled_View] + !String.IsEmpty(ListItem.Year)">$INFO[ListItem.Year,/ ]</value>
 		<value condition="Container.Content(files) + String.IsEmpty(ListItem.Art(Poster))">$INFO[ListItem.EndTime,/ $LOCALIZE[32000] ]</value>
