@@ -39,22 +39,22 @@
 						<preloaditems>2</preloaditems>
 						<scrolltime tween="sine" easing="inout">360</scrolltime>
 						<itemlayout width="592" height="333" condition="$EXP[GridView_Display_IsFanart]">
-							<include>Grid_List_Item_Layout</include>
+							<include>GridView_List_Item_Layout</include>
 						</itemlayout>
 						<focusedlayout width="592" height="333" condition="$EXP[GridView_Display_IsFanart]">
-							<include>Grid_List_Focus_Layout</include>
+							<include>GridView_List_Focus_Layout</include>
 						</focusedlayout>
 						<itemlayout width="360" height="540" condition="$EXP[GridView_Display_IsPosters]">
-							<include>Grid_List_Item_Layout</include>
+							<include>GridView_List_Item_Layout</include>
 						</itemlayout>
 						<focusedlayout width="360" height="540" condition="$EXP[GridView_Display_IsPosters]">
-							<include>Grid_List_Focus_Layout</include>
+							<include>GridView_List_Focus_Layout</include>
 						</focusedlayout>
 						<itemlayout width="360" height="360" condition="$EXP[GridView_Display_IsSquare]">
-							<include>Grid_List_Item_Layout</include>
+							<include>GridView_List_Item_Layout</include>
 						</itemlayout>
 						<focusedlayout width="360" height="360" condition="$EXP[GridView_Display_IsSquare]">
-							<include>Grid_List_Focus_Layout</include>
+							<include>GridView_List_Focus_Layout</include>
 						</focusedlayout>
 					</control>
 					<control type="group">
@@ -98,11 +98,7 @@
 							<!--FANART-->
 							<control type="group">
 								<visible>$EXP[GridView_Display_IsFanart]</visible>
-								<animation effect="slide" end="592,0" time="0" condition="Container.Position(1)" reversible="false">Conditional</animation>
-								<animation effect="slide" end="1184,0" time="0" condition="Container.Position(2)" reversible="false">Conditional</animation>
-								<animation effect="slide" end="0,333" time="0" condition="Container.Position(3)" reversible="false">Conditional</animation>
-								<animation effect="slide" end="592,333" time="0" condition="Container.Position(4)" reversible="false">Conditional</animation>
-								<animation effect="slide" end="1184,333" time="0" condition="Container.Position(5)" reversible="false">Conditional</animation>
+								<include>GridView_Slides_Fanart</include>
 								<include content="ProgressBar">
 									<param name="left" value="188"/>
 									<param name="top" value="492"/>
@@ -111,16 +107,34 @@
 							<!--POSTER or SQUARE-->
 							<control type="group">
 								<visible>$EXP[GridView_Display_IsPosters]</visible>
-								<animation effect="slide" end="360,0" time="0" condition="Container.Position(1)" reversible="false">Conditional</animation>
-								<animation effect="slide" end="720,0" time="0" condition="Container.Position(2)" reversible="false">Conditional</animation>
-								<animation effect="slide" end="1080,0" time="0" condition="Container.Position(3)" reversible="false">Conditional</animation>
-								<animation effect="slide" end="1440,0" time="0" condition="Container.Position(4)" reversible="false">Conditional</animation>
+								<include>GridView_Slides_Posters</include>
+								<include>GridView_Slides_Square</include>
 								<include content="ProgressBar">
 									<param name="left" value="120"/>
 									<param name="top" value="699"/>
 									<param name="width" value="240"/>
 								</include>
 							</control>
+						</control>
+					</control>
+					<!--Overlay Details-->
+					<control type="group">
+						<visible>![$EXP[ContentSwitching] | $EXP[TransparentDialog_IsVisible] | Control.HasFocus(60)]</visible>
+						<include>Content_Grid_Transition_Fade_Animation</include>
+						<control type="group">
+							<visible>!$EXP[ContentSwitching]</visible>
+							<include content="GridView_Details">
+								<param name="displaytype_label" value="Fanart"/>
+								<param name="left" value="72"/>
+								<param name="width" value="592"/>
+								<param name="height" value="333"/>
+							</include>
+							<include content="GridView_Details">
+								<param name="displaytype_label" value="Posters"/>
+								<param name="left" value="60"/>
+								<param name="width" value="360"/>
+								<param name="height" value="540"/>
+							</include>
 						</control>
 					</control>
 				</control>
