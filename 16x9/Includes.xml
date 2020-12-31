@@ -16,10 +16,10 @@
 	<include file="Variables.xml"/>
 
   <!--Expressions-->
-  <expression name="All_Paths">String.Contains(Container.FolderPath,videodb://) | String.Contains(Container.FolderPath,special://) | String.Contains(Container.FolderPath,addons://) | String.Contains(Container.FolderPath,musicdb://) | String.Contains(Container.FolderPath,plugin://)</expression>
   <expression name="Video_Containers">Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | Container.Content(episodes) | Container.Content(musicvideos)</expression>
-  <expression name="ListOnly_Containers">![Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | Container.Content(episodes) | Container.Content(artists) | Container.Content(albums)]</expression>
-  <expression name="Fanart_Containers">Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | Container.Content(episodes) | Container.Content(artists) | Container.content(albums) | Container.Content(songs)</expression>
+  <expression name="View_Containers">Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | Container.Content(episodes) | Container.Content(artists) | Container.Content(albums)</expression>
+
+	<expression name="Fanart_Containers">Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | Container.Content(episodes) | Container.Content(artists) | Container.content(albums) | Container.Content(songs)</expression>
 	<expression name="Poster_Containers">[Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | Container.Content(actors)]</expression>
 	<expression name="Square_Containers">[Container.Content(artists) | Container.Content(albums) | Container.Content(songs)]</expression>
   <expression name="Background_IsFanart">[[$EXP[ListView_IsVisible] + $EXP[ListView_Display_IsBackground]] | $EXP[BillboardView_IsVisible]]</expression>
@@ -36,7 +36,7 @@
 	<expression name="Prefer_Keyart">Skin.String(Prefer_Keyart,True)</expression>
 	<expression name="Breadcrumb_Enabled_View">$EXP[ListView_IsVisible] | $EXP[GridView_IsVisible]</expression>
 
-  <expression name="ListView_IsVisible">[Control.IsVisible(50) | String.IsEqual(Container.ViewMode,List)]</expression>
+  <expression name="ListView_IsVisible">Control.IsVisible(50) | String.IsEqual(Container.ViewMode,List)</expression>
 	<expression name="ListView_Display_IsBackground">$EXP[ListView_IsVisible] + [$EXP[ListView_Display_IsBackground_Movies] | $EXP[ListView_Display_IsBackground_Sets] | $EXP[ListView_Display_IsBackground_TVShows] | $EXP[ListView_Display_IsBackground_Seasons] | $EXP[ListView_Display_IsBackground_Episodes] | $EXP[ListView_Display_IsBackground_Artists] | $EXP[ListView_Display_IsBackground_Albums] | $EXP[ListView_Display_IsBackground_Songs]]</expression>
 	<expression name="ListView_Display_IsBackground_Movies">Container.Content(movies) + [Skin.String(ListView_Display_Movies,Background) | String.IsEmpty(Skin.String(ListView_Display_Movies))]</expression>
 	<expression name="ListView_Display_IsBackground_Sets">Container.Content(sets) + [Skin.String(ListView_Display_Sets,Background) | String.IsEmpty(Skin.String(ListView_Display_Sets))]</expression>
@@ -90,8 +90,7 @@
 	<expression name="ListView_Flags_Studio_Shift_Seasons">Container.Content(seasons) + [Skin.String(ListView_Flags_Seasons,Studio) | [Skin.String(ListView_Flags_Seasons,All) + String.IsEqual(Control.GetLabel(915),flags/blank.png)]]</expression>
 	<expression name="ListView_Flags_Studio_Shift_Episodes">Container.Content(episodes) + [Skin.String(ListView_Flags_Episodes,Studio) | [Skin.String(ListView_Flags_Episodes,All) + String.IsEqual(Control.GetLabel(915),flags/blank.png)]]</expression>
 
-	<expression name="BillboardView_IsVisible">[Control.IsVisible(501) | String.IsEqual(Container.ViewMode,Billboard)]</expression>
-	<expression name="BillboardView_Containers">$EXP[All_Paths] + !$EXP[ListOnly_Containers] + !Container.Content(albums)</expression>
+	<expression name="BillboardView_IsVisible">Control.IsVisible(501) | String.IsEqual(Container.ViewMode,Billboard)</expression>
 	<expression name="BillboardView_Details_NowPlaying_Left_IsVisible">!$EXP[BillboardView_Details_Off] + !$EXP[BillboardView_Details_Plot_IsVisible] + !$EXP[BillboardView_Details_Logo_IsVisible]</expression>
 	<expression name="BillboardView_Details_Off">[Container.Content(movies) + Skin.String(BillboardView_Details_Movies,Off)] | [Container.Content(sets) + Skin.String(BillboardView_Details_Sets,Off)] | [Container.Content(tvshows) + Skin.String(BillboardView_Details_TVShows,Off)] | [Container.Content(seasons) + Skin.String(BillboardView_Details_Seasons,Off)] | [Container.Content(episodes) + Skin.String(BillboardView_Details_Episodes,Off)] | [Container.Content(artists) + Skin.String(BillboardView_Details_Artists,Off)]</expression>
 	<expression name="BillboardView_Details_Info_IsVisible">$EXP[BillboardView_Details_Info_IsVisible_Movies] | $EXP[BillboardView_Details_Info_IsVisible_Sets] | $EXP[BillboardView_Details_Info_IsVisible_TVShows] | $EXP[BillboardView_Details_Info_IsVisible_Seasons] | $EXP[BillboardView_Details_Info_IsVisible_Episodes] | $EXP[BillboardView_Details_Info_IsVisible_Artists]</expression>
@@ -141,8 +140,7 @@
 	<expression name="BillboardView_Flags_Studio_Shift_Episodes">Container.Content(episodes) + [Skin.String(BillboardView_Flags_Episodes,Studio) | [Skin.String(BillboardView_Flags_Episodes,All) + String.IsEqual(Control.GetLabel(915),flags/blank.png)]]</expression>
 	<expression name="BillboardView_Flags_All">[Container.Content(movies) + [Skin.String(BillboardView_Flags_Movies,All) | String.IsEmpty(Skin.String(BillboardView_Flags_Movies))]] | [Container.Content(sets) + [Skin.String(BillboardView_Flags_Movies,Sets) | String.IsEmpty(Skin.String(BillboardView_Flags_Sets))]] | [Container.Content(tvshows) + [Skin.String(BillboardView_Flags_TVShows,All) | String.IsEmpty(Skin.String(BillboardView_Flags_TVShows))]] | [Container.Content(seasons) + [Skin.String(BillboardView_Flags_Seasons,All) | String.IsEmpty(Skin.String(BillboardView_Flags_Seasons))]] | [Container.Content(episodes) + [Skin.String(BillboardView_Flags_Episodes,All) | String.IsEmpty(Skin.String(BillboardView_Flags_Episodes))]]</expression>
 
-	<expression name="ShowcaseView_IsVisible">[Control.IsVisible(502) | String.IsEqual(Container.ViewMode,Showcase)]</expression>
-  <expression name="ShowcaseView_Containers">$EXP[All_Paths] + !$EXP[ListOnly_Containers]</expression>
+	<expression name="ShowcaseView_IsVisible">Control.IsVisible(502) | String.IsEqual(Container.ViewMode,Showcase)</expression>
   <expression name="ShowcaseView_Display_IsPosters">$EXP[ShowcaseView_IsVisible] + [$EXP[ShowcaseView_Display_IsPosters_Movies] | $EXP[ShowcaseView_Display_IsPosters_Sets] | $EXP[ShowcaseView_Display_IsPosters_TVShows] | $EXP[ShowcaseView_Display_IsPosters_Seasons]]</expression>
 	<expression name="ShowcaseView_Display_IsPosters_Movies">Container.Content(movies) + [Skin.String(ShowcaseView_Display_Movies,Posters) | String.IsEmpty(Skin.String(ShowcaseView_Display_Movies))]</expression>
 	<expression name="ShowcaseView_Display_IsPosters_Sets">Container.Content(sets) + [Skin.String(ShowcaseView_Display_Sets,Posters) | String.IsEmpty(Skin.String(ShowcaseView_Display_Sets))]</expression>
@@ -220,8 +218,7 @@
   <expression name="ShowcaseView_Flags_Studio_Shift_Seasons">Container.Content(seasons) + [Skin.String(ShowcaseView_Flags_Seasons,Studio) | [Skin.String(ShowcaseView_Flags_Seasons,All) + String.IsEqual(Control.GetLabel(915),flags/blank.png)]]</expression>
   <expression name="ShowcaseView_Flags_Studio_Shift_Episodes">Container.Content(episodes) + [Skin.String(ShowcaseView_Flags_Episodes,Studio) | [Skin.String(ShowcaseView_Flags_Episodes,All) + String.IsEqual(Control.GetLabel(915),flags/blank.png)]]</expression>
 
-  <expression name="StripView_IsVisible">[Control.IsVisible(504) | String.IsEqual(Container.ViewMode,Strip)]</expression>
-  <expression name="StripView_Containers">$EXP[All_Paths] + !$EXP[ListOnly_Containers]</expression>
+  <expression name="StripView_IsVisible">Control.IsVisible(504) | String.IsEqual(Container.ViewMode,Strip)</expression>
   <expression name="StripView_Display_IsPosters">$EXP[StripView_IsVisible] + [$EXP[StripView_Display_IsPosters_Movies] | $EXP[StripView_Display_IsPosters_Sets] | $EXP[StripView_Display_IsPosters_TVShows] | $EXP[StripView_Display_IsPosters_Seasons]]</expression>
   <expression name="StripView_Display_IsPosters_Movies">Container.Content(movies) + [Skin.String(StripView_Display_Movies,Posters) | String.IsEmpty(Skin.String(StripView_Display_Movies))]</expression>
   <expression name="StripView_Display_IsPosters_Sets">Container.Content(sets) + [Skin.String(StripView_Display_Sets,Posters) | String.IsEmpty(Skin.String(StripView_Display_Sets))]</expression>
@@ -299,8 +296,7 @@
   <expression name="StripView_Flags_Studio_Shift_Seasons">Container.Content(seasons) + [Skin.String(StripView_Flags_Seasons,Studio) | [Skin.String(StripView_Flags_Seasons,All) + String.IsEqual(Control.GetLabel(915),flags/blank.png)]]</expression>
   <expression name="StripView_Flags_Studio_Shift_Episodes">Container.Content(episodes) + [Skin.String(StripView_Flags_Episodes,Studio) | [Skin.String(StripView_Flags_Episodes,All) + String.IsEqual(Control.GetLabel(915),flags/blank.png)]]</expression>
 
-  <expression name="GridView_IsVisible">[Control.IsVisible(505) | String.IsEqual(Container.ViewMode,Grid)]</expression>
-	<expression name="GridView_Containers">$EXP[All_Paths] + !$EXP[ListOnly_Containers]</expression>
+  <expression name="GridView_IsVisible">Control.IsVisible(505) | String.IsEqual(Container.ViewMode,Grid)</expression>
 	<expression name="GridView_Display_IsFanart">$EXP[GridView_IsVisible] + [$EXP[GridView_Display_IsFanart_Movies] | $EXP[GridView_Display_IsFanart_Sets] | $EXP[GridView_Display_IsFanart_TVShows] | $EXP[GridView_Display_IsFanart_Seasons] | container.content(episodes) | $EXP[GridView_Display_IsFanart_Artists]]</expression>
 	<expression name="GridView_Display_IsFanart_Movies">Container.Content(movies) + [Skin.String(GridView_Display_Movies,Fanart) | String.IsEmpty(Skin.String(GridView_Display_Movies))]</expression>
 	<expression name="GridView_Display_IsFanart_Sets">Container.Content(sets) + [Skin.String(GridView_Display_Sets,Fanart) | String.IsEmpty(Skin.String(GridView_Display_Sets))]</expression>
@@ -457,7 +453,7 @@
   <!--Context Menu Label Focused-->
 	<include name="ContextMenuLabelFocused">
 		<definition>
-			<height>80</height>
+			<height>70</height>
 			<font>List_Title_Focused</font>
 			<textcolor>$VAR[PrimaryColor]</textcolor>
 		</definition>
