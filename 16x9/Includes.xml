@@ -367,11 +367,13 @@
 	<expression name="Grid_Shadow_Bottom-Right_Watched">[[$EXP[GridView_Display_IsFanart] + Control.IsVisible(9616)] | [!$EXP[GridView_Display_IsFanart] + Control.IsVisible(9618)]]</expression>
 	<expression name="Grid_Shadow_Bottom_Watched">[[$EXP[GridView_Display_IsFanart] + Control.IsVisible(9615)] | [!$EXP[GridView_Display_IsFanart] + Control.IsVisible(9617)]]</expression>
 	<expression name="Grid_Shadow_Bottom-Left_Watched">[[$EXP[GridView_Display_IsFanart] + Control.IsVisible(9614)] | [!$EXP[GridView_Display_IsFanart] + Control.IsVisible(9616)]]</expression>
+	<expression name="GridView_Position_IsTop-Right">Container.Row(0) + [[$EXP[GridView_Display_IsFanart] + Container.Column(2)] | [[$EXP[GridView_Display_IsPosters] | $EXP[GridView_Display_IsSquare]] + Container.Column(4)]]</expression>
 
   <expression name="Icon_240_IsVisible">String.IsEqual(Container.ViewMode,Strip)</expression>
   <expression name="Icon_180_IsVisible">!$EXP[Icon_240_IsVisible]</expression>
   <expression name="Notification_IsVisible">Window.IsActive(notification) | Window.IsActive(extendedprogressdialog)</expression>
-  <expression name="StandardViews_NowPlaying">[ListItem.IsPlaying | [Container.Content(tvshows) + String.IsEqual(VideoPlayer.TVShowTitle,ListItem.Title)] | [Container.Content(seasons) + String.IsEqual(VideoPlayer.TVShowTitle,ListItem.TVShowTitle) + String.IsEqual(VideoPlayer.Season,ListItem.Season)] | [Container.Content(artists) + String.IsEqual(MusicPlayer.Artist, ListItem.Artist)] | [Container.Content(albums) + String.IsEqual(MusicPlayer.Artist, ListItem.Artist) + String.IsEqual(MusicPlayer.Album, ListItem.Album)]]</expression>
+  <expression name="StandardViews_NowPlaying">[ListItem.IsPlaying | [Container.Content(tvshows) + String.IsEqual(VideoPlayer.TVShowTitle,ListItem.Title)] | [Container.Content(seasons) + String.IsEqual(VideoPlayer.TVShowTitle,ListItem.TVShowTitle) + String.IsEqual(VideoPlayer.Season,ListItem.Season)] | [Container.Content(artists) + String.IsEqual(MusicPlayer.Artist, ListItem.Artist)] | [Container.Content(artists) + String.IsEqual(MusicPlayer.Artist, ListItem.AlbumArtist)] | [Container.Content(albums) + String.IsEqual(MusicPlayer.Artist, ListItem.Artist) + String.IsEqual(MusicPlayer.Album, ListItem.Album)] | [Container.Content(albums) + String.IsEqual(MusicPlayer.Artist, ListItem.AlbumArtist) + String.IsEqual(MusicPlayer.Album, ListItem.Album)]]</expression>
+	<expression name="Music_Player_Top_Right">$EXP[GridView_IsVisible] | [$EXP[ListView_Display_IsThumbnails] + ![Container.Content(episodes) | Container.Content(artists) | Container.Content(albums) | Container.Content(songs)]]</expression>
 
 	<!-- Fullscreen dimensions -->
 	<include name="FullscreenDimensions">
@@ -921,7 +923,6 @@
 			<top>0</top>
 			<width>$PARAM[size]</width>
 			<height>$PARAM[size]</height>
-			<visible>!$EXP[TransparentDialog_IsVisible]</visible>
 			<include>Content_Transition_Fade_Animation</include>
 			<control type="image">
 				<texture colordiffuse="$PARAM[backgroundcolor]">$PARAM[backgroundopacity]</texture>
@@ -1110,6 +1111,7 @@
   <param name="barheight1" default="400"/>
   <param name="barheight2" default="880"/>
   <param name="barheight3" default="560"/>
+	<param name="colordiffuse" default="$VAR[ListFocusColor]"/>
   <param name="pausewidth" default="10"/>
   <param name="pauseheight" default="600"/>
   <param name="pauseshift" default="-3"/>
@@ -1132,15 +1134,18 @@
           <param name="width" value="$PARAM[barwidth]"/>
           <param name="maxheight" value="$PARAM[barheight1]"/>
           <param name="delay" value="70"/>
+					<param name="colordiffuse" default="$PARAM[colordiffuse]"/>
         </include>
         <include content="NowPlayingBar_Fill">
           <param name="width" value="$PARAM[barwidth]"/>
           <param name="maxheight" value="$PARAM[barheight2]"/>
+					<param name="colordiffuse" default="$PARAM[colordiffuse]"/>
         </include>
         <include content="NowPlayingBar_Fill">
           <param name="width" value="$PARAM[barwidth]"/>
           <param name="maxheight" value="$PARAM[barheight3]"/>
           <param name="delay" value="130"/>
+					<param name="colordiffuse" default="$PARAM[colordiffuse]"/>
         </include>
         <include content="NowPlayingBar_Fill">
           <param name="visible" value="Player.Paused"/>
@@ -1148,6 +1153,7 @@
           <param name="maxheight" value="$PARAM[pauseheight]"/>
           <param name="pulse" value="false"/>
           <param name="time" value="0"/>
+					<param name="colordiffuse" default="$PARAM[colordiffuse]"/>
         </include>
         <include content="NowPlayingBar_Fill">
           <param name="visible" value="Player.Paused"/>
@@ -1155,6 +1161,7 @@
           <param name="maxheight" value="$PARAM[pauseheight]"/>
           <param name="pulse" value="false"/>
           <param name="time" value="0"/>
+					<param name="colordiffuse" default="$PARAM[colordiffuse]"/>
         </include>
       </control>
     </control>
@@ -1166,7 +1173,8 @@
 	<param name="right" default="0"/>
 	<param name="top" default="0"/>
 	<param name="width" default="360"/>
-	<param name="progress_bottom" default="0"/>
+	<param name="progress_side" default="15"/>
+	<param name="progress_bottom" default="15"/>
 	<param name="ondown" default="9000"/>
 	<param name="onup" default="900"/>
 	<param name="onleft" default="9000"/>
@@ -1177,9 +1185,7 @@
 	<param name="right_label_visible" default="false"/>
 	<definition>
 		<control type="group">
-			<visible>!$EXP[TransparentDialog_IsVisible]</visible>
-			<visible>$PARAM[visible]</visible>
-			<include>Content_Transition_Fade_Animation</include>
+			<visible>$PARAM[visible] + [!$EXP[ContainerSwitching] | Window.IsActive(home)]</visible>
 			<right>$PARAM[right]</right>
 			<top>$PARAM[top]</top>
 			<width>$PARAM[width]</width>
@@ -1191,113 +1197,145 @@
 				<onup>$PARAM[onup]</onup>
 				<onleft>$PARAM[onleft]</onleft>
 				<onright>$PARAM[onright]</onright>
-				<onback>$PARAM[onright]</onback>
+				<onback>$PARAM[onback]</onback>
 			</control>
 			<!--Artwork + overlay-->
-			<control type="image">
-				<texture>$INFO[MusicPlayer.Cover]</texture>
-				<aspectratio>scale</aspectratio>
-			</control>
-			<control type="image">
-				<texture colordiffuse="$VAR[DarkColor]">views/white_75.png</texture>
-			</control>
-			<!--Now Playing animation-->
 			<control type="group">
-				<centerleft>50%</centerleft>
-				<centertop>50%</centertop>
-				<width>120</width>
-				<height>120</height>
-				<include content="NowPlayingVisualization_Fill">
-					<param name="visible" value="true"/>
-				</include>
-			</control>
-			<!--Progress Bar-->
-			<control type="progress">
-				<width>100%</width>
-				<height>6</height>
-				<bottom>$PARAM[progress_bottom]</bottom>
-				<info>Player.Progress</info>
-				<texturebg colordiffuse="$VAR[LightColor]">views/white_20.png</texturebg>
-				<lefttexture></lefttexture>
-				<midtexture colordiffuse="$VAR[LightColor]">views/white_100.png</midtexture>
-				<righttexture></righttexture>
-				<overlaytexture></overlaytexture>
-			</control>
-			<!--Labels (center)-->
-			<control type="grouplist">
-				<visible>$PARAM[center_label_visible]</visible>
-				<bottom>20</bottom>
-				<left>15</left>
-				<right>15</right>
-				<orientation>vertical</orientation>
-				<align>right</align>
-				<itemgap>0</itemgap>
-				<control type="label">
-					<height>55</height>
-					<label>$INFO[MusicPlayer.Title]</label>
-					<font>Breadcrumb_Title_Label</font>
-					<textcolor>$VAR[LightColor]</textcolor>
-				</control>
-				<control type="label">
-					<height>40</height>
-					<label>$INFO[MusicPlayer.Artist]</label>
-					<font>Breadcrumb_Info_Label</font>
-					<textcolor>$VAR[LightColor]</textcolor>
+				<visible>$PARAM[visible] + [!$EXP[ContainerSwitching] | Window.IsActive(home)]</visible>
+				<include>View_Transition_Fade_Animation</include>
+				<control type="group">
+					<visible>!$EXP[OptionsSwitching]</visible>
+					<include>View_Transition_Fade_Animation_No_Delay</include>
+					<control type="image">
+						<texture colordiffuse="$VAR[DarkColor]">views/white_100.png</texture>
+					</control>
+					<control type="image">
+						<texture diffuse="views/white_30.png">$INFO[MusicPlayer.Cover]</texture>
+						<aspectratio>scale</aspectratio>
+					</control>
+					<!--Shadow for Gridview-->
+					<control type="group">
+						<visible>!$EXP[TransparentDialog_IsVisible]</visible>
+						<include>Content_Fade_Animation</include>
+						<control type="image">
+							<bottom>0</bottom>
+							<height>120</height>
+							<texture colordiffuse="$VAR[ShadowColor]">views/dropshadow_top_120.png</texture>
+							<aspectratio>stretch</aspectratio>
+							<visible>$EXP[GridView_Position_IsTop-Right]</visible>
+						</control>
+					</control>
 				</control>
 			</control>
-			<!--Labels (Left)-->
+			<!--Details-->
 			<control type="group">
-				<visible>$PARAM[left_label_visible]</visible>
-				<centertop>50%</centertop>
-				<width>540</width>
-				<right>$PARAM[width]</right>
-				<control type="grouplist">
-					<left>30</left>
-					<right>30</right>
-					<orientation>vertical</orientation>
-					<align>center</align>
-					<itemgap>0</itemgap>
-					<control type="label">
-						<height>55</height>
-						<label>$INFO[MusicPlayer.Title]</label>
-						<font>Breadcrumb_Title_Label</font>
-						<textcolor>$VAR[PrimaryColor]</textcolor>
+				<visible>$PARAM[visible] + [!$EXP[ContainerSwitching] | Window.IsActive(home)]</visible>
+				<include>View_Transition_Content_Fade_Animation</include>
+				<control type="group">
+					<visible>!$EXP[TransparentDialog_IsVisible]</visible>
+					<include>Content_Transition_Fade_Animation</include>
+					<!--Now Playing animation-->
+					<control type="group">
+						<centerleft>50%</centerleft>
+						<centertop>50%</centertop>
+						<width>120</width>
+						<height>120</height>
+						<include content="NowPlayingVisualization_Fill">
+							<param name="visible" value="true"/>
+							<param name="colordiffuse" value="$VAR[LightColor]"/>
+						</include>
+					</control>
+					<!--Progress Bar-->
+					<control type="progress">
+						<animation effect="slide" end="0,-10" time="0" condition="$EXP[GridView_Position_IsTop-Right]">Conditional</animation>
+						<left>$PARAM[progress_side]</left>
+						<right>$PARAM[progress_side]</right>
+						<bottom>$PARAM[progress_bottom]</bottom>
+						<height>4</height>
+						<info>Player.Progress</info>
+						<texturebg colordiffuse="$VAR[LightColor]">views/white_20.png</texturebg>
+						<lefttexture></lefttexture>
+						<midtexture colordiffuse="$VAR[LightColor]">views/white_100.png</midtexture>
+						<righttexture></righttexture>
+						<overlaytexture></overlaytexture>
+					</control>
+					<!--Labels (center)-->
+					<control type="grouplist">
+						<visible>$PARAM[center_label_visible]</visible>
+						<bottom>20</bottom>
+						<left>15</left>
+						<right>15</right>
+						<orientation>vertical</orientation>
 						<align>right</align>
+						<itemgap>0</itemgap>
+						<control type="label">
+							<height>55</height>
+							<label>$INFO[MusicPlayer.Title]</label>
+							<font>Breadcrumb_Title_Label</font>
+							<textcolor>$VAR[LightColor]</textcolor>
+						</control>
+						<control type="label">
+							<height>40</height>
+							<label>$INFO[MusicPlayer.Artist]</label>
+							<font>Breadcrumb_Info_Label</font>
+							<textcolor>$VAR[LightColor]</textcolor>
+						</control>
 					</control>
-					<control type="label">
-						<height>40</height>
-						<label>$INFO[MusicPlayer.Artist]</label>
-						<font>Breadcrumb_Info_Label</font>
-						<textcolor>$VAR[PrimaryColor]</textcolor>
-						<align>right</align>
+					<!--Labels (Left)-->
+					<control type="group">
+						<visible>$PARAM[left_label_visible]</visible>
+						<centertop>50%</centertop>
+						<width>540</width>
+						<right>$PARAM[width]</right>
+						<control type="grouplist">
+							<left>30</left>
+							<right>30</right>
+							<orientation>vertical</orientation>
+							<align>center</align>
+							<itemgap>0</itemgap>
+							<control type="label">
+								<height>55</height>
+								<label>$INFO[MusicPlayer.Title]</label>
+								<font>Breadcrumb_Title_Label</font>
+								<textcolor>$VAR[ListFocusColor]</textcolor>
+								<align>right</align>
+							</control>
+							<control type="label">
+								<height>40</height>
+								<label>$INFO[MusicPlayer.Artist]</label>
+								<font>Breadcrumb_Info_Label</font>
+								<textcolor>$VAR[ListFocusColor]</textcolor>
+								<align>right</align>
+							</control>
+						</control>
 					</control>
-				</control>
-			</control>
-			<!--Labels (Right)-->
-			<control type="group">
-				<visible>$PARAM[right_label_visible]</visible>
-				<centertop>50%</centertop>
-				<width>540</width>
-				<left>$PARAM[width]</left>
-				<control type="grouplist">
-					<left>30</left>
-					<right>30</right>
-					<orientation>vertical</orientation>
-					<align>center</align>
-					<itemgap>0</itemgap>
-					<control type="label">
-						<height>55</height>
-						<label>$INFO[MusicPlayer.Title]</label>
-						<font>Breadcrumb_Title_Label</font>
-						<textcolor>$VAR[PrimaryColor]</textcolor>
-						<align>left</align>
-					</control>
-					<control type="label">
-						<height>40</height>
-						<label>$INFO[MusicPlayer.Artist]</label>
-						<font>Breadcrumb_Info_Label</font>
-						<textcolor>$VAR[PrimaryColor]</textcolor>
-						<align>left</align>
+					<!--Labels (Right)-->
+					<control type="group">
+						<visible>$PARAM[right_label_visible]</visible>
+						<centertop>50%</centertop>
+						<width>540</width>
+						<left>$PARAM[width]</left>
+						<control type="grouplist">
+							<left>30</left>
+							<right>30</right>
+							<orientation>vertical</orientation>
+							<align>center</align>
+							<itemgap>0</itemgap>
+							<control type="label">
+								<height>55</height>
+								<label>$INFO[MusicPlayer.Title]</label>
+								<font>Breadcrumb_Title_Label</font>
+								<textcolor>$VAR[ListFocusColor]</textcolor>
+								<align>left</align>
+							</control>
+							<control type="label">
+								<height>40</height>
+								<label>$INFO[MusicPlayer.Artist]</label>
+								<font>Breadcrumb_Info_Label</font>
+								<textcolor>$VAR[ListFocusColor]</textcolor>
+								<align>left</align>
+							</control>
+						</control>
 					</control>
 				</control>
 			</control>
