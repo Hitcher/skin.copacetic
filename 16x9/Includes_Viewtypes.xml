@@ -24,13 +24,18 @@
 				<visible>$PARAM[groupvisible]</visible>
 				<include>$PARAM[animation]</include>
 				<!--NowPlaying-->
-				<include content="NowPlayingVisualization_Fill">
-					<param name="visible" value="$EXP[StandardViews_NowPlaying_Small]"/>
-					<param name="top" value="$PARAM[nowplayingtop]"/>
-				</include>
+				<control type="group">
+					<width>120</width>
+					<height>120</height>
+					<left>0</left>
+					<top>$PARAM[nowplayingtop]</top>
+					<include content="NowPlayingVisualization_Fill">
+						<param name="visible" value="$EXP[StandardViews_NowPlaying]"/>
+					</include>
+				</control>
 				<!--Icon-->
 				<control type="image">
-					<visible>!$EXP[StandardViews_NowPlaying_Small]</visible>
+					<visible>!$EXP[StandardViews_NowPlaying]</visible>
 					<visible>$PARAM[iconvisible]</visible>
 					<left>$PARAM[iconleft]</left>
 					<top>$PARAM[icontop]</top>
@@ -114,7 +119,6 @@
 						<param name="font" value="List_Title_Focused"/>
 						<param name="tracknumbercolor" value="$PARAM[textcolor]"/>
 						<param name="textcolor" value="$PARAM[textcolor]"/>
-						<param name="scroll" value="true"/>
 						<param name="icontexture" value="$PARAM[focusedicontexture]"/>
 						<param name="iconvisible" value="$PARAM[focusediconvisible]"/>
 					</include>
@@ -131,7 +135,6 @@
 						<param name="font" value="List_Title_Focused"/>
 						<param name="tracknumbercolor" value="$PARAM[textcolor]"/>
 						<param name="textcolor" value="$PARAM[textcolor]"/>
-						<param name="scroll" value="true"/>
 						<param name="icontexture" value="$PARAM[focusedicontexture]"/>
 						<param name="iconvisible" value="$PARAM[focusediconvisible]"/>
 					</include>
@@ -148,7 +151,6 @@
 						<param name="font" value="List_Title_Focused"/>
 						<param name="tracknumbercolor" value="$PARAM[textcolor]"/>
             <param name="textcolor" value="$PARAM[textcolor]"/>
-						<param name="scroll" value="true"/>
             <param name="icontexture" value="$PARAM[focusedicontexture]"/>
             <param name="iconvisible" value="$PARAM[focusediconvisible]"/>
 					</include>
@@ -165,7 +167,6 @@
 						<param name="font" value="List_Title_Focused"/>
 						<param name="tracknumbercolor" value="$PARAM[textcolor]"/>
             <param name="textcolor" value="$PARAM[textcolor]"/>
-						<param name="scroll" value="true"/>
             <param name="icontexture" value="$PARAM[focusedicontexture]"/>
             <param name="iconvisible" value="$PARAM[focusediconvisible]"/>
 					</include>
@@ -179,11 +180,12 @@
 		<param name="id"/>
 		<param name="viewtype_label"/>
 		<param name="viewtype"/>
+		<param name="visible" default="$EXP[View_Containers]"/>
 		<param name="orientation"/>
 		<definition>
 			<control type="$PARAM[type]" id="$PARAM[id]">
 				<viewtype label="$PARAM[viewtype_label]">$PARAM[viewtype]</viewtype>
-				<visible>$EXP[View_Containers]</visible>
+				<visible>$PARAM[visible]</visible>
 				<left>0</left>
 				<top>0</top>
 				<focusposition>0</focusposition>
@@ -388,7 +390,7 @@
 				</control>
 				<!--Now Playing Background-->
 				<control type="group">
-					<visible>[[$EXP[ShowcaseView_IsVisible] | $EXP[StripView_IsVisible]] + [ListItem($PARAM[position]).IsPlaying | [Container.Content(tvshows) + String.IsEqual(VideoPlayer.TVShowTitle,ListItem($PARAM[position]).Title)] | [Container.Content(seasons) + String.IsEqual(VideoPlayer.TVShowTitle,ListItem($PARAM[position]).TVShowTitle) + String.IsEqual(VideoPlayer.Season,ListItem($PARAM[position]).Season)] | [Container.Content(artists) + String.IsEqual(MusicPlayer.Artist, ListItem($PARAM[position]).Artist)] | [Container.Content(albums) + String.IsEqual(MusicPlayer.Artist, ListItem($PARAM[position]).Artist) + String.IsEqual(MusicPlayer.Album, ListItem($PARAM[position]).Album)]]] | $EXP[StandardViews_NowPlaying]</visible>
+					<visible>[[$EXP[ShowcaseView_IsVisible] | $EXP[StripView_IsVisible]] + [ListItem($PARAM[position]).IsPlaying | [Container.Content(tvshows) + String.IsEqual(VideoPlayer.TVShowTitle,ListItem($PARAM[position]).Title)] | [Container.Content(seasons) + String.IsEqual(VideoPlayer.TVShowTitle,ListItem($PARAM[position]).TVShowTitle) + String.IsEqual(VideoPlayer.Season,ListItem($PARAM[position]).Season)] | [Container.Content(artists) + String.IsEqual(MusicPlayer.Artist, ListItem($PARAM[position]).Artist)] | [Container.Content(albums) + String.IsEqual(MusicPlayer.Artist, ListItem($PARAM[position]).Artist) + String.IsEqual(MusicPlayer.Album, ListItem($PARAM[position]).Album)]]] | [$EXP[GridView_IsVisible] + $EXP[StandardViews_NowPlaying]]</visible>
 					<control type="image">
 						<aspectratio>stretch</aspectratio>
 						<texture colordiffuse="$VAR[DarkColor]">views/white_75.png</texture>
@@ -564,7 +566,7 @@
 								<param name="top" value="$PARAM[item_top]"/>
 								<param name="height" value="$PARAM[item_height]"/>
 								<param name="flipx" value="true"/>
-								<param name="visible" value="!String.IsEmpty(Container.ListItemNoWrap(1).Label) + [[$EXP[ShowcaseView_IsVisible] + $EXP[ShowcaseView_Details_Off]] | $EXP[StripView_IsVisible]]"/>
+								<param name="visible" value="!String.IsEmpty(Container.ListItemNoWrap(1).Label) + [[$EXP[ShowcaseView_IsVisible] + $EXP[ShowcaseView_Details_Off] + !Control.HasFocus(60)] | $EXP[StripView_IsVisible]]"/>
 							</include>
 						</control>
 					</control>
@@ -582,7 +584,7 @@
 					<visible>![$EXP[ContentSwitching] | $EXP[TransparentDialog_IsVisible] | Control.HasFocus(60)]</visible>
 					<include>Content_Transition_Fade_Animation</include>
 					<control type="grouplist">
-						<visible>!$EXP[ContentSwitching] + $EXP[ShowcaseView_Details_Overlay_IsVisible] + !ListItem.IsPlaying</visible>
+						<visible>!$EXP[ContentSwitching] + $EXP[ShowcaseView_Details_Overlay_IsVisible] + !$EXP[StandardViews_NowPlaying]</visible>
 						<orientation>vertical</orientation>
 						<align>center</align>
 						<itemgap>5</itemgap>

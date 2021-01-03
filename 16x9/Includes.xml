@@ -371,8 +371,7 @@
   <expression name="Icon_240_IsVisible">String.IsEqual(Container.ViewMode,Strip)</expression>
   <expression name="Icon_180_IsVisible">!$EXP[Icon_240_IsVisible]</expression>
   <expression name="Notification_IsVisible">Window.IsActive(notification) | Window.IsActive(extendedprogressdialog)</expression>
-  <expression name="StandardViews_NowPlaying">$EXP[GridView_IsVisible] + [ListItem.IsPlaying | [Container.Content(tvshows) + String.IsEqual(VideoPlayer.TVShowTitle,ListItem.Title)] | [Container.Content(seasons) + String.IsEqual(VideoPlayer.TVShowTitle,ListItem.TVShowTitle) + String.IsEqual(VideoPlayer.Season,ListItem.Season)] | [Container.Content(artists) + String.IsEqual(MusicPlayer.Artist, ListItem.Artist)] | [Container.Content(albums) + String.IsEqual(MusicPlayer.Artist, ListItem.Artist) + String.IsEqual(MusicPlayer.Album, ListItem.Album)]]</expression>
-    <expression name="StandardViews_NowPlaying_Small">[$EXP[ListView_IsVisible] | $EXP[BillboardView_IsVisible]] + [ListItem.IsPlaying | [Container.Content(tvshows) + String.IsEqual(VideoPlayer.TVShowTitle,ListItem.Title)] | [Container.Content(seasons) + String.IsEqual(VideoPlayer.TVShowTitle,ListItem.TVShowTitle) + String.IsEqual(VideoPlayer.Season,ListItem.Season)] | [Container.Content(artists) + String.IsEqual(MusicPlayer.Artist, ListItem.Artist)] | [Container.Content(albums) + String.IsEqual(MusicPlayer.Artist, ListItem.Artist) + String.IsEqual(MusicPlayer.Album, ListItem.Album)]]</expression>
+  <expression name="StandardViews_NowPlaying">[ListItem.IsPlaying | [Container.Content(tvshows) + String.IsEqual(VideoPlayer.TVShowTitle,ListItem.Title)] | [Container.Content(seasons) + String.IsEqual(VideoPlayer.TVShowTitle,ListItem.TVShowTitle) + String.IsEqual(VideoPlayer.Season,ListItem.Season)] | [Container.Content(artists) + String.IsEqual(MusicPlayer.Artist, ListItem.Artist)] | [Container.Content(albums) + String.IsEqual(MusicPlayer.Artist, ListItem.Artist) + String.IsEqual(MusicPlayer.Album, ListItem.Album)]]</expression>
 
 	<!-- Fullscreen dimensions -->
 	<include name="FullscreenDimensions">
@@ -480,6 +479,7 @@
       <visible>Control.IsVisible($PARAM[id]) + Control.HasFocus($PARAM[id])</visible>
     </control>
   </include>
+
   <!--Home Menu Label Focused-->
 	<include name="HomeMenuLabelFocused">
 		<param name="hiddenid"/>
@@ -909,254 +909,407 @@
   </definition>
 </include>
 
+<!-- Clock -->
+<include name="Clock">
+	<param name="size" default="180"/>
+	<param name="backgroundcolor" default="$VAR[AccentColor]"/>
+	<param name="backgroundopacity" default="views/white_100.png"/>
+	<param name="textcolor" default="$VAR[LightColor]"/>
+	<definition>
+		<control type="group">
+			<right>0</right>
+			<top>0</top>
+			<width>$PARAM[size]</width>
+			<height>$PARAM[size]</height>
+			<visible>!$EXP[TransparentDialog_IsVisible]</visible>
+			<include>Content_Transition_Fade_Animation</include>
+			<control type="image">
+				<texture colordiffuse="$PARAM[backgroundcolor]">$PARAM[backgroundopacity]</texture>
+			</control>
+			<control type="grouplist">
+				<left>15</left>
+				<right>15</right>
+				<centertop>50%</centertop>
+				<height>70</height>
+				<align>center</align>
+				<itemgap>3</itemgap>
+				<orientation>horizontal</orientation>
+				<usecontrolcoords>true</usecontrolcoords>
+				<control type="label">
+					<width>auto</width>
+					<height>70</height>
+					<font>List_Title_Focused</font>
+					<align>right</align>
+					<aligny>center</aligny>
+					<textcolor>$PARAM[textcolor]</textcolor>
+					<label>$INFO[System.Time(hh)]</label>
+				</control>
+				<control type="label">
+					<width>auto</width>
+					<height>55</height>
+					<top>13</top>
+					<font>Main_Menu_Unfocused</font>
+					<align>left</align>
+					<aligny>center</aligny>
+					<textcolor>$PARAM[textcolor]</textcolor>
+					<label>$INFO[System.Time(mm)]</label>
+				</control>
+			</control>
+		</control>
+	</definition>
+</include>
 
-  <include name="NowPlayingBar_Stroke">
-    <param name="visible" default="Player.Playing"/>
-    <param name="top" default="0"/>
-    <param name="width" default="33"/>
-    <param name="height" default="10"/>
-    <param name="maxheight" default="1200"/>
-    <param name="slideheight" default="0"/>
-    <param name="delay" default="0"/>
-    <param name="time" default="180"/>
-    <param name="pulse" default="true"/>
-    <definition>
-      <control type="grouplist">
-        <visible>$PARAM[visible]</visible>
-        <left>0</left>
-        <top>$PARAM[top]</top>
-        <width>$PARAM[width]</width>
-        <orientation>vertical</orientation>
-        <itemgap>0</itemgap>
-        <control type="image">
-          <animation effect="slide" end="0,$PARAM[slideheight]" time="180" delay="$PARAM[delay]" tween="sine" easing="out" pulse="$PARAM[pulse]" condition="true">Conditional</animation>
-          <height>5</height>
-          <aspectratio>stretch</aspectratio>
-          <texture colordiffuse="$VAR[LightColor]">views/white_100.png</texture>
-        </control>
-        <control type="image">
-          <animation effect="zoom" end="100, $PARAM[maxheight]" center="0, $PARAM[height]" time="$PARAM[time]" delay="$PARAM[delay]" tween="sine" easing="out" pulse="$PARAM[pulse]" condition="true">Conditional</animation>
-          <height>$PARAM[height]</height>
-          <aspectratio>stretch</aspectratio>
-          <texture border="6" colordiffuse="$VAR[LightColor]">views/now-playing_5px.png</texture>
-        </control>
-        <control type="image">
-          <height>5</height>
-          <aspectratio>stretch</aspectratio>
-          <texture colordiffuse="$VAR[LightColor]">views/white_100.png</texture>
-        </control>
-      </control>
-    </definition>
-  </include>
-
-	<include name="NowPlayingVisualization_Stroke">
-    <param name="visible" default="true"/>
-    <param name="centerpoint" default="50%"/>
-    <param name="width" default="120"/>
-    <param name="height" default="120"/>
-    <param name="charttop" default="100"/>
-    <param name="itemgap" default="10"/>
-    <param name="barwidth" default="33"/>
-    <param name="barheight1" default="440"/>
-    <param name="slideheight1" default="-34"/>
-    <param name="barheight2" default="1100"/>
-    <param name="slideheight2" default="-100"/>
-    <param name="barheight3" default="680"/>
-    <param name="slideheight3" default="-58"/>
-    <definition>
-      <!--Now Playing-->
-      <control type="group">
-        <animation effect="slide" end="0,-30" time="0" condition="Player.Paused">Conditional</animation>
-        <visible>$PARAM[visible]</visible>
-        <visible>!$EXP[Background_IsFanart]</visible>
-        <visible>!$EXP[TransparentDialog_IsVisible] + !Window.IsActive(busydialog)</visible>
-        <include>Content_Fade_Animation</include>
-        <centertop>$PARAM[centerpoint]</centertop>
-        <centerleft>$PARAM[centerpoint]</centerleft>
-        <width>$PARAM[width]</width>
-        <height>$PARAM[height]</height>
-        <!--
-        <control type="image">
-          <aspectratio>stretch</aspectratio>
-          <texture colordiffuse="$VAR[AccentColor]">views/white_100.png</texture>
-        </control>
-        -->
-        <control type="grouplist">
-          <usecontrolcoords>true</usecontrolcoords>
-          <top>$PARAM[charttop]</top>
-          <itemgap>$PARAM[itemgap]</itemgap>
-          <orientation>horizontal</orientation>
-          <align>center</align>
-          <include content="NowPlayingBar_Stroke">
-            <param name="width" value="$PARAM[barwidth]"/>
-            <param name="maxheight" value="$PARAM[barheight1]"/>
-            <param name="slideheight" value="$PARAM[slideheight1]"/>
-            <param name="delay" value="70"/>
-          </include>
-          <include content="NowPlayingBar_Stroke">
-            <param name="width" value="$PARAM[barwidth]"/>
-            <param name="maxheight" value="$PARAM[barheight2]"/>
-            <param name="slideheight" value="$PARAM[slideheight2]"/>
-          </include>
-          <include content="NowPlayingBar_Stroke">
-            <param name="width" value="$PARAM[barwidth]"/>
-            <param name="maxheight" value="$PARAM[barheight3]"/>
-            <param name="slideheight" value="$PARAM[slideheight3]"/>
-            <param name="delay" value="130"/>
-          </include>
-          <include content="NowPlayingBar_Stroke">
-            <param name="visible" value="Player.Paused"/>
-            <param name="width" value="25"/>
-            <param name="height" value="10"/>
-            <param name="pulse" value="false"/>
-            <param name="maxheight" value="500"/>
-            <param name="slideheight" value="-40"/>
-            <param name="time" value="0"/>
-          </include>
-          <include content="NowPlayingBar_Stroke">
-            <param name="visible" value="Player.Paused"/>
-            <param name="width" value="25"/>
-            <param name="height" value="10"/>
-            <param name="pulse" value="false"/>
-            <param name="maxheight" value="500"/>
-            <param name="slideheight" value="-40"/>
-            <param name="time" value="0"/>
-          </include>
-        </control>
-      </control>
-    </definition>
-  </include>
-
-  <include name="NowPlayingBar_Fill">
-    <param name="visible" default="Player.Playing"/>
-    <param name="width" default="12"/>
-    <param name="height" default="5"/>
-    <param name="maxheight" default="880"/>
-    <param name="delay" default="0"/>
-    <param name="time" default="180"/>
-    <param name="pulse" default="true"/>
-    <definition>
+<include name="NowPlayingBar_Stroke">
+  <param name="visible" default="Player.Playing"/>
+  <param name="top" default="0"/>
+  <param name="width" default="33"/>
+  <param name="height" default="10"/>
+  <param name="maxheight" default="1200"/>
+  <param name="slideheight" default="0"/>
+  <param name="delay" default="0"/>
+  <param name="time" default="180"/>
+  <param name="pulse" default="true"/>
+  <definition>
+    <control type="grouplist">
+      <visible>$PARAM[visible]</visible>
+      <left>0</left>
+      <top>$PARAM[top]</top>
+      <width>$PARAM[width]</width>
+      <orientation>vertical</orientation>
+      <itemgap>0</itemgap>
       <control type="image">
-        <visible>$PARAM[visible]</visible>
+        <animation effect="slide" end="0,$PARAM[slideheight]" time="180" delay="$PARAM[delay]" tween="sine" easing="out" pulse="$PARAM[pulse]" condition="true">Conditional</animation>
+        <height>5</height>
+        <aspectratio>stretch</aspectratio>
+        <texture colordiffuse="$VAR[LightColor]">views/white_100.png</texture>
+      </control>
+      <control type="image">
         <animation effect="zoom" end="100, $PARAM[maxheight]" center="0, $PARAM[height]" time="$PARAM[time]" delay="$PARAM[delay]" tween="sine" easing="out" pulse="$PARAM[pulse]" condition="true">Conditional</animation>
-        <left>0</left>
-        <top>0</top>
-        <width>$PARAM[width]</width>
         <height>$PARAM[height]</height>
         <aspectratio>stretch</aspectratio>
-        <texture colordiffuse="$VAR[ListFocusColor]">views/white_100.png</texture>
+        <texture border="6" colordiffuse="$VAR[LightColor]">views/now-playing_5px.png</texture>
       </control>
-    </definition>
-  </include>
-
-  <include name="NowPlayingVisualization_Fill">
-    <param name="visible" default="false"/>
-    <param name="left" default="0"/>
-    <param name="top" default="0"/>
-    <param name="width" default="120"/>
-    <param name="height" default="120"/>
-    <param name="charttop" default="77"/>
-    <param name="itemgap" default="4"/>
-    <param name="barwidth" default="12"/>
-    <param name="barheight1" default="400"/>
-    <param name="barheight2" default="880"/>
-    <param name="barheight3" default="560"/>
-    <param name="pausewidth" default="10"/>
-    <param name="pauseheight" default="600"/>
-    <param name="pauseshift" default="-3"/>
-    <definition>
-      <control type="group">
-        <animation effect="slide" end="0,$PARAM[pauseshift]" time="0" condition="Player.Paused">Conditional</animation>
-        <visible>$PARAM[visible]</visible>
-        <visible>!$EXP[TransparentDialog_IsVisible] + !Window.IsActive(busydialog)</visible>
-        <include>Content_Fade_Animation</include>
-        <left>$PARAM[left]</left>
-        <top>$PARAM[top]</top>
-        <width>$PARAM[width]</width>
-        <height>$PARAM[height]</height>
-        <control type="grouplist">
-          <top>$PARAM[charttop]</top>
-          <itemgap>$PARAM[itemgap]</itemgap>
-          <orientation>horizontal</orientation>
-          <align>center</align>
-          <include content="NowPlayingBar_Fill">
-            <param name="width" value="$PARAM[barwidth]"/>
-            <param name="maxheight" value="$PARAM[barheight1]"/>
-            <param name="delay" value="70"/>
-          </include>
-          <include content="NowPlayingBar_Fill">
-            <param name="width" value="$PARAM[barwidth]"/>
-            <param name="maxheight" value="$PARAM[barheight2]"/>
-          </include>
-          <include content="NowPlayingBar_Fill">
-            <param name="width" value="$PARAM[barwidth]"/>
-            <param name="maxheight" value="$PARAM[barheight3]"/>
-            <param name="delay" value="130"/>
-          </include>
-          <include content="NowPlayingBar_Fill">
-            <param name="visible" value="Player.Paused"/>
-            <param name="width" value="$PARAM[pausewidth]"/>
-            <param name="maxheight" value="$PARAM[pauseheight]"/>
-            <param name="pulse" value="false"/>
-            <param name="time" value="0"/>
-          </include>
-          <include content="NowPlayingBar_Fill">
-            <param name="visible" value="Player.Paused"/>
-            <param name="width" value="$PARAM[pausewidth]"/>
-            <param name="maxheight" value="$PARAM[pauseheight]"/>
-            <param name="pulse" value="false"/>
-            <param name="time" value="0"/>
-          </include>
-        </control>
+      <control type="image">
+        <height>5</height>
+        <aspectratio>stretch</aspectratio>
+        <texture colordiffuse="$VAR[LightColor]">views/white_100.png</texture>
       </control>
-    </definition>
-  </include>
+    </control>
+  </definition>
+</include>
 
-	<!-- Clock -->
-	<include name="Clock">
-		<param name="size" default="180"/>
-		<param name="backgroundcolor" default="$VAR[AccentColor]"/>
-		<param name="backgroundopacity" default="views/white_100.png"/>
-		<param name="textcolor" default="$VAR[LightColor]"/>
-		<definition>
+<include name="NowPlayingVisualization_Stroke">
+  <param name="visible" default="true"/>
+  <param name="centerpoint" default="50%"/>
+  <param name="width" default="120"/>
+  <param name="height" default="120"/>
+  <param name="charttop" default="100"/>
+  <param name="itemgap" default="10"/>
+  <param name="barwidth" default="33"/>
+  <param name="barheight1" default="440"/>
+  <param name="slideheight1" default="-34"/>
+  <param name="barheight2" default="1100"/>
+  <param name="slideheight2" default="-100"/>
+  <param name="barheight3" default="680"/>
+  <param name="slideheight3" default="-58"/>
+  <definition>
+    <!--Now Playing-->
+    <control type="group">
+      <animation effect="slide" end="0,-30" time="0" condition="Player.Paused">Conditional</animation>
+      <visible>$PARAM[visible]</visible>
+      <visible>!$EXP[Background_IsFanart]</visible>
+      <visible>!$EXP[TransparentDialog_IsVisible] + !Window.IsActive(busydialog)</visible>
+      <include>Content_Fade_Animation</include>
+      <centertop>$PARAM[centerpoint]</centertop>
+      <centerleft>$PARAM[centerpoint]</centerleft>
+      <width>$PARAM[width]</width>
+      <height>$PARAM[height]</height>
+      <!--
+      <control type="image">
+        <aspectratio>stretch</aspectratio>
+        <texture colordiffuse="$VAR[AccentColor]">views/white_100.png</texture>
+      </control>
+      -->
+      <control type="grouplist">
+        <usecontrolcoords>true</usecontrolcoords>
+        <top>$PARAM[charttop]</top>
+        <itemgap>$PARAM[itemgap]</itemgap>
+        <orientation>horizontal</orientation>
+        <align>center</align>
+        <include content="NowPlayingBar_Stroke">
+          <param name="width" value="$PARAM[barwidth]"/>
+          <param name="maxheight" value="$PARAM[barheight1]"/>
+          <param name="slideheight" value="$PARAM[slideheight1]"/>
+          <param name="delay" value="70"/>
+        </include>
+        <include content="NowPlayingBar_Stroke">
+          <param name="width" value="$PARAM[barwidth]"/>
+          <param name="maxheight" value="$PARAM[barheight2]"/>
+          <param name="slideheight" value="$PARAM[slideheight2]"/>
+        </include>
+        <include content="NowPlayingBar_Stroke">
+          <param name="width" value="$PARAM[barwidth]"/>
+          <param name="maxheight" value="$PARAM[barheight3]"/>
+          <param name="slideheight" value="$PARAM[slideheight3]"/>
+          <param name="delay" value="130"/>
+        </include>
+        <include content="NowPlayingBar_Stroke">
+          <param name="visible" value="Player.Paused"/>
+          <param name="width" value="25"/>
+          <param name="height" value="10"/>
+          <param name="pulse" value="false"/>
+          <param name="maxheight" value="500"/>
+          <param name="slideheight" value="-40"/>
+          <param name="time" value="0"/>
+        </include>
+        <include content="NowPlayingBar_Stroke">
+          <param name="visible" value="Player.Paused"/>
+          <param name="width" value="25"/>
+          <param name="height" value="10"/>
+          <param name="pulse" value="false"/>
+          <param name="maxheight" value="500"/>
+          <param name="slideheight" value="-40"/>
+          <param name="time" value="0"/>
+        </include>
+      </control>
+    </control>
+  </definition>
+</include>
+
+<include name="NowPlayingBar_Fill">
+  <param name="visible" default="Player.Playing"/>
+  <param name="width" default="12"/>
+  <param name="height" default="5"/>
+  <param name="maxheight" default="880"/>
+  <param name="delay" default="0"/>
+  <param name="time" default="180"/>
+  <param name="pulse" default="true"/>
+	<param name="colordiffuse" default="$VAR[ListFocusColor]"/>
+  <definition>
+    <control type="image">
+      <visible>$PARAM[visible]</visible>
+      <animation effect="zoom" end="100, $PARAM[maxheight]" center="0, $PARAM[height]" time="$PARAM[time]" delay="$PARAM[delay]" tween="sine" easing="out" pulse="$PARAM[pulse]" condition="true">Conditional</animation>
+      <left>0</left>
+      <top>0</top>
+      <width>$PARAM[width]</width>
+      <height>$PARAM[height]</height>
+      <aspectratio>stretch</aspectratio>
+      <texture colordiffuse="$PARAM[colordiffuse]">views/white_100.png</texture>
+    </control>
+  </definition>
+</include>
+
+<include name="NowPlayingVisualization_Fill">
+  <param name="visible" default="false"/>
+  <param name="centerpoint" default="50%"/>
+  <param name="width" default="100%"/>
+  <param name="height" default="100%"/>
+  <param name="charttop" default="77"/>
+  <param name="itemgap" default="4"/>
+  <param name="barwidth" default="12"/>
+  <param name="barheight1" default="400"/>
+  <param name="barheight2" default="880"/>
+  <param name="barheight3" default="560"/>
+  <param name="pausewidth" default="10"/>
+  <param name="pauseheight" default="600"/>
+  <param name="pauseshift" default="-3"/>
+  <definition>
+    <control type="group">
+      <visible>$PARAM[visible]</visible>
+      <visible>!$EXP[TransparentDialog_IsVisible] + !Window.IsActive(busydialog)</visible>
+      <include>Content_Fade_Animation</include>
+			<centerleft>$PARAM[centerpoint]</centerleft>
+			<centertop>$PARAM[centerpoint]</centertop>
+      <width>$PARAM[width]</width>
+      <height>$PARAM[height]</height>
+      <control type="grouplist">
+				<animation effect="slide" end="0,$PARAM[pauseshift]" time="0" condition="Player.Paused">Conditional</animation>
+        <top>$PARAM[charttop]</top>
+        <itemgap>$PARAM[itemgap]</itemgap>
+        <orientation>horizontal</orientation>
+        <align>center</align>
+        <include content="NowPlayingBar_Fill">
+          <param name="width" value="$PARAM[barwidth]"/>
+          <param name="maxheight" value="$PARAM[barheight1]"/>
+          <param name="delay" value="70"/>
+        </include>
+        <include content="NowPlayingBar_Fill">
+          <param name="width" value="$PARAM[barwidth]"/>
+          <param name="maxheight" value="$PARAM[barheight2]"/>
+        </include>
+        <include content="NowPlayingBar_Fill">
+          <param name="width" value="$PARAM[barwidth]"/>
+          <param name="maxheight" value="$PARAM[barheight3]"/>
+          <param name="delay" value="130"/>
+        </include>
+        <include content="NowPlayingBar_Fill">
+          <param name="visible" value="Player.Paused"/>
+          <param name="width" value="$PARAM[pausewidth]"/>
+          <param name="maxheight" value="$PARAM[pauseheight]"/>
+          <param name="pulse" value="false"/>
+          <param name="time" value="0"/>
+        </include>
+        <include content="NowPlayingBar_Fill">
+          <param name="visible" value="Player.Paused"/>
+          <param name="width" value="$PARAM[pausewidth]"/>
+          <param name="maxheight" value="$PARAM[pauseheight]"/>
+          <param name="pulse" value="false"/>
+          <param name="time" value="0"/>
+        </include>
+      </control>
+    </control>
+  </definition>
+</include>
+
+<include name="Now_Playing_Music_Widget">
+	<param name="visible" default="true"/>
+	<param name="right" default="0"/>
+	<param name="top" default="0"/>
+	<param name="width" default="360"/>
+	<param name="progress_bottom" default="0"/>
+	<param name="ondown" default="9000"/>
+	<param name="onup" default="900"/>
+	<param name="onleft" default="9000"/>
+	<param name="onright" default="900"/>
+	<param name="onback" default="9000"/>
+	<param name="center_label_visible" default="true"/>
+	<param name="left_label_visible" default="false"/>
+	<param name="right_label_visible" default="false"/>
+	<definition>
+		<control type="group">
+			<visible>!$EXP[TransparentDialog_IsVisible]</visible>
+			<visible>$PARAM[visible]</visible>
+			<include>Content_Transition_Fade_Animation</include>
+			<right>$PARAM[right]</right>
+			<top>$PARAM[top]</top>
+			<width>$PARAM[width]</width>
+			<height>$PARAM[width]</height>
+			<visible>Player.HasAudio</visible>
+			<control type="button" id="999">
+				<onclick>12006</onclick>
+				<ondown>$PARAM[ondown]</ondown>
+				<onup>$PARAM[onup]</onup>
+				<onleft>$PARAM[onleft]</onleft>
+				<onright>$PARAM[onright]</onright>
+				<onback>$PARAM[onright]</onback>
+			</control>
+			<!--Artwork + overlay-->
+			<control type="image">
+				<texture>$INFO[MusicPlayer.Cover]</texture>
+				<aspectratio>scale</aspectratio>
+			</control>
+			<control type="image">
+				<texture colordiffuse="$VAR[DarkColor]">views/white_75.png</texture>
+			</control>
+			<!--Now Playing animation-->
 			<control type="group">
-				<right>0</right>
-				<top>0</top>
-				<width>$PARAM[size]</width>
-				<height>$PARAM[size]</height>
-				<control type="image">
-					<texture colordiffuse="$PARAM[backgroundcolor]">$PARAM[backgroundopacity]</texture>
+				<centerleft>50%</centerleft>
+				<centertop>50%</centertop>
+				<width>120</width>
+				<height>120</height>
+				<include content="NowPlayingVisualization_Fill">
+					<param name="visible" value="true"/>
+				</include>
+			</control>
+			<!--Progress Bar-->
+			<control type="progress">
+				<width>100%</width>
+				<height>6</height>
+				<bottom>$PARAM[progress_bottom]</bottom>
+				<info>Player.Progress</info>
+				<texturebg colordiffuse="$VAR[LightColor]">views/white_20.png</texturebg>
+				<lefttexture></lefttexture>
+				<midtexture colordiffuse="$VAR[LightColor]">views/white_100.png</midtexture>
+				<righttexture></righttexture>
+				<overlaytexture></overlaytexture>
+			</control>
+			<!--Labels (center)-->
+			<control type="grouplist">
+				<visible>$PARAM[center_label_visible]</visible>
+				<bottom>20</bottom>
+				<left>15</left>
+				<right>15</right>
+				<orientation>vertical</orientation>
+				<align>right</align>
+				<itemgap>0</itemgap>
+				<control type="label">
+					<height>55</height>
+					<label>$INFO[MusicPlayer.Title]</label>
+					<font>Breadcrumb_Title_Label</font>
+					<textcolor>$VAR[LightColor]</textcolor>
 				</control>
+				<control type="label">
+					<height>40</height>
+					<label>$INFO[MusicPlayer.Artist]</label>
+					<font>Breadcrumb_Info_Label</font>
+					<textcolor>$VAR[LightColor]</textcolor>
+				</control>
+			</control>
+			<!--Labels (Left)-->
+			<control type="group">
+				<visible>$PARAM[left_label_visible]</visible>
+				<centertop>50%</centertop>
+				<width>540</width>
+				<right>$PARAM[width]</right>
 				<control type="grouplist">
-					<left>15</left>
-					<right>15</right>
-					<centertop>50%</centertop>
-					<height>60</height>
+					<left>30</left>
+					<right>30</right>
+					<orientation>vertical</orientation>
 					<align>center</align>
-					<itemgap>3</itemgap>
-					<orientation>horizontal</orientation>
-					<usecontrolcoords>true</usecontrolcoords>
+					<itemgap>0</itemgap>
 					<control type="label">
-						<width>auto</width>
-						<height>60</height>
-						<font>List_Title_Focused</font>
+						<height>55</height>
+						<label>$INFO[MusicPlayer.Title]</label>
+						<font>Breadcrumb_Title_Label</font>
+						<textcolor>$VAR[PrimaryColor]</textcolor>
 						<align>right</align>
-						<textcolor>$PARAM[textcolor]</textcolor>
-						<label>$INFO[System.Time(hh)]</label>
 					</control>
 					<control type="label">
-						<width>auto</width>
-						<height>55</height>
-						<top>16</top>
-						<font>Main_Menu_Unfocused</font>
-						<align>left</align>
-						<textcolor>$PARAM[textcolor]</textcolor>
-						<label>$INFO[System.Time(mm)]</label>
+						<height>40</height>
+						<label>$INFO[MusicPlayer.Artist]</label>
+						<font>Breadcrumb_Info_Label</font>
+						<textcolor>$VAR[PrimaryColor]</textcolor>
+						<align>right</align>
 					</control>
 				</control>
 			</control>
-		</definition>
-	</include>
+			<!--Labels (Right)-->
+			<control type="group">
+				<visible>$PARAM[right_label_visible]</visible>
+				<centertop>50%</centertop>
+				<width>540</width>
+				<left>$PARAM[width]</left>
+				<control type="grouplist">
+					<left>30</left>
+					<right>30</right>
+					<orientation>vertical</orientation>
+					<align>center</align>
+					<itemgap>0</itemgap>
+					<control type="label">
+						<height>55</height>
+						<label>$INFO[MusicPlayer.Title]</label>
+						<font>Breadcrumb_Title_Label</font>
+						<textcolor>$VAR[PrimaryColor]</textcolor>
+						<align>left</align>
+					</control>
+					<control type="label">
+						<height>40</height>
+						<label>$INFO[MusicPlayer.Artist]</label>
+						<font>Breadcrumb_Info_Label</font>
+						<textcolor>$VAR[PrimaryColor]</textcolor>
+						<align>left</align>
+					</control>
+				</control>
+			</control>
+		</control>
+	</definition>
+</include>
+
+
+
+
+
+
 
 	<!--FlagLayout-->
 	<include name="FlagLayout">
