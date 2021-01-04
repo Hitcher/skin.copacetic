@@ -26,6 +26,7 @@
 		<definition>
 			<!--ARTWORK-->
 			<control type="group">
+				<animation effect="slide" start="0,0" end="360,0" time="180" tween="sine" easing="out" reversible="true" condition="$EXP[$PARAM[viewtype_label]View_Display_IsPosters] + Player.HasAudio">Conditional</animation>
 				<include content="ShowcaseView_Art">
 					<param name="target_id" value="$PARAM[id]"/>
 					<param name="viewtype_label" value="$PARAM[viewtype_label]"/>
@@ -56,32 +57,39 @@
 						<visible>!$EXP[ContentSwitching]</visible>
 						<include content="MediaFlags"/>
 						<control type="group">
-							<animation effect="slide" start="0,0" end="180,0" time="0" condition="$EXP[$PARAM[viewtype_label]View_Display_IsSquare]">Conditional</animation>
-							<include content="ProgressBar">
-								<param name="left" value="180"/>
+							<animation effect="slide" start="0,0" end="180,0" condition="$EXP[$PARAM[viewtype_label]View_Display_IsPosters] + Player.HasAudio">Conditional</animation>
+							<include content="CommonDetails">
+								<param name="viewtype_label" value="$PARAM[viewtype_label]"/>
+								<param name="left" value="960"/>
+								<param name="width" value="720"/>
+								<param name="titleheight" value="156"/>
+						    <param name="infogap" value="5"/>
+						    <param name="infoheight" value="70"/>
+								<param name="plotmaxheight" value="165"/>
 							</include>
+							<control type="group">
+								<animation effect="slide" start="0,0" end="180,0" time="0" condition="$EXP[$PARAM[viewtype_label]View_Display_IsSquare]">Conditional</animation>
+								<include content="ProgressBar">
+									<param name="left" value="180"/>
+								</include>
+							</control>
 						</control>
-						<include content="CommonDetails">
-							<param name="viewtype_label" value="$PARAM[viewtype_label]"/>
-							<param name="left" value="960"/>
-							<param name="width" value="720"/>
-							<param name="titleheight" value="156"/>
-					    <param name="infogap" value="5"/>
-					    <param name="infoheight" value="70"/>
-							<param name="plotmaxheight" value="165"/>
-						</include>
 					</control>
 				</control>
 			</control>
-			<!--Now Playing Widget-->
-			<include content="Now_Playing_Music_Widget">
-				<param name="visible" value="$EXP[ShowcaseView_Display_IsPosters] + !$EXP[ShowcaseView_Details_Off]"/>
-				<param name="right" value="1560"/>
-				<param name="top" value="720"/>
-				<param name="width" value="360"/>
-				<param name="progress_side" value="0"/>
-				<param name="progress_bottom" value="356"/>
-			</include>
+			<!--MusicPlayer-->
+			<control type="group">
+				<animation effect="slide" start="-360,0" end="0,0" time="180" tween="sine" easing="out" reversible="true" condition="$EXP[$PARAM[viewtype_label]View_Display_IsPosters] + Player.HasAudio">Conditional</animation>
+				<include content="Now_Playing_Music_Widget">
+					<param name="visible" value="$EXP[ShowcaseView_Display_IsPosters]"/>
+					<param name="right" value="1560"/>
+					<param name="top" value="720"/>
+					<param name="width" value="360"/>
+					<param name="progress_height" value="6"/>
+					<param name="progress_side" value="0"/>
+					<param name="progress_bottom" value="354"/>
+				</include>
+			</control>
 		</definition>
 	</include>
 
