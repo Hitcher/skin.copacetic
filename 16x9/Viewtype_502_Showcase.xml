@@ -84,24 +84,37 @@
 				</control>
 				<!--MUSICPLAYER-->
 				<control type="group">
+					<visible>$EXP[$PARAM[viewtype_label]View_IsVisible] + !$EXP[ContainerSwitching]</visible>
+					<include>View_Transition_Fade_Animation</include>
 					<control type="group">
-						<include content="Now_Playing_Music_Widget">
-							<param name="viewtype_label" value="$PARAM[viewtype_label]"/>
-							<param name="visible" value="$EXP[ShowcaseView_Display_IsPosters] | [$EXP[ShowcaseView_Display_IsSquare] + $EXP[ShowcaseView_Details_Off]]"/>
-							<param name="right" value="1920"/>
-							<param name="top" value="720"/>
-							<param name="width" value="360"/>
-						</include>
+						<visible>Player.HasAudio</visible>
+						<include>Notification_Widget_Animation</include>
+						<control type="group">
+							<include content="Notification_Widget">
+								<param name="visible" value="$EXP[ShowcaseView_Display_IsSquare] + [!Player.HasAudio | !$EXP[ShowcaseView_Details_Off]]"/>
+								<param name="right" value="600"/>
+								<param name="width" value="240"/>
+								<param name="progress_bottom" value="234"/>
+								<param name="center_label_visible" value="false"/>
+								<param name="right_label_visible" value="true"/>
+							</include>
+							<include content="Notification_Widget">
+								<param name="visible" value="$EXP[ShowcaseView_Display_IsPosters] + !Player.HasAudio"/>
+								<param name="right" value="960"/>
+								<param name="width" value="240"/>
+								<param name="progress_bottom" value="234"/>
+								<param name="center_label_visible" value="false"/>
+								<param name="right_label_visible" value="true"/>
+								<param name="label_width" value="900"/>
+							</include>
+							<include content="Notification_Widget">
+								<param name="visible" value="Player.HasAudio + [$EXP[ShowcaseView_Display_IsPosters] | [$EXP[ShowcaseView_Display_IsSquare] + $EXP[ShowcaseView_Details_Off]]]"/>
+								<param name="right" value="1920"/>
+								<param name="top" value="720"/>
+								<param name="width" value="360"/>
+							</include>
+						</control>
 					</control>
-					<include content="Now_Playing_Music_Widget">
-						<param name="viewtype_label" value="$PARAM[viewtype_label]"/>
-						<param name="visible" value="$EXP[ShowcaseView_Display_IsSquare] + !$EXP[ShowcaseView_Details_Off]"/>
-						<param name="right" value="600"/>
-						<param name="width" value="240"/>
-						<param name="progress_bottom" value="234"/>
-						<param name="center_label_visible" value="false"/>
-						<param name="right_label_visible" value="true"/>
-					</include>
 				</control>
 			</control>
 		</definition>

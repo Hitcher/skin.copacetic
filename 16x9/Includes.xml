@@ -36,6 +36,7 @@
 	<expression name="Prefer_Keyart">Skin.String(Prefer_Keyart,True)</expression>
 	<expression name="Breadcrumb_Enabled_View">$EXP[ListView_IsVisible] | $EXP[GridView_IsVisible]</expression>
 
+	<expression name="HomeView_IsVisible">Window.IsVisible(home)</expression>
   <expression name="ListView_IsVisible">Control.IsVisible(50) | String.IsEqual(Container.ViewMode,List)</expression>
 	<expression name="ListView_Display_IsBackground">$EXP[ListView_IsVisible] + [$EXP[ListView_Display_IsBackground_Movies] | $EXP[ListView_Display_IsBackground_Sets] | $EXP[ListView_Display_IsBackground_TVShows] | $EXP[ListView_Display_IsBackground_Seasons] | $EXP[ListView_Display_IsBackground_Episodes] | $EXP[ListView_Display_IsBackground_Artists] | $EXP[ListView_Display_IsBackground_Albums] | $EXP[ListView_Display_IsBackground_Songs]]</expression>
 	<expression name="ListView_Display_IsBackground_Movies">Container.Content(movies) + [Skin.String(ListView_Display_Movies,Background) | String.IsEmpty(Skin.String(ListView_Display_Movies))]</expression>
@@ -369,9 +370,6 @@
 	<expression name="Grid_Shadow_Bottom-Left_Watched">[[$EXP[GridView_Display_IsFanart] + Control.IsVisible(9614)] | [!$EXP[GridView_Display_IsFanart] + Control.IsVisible(9616)]]</expression>
 	<expression name="GridView_Position_IsTop-Right">Container.Row(0) + [[$EXP[GridView_Display_IsFanart] + Container.Column(2)] | [[$EXP[GridView_Display_IsPosters] | $EXP[GridView_Display_IsSquare]] + Container.Column(4)]]</expression>
 
-  <expression name="Icon_240_IsVisible">String.IsEqual(Container.ViewMode,Strip)</expression>
-  <expression name="Icon_180_IsVisible">!$EXP[Icon_240_IsVisible]</expression>
-  <expression name="Notification_IsVisible">Window.IsActive(notification) | Window.IsActive(extendedprogressdialog)</expression>
   <expression name="StandardViews_NowPlaying">[ListItem.IsPlaying | [Container.Content(tvshows) + String.IsEqual(VideoPlayer.TVShowTitle,ListItem.Title)] | [Container.Content(seasons) + String.IsEqual(VideoPlayer.TVShowTitle,ListItem.TVShowTitle) + String.IsEqual(VideoPlayer.Season,ListItem.Season)] | [Container.Content(artists) + String.IsEqual(MusicPlayer.Artist, ListItem.Artist)] | [Container.Content(artists) + String.IsEqual(MusicPlayer.Artist, ListItem.AlbumArtist)] | [Container.Content(albums) + String.IsEqual(MusicPlayer.Artist, ListItem.Artist) + String.IsEqual(MusicPlayer.Album, ListItem.Album)] | [Container.Content(albums) + String.IsEqual(MusicPlayer.Artist, ListItem.AlbumArtist) + String.IsEqual(MusicPlayer.Album, ListItem.Album)]]</expression>
 	<expression name="Music_Player_Top_Right">$EXP[GridView_IsVisible] | [$EXP[ListView_Display_IsThumbnails] + ![Container.Content(episodes) | Container.Content(artists) | Container.Content(albums) | Container.Content(songs)]]</expression>
 
@@ -1168,97 +1166,133 @@
   </definition>
 </include>
 
-<include name="Now_Playing_Music_Widget">
+<include name="Notification_Widget">
 	<param name="visible" default="true"/>
-	<param name="viewtype_label" default="List"/>
 	<param name="right" default="0"/>
 	<param name="top" default="0"/>
 	<param name="width" default="360"/>
+	<param name="volumebar_isvisible" default="false"/>
+	<param name="nowplaying_isvisible" default="![Window.IsVisible(volumebar) | Window.IsVisible(notification) | Window.IsVisible(extendedprogressdialog)]"/>
+	<param name="progress_isvisible" default="![Window.IsVisible(volumebar) | Window.IsVisible(notification) | Window.IsVisible(extendedprogressdialog)]"/>
+	<param name="progress_id" default="50661"/>
+	<param name="progress_info" default="Player.Progress"/>
 	<param name="progress_side" default="0"/>
 	<param name="progress_bottom" default="0"/>
 	<param name="progress_height" default="6"/>
+	<param name="label_isvisible" default="![Window.IsVisible(volumebar) | Window.IsVisible(notification) | Window.IsVisible(extendedprogressdialog)]"/>
+	<param name="label_scroll" default="false"/>
+	<param name="label_1" default="$INFO[MusicPlayer.Title]"/>
+	<param name="label_2" default="$INFO[MusicPlayer.Artist]"/>
 	<param name="center_label_visible" default="true"/>
 	<param name="left_label_visible" default="false"/>
 	<param name="right_label_visible" default="false"/>
-	<param name="label_width" default="540"/>
+	<param name="label_width" default="600"/>
 	<definition>
 		<control type="group">
+			<visible>$PARAM[visible]</visible>
 			<right>$PARAM[right]</right>
 			<top>$PARAM[top]</top>
 			<width>$PARAM[width]</width>
 			<height>$PARAM[width]</height>
-			<!--Artwork-->
 			<control type="group">
-				<visible>[$EXP[$PARAM[viewtype_label]View_IsVisible] + !$EXP[ContainerSwitching]] | Window.IsVisible(home)</visible>
-				<include>View_Transition_Fade_Animation</include>
-				<control type="group">
-					<visible>!$EXP[OptionsSwitching]</visible>
-					<include>View_Transition_Fade_Animation_No_Delay</include>
-					<control type="group">
-						<visible>Player.HasAudio</visible>
-						<include>Now_Playing_Music_Widget_Animation</include>
-						<control type="group">
-							<visible>$PARAM[visible]</visible>
-							<control type="image">
-								<texture colordiffuse="$VAR[DarkColor]">views/white_100.png</texture>
-							</control>
-							<control type="image">
-								<texture diffuse="views/white_30.png">$INFO[MusicPlayer.Cover]</texture>
-								<aspectratio>scale</aspectratio>
-							</control>
-							<!--Shadow for Gridview-->
-							<control type="group">
-								<visible>!$EXP[TransparentDialog_IsVisible]</visible>
-								<include>Content_Fade_Animation</include>
-								<control type="image">
-									<bottom>0</bottom>
-									<height>120</height>
-									<texture colordiffuse="$VAR[ShadowColor]">views/dropshadow_top_120.png</texture>
-									<aspectratio>stretch</aspectratio>
-									<visible>$EXP[GridView_Position_IsTop-Right]</visible>
-								</control>
-							</control>
-						</control>
-					</control>
-				</control>
-			</control>
-			<!--Details-->
-			<control type="group">
-				<visible>[$EXP[$PARAM[viewtype_label]View_IsVisible] + !$EXP[ContainerSwitching]] | Window.IsVisible(home)</visible>
-				<include>View_Transition_Content_Fade_Animation</include>
+				<visible>!$EXP[OptionsSwitching]</visible>
+				<include>View_Transition_Fade_Animation_No_Delay</include>
 				<control type="group">
 					<visible>!$EXP[TransparentDialog_IsVisible]</visible>
 					<include>Content_Transition_Fade_Animation</include>
-					<control type="group">
+					<!--Background-->
+					<control type="image">
+						<texture colordiffuse="$VAR[Notification_Widget_Background_Color]">views/white_100.png</texture>
+						<aspectratio>scale</aspectratio>
+					</control>
+					<!--Album Cover-->
+					<control type="image">
 						<visible>Player.HasAudio</visible>
-						<include>Now_Playing_Music_Widget_Animation</include>
+						<visible>Window.IsActive(home) | Window.IsActive(videos) | Window.IsActive(music)</visible>
+						<texture diffuse="views/white_30.png">$INFO[MusicPlayer.Cover]</texture>
+						<aspectratio>scale</aspectratio>
+					</control>
+					<!--Volume Progress Bar-->
+					<control type="group">
+						<visible>$PARAM[volumebar_isvisible]</visible>
+						<include>Label_Switching_Animation</include>
+						<animation effect="rotate" center="auto" end="90" time="0" condition="true" reversible="false">Conditional</animation>
+						<control type="progress">
+							<visible>!Player.Muted</visible>
+							<centerleft>50%</centerleft>
+							<centertop>50%</centertop>
+							<width>120</width>
+							<height>30</height>
+							<info>player.volume</info>
+							<reveal>true</reveal>
+							<texturebg colordiffuse="$VAR[LightColor]">views/white_20.png</texturebg>
+							<midtexture colordiffuse="$VAR[LightColor]">views/white_100.png</midtexture>
+						</control>
+						<control type="image">
+							<visible>Player.Muted</visible>
+							<centerleft>50%</centerleft>
+							<centertop>50%</centertop>
+							<width>120</width>
+							<height>30</height>
+							<texture colordiffuse="$VAR[LightColor]">views/white_20.png</texture>
+						</control>
+						<control type="image">
+							<visible>Player.Muted</visible>
+							<centerleft>50%</centerleft>
+							<centertop>50%</centertop>
+							<width>60</width>
+							<height>60</height>
+							<texture colordiffuse="$VAR[LightColor]">views/cross-large_focused.png</texture>
+						</control>
+					</control>
+					<!--Shadow for Gridview-->
+					<control type="group">
+						<visible>!$EXP[TransparentDialog_IsVisible]</visible>
+						<include>Content_Fade_Animation</include>
+						<control type="image">
+							<bottom>0</bottom>
+							<height>120</height>
+							<texture colordiffuse="$VAR[ShadowColor]">views/dropshadow_top_120.png</texture>
+							<aspectratio>stretch</aspectratio>
+							<visible>$EXP[GridView_Position_IsTop-Right]</visible>
+						</control>
+					</control>
+					<!--Details-->
+					<control type="group">
+						<visible>!$EXP[TransparentDialog_IsVisible]</visible>
+						<include>Content_Transition_Fade_Animation</include>
+						<!--Now Playing animation-->
 						<control type="group">
-							<visible>$PARAM[visible]</visible>
-							<!--Now Playing animation-->
-							<control type="group">
-								<centerleft>50%</centerleft>
-								<centertop>50%</centertop>
-								<width>120</width>
-								<height>120</height>
-								<include content="Now_Playing_Visualization_Fill">
-									<param name="visible" value="true"/>
-									<param name="colordiffuse" value="$VAR[LightColor]"/>
-								</include>
-							</control>
-							<!--Progress Bar-->
-							<control type="progress">
-								<left>$PARAM[progress_side]</left>
-								<right>$PARAM[progress_side]</right>
-								<bottom>$PARAM[progress_bottom]</bottom>
-								<height>$PARAM[progress_height]</height>
-								<info>Player.Progress</info>
-								<texturebg colordiffuse="$VAR[LightColor]">views/white_20.png</texturebg>
-								<lefttexture></lefttexture>
-								<midtexture colordiffuse="$VAR[LightColor]">views/white_100.png</midtexture>
-								<righttexture></righttexture>
-								<overlaytexture></overlaytexture>
-							</control>
-							<!--Labels (center)-->
+							<visible>$PARAM[nowplaying_isvisible]</visible>
+							<include>Label_Switching_Animation</include>
+							<centerleft>50%</centerleft>
+							<centertop>50%</centertop>
+							<width>120</width>
+							<height>120</height>
+							<include content="Now_Playing_Visualization_Fill">
+								<param name="visible" value="Player.HasAudio + !Window.IsVisible(volumebar)"/>
+								<param name="colordiffuse" value="$VAR[LightColor]"/>
+							</include>
+						</control>
+						<!--Progress Bar-->
+						<control type="progress" id="$PARAM[progress_id]">
+							<visible>$PARAM[progress_isvisible]</visible>
+							<include>Label_Switching_Animation</include>
+							<left>$PARAM[progress_side]</left>
+							<right>$PARAM[progress_side]</right>
+							<bottom>$PARAM[progress_bottom]</bottom>
+							<height>$PARAM[progress_height]</height>
+							<info>$PARAM[progress_info]</info>
+							<texturebg colordiffuse="$VAR[LightColor]">views/white_20.png</texturebg>
+							<lefttexture></lefttexture>
+							<midtexture colordiffuse="$VAR[LightColor]">views/white_100.png</midtexture>
+							<righttexture></righttexture>
+							<overlaytexture></overlaytexture>
+						</control>
+						<!--Labels (center)-->
+						<control type="group">
+							<visible>$PARAM[label_isvisible]</visible>
+							<include>Label_Switching_Animation</include>
 							<control type="grouplist">
 								<visible>$PARAM[center_label_visible]</visible>
 								<bottom>20</bottom>
@@ -1269,17 +1303,21 @@
 								<itemgap>0</itemgap>
 								<control type="label">
 									<height>55</height>
-									<label>$INFO[MusicPlayer.Title]</label>
+									<label>$PARAM[label_1]</label>
 									<font>Breadcrumb_Title_Label</font>
 									<textcolor>$VAR[LightColor]</textcolor>
 									<align>left</align>
+									<scroll>$PARAM[label_scroll]</scroll>
+									<scrollsuffix> / </scrollsuffix>
 								</control>
 								<control type="label">
-									<height>35</height>
-									<label>$INFO[MusicPlayer.Artist]</label>
+									<height>40</height>
+									<label>$PARAM[label_2]</label>
 									<font>Breadcrumb_Info_Label</font>
 									<textcolor>$VAR[LightColor]</textcolor>
 									<align>left</align>
+									<scroll>$PARAM[label_scroll]</scroll>
+									<scrollsuffix> / </scrollsuffix>
 								</control>
 							</control>
 							<!--Labels (Left)-->
@@ -1297,17 +1335,21 @@
 									<itemgap>0</itemgap>
 									<control type="label">
 										<height>55</height>
-										<label>$INFO[MusicPlayer.Title]</label>
+										<label>$PARAM[label_1]</label>
 										<font>Breadcrumb_Title_Label</font>
-										<textcolor>$VAR[MusicPlayerColor]</textcolor>
+										<textcolor>$VAR[Notification_Widget_Label_Color]</textcolor>
 										<align>right</align>
+										<scroll>$PARAM[label_scroll]</scroll>
+										<scrollsuffix> / </scrollsuffix>
 									</control>
 									<control type="label">
 										<height>40</height>
-										<label>$INFO[MusicPlayer.Artist]</label>
+										<label>$PARAM[label_2]</label>
 										<font>Breadcrumb_Info_Label</font>
-										<textcolor>$VAR[MusicPlayerColor]</textcolor>
+										<textcolor>$VAR[Notification_Widget_Label_Color]</textcolor>
 										<align>right</align>
+										<scroll>$PARAM[label_scroll]</scroll>
+										<scrollsuffix> / </scrollsuffix>
 									</control>
 								</control>
 							</control>
@@ -1325,17 +1367,21 @@
 									<itemgap>0</itemgap>
 									<control type="label">
 										<height>55</height>
-										<label>$INFO[MusicPlayer.Title]</label>
+										<label>$PARAM[label_1]</label>
 										<font>Breadcrumb_Title_Label</font>
-										<textcolor>$VAR[MusicPlayerColor]</textcolor>
+										<textcolor>$VAR[Notification_Widget_Label_Color]</textcolor>
 										<align>left</align>
+										<scroll>$PARAM[label_scroll]</scroll>
+										<scrollsuffix> / </scrollsuffix>
 									</control>
 									<control type="label">
 										<height>40</height>
-										<label>$INFO[MusicPlayer.Artist]</label>
+										<label>$PARAM[label_2]</label>
 										<font>Breadcrumb_Info_Label</font>
-										<textcolor>$VAR[MusicPlayerColor]</textcolor>
+										<textcolor>$VAR[Notification_Widget_Label_Color]</textcolor>
 										<align>left</align>
+										<scroll>$PARAM[label_scroll]</scroll>
+										<scrollsuffix> / </scrollsuffix>
 									</control>
 								</control>
 							</control>
@@ -1347,7 +1393,197 @@
 	</definition>
 </include>
 
-
+<include name="Notification_Dialogs">
+	<param name="volumebar_isvisible" default="Window.IsVisible(volumebar)"/>
+	<param name="progress_isvisible" default="false"/>
+	<param name="progress_id" default="50661"/>
+	<param name="progress_info" default="Player.Progress"/>
+	<param name="label_isvisible" default="Window.IsVisible(volumebar)"/>
+	<param name="label_scroll" default="true"/>
+	<param name="label_1" default="$LOCALIZE[13376]"/>
+	<param name="label_2" default="$VAR[Volumebar_Info_Label]"/>
+	<definition>
+		<!--GENERIC / BILLBOARD-->
+		<control type="group">
+			<animation effect="slide" start="0,0" end="-180,0" time="0" reversible="false" condition="Window.IsVisible(home)">Conditional</animation>
+			<visible>![$EXP[ListView_IsVisible] | $EXP[ShowcaseView_IsVisible] | $EXP[StripView_IsVisible] | $EXP[GridView_IsVisible]]</visible>
+			<include>View_Transition_Fade_Animation</include>
+			<include content="Notification_Widget">
+				<param name="width" value="180"/>
+				<param name="volumebar_isvisible" value="$PARAM[volumebar_isvisible]"/>
+				<param name="nowplaying_isvisible" value="false"/>
+				<param name="progress_isvisible" value="$PARAM[progress_isvisible]"/>
+				<param name="progress_id" value="$PARAM[progress_id]"/>
+				<param name="progress_info" value="$PARAM[progress_info]"/>
+				<param name="label_isvisible" value="$PARAM[label_isvisible]"/>
+				<param name="label_scroll" value="$PARAM[label_scroll]"/>
+				<param name="label_1" value="$PARAM[label_1]"/>
+				<param name="label_2" value="$PARAM[label_2]"/>
+				<param name="center_label_visible" value="false"/>
+				<param name="left_label_visible" value="true"/>
+				<param name="label_width" value="1710"/>
+			</include>
+		</control>
+		<!--LISTVIEW-->
+		<control type="group">
+			<visible>$EXP[ListView_IsVisible]</visible>
+			<include>View_Transition_Fade_Animation</include>
+			<include content="Notification_Widget">
+				<param name="visible" value="$EXP[ListView_Display_IsThumbnails] + $EXP[Poster_Containers]"/>
+				<param name="width" value="180"/>
+				<param name="volumebar_isvisible" value="$PARAM[volumebar_isvisible]"/>
+				<param name="nowplaying_isvisible" value="false"/>
+				<param name="progress_isvisible" value="$PARAM[progress_isvisible]"/>
+				<param name="progress_id" value="$PARAM[progress_id]"/>
+				<param name="progress_bottom" value="174"/>
+				<param name="progress_info" value="$PARAM[progress_info]"/>
+				<param name="label_isvisible" value="$PARAM[label_isvisible]"/>
+				<param name="label_scroll" value="$PARAM[label_scroll]"/>
+				<param name="label_1" value="$PARAM[label_1]"/>
+				<param name="label_2" value="$PARAM[label_2]"/>
+				<param name="center_label_visible" value="false"/>
+				<param name="left_label_visible" value="true"/>
+				<param name="label_width" value="1020"/>
+			</include>
+			<include content="Notification_Widget">
+				<param name="visible" value="$EXP[ListView_Display_IsThumbnails] + $EXP[Square_Containers]"/>
+				<param name="right" value="1740"/>
+				<param name="top" value="900"/>
+				<param name="width" value="180"/>
+				<param name="volumebar_isvisible" value="$PARAM[volumebar_isvisible]"/>
+				<param name="nowplaying_isvisible" value="false"/>
+				<param name="progress_isvisible" value="$PARAM[progress_isvisible]"/>
+				<param name="progress_id" value="$PARAM[progress_id]"/>
+				<param name="progress_info" value="$PARAM[progress_info]"/>
+				<param name="label_isvisible" value="$PARAM[label_isvisible]"/>
+				<param name="label_scroll" value="$PARAM[label_scroll]"/>
+				<param name="label_1" value="$PARAM[label_1]"/>
+				<param name="label_2" value="$PARAM[label_2]"/>
+				<param name="center_label_visible" value="false"/>
+				<param name="right_label_visible" value="true"/>
+				<param name="label_width" value="1710"/>
+			</include>
+			<include content="Notification_Widget">
+				<param name="visible" value="![$EXP[ListView_Display_IsThumbnails] + [$EXP[Square_Containers] | $EXP[Poster_Containers]]]"/>
+				<param name="width" value="180"/>
+				<param name="volumebar_isvisible" value="$PARAM[volumebar_isvisible]"/>
+				<param name="nowplaying_isvisible" value="false"/>
+				<param name="progress_isvisible" value="$PARAM[progress_isvisible]"/>
+				<param name="progress_id" value="$PARAM[progress_id]"/>
+				<param name="progress_info" value="$PARAM[progress_info]"/>
+				<param name="label_isvisible" value="$PARAM[label_isvisible]"/>
+				<param name="label_scroll" value="$PARAM[label_scroll]"/>
+				<param name="label_1" value="$PARAM[label_1]"/>
+				<param name="label_2" value="$PARAM[label_2]"/>
+				<param name="center_label_visible" value="false"/>
+				<param name="left_label_visible" value="true"/>
+				<param name="label_width" value="750"/>
+			</include>
+		</control>
+		<!--SHOWCASEVIEW-->
+		<control type="group">
+			<visible>$EXP[ShowcaseView_IsVisible]</visible>
+			<include>View_Transition_Fade_Animation</include>
+			<include content="Notification_Widget">
+				<param name="visible" value="$EXP[ShowcaseView_Display_IsSquare] + [!Player.HasAudio | !$EXP[ShowcaseView_Details_Off]]"/>
+				<param name="right" value="600"/>
+				<param name="width" value="240"/>
+				<param name="volumebar_isvisible" value="$PARAM[volumebar_isvisible]"/>
+				<param name="nowplaying_isvisible" value="false"/>
+				<param name="progress_isvisible" value="$PARAM[progress_isvisible]"/>
+				<param name="progress_id" value="$PARAM[progress_id]"/>
+				<param name="progress_info" value="$PARAM[progress_info]"/>
+				<param name="label_isvisible" value="$PARAM[label_isvisible]"/>
+				<param name="label_scroll" value="$PARAM[label_scroll]"/>
+				<param name="label_1" value="$PARAM[label_1]"/>
+				<param name="label_2" value="$PARAM[label_2]"/>
+				<param name="center_label_visible" value="false"/>
+				<param name="right_label_visible" value="true"/>
+			</include>
+			<include content="Notification_Widget">
+				<param name="visible" value="$EXP[ShowcaseView_Display_IsPosters] + !Player.HasAudio"/>
+				<param name="right" value="960"/>
+				<param name="width" value="240"/>
+				<param name="volumebar_isvisible" value="$PARAM[volumebar_isvisible]"/>
+				<param name="nowplaying_isvisible" value="false"/>
+				<param name="progress_isvisible" value="$PARAM[progress_isvisible]"/>
+				<param name="progress_id" value="$PARAM[progress_id]"/>
+				<param name="progress_info" value="$PARAM[progress_info]"/>
+				<param name="label_isvisible" value="$PARAM[label_isvisible]"/>
+				<param name="label_scroll" value="$PARAM[label_scroll]"/>
+				<param name="label_1" value="$PARAM[label_1]"/>
+				<param name="label_2" value="$PARAM[label_2]"/>
+				<param name="center_label_visible" value="false"/>
+				<param name="right_label_visible" value="true"/>
+				<param name="label_width" value="900"/>
+			</include>
+			<include content="Notification_Widget">
+				<param name="visible" value="Player.HasAudio + [$EXP[ShowcaseView_Display_IsPosters] | [$EXP[ShowcaseView_Display_IsSquare] + $EXP[ShowcaseView_Details_Off]]]"/>
+				<param name="right" value="1560"/>
+				<param name="top" value="720"/>
+				<param name="width" value="360"/>
+				<param name="volumebar_isvisible" value="$PARAM[volumebar_isvisible]"/>
+				<param name="nowplaying_isvisible" value="false"/>
+				<param name="progress_isvisible" value="$PARAM[progress_isvisible]"/>
+				<param name="progress_id" value="$PARAM[progress_id]"/>
+				<param name="progress_info" value="$PARAM[progress_info]"/>
+				<param name="label_isvisible" value="$PARAM[label_isvisible]"/>
+				<param name="label_scroll" value="$PARAM[label_scroll]"/>
+				<param name="label_1" value="$PARAM[label_1]"/>
+				<param name="label_2" value="$PARAM[label_2]"/>
+			</include>
+		</control>
+		<!--STRIPVIEW-->
+		<control type="group">
+			<visible>$EXP[StripView_IsVisible]</visible>
+			<include>View_Transition_Fade_Animation</include>
+			<animation effect="slide" end="-100,0" time="0" condition="[$EXP[StripView_Display_IsPosters] | [$EXP[StripView_Display_IsFanart] + !$EXP[StripView_Details_Off]]] + Window.IsVisible(shutdownmenu)" reversible="true">Conditional</animation>
+			<animation effect="slide" end="320,0" time="0" condition="$EXP[StripView_Display_IsPosters]">Conditional</animation>
+			<animation effect="slide" end="75,0" time="0" condition="$EXP[StripView_Display_IsSquare] + !$EXP[StripView_Details_Off]">Conditional</animation>
+			<animation effect="slide" end="320,0" time="0" condition="$EXP[StripView_Display_IsFanart] + !$EXP[StripView_Details_Off]">Conditional</animation>
+			<animation effect="slide" end="-245,0" time="0" condition="$EXP[StripView_Display_IsSquare]">Conditional</animation>
+			<include content="Notification_Widget">
+				<param name="right" value="400"/>
+				<param name="width" value="240"/>
+				<param name="volumebar_isvisible" value="$PARAM[volumebar_isvisible]"/>
+				<param name="nowplaying_isvisible" value="false"/>
+				<param name="progress_isvisible" value="$PARAM[progress_isvisible]"/>
+				<param name="progress_id" value="$PARAM[progress_id]"/>
+				<param name="progress_info" value="$PARAM[progress_info]"/>
+				<param name="label_isvisible" value="$PARAM[label_isvisible]"/>
+				<param name="label_scroll" value="$PARAM[label_scroll]"/>
+				<param name="label_1" value="$PARAM[label_1]"/>
+				<param name="label_2" value="$PARAM[label_2]"/>
+				<param name="center_label_visible" value="false"/>
+				<param name="left_label_visible" value="true"/>
+				<param name="label_width" value="990"/>
+			</include>
+		</control>
+		<!--GRIDVIEW-->
+		<control type="group">
+			<visible>$EXP[GridView_IsVisible]</visible>
+			<include>View_Transition_Fade_Animation</include>
+			<animation effect="slide" end="-12,0" time="0" condition="$EXP[GridView_Display_IsFanart]" reversible="false">Conditional</animation>
+			<animation effect="slide" end="-180,0" time="180" tween="sine" easing="out" condition="Window.IsVisible(shutdownmenu)" reversible="true">Conditional</animation>
+			<include content="Notification_Widget">
+				<param name="right" value="60"/>
+				<param name="width" value="180"/>
+				<param name="volumebar_isvisible" value="$PARAM[volumebar_isvisible]"/>
+				<param name="nowplaying_isvisible" value="false"/>
+				<param name="progress_isvisible" value="$PARAM[progress_isvisible]"/>
+				<param name="progress_id" value="$PARAM[progress_id]"/>
+				<param name="progress_info" value="$PARAM[progress_info]"/>
+				<param name="label_isvisible" value="$PARAM[label_isvisible]"/>
+				<param name="label_scroll" value="$PARAM[label_scroll]"/>
+				<param name="label_1" value="$PARAM[label_1]"/>
+				<param name="label_2" value="$PARAM[label_2]"/>
+				<param name="center_label_visible" value="false"/>
+				<param name="left_label_visible" value="true"/>
+				<param name="label_width" value="738"/>
+			</include>
+		</control>
+	</definition>
+</include>
 
 
 
@@ -1371,504 +1607,9 @@
 					<aspectratio>keep</aspectratio>
 					<texture colordiffuse="$PARAM[colordiffuse]" fallback="flags/blank.png">$PARAM[content]</texture>
 				</control>
-			</control>
-		</definition>
-	</include>
-
-  <!-- IconLayout -->
-  <include name="IconLayout">
-    <definition>
-      <control type="group">
-        <left>0</left>
-        <top>0</top>
-        <width>$PARAM[width]</width>
-        <height>$PARAM[width]</height>
-        <visible>$PARAM[visible]</visible>
-        <!--Background-->
-        <control type="image">
-          <texture colordiffuse="$PARAM[backgroundcolor]">$PARAM[backgroundtexture]</texture>
-        </control>
-        <!-- Volume Progressbar -->
-        <control type="progress" id="$PARAM[progressbarid]">
-          <visible>$PARAM[progressbarvisible]</visible>
-          <animation effect="rotate" center="$PARAM[rotatecenter]" end="90" time="0" condition="$PARAM[progressbarrotate]" reversible="false">Conditional</animation>
-          <left>$PARAM[progressbarleft]</left>
-          <top>$PARAM[progressbartop]</top>
-          <width>$PARAM[progressbarwidth]</width>
-          <height>$PARAM[progressbarheight]</height>
-          <info>$PARAM[progressbarinfo]</info>
-          <texturebg colordiffuse="$PARAM[progressbarbackgroundcolor]">$PARAM[progressbarbackgroundtexture]</texturebg>
-          <lefttexture></lefttexture>
-          <midtexture colordiffuse="$PARAM[progressbarfocuscolor]">$PARAM[progressbarfocustexture]</midtexture>
-          <righttexture></righttexture>
-          <overlaytexture></overlaytexture>
-        </control>
-        <!-- Icon Backing -->
-        <control type="grouplist">
-          <visible>$PARAM[iconbackingvisible]</visible>
-          <align>center</align>
-          <orientation>vertical</orientation>
-          <control type="grouplist">
-            <height>$PARAM[iconbackingheight]</height>
-            <align>center</align>
-            <orientation>horizontal</orientation>
-            <control type="image">
-              <width>$PARAM[iconbackingwidth]</width>
-              <height>$PARAM[iconbackingheight]</height>
-              <texture colordiffuse="$PARAM[iconbackingcolor]">$PARAM[iconbackingtexture]</texture>
-            </control>
-          </control>
-        </control>
-        <!-- Icon -->
-        <control type="grouplist">
-          <visible>$PARAM[iconvisible]</visible>
-          <align>center</align>
-          <orientation>vertical</orientation>
-          <control type="grouplist">
-            <height>$PARAM[iconheight]</height>
-            <align>center</align>
-            <orientation>horizontal</orientation>
-            <control type="image">
-              <width>$PARAM[iconwidth]</width>
-              <height>$PARAM[iconheight]</height>
-              <texture colordiffuse="$PARAM[iconcolor]">$PARAM[icontexture]</texture>
-            </control>
-          </control>
-        </control>
-      </control>
-    </definition>
-  </include>
-
-  <!--Icon180x180-->
-  <include name="Icon180">
-    <param name="backgroundcolor" default="$VAR[DarkGreyColor]"/>
-    <param name="backgroundtexture" default="views/white_100.png"/>
-    <param name="progressbarvisible" default="!Player.Muted"/>
-    <param name="progressbarid" default="50405"/>
-    <param name="progressbarrotate" default="true"/>
-    <param name="progressbarleft" default="30"/>
-    <param name="progressbartop" default="75"/>
-    <param name="progressbarwidth" default="120"/>
-    <param name="progressbarheight" default="30"/>
-    <param name="progressbarinfo" default="player.volume"/>
-    <param name="progressbarbackgroundcolor" default="$VAR[LightColor]"/>
-    <param name="progressbarbackgroundtexture" default="views/white_20.png"/>
-    <param name="progressbarfocuscolor" default="$VAR[LightColor]"/>
-    <param name="progressbarfocustexture" default="views/white_75.png"/>
-    <param name="iconbackingvisible" default="Player.Muted"/>
-    <param name="iconbackingwidth" default="30"/>
-    <param name="iconbackingheight" default="120"/>
-    <param name="iconbackingcolor" default="$VAR[LightColor]"/>
-    <param name="iconbackingtexture" default="views/white_20.png"/>
-    <param name="iconvisible" default="Player.Muted"/>
-    <param name="iconwidth" default="60"/>
-    <param name="iconheight" default="60"/>
-    <param name="iconcolor" default="$VAR[AccentColor]"/>
-    <param name="icontexture" default="views/cross-large_focused.png"/>
-    <definition>
-      <control type="group">
-        <animation effect="slide" end="1560,0" time="0" condition="Window.IsActive(home)">Conditional</animation>
-        <animation effect="slide" end="1740,0" time="0" condition="String.IsEqual(Container.ViewMode,List) | String.IsEqual(Container.ViewMode,Billboard)">Conditional</animation>
-        <animation effect="slide" end="720,0" time="0" condition="String.IsEqual(Container.ViewMode,Showcase) + $EXP[ShowcaseView_Display_IsPosters]">Conditional</animation>
-        <animation effect="slide" end="1080,0" time="0" condition="String.IsEqual(Container.ViewMode,Showcase) + $EXP[ShowcaseView_Display_IsSquare]">Conditional</animation>
-        <animation effect="slide" end="1680,0" time="0" condition="String.IsEqual(Container.ViewMode,Grid) + [$EXP[GridView_Display_IsPosters] | $EXP[GridView_Display_IsSquare]]">Conditional</animation>
-        <animation effect="slide" end="1668,0" time="0" condition="String.IsEqual(Container.ViewMode,Grid) + $EXP[GridView_Display_IsFanart]">Conditional</animation>
-        <animation effect="slide" end="1740,0" time="0" condition="Window.IsActive(fullscreenvideo)">Conditional</animation>
-        <include content="IconLayout">
-          <param name="width" value="180"/>
-          <param name="visible" value="$EXP[Icon_180_IsVisible]"/>
-          <param name="backgroundcolor" value="$PARAM[backgroundcolor]"/>
-          <param name="backgroundtexture" value="$PARAM[backgroundtexture]"/>
-          <param name="progressbarid" value="$PARAM[progressbarid]"/>
-          <param name="progressbarrotate" value="$PARAM[progressbarrotate]"/>
-          <param name="rotatecenter" value="90,90"/>
-          <param name="progressbarvisible" value="$PARAM[progressbarvisible]"/>
-          <param name="progressbarleft" value="$PARAM[progressbarleft]"/>
-          <param name="progressbartop" value="$PARAM[progressbartop]"/>
-          <param name="progressbarwidth" value="$PARAM[progressbarwidth]"/>
-          <param name="progressbarheight" value="$PARAM[progressbarheight]"/>
-          <param name="progressbarinfo" value="$PARAM[progressbarinfo]"/>
-          <param name="progressbarbackgroundcolor" value="$PARAM[progressbarbackgroundcolor]"/>
-          <param name="progressbarbackgroundtexture" value="$PARAM[progressbarbackgroundtexture]"/>
-          <param name="progressbarfocuscolor" value="$PARAM[progressbarfocuscolor]"/>
-          <param name="progressbarfocustexture" value="$PARAM[progressbarfocustexture]"/>
-          <param name="iconbackingvisible" value="$PARAM[iconbackingvisible]"/>
-          <param name="iconbackingwidth" value="$PARAM[iconbackingwidth]"/>
-          <param name="iconbackingheight" value="$PARAM[iconbackingheight]"/>
-          <param name="iconbackingcolor" value="$PARAM[iconbackingcolor]"/>
-          <param name="iconbackingtexture" value="$PARAM[iconbackingtexture]"/>
-          <param name="iconvisible" value="$PARAM[iconvisible]"/>
-          <param name="iconleft" value="$PARAM[iconleft]"/>
-          <param name="icontop" value="$PARAM[icontop]"/>
-          <param name="iconwidth" value="$PARAM[iconwidth]"/>
-          <param name="iconheight" value="$PARAM[iconheight]"/>
-          <param name="iconcolor" value="$PARAM[iconcolor]"/>
-          <param name="icontexture" value="$PARAM[icontexture]"/>
-        </include>
-      </control>
-    </definition>
-  </include>
-
-  <!--Icon240x240-->
-  <include name="Icon240">
-    <param name="backgroundcolor" default="$VAR[DarkGreyColor]"/>
-    <param name="backgroundtexture" default="views/white_100.png"/>
-    <param name="progressbarvisible" default="!Player.Muted"/>
-    <param name="progressbarid" default="50404"/>
-    <param name="progressbarrotate" default="true"/>
-    <param name="progressbarleft" default="60"/>
-    <param name="progressbartop" default="105"/>
-    <param name="progressbarwidth" default="120"/>
-    <param name="progressbarheight" default="30"/>
-    <param name="progressbarinfo" default="player.volume"/>
-    <param name="progressbarbackgroundcolor" default="$VAR[LightColor]"/>
-    <param name="progressbarbackgroundtexture" default="views/white_20.png"/>
-    <param name="progressbarfocuscolor" default="$VAR[LightColor]"/>
-    <param name="progressbarfocustexture" default="views/white_75.png"/>
-    <param name="iconbackingvisible" default="Player.Muted"/>
-    <param name="iconbackingwidth" default="30"/>
-    <param name="iconbackingheight" default="120"/>
-    <param name="iconbackingcolor" default="$VAR[LightColor]"/>
-    <param name="iconbackingtexture" default="views/white_20.png"/>
-    <param name="iconvisible" default="Player.Muted"/>
-    <param name="iconwidth" default="60"/>
-    <param name="iconheight" default="60"/>
-    <param name="iconcolor" default="$VAR[AccentColor]"/>
-    <param name="icontexture" default="views/cross-large_focused.png"/>
-    <definition>
-      <control type="group">
-        <animation effect="slide" end="1600,0" time="0" condition="String.IsEqual(Container.ViewMode,Strip) + $EXP[StripView_Display_IsPosters]">Conditional</animation>
-        <animation effect="slide" end="1600,0" time="0" condition="String.IsEqual(Container.ViewMode,Strip) + $EXP[StripView_Display_IsFanart] + !Skin.String(StripView_Details,Off)">Conditional</animation>
-        <animation effect="slide" end="1280,0" time="0" condition="String.IsEqual(Container.ViewMode,Strip) + $EXP[StripView_Display_IsFanart] + Skin.String(StripView_Details,Off)">Conditional</animation>
-        <animation effect="slide" end="720,0" time="0" condition="String.IsEqual(Container.ViewMode,Strip) + $EXP[StripView_Display_IsSquare] + !Skin.String(StripView_Details,Off)">Conditional</animation>
-        <animation effect="slide" end="645,0" time="0" condition="String.IsEqual(Container.ViewMode,Strip) + $EXP[StripView_Display_IsSquare] + Skin.String(StripView_Details,Off)">Conditional</animation>
-        <include content="IconLayout">
-          <param name="width" value="240"/>
-          <param name="visible" value="$EXP[Icon_240_IsVisible]"/>
-          <param name="backgroundcolor" value="$PARAM[backgroundcolor]"/>
-          <param name="backgroundtexture" value="$PARAM[backgroundtexture]"/>
-          <param name="progressbarid" value="$PARAM[progressbarid]"/>
-          <param name="progressbarrotate" value="$PARAM[progressbarrotate]"/>
-          <param name="rotatecenter" value="120,120"/>
-          <param name="progressbarvisible" value="$PARAM[progressbarvisible]"/>
-          <param name="progressbarleft" value="$PARAM[progressbarleft]"/>
-          <param name="progressbartop" value="$PARAM[progressbartop]"/>
-          <param name="progressbarwidth" value="$PARAM[progressbarwidth]"/>
-          <param name="progressbarheight" value="$PARAM[progressbarheight]"/>
-          <param name="progressbarinfo" value="$PARAM[progressbarinfo]"/>
-          <param name="progressbarbackgroundcolor" value="$PARAM[progressbarbackgroundcolor]"/>
-          <param name="progressbarbackgroundtexture" value="$PARAM[progressbarbackgroundtexture]"/>
-          <param name="progressbarfocuscolor" value="$PARAM[progressbarfocuscolor]"/>
-          <param name="progressbarfocustexture" value="$PARAM[progressbarfocustexture]"/>
-          <param name="iconbackingvisible" value="$PARAM[iconbackingvisible]"/>
-          <param name="iconbackingwidth" value="$PARAM[iconbackingwidth]"/>
-          <param name="iconbackingheight" value="$PARAM[iconbackingheight]"/>
-          <param name="iconbackingcolor" value="$PARAM[iconbackingcolor]"/>
-          <param name="iconbackingtexture" value="$PARAM[iconbackingtexture]"/>
-          <param name="iconvisible" value="$PARAM[iconvisible]"/>
-          <param name="iconleft" value="$PARAM[iconleft]"/>
-          <param name="icontop" value="$PARAM[icontop]"/>
-          <param name="iconwidth" value="$PARAM[iconwidth]"/>
-          <param name="iconheight" value="$PARAM[iconheight]"/>
-          <param name="iconcolor" value="$PARAM[iconcolor]"/>
-          <param name="icontexture" value="$PARAM[icontexture]"/>
-        </include>
-      </control>
-    </definition>
-  </include>
-
-  <!--Icon details layout-->
-  <include name="IconDetailsLayout">
-    <param name="visible" default="false"/>
-    <param name="left" default="0"/>
-    <param name="top" default="0"/>
-    <param name="width" default="100%"/>
-    <param name="height" default="180"/>
-    <param name="progressbarvisible" default="false"/>
-    <param name="progressbarid" default=""/>
-    <param name="progressbarinfo" default=""/>
-    <param name="progressbarwidth" default="100%"/>
-    <param name="progressbaralign" default="right"/>
-    <param name="progressbarbackgroundcolor" default="$VAR[IconDetailsProgressBarBackgroundColor]"/>
-    <param name="progressbarbackgroundtexture" default="views/white_100.png"/>
-    <param name="progressbarfocuscolor" default="$VAR[IconDetailsProgressBarFocusColor]"/>
-    <param name="progressbarfocustexture" default="views/white_100.png"/>
-    <param name="titleid" default=""/>
-    <param name="infoid" default=""/>
-    <param name="textalign" default="right"/>
-    <param name="titlelabel" default=""/>
-    <param name="infolabel" default=""/>
-    <param name="textcolor" default="$VAR[IconDetailsTextColor]"/>
-    <definition>
-      <control type="group">
-        <visible>$PARAM[visible]</visible>
-        <left>$PARAM[left]</left>
-        <top>$PARAM[top]</top>
-        <width>$PARAM[width]</width>
-        <height>$PARAM[height]</height>
-        <!-- Progressbar-->
-        <control type="grouplist">
-          <visible>$PARAM[progressbarvisible]</visible>
-          <width>100%</width>
-          <orientation>horizontal</orientation>
-          <align>%PARAM[progressbaralign]</align>
-          <control type="progress" id="$PARAM[progressbarid]">
-            <width>$PARAM[progressbarwidth]</width>
-            <height>8</height>
-            <info>$PARAM[progressbarinfo]</info>
-            <texturebg colordiffuse="$PARAM[progressbarbackgroundcolor]">$PARAM[progressbarbackgroundtexture]</texturebg>
-            <lefttexture></lefttexture>
-            <midtexture colordiffuse="$PARAM[progressbarfocuscolor]">$PARAM[progressbarfocustexture]</midtexture>
-            <righttexture></righttexture>
-            <overlaytexture></overlaytexture>
-          </control>
-        </control>
-        <!--Progressbar-->
-        <control type="group">
-          <visible>$PARAM[progressbarvisible]</visible>
-          <!--Background-->
-          <control type="image">
-            <width>$PARAM[width]</width>
-            <height>8</height>
-            <texture colordiffuse="$PARAM[progressbarbackgroundcolor]">$PARAM[progressbarbackgoundtexture]</texture>
-          </control>
-          <!--Focus-->
-          <control type="image">
-            <animation effect="zoom" end="5,100" time="0" condition="Integer.IsGreater($PARAM[progressbarinfo],0) + Integer.IsLessOrEqual($PARAM[progressbarinfo],5)">Conditional</animation>
-            <animation effect="zoom" end="10,100" time="0" condition="Integer.IsGreater($PARAM[progressbarinfo],5) + Integer.IsLessOrEqual($PARAM[progressbarinfo],10)">Conditional</animation>
-            <animation effect="zoom" end="15,100" time="0" condition="Integer.IsGreater($PARAM[progressbarinfo],10) + Integer.IsLessOrEqual($PARAM[progressbarinfo],15)">Conditional</animation>
-            <animation effect="zoom" end="20,100" time="0" condition="Integer.IsGreater($PARAM[progressbarinfo],15) + Integer.IsLessOrEqual($PARAM[progressbarinfo],20)">Conditional</animation>
-            <animation effect="zoom" end="25,100" time="0" condition="Integer.IsGreater($PARAM[progressbarinfo],20) + Integer.IsLessOrEqual($PARAM[progressbarinfo],25)">Conditional</animation>
-            <animation effect="zoom" end="30,100" time="0" condition="Integer.IsGreater($PARAM[progressbarinfo],25) + Integer.IsLessOrEqual($PARAM[progressbarinfo],30)">Conditional</animation>
-            <animation effect="zoom" end="35,100" time="0" condition="Integer.IsGreater($PARAM[progressbarinfo],30) + Integer.IsLessOrEqual($PARAM[progressbarinfo],35)">Conditional</animation>
-            <animation effect="zoom" end="40,100" time="0" condition="Integer.IsGreater($PARAM[progressbarinfo],35) + Integer.IsLessOrEqual($PARAM[progressbarinfo],40)">Conditional</animation>
-            <animation effect="zoom" end="45,100" time="0" condition="Integer.IsGreater($PARAM[progressbarinfo],40) + Integer.IsLessOrEqual($PARAM[progressbarinfo],45)">Conditional</animation>
-            <animation effect="zoom" end="50,100" time="0" condition="Integer.IsGreater($PARAM[progressbarinfo],45) + Integer.IsLessOrEqual($PARAM[progressbarinfo],50)">Conditional</animation>
-            <animation effect="zoom" end="55,100" time="0" condition="Integer.IsGreater($PARAM[progressbarinfo],50) + Integer.IsLessOrEqual($PARAM[progressbarinfo],55)">Conditional</animation>
-            <animation effect="zoom" end="60,100" time="0" condition="Integer.IsGreater($PARAM[progressbarinfo],55) + Integer.IsLessOrEqual($PARAM[progressbarinfo],60)">Conditional</animation>
-            <animation effect="zoom" end="65,100" time="0" condition="Integer.IsGreater($PARAM[progressbarinfo],60) + Integer.IsLessOrEqual($PARAM[progressbarinfo],65)">Conditional</animation>
-            <animation effect="zoom" end="70,100" time="0" condition="Integer.IsGreater($PARAM[progressbarinfo],65) + Integer.IsLessOrEqual($PARAM[progressbarinfo],70)">Conditional</animation>
-            <animation effect="zoom" end="75,100" time="0" condition="Integer.IsGreater($PARAM[progressbarinfo],70) + Integer.IsLessOrEqual($PARAM[progressbarinfo],75)">Conditional</animation>
-            <animation effect="zoom" end="80,100" time="0" condition="Integer.IsGreater($PARAM[progressbarinfo],75) + Integer.IsLessOrEqual($PARAM[progressbarinfo],80)">Conditional</animation>
-            <animation effect="zoom" end="85,100" time="0" condition="Integer.IsGreater($PARAM[progressbarinfo],80) + Integer.IsLessOrEqual($PARAM[progressbarinfo],85)">Conditional</animation>
-            <animation effect="zoom" end="90,100" time="0" condition="Integer.IsGreater($PARAM[progressbarinfo],85) + Integer.IsLessOrEqual($PARAM[progressbarinfo],90)">Conditional</animation>
-            <animation effect="zoom" end="95,100" time="0" condition="Integer.IsGreater($PARAM[progressbarinfo],90) + Integer.IsLessOrEqual($PARAM[progressbarinfo],95)">Conditional</animation>
-            <animation effect="zoom" end="97.5,100" time="0" condition="Integer.IsGreater($PARAM[progressbarinfo],95) + Integer.IsLess($PARAM[progressbarinfo],100)">Conditional</animation>
-            <width>$PARAM[width]</width>
-            <height>8</height>
-            <texture colordiffuse="$PARAM[progressbarfocuscolor]">$PARAM[progressbarfocustexture]</texture>
-          </control>
-        </control>
-        <!--Details-->
-        <control type="grouplist">
-          <left>60</left>
-          <right>60</right>
-          <top>$PARAM[top]</top>
-          <orientation>vertical</orientation>
-          <align>center</align>
-          <itemgap>0</itemgap>
-          <!-- Title-->
-          <control type="label" id="$PARAM[titleid]">
-            <left>0</left>
-            <width>100%</width>
-            <height>48</height>
-            <align>$PARAM[textalign]</align>
-            <scroll>true</scroll>
-            <scrollsuffix> / </scrollsuffix>
-            <font>MusicPlayer_Title</font>
-            <label>$PARAM[titlelabel]</label>
-            <textcolor>$PARAM[textcolor]</textcolor>
-          </control>
-          <!-- Details-->
-          <control type="label" id="$PARAM[infoid]">
-            <left>0</left>
-            <width>100%</width>
-            <height>36</height>
-            <align>$PARAM[textalign]</align>
-            <scroll>true</scroll>
-            <scrollsuffix> / </scrollsuffix>
-            <font>MusicPlayer_Info</font>
-            <label>$PARAM[infolabel]</label>
-            <textcolor>$PARAM[textcolor]</textcolor>
-          </control>
-        </control>
-      </control>
-    </definition>
-  </include>
-
-  <include name="IconDetails">
-    <param name="visible" default="true"/>
-    <param name="progressbarid" default=""/>
-    <param name="progressbarvisible" default="false"/>
-    <param name="progressbarinfo" default=""/>
-    <param name="titleid" default=""/>
-    <param name="titlelabel" default=""/>
-    <param name="infoid" default=""/>
-    <param name="infolabel" default=""/>
-    <definition>
-      <control type="group">
-        <visible>$PARAM[visible]</visible>
-        <!--Right-Aligned-->
-        <animation effect="slide" end="180,0" time="0" reversible="false" condition="!Window.IsActive(volumebar)">Conditional</animation>
-        <control type="group">
-          <include content="IconDetailsLayout">
-            <param name="visible" value="Window.IsActive(home)"/>
-            <param name="width" value="1560"/>
-            <param name="height" value="180"/>
-            <param name="progressbarid" value="$PARAM[progressbarid]"/>
-            <param name="progressbarvisible" value="$PARAM[progressvisible]"/>
-            <param name="progressbarwidth" value="600"/>
-            <param name="titleid" value="$PARAM[titleid]"/>
-            <param name="titlelabel" value="$PARAM[titlelabel]"/>
-            <param name="infoid" value="$PARAM[infoid]"/>
-            <param name="infolabel" value="$PARAM[infolabel]"/>
-          </include>
-          <include content="IconDetailsLayout">
-            <param name="visible" value="Window.IsActive(fullscreenvideo) | String.IsEqual(Container.ViewMode,Billboard)"/>
-            <param name="left" value="0"/>
-            <param name="width" value="1740"/>
-            <param name="height" value="180"/>
-            <param name="progressbarid" value="$PARAM[progressbarid]"/>
-            <param name="progressbarvisible" value="$PARAM[progressvisible]"/>
-            <param name="titleid" value="$PARAM[titleid]"/>
-            <param name="titlelabel" value="$PARAM[titlelabel]"/>
-            <param name="infoid" value="$PARAM[infoid]"/>
-            <param name="infolabel" value="$PARAM[infolabel]"/>
-          </include>
-          <include content="IconDetailsLayout">
-            <param name="visible" value="String.IsEqual(Container.ViewMode,List)"/>
-            <param name="left" value="840"/>
-            <param name="width" value="900"/>
-            <param name="height" value="180"/>
-            <param name="progressbarid" value="$PARAM[progressbarid]"/>
-            <param name="progressbarvisible" value="$PARAM[progressvisible]"/>
-            <param name="titleid" value="$PARAM[titleid]"/>
-            <param name="titlelabel" value="$PARAM[titlelabel]"/>
-            <param name="infoid" value="$PARAM[infoid]"/>
-            <param name="infolabel" value="$PARAM[infolabel]"/>
-          </include>
-          <include content="IconDetailsLayout">
-            <param name="visible" value="String.IsEqual(Container.ViewMode,Strip) + $EXP[StripView_Display_IsPosters]"/>
-            <param name="left" value="720"/>
-            <param name="width" value="880"/>
-            <param name="height" value="180"/>
-            <param name="progressbarid" value="$PARAM[progressbarid]"/>
-            <param name="progressbarvisible" value="$PARAM[progressvisible]"/>
-            <param name="titleid" value="$PARAM[titleid]"/>
-            <param name="titlelabel" value="$PARAM[titlelabel]"/>
-            <param name="infoid" value="$PARAM[infoid]"/>
-            <param name="infolabel" value="$PARAM[infolabel]"/>
-          </include>
-          <include content="IconDetailsLayout">
-            <param name="visible" value="[String.IsEqual(Container.ViewMode,Strip) + $EXP[StripView_Display_IsFanart] + !Skin.String(StripView_Details,Off)]"/>
-            <param name="left" value="720"/>
-            <param name="width" value="880"/>
-            <param name="height" value="240"/>
-            <param name="progressbarid" value="$PARAM[progressbarid]"/>
-            <param name="progressbarvisible" value="$PARAM[progressvisible]"/>
-            <param name="titleid" value="$PARAM[titleid]"/>
-            <param name="titlelabel" value="$PARAM[titlelabel]"/>
-            <param name="infoid" value="$PARAM[infoid]"/>
-            <param name="infolabel" value="$PARAM[infolabel]"/>
-          </include>
-          <include content="IconDetailsLayout">
-            <param name="visible" value="String.IsEqual(Container.ViewMode,Strip) + $EXP[StripView_Display_IsFanart] + Skin.String(StripView_Details,Off)"/>
-            <param name="left" value="400"/>
-            <param name="width" value="880"/>
-            <param name="height" value="240"/>
-            <param name="progressbarid" value="$PARAM[progressbarid]"/>
-            <param name="progressbarvisible" value="$PARAM[progressvisible]"/>
-            <param name="titleid" value="$PARAM[titleid]"/>
-            <param name="titlelabel" value="$PARAM[titlelabel]"/>
-            <param name="infoid" value="$PARAM[infoid]"/>
-            <param name="infolabel" value="$PARAM[infolabel]"/>
-          </include>
-          <include content="IconDetailsLayout">
-            <param name="visible" value="String.IsEqual(Container.ViewMode,Grid) + [$EXP[GridView_Display_IsPosters] | $EXP[GridView_Display_IsSquare]]"/>
-            <param name="left" value="780"/>
-            <param name="width" value="900"/>
-            <param name="height" value="180"/>
-            <param name="progressbarid" value="$PARAM[progressbarid]"/>
-            <param name="progressbarvisible" value="$PARAM[progressvisible]"/>
-            <param name="titleid" value="$PARAM[titleid]"/>
-            <param name="titlelabel" value="$PARAM[titlelabel]"/>
-            <param name="infoid" value="$PARAM[infoid]"/>
-            <param name="infolabel" value="$PARAM[infolabel]"/>
-          </include>
-          <include content="IconDetailsLayout">
-            <param name="visible" value="String.IsEqual(Container.ViewMode,Grid) + $EXP[GridView_Display_IsFanart]"/>
-            <param name="left" value="664"/>
-            <param name="width" value="1004"/>
-            <param name="height" value="180"/>
-            <param name="progressbarid" value="$PARAM[progressbarid]"/>
-            <param name="progressbarvisible" value="$PARAM[progressvisible]"/>
-            <param name="titleid" value="$PARAM[titleid]"/>
-            <param name="titlelabel" value="$PARAM[titlelabel]"/>
-            <param name="infoid" value="$PARAM[infoid]"/>
-            <param name="infolabel" value="$PARAM[infolabel]"/>
-          </include>
-        </control>
-        <!--Left-Aligned-->
-        <control type="group">
-          <animation effect="slide" end="180,0" time="0" reversible="false" condition="!Window.IsActive(volumebar)">Conditional</animation>
-          <include content="IconDetailsLayout">
-            <param name="visible" value="String.IsEqual(Container.ViewMode,Showcase) + $EXP[ShowcaseView_Display_IsPosters]"/>
-            <param name="left" value="900"/>
-            <param name="width" value="1020"/>
-            <param name="height" value="180"/>
-            <param name="progressbarid" value="$PARAM[progressbarid]"/>
-            <param name="progressbarvisible" value="$PARAM[progressvisible]"/>
-            <param name="titleid" value="$PARAM[titleid]"/>
-            <param name="titlelabel" value="$PARAM[titlelabel]"/>
-            <param name="textalign" value="left"/>
-            <param name="infoid" value="$PARAM[infoid]"/>
-            <param name="infolabel" value="$PARAM[infolabel]"/>
-          </include>
-          <include content="IconDetailsLayout">
-            <param name="visible" value="String.IsEqual(Container.ViewMode,Showcase) + $EXP[ShowcaseView_Display_IsSquare]"/>
-            <param name="left" value="1260"/>
-            <param name="width" value="660"/>
-            <param name="height" value="180"/>
-            <param name="progressbarid" value="$PARAM[progressbarid]"/>
-            <param name="progressbarvisible" value="$PARAM[progressvisible]"/>
-            <param name="titleid" value="$PARAM[titleid]"/>
-            <param name="titlelabel" value="$PARAM[titlelabel]"/>
-            <param name="textalign" value="left"/>
-            <param name="infoid" value="$PARAM[infoid]"/>
-            <param name="infolabel" value="$PARAM[infolabel]"/>
-          </include>
-          <include content="IconDetailsLayout">
-            <param name="visible" value="String.IsEqual(Container.ViewMode,Strip) + $EXP[StripView_Display_IsSquare] + !Skin.String(StripView_Details,Off)"/>
-            <param name="left" value="960"/>
-            <param name="width" value="960"/>
-            <param name="height" value="240"/>
-            <param name="progressbarid" value="$PARAM[progressbarid]"/>
-            <param name="progressbarvisible" value="$PARAM[progressvisible]"/>
-            <param name="textalign" value="left"/>
-            <param name="titleid" value="$PARAM[titleid]"/>
-            <param name="titlelabel" value="$PARAM[titlelabel]"/>
-            <param name="infoid" value="$PARAM[infoid]"/>
-            <param name="infolabel" value="$PARAM[infolabel]"/>
-          </include>
-          <include content="IconDetailsLayout">
-            <param name="visible" value="String.IsEqual(Container.ViewMode,Strip) + $EXP[StripView_Display_IsSquare] + Skin.String(StripView_Details,Off)"/>
-            <param name="left" value="885"/>
-            <param name="width" value="1035"/>
-            <param name="height" value="240"/>
-            <param name="progressbarid" value="$PARAM[progressbarid]"/>
-            <param name="progressbarvisible" value="$PARAM[progressvisible]"/>
-            <param name="textalign" value="left"/>
-            <param name="titleid" value="$PARAM[titleid]"/>
-            <param name="titlelabel" value="$PARAM[titlelabel]"/>
-            <param name="infoid" value="$PARAM[infoid]"/>
-            <param name="infolabel" value="$PARAM[infolabel]"/>
-          </include>
-        </control>
-      </control>
-    </definition>
-  </include>
-
-
+		</control>
+	</definition>
+</include>
 
 
 
@@ -2072,7 +1813,7 @@
 			<height>33</height>
 			<aligny>top</aligny>
 			<label>[COLOR TextColor1]$VAR[HeadingLabel][/COLOR]</label>
-			<label2>$INFO[System.Time]</label2>
+			<label_2>$INFO[System.Time]</label_2>
 			<font>Font33</font>
 			<textcolor>$VAR[UnFocusedColor]</textcolor>
 			<animation type="WindowOpen" condition="Window.Previous(startup)">
