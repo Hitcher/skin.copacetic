@@ -4,6 +4,7 @@
 		<param name="groupvisible" default="!$EXP[TransparentDialog_IsVisible]"/>
 		<param name="animation" default="Content_Fade_Animation"/>
 		<param name="nowplayingtop" default="-34"/>
+		<param name="nowplayingvisible" default="true"/>
 		<param name="iconleft" default="30"/>
 		<param name="icontop" default="5"/>
 		<param name="iconwidth" default="60"/>
@@ -29,6 +30,7 @@
 					<height>120</height>
 					<left>0</left>
 					<top>$PARAM[nowplayingtop]</top>
+					<visible>$PARAM[nowplayingvisible]</visible>
 					<include content="Now_Playing_Visualization_Fill">
 						<param name="visible" value="$EXP[StandardViews_NowPlaying]"/>
 					</include>
@@ -280,8 +282,10 @@
 	<include name="HiddenFocusButton">
 		<control type="button">
 			<visible allowhiddenfocus="true">false</visible>
-			<onfocus>ClearProperty(WatchedPercentage,home)</onfocus>
 			<onfocus condition="System.HasAddon(script.embuary.helper) + Integer.IsGreater(ListItem.Property(WatchedEpisodes),0) + Integer.IsGreater(ListItem.Property(TotalEpisodes),0) + !String.IsEqual(ListItem.Overlay,OverlayWatched.png) + [Container.Content(tvshows) | Container.Content(seasons)]">RunScript(script.embuary.helper,action=calc,do='"($INFO[ListItem.Property(WatchedEpisodes)] / $INFO[ListItem.Property(TotalEpisodes)]) * 100"',prop=WatchedPercentage)</onfocus>
+			<onfocus condition="$EXP[GridView_IsVisible]">SetProperty(GridView_Row,$INFO[Container.Row],home)</onfocus>
+			<onfocus condition="$EXP[GridView_IsVisible]">SetProperty(GridView_Column,$INFO[Container.Column],home)</onfocus>
+			<onfocus condition="Control.HasFocus(505) + [Control.IsVisible(5007) | Control.IsVisible(5008)] + !String.IsEqual(Container.NumItems,1)">SetProperty(GridView_IsScrolling,true,home)</onfocus>
 		</control>
 	</include>
 
@@ -1881,7 +1885,7 @@
 		</definition>
 	</include>
 
-	<include name="CommonDetails">
+	<include name="Common_Details">
 		<param name="viewtype_label" default="Billboard"/>
 		<param name="left" default="120"/>
 		<param name="bottom" default="0"/>
@@ -1924,6 +1928,7 @@
 				</control>
 				<!--Title-->
 				<control type="$PARAM[labeltype]">
+					<visible>!$EXP[$PARAM[viewtype_label]View_Details_Logo_IsVisible]</visible>
 					<height max="$PARAM[titleheight]">auto</height>
 					<font>$PARAM[viewtype_label]_Title</font>
 					<textcolor>$PARAM[titlecolor]</textcolor>

@@ -35,8 +35,8 @@
 	<expression name="OptionsSwitching">Control.IsVisible(941)</expression>
 	<expression name="Prefer_Keyart">Skin.String(Prefer_Keyart,True)</expression>
 	<expression name="Breadcrumb_Enabled_View">$EXP[ListView_IsVisible] | $EXP[GridView_IsVisible]</expression>
+	<expression name="StandardViews_NowPlaying">[ListItem.IsPlaying | [Container.Content(tvshows) + String.IsEqual(VideoPlayer.TVShowTitle,ListItem.Title)] | [Container.Content(seasons) + String.IsEqual(VideoPlayer.TVShowTitle,ListItem.TVShowTitle) + String.IsEqual(VideoPlayer.Season,ListItem.Season)] | [Container.Content(artists) + String.IsEqual(MusicPlayer.Artist, ListItem.Artist)] | [Container.Content(artists) + String.IsEqual(MusicPlayer.Artist, ListItem.AlbumArtist)] | [Container.Content(albums) + String.IsEqual(MusicPlayer.Artist, ListItem.Artist) + String.IsEqual(MusicPlayer.Album, ListItem.Album)] | [Container.Content(albums) + String.IsEqual(MusicPlayer.Artist, ListItem.AlbumArtist) + String.IsEqual(MusicPlayer.Album, ListItem.Album)]]</expression>
 
-	<expression name="HomeView_IsVisible">Window.IsVisible(home)</expression>
   <expression name="ListView_IsVisible">Control.IsVisible(50) | String.IsEqual(Container.ViewMode,List)</expression>
 	<expression name="ListView_Display_IsBackground">$EXP[ListView_IsVisible] + [$EXP[ListView_Display_IsBackground_Movies] | $EXP[ListView_Display_IsBackground_Sets] | $EXP[ListView_Display_IsBackground_TVShows] | $EXP[ListView_Display_IsBackground_Seasons] | $EXP[ListView_Display_IsBackground_Episodes] | $EXP[ListView_Display_IsBackground_Artists] | $EXP[ListView_Display_IsBackground_Albums] | $EXP[ListView_Display_IsBackground_Songs]]</expression>
 	<expression name="ListView_Display_IsBackground_Movies">Container.Content(movies) + [Skin.String(ListView_Display_Movies,Background) | String.IsEmpty(Skin.String(ListView_Display_Movies))]</expression>
@@ -368,10 +368,7 @@
 	<expression name="Grid_Shadow_Bottom-Right_Watched">[[$EXP[GridView_Display_IsFanart] + Control.IsVisible(9616)] | [!$EXP[GridView_Display_IsFanart] + Control.IsVisible(9618)]]</expression>
 	<expression name="Grid_Shadow_Bottom_Watched">[[$EXP[GridView_Display_IsFanart] + Control.IsVisible(9615)] | [!$EXP[GridView_Display_IsFanart] + Control.IsVisible(9617)]]</expression>
 	<expression name="Grid_Shadow_Bottom-Left_Watched">[[$EXP[GridView_Display_IsFanart] + Control.IsVisible(9614)] | [!$EXP[GridView_Display_IsFanart] + Control.IsVisible(9616)]]</expression>
-	<expression name="GridView_Position_IsTop-Right">Container.Row(0) + [[$EXP[GridView_Display_IsFanart] + Container.Column(2)] | [[$EXP[GridView_Display_IsPosters] | $EXP[GridView_Display_IsSquare]] + Container.Column(4)]]</expression>
-
-  <expression name="StandardViews_NowPlaying">[ListItem.IsPlaying | [Container.Content(tvshows) + String.IsEqual(VideoPlayer.TVShowTitle,ListItem.Title)] | [Container.Content(seasons) + String.IsEqual(VideoPlayer.TVShowTitle,ListItem.TVShowTitle) + String.IsEqual(VideoPlayer.Season,ListItem.Season)] | [Container.Content(artists) + String.IsEqual(MusicPlayer.Artist, ListItem.Artist)] | [Container.Content(artists) + String.IsEqual(MusicPlayer.Artist, ListItem.AlbumArtist)] | [Container.Content(albums) + String.IsEqual(MusicPlayer.Artist, ListItem.Artist) + String.IsEqual(MusicPlayer.Album, ListItem.Album)] | [Container.Content(albums) + String.IsEqual(MusicPlayer.Artist, ListItem.AlbumArtist) + String.IsEqual(MusicPlayer.Album, ListItem.Album)]]</expression>
-	<expression name="Music_Player_Top_Right">$EXP[GridView_IsVisible] | [$EXP[ListView_Display_IsThumbnails] + ![Container.Content(episodes) | Container.Content(artists) | Container.Content(albums) | Container.Content(songs)]]</expression>
+	<expression name="GridView_Position_IsTop-Right">String.IsEqual(Window(home).property(GridView_Row),0) + [[$EXP[GridView_Display_IsFanart] + String.IsEqual(Window(home).property(GridView_Column),2)] | [[$EXP[GridView_Display_IsPosters] | $EXP[GridView_Display_IsSquare]] + String.IsEqual(Window(home).property(GridView_Column),4)]]</expression>
 
 	<!-- Fullscreen dimensions -->
 	<include name="FullscreenDimensions">
@@ -1207,6 +1204,7 @@
 					</control>
 					<!--Album Cover-->
 					<control type="image">
+						<animation effect="fade" start="0" end="100" time="360" condition="Window.IsVisible(volumebar) | Window.IsVisible(notification) | Window.IsVisible(extendedprogressdialog)" reversible="false">VisibleChange</animation>
 						<visible>Player.HasAudio</visible>
 						<visible>Window.IsActive(home) | Window.IsActive(videos) | Window.IsActive(music)</visible>
 						<texture diffuse="views/white_30.png">$INFO[MusicPlayer.Cover]</texture>
@@ -1245,16 +1243,28 @@
 							<texture colordiffuse="$VAR[LightColor]">views/cross-large_focused.png</texture>
 						</control>
 					</control>
-					<!--Shadow for Gridview-->
 					<control type="group">
-						<visible>!$EXP[TransparentDialog_IsVisible]</visible>
-						<include>Content_Fade_Animation</include>
-						<control type="image">
-							<bottom>0</bottom>
-							<height>120</height>
-							<texture colordiffuse="$VAR[ShadowColor]">views/dropshadow_top_120.png</texture>
-							<aspectratio>stretch</aspectratio>
-							<visible>$EXP[GridView_Position_IsTop-Right]</visible>
+						<visible>$EXP[GridView_IsVisible]</visible>
+						<include>View_Transition_Fade_Animation</include>
+						<control type="group">
+							<visible>!$EXP[TransparentDialog_IsVisible]</visible>
+							<include>Content_Fade_Animation</include>
+							<!--Shadow for Gridview-->
+							<control type="image">
+								<bottom>0</bottom>
+								<height>120</height>
+								<texture colordiffuse="$VAR[ShadowColorWatched]">views/dropshadow_top_120.png</texture>
+								<aspectratio>stretch</aspectratio>
+								<visible>$EXP[GridView_Position_IsTop-Right]</visible>
+							</control>
+							<!--Border for Gridview-->
+							<control type="image">
+								<bottom>0</bottom>
+								<height>10</height>
+								<texture colordiffuse="$VAR[AccentColor]">views/white_100.png</texture>
+								<aspectratio>stretch</aspectratio>
+								<visible>$EXP[GridView_Position_IsTop-Right] + !Window.IsVisible(1100) + [Window.IsVisible(volumebar) | Window.IsVisible(notification) | Window.IsVisible(extendedprogressdialog)]</visible>
+							</control>
 						</control>
 					</control>
 					<!--Details-->
@@ -1273,6 +1283,16 @@
 								<param name="visible" value="Player.HasAudio + !Window.IsVisible(volumebar)"/>
 								<param name="colordiffuse" value="$VAR[LightColor]"/>
 							</include>
+						</control>
+						<!--Busy Spinner-->
+						<control type="image">
+							<visible>Window.IsVisible(notification) | Window.IsVisible(extendedprogressdialog)</visible>
+							<centerleft>50%</centerleft>
+							<centertop>50%</centertop>
+							<width>60</width>
+							<height>60</height>
+							<texture colordiffuse="$VAR[LightColor]">views/busy.png</texture>
+							<animation effect="rotate" start="0" end="-360" center="auto" time="1800" loop="true" tween="cubic" easing="out" condition="true">Conditional</animation>
 						</control>
 						<!--Progress Bar-->
 						<control type="progress" id="$PARAM[progress_id]">
@@ -1407,7 +1427,7 @@
 		<control type="group">
 			<animation effect="slide" start="0,0" end="-180,0" time="0" reversible="false" condition="Window.IsVisible(home)">Conditional</animation>
 			<visible>![$EXP[ListView_IsVisible] | $EXP[ShowcaseView_IsVisible] | $EXP[StripView_IsVisible] | $EXP[GridView_IsVisible]]</visible>
-			<include>View_Transition_Fade_Animation</include>
+			<include>Notification_Transition_Fade_Animation</include>
 			<include content="Notification_Widget">
 				<param name="width" value="180"/>
 				<param name="volumebar_isvisible" value="$PARAM[volumebar_isvisible]"/>
@@ -1427,7 +1447,7 @@
 		<!--LISTVIEW-->
 		<control type="group">
 			<visible>$EXP[ListView_IsVisible]</visible>
-			<include>View_Transition_Fade_Animation</include>
+			<include>Notification_Transition_Fade_Animation</include>
 			<include content="Notification_Widget">
 				<param name="visible" value="$EXP[ListView_Display_IsThumbnails] + $EXP[Poster_Containers]"/>
 				<param name="width" value="180"/>
@@ -1499,7 +1519,7 @@
 		<!--SHOWCASEVIEW-->
 		<control type="group">
 			<visible>$EXP[ShowcaseView_IsVisible]</visible>
-			<include>View_Transition_Fade_Animation</include>
+			<include>Notification_Transition_Fade_Animation</include>
 			<include content="Notification_Widget">
 				<param name="visible" value="$EXP[ShowcaseView_Display_IsSquare] + [!Player.HasAudio | !$EXP[ShowcaseView_Details_Off]]"/>
 				<param name="right" value="600"/>
@@ -1552,7 +1572,7 @@
 		<!--STRIPVIEW-->
 		<control type="group">
 			<visible>$EXP[StripView_IsVisible]</visible>
-			<include>View_Transition_Fade_Animation</include>
+			<include>Notification_Transition_Fade_Animation</include>
 			<animation effect="slide" end="-100,0" time="0" condition="[$EXP[StripView_Display_IsPosters] | [$EXP[StripView_Display_IsFanart] + !$EXP[StripView_Details_Off]]] + Window.IsVisible(shutdownmenu)" reversible="true">Conditional</animation>
 			<animation effect="slide" end="320,0" time="0" condition="$EXP[StripView_Display_IsPosters]">Conditional</animation>
 			<animation effect="slide" end="75,0" time="0" condition="$EXP[StripView_Display_IsSquare] + !$EXP[StripView_Details_Off]">Conditional</animation>
@@ -1578,7 +1598,7 @@
 		<!--GRIDVIEW-->
 		<control type="group">
 			<visible>$EXP[GridView_IsVisible]</visible>
-			<include>View_Transition_Fade_Animation</include>
+			<include>Notification_Transition_Fade_Animation</include>
 			<animation effect="slide" end="-12,0" time="0" condition="$EXP[GridView_Display_IsFanart]" reversible="false">Conditional</animation>
 			<animation effect="slide" end="-180,0" time="180" tween="sine" easing="out" condition="Window.IsVisible(shutdownmenu)" reversible="true">Conditional</animation>
 			<include content="Notification_Widget">
