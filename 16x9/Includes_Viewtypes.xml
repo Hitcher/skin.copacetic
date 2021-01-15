@@ -212,7 +212,7 @@
 				<ondown condition="Integer.IsGreater(Container.NumItems,1)">50</ondown>
 				<ondown condition="Integer.IsEqual(Container.NumItems,1)">SetFocus(3000,0)</ondown>
 				<onleft>SetFocus(3000,0)</onleft>
-				<onright condition="Integer.IsGreater(Container.NumItems,12)">60</onright>
+				<onright condition="Integer.IsGreater(Container.NumItems,12)">61</onright>
 				<onright condition="Integer.IsLessOrEqual(Container.NumItems,11)">SetFocus(3000,0)</onright>
 				<onback condition="String.IsEqual(window(movieinformation).property(SentFromInfo),true)">SetFocus(5005)</onback>
 			</definition>
@@ -221,7 +221,7 @@
 		<include name="Billboard_Navigation">
 			<definition>
 				<onup>SetFocus(3000,0)</onup>
-				<ondown conditon="Integer.IsGreater(Container.NumItems,1)">60</ondown>
+				<ondown conditon="Integer.IsGreater(Container.NumItems,1)">61</ondown>
 				<ondown condition="Integer.IsEqual(Container.NumItems,1)">SetFocus(3000,0)</ondown>
 				<onleft condition="Integer.IsGreater(Container.NumItems,3)">501</onleft>
 				<onleft condition="Integer.IsLessOrEqual(Container.NumItems,3) + Integer.IsGreater(Container.NumItems,1)">0</onleft>
@@ -236,7 +236,7 @@
 		<include name="Showcase_Navigation">
 			<definition>
 				<onup>SetFocus(3000,0)</onup>
-				<ondown conditon="Integer.IsGreater(Container.NumItems,1)">60</ondown>
+				<ondown conditon="Integer.IsGreater(Container.NumItems,1)">61</ondown>
 				<ondown condition="Integer.IsEqual(Container.NumItems,1)">SetFocus(3000,0)</ondown>
 				<onleft condition="Integer.IsGreater(Container.NumItems,10)">502</onleft>
 				<onleft condition="Integer.IsLessOrEqual(Container.NumItems,10) + Integer.IsGreater(Container.NumItems,1)">0</onleft>
@@ -251,7 +251,7 @@
 		<include name="Strip_Navigation">
 			<definition>
 				<onup>SetFocus(3000,0)</onup>
-				<ondown conditon="Integer.IsGreater(Container.NumItems,1)">60</ondown>
+				<ondown conditon="Integer.IsGreater(Container.NumItems,1)">61</ondown>
 				<ondown condition="Integer.IsEqual(Container.NumItems,1)">SetFocus(3000,0)</ondown>
 				<onleft condition="Integer.IsGreater(Container.NumItems,10)">504</onleft>
 				<onleft condition="Integer.IsLessOrEqual(Container.NumItems,10) + Integer.IsGreater(Container.NumItems,1)">0</onleft>
@@ -266,7 +266,7 @@
 		<include name="Grid_Navigation">
 			<definition>
 				<onleft>SetFocus(3000,0)</onleft>
-				<onright>60</onright>
+				<onright>61</onright>
 				<onup condition="$EXP[GridView_Display_IsFanart] + Integer.IsGreater(Container.NumItems,3)">505</onup>
 				<onup condition="!$EXP[GridView_Display_IsFanart] + Integer.IsGreater(Container.NumItems,5)">505</onup>
 				<onup condition="$EXP[GridView_Display_IsFanart] + Integer.IsLessorEqual(Container.NumItems,3)">SetFocus(3000,0)</onup>
@@ -282,10 +282,13 @@
 	<include name="HiddenFocusButton">
 		<control type="button">
 			<visible allowhiddenfocus="true">false</visible>
-			<onfocus condition="System.HasAddon(script.embuary.helper) + Integer.IsGreater(ListItem.Property(WatchedEpisodes),0) + Integer.IsGreater(ListItem.Property(TotalEpisodes),0) + !String.IsEqual(ListItem.Overlay,OverlayWatched.png) + [Container.Content(tvshows) | Container.Content(seasons)]">RunScript(script.embuary.helper,action=calc,do='"($INFO[ListItem.Property(WatchedEpisodes)] / $INFO[ListItem.Property(TotalEpisodes)]) * 100"',prop=WatchedPercentage)</onfocus>
+			<onfocus condition="$EXP[GridView_IsVisible]">SetProperty(GridView_Position,$INFO[Container.Position],home)</onfocus>
 			<onfocus condition="$EXP[GridView_IsVisible]">SetProperty(GridView_Row,$INFO[Container.Row],home)</onfocus>
-			<onfocus condition="$EXP[GridView_IsVisible]">SetProperty(GridView_Column,$INFO[Container.Column],home)</onfocus>
-			<onfocus condition="Control.HasFocus(505) + [Control.IsVisible(5007) | Control.IsVisible(5008)] + !String.IsEqual(Container.NumItems,1)">SetProperty(GridView_IsScrolling,true,home)</onfocus>
+			<onfocus condition="$EXP[GridView_IsVisible]">SetProperty(GridView_NumItems,$INFO[Container.NumItems],home)</onfocus>
+			<onfocus condition="$EXP[GridView_Display_IsFanart] + Integer.IsEqual(Container.Row,0) + Integer.IsEqual(Container.Column,2) + Integer.IsGreater(Container.NumItems,3)">SetProperty(GridView_TopRight,true,home)</onfocus>
+			<onfocus condition="[$EXP[GridView_Display_IsSquare] | $EXP[GridView_Display_IsPosters]] + Integer.IsEqual(Container.Row,0) + Integer.IsEqual(Container.Column,4) + Integer.IsGreater(Container.NumItems,5)">SetProperty(GridView_TopRight,true,home)</onfocus>
+			<onfocus condition="System.HasAddon(script.embuary.helper) + Integer.IsGreater(ListItem.Property(WatchedEpisodes),0) + Integer.IsGreater(ListItem.Property(TotalEpisodes),0) + !String.IsEqual(ListItem.Overlay,OverlayWatched.png) + [Container.Content(tvshows) | Container.Content(seasons)]">RunScript(script.embuary.helper,action=calc,do='"($INFO[ListItem.Property(WatchedEpisodes)] / $INFO[ListItem.Property(TotalEpisodes)]) * 100"',prop=WatchedPercentage)</onfocus>
+			<onunfocus>ClearProperty(GridView_TopRight,home)</onunfocus>
 		</control>
 	</include>
 
