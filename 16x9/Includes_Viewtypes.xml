@@ -372,7 +372,7 @@
 				<animation effect="$PARAM[animationeffect]" end="$PARAM[animationend]" condition="$PARAM[animationcondition]" time="$PARAM[animationtime]" tween="$PARAM[animationtween]" easing="$PARAM[animationeasing]" reversible="false">$PARAM[animationtype]</animation>
 				<!--Artwork-->
 				<control type="image">
-					<include>FocusBounceAnimation</include>
+					<include>Focus_Zoom_Animation</include>
 					<texture background="true" diffuse="$PARAM[diffuse]">$VAR[Thumbnail($PARAM[position])Content]</texture>
 					<!--<texture background="true" colordiffuse="$VAR[AccentColor]">views/white_100.png</texture>-->
 					<aspectratio align="center" aligny="center">$PARAM[aspectratio]</aspectratio>
@@ -488,11 +488,9 @@
 			<control type="group">
 				<left>$PARAM[left]</left>
 				<top>$PARAM[top]</top>
-				<visible>$EXP[$PARAM[viewtype_label]View_Display_Is$PARAM[displaytype_label]] + !$EXP[ContainerSwitching]</visible>
-				<include>View_Transition_Fade_Animation</include>
 				<control type="group">
-					<visible>!$EXP[OptionsSwitching]</visible>
-					<include>View_Transition_Fade_Animation_No_Delay</include>
+					<visible>$EXP[$PARAM[viewtype_label]View_Display_Is$PARAM[displaytype_label]] + !$EXP[ContainerSwitching] + !$EXP[OptionsSwitching]</visible>
+					<include>Artwork_Fade_Animation</include>
 					<control type="group">
 						<visible>!$EXP[ContentSwitching]</visible>
 						<include content="ListIcon">
@@ -578,44 +576,40 @@
 			</control>
 			<!--ShowcaseView Overlay Details-->
 			<control type="group">
-				<visible>$EXP[ShowcaseView_IsVisible] + $EXP[$PARAM[viewtype_label]View_Display_Is$PARAM[displaytype_label]] + !$EXP[ContainerSwitching]</visible>
-				<include>View_Transition_Content_Fade_Animation</include>
 				<width>$PARAM[focus_width]</width>
 				<height>$PARAM[focus_height]</height>
-				<control type="group">
+				<visible>$EXP[ShowcaseView_Display_Is$PARAM[displaytype_label]] + !$EXP[ContainerSwitching] + !$EXP[OptionsSwitching] + !$EXP[ContentSwitching] + !$EXP[TransparentDialog_IsVisible] + !Control.HasFocus(60)</visible>
+				<include>Content_Delayed_Fade_Animation</include>
+				<control type="grouplist">
 					<left>30</left>
 					<right>30</right>
-					<visible>![$EXP[ContentSwitching] | $EXP[TransparentDialog_IsVisible] | Control.HasFocus(60)]</visible>
-					<include>Content_Transition_Fade_Animation</include>
-					<control type="grouplist">
-						<visible>!$EXP[ContentSwitching] + $EXP[ShowcaseView_Details_Overlay_IsVisible] + !$EXP[StandardViews_NowPlaying]</visible>
-						<orientation>vertical</orientation>
+					<visible>$EXP[ShowcaseView_Details_Overlay_IsVisible] + !$EXP[StandardViews_NowPlaying]</visible>
+					<orientation>vertical</orientation>
+					<align>center</align>
+					<itemgap>5</itemgap>
+					<control type="textbox">
+						<visible>$EXP[ShowcaseView_Display_IsSquare]</visible>
+						<height max="180">auto</height>
+						<font>Showcase_Overlay_Title</font>
+						<textcolor>$VAR[LightColor]</textcolor>
+						<label>$VAR[Title_Label]</label>
 						<align>center</align>
-						<itemgap>5</itemgap>
-						<control type="textbox">
-							<visible>$EXP[ShowcaseView_Display_IsSquare]</visible>
-							<height max="180">auto</height>
-							<font>Showcase_Overlay_Title</font>
-							<textcolor>$VAR[LightColor]</textcolor>
-							<label>$VAR[Title_Label]</label>
-							<align>center</align>
-						</control>
-						<control type="textbox">
-							<visible>$EXP[ShowcaseView_Display_IsPosters]</visible>
-							<height max="156">auto</height>
-							<font>Showcase_Title</font>
-							<textcolor>$VAR[LightColor]</textcolor>
-							<label>$VAR[Title_Label]</label>
-							<align>center</align>
-						</control>
-						<control type="label">
-		          <visible>$EXP[ShowcaseView_Details_Info_Overlay_IsVisible]</visible>
-		          <height max="70">auto</height>
-							<font>Showcase_Info</font>
-							<textcolor>$VAR[LightColor]</textcolor>
-							<label>$VAR[Info_Label]</label>
-							<align>center</align>
-						</control>
+					</control>
+					<control type="textbox">
+						<visible>$EXP[ShowcaseView_Display_IsPosters]</visible>
+						<height max="156">auto</height>
+						<font>Showcase_Title</font>
+						<textcolor>$VAR[LightColor]</textcolor>
+						<label>$VAR[Title_Label]</label>
+						<align>center</align>
+					</control>
+					<control type="label">
+						<visible>$EXP[ShowcaseView_Details_Info_Overlay_IsVisible]</visible>
+						<height max="70">auto</height>
+						<font>Showcase_Info</font>
+						<textcolor>$VAR[LightColor]</textcolor>
+						<label>$VAR[Info_Label]</label>
+						<align>center</align>
 					</control>
 				</control>
 			</control>
@@ -693,7 +687,7 @@
 		<definition>
 			<control type="group">
 				<visible>$EXP[$PARAM[viewtype_label]View_Display_Is$PARAM[displaytype_label]] + !$EXP[ContainerSwitching]</visible>
-				<include>View_Transition_Fade_Animation</include>
+				<include>Artwork_Fade_Animation</include>
 				<!--PREVIOUS SCROLL-->
 				<control type="group">
 					<visible>$EXP[ContentPrevious]</visible>
@@ -1130,7 +1124,7 @@
 			<control type="group">
 				<top>$PARAM[top]</top>
 				<visible>$EXP[$PARAM[viewtype_label]View_Display_Is$PARAM[displaytype_label]] + !$EXP[ContainerSwitching]</visible>
-				<include>View_Transition_Fade_Animation</include>
+				<include>Artwork_Fade_Animation</include>
 				<animation effect="slide" start="0,0" end="-960,0" time="0" condition="$EXP[StripView_Display_IsFanart]">Conditional</animation>
 				<!--PREVIOUS SCROLL-->
 				<control type="group">
@@ -1581,7 +1575,7 @@
 				<param name="unfocusedoverlayanimationeffect" value="fade"/>
 				<param name="unfocusedoverlayanimationstart" value="0"/>
 				<param name="unfocusedoverlayanimationend" value="100"/>
-				<param name="unfocusedoverlayanimationdelay" value="180"/>
+				<param name="unfocusedoverlayanimationdelay" value="540"/>
 				<param name="bordervisible" value="true"/>
 				<param name="borderedge" value="-10"/>
 				<param name="bordersize" value="11"/>

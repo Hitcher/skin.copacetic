@@ -9,6 +9,7 @@
 		<param name="orientation" default="horizontal"/>
 		<definition>
 			<control type="group">
+				<visible>$EXP[$PARAM[viewtype_label]View_IsVisible]</visible>
 				<include content="Custom_List">
 					<param name="type" value="$PARAM[type]"/>
 					<param name="id" value="$PARAM[id]"/>
@@ -25,6 +26,8 @@
 		<param name="viewtype_label" default="Showcase"/>
 		<definition>
 			<control type="group">
+				<visible>$EXP[$PARAM[viewtype_label]View_IsVisible]</visible>
+				<include>Viewtype_Fade_Animation</include>
 				<animation effect="slide" start="0,0" end="360,0" time="360" tween="sine" easing="out" reversible="true" condition="Player.HasAudio + [$EXP[ShowcaseView_Display_IsPosters] | [$EXP[ShowcaseView_Display_IsSquare] + $EXP[ShowcaseView_Details_Off]]]">Conditional</animation>
 				<!--ARTWORK-->
 				<control type="group">
@@ -49,46 +52,39 @@
 				</control>
 				<!--DETAILS-->
 				<control type="group">
-					<visible>$EXP[$PARAM[viewtype_label]View_IsVisible] + !$EXP[ContainerSwitching]</visible>
-					<include>View_Transition_Content_Fade_Animation</include>
+					<visible>!$EXP[ContainerSwitching] + !$EXP[ContentSwitching] + !$EXP[TransparentDialog_IsVisible] + !Control.HasFocus(60)</visible>
+					<include>Content_Delayed_Fade_Animation</include>
 					<control type="group">
-						<visible>![$EXP[ContentSwitching] | $EXP[TransparentDialog_IsVisible] | Control.HasFocus(60)]</visible>
-						<include>Content_Transition_Fade_Animation</include>
-						<control type="group">
-							<visible>!$EXP[ContentSwitching]</visible>
-							<control type="group">
-								<animation effect="slide" start="0,0" end="-180,0" time="1" reversible="true" condition="$EXP[$PARAM[viewtype_label]View_Display_IsPosters] + Player.HasAudio">Conditional</animation>
-								<include content="MediaFlags"/>
-								<include content="Common_Details">
-									<param name="viewtype_label" value="$PARAM[viewtype_label]"/>
-									<param name="left" value="960"/>
-									<param name="width" value="720"/>
-									<param name="titleheight" value="156"/>
-							    <param name="infogap" value="5"/>
-							    <param name="infoheight" value="70"/>
-									<param name="plotmaxheight" value="165"/>
-								</include>
-							</control>
-							<control type="group">
-								<animation effect="slide" start="0,0" end="-360,0" time="1" reversible="true" condition="$EXP[$PARAM[viewtype_label]View_Display_IsPosters] + Player.HasAudio">Conditional</animation>
-								<include content="MediaFlags"/>
-							</control>
-							<control type="group">
-								<animation effect="slide" start="0,0" end="180,0" time="0" condition="$EXP[ShowcaseView_Display_IsSquare]">Conditional</animation>
-								<include content="ProgressBar">
-									<param name="left" value="180"/>
-								</include>
-							</control>
-						</control>
+						<animation effect="slide" start="0,0" end="-180,0" time="1" reversible="true" condition="$EXP[$PARAM[viewtype_label]View_Display_IsPosters] + Player.HasAudio">Conditional</animation>
+						<include content="MediaFlags"/>
+						<include content="Common_Details">
+							<param name="viewtype_label" value="$PARAM[viewtype_label]"/>
+							<param name="left" value="960"/>
+							<param name="width" value="720"/>
+							<param name="titleheight" value="156"/>
+							<param name="infogap" value="5"/>
+							<param name="infoheight" value="70"/>
+							<param name="plotmaxheight" value="165"/>
+						</include>
+					</control>
+					<control type="group">
+						<animation effect="slide" start="0,0" end="-360,0" time="1" reversible="true" condition="$EXP[$PARAM[viewtype_label]View_Display_IsPosters] + Player.HasAudio">Conditional</animation>
+						<include content="MediaFlags"/>
+					</control>
+					<control type="group">
+						<animation effect="slide" start="0,0" end="180,0" time="0" condition="$EXP[ShowcaseView_Display_IsSquare]">Conditional</animation>
+						<include content="ProgressBar">
+							<param name="left" value="180"/>
+						</include>
 					</control>
 				</control>
 				<!--MUSICPLAYER-->
 				<control type="group">
-					<visible>$EXP[$PARAM[viewtype_label]View_IsVisible] + !$EXP[ContainerSwitching]</visible>
-					<include>View_Transition_Fade_Animation</include>
+					<visible>!$EXP[ContainerSwitching]</visible>
+					<include>Artwork_Fade_Animation</include>
 					<control type="group">
 						<visible>Player.HasAudio</visible>
-						<include>Notification_Widget_Animation</include>
+						<include>Notification_Widget_Fade_Animation</include>
 						<control type="group">
 							<include content="Notification_Widget">
 								<param name="visible" value="$EXP[ShowcaseView_Display_IsSquare] + [!Player.HasAudio | !$EXP[ShowcaseView_Details_Off]]"/>

@@ -5,226 +5,223 @@
 		<param name="id" default="50"/>
 		<param name="viewtype_label" default="List"/>
 		<definition>
-			<!--ART (Background)-->
 			<control type="group">
-				<include>FullscreenDimensions</include>
-				<visible>$EXP[$PARAM[viewtype_label]View_Display_IsBackground] + !$EXP[ContainerSwitching]</visible>
-				<include>View_Transition_Fade_Animation</include>
-				<include content="ListIcon">
-					<param name="unfocusedoverlay" value="true"/>
-				</include>
-				<include content="Artwork_Transition_Fade">
-					<param name="target_id" value="$PARAM[id]"/>
-					<param name="viewtype_label" value="$PARAM[viewtype_label]"/>
-				</include>
-			</control>
-			<!--ART (Thumbnails)-->
-			<control type="group">
-				<left>0</left>
-				<top>0</top>
-				<width>720</width>
-				<height>100%</height>
-				<visible>$EXP[$PARAM[viewtype_label]View_Display_IsThumbnails] + !$EXP[ContainerSwitching]</visible>
-				<include>View_Transition_Fade_Animation</include>
-				<!--Static/Scroll for files view-->
-				<include content="ListIcon">
-					<param name="aspectratio" value="keep"/>
-					<param name="visible" value="Container.Content(files)"/>
-					<param name="fadetime" value="360"/>
-				</include>
-				<!--Static-->
+				<visible>$EXP[$PARAM[viewtype_label]View_IsVisible]</visible>
+				<include>Viewtype_Fade_Animation</include>
+				<!--ART-->
 				<control type="group">
-					<visible>!$EXP[ContentSwitching]</visible>
-					<include content="ListIcon">
-						<param name="aspectratio" value="scale"/>
-						<param name="showgradient" value="!Container.Content(sets)"/>
-						<param name="visible" value="$EXP[Poster_Containers]"/>
-					</include>
-					<include content="ListIcon">
-						<param name="top" value="180"/>
-						<param name="height" value="720"/>
-						<param name="aspectratio" value="scale"/>
-						<param name="visible" value="$EXP[Square_Containers]"/>
-					</include>
-					<include content="ListIcon">
-						<param name="left" value="180"/>
-						<param name="top" value="180"/>
-						<param name="width" value="480"/>
-						<param name="height" value="720"/>
-						<param name="aspectratio" value="scale"/>
-						<param name="visible" value="Container.Content(actors)"/>
-					</include>
-					<include content="ListIcon">
-						<param name="aspectratio" value="keep"/>
-						<param name="visible" value="![$EXP[Poster_Containers] | $EXP[Square_Containers] | Container.Content(files) | Container.Content(actors)]"/>
-					</include>
-				</control>
-				<!--Scrolling-->
-				<include content="Artwork_Transition_Fade">
-					<param name="target_id" value="$PARAM[id]"/>
-					<param name="viewtype_label" value="$PARAM[viewtype_label]"/>
-					<param name="aspectratio" value="scale"/>
-					<param name="showgradient" value="!Container.Content(sets)"/>
-					<param name="unfocusedoverlay" value="false"/>
-					<param name="visible" value="$EXP[Poster_Containers]"/>
-				</include>
-				<include content="Artwork_Transition_Fade">
-					<param name="target_id" value="$PARAM[id]"/>
-					<param name="top" value="180"/>
-					<param name="height" value="720"/>
-					<param name="viewtype_label" value="$PARAM[viewtype_label]"/>
-					<param name="aspectratio" value="scale"/>
-					<param name="unfocusedoverlay" value="false"/>
-					<param name="visible" value="$EXP[Square_Containers]"/>
-				</include>
-				<include content="Artwork_Transition_Fade">
-					<param name="target_id" value="$PARAM[id]"/>
-					<param name="top" value="180"/>
-					<param name="left" value="180"/>
-					<param name="width" value="480"/>
-					<param name="height" value="720"/>
-					<param name="viewtype_label" value="$PARAM[viewtype_label]"/>
-					<param name="aspectratio" value="scale"/>
-					<param name="unfocusedoverlay" value="false"/>
-					<param name="visible" value="Container.Content(actors)"/>
-				</include>
-
-				<include content="Artwork_Transition_Fade">
-					<param name="target_id" value="$PARAM[id]"/>
-					<param name="viewtype_label" value="$PARAM[viewtype_label]"/>
-					<param name="aspectratio" value="keep"/>
-					<param name="unfocusedoverlay" value="false"/>
-					<param name="visible" value="![$EXP[Poster_Containers] | $EXP[Square_Containers] | Container.Content(files) | Container.Content(actors)]"/>
-				</include>
-			</control>
-			<!--DETAILS-->
-			<control type="group">
-				<visible>$EXP[$PARAM[viewtype_label]View_IsVisible] + !$EXP[ContainerSwitching]</visible>
-				<include>View_Transition_Content_Fade_Animation</include>
-				<control type="group">
-					<visible>![$EXP[TransparentDialog_IsVisible] | Control.HasFocus(60)]</visible>
-					<include>Content_Transition_Fade_Animation</include>
-					<include content="Breadcrumb_Label">
-						<param name="visible" value="!$EXP[$PARAM[viewtype_label]View_Details_Off] + Player.HasAudio"/>
-						<param name="width" value="870"/>
-					</include>
-					<include content="Breadcrumb_Label">
-						<param name="visible" value="!$EXP[$PARAM[viewtype_label]View_Details_Off] + !Player.HasAudio"/>
-						<param name="width" value="1800"/>
-					</include>
-				</control>
-				<control type="group">
-					<visible>![$EXP[ContentSwitching] | $EXP[TransparentDialog_IsVisible] | Control.HasFocus(60)]</visible>
-					<include>Content_Transition_Fade_Animation</include>
 					<control type="group">
-						<visible>!$EXP[ContentSwitching]</visible>
+						<visible>$EXP[$PARAM[viewtype_label]View_Display_IsBackground] + !$EXP[ContainerSwitching] + !$EXP[OptionsSwitching]</visible>
+						<include>Artwork_Fade_Animation</include>
+						<include content="ListIcon">
+							<param name="unfocusedoverlay" value="true"/>
+						</include>
+						<include content="Artwork_Transition_Fade">
+							<param name="target_id" value="$PARAM[id]"/>
+							<param name="viewtype_label" value="$PARAM[viewtype_label]"/>
+						</include>
+					</control>
+					<control type="group">
+						<visible>$EXP[$PARAM[viewtype_label]View_Display_IsThumbnails] + !$EXP[ContainerSwitching] + !$EXP[OptionsSwitching]</visible>
+						<include>Artwork_Fade_Animation</include>
+						<width>720</width>
+						<!--Static/Scroll for files view-->
+						<include content="ListIcon">
+							<param name="aspectratio" value="keep"/>
+							<param name="visible" value="Container.Content(files)"/>
+							<param name="fadetime" value="360"/>
+						</include>
+						<!--Static-->
+						<control type="group">
+							<visible>!$EXP[ContentSwitching]</visible>
+							<include content="ListIcon">
+								<param name="aspectratio" value="scale"/>
+								<param name="showgradient" value="!Container.Content(sets)"/>
+								<param name="visible" value="$EXP[Poster_Containers]"/>
+							</include>
+							<include content="ListIcon">
+								<param name="top" value="180"/>
+								<param name="height" value="720"/>
+								<param name="aspectratio" value="scale"/>
+								<param name="visible" value="$EXP[Square_Containers]"/>
+							</include>
+							<include content="ListIcon">
+								<param name="left" value="180"/>
+								<param name="top" value="180"/>
+								<param name="width" value="480"/>
+								<param name="height" value="720"/>
+								<param name="aspectratio" value="scale"/>
+								<param name="visible" value="Container.Content(actors)"/>
+							</include>
+							<include content="ListIcon">
+								<param name="aspectratio" value="keep"/>
+								<param name="visible" value="![$EXP[Poster_Containers] | $EXP[Square_Containers] | Container.Content(files) | Container.Content(actors)]"/>
+							</include>
+						</control>
+						<!--Scrolling-->
+						<include content="Artwork_Transition_Fade">
+							<param name="target_id" value="$PARAM[id]"/>
+							<param name="viewtype_label" value="$PARAM[viewtype_label]"/>
+							<param name="aspectratio" value="scale"/>
+							<param name="showgradient" value="!Container.Content(sets)"/>
+							<param name="unfocusedoverlay" value="false"/>
+							<param name="visible" value="$EXP[Poster_Containers]"/>
+						</include>
+						<include content="Artwork_Transition_Fade">
+							<param name="target_id" value="$PARAM[id]"/>
+							<param name="top" value="180"/>
+							<param name="height" value="720"/>
+							<param name="viewtype_label" value="$PARAM[viewtype_label]"/>
+							<param name="aspectratio" value="scale"/>
+							<param name="unfocusedoverlay" value="false"/>
+							<param name="visible" value="$EXP[Square_Containers]"/>
+						</include>
+						<include content="Artwork_Transition_Fade">
+							<param name="target_id" value="$PARAM[id]"/>
+							<param name="top" value="180"/>
+							<param name="left" value="180"/>
+							<param name="width" value="480"/>
+							<param name="height" value="720"/>
+							<param name="viewtype_label" value="$PARAM[viewtype_label]"/>
+							<param name="aspectratio" value="scale"/>
+							<param name="unfocusedoverlay" value="false"/>
+							<param name="visible" value="Container.Content(actors)"/>
+						</include>
+						<include content="Artwork_Transition_Fade">
+							<param name="target_id" value="$PARAM[id]"/>
+							<param name="viewtype_label" value="$PARAM[viewtype_label]"/>
+							<param name="aspectratio" value="keep"/>
+							<param name="unfocusedoverlay" value="false"/>
+							<param name="visible" value="![$EXP[Poster_Containers] | $EXP[Square_Containers] | Container.Content(files) | Container.Content(actors)]"/>
+						</include>
+					</control>
+				</control>
+				<!--DETAILS-->
+				<control type="group">
+					<!--Breadcrumb-->
+					<control type="group">
+						<visible>!$EXP[ContainerSwitching] + !$EXP[TransparentDialog_IsVisible] + !Control.HasFocus(60)</visible>
+						<include>Content_Delayed_Fade_Animation</include>
+						<include content="Breadcrumb_Label">
+							<param name="visible" value="!$EXP[$PARAM[viewtype_label]View_Details_Off] + Player.HasAudio"/>
+							<param name="width" value="870"/>
+						</include>
+						<include content="Breadcrumb_Label">
+							<param name="visible" value="!$EXP[$PARAM[viewtype_label]View_Details_Off] + !Player.HasAudio"/>
+							<param name="width" value="1800"/>
+						</include>
+					</control>
+					<!--Other Details-->
+					<control type="group">
+						<visible>!$EXP[ContainerSwitching] + !$EXP[ContentSwitching] + !$EXP[TransparentDialog_IsVisible] + !Control.HasFocus(60)</visible>
+						<include>Content_Delayed_Fade_Animation</include>
 						<include content="MediaFlags"/>
 						<control type="group">
 							<animation effect="slide" end="-600,0" time="0" condition="$EXP[ListView_Display_IsThumbnails]">Conditional</animation>
 							<include content="ProgressBar"/>
 						</control>
-					</control>
-					<!--DETAILS (Background)-->
-					<control type="grouplist">
-						<left>120</left>
-						<top>510</top>
-						<width>1740</width>
-						<height>60</height>
-						<itemgap>12</itemgap>
-						<orientation>horizontal</orientation>
-						<usecontrolcoords>true</usecontrolcoords>
-						<visible>$EXP[$PARAM[viewtype_label]View_Display_IsBackground] + $EXP[$PARAM[viewtype_label]View_Details_Info_IsVisible] + !$EXP[ContentSwitching]</visible>
-						<!--Title Gap-->
-						<control type="label">
-							<width max="1200">auto</width>
+						<!--Background-->
+						<control type="grouplist">
+							<visible>$EXP[$PARAM[viewtype_label]View_Display_IsBackground] + $EXP[$PARAM[viewtype_label]View_Details_Info_IsVisible]</visible>
+							<left>120</left>
+							<top>510</top>
+							<width>1740</width>
 							<height>60</height>
-							<aligny>center</aligny>
-							<font>List_Title_Focused</font>
-							<textcolor>$VAR[Blank]</textcolor>
-							<label>$VAR[Title_Label]</label>
+							<itemgap>12</itemgap>
+							<orientation>horizontal</orientation>
+							<usecontrolcoords>true</usecontrolcoords>
+							<!--Title Gap-->
+							<control type="label">
+								<width max="1200">auto</width>
+								<height>60</height>
+								<aligny>center</aligny>
+								<font>List_Title_Focused</font>
+								<textcolor>$VAR[Blank]</textcolor>
+								<label>$VAR[Title_Label]</label>
+							</control>
+							<!--Abbreviated Details-->
+							<control type="label">
+								<width>468</width>
+								<top>23</top>
+								<height>35</height>
+								<font>List_Info</font>
+								<textcolor>$VAR[ListFocusColor]</textcolor>
+								<label>$VAR[Info_Label,/ ]</label>
+								<aligny>center</aligny>
+							</control>
 						</control>
-						<!--Abbreviated Details-->
-						<control type="label">
-							<width>468</width>
-							<top>23</top>
-							<height>35</height>
-							<font>List_Info</font>
-							<textcolor>$VAR[ListFocusColor]</textcolor>
-							<label>$VAR[Info_Label,/ ]</label>
-							<aligny>center</aligny>
-						</control>
-					</control>
-					<!--DETAILS (Thumbnails)-->
-					<control type="grouplist">
-						<left>840</left>
-						<top>510</top>
-						<width>1020</width>
-						<height>60</height>
-						<itemgap>12</itemgap>
-						<orientation>horizontal</orientation>
-						<usecontrolcoords>true</usecontrolcoords>
-						<visible>$EXP[$PARAM[viewtype_label]View_Display_IsThumbnails] + !Container.Content(artists) + $EXP[$PARAM[viewtype_label]View_Details_Info_IsVisible] + !$EXP[ContentSwitching]</visible>
-						<!--Title Gap-->
-						<control type="label">
-							<width max="900">auto</width>
+						<!--Thumbnails-->
+						<control type="grouplist">
+							<left>840</left>
+							<top>510</top>
+							<width>1020</width>
 							<height>60</height>
-							<aligny>center</aligny>
-							<font>List_Title_Focused</font>
-							<textcolor>$VAR[Blank]</textcolor>
-							<label>$VAR[Title_Label]</label>
-						</control>
-						<!--Abbreviated Details-->
-						<control type="label">
-							<width>120</width>
-							<top>23</top>
-							<height>35</height>
-							<font>List_Info</font>
-							<textcolor>$VAR[ListFocusColor]</textcolor>
-							<label>$VAR[Info_Label,/ ]</label>
-							<aligny>center</aligny>
+							<itemgap>12</itemgap>
+							<orientation>horizontal</orientation>
+							<usecontrolcoords>true</usecontrolcoords>
+							<visible>$EXP[$PARAM[viewtype_label]View_Display_IsThumbnails] + !Container.Content(artists) + $EXP[$PARAM[viewtype_label]View_Details_Info_IsVisible]</visible>
+							<!--Title Gap-->
+							<control type="label">
+								<width max="900">auto</width>
+								<height>60</height>
+								<aligny>center</aligny>
+								<font>List_Title_Focused</font>
+								<textcolor>$VAR[Blank]</textcolor>
+								<label>$VAR[Title_Label]</label>
+							</control>
+							<!--Abbreviated Details-->
+							<control type="label">
+								<width>120</width>
+								<top>23</top>
+								<height>35</height>
+								<font>List_Info</font>
+								<textcolor>$VAR[ListFocusColor]</textcolor>
+								<label>$VAR[Info_Label,/ ]</label>
+								<aligny>center</aligny>
+							</control>
 						</control>
 					</control>
 				</control>
-			</control>
-			<!--MUSICPLAYER-->
-			<control type="group">
-				<visible>$EXP[$PARAM[viewtype_label]View_IsVisible] + !$EXP[ContainerSwitching]</visible>
-				<include>View_Transition_Fade_Animation</include>
+				<!--MUSICPLAYER-->
 				<control type="group">
-					<visible>Player.HasAudio</visible>
-					<include>Notification_Widget_Animation</include>
-					<include content="Notification_Widget">
-						<param name="visible" value="$EXP[ListView_Display_IsThumbnails] + $EXP[Poster_Containers]"/>
-						<param name="width" value="180"/>
-						<param name="progress_bottom" value="174"/>
-						<param name="center_label_visible" value="false"/>
-						<param name="left_label_visible" value="true"/>
-						<param name="label_width" value="1020"/>
-					</include>
-					<include content="Notification_Widget">
-						<param name="visible" value="$EXP[ListView_Display_IsThumbnails] + $EXP[Square_Containers]"/>
-						<param name="right" value="1740"/>
-						<param name="top" value="900"/>
-						<param name="width" value="180"/>
-						<param name="center_label_visible" value="false"/>
-						<param name="right_label_visible" value="true"/>
-						<param name="label_width" value="1710"/>
-					</include>
-					<include content="Notification_Widget">
-						<param name="visible" value="$EXP[ListView_Display_IsThumbnails] + ![$EXP[Square_Containers] | $EXP[Poster_Containers]]"/>
-						<param name="width" value="180"/>
-						<param name="progress_bottom" value="174"/>
-						<param name="center_label_visible" value="false"/>
-						<param name="left_label_visible" value="true"/>
-						<param name="label_width" value="750"/>
-					</include>
-					<include content="Notification_Widget">
-						<param name="visible" value="!$EXP[ListView_Display_IsThumbnails]"/>
-						<param name="width" value="180"/>
-						<param name="center_label_visible" value="false"/>
-						<param name="left_label_visible" value="true"/>
-						<param name="label_width" value="750"/>
-					</include>
+					<visible>!$EXP[ContainerSwitching]</visible>
+					<include>Artwork_Fade_Animation</include>
+					<control type="group">
+						<visible>Player.HasAudio</visible>
+						<include>Notification_Widget_Fade_Animation</include>
+						<include content="Notification_Widget">
+							<param name="visible" value="$EXP[ListView_Display_IsThumbnails] + $EXP[Poster_Containers]"/>
+							<param name="width" value="180"/>
+							<param name="progress_bottom" value="174"/>
+							<param name="center_label_visible" value="false"/>
+							<param name="left_label_visible" value="true"/>
+							<param name="label_width" value="1020"/>
+						</include>
+						<include content="Notification_Widget">
+							<param name="visible" value="$EXP[ListView_Display_IsThumbnails] + $EXP[Square_Containers]"/>
+							<param name="right" value="1740"/>
+							<param name="top" value="900"/>
+							<param name="width" value="180"/>
+							<param name="center_label_visible" value="false"/>
+							<param name="right_label_visible" value="true"/>
+							<param name="label_width" value="1710"/>
+						</include>
+						<include content="Notification_Widget">
+							<param name="visible" value="$EXP[ListView_Display_IsThumbnails] + ![$EXP[Square_Containers] | $EXP[Poster_Containers]]"/>
+							<param name="width" value="180"/>
+							<param name="progress_bottom" value="174"/>
+							<param name="center_label_visible" value="false"/>
+							<param name="left_label_visible" value="true"/>
+							<param name="label_width" value="750"/>
+						</include>
+						<include content="Notification_Widget">
+							<param name="visible" value="!$EXP[ListView_Display_IsThumbnails]"/>
+							<param name="width" value="180"/>
+							<param name="center_label_visible" value="false"/>
+							<param name="left_label_visible" value="true"/>
+							<param name="label_width" value="750"/>
+						</include>
+					</control>
 				</control>
 			</control>
 		</definition>
@@ -235,11 +232,11 @@
 		<param name="viewtype_label" default="List"/>
 		<definition>
 			<control type="group">
-				<visible>$EXP[$PARAM[viewtype_label]View_IsVisible] + !$EXP[ContainerSwitching]</visible>
-				<include>View_Transition_Content_Fade_Animation</include>
+				<visible>$EXP[$PARAM[viewtype_label]View_IsVisible]</visible>
+				<include>Viewtype_Fade_Animation</include>
 				<control type="group">
-					<visible>!$EXP[TransparentDialog_IsVisible]</visible>
-					<include>Content_Transition_Fade_Animation</include>
+					<visible>!$EXP[ContainerSwitching] + !$EXP[TransparentDialog_IsVisible]</visible>
+					<include>Content_Delayed_Fade_Animation</include>
 					<animation effect="slide" end="720,0" time="0" condition="$EXP[ListView_Display_IsThumbnails]">Conditional</animation>
 					<include content="Common_List">
 						<param name="id" value="$PARAM[id]"/>
