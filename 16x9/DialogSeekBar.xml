@@ -2,62 +2,39 @@
 <window>
 	<!-- seekbar -->
 	<defaultcontrol always="true">901</defaultcontrol>
-	<visible>[VideoPlayer.IsFullscreen | Window.IsVisible(visualisation)] + [Player.Seeking | Player.DisplayAfterSeek | Player.Paused | Player.Forwarding | Player.Rewinding] + !Window.IsVisible(videoosd) + !Window.IsVisible(subtitlesearch) + !Player.FrameAdvance</visible>
-	<animation type="WindowOpen">
-		<effect type="zoom" start="90" end="100" center="auto" tween="back" easing="out" time="200"/>
-		<effect type="fade" start="0" end="100" time="200"/>
-	</animation>
+	<visible>[VideoPlayer.IsFullscreen | Window.IsVisible(visualisation)] + [Player.Seeking | Player.Paused | Player.Forwarding | Player.Rewinding] + !Window.IsVisible(videoosd) + !Window.IsVisible(subtitlesearch) + !Player.FrameAdvance</visible>
+	<include>Transparent_Dialog_Fade_Animation</include>
 
 	<controls>
 
-		<!-- Info -->
+		<!--Background-->
 		<control type="group">
-			<left>150</left>
-			<top>75</top>
-			<width>1620</width>
-			<height>234</height>
-
-			<!-- Background -->
-			<control type="image">
-				<width>1620</width>
-				<height>234</height>
-				<texture border="1">osd/OSDBack.png</texture>
+			<include>FullscreenDimensions</include>
+			<include>DialogBackground</include>
+			<!-- Pause -->
+			<control type="group">
+				<visible>Player.Paused</visible>
+				<include>Content_Fade_Animation</include>
+				<include content="Now_Playing_Visualization_Stroke"/>
 			</control>
-
-			<!-- Title -->
-			<control type="label">
-				<left>20</left>
-				<top>14</top>
-				<width>1280</width>
-				<height>48</height>
-				<font>Font48</font>
-				<textcolor>$VAR[FocusedColor]</textcolor>
-				<label>$VAR[VideoPlayerTitle]</label>
-			</control>
-
-			<!-- Plot -->
-			<control type="textbox">
-				<left>20</left>
-				<top>87</top>
-				<width>1280</width>
-				<height>118</height>
-				<label>$VAR[VideoPlayerPlot]</label>
-				<font>Font25</font>
-				<textcolor>$VAR[UnFocusedColor]</textcolor>
-				<autoscroll delay="5000" time="1400" repeat="10000">true</autoscroll>
-			</control>
-
-			<!-- Icon -->
-			<control type="image">
-				<right>20</right>
-				<top>20</top>
-				<width>234</width>
-				<height>194</height>
-				<aspectratio align="right">keep</aspectratio>
-				<texture>$VAR[VideoPlayerIcon]</texture>
-			</control>
-
 		</control>
+
+		<!--  Progress bar -->
+		<control type="progress" id="1">
+			<left>60</left>
+			<right>60</right>
+			<bottom>60</bottom>
+			<height>6</height>
+			<info>Player.Progress</info>
+			<texturebg colordiffuse="$VAR[LightColor]">views/white_20.png</texturebg>
+			<lefttexture></lefttexture>
+			<midtexture colordiffuse="$VAR[LightColor]">views/white_100.png</midtexture>
+			<righttexture></righttexture>
+			<overlaytexture></overlaytexture>
+		</control>
+
+
+
 
 		<!-- Player forwarding/rewinding -->
 		<control type="group">
@@ -65,7 +42,7 @@
 			<top>870</top>
 			<width>80</width>
 			<height>60</height>
-			<visible>player.forwarding | player.rewinding | player.paused</visible>
+			<visible>player.forwarding | player.rewinding</visible>
 
 			<!-- Background -->
 			<control type="image">
@@ -84,14 +61,7 @@
 				<textcolor>$VAR[UnFocusedColor]</textcolor>
 			</control>
 
-			<!-- Pause -->
-			<control type="image">
-				<left>10</left>
-				<width>60</width>
-				<height>60</height>
-				<texture>osd/OSDPauseNF.png</texture>
-				<visible>player.paused</visible>
-			</control>
+
 
 		</control>
 
@@ -156,20 +126,6 @@
 				<font>Font27</font>
 				<textcolor>$VAR[UnFocusedColor]</textcolor>
 				<label>$INFO[Player.Time] / $INFO[Player.Duration]</label>
-			</control>
-
-			<!--  Progress bar -->
-			<control type="progress" id="1">
-				<left>280</left>
-				<top>20</top>
-				<width>920</width>
-				<height>20</height>
-				<info>Player.Progress</info>
-				<texturebg border="2">osd/OSDProgressBack.png</texturebg>
-				<lefttexture></lefttexture>
-				<midtexture border="2">osd/OSDProgressBar.png</midtexture>
-				<righttexture></righttexture>
-				<overlaytexture></overlaytexture>
 			</control>
 
 			<!--  Cache bar -->

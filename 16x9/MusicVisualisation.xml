@@ -1,22 +1,161 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <window>
 	<!-- visualisation -->
-	<defaultcontrol></defaultcontrol>
-	<onload condition="System.HasAddon(script.artistslideshow)">RunScript(script.artistslideshow)</onload>
-
+	<backgroundcolor>$VAR[SecondaryColor]</backgroundcolor>
+	<include>My_Window_Fade_Animation</include>
+	<include>FullscreenDimensions</include>
 	<controls>
 
 		<!-- Visualisation -->
 		<control type="visualisation" id="2">
-			<include>FullscreenDimensions</include>
 			<visible>Player.HasAudio</visible>
 		</control>
 
+		<include content="Breadcrumb_Label">
+			<param name="visible" value="true"/>
+		</include>
+
+		<!--Artwork-->
+		<control type="group">
+			<visible>Player.HasAudio</visible>
+			<include>Notification_Widget_Fade_Animation</include>
+			<include content="ListIcon">
+				<param name="unfocusedoverlay" value="true"/>
+				<param name="left" value="540"/>
+				<param name="top" value="180"/>
+				<param name="width" value="840"/>
+				<param name="height" value="840"/>
+				<param name="bordervisible" value="true"/>
+			</include>
+			<control type="group">
+				<left>1380</left>
+				<top>240</top>
+				<width>360</width>
+				<height>360</height>
+				<include content="ListIcon">
+					<param name="position" value="1"/>
+					<param name="visible" value="MusicPlayer.HasNext + !String.IsEmpty(MusicPlayer.offset(1).Title)"/>
+				</include>
+				<include content="DropShadow">
+					<param name="height" value="100%"/>
+					<param name="flipx" value="true"/>
+					<param name="visible" value="MusicPlayer.HasNext + !String.IsEmpty(MusicPlayer.offset(1).Title)"/>
+				</include>
+			</control>
+		</control>
+
+		<!--Details-->
+		<control type="group">
+			<visible>Player.HasAudio</visible>
+			<include>Notification_Widget_Fade_Animation</include>
+			<control type="group">
+				<visible>!$EXP[TransparentDialog_IsVisible] + !Player.Paused</visible>
+				<include>Content_Fade_Animation</include>
+				<left>540</left>
+				<top>180</top>
+				<width>840</width>
+				<height>840</height>
+				<control type="grouplist">
+					<left>60</left>
+					<right>60</right>
+					<top>240</top>
+					<bottom>240</bottom>
+					<orientation>vertical</orientation>
+					<align>center</align>
+					<itemgap>5</itemgap>
+					<usecontrolcoords>true</usecontrolcoords>
+					<!--Title-->
+					<control type="textbox">
+						<height max="200">auto</height>
+						<font>List_Title_Focused</font>
+						<textcolor>$VAR[LightColor]</textcolor>
+						<label>$INFO[MusicPlayer.Title]</label>
+						<align>center</align>
+					</control>
+					<!--Info-->
+					<control type="textbox">
+						<top>-10</top>
+						<height max="70">auto</height>
+						<font>Visualisation_Info</font>
+						<textcolor>$VAR[LightColor]</textcolor>
+						<label>$INFO[MusicPlayer.Artist]</label>
+						<align>center</align>
+					</control>
+					<!--NowPlaying-->
+					<control type="group">
+						<top>-10</top>
+						<centerleft>50%</centerleft>
+						<width>120</width>
+						<height>120</height>
+						<include content="Now_Playing_Visualization_Fill">
+							<param name="itemgap" value="6"/>
+							<param name="barwidth" value="18"/>
+							<param name="barheight1" value="600"/>
+							<param name="barheight2" value="1320"/>
+							<param name="barheight3" value="840"/>
+							<param name="pausewidth" value="15"/>
+							<param name="pauseheight" value="900"/>
+							<param name="pauseshift" value="-3"/>
+							<param name="visible" value="Player.HasAudio"/>
+							<param name="colordiffuse" value="$VAR[LightColor]"/>
+						</include>
+					</control>-->
+				</control>
+				<control type="grouplist">
+					<left>60</left>
+					<right>60</right>
+					<bottom>60</bottom>
+					<height>46</height>
+					<orientation>vertical</orientation>
+					<align>right</align>
+					<itemgap>10</itemgap>
+					<usecontrolcoords>true</usecontrolcoords>
+					<!--Time and track labels-->
+					<control type="group">
+						<height>30</height>
+						<control type="label">
+							<left>0</left>
+							<width>300</width>
+							<height>24</height>
+							<font>Visualisation_Time</font>
+							<textcolor>$VAR[LightColor]</textcolor>
+							<align>left</align>
+							<label>$INFO[Player.Time]$INFO[Player.Duration, / ]</label>
+						</control>
+						<control type="label">
+							<right>0</right>
+							<width>300</width>
+							<font>Visualisation_Time</font>
+							<textcolor>$VAR[LightColor]</textcolor>
+							<align>right</align>
+							<label>$INFO[MusicPlayer.PlaylistPosition,Track ]$INFO[MusicPlayer.PlaylistLength,/]</label>
+						</control>
+					</control>
+					<!--Progressbar-->
+					<control type="progress">
+						<height>6</height>
+						<info>Player.Progress</info>
+						<texturebg colordiffuse="$VAR[LightColor]">views/white_20.png</texturebg>
+						<lefttexture></lefttexture>
+						<midtexture colordiffuse="$VAR[LightColor]">views/white_100.png</midtexture>
+						<righttexture></righttexture>
+						<overlaytexture></overlaytexture>
+					</control>
+				</control>
+			</control>
+		</control>
+
+	</controls>
+</window>
+
+
+
+<!--
 		<control type="group">
 			<visible>!Window.IsActive(seekbar) + !Window.IsActive(musicosd) + Player.ShowInfo</visible>
 			<animation effect="fade" start="100" end="0" time="0">Hidden</animation>
 
-			<!-- Player forwarding/rewinding -->
+			<!-- Player forwarding/rewinding
 			<control type="group">
 				<left>150</left>
 				<top>621</top>
@@ -32,14 +171,14 @@
 				</animation>
 				<visible>player.forwarding | player.rewinding | player.paused</visible>
 
-				<!-- Background -->
+				<!-- Background
 				<control type="image">
 					<width>80</width>
 					<height>60</height>
 					<texture border="1">osd/OSDBack.png</texture>
 				</control>
 
-				<!-- Status -->
+				<!-- Status
 				<control type="label">
 					<width>80</width>
 					<height>60</height>
@@ -49,7 +188,7 @@
 					<textcolor>$VAR[UnFocusedColor]</textcolor>
 				</control>
 
-				<!-- Pause -->
+				<!-- Pause
 				<control type="image">
 					<left>10</left>
 					<width>60</width>
@@ -60,7 +199,7 @@
 
 			</control>
 
-			<!-- Player skipping -->
+			<!-- Player skipping
 			<control type="group">
 				<right>150</right>
 				<top>621</top>
@@ -76,14 +215,14 @@
 				</animation>
 				<visible>Integer.IsGreater(MusicPlayer.PlaylistLength,0)</visible>
 
-				<!-- Background -->
+				<!-- Background
 				<control type="image">
 					<width>140</width>
 					<height>60</height>
 					<texture border="1">osd/OSDBack.png</texture>
 				</control>
 
-				<!-- Status -->
+				<!-- Status
 				<control type="label">
 					<width>140</width>
 					<height>60</height>
@@ -95,7 +234,7 @@
 
 			</control>
 
-			<!-- Progress -->
+			<!-- Progress
 			<control type="group">
 				<left>150</left>
 				<top>696</top>
@@ -110,14 +249,14 @@
 					<effect type="fade" start="100" end="0" time="200"/>
 				</animation>
 
-				<!-- Background -->
+				<!-- Background
 				<control type="image">
 					<width>1620</width>
 					<height>60</height>
 					<texture border="1">osd/OSDBack.png</texture>
 				</control>
 
-				<!--  Current position/Time remaining -->
+				<!--  Current position/Time remaining
 				<control type="label">
 					<left>20</left>
 					<width>260</width>
@@ -127,7 +266,7 @@
 					<label>$INFO[Player.Time] / $INFO[Player.Duration]</label>
 				</control>
 
-				<!--  Progress bar -->
+				<!--  Progress bar
 				<control type="progress" id="1">
 					<left>280</left>
 					<top>20</top>
@@ -141,7 +280,7 @@
 					<overlaytexture></overlaytexture>
 				</control>
 
-				<!--  Cache bar -->
+				<!--  Cache bar
 				<control type="progress" id="1">
 					<left>280</left>
 					<top>20</top>
@@ -155,7 +294,7 @@
 					<overlaytexture></overlaytexture>
 				</control>
 
-				<!-- Current Time/End Time -->
+				<!-- Current Time/End Time
 				<control type="label">
 					<left>1001</left>
 					<width>600</width>
@@ -168,7 +307,7 @@
 
 			</control>
 
-			<!-- Info -->
+			<!-- Info
 			<control type="group">
 				<left>150</left>
 				<top>771</top>
@@ -183,14 +322,14 @@
 					<effect type="fade" start="100" end="0" time="200"/>
 				</animation>
 
-				<!-- Background -->
+				<!-- Background
 				<control type="image">
 					<width>1620</width>
 					<height>234</height>
 					<texture border="1">osd/OSDBack.png</texture>
 				</control>
 
-				<!-- Title -->
+				<!-- Title
 				<control type="label">
 					<left>20</left>
 					<top>14</top>
@@ -201,7 +340,7 @@
 					<label>$INFO[MusicPlayer.Title]$INFO[MusicPlayer.Album, / ]$INFO[MusicPlayer.Artist, &#8226; ]</label>
 				</control>
 
-				<!-- Plot -->
+				<!-- Plot
 				<control type="textbox">
 					<left>20</left>
 					<top>87</top>
@@ -213,8 +352,4 @@
 
 			</control>
 
-		</control>
-
-	</controls>
-
-</window>
+		</control>-->

@@ -24,7 +24,7 @@
 	<expression name="Square_Containers">[Container.Content(artists) | Container.Content(albums) | Container.Content(songs)]</expression>
   <expression name="Background_IsFanart">[[$EXP[ListView_IsVisible] + $EXP[ListView_Display_IsBackground]] | $EXP[BillboardView_IsVisible]]</expression>
 	<expression name="OpaqueDialog_IsVisible">[Window.IsVisible(movieinformation) | Window.IsVisible(musicinformation)]</expression>
-	<expression name="TransparentDialog_IsVisible">[String.IsEqual(Window(home).Property(OptionsMenu),Active) | Window.IsVisible(contextmenu) | Window.IsVisible(shutdownmenu) | Window.IsVisible(okdialog) | Window.IsVisible(yesnodialog) | Window.IsVisible(progressdialog) | Window.IsVisible(selectdialog)]</expression>
+	<expression name="TransparentDialog_IsVisible">[String.IsEqual(Window(home).Property(OptionsMenu),Active) | Window.IsVisible(contextmenu) | Window.IsVisible(shutdownmenu) | Window.IsVisible(okdialog) | Window.IsVisible(yesnodialog) | Window.IsVisible(progressdialog) | Window.IsVisible(selectdialog) | Window.IsVisible(dialogseek)]</expression>
 
 	<expression name="ContainerSwitching">![[Container.Content(movies) + !Window.IsVisible(1101)] | [Container.Content(sets) + !Window.IsVisible(1102)] | [Container.Content(tvshows) + !Window.IsVisible(1103)] | [Container.Content(seasons) + !Window.IsVisible(1104)] | [Container.Content(episodes) + !Window.IsVisible(1105)] | [Container.Content(artists) + !Window.IsVisible(1107)] | [Container.Content(albums) + !Window.IsVisible(1108)] | [Container.Content(songs) + !Window.IsVisible(1109)] | [Container.Content(actors) + !Window.IsVisible(1110)] | [Container.Content(addons) + !Window.IsVisible(1111)] | [Container.Content() + !Window.IsVisible(1112)] | [[Container.Content(files) | Container.Content(genres) | Container.Content(years) | Container.Content(playlists) | Container.Content(plugins) | Container.Content(studios) | Container.Content(directors) | Container.Content(tags) | Container.Content(countries) | Container.Content(roles) | Container.Content(images) | Container.Content(sources)] + !Window.IsVisible(1113)]]</expression>
 	<expression name="OptionsSwitching">Control.IsVisible(941)</expression>
@@ -412,17 +412,14 @@
     </definition>
 	</include>
 
-	<include name="ViewtypeOverlay">
-    <param name="visible" default="true"/>
-    <definition>
-  		<control type="image">
-        <visible>$PARAM[visible]</visible>
-  			<texture colordiffuse="$VAR[DarkColor]">$VAR[Viewtype_Diffuse]</texture>
-  		</control>
-    </definition>
+	<include name="DialogBackground">
+		<control type="image">
+			<visible>!$EXP[OpaqueDialog_IsVisible]</visible>
+			<texture colordiffuse="$VAR[SecondaryColor]">$VAR[Dialog_Background_Diffuse]</texture>
+		</control>
 	</include>
 
-  <include name="DialogBackground">
+  <include name="DropShadow">
     <control type="image">
 			<visible>!$EXP[OpaqueDialog_IsVisible]</visible>
       <texture colordiffuse="$VAR[SecondaryColor]">$VAR[Dialog_Background_Diffuse]</texture>
@@ -804,43 +801,189 @@
 		</definition>
 	</include>
 
+	<include name="Check_Template">
+		<param name="width" default="27"/>
+		<param name="height" default="14"/>
+		<param name="thickness" default="2"/>
+		<param name="color" default="$VAR[Plot]"/>
+		<definition>
+			<control type="group">
+				<width>100%</width>
+				<height>100%</height>
+				<control type="group">
+					<animation effect="rotate" center="auto" end="45" time="0" condition="true" reversible="false">Conditional</animation>
+					<centerleft>50%</centerleft>
+					<centertop>50%</centertop>
+					<width>$PARAM[width]</width>
+					<height>$PARAM[height]</height>
+					<control type="image">
+						<left>0</left>
+						<width>$PARAM[thickness]</width>
+						<height>100%</height>
+						<texture colordiffuse="$PARAM[color]">views/white_100.png</texture>
+					</control>
+					<control type="image">
+						<width>100%</width>
+						<bottom>0</bottom>
+						<height>$PARAM[thickness]</height>
+						<texture colordiffuse="$PARAM[color]">views/white_100.png</texture>
+					</control>
+				</control>
+			</control>
+		</definition>
+	</include>
+
+	<include name="Check_Unfocused">
+		<param name="color" default="$VAR[PlotColor]"/>
+		<definition>
+			<include content="Check_Template">
+				<param name="width" value="28"/>
+				<param name="height" value="14"/>
+				<param name="thickness" value="2"/>
+				<param name="color" value="$PARAM[color]"/>
+			</include>
+		</definition>
+	</include>
+
+	<include name="Check_Focused">
+		<param name="color" default="$VAR[ListFocusColor]"/>
+		<definition>
+			<include content="Check_Template">
+				<param name="width" value="36"/>
+				<param name="height" value="18"/>
+				<param name="thickness" value="6"/>
+				<param name="color" value="$PARAM[color]"/>
+			</include>
+		</definition>
+	</include>
+
+	<include name="Check_Unfocused_Large">
+		<param name="color" default="$VAR[PrimaryColor]"/>
+		<definition>
+			<include content="Check_Template">
+				<param name="width" value="40"/>
+				<param name="height" value="20"/>
+				<param name="thickness" value="3"/>
+				<param name="color" value="$PARAM[color]"/>
+			</include>
+		</definition>
+	</include>
+
+	<include name="Check_Focused_Large">
+		<param name="color" default="$VAR[PrimaryColor]"/>
+		<definition>
+			<include content="Check_Template">
+				<param name="width" value="48"/>
+				<param name="height" value="24"/>
+				<param name="thickness" value="9"/>
+				<param name="color" value="$PARAM[color]"/>
+			</include>
+		</definition>
+	</include>
+
+	<include name="Cross_Template">
+		<param name="width" default="28"/>
+		<param name="thickness" default="2"/>
+		<param name="color" default="$VAR[Plot]"/>
+		<definition>
+			<control type="group">
+				<width>100%</width>
+				<height>100%</height>
+				<control type="group">
+					<animation effect="rotate" center="auto" end="45" time="0" condition="true" reversible="false">Conditional</animation>
+					<centerleft>50%</centerleft>
+					<centertop>50%</centertop>
+					<width>$PARAM[width]</width>
+					<height>$PARAM[width]</height>
+					<control type="image">
+						<centerleft>50%</centerleft>
+						<width>$PARAM[thickness]</width>
+						<height>100%</height>
+						<texture colordiffuse="$PARAM[color]">views/white_100.png</texture>
+					</control>
+					<control type="image">
+						<width>100%</width>
+						<centertop>50%</centertop>
+						<height>$PARAM[thickness]</height>
+						<texture colordiffuse="$PARAM[color]">views/white_100.png</texture>
+					</control>
+				</control>
+			</control>
+		</definition>
+	</include>
+
+	<include name="Cross_Unfocused">
+		<param name="color" default="$VAR[PrimaryColor]"/>
+		<definition>
+			<include content="Cross_Template">
+				<param name="width" value="28"/>
+				<param name="thickness" value="2"/>
+				<param name="color" value="$PARAM[color]"/>
+			</include>
+		</definition>
+	</include>
+
+	<include name="Cross_Focused">
+		<param name="color" default="$VAR[PrimaryColor]"/>
+		<definition>
+			<include content="Cross_Template">
+				<param name="width" value="36"/>
+				<param name="thickness" value="6"/>
+				<param name="color" value="$PARAM[color]"/>
+			</include>
+		</definition>
+	</include>
+
+	<include name="Cross_Unfocused_Large">
+		<param name="color" default="$VAR[PrimaryColor]"/>
+		<definition>
+			<include content="Cross_Template">
+				<param name="width" value="40"/>
+				<param name="thickness" value="3"/>
+				<param name="color" value="$PARAM[color]"/>
+			</include>
+		</definition>
+	</include>
+
+	<include name="Cross_Focused_Large">
+		<param name="color" default="$VAR[PrimaryColor]"/>
+		<definition>
+			<include content="Cross_Template">
+				<param name="width" value="48"/>
+				<param name="thickness" value="9"/>
+				<param name="color" value="$PARAM[color]"/>
+			</include>
+		</definition>
+	</include>
+
 	<include name="ButtonLayout">
     <param name="buttonid" default=""/>
-    <param name="buttonwidth" default="120"/>
-		<param name="iconwidth" default="60"/>
+    <param name="width" default="120"/>
     <param name="unfocusedcolor" default="$VAR[PrimaryColor]"/>
-    <param name="unfocusedtexture" default=""/>
+    <param name="unfocusedtexture"/>
     <param name="focusedcolor" default="$VAR[PrimaryColor]"/>
-    <param name="focusedtexture" default=""/>
+    <param name="focusedtexture"/>
     <definition>
 			<control type="group">
 				<visible>Control.IsVisible($PARAM[buttonid])</visible>
-				<width>$PARAM[buttonwidth]</width>
-				<height>$PARAM[buttonwidth]</height>
-				<control type="grouplist">
-					<orientation>horizontal</orientation>
-					<align>center</align>
-					<control type="grouplist">
-						<width>$PARAM[iconwidth]</width>
-						<height>$PARAM[buttonwidth]</height>
-						<orientation>vertical</orientation>
-						<align>center</align>
-						<!--Unfocused-->
-						<control type="image">
-							<width>$PARAM[iconwidth]</width>
-							<height>$PARAM[iconwidth]</height>
-							<aspectratio>keep</aspectratio>
-							<texture colordiffuse="$PARAM[unfocusedcolor]">$PARAM[unfocusedtexture]</texture>
-							<visible>Control.IsVisible($PARAM[buttonid]) + !Control.HasFocus($PARAM[buttonid])</visible>
-						</control>
-						<!--Focused-->
-						<control type="image">
-							<width>$PARAM[iconwidth]</width>
-							<height>$PARAM[iconwidth]</height>
-							<aspectratio>keep</aspectratio>
-							<texture colordiffuse="$PARAM[focusedcolor]">$PARAM[focusedtexture]</texture>
-							<visible>Control.IsVisible($PARAM[buttonid]) + Control.HasFocus($PARAM[buttonid])</visible>
-						</control>
+				<width>$PARAM[width]</width>
+				<height>$PARAM[width]</height>
+				<control type="group">
+					<width>60</width>
+					<height>60</height>
+					<centerleft>50%</centerleft>
+					<centertop>50%</centertop>
+					<control type="group">
+						<visible>Control.IsVisible($PARAM[buttonid]) + !Control.HasFocus($PARAM[buttonid])</visible>
+						<include content="$PARAM[unfocusedtexture]">
+							<param name="color" value="$PARAM[unfocusedcolor]"/>
+						</include>
+					</control>
+					<control type="group">
+						<visible>Control.IsVisible($PARAM[buttonid]) + Control.HasFocus($PARAM[buttonid])</visible>
+						<include content="$PARAM[focusedtexture]">
+							<param name="color" value="$PARAM[focusedcolor]"/>
+						</include>
 					</control>
 				</control>
 			</control>
@@ -849,58 +992,90 @@
 
 <include name="ButtonGroup">
   <param name="id" default=""/>
-  <param name="groupright" default="0"/>
-  <param name="grouptop" default="960"/>
-  <param name="groupwidth" default="240"/>
-  <param name="buttonheight" default="120"/>
-	<param name="iconheight" default="60"/>
+  <param name="right" default="0"/>
+  <param name="bottom" default="0"/>
+  <param name="buttonwidth" default="120"/>
 	<param name="align" default="right"/>
   <param name="button1id" default=""/>
 	<param name="button2id" default=""/>
-	<param name="texturebuttonsvisible" default="[String.IsEqual(Control.GetLabel(11),Yes) | String.IsEqual(Control.GetLabel(11),Ok)]"/>
-	<param name="texturebutton1unfocused" default="views/cross-large_unfocused.png"/>
-	<param name="texturebutton1focused" default="views/cross-large_focused.png"/>
-	<param name="texturebutton2unfocused" default="views/check-large_unfocused.png"/>
-	<param name="texturebutton2focused" default="views/check-large_focused.png"/>
+	<param name="buttonsvisible" default="[String.IsEqual(Control.GetLabel(11),Yes) | String.IsEqual(Control.GetLabel(11),Ok)]"/>
+	<param name="button1unfocused" default="Cross_Unfocused_Large"/>
+	<param name="button1focused" default="Cross_Focused_Large"/>
+	<param name="button2unfocused" default="Check_Unfocused_Large"/>
+	<param name="button2focused" default="Check_Focused_Large"/>
   <definition>
-		<control type="group">
-	    <control type="grouplist" id="$PARAM[id]">
-	      <visible allowhiddenfocus="true">false</visible>
-	      <itemgap>0</itemgap>
-	      <onleft>0</onleft>
-	      <onright>0</onright>
-	      <onup>noop</onup>
-	      <ondown>noop</ondown>
-	      <orientation>horizontal</orientation>
-	      <control type="button" id="$PARAM[button1id]"/>
-	      <control type="button" id="$PARAM[button2id]"/>
-	    </control>
-			<!-- tick/cross buttons for yes/no or ok/cancel-->
-	    <control type="grouplist">
-				<visible>$PARAM[texturebuttonsvisible]</visible>
-	      <right>$PARAM[groupright]</right>
-	      <top>$PARAM[grouptop]</top>
-	      <width>$PARAM[groupwidth]</width>
-	      <height>$PARAM[buttonheight]</height>
-	      <itemgap>0</itemgap>
-				<align>$PARAM[align]</align>
-				<orientation>horizontal</orientation>
-	      <include content="ButtonLayout">
-	        <param name="buttonid" value="$PARAM[button1id]"/>
-					<param name="buttonwidth" value="$PARAM[buttonheight]"/>
-					<param name="iconwidth" value="$PARAM[iconheight]"/>
-	        <param name="unfocusedtexture" value="$PARAM[texturebutton1unfocused]"/>
-	        <param name="focusedtexture" value="$PARAM[texturebutton1focused]"/>
-	      </include>
-	      <include content="ButtonLayout">
-	        <param name="buttonid" value="$PARAM[button2id]"/>
-					<param name="buttonwidth" value="$PARAM[buttonheight]"/>
-					<param name="iconwidth" value="$PARAM[iconheight]"/>
-	        <param name="unfocusedtexture" value="$PARAM[texturebutton2unfocused]"/>
-	        <param name="focusedtexture" value="$PARAM[texturebutton2focused]"/>
-	      </include>
-	    </control>
-		</control>
+    <control type="grouplist" id="$PARAM[id]">
+      <visible allowhiddenfocus="true">false</visible>
+      <itemgap>0</itemgap>
+      <onleft>0</onleft>
+      <onright>0</onright>
+      <onup>noop</onup>
+      <ondown>noop</ondown>
+      <orientation>horizontal</orientation>
+      <control type="button" id="$PARAM[button1id]"/>
+      <control type="button" id="$PARAM[button2id]"/>
+    </control>
+    <control type="grouplist">
+			<visible>$PARAM[buttonsvisible]</visible>
+      <right>0</right>
+      <bottom>0</bottom>
+			<width>100%</width>
+      <height>120</height>
+      <itemgap>0</itemgap>
+			<align>right</align>
+			<orientation>horizontal</orientation>
+      <include content="ButtonLayout">
+        <param name="buttonid" value="$PARAM[button1id]"/>
+				<param name="width" value="$PARAM[buttonwidth]"/>
+        <param name="unfocusedtexture" value="$PARAM[button1unfocused]"/>
+        <param name="focusedtexture" value="$PARAM[button1focused]"/>
+      </include>
+      <include content="ButtonLayout">
+        <param name="buttonid" value="$PARAM[button2id]"/>
+				<param name="width" value="$PARAM[buttonwidth]"/>
+        <param name="unfocusedtexture" value="$PARAM[button2unfocused]"/>
+        <param name="focusedtexture" value="$PARAM[button2focused]"/>
+      </include>
+    </control>
+  </definition>
+</include>
+
+<include name="Now_Playing_Bar_Stroke">
+  <param name="visible" default="Player.Playing"/>
+  <param name="top" default="0"/>
+  <param name="width" default="33"/>
+  <param name="height" default="10"/>
+  <param name="maxheight" default="1200"/>
+  <param name="slideheight" default="0"/>
+  <param name="delay" default="0"/>
+  <param name="time" default="180"/>
+  <param name="pulse" default="true"/>
+  <definition>
+    <control type="grouplist">
+      <visible>$PARAM[visible]</visible>
+      <left>0</left>
+      <top>$PARAM[top]</top>
+      <width>$PARAM[width]</width>
+      <orientation>vertical</orientation>
+      <itemgap>0</itemgap>
+      <control type="image">
+        <animation effect="slide" end="0,$PARAM[slideheight]" time="180" delay="$PARAM[delay]" tween="sine" easing="out" pulse="$PARAM[pulse]" condition="true">Conditional</animation>
+        <height>5</height>
+        <aspectratio>stretch</aspectratio>
+        <texture colordiffuse="$VAR[LightColor]">views/white_100.png</texture>
+      </control>
+      <control type="image">
+        <animation effect="zoom" end="100, $PARAM[maxheight]" center="0, $PARAM[height]" time="$PARAM[time]" delay="$PARAM[delay]" tween="sine" easing="out" pulse="$PARAM[pulse]" condition="true">Conditional</animation>
+        <height>$PARAM[height]</height>
+        <aspectratio>stretch</aspectratio>
+        <texture border="6" colordiffuse="$VAR[LightColor]">views/now-playing_5px.png</texture>
+      </control>
+      <control type="image">
+        <height>5</height>
+        <aspectratio>stretch</aspectratio>
+        <texture colordiffuse="$VAR[LightColor]">views/white_100.png</texture>
+      </control>
+    </control>
   </definition>
 </include>
 
@@ -951,45 +1126,6 @@
 			</control>
 		</control>
 	</definition>
-</include>
-
-<include name="Now_Playing_Bar_Stroke">
-  <param name="visible" default="Player.Playing"/>
-  <param name="top" default="0"/>
-  <param name="width" default="33"/>
-  <param name="height" default="10"/>
-  <param name="maxheight" default="1200"/>
-  <param name="slideheight" default="0"/>
-  <param name="delay" default="0"/>
-  <param name="time" default="180"/>
-  <param name="pulse" default="true"/>
-  <definition>
-    <control type="grouplist">
-      <visible>$PARAM[visible]</visible>
-      <left>0</left>
-      <top>$PARAM[top]</top>
-      <width>$PARAM[width]</width>
-      <orientation>vertical</orientation>
-      <itemgap>0</itemgap>
-      <control type="image">
-        <animation effect="slide" end="0,$PARAM[slideheight]" time="180" delay="$PARAM[delay]" tween="sine" easing="out" pulse="$PARAM[pulse]" condition="true">Conditional</animation>
-        <height>5</height>
-        <aspectratio>stretch</aspectratio>
-        <texture colordiffuse="$VAR[LightColor]">views/white_100.png</texture>
-      </control>
-      <control type="image">
-        <animation effect="zoom" end="100, $PARAM[maxheight]" center="0, $PARAM[height]" time="$PARAM[time]" delay="$PARAM[delay]" tween="sine" easing="out" pulse="$PARAM[pulse]" condition="true">Conditional</animation>
-        <height>$PARAM[height]</height>
-        <aspectratio>stretch</aspectratio>
-        <texture border="6" colordiffuse="$VAR[LightColor]">views/now-playing_5px.png</texture>
-      </control>
-      <control type="image">
-        <height>5</height>
-        <aspectratio>stretch</aspectratio>
-        <texture colordiffuse="$VAR[LightColor]">views/white_100.png</texture>
-      </control>
-    </control>
-  </definition>
 </include>
 
 <include name="Now_Playing_Visualization_Stroke">
@@ -1203,7 +1339,7 @@
 					<animation effect="fade" start="0" end="100" time="360" condition="Window.IsVisible(volumebar) | Window.IsVisible(notification) | Window.IsVisible(extendedprogressdialog)" reversible="false">VisibleChange</animation>
 					<visible>Player.HasAudio</visible>
 					<visible>Window.IsVisible(home) | Window.IsVisible(videos) | Window.IsVisible(music)</visible>
-					<texture diffuse="views/white_30.png">$INFO[MusicPlayer.Cover]</texture>
+					<texture fallback="fallback.png" diffuse="views/white_30.png">$INFO[Player.Art(album.thumb)]</texture>
 					<aspectratio>scale</aspectratio>
 				</control>
 				<!--Volume Progress Bar-->

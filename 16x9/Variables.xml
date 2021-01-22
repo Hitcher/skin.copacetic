@@ -105,10 +105,6 @@
 	</variable>
 
 	<variable name="Thumbnail(0)Content">
-		<!--Dialog Favourites-->
-		<value condition="Control.IsVisible(450) + !String.IsEmpty(ListItem.Art(poster))">$INFO[ListItem.Art(poster)]</value>
-		<value condition="Control.IsVisible(450) + !String.IsEmpty(ListItem.Art(fanart))">$INFO[ListItem.Art(fanart)]</value>
-		<value condition="Control.IsVisible(450) + !String.IsEmpty(ListItem.Art(thumb))">$INFO[ListItem.Art(thumb)]</value>
 		<!--Files-->
 		<value condition="Container.Content(episodes) + String.IsEmpty(ListItem.TVShowTitle) + !ListItem.IsFolder + !String.IsEmpty(ListItem.Art(fanart))">$INFO[ListItem.Art(fanart)]</value>
 		<value condition="Container.Content(episodes) + String.IsEmpty(ListItem.TVShowTitle) + !ListItem.IsFolder">$INFO[ListItem.Path,,fanart.jpg]</value>-->
@@ -162,7 +158,13 @@
 		<value condition="$EXP[GridView_Display_IsSquare] + Container.Content(artists) + !String.IsEmpty(ListItem.Art(thumb))">$INFO[ListItem.Art(thumb)]</value>
 		<value condition="$EXP[GridView_Display_IsSquare] + !String.IsEmpty(ListItem.Art(square))">$INFO[ListItem.Art(square)]</value>
 		<value condition="$EXP[GridView_Display_IsSquare] + !String.IsEmpty(ListItem.Art(fanart))">$INFO[ListItem.Art(fanart)]</value>
+		<!--Dialog Favourites-->
+		<value condition="Control.IsVisible(450) + !String.IsEmpty(ListItem.Art(poster))">$INFO[ListItem.Art(poster)]</value>
+		<value condition="Control.IsVisible(450) + !String.IsEmpty(ListItem.Art(fanart))">$INFO[ListItem.Art(fanart)]</value>
+		<value condition="Control.IsVisible(450) + !String.IsEmpty(ListItem.Art(thumb))">$INFO[ListItem.Art(thumb)]</value>
 		<value condition="!String.IsEmpty(ListItem.Art(thumb))">$INFO[ListItem.Art(thumb)]</value>
+		<!--MusicVisualisation-->
+		<value condition="Window.IsVisible(visualisation) + !String.IsEmpty(Player.Art(album.thumb))">$INFO[Player.Art(album.thumb)]</value>
 		<value>fallback.png</value>
 	</variable>
 
@@ -211,6 +213,9 @@
 		<value condition="!String.IsEmpty(Container.ListItemNoWrap(1).FolderPath) + $EXP[StripView_Display_IsSquare] + !String.IsEmpty(ListItem(1).Art(fanart))">$INFO[ListItem(1).Art(fanart)]</value>
 		<value condition="!String.IsEmpty(Container.ListItemNoWrap(1).FolderPath) + !String.IsEmpty(ListItem(1).Art(thumb))">$INFO[ListItem(1).Art(thumb)]</value>
 		<value condition="!String.IsEmpty(Container.ListItemNoWrap(1).FolderPath)">fallback.png</value>
+		<!--MusicVisualisation-->
+		<value condition="Window.IsVisible(visualisation) + !String.IsEmpty(MusicPlayer.offset(1).Cover)">$INFO[MusicPlayer.offset(1).Cover]</value>
+		<value condition="Window.IsVisible(visualisation)">fallback.png</value>
 	</variable>
 
 	<variable name="Thumbnail(2)Content">
@@ -311,9 +316,9 @@
 		<!-- MOVIES -->
 		<!-- ListView/Thumbnails: 2019 -->
 		<!-- Others: 2019 / 152 mins -->
-		<value condition="Container.Content(movies) + $EXP[ListView_Display_IsThumbnails]">[UPPERCASE]$INFO[ListItem.Year][/UPPERCASE]</value>
-		<value condition="Container.Content(movies) + !String.IsEmpty(ListItem.Year)">[UPPERCASE]$INFO[ListItem.Year]$INFO[ListItem.Duration(mins), / , $LOCALIZE[31138]][/UPPERCASE]</value>
-		<value condition="Container.Content(movies) + !String.IsEmpty(ListItem.Duration)">[UPPERCASE]$INFO[ListItem.Duration(mins),, $LOCALIZE[31138]][/UPPERCASE]</value>
+		<value condition="Container.Content(movies) + $EXP[ListView_Display_IsThumbnails] + !String.IsEmpty(ListItem.Year)">[UPPERCASE]$INFO[ListItem.Year][/UPPERCASE]</value>
+		<value condition="Container.Content(movies) + !$EXP[ListView_Display_IsThumbnails] + !String.IsEmpty(ListItem.Year)">[UPPERCASE]$INFO[ListItem.Year]$INFO[ListItem.Duration(mins), / , $LOCALIZE[31138]][/UPPERCASE]</value>
+		<value condition="Container.Content(movies) + !$EXP[ListView_Display_IsThumbnails] + !String.IsEmpty(ListItem.Duration)">[UPPERCASE]$INFO[ListItem.Duration(mins),, $LOCALIZE[31138]][/UPPERCASE]</value>
 		<!-- SETS -->
 		<!-- Listview/Thumbnails: 3 -->
 		<!-- Others: 2005-2012 / 3 Movies -->
@@ -390,6 +395,7 @@
 		<value condition="Container.Content(actors) + !String.IsEmpty(ListItem.Appearances)">$INFO[ListItem.Appearances]$VAR[Appearances_Label, ]</value>
 		<value condition="Container.Content(actors) + !String.IsEmpty(ListItem.Appearances)">$INFO[ListItem.Appearances]$VAR[Appearances_Label, ]</value>
 		<value condition="Container.Content(files) + String.IsEmpty(ListItem.Art(Poster))">$INFO[ListItem.FolderName]</value>
+		<value condition="Window.IsVisible(visualisation) + !String.IsEmpty(MusicPlayer.Album)">$INFO[MusicPlayer.Album]</value>
 		<value></value>
 	</variable>
 
@@ -408,10 +414,9 @@
 		<value condition="Container.Content(songs) + $EXP[Breadcrumb_Enabled_View] + !String.IsEmpty(ListItem.Year)">$INFO[ListItem.Year,/ ]</value>
 		<value condition="Container.Content(actors) + !String.IsEmpty(ListItem.Appearances)">$VAR[Appearances_Label_2,/ ]$INFO[Container(4501).ListItem(-1).Title, ]</value>
 		<value condition="Container.Content(files) + String.IsEmpty(ListItem.Art(Poster))">$INFO[ListItem.EndTime,/ $LOCALIZE[32000] ]</value>
+		<value condition="Window.IsVisible(visualisation) + !String.IsEmpty(MusicPlayer.Year)">$INFO[MusicPlayer.Year,/ ]</value>
 		<value></value>
 	</variable>
-
-	$INFO[Container(4501).ListItem(-1).Title, ]
 
 	<variable name="Dialog_Info_Label">
 		<!-- Movies -->
