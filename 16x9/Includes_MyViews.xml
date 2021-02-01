@@ -50,6 +50,9 @@
 				<onfocus>SetFocus(50)</onfocus>
 			</control>
 
+			<!--Hidden Music Player Controls-->
+			<include content="Music_Player_Buttons"/>
+
 			<!--Hidden Controls for animation trigger on menu switching-->
 			<control type="button" id="940">
 				<visible allowhiddenfocus="true">false</visible>
@@ -239,11 +242,10 @@
 	</include>
 
 	<include name="MyViews_Main">
+		<include>CustomViewsBackground</include>
 		<control type="group">
 			<visible>!$EXP[OpaqueDialog_IsVisible]</visible>
 			<include>My_Window_Fade_Animation</include>
-
-			<!--Viewtypes-->
 			<include>ListView_Display</include>
 			<include>ListView_Container</include>
 			<include>BillboardView_Container</include>
@@ -253,19 +255,10 @@
 			<include>StripView_Container</include>
 			<include>StripView_Display</include>
 			<include>GridView_Container</include>
-
-			<!--Test Label
-			<control type="label">
-				<height>100</height>
-				<bottom>100</bottom>
-				<left>60</left>
-				<textcolor>$VAR[PrimaryColor]</textcolor>
-				<font>Showcase_Title</font>
-				<label>$INFO[Window(Home).Property(OptionsSwitching)]</label>
-			</control>-->
-
 		</control>
 	</include>
+
+
 
 	<include name="Scrollbars">
 		<param name="right"/>
@@ -343,7 +336,7 @@
 				<param name="onup" value="62"/>
 				<param name="ondown" value="SetFocus(3000,0)"/>
 				<param name="orientation" value="horizontal"/>
-				<param name="visible" value="$EXP[BillboardView_IsVisible] | $EXP[StripView_IsVisible] | [$EXP[ShowcaseView_IsVisible] + $EXP[ShowcaseView_Details_Off]]"/>
+				<param name="visible" value="$EXP[BillboardView_IsVisible] | $EXP[StripView_IsVisible]"/>
 			</include>
 			<!--Horizontal: Showcase Square-->
 			<include content="Scrollbars">
@@ -358,7 +351,7 @@
 				<param name="orientation" value="horizontal"/>
 				<param name="visible" value="$EXP[ShowcaseView_IsVisible] + $EXP[ShowcaseView_Display_IsSquare] + !$EXP[ShowcaseView_Details_Off]"/>
 			</include>
-			<!--Horizontal: Showcase Posters-->
+			<!--Horizontal: Showcase Posters + !Player-->
 			<include content="Scrollbars">
 				<param name="right" value="180"/>
 				<param name="bottom" value="27"/>
@@ -369,7 +362,20 @@
 				<param name="onup" value="62"/>
 				<param name="ondown" value="SetFocus(3000,0)"/>
 				<param name="orientation" value="horizontal"/>
-				<param name="visible" value="$EXP[ShowcaseView_IsVisible] + $EXP[ShowcaseView_Display_IsPosters] + !$EXP[ShowcaseView_Details_Off]"/>
+				<param name="visible" value="$EXP[ShowcaseView_IsVisible] + $EXP[ShowcaseView_Display_IsPosters] + !$EXP[ShowcaseView_Details_Off] + !Player.HasAudio"/>
+			</include>
+			<!--Horizontal: Showcase Posters + Player-->
+			<include content="Scrollbars">
+				<param name="right" value="180"/>
+				<param name="bottom" value="27"/>
+				<param name="width" value="480"/>
+				<param name="height" value="6"/>
+				<param name="onleft" value="60"/>
+				<param name="onright" value="60"/>
+				<param name="onup" value="62"/>
+				<param name="ondown" value="SetFocus(3000,0)"/>
+				<param name="orientation" value="horizontal"/>
+				<param name="visible" value="$EXP[ShowcaseView_IsVisible] + $EXP[ShowcaseView_Display_IsPosters] + !$EXP[ShowcaseView_Details_Off] + Player.HasAudio"/>
 			</include>
 
 		</control>

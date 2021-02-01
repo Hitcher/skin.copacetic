@@ -31,16 +31,26 @@
 				<include>Viewtype_Fade_Animation</include>
 				<!--ART-->
 				<control type="group">
-					<visible>!$EXP[ContainerSwitching] + !$EXP[OptionsSwitching]</visible>
+					<visible>!$EXP[OptionsSwitching]</visible>
 					<include>Artwork_Fade_Animation</include>
+					<control type="image">
+						<visible>$EXP[ContentNext] | $EXP[ContentPrevious]</visible>
+						<aspectratio>stretch</aspectratio>
+						<texture colordiffuse="$VAR[DarkColor]">views/white_100.png</texture>
+					</control>
 					<include content="ListIcon">
 						<param name="unfocusedoverlay" value="true"/>
-					</include>
-					<include content="Artwork_Transition_Fade">
-						<param name="target_id" value="$PARAM[id]"/>
-						<param name="viewtype_label" value="$PARAM[viewtype_label]"/>
+						<param name="fadetime" value="360"/>
 					</include>
 				</control>
+
+				<!--Hide fadetime transition on artwork during Container.Content change animation-->
+				<control type="group">
+					<visible>$EXP[ContainerSwitching]</visible>
+					<include>ContainerSwitching_Cover_Fade_Animation</include>
+					<include>CustomViewsBackground</include>
+				</control>
+
 				<!--DETAILS-->
 				<control type="group">
 					<visible>!$EXP[ContainerSwitching] + !$EXP[ContentSwitching] + !$EXP[TransparentDialog_IsVisible] + !Control.HasFocus(60)</visible>

@@ -1,5 +1,15 @@
 <includes>
 
+	<include name="HiddenFocusButton">
+		<control type="button">
+			<visible allowhiddenfocus="true">false</visible>
+			<onfocus condition="System.HasAddon(script.embuary.helper) + Integer.IsGreater(ListItem.Property(TotalEpisodes),0) + !String.IsEqual(ListItem.Overlay,OverlayWatched.png) + [Container.Content(tvshows) | Container.Content(seasons)]">RunScript(script.embuary.helper,action=calc,do='"($INFO[ListItem.Property(WatchedEpisodes)] / $INFO[ListItem.Property(TotalEpisodes)]) * 100"',prop=WatchedPercentage)</onfocus>
+			<onfocus condition="$EXP[GridView_IsVisible]">SetProperty(GridView_Position,$INFO[Container.Position],home)</onfocus>
+			<onfocus condition="$EXP[GridView_IsVisible]">SetProperty(GridView_Row,$INFO[Container.Row],home)</onfocus>
+			<onfocus condition="$EXP[GridView_IsVisible]">SetProperty(GridView_NumItems,$INFO[Container.NumItems],home)</onfocus>
+		</control>
+	</include>
+
 	<include name="Common_List_Layout">
 		<param name="groupvisible" default="!$EXP[TransparentDialog_IsVisible]"/>
 		<param name="animation" default="Content_Fade_Animation"/>
@@ -197,93 +207,94 @@
 	</include>
 
 
-		<include name="List_Navigation">
-			<definition>
-				<onup condition="Integer.IsGreater(Container.NumItems,1)">50</onup>
-				<onup condition="Integer.IsEqual(Container.NumItems,1)">SetFocus(3000,0)</onup>
-				<ondown condition="Integer.IsGreater(Container.NumItems,1)">50</ondown>
-				<ondown condition="Integer.IsEqual(Container.NumItems,1)">SetFocus(3000,0)</ondown>
-				<onleft>SetFocus(3000,0)</onleft>
-				<onright condition="Integer.IsGreater(Container.NumItems,12)">61</onright>
-				<onright condition="Integer.IsLessOrEqual(Container.NumItems,11)">SetFocus(3000,0)</onright>
-				<onback condition="String.IsEqual(window(movieinformation).property(SentFromInfo),true)">SetFocus(5005)</onback>
-			</definition>
-		</include>
+	<include name="List_Navigation">
+		<definition>
+			<onup condition="Integer.IsGreater(Container.NumItems,1)">50</onup>
+			<onup condition="Integer.IsEqual(Container.NumItems,1)">SetFocus(3000,0)</onup>
+			<ondown condition="Integer.IsGreater(Container.NumItems,1)">50</ondown>
+			<ondown condition="Integer.IsEqual(Container.NumItems,1)">SetFocus(3000,0)</ondown>
+			<onleft condition="Player.HasAudio + $EXP[ListView_Display_IsThumbnails] + $EXP[Square_Containers]">SetFocus(91100,1)</onleft>
+			<onleft condition="![Player.HasAudio + $EXP[ListView_Display_IsThumbnails] + $EXP[Square_Containers]]">SetFocus(3000,0)</onleft>
+			<onright condition="Player.HasAudio + ![$EXP[ListView_Display_IsThumbnails] + $EXP[Square_Containers]]">SetFocus(91100,1)</onright>
+			<onright condition="![Player.HasAudio + ![$EXP[ListView_Display_IsThumbnails] + $EXP[Square_Containers]]] + Integer.IsGreater(Container.NumItems,12)">61</onright>
+			<onright condition="![Player.HasAudio + ![$EXP[ListView_Display_IsThumbnails] + $EXP[Square_Containers]]] + Integer.IsLessOrEqual(Container.NumItems,11)">SetFocus(3000,0)</onright>
+			<onback condition="String.IsEqual(window(movieinformation).property(SentFromInfo),true)">SetFocus(5005)</onback>
+			<onright condition="Window.IsVisible(favourites) + Player.HasAudio">SetFocus(91100,1)</onright>
+			<onright condition="Window.IsVisible(favourites) + !Player.HasAudio">0</onright>
+			<onleft condition="Window.IsVisible(favourites) + ">0</onleft>
+		</definition>
+	</include>
 
-		<include name="Billboard_Navigation">
-			<definition>
-				<onup>SetFocus(3000,0)</onup>
-				<ondown conditon="Integer.IsGreater(Container.NumItems,1)">61</ondown>
-				<ondown condition="Integer.IsEqual(Container.NumItems,1)">SetFocus(3000,0)</ondown>
-				<onleft condition="Integer.IsGreater(Container.NumItems,3)">501</onleft>
-				<onleft condition="Integer.IsLessOrEqual(Container.NumItems,3) + Integer.IsGreater(Container.NumItems,1)">0</onleft>
-				<onleft condition="Integer.IsEqual(Container.NumItems,1)">SetFocus(3000,0)</onleft>
-				<onright condition="Integer.IsGreater(Container.NumItems,3)">501</onright>
-				<onright condition="Integer.IsLessOrEqual(Container.NumItems,3) + Integer.IsGreater(Container.NumItems,1)">0</onright>
-				<onright condition="Integer.IsEqual(Container.NumItems,1)">SetFocus(3000,0)</onright>
-				<onback condition="String.IsEqual(window(movieinformation).property(SentFromInfo),true)">SetFocus(5005)</onback>
-			</definition>
-		</include>
+	<include name="Billboard_Navigation">
+		<definition>
+			<onup condition="Player.HasAudio">SetFocus(91100,1)</onup>
+			<onup condition="!Player.HasAudio">SetFocus(3000,0)</onup>
+			<ondown conditon="Integer.IsGreater(Container.NumItems,1)">61</ondown>
+			<ondown condition="Integer.IsEqual(Container.NumItems,1)">SetFocus(3000,0)</ondown>
+			<onleft condition="Integer.IsGreater(Container.NumItems,3)">501</onleft>
+			<onleft condition="Integer.IsLessOrEqual(Container.NumItems,3) + Integer.IsGreater(Container.NumItems,1)">0</onleft>
+			<onleft condition="Integer.IsEqual(Container.NumItems,1)">SetFocus(3000,0)</onleft>
+			<onright condition="Integer.IsGreater(Container.NumItems,3)">501</onright>
+			<onright condition="Integer.IsLessOrEqual(Container.NumItems,3) + Integer.IsGreater(Container.NumItems,1)">0</onright>
+			<onright condition="Integer.IsEqual(Container.NumItems,1)">SetFocus(3000,0)</onright>
+			<onback condition="String.IsEqual(window(movieinformation).property(SentFromInfo),true)">SetFocus(5005)</onback>
+		</definition>
+	</include>
 
-		<include name="Showcase_Navigation">
-			<definition>
-				<onup>SetFocus(3000,0)</onup>
-				<ondown conditon="Integer.IsGreater(Container.NumItems,1)">61</ondown>
-				<ondown condition="Integer.IsEqual(Container.NumItems,1)">SetFocus(3000,0)</ondown>
-				<onleft condition="Integer.IsGreater(Container.NumItems,10)">502</onleft>
-				<onleft condition="Integer.IsLessOrEqual(Container.NumItems,10) + Integer.IsGreater(Container.NumItems,1)">0</onleft>
-				<onleft condition="Integer.IsEqual(Container.NumItems,1)">SetFocus(3000,0)</onleft>
-				<onright condition="Integer.IsGreater(Container.NumItems,10)">502</onright>
-				<onright condition="Integer.IsLessOrEqual(Container.NumItems,10) + Integer.IsGreater(Container.NumItems,1)">0</onright>
-				<onright condition="Integer.IsEqual(Container.NumItems,1)">SetFocus(3000,0)</onright>
-				<onback condition="String.IsEqual(window(movieinformation).property(SentFromInfo),true)">SetFocus(5005)</onback>
-			</definition>
-		</include>
+	<include name="Showcase_Navigation">
+		<definition>
+			<onup condition="Player.HasAudio + $EXP[ShowcaseView_Display_IsSquare] + !$EXP[ShowcaseView_Details_Off]">SetFocus(91100,1)</onup>
+			<onup condition="![Player.HasAudio + $EXP[ShowcaseView_Display_IsSquare] + !$EXP[ShowcaseView_Details_Off]]">SetFocus(3000,0)</onup>
+			<ondown condition="Player.HasAudio + ![$EXP[ShowcaseView_Display_IsSquare] + !$EXP[ShowcaseView_Details_Off]]">SetFocus(91100,1)</ondown>
+			<ondown condition="Player.HasAudio + [$EXP[ShowcaseView_Display_IsSquare] + !$EXP[ShowcaseView_Details_Off]]">61</ondown>
+			<ondown condition="!Player.HasAudio + !$EXP[ShowcaseView_Details_Off] + Integer.IsGreater(Container.NumItems,1)">61</ondown>
+			<ondown condition="!Player.HasAudio + [$EXP[ShowcaseView_Details_Off] | Integer.IsEqual(Container.NumItems,1)]">SetFocus(3000,0)</ondown>
+			<onleft condition="Integer.IsGreater(Container.NumItems,10)">502</onleft>
+			<onleft condition="Integer.IsLessOrEqual(Container.NumItems,10) + Integer.IsGreater(Container.NumItems,1)">0</onleft>
+			<onleft condition="Integer.IsEqual(Container.NumItems,1)">SetFocus(3000,0)</onleft>
+			<onright condition="Integer.IsGreater(Container.NumItems,10)">502</onright>
+			<onright condition="Integer.IsLessOrEqual(Container.NumItems,10) + Integer.IsGreater(Container.NumItems,1)">0</onright>
+			<onright condition="Integer.IsEqual(Container.NumItems,1)">SetFocus(3000,0)</onright>
+			<onback condition="String.IsEqual(window(movieinformation).property(SentFromInfo),true)">SetFocus(5005)</onback>
+		</definition>
+	</include>
 
-		<include name="Strip_Navigation">
-			<definition>
-				<onup>SetFocus(3000,0)</onup>
-				<ondown conditon="Integer.IsGreater(Container.NumItems,1)">61</ondown>
-				<ondown condition="Integer.IsEqual(Container.NumItems,1)">SetFocus(3000,0)</ondown>
-				<onleft condition="Integer.IsGreater(Container.NumItems,10)">504</onleft>
-				<onleft condition="Integer.IsLessOrEqual(Container.NumItems,10) + Integer.IsGreater(Container.NumItems,1)">0</onleft>
-				<onleft condition="Integer.IsEqual(Container.NumItems,1)">SetFocus(3000,0)</onleft>
-				<onright condition="Integer.IsGreater(Container.NumItems,10)">504</onright>
-				<onright condition="Integer.IsLessOrEqual(Container.NumItems,10) + Integer.IsGreater(Container.NumItems,1)">0</onright>
-				<onright condition="Integer.IsEqual(Container.NumItems,1)">SetFocus(3000,0)</onright>
-				<onback condition="String.IsEqual(window(movieinformation).property(SentFromInfo),true)">SetFocus(5005)</onback>
-			</definition>
-		</include>
+	<include name="Strip_Navigation">
+		<definition>
+			<onup condition="Player.HasAudio">SetFocus(91100,1)</onup>
+			<onup condition="!Player.HasAudio">SetFocus(3000,0)</onup>
+			<ondown conditon="Integer.IsGreater(Container.NumItems,1)">61</ondown>
+			<ondown condition="Integer.IsEqual(Container.NumItems,1)">SetFocus(3000,0)</ondown>
+			<onleft condition="Integer.IsGreater(Container.NumItems,10)">504</onleft>
+			<onleft condition="Integer.IsLessOrEqual(Container.NumItems,10) + Integer.IsGreater(Container.NumItems,1)">0</onleft>
+			<onleft condition="Integer.IsEqual(Container.NumItems,1)">SetFocus(3000,0)</onleft>
+			<onright condition="Integer.IsGreater(Container.NumItems,10)">504</onright>
+			<onright condition="Integer.IsLessOrEqual(Container.NumItems,10) + Integer.IsGreater(Container.NumItems,1)">0</onright>
+			<onright condition="Integer.IsEqual(Container.NumItems,1)">SetFocus(3000,0)</onright>
+			<onback condition="String.IsEqual(window(movieinformation).property(SentFromInfo),true)">SetFocus(5005)</onback>
+		</definition>
+	</include>
 
-		<include name="Grid_Navigation">
-			<definition>
-				<onleft>SetFocus(3000,0)</onleft>
-				<onright condition="$EXP[GridView_Display_IsFanart] + Integer.IsGreater(Container.NumItems,3)">61</onright>
-				<onright condition="$EXP[GridView_Display_IsPosters] + Integer.IsGreater(Container.NumItems,5)">61</onright>
-				<onright condition="$EXP[GridView_Display_IsSquare] + Integer.IsGreater(Container.NumItems,10)">61</onright>
-				<onright condition="$EXP[GridView_Display_IsFanart] + Integer.IsLessorEqual(Container.NumItems,3)">0</onright>
-				<onright condition="$EXP[GridView_Display_IsPosters] + Integer.IsLessorEqual(Container.NumItems,5)">0</onright>
-				<onright condition="$EXP[GridView_Display_IsSquare] + Integer.IsLessorEqual(Container.NumItems,10)">0</onright>
-				<onup condition="$EXP[GridView_Display_IsFanart] + Integer.IsGreater(Container.NumItems,3)">505</onup>
-				<onup condition="!$EXP[GridView_Display_IsFanart] + Integer.IsGreater(Container.NumItems,5)">505</onup>
-				<onup condition="$EXP[GridView_Display_IsFanart] + Integer.IsLessorEqual(Container.NumItems,3)">0</onup>
-				<onup condition="!$EXP[GridView_Display_IsFanart] + Integer.IsLessorEqual(Container.NumItems,5)">0</onup>
-				<ondown condition="$EXP[GridView_Display_IsFanart] + Integer.IsGreater(Container.NumItems,3)">505</ondown>
-				<ondown condition="!$EXP[GridView_Display_IsFanart] + Integer.IsGreater(Container.NumItems,5)">505</ondown>
-				<ondown condition="$EXP[GridView_Display_IsFanart] + Integer.IsLessorEqual(Container.NumItems,3)">0</ondown>
-				<ondown condition="!$EXP[GridView_Display_IsFanart] + Integer.IsLessorEqual(Container.NumItems,5)">0</ondown>
-				<onback condition="String.IsEqual(window(movieinformation).property(SentFromInfo),true)">SetFocus(5005)</onback>
-			</definition>
-		</include>
-
-	<include name="HiddenFocusButton">
-		<control type="button">
-			<visible allowhiddenfocus="true">false</visible>
-			<onfocus condition="System.HasAddon(script.embuary.helper) + Integer.IsGreater(ListItem.Property(TotalEpisodes),0) + !String.IsEqual(ListItem.Overlay,OverlayWatched.png) + [Container.Content(tvshows) | Container.Content(seasons)]">RunScript(script.embuary.helper,action=calc,do='"($INFO[ListItem.Property(WatchedEpisodes)] / $INFO[ListItem.Property(TotalEpisodes)]) * 100"',prop=WatchedPercentage)</onfocus>
-			<onfocus condition="$EXP[GridView_IsVisible]">SetProperty(GridView_Position,$INFO[Container.Position],home)</onfocus>
-			<onfocus condition="$EXP[GridView_IsVisible]">SetProperty(GridView_Row,$INFO[Container.Row],home)</onfocus>
-			<onfocus condition="$EXP[GridView_IsVisible]">SetProperty(GridView_NumItems,$INFO[Container.NumItems],home)</onfocus>
-		</control>
+	<include name="Grid_Navigation">
+		<definition>
+			<onleft>SetFocus(3000,0)</onleft>
+			<onright condition="Player.HasAudio">SetFocus(91100,1)</onright>
+			<onright condition="!Player.HasAudio + $EXP[GridView_Display_IsFanart] + Integer.IsGreater(Container.NumItems,3)">61</onright>
+			<onright condition="!Player.HasAudio + $EXP[GridView_Display_IsPosters] + Integer.IsGreater(Container.NumItems,5)">61</onright>
+			<onright condition="!Player.HasAudio + $EXP[GridView_Display_IsSquare] + Integer.IsGreater(Container.NumItems,10)">61</onright>
+			<onright condition="!Player.HasAudio + $EXP[GridView_Display_IsFanart] + Integer.IsLessorEqual(Container.NumItems,3)">SetFocus(3000,0)</onright>
+			<onright condition="!Player.HasAudio + $EXP[GridView_Display_IsPosters] + Integer.IsLessorEqual(Container.NumItems,5)">SetFocus(3000,0)</onright>
+			<onright condition="!Player.HasAudio + $EXP[GridView_Display_IsSquare] + Integer.IsLessorEqual(Container.NumItems,10)">SetFocus(3000,0)</onright>
+			<onup condition="$EXP[GridView_Display_IsFanart] + Integer.IsGreater(Container.NumItems,3)">505</onup>
+			<onup condition="!$EXP[GridView_Display_IsFanart] + Integer.IsGreater(Container.NumItems,5)">505</onup>
+			<onup condition="$EXP[GridView_Display_IsFanart] + Integer.IsLessorEqual(Container.NumItems,3)">0</onup>
+			<onup condition="!$EXP[GridView_Display_IsFanart] + Integer.IsLessorEqual(Container.NumItems,5)">0</onup>
+			<ondown condition="$EXP[GridView_Display_IsFanart] + Integer.IsGreater(Container.NumItems,3)">505</ondown>
+			<ondown condition="!$EXP[GridView_Display_IsFanart] + Integer.IsGreater(Container.NumItems,5)">505</ondown>
+			<ondown condition="$EXP[GridView_Display_IsFanart] + Integer.IsLessorEqual(Container.NumItems,3)">0</ondown>
+			<ondown condition="!$EXP[GridView_Display_IsFanart] + Integer.IsLessorEqual(Container.NumItems,5)">0</ondown>
+			<onback condition="String.IsEqual(window(movieinformation).property(SentFromInfo),true)">SetFocus(5005)</onback>
+		</definition>
 	</include>
 
 	<include name="SimpleListIcon">
@@ -308,10 +319,9 @@
 				<visible>$PARAM[visible]</visible>
 				<control type="image">
 					<aspectratio align="center" aligny="center">$PARAM[aspectratio]</aspectratio>
-					<texture background="true">$PARAM[texture]</texture>
+					<texture fallback="fallback.png" background="true">$PARAM[texture]</texture>
 					<fadetime>$PARAM[fadetime]</fadetime>
 				</control>
-				<!--Border-->
 				<control type="image">
 					<visible>$PARAM[bordervisible]</visible>
 					<visible>!$EXP[TransparentDialog_IsVisible]</visible>
@@ -363,14 +373,14 @@
 				<top>$PARAM[top]</top>
 				<width>$PARAM[width]</width>
 				<height>$PARAM[height]</height>
-				<visible>$EXP[ListView_IsVisible] | $EXP[BillboardView_IsVisible] | !String.IsEmpty(Container.ListItemNoWrap($PARAM[position]).Label) | Window.IsVisible(visualisation)</visible>
+				<visible>$EXP[ListView_IsVisible] | $EXP[BillboardView_IsVisible] | Window.IsVisible(visualisation) | !String.IsEmpty(Container.ListItemNoWrap($PARAM[position]).Label)</visible>
 				<visible>$PARAM[visible]</visible>
 				<animation effect="$PARAM[animationeffect]" end="$PARAM[animationend]" condition="$PARAM[animationcondition]" time="$PARAM[animationtime]" tween="$PARAM[animationtween]" easing="$PARAM[animationeasing]" reversible="false">$PARAM[animationtype]</animation>
 				<!--Artwork-->
 				<control type="image">
 					<include>Focus_Zoom_Animation</include>
 					<texture fallback="fallback.png" background="true" diffuse="$PARAM[diffuse]">$VAR[Thumbnail($PARAM[position])Content]</texture>
-					<!--<texture background="true" colordiffuse="$VAR[AccentColor]">views/white_100.png</texture>-->
+					<!-- <texture colordiffuse="$VAR[AccentColor]">fallback.png</texture> -->
 					<aspectratio align="center" aligny="center">$PARAM[aspectratio]</aspectratio>
 					<fadetime>$PARAM[fadetime]</fadetime>
 				</control>
@@ -421,6 +431,9 @@
 				</control>
 			</control>
 		</definition>
+	</include>
+
+	<include name="SimpleDropShadow">
 	</include>
 
 	<include name="DropShadow">
@@ -616,64 +629,6 @@
 						<align>center</align>
 					</control>
 				</control>
-			</control>
-		</definition>
-	</include>
-
-	<include name="Artwork_Transition_Fade">
-		<param name="id"/>
-		<param name="target_id"/>
-		<param name="left" default="0"/>
-		<param name="top" default="0"/>
-		<param name="width" default="100%"/>
-		<param name="height" default="100%"/>
-		<param name="visible" default="true"/>
-		<param name="viewtype_label"/>
-		<param name="aspectratio" default="scale"/>
-		<param name="unfocusedoverlay" default="true"/>
-		<param name="showgradient" default="false"/>
-		<definition>
-			<control type="group" id="$PARAM[id]">
-				<visible>[$EXP[ContentPrevious] | $EXP[ContentNext]] + $PARAM[visible]</visible>
-`				<!--Display 1 for duration of scroll-->
-				<include content="ListIcon">
-					<param name="position" value="1"/>
-					<param name="left" value="$PARAM[left]"/>
-					<param name="top" value="$PARAM[top]"/>
-					<param name="width" value="$PARAM[width]"/>
-					<param name="height" value="$PARAM[height]"/>
-					<param name="visible" value="$EXP[ContentPrevious] + !$EXP[ContentNext]"/>
-					<param name="aspectratio" value="$PARAM[aspectratio]"/>
-					<param name="showgradient" value="$PARAM[showgradient]"/>
-					<param name="unfocusedoverlay" value="$PARAM[unfocusedoverlay]"/>
-				</include>
-				<!--Display -1 for duration of scroll-->
-				<include content="ListIcon">
-					<param name="position" value="-1"/>
-					<param name="left" value="$PARAM[left]"/>
-					<param name="top" value="$PARAM[top]"/>
-					<param name="width" value="$PARAM[width]"/>
-					<param name="height" value="$PARAM[height]"/>
-					<param name="visible" value="$EXP[ContentNext] + !$EXP[ContentPrevious]"/>
-					<param name="aspectratio" value="$PARAM[aspectratio]"/>
-					<param name="showgradient" value="$PARAM[showgradient]"/>
-					<param name="unfocusedoverlay" value="$PARAM[unfocusedoverlay]"/>
-				</include>
-				<!--Fade In 0 on Previous/Next-->
-				<include content="ListIcon">
-					<param name="left" value="$PARAM[left]"/>
-					<param name="top" value="$PARAM[top]"/>
-					<param name="width" value="$PARAM[width]"/>
-					<param name="height" value="$PARAM[height]"/>
-					<param name="visible" value="![[Container.OnPrevious + !String.IsEqual(Control.GetLabel(4502),Control.GetLabel(4503))] | [Container.OnNext + !String.IsEqual(Control.GetLabel(4502),Control.GetLabel(4504))]]"/>
-					<param name="aspectratio" value="$PARAM[aspectratio]"/>
-					<param name="animationtype" value="Visible"/>
-					<param name="animationcondition" value="true"/>
-					<param name="animationeffect" value="fade"/>
-					<param name="animationend" value="100"/>
-					<param name="showgradient" value="$PARAM[showgradient]"/>
-					<param name="unfocusedoverlay" value="$PARAM[unfocusedoverlay]"/>
-				</include>
 			</control>
 		</definition>
 	</include>
@@ -1966,33 +1921,36 @@
 
 	<include name="Breadcrumb_Label">
 		<param name="visible" default=""/>
-		<param name="width" default="1800"/>
 		<definition>
-			<control type="grouplist">
-				<visible>$PARAM[visible]</visible>
-				<left>60</left>
-				<top>60</top>
-				<width>$PARAM[width]</width>
-				<height>60</height>
-				<orientation>horizontal</orientation>
-				<align>left</align>
-				<itemgap>12</itemgap>
-				<usecontrolcoords>true</usecontrolcoords>
-				<control type="label" id="980">
+			<control type="group">
+				<visible>![Window.IsVisible(1100) | Window.IsVisible(volumebar) | Window.IsVisible(notification) | Window.IsVisible(extendedprogressdialog)]</visible>
+				<include>Content_Fade_Animation</include>
+				<control type="grouplist">
+					<visible>$PARAM[visible]</visible>
+					<left>60</left>
+					<right>60</right>
+					<top>60</top>
 					<height>60</height>
-					<width>auto</width>
-					<label>$VAR[Breadcrumb_Title_Label]</label>
-					<font>Breadcrumb_Title_Label</font>
-					<textcolor>$VAR[ListFocusColor]</textcolor>
-				</control>
-				<control type="label">
-					<width>auto</width>
-					<height>35</height>
-					<top>11</top>
-					<label>$VAR[Breadcrumb_Info_Label]</label>
-					<font>Breadcrumb_Info_Label</font>
-					<textcolor>$VAR[ListFocusColor]</textcolor>
-					<visible>!String.IsEmpty(Control.GetLabel(980))</visible>
+					<orientation>horizontal</orientation>
+					<align>left</align>
+					<itemgap>12</itemgap>
+					<usecontrolcoords>true</usecontrolcoords>
+					<control type="label" id="980">
+						<height>60</height>
+						<width>auto</width>
+						<label>$VAR[Breadcrumb_Title_Label]</label>
+						<font>Breadcrumb_Title_Label</font>
+						<textcolor>$VAR[ListFocusColor]</textcolor>
+					</control>
+					<control type="label">
+						<width>auto</width>
+						<height>35</height>
+						<top>11</top>
+						<label>$VAR[Breadcrumb_Info_Label]</label>
+						<font>Breadcrumb_Info_Label</font>
+						<textcolor>$VAR[ListFocusColor]</textcolor>
+						<visible>!String.IsEmpty(Control.GetLabel(980))</visible>
+					</control>
 				</control>
 			</control>
 		</definition>
