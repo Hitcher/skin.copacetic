@@ -7,7 +7,6 @@
 		<definition>
 			<control type="group">
 				<visible>$EXP[$PARAM[viewtype_label]View_IsVisible]</visible>
-				<include>Viewtype_Fade_Animation</include>
 				<!--ART-->
 				<control type="group">
 					<visible>$EXP[$PARAM[viewtype_label]View_Display_IsBackground] + !$EXP[OptionsSwitching]</visible>
@@ -67,9 +66,13 @@
 
 				<!--Hide fadetime transition on artwork during Container.Content change animation-->
 				<control type="group">
-					<visible>$EXP[ContainerSwitching]</visible>
+					<visible>$EXP[$PARAM[viewtype_label]View_IsVisible]</visible>
 					<include>ContainerSwitching_Cover_Fade_Animation</include>
-					<include>CustomViewsBackground</include>
+					<control type="group">
+						<visible>$EXP[ContainerSwitching]</visible>
+						<include>ContainerSwitching_Cover_Fade_Animation</include>
+						<include>CustomViewsBackground</include>
+					</control>
 				</control>
 
 				<!--DETAILS-->
@@ -161,17 +164,11 @@
 		<param name="viewtype_label" default="List"/>
 		<definition>
 			<control type="group">
-				<visible>$EXP[$PARAM[viewtype_label]View_IsVisible]</visible>
-				<include>Viewtype_Fade_Animation</include>
-				<control type="group">
-					<visible>!$EXP[ContainerSwitching] + !$EXP[TransparentDialog_IsVisible]</visible>
-					<include>Content_Delayed_Fade_Animation</include>
-					<animation effect="slide" end="720,0" time="0" condition="$EXP[ListView_Display_IsThumbnails]">Conditional</animation>
-					<include content="Common_List">
-						<param name="id" value="$PARAM[id]"/>
-						<param name="viewtype_label" value="$PARAM[viewtype_label]"/>
-					</include>
-				</control>
+				<animation effect="slide" end="720,0" time="0" condition="$EXP[ListView_Display_IsThumbnails]">Conditional</animation>
+				<include content="Common_List">
+					<param name="id" value="$PARAM[id]"/>
+					<param name="viewtype_label" value="$PARAM[viewtype_label]"/>
+				</include>
 			</control>
 		</definition>
 	</include>

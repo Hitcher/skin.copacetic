@@ -10,19 +10,6 @@
 		</control>
 	</include>
 
-	<!--
-	<onfocus condition="[$EXP[ContentPrevious] | $EXP[ContentNext]] + System.HasAddon(script.embuary.helper) + Integer.IsGreater(ListItem.Property(TotalEpisodes),0) + !String.IsEqual(ListItem.Overlay,OverlayWatched.png) + [Container.Content(tvshows) | Container.Content(seasons)]">RunScript(script.embuary.helper,action=calc,do='"($INFO[ListItem.Property(WatchedEpisodes)] / $INFO[ListItem.Property(TotalEpisodes)]) * 100"',prop=WatchedPercentage)</onfocus> -->
-
-
-	<!-- <include name="HiddenFocusButton">
-		<control type="button">
-			<visible allowhiddenfocus="true">!$EXP[ContentPrevious] + !$EXP[ContentNext]</visible>
-			<onfocus condition="System.HasAddon(script.embuary.helper) + Integer.IsGreater(ListItem.Property(TotalEpisodes),0) + !String.IsEqual(ListItem.Overlay,OverlayWatched.png) + [Container.Content(tvshows) | Container.Content(seasons)]">RunScript(script.embuary.helper,action=calc,do='"($INFO[ListItem.Property(WatchedEpisodes)] / $INFO[ListItem.Property(TotalEpisodes)]) * 100"',prop=WatchedPercentage)</onfocus>
-			<animation effect="slide" end="0,0" time="380" reversible="false">Focus</animation>
-			<onfocus condition="[$EXP[ContentPrevious] | $EXP[ContentNext]] + System.HasAddon(script.embuary.helper) + Integer.IsGreater(ListItem.Property(TotalEpisodes),0) + !String.IsEqual(ListItem.Overlay,OverlayWatched.png) + [Container.Content(tvshows) | Container.Content(seasons)]">RunScript(script.embuary.helper,action=calc,do='"($INFO[ListItem.Property(WatchedEpisodes)] / $INFO[ListItem.Property(TotalEpisodes)]) * 100"',prop=WatchedPercentage)</onfocus>
-		</control>
-	</include> -->
-
 	<include name="HiddenGridFocusButton">
 		<control type="button">
 			<visible allowhiddenfocus="true">false</visible>
@@ -130,72 +117,112 @@
 				<orientation>$PARAM[orientation]</orientation>
 				<scrolltime tween="sine" easing="inout">360</scrolltime>
 				<itemlayout height="55" width="720">
-					<include content="Common_$PARAM[viewtype_label]_Layout">
-            <param name="label" value="$PARAM[label]"/>
-            <param name="textcolor" value="$PARAM[textcolor]"/>
-            <param name="icontexture" value="$PARAM[unfocusedicontexture]"/>
-            <param name="iconvisible" value="$PARAM[unfocusediconvisible]"/>
-          </include>
+					<control type="group">
+						<visible>$EXP[$PARAM[viewtype_label]View_IsVisible]</visible>
+						<include>Viewtype_Fade_Animation</include>
+						<control type="group">
+							<visible>!$EXP[ContainerSwitching] + !$EXP[TransparentDialog_IsVisible]</visible>
+							<include>Content_Delayed_Fade_Animation</include>
+							<include content="Common_$PARAM[viewtype_label]_Layout">
+		            <param name="label" value="$PARAM[label]"/>
+		            <param name="textcolor" value="$PARAM[textcolor]"/>
+		            <param name="icontexture" value="$PARAM[unfocusedicontexture]"/>
+		            <param name="iconvisible" value="$PARAM[unfocusediconvisible]"/>
+		          </include>
+						</control>
+					</control>
 				</itemlayout>
 				<!--Background + !Details-->
 				<focusedlayout height="60" width="1740" condition="$EXP[$PARAM[viewtype_label]View_Display_IsBackground] + !$EXP[$PARAM[viewtype_label]View_Details_Info_IsVisible]">
 					<include>HiddenFocusButton</include>
-					<include content="Common_$PARAM[viewtype_label]_Layout">
-						<param name="nowplayingtop" value="-30"/>
-						<param name="icontop" value="0"/>
-						<param name="icontexture" value="$PARAM[focusedicontexture]"/>
-						<param name="iconvisible" value="$PARAM[focusediconvisible]"/>
-						<param name="label" value="$PARAM[label]"/>
-						<param name="labelmaxwidth" value="1740"/>
-						<param name="font" value="List_Title_Focused"/>
-						<param name="tracknumbercolor" value="$PARAM[textcolor]"/>
-						<param name="textcolor" value="$PARAM[textcolor]"/>
-					</include>
+					<control type="group">
+						<visible>$EXP[$PARAM[viewtype_label]View_IsVisible]</visible>
+						<include>Viewtype_Fade_Animation</include>
+						<control type="group">
+							<visible>!$EXP[ContainerSwitching] + !$EXP[TransparentDialog_IsVisible]</visible>
+							<include>Content_Delayed_Fade_Animation</include>
+							<include content="Common_$PARAM[viewtype_label]_Layout">
+								<param name="nowplayingtop" value="-30"/>
+								<param name="icontop" value="0"/>
+								<param name="icontexture" value="$PARAM[focusedicontexture]"/>
+								<param name="iconvisible" value="$PARAM[focusediconvisible]"/>
+								<param name="label" value="$PARAM[label]"/>
+								<param name="labelmaxwidth" value="1740"/>
+								<param name="font" value="List_Title_Focused"/>
+								<param name="tracknumbercolor" value="$PARAM[textcolor]"/>
+								<param name="textcolor" value="$PARAM[textcolor]"/>
+							</include>
+						</control>
+					</control>
 				</focusedlayout>
 				<!--Background + Details-->
 				<focusedlayout height="60" width="1200" condition="$EXP[$PARAM[viewtype_label]View_Display_IsBackground] + $EXP[$PARAM[viewtype_label]View_Details_Info_IsVisible]">
 					<include>HiddenFocusButton</include>
-					<include content="Common_$PARAM[viewtype_label]_Layout">
-						<param name="nowplayingtop" value="-30"/>
-						<param name="icontop" value="0"/>
-						<param name="icontexture" value="$PARAM[focusedicontexture]"/>
-						<param name="iconvisible" value="$PARAM[focusediconvisible]"/>
-						<param name="label" value="$PARAM[label]"/>
-						<param name="labelmaxwidth" value="1200"/>
-						<param name="font" value="List_Title_Focused"/>
-						<param name="tracknumbercolor" value="$PARAM[textcolor]"/>
-						<param name="textcolor" value="$PARAM[textcolor]"/>
-					</include>
+					<control type="group">
+						<visible>$EXP[$PARAM[viewtype_label]View_IsVisible]</visible>
+						<include>Viewtype_Fade_Animation</include>
+						<control type="group">
+							<visible>!$EXP[ContainerSwitching] + !$EXP[TransparentDialog_IsVisible]</visible>
+							<include>Content_Delayed_Fade_Animation</include>
+							<include content="Common_$PARAM[viewtype_label]_Layout">
+								<param name="nowplayingtop" value="-30"/>
+								<param name="icontop" value="0"/>
+								<param name="icontexture" value="$PARAM[focusedicontexture]"/>
+								<param name="iconvisible" value="$PARAM[focusediconvisible]"/>
+								<param name="label" value="$PARAM[label]"/>
+								<param name="labelmaxwidth" value="1200"/>
+								<param name="font" value="List_Title_Focused"/>
+								<param name="tracknumbercolor" value="$PARAM[textcolor]"/>
+								<param name="textcolor" value="$PARAM[textcolor]"/>
+							</include>
+						</control>
+					</control>
 				</focusedlayout>
 				<!--Thumbnails + !Details-->
 				<focusedlayout height="60" width="1020" condition="$EXP[$PARAM[viewtype_label]View_Display_IsThumbnails] + !$EXP[$PARAM[viewtype_label]View_Details_Info_IsVisible]">
 					<include>HiddenFocusButton</include>
-					<include content="Common_$PARAM[viewtype_label]_Layout">
-						<param name="nowplayingtop" value="-30"/>
-						<param name="icontop" value="0"/>
-						<param name="icontexture" value="$PARAM[focusedicontexture]"/>
-						<param name="iconvisible" value="$PARAM[focusediconvisible]"/>
-            <param name="label" value="$PARAM[label]"/>
-						<param name="labelmaxwidth" value="1020"/>
-						<param name="font" value="List_Title_Focused"/>
-						<param name="tracknumbercolor" value="$PARAM[textcolor]"/>
-            <param name="textcolor" value="$PARAM[textcolor]"/>
-					</include>
+					<control type="group">
+						<visible>$EXP[$PARAM[viewtype_label]View_IsVisible]</visible>
+						<include>Viewtype_Fade_Animation</include>
+						<control type="group">
+							<visible>!$EXP[ContainerSwitching] + !$EXP[TransparentDialog_IsVisible]</visible>
+							<include>Content_Delayed_Fade_Animation</include>
+							<include content="Common_$PARAM[viewtype_label]_Layout">
+								<param name="nowplayingtop" value="-30"/>
+								<param name="icontop" value="0"/>
+								<param name="icontexture" value="$PARAM[focusedicontexture]"/>
+								<param name="iconvisible" value="$PARAM[focusediconvisible]"/>
+		            <param name="label" value="$PARAM[label]"/>
+								<param name="labelmaxwidth" value="1020"/>
+								<param name="font" value="List_Title_Focused"/>
+								<param name="tracknumbercolor" value="$PARAM[textcolor]"/>
+		            <param name="textcolor" value="$PARAM[textcolor]"/>
+							</include>
+						</control>
+					</control>
 				</focusedlayout>
 				<!--Thumbnails + Details-->
 				<focusedlayout height="60" width="900" condition="$EXP[$PARAM[viewtype_label]View_Display_IsThumbnails] + $EXP[$PARAM[viewtype_label]View_Details_Info_IsVisible]">
 					<include>HiddenFocusButton</include>
-					<include content="Common_$PARAM[viewtype_label]_Layout">
-						<param name="nowplayingtop" value="-30"/>
-						<param name="icontop" value="0"/>
-						<param name="icontexture" value="$PARAM[focusedicontexture]"/>
-						<param name="iconvisible" value="$PARAM[focusediconvisible]"/>
-            <param name="label" value="$PARAM[label]"/>
-						<param name="labelmaxwidth" value="900"/>
-						<param name="font" value="List_Title_Focused"/>
-						<param name="tracknumbercolor" value="$PARAM[textcolor]"/>
-            <param name="textcolor" value="$PARAM[textcolor]"/>
-					</include>
+					<control type="group">
+						<visible>$EXP[$PARAM[viewtype_label]View_IsVisible]</visible>
+						<include>Viewtype_Fade_Animation</include>
+						<control type="group">
+							<visible>!$EXP[ContainerSwitching] + !$EXP[TransparentDialog_IsVisible]</visible>
+							<include>Content_Delayed_Fade_Animation</include>
+							<include content="Common_$PARAM[viewtype_label]_Layout">
+								<param name="nowplayingtop" value="-30"/>
+								<param name="icontop" value="0"/>
+								<param name="icontexture" value="$PARAM[focusedicontexture]"/>
+								<param name="iconvisible" value="$PARAM[focusediconvisible]"/>
+		            <param name="label" value="$PARAM[label]"/>
+								<param name="labelmaxwidth" value="900"/>
+								<param name="font" value="List_Title_Focused"/>
+								<param name="tracknumbercolor" value="$PARAM[textcolor]"/>
+		            <param name="textcolor" value="$PARAM[textcolor]"/>
+							</include>
+						</control>
+					</control>
 				</focusedlayout>
 			</control>
     </definition>
