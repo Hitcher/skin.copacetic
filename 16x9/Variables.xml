@@ -396,6 +396,7 @@
 		<value condition="Container.Content(actors) + !String.IsEmpty(ListItem.Appearances)">$INFO[ListItem.Appearances]$VAR[Appearances_Label, ]</value>
 		<value condition="Container.Content(actors) + !String.IsEmpty(ListItem.Appearances)">$INFO[ListItem.Appearances]$VAR[Appearances_Label, ]</value>
 		<value condition="Container.Content(files) + String.IsEmpty(ListItem.Art(Poster))">$INFO[ListItem.FolderName]</value>
+		<value condition="Container.Content(addons)">$INFO[ListItem.Label]</value>
 		<value condition="Window.IsVisible(visualisation) + !String.IsEmpty(MusicPlayer.Album)">$INFO[MusicPlayer.Album]</value>
 		<value></value>
 	</variable>
@@ -415,6 +416,7 @@
 		<value condition="Container.Content(songs) + $EXP[Breadcrumb_Enabled_View] + !String.IsEmpty(ListItem.Year)">$INFO[ListItem.Year,/ ]</value>
 		<value condition="Container.Content(actors) + !String.IsEmpty(ListItem.Appearances)">$VAR[Appearances_Label_2,/ ]$INFO[Container(4501).ListItem(-1).Title, ]</value>
 		<value condition="Container.Content(files) + String.IsEmpty(ListItem.Art(Poster))">$INFO[ListItem.EndTime,/ $LOCALIZE[32000] ]</value>
+		<value condition="Container.Content(addons)">$INFO[ListItem.AddonType,/ ]$INFO[ListItem.AddonCreator, / ]</value>
 		<value condition="Window.IsVisible(visualisation) + !String.IsEmpty(MusicPlayer.Year)">$INFO[MusicPlayer.Year,/ ]</value>
 		<value></value>
 	</variable>
@@ -515,10 +517,18 @@
 	</variable>
 
 	<variable name="VideoSource_Label">
-		<value condition="String.Contains(ListItem.FilenameAndPath,bluray) | String.Contains(ListItem.FilenameAndPath,blu-ray) | String.Contains(ListItem.FilenameAndPath,brrip) | String.Contains(ListItem.FilenameAndPath,bdrip) | String.Contains(ListItem.FilenameAndPath,.m2ts,Right) | String.Contains(ListItem.FilenameAndPath,.bdmv,Right) | String.Contains(ListItem.FilenameAndPathAndPath,bd25) | String.Contains(ListItem.FilenameAndPathAndPath,bd50)">flags/source/bluray.png</value>
+		<!--DISC-->
+		<value condition="[String.Contains(ListItem.FilenameAndPath,bluray) | String.Contains(ListItem.FilenameAndPath,blu-ray) | String.Contains(ListItem.FilenameAndPath,brrip) | String.Contains(ListItem.FilenameAndPath,bdrip) | String.Contains(ListItem.FilenameAndPath,.m2ts,Right) | String.Contains(ListItem.FilenameAndPath,.bdmv,Right) | String.Contains(ListItem.FilenameAndPathAndPath,bd25) | String.Contains(ListItem.FilenameAndPathAndPath,bd50)] + String.Contains(ListItem.FilesnameAndPath,2160p)">flags/source/uhd-bluray.png</value>
+		<value condition="[String.Contains(ListItem.FilenameAndPath,bluray) | String.Contains(ListItem.FilenameAndPath,blu-ray) | String.Contains(ListItem.FilenameAndPath,brrip) | String.Contains(ListItem.FilenameAndPath,bdrip) | String.Contains(ListItem.FilenameAndPath,.m2ts,Right) | String.Contains(ListItem.FilenameAndPath,.bdmv,Right) | String.Contains(ListItem.FilenameAndPathAndPath,bd25) | String.Contains(ListItem.FilenameAndPathAndPath,bd50)]">flags/source/bluray.png</value>
+		<!--WEB-->
+		<value condition="[String.Contains(ListItem.FilenameAndPath,.NF.) | String.Contains(ListItem.FilenameAndPath,netflix)] + [String.Contains(ListItem.FilenameAndPath,dl) | String.Contains(ListItem.FilenameAndPath,rip)]">flags/source/netflix.png</value>
+		<value condition="[String.Contains(ListItem.FilenameAndPath,DSNP) | String.Contains(ListItem.FilenameAndPath,Disney)] + [String.Contains(ListItem.FilenameAndPath,dl) | String.Contains(ListItem.FilenameAndPath,rip)]">flags/source/disney+.png</value>
+		<value condition="[String.Contains(ListItem.FilenameAndPath,AMZN) | String.Contains(ListItem.FilenameAndPath,Amazon)] + [String.Contains(ListItem.FilenameAndPath,dl) | String.Contains(ListItem.FilenameAndPath,rip)]">flags/source/amazon.png</value>
+		<value condition="String.Contains(ListItem.FilenameAndPath,HULU)  + [String.Contains(ListItem.FilenameAndPath,dl) | String.Contains(ListItem.FilenameAndPath,rip)]">flags/source/hulu.png</value>
+		<value condition="String.Contains(ListItem.FilenameAndPath,web) + [String.Contains(ListItem.FilenameAndPath,dl) | String.Contains(ListItem.FilenameAndPath,rip)]">flags/source/webtv.png</value>
+		<!--Legacy formats-->
 		<value condition="String.Contains(ListItem.FilenameAndPath,hddvd) | String.Contains(ListItem.FilenameAndPath,hd-dvd) | String.Contains(ListItem.FilenameAndPath,.evo,Right)">flags/source/hddvd.png</value>
 		<value condition="String.Contains(ListItem.FilenameAndPath,.ifo,Right) | String.Contains(ListItem.FilenameAndPath,.iso,Right) | String.Contains(ListItem.FilenameAndPath,dvd)">flags/source/dvd.png</value>
-		<value condition="String.Contains(ListItem.FilenameAndPath,web) + [String.Contains(ListItem.FilenameAndPath,dl) | String.Contains(ListItem.FilenameAndPath,rip)]">flags/source/webtv.png</value>
 		<value condition="String.Contains(ListItem.FilenameAndPath,hd) + String.Contains(ListItem.FilenameAndPath,tv)">flags/source/hdtv.png</value>
 		<value condition="[String.Contains(ListItem.FilenameAndPath,sd) + String.Contains(ListItem.FilenameAndPath,tv)] | [String.Contains(ListItem.FilenameAndPath,pd) + String.Contains(ListItem.FilenameAndPath,tv)] | String.Contains(ListItem.FilenameAndPath,dsr)">flags/source/sdtv.png</value>
 		<value condition="String.Contains(ListItem.FilenameAndPath,divx)">flags/source/divx.png</value>
@@ -535,12 +545,12 @@
 	</variable>
 
 	<variable name="Resolution_Label">
-		<value condition="String.StartsWith(ListItem.VideoResolution,8K)">8KUHD</value>
-		<value condition="String.StartsWith(ListItem.VideoResolution,4K)">4KUHD</value>
+		<value condition="String.StartsWith(ListItem.VideoResolution,8K)">8k Ultra HD</value>
+		<value condition="String.StartsWith(ListItem.VideoResolution,4K)">4K Ultra HD</value>
 		<value condition="String.StartsWith(ListItem.VideoResolution,1080)">Full HD</value>
 		<value condition="String.StartsWith(ListItem.VideoResolution,720)">HD</value>
-		<value condition="String.StartsWith(ListItem.VideoResolution,540)">SD</value>
 		<value condition="String.StartsWith(ListItem.VideoResolution,576)">SD</value>
+		<value condition="String.StartsWith(ListItem.VideoResolution,540)">SD</value>
 		<value condition="String.StartsWith(ListItem.VideoResolution,480)">SD</value>
 	</variable>
 
