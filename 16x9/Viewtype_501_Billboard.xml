@@ -28,31 +28,28 @@
 		<definition>
 			<control type="group">
 				<visible>$EXP[$PARAM[viewtype_label]View_IsVisible]</visible>
-				<include>Viewtype_Fade_Animation</include>
+
 				<!--ART-->
 				<control type="group">
 					<visible>!$EXP[OptionsSwitching]</visible>
 					<include>Artwork_Fade_Animation</include>
-					<control type="image">
-						<visible>$EXP[ContentNext] | $EXP[ContentPrevious]</visible>
-						<aspectratio>stretch</aspectratio>
-						<texture colordiffuse="$VAR[DarkColor]">views/white_100.png</texture>
-					</control>
-					<include content="ListIcon">
-						<param name="unfocusedoverlay" value="true"/>
-						<param name="fadetime" value="360"/>
+					<include content="Artwork_Transition_Fade">
+						<param name="target_id" value="501"/>
+						<param name="visible" value="true"/>
 					</include>
 				</control>
 
-				<!--Hide fadetime transition on artwork during Container.Content change animation-->
+				<!--Hide Artwork during viewtype transition-->
 				<control type="group">
-					<visible>$EXP[$PARAM[viewtype_label]View_IsVisible]</visible>
+					<visible>Window.IsVisible(1118)</visible>
+					<include>ViewtypeSwitching_Cover_Fade_Animation</include>
+					<include>CustomViewsBackground</include>
+				</control>
+				<!--Hide Artwork during container content transition-->
+				<control type="group">
+					<visible>$EXP[$PARAM[viewtype_label]View_IsVisible] + $EXP[ContainerSwitching]</visible>
 					<include>ContainerSwitching_Cover_Fade_Animation</include>
-					<control type="group">
-						<visible>$EXP[ContainerSwitching]</visible>
-						<include>ContainerSwitching_Cover_Fade_Animation</include>
-						<include>CustomViewsBackground</include>
-					</control>
+					<include>CustomViewsBackground</include>
 				</control>
 
 				<!--DETAILS-->

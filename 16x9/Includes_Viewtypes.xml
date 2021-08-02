@@ -124,7 +124,7 @@
 							<visible>!$EXP[ContainerSwitching] + !$EXP[TransparentDialog_IsVisible]</visible>
 							<include>Content_Delayed_Fade_Animation</include>
 							<include content="Common_$PARAM[viewtype_label]_Layout">
-		            <param name="label" value="$PARAM[label]"/>
+		            <param name="label" value="$VAR[Unfocused_Title_Label]"/>
 		            <param name="textcolor" value="$PARAM[textcolor]"/>
 		            <param name="icontexture" value="$PARAM[unfocusedicontexture]"/>
 		            <param name="iconvisible" value="$PARAM[unfocusediconvisible]"/>
@@ -133,7 +133,7 @@
 					</control>
 				</itemlayout>
 				<!--Background + !Details-->
-				<focusedlayout height="60" width="1740" condition="$EXP[$PARAM[viewtype_label]View_Display_IsBackground] + !$EXP[$PARAM[viewtype_label]View_Details_Info_IsVisible] + !Window.IsVisible(favourites)">
+				<focusedlayout height="60" width="1680" condition="$EXP[$PARAM[viewtype_label]View_Display_IsBackground] + !$EXP[$PARAM[viewtype_label]View_Details_Info_IsVisible] + !Window.IsVisible(favourites)">
 					<include>HiddenFocusButton</include>
 					<control type="group">
 						<visible>$EXP[$PARAM[viewtype_label]View_IsVisible]</visible>
@@ -147,7 +147,7 @@
 								<param name="icontexture" value="$PARAM[focusedicontexture]"/>
 								<param name="iconvisible" value="$PARAM[focusediconvisible]"/>
 								<param name="label" value="$PARAM[label]"/>
-								<param name="labelmaxwidth" value="1740"/>
+								<param name="labelmaxwidth" value="1680"/>
 								<param name="font" value="List_Title_Focused"/>
 								<param name="tracknumbercolor" value="$PARAM[textcolor]"/>
 								<param name="textcolor" value="$PARAM[textcolor]"/>
@@ -202,7 +202,7 @@
 					</control>
 				</focusedlayout>
 				<!--Thumbnails + Details-->
-				<focusedlayout height="60" width="900" condition="$EXP[$PARAM[viewtype_label]View_Display_IsThumbnails] + $EXP[$PARAM[viewtype_label]View_Details_Info_IsVisible] + !Window.IsVisible(favourites)">
+				<focusedlayout height="60" width="840" condition="$EXP[$PARAM[viewtype_label]View_Display_IsThumbnails] + $EXP[$PARAM[viewtype_label]View_Details_Info_IsVisible] + !Window.IsVisible(favourites)">
 					<include>HiddenFocusButton</include>
 					<control type="group">
 						<visible>$EXP[$PARAM[viewtype_label]View_IsVisible]</visible>
@@ -216,7 +216,7 @@
 								<param name="icontexture" value="$PARAM[focusedicontexture]"/>
 								<param name="iconvisible" value="$PARAM[focusediconvisible]"/>
 		            <param name="label" value="$PARAM[label]"/>
-								<param name="labelmaxwidth" value="900"/>
+								<param name="labelmaxwidth" value="840"/>
 								<param name="font" value="List_Title_Focused"/>
 								<param name="tracknumbercolor" value="$PARAM[textcolor]"/>
 		            <param name="textcolor" value="$PARAM[textcolor]"/>
@@ -368,6 +368,7 @@
 		<param name="height" default="100%"/>
 		<param name="visible" default="true"/>
 		<param name="aspectratio" default="scale"/>
+		<param name="fallback" default="fallback.png"/>
 		<param name="texture" default="$VAR[Thumbnail(0)Content]"/>
 		<param name="fadetime" default="0"/>
 		<param name="bordervisible" default="false"/>
@@ -383,7 +384,7 @@
 				<visible>$PARAM[visible]</visible>
 				<control type="image">
 					<aspectratio align="center" aligny="center">$PARAM[aspectratio]</aspectratio>
-					<texture fallback="fallback.png" background="true">$PARAM[texture]</texture>
+					<texture fallback="$PARAM[fallback]" background="true">$PARAM[texture]</texture>
 					<fadetime>$PARAM[fadetime]</fadetime>
 				</control>
 				<control type="image">
@@ -445,7 +446,7 @@
 				<control type="image">
 					<include>Focus_Zoom_Animation</include>
 					<texture fallback="$PARAM[fallback]" background="true" diffuse="$PARAM[diffuse]">$VAR[Thumbnail($PARAM[position])Content]</texture>
-					<!-- <texture colordiffuse="$VAR[AccentColor]">fallback.png</texture> -->
+
 					<aspectratio align="center" aligny="center">$PARAM[aspectratio]</aspectratio>
 					<fadetime>$PARAM[fadetime]</fadetime>
 				</control>
@@ -496,9 +497,6 @@
 				</control>
 			</control>
 		</definition>
-	</include>
-
-	<include name="SimpleDropShadow">
 	</include>
 
 	<include name="DropShadow">
@@ -703,6 +701,104 @@
 		</definition>
 	</include>
 
+	<include name="Artwork_Transition_Fade">
+		<param name="visible"/>
+		<param name="target_id" default="50"/>
+		<param name="aspectratio" default="scale"/>
+		<param name="fallback" default="fallback.png"/>
+		<param name="unfocusedoverlay" default="true"/>
+		<param name="showgradient" default="false"/>
+		<definition>
+			<control type="group">
+				<visible>$PARAM[visible]</visible>
+				<!--STATIC-->
+				<include content="ListIcon">
+					<param name="visible" value="!$EXP[ContentSwitching]"/>
+					<param name="aspectratio" value="$PARAM[aspectratio]"/>
+					<param name="fallback" value="$PARAM[fallback]"/>
+					<param name="unfocusedoverlay" value="$PARAM[unfocusedoverlay]"/>
+					<param name="showgradient" value="$PARAM[showgradient]"/>
+				</include>
+				<!--PREVIOUS SCROLL-->
+				<control type="group">
+					<visible>$EXP[ContentPrevious]</visible>
+					<!--Fade Out Icon 0 if aspect ratio not fixed-->
+					<include content="ListIcon">
+						<param name="position" value="1"/>
+						<param name="visible" value="Container($PARAM[target_id]).OnPrevious + ![$EXP[Poster_Containers] | $EXP[Square_Containers]]"/>
+						<param name="aspectratio" value="$PARAM[aspectratio]"/>
+						<param name="fallback" value="$PARAM[fallback]"/>
+						<param name="animationtype" value="Hidden"/>
+						<param name="animationcondition" value="true"/>
+						<param name="animationeffect" value="fade"/>
+						<param name="animationend" value="0"/>
+						<param name="unfocusedoverlay" value="$PARAM[unfocusedoverlay]"/>
+						<param name="showgradient" value="$PARAM[showgradient]"/>
+					</include>
+					<!--Hold in place Icon 0 if aspectratio is fixed-->
+					<include content="ListIcon">
+						<param name="position" value="1"/>
+						<param name="visible" value="$EXP[ContentPrevious] + [$EXP[Poster_Containers] | $EXP[Square_Containers]]"/>
+						<param name="aspectratio" value="$PARAM[aspectratio]"/>
+						<param name="fallback" value="$PARAM[fallback]"/>
+						<param name="unfocusedoverlay" value="$PARAM[unfocusedoverlay]"/>
+						<param name="showgradient" value="$PARAM[showgradient]"/>
+					</include>
+					<!--Fade in Icon -1-->
+					<include content="ListIcon">
+						<param name="visible" value="!Container($PARAM[target_id]).OnPrevious"/>
+						<param name="aspectratio" value="$PARAM[aspectratio]"/>
+						<param name="fallback" value="$PARAM[fallback]"/>
+						<param name="animationtype" value="Visible"/>
+						<param name="animationcondition" value="true"/>
+						<param name="animationeffect" value="fade"/>
+						<param name="animationend" value="100"/>
+						<param name="unfocusedoverlay" value="$PARAM[unfocusedoverlay]"/>
+						<param name="showgradient" value="$PARAM[showgradient]"/>
+					</include>
+				</control>
+				<!--NEXT SCROLL-->
+				<control type="group">
+				  <visible>$EXP[ContentNext]</visible>
+					<!--Fade Out Icon 0 if aspect ratio not fixed-->
+				  <include content="ListIcon">
+				    <param name="position" value="-1"/>
+				    <param name="visible" value="Container($PARAM[target_id]).OnNext + ![$EXP[Poster_Containers] | $EXP[Square_Containers]]"/>
+				    <param name="aspectratio" value="$PARAM[aspectratio]"/>
+				    <param name="fallback" value="$PARAM[fallback]"/>
+				    <param name="animationtype" value="Hidden"/>
+				    <param name="animationcondition" value="true"/>
+				    <param name="animationeffect" value="fade"/>
+				    <param name="animationend" value="0"/>
+				    <param name="unfocusedoverlay" value="$PARAM[unfocusedoverlay]"/>
+				    <param name="showgradient" value="$PARAM[showgradient]"/>
+				  </include>
+					<!--Hold in place Icon 0 if aspectratio is fixed-->
+					<include content="ListIcon">
+						<param name="position" value="-1"/>
+						<param name="visible" value="$EXP[ContentNext] + [$EXP[Poster_Containers] | $EXP[Square_Containers]]"/>
+						<param name="aspectratio" value="$PARAM[aspectratio]"/>
+						<param name="fallback" value="$PARAM[fallback]"/>
+						<param name="unfocusedoverlay" value="$PARAM[unfocusedoverlay]"/>
+						<param name="showgradient" value="$PARAM[showgradient]"/>
+					</include>
+					<!--Fade in Icon 1-->
+				  <include content="ListIcon">
+				    <param name="visible" value="!Container($PARAM[target_id]).OnNext"/>
+				    <param name="aspectratio" value="$PARAM[aspectratio]"/>
+				    <param name="fallback" value="$PARAM[fallback]"/>
+				    <param name="animationtype" value="Visible"/>
+				    <param name="animationcondition" value="true"/>
+				    <param name="animationeffect" value="fade"/>
+				    <param name="animationend" value="100"/>
+				    <param name="unfocusedoverlay" value="$PARAM[unfocusedoverlay]"/>
+				    <param name="showgradient" value="$PARAM[showgradient]"/>
+				  </include>
+				</control>
+			</control>
+		</definition>
+	</include>
+
 	<include name="Artwork_Transition_Slide">
 		<param name="target_id" default="504"/>
 		<param name="viewtype_label" default="Showcase"/>
@@ -760,7 +856,7 @@
 						<param name="animationcondition" value="true"/>
 						<param name="animationeffect" value="slide"/>
 						<param name="animationend" value="$PARAM[item_width],0"/>
-						<param name="showgradient" value="!String.IsEmpty(Container.ListItemNoWrap(1).Label) + $PARAM[showgradient]"/>
+						<param name="showgradient" value=" + $PARAM[showgradient]"/>
 						<param name="unfocusedoverlay" value="!Container($PARAM[target_id]).OnPrevious + $PARAM[unfocusedoverlay]"/>
 						<param name="unfocusedoverlayanimationtype" value="Visible"/>
 						<param name="unfocusedoverlayanimationcondition" value="true"/>
