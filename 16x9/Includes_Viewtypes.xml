@@ -641,21 +641,25 @@
 								<param name="showgradient" value="$PARAM[show_gradient]"/>
 								<param name="unfocusedoverlay" value="$PARAM[unfocused_overlay]"/>
 							</include>
-							<!--Dropshadow Left Side-->
-							<include content="DropShadow">
-								<param name="left" value="$PARAM[2x_item_width_minus_dropshadow_width]"/>
-								<param name="top" value="$PARAM[item_top]"/>
-								<param name="height" value="$PARAM[item_height]"/>
-								<param name="visible" value="!String.IsEmpty(Container.ListItemNoWrap(-1).Label) + $EXP[StripView_IsVisible] + $EXP[StripView_Details_Off]"/>
-							</include>
-							<!--Dropshadow Right Side-->
-							<include content="DropShadow">
-								<param name="left" value="$PARAM[2x_item_width_plus_focus_width]"/>
-								<param name="top" value="$PARAM[item_top]"/>
-								<param name="height" value="$PARAM[item_height]"/>
-								<param name="flipx" value="true"/>
-								<param name="visible" value="!String.IsEmpty(Container.ListItemNoWrap(1).Label) + [[$EXP[ShowcaseView_IsVisible] + $EXP[ShowcaseView_Details_Off] + !Control.HasFocus(60)] | $EXP[StripView_IsVisible]]"/>
-							</include>
+							<control type="group">
+								<visible>!$EXP[TransparentDialog_IsVisible] | $EXP[StripView_IsVisible]</visible>
+								<include>Content_Fade_Animation</include>
+								<!--Dropshadow Left Side-->
+								<include content="DropShadow">
+									<param name="left" value="$PARAM[2x_item_width_minus_dropshadow_width]"/>
+									<param name="top" value="$PARAM[item_top]"/>
+									<param name="height" value="$PARAM[item_height]"/>
+									<param name="visible" value="!String.IsEmpty(Container.ListItemNoWrap(-1).Label) + $EXP[StripView_IsVisible] + $EXP[StripView_Details_Off]"/>
+								</include>
+								<!--Dropshadow Right Side-->
+								<include content="DropShadow">
+									<param name="left" value="$PARAM[2x_item_width_plus_focus_width]"/>
+									<param name="top" value="$PARAM[item_top]"/>
+									<param name="height" value="$PARAM[item_height]"/>
+									<param name="flipx" value="true"/>
+									<param name="visible" value="!String.IsEmpty(Container.ListItemNoWrap(1).Label) + [[$EXP[ShowcaseView_IsVisible] + $EXP[ShowcaseView_Details_Off] + !Control.HasFocus(60)] | $EXP[StripView_IsVisible]]"/>
+								</include>
+							</control>
 						</control>
 					</control>
 				</control>
@@ -715,25 +719,25 @@
 				<!--PREVIOUS SCROLL-->
 				<control type="group">
 					<visible>$EXP[ContentPrevious] + !$EXP[ContentNext]</visible>
-					<!--Hold in place Icon 0 if aspectratio is fixed-->
-					<include content="ListIcon">
-						<param name="position" value="1"/>
-						<param name="visible" value="$EXP[ContentPrevious] + [$EXP[Poster_Containers] | $EXP[Square_Containers]]"/>
-						<param name="aspectratio" value="$PARAM[aspectratio]"/>
-						<param name="fallback" value="$PARAM[fallback]"/>
-						<param name="unfocusedoverlay" value="$PARAM[unfocusedoverlay]"/>
-						<param name="showgradient" value="$PARAM[showgradient]"/>
-					</include>
 					<!--Fade Out Icon 0 if aspect ratio not fixed-->
 					<include content="ListIcon">
 						<param name="position" value="1"/>
-						<param name="visible" value="Container($PARAM[target_id]).OnPrevious + ![$EXP[Poster_Containers] | $EXP[Square_Containers]]"/>
+						<param name="visible" value="Container($PARAM[target_id]).OnPrevious + Container.Content(files)"/>
 						<param name="aspectratio" value="$PARAM[aspectratio]"/>
 						<param name="fallback" value="$PARAM[fallback]"/>
 						<param name="animationtype" value="Hidden"/>
 						<param name="animationcondition" value="true"/>
 						<param name="animationeffect" value="fade"/>
 						<param name="animationend" value="0"/>
+						<param name="unfocusedoverlay" value="$PARAM[unfocusedoverlay]"/>
+						<param name="showgradient" value="$PARAM[showgradient]"/>
+					</include>
+					<!--Hold in place Icon 0 if aspectratio is fixed-->
+					<include content="ListIcon">
+						<param name="position" value="1"/>
+						<param name="visible" value="$EXP[ContentPrevious] + !Container.Content(files)"/>
+						<param name="aspectratio" value="$PARAM[aspectratio]"/>
+						<param name="fallback" value="$PARAM[fallback]"/>
 						<param name="unfocusedoverlay" value="$PARAM[unfocusedoverlay]"/>
 						<param name="showgradient" value="$PARAM[showgradient]"/>
 					</include>
@@ -753,19 +757,10 @@
 				<!--NEXT SCROLL-->
 				<control type="group">
 				  <visible>$EXP[ContentNext] + !$EXP[ContentPrevious]</visible>
-					<!--Hold in place Icon 0 if aspectratio is fixed-->
-					<include content="ListIcon">
-						<param name="position" value="-1"/>
-						<param name="visible" value="$EXP[ContentNext] + [$EXP[Poster_Containers] | $EXP[Square_Containers]]"/>
-						<param name="aspectratio" value="$PARAM[aspectratio]"/>
-						<param name="fallback" value="$PARAM[fallback]"/>
-						<param name="unfocusedoverlay" value="$PARAM[unfocusedoverlay]"/>
-						<param name="showgradient" value="$PARAM[showgradient]"/>
-					</include>
 					<!--Fade Out Icon 0 if aspect ratio not fixed-->
 				  <include content="ListIcon">
 				    <param name="position" value="-1"/>
-				    <param name="visible" value="Container($PARAM[target_id]).OnNext + ![$EXP[Poster_Containers] | $EXP[Square_Containers]]"/>
+				    <param name="visible" value="Container($PARAM[target_id]).OnNext + Container.Content(files)"/>
 				    <param name="aspectratio" value="$PARAM[aspectratio]"/>
 				    <param name="fallback" value="$PARAM[fallback]"/>
 				    <param name="animationtype" value="Hidden"/>
@@ -775,6 +770,15 @@
 				    <param name="unfocusedoverlay" value="$PARAM[unfocusedoverlay]"/>
 				    <param name="showgradient" value="$PARAM[showgradient]"/>
 				  </include>
+					<!--Hold in place Icon 0 if aspectratio is fixed-->
+					<include content="ListIcon">
+						<param name="position" value="-1"/>
+						<param name="visible" value="$EXP[ContentNext] + !Container.Content(files)"/>
+						<param name="aspectratio" value="$PARAM[aspectratio]"/>
+						<param name="fallback" value="$PARAM[fallback]"/>
+						<param name="unfocusedoverlay" value="$PARAM[unfocusedoverlay]"/>
+						<param name="showgradient" value="$PARAM[showgradient]"/>
+					</include>
 					<!--Fade in Icon 1-->
 				  <include content="ListIcon">
 				    <param name="visible" value="!Container($PARAM[target_id]).OnNext"/>
@@ -2057,7 +2061,7 @@
     <param name="infoheight" default="35"/>
     <param name="plotfont" default="Body"/>
 		<param name="plotmaxheight" default="103"/>
-    <param name="plotgap" default="55"/>
+    <param name="plotgap" default="60"/>
     <param name="plotcolor" default="$VAR[PlotColor]"/>
 		<definition>
 			<control type="grouplist">
@@ -2074,7 +2078,9 @@
 				<visible>!$EXP[$PARAM[viewtype_label]View_Details_Off] + ![$EXP[StripView_IsVisible] + $EXP[StripView_Details_Title] + !$EXP[StripView_Details_Logo_IsOn]]</visible>
 				<!--Logo-->
 				<control type="image">
+					<animation effect="slide" start="0,0" end="20,0" time="0" condition="[$EXP[StripView_IsVisible] + !$EXP[StripView_Details_Info_IsVisible] + !$EXP[StripView_Details_Plot_IsVisible]]">Conditional</animation>
 					<animation effect="slide" start="0,0" end="-60,371" time="0" condition="$EXP[BillboardView_IsVisible] + !$EXP[BillboardView_Details_Info_IsVisible] + !$EXP[BillboardView_Details_Plot_IsVisible]">Conditional</animation>
+					<animation effect="slide" start="0,0" end="0,-10" time="0" condition="$EXP[$PARAM[viewtype_label]View_Details_Info_IsVisible] | $EXP[$PARAM[viewtype_label]View_Details_Plot_IsVisible]">Conditional</animation>
 					<visible>$EXP[$PARAM[viewtype_label]View_Details_Logo_IsVisible]</visible>
 					<width>560</width>
 					<height>237</height>
@@ -2094,7 +2100,6 @@
 				</control>
 				<!--Info-->
 				<control type="$PARAM[labeltype]">
-					<animation effect="slide" start="0,0" end="0,50" time="0" condition="$EXP[$PARAM[viewtype_label]View_Details_Plot_IsVisible] + !String.IsEmpty(Control.GetLabel(916))">Conditional</animation>
           <top>$PARAM[infogap]</top>
           <visible>$EXP[$PARAM[viewtype_label]View_Details_Info_IsVisible]</visible>
 					<visible>!String.IsEmpty(Control.GetLabel(917))</visible>
@@ -2119,6 +2124,8 @@
 					<autoscroll delay="5000" time="1500" repeat="2000">true</autoscroll>
 				</control>
 			</control>
+
+
 		</definition>
 	</include>
 

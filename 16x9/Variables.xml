@@ -3,12 +3,16 @@
 
 	<!--PATHS-->
 	<variable name="Logo_Path">
+		<value condition="$EXP[BillboardView_IsVisible] + !String.IsEmpty(ListItem.Art(clearlogo-bilboard))">$INFO[ListItemm.Art(clearlogo-billboard)]</value>
+		<value condition="Skin.String(Theme,Light) + [[$EXP[ShowcaseView_IsVisible] + !$EXP[ShowcaseView_Details_Info_IsVisible] + !$EXP[ShowcaseView_Details_Plot_IsVisible]] | [$EXP[StripView_IsVisible] + !$EXP[StripView_Details_Info_IsVisible] + !$EXP[StripView_Details_Plot_IsVisible]]] + !String.IsEmpty(ListItem.Art(clearlogo-alt-center))">$INFO[ListItem.Art(clearlogo-alt-center)]</value>
 		<value condition="Skin.String(Theme,Light) + !$EXP[BillboardView_IsVisible] + !String.IsEmpty(ListItem.Art(clearlogo-alt))">$INFO[ListItem.Art(clearlogo-alt)]</value>
+		<value condition="[[$EXP[ShowcaseView_IsVisible] + !$EXP[ShowcaseView_Details_Info_IsVisible] + !$EXP[ShowcaseView_Details_Plot_IsVisible]] | [$EXP[StripView_IsVisible] + !$EXP[StripView_Details_Info_IsVisible] + !$EXP[StripView_Details_Plot_IsVisible]]] + !String.IsEmpty(ListItem.Art(clearlogo-center))">$INFO[ListItem.Art(clearlogo-center)]</value>
 		<value>$INFO[ListItem.Art(clearlogo)]</value>
 	</variable>
 
 	<variable name="Slideshow_Path">
 		<value condition="Window.IsActive(home) + String.Contains(Container(9000).ListItem.Property(path),sets)">library://video/movies/sets.xml</value>
+		<value condition="Window.IsActive(home) + String.Contains(Container(9000).ListItem.Property(path),recently)">library://video/movies/recentlyaddedmovies.xml</value>
 		<value condition="Window.IsActive(home) + String.Contains(Container(9000).ListItem.Property(path),tv)">videodb://tvshows/titles/</value>
 		<value condition="Window.IsActive(home) + String.Contains(Container(9000).ListItem.Property(path),music)">musicdb://artists/?albumartistsonly=true</value>
 		<value condition="Window.IsActive(home) + String.Contains(Container(9000).ListItem.Property(path),kids)">special://profile/playlists/video/Kids.xsp</value>
@@ -317,8 +321,10 @@
 	<variable name="Info_Label">
 		<!-- MOVIES -->
 		<!-- ListView/Thumbnails: 2019 -->
-		<!-- Others: 2019 / 152 mins -->
+		<!-- Gridview: 2019 / 152 mins -->
+		<!-- Others: 2019 / 152 mins / 4KHDR  -->
 		<value condition="Container.Content(movies) + $EXP[ListView_Display_IsThumbnails] + !String.IsEmpty(ListItem.Year)">[UPPERCASE]$INFO[ListItem.Year][/UPPERCASE]</value>
+		<value condition="Container.Content(movies) + !$EXP[ListView_IsVisible] + !$EXP[GridView_IsVisible] + !String.IsEmpty(ListItem.Year)">[UPPERCASE]$INFO[ListItem.Year]$INFO[ListItem.Duration(mins), / , $LOCALIZE[31138]]$VAR[Resolution_Label, / ][/UPPERCASE]</value>
 		<value condition="Container.Content(movies) + !String.IsEmpty(ListItem.Year)">[UPPERCASE]$INFO[ListItem.Year]$INFO[ListItem.Duration(mins), / , $LOCALIZE[31138]][/UPPERCASE]</value>
 		<value condition="Container.Content(movies) + !String.IsEmpty(ListItem.Duration)">[UPPERCASE]$INFO[ListItem.Duration(mins),, $LOCALIZE[31138]][/UPPERCASE]</value>
 		<!-- SETS -->
@@ -549,10 +555,12 @@
 	</variable>
 
 	<variable name="Resolution_Label">
-		<value condition="String.StartsWith(ListItem.VideoResolution,8K)">8k Ultra HD</value>
-		<value condition="String.StartsWith(ListItem.VideoResolution,4K)">4K Ultra HD</value>
-		<value condition="String.StartsWith(ListItem.VideoResolution,1080)">Full HD</value>
-		<value condition="String.StartsWith(ListItem.VideoResolution,720)">HD</value>
+		<value condition="[String.StartsWith(ListItem.VideoResolution,8K) | String.Contains(ListItem.FileNameAndPath,4320p)]">8k</value>
+		<value condition="[String.StartsWith(ListItem.VideoResolution,4K) | String.Contains(ListItem.FileNameAndPath,2160p)] + [String.Contains(ListItem.FilenameAndPath,DV) | String.Contains(ListItem.FilenameAndPath,Dolby.Vision)]">4K Dolby Vision</value>
+		<value condition="[String.StartsWith(ListItem.VideoResolution,4K) | String.Contains(ListItem.FileNameAndPath,2160p)] + String.Contains(ListItem.FilenameAndPath,HDR)">4K HDR</value>
+		<value condition="[String.StartsWith(ListItem.VideoResolution,4K) | String.Contains(ListItem.FileNameAndPath,2160p)]">4K UHD</value>
+		<value condition="[String.StartsWith(ListItem.VideoResolution,1080) | String.Contains(ListItem.FileNameAndPath,1080p)]">Full HD</value>
+		<value condition="[String.StartsWith(ListItem.VideoResolution,720) | String.Contains(ListItem.FileNameAndPath,720p)]">HD</value>
 		<value condition="String.StartsWith(ListItem.VideoResolution,576)">SD</value>
 		<value condition="String.StartsWith(ListItem.VideoResolution,540)">SD</value>
 		<value condition="String.StartsWith(ListItem.VideoResolution,480)">SD</value>
@@ -588,6 +596,10 @@
 		<value>$INFO[Control.GetLabel(50660),,%]</value>
 	</variable>
 
+	<variable name="Music_Player_Label">
+		<value condition="String.IsEqual(Window(home).Property(Music_Player_Controls),Pause) + Player.Paused">Play</value>
+		<value>$INFO[Window(home).Property(Music_Player_Controls)]</value>
+	</variable>
 
 	<!--WIDGETS-->
 	<variable name="WidgetIcon_Poster">
