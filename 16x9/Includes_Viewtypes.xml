@@ -20,8 +20,6 @@
 	</include>
 
 	<include name="Common_List_Layout">
-		<param name="groupvisible" default="!$EXP[TransparentDialog_IsVisible]"/>
-		<param name="animation" default="Content_Fade_Animation"/>
 		<param name="nowplayingtop" default="-34"/>
 		<param name="nowplayingvisible" default="true"/>
 		<param name="icontop" default="-3"/>
@@ -38,8 +36,6 @@
 			<control type="group">
 				<width>100%</width>
 				<height>$PARAM[labelheight]</height>
-				<visible>$PARAM[groupvisible]</visible>
-				<include>$PARAM[animation]</include>
 				<!--NowPlaying-->
 				<control type="group">
 					<width>120</width>
@@ -95,6 +91,7 @@
 		<param name="id"/>
 		<param name="viewtype_label" default="List"/>
 		<param name="viewtype" default="list"/>
+		<param name="visible" default="true"/>
 		<param name="orientation" default="vertical"/>
     <param name="left" default="0"/>
     <param name="label" default="$VAR[Title_Label]"/>
@@ -106,6 +103,7 @@
     <definition>
       <control type="$PARAM[type]" id="$PARAM[id]">
 				<viewtype label="$PARAM[viewtype_label]">$PARAM[viewtype]</viewtype>
+				<visible>$PARAM[visible]</visible>
 				<left>$PARAM[left]</left>
 				<top>180</top>
 				<width>1920</width>
@@ -118,7 +116,7 @@
 				<scrolltime tween="sine" easing="inout">360</scrolltime>
 				<itemlayout height="55" width="720">
 					<control type="group">
-						<visible>$EXP[$PARAM[viewtype_label]View_IsVisible] | Window.IsVisible(favourites)</visible>
+						<visible>$EXP[$PARAM[viewtype_label]View_IsVisible]</visible>
 						<include>Viewtype_Fade_Animation</include>
 						<control type="group">
 							<visible>!$EXP[ContainerSwitching] + !$EXP[TransparentDialog_IsVisible]</visible>
@@ -133,7 +131,7 @@
 					</control>
 				</itemlayout>
 				<!--Background + !Details-->
-				<focusedlayout height="60" width="1680" condition="$EXP[$PARAM[viewtype_label]View_Display_IsBackground] + !$EXP[$PARAM[viewtype_label]View_Details_Info_IsVisible] + !Window.IsVisible(favourites)">
+				<focusedlayout height="60" width="1680" condition="$EXP[$PARAM[viewtype_label]View_Display_IsBackground] + !$EXP[$PARAM[viewtype_label]View_Details_Info_IsVisible]">
 					<include>HiddenFocusButton</include>
 					<control type="group">
 						<visible>$EXP[$PARAM[viewtype_label]View_IsVisible]</visible>
@@ -156,7 +154,7 @@
 					</control>
 				</focusedlayout>
 				<!--Background + Details-->
-				<focusedlayout height="60" width="1200" condition="$EXP[$PARAM[viewtype_label]View_Display_IsBackground] + $EXP[$PARAM[viewtype_label]View_Details_Info_IsVisible] + !Window.IsVisible(favourites)">
+				<focusedlayout height="60" width="1200" condition="$EXP[$PARAM[viewtype_label]View_Display_IsBackground] + $EXP[$PARAM[viewtype_label]View_Details_Info_IsVisible]">
 					<include>HiddenFocusButton</include>
 					<control type="group">
 						<visible>$EXP[$PARAM[viewtype_label]View_IsVisible]</visible>
@@ -179,7 +177,7 @@
 					</control>
 				</focusedlayout>
 				<!--Thumbnails + !Details-->
-				<focusedlayout height="60" width="1020" condition="[$EXP[$PARAM[viewtype_label]View_Display_IsThumbnails] + !$EXP[$PARAM[viewtype_label]View_Details_Info_IsVisible]] | Window.IsVisible(favourites)">
+				<focusedlayout height="60" width="1020" condition="[$EXP[$PARAM[viewtype_label]View_Display_IsThumbnails] + !$EXP[$PARAM[viewtype_label]View_Details_Info_IsVisible]]">
 					<include>HiddenFocusButton</include>
 					<control type="group">
 						<visible>$EXP[$PARAM[viewtype_label]View_IsVisible] | Window.IsVisible(favourites)</visible>
@@ -202,7 +200,7 @@
 					</control>
 				</focusedlayout>
 				<!--Thumbnails + Details-->
-				<focusedlayout height="60" width="840" condition="$EXP[$PARAM[viewtype_label]View_Display_IsThumbnails] + $EXP[$PARAM[viewtype_label]View_Details_Info_IsVisible] + !Window.IsVisible(favourites)">
+				<focusedlayout height="60" width="840" condition="$EXP[$PARAM[viewtype_label]View_Display_IsThumbnails] + $EXP[$PARAM[viewtype_label]View_Details_Info_IsVisible]">
 					<include>HiddenFocusButton</include>
 					<control type="group">
 						<visible>$EXP[$PARAM[viewtype_label]View_IsVisible]</visible>
@@ -222,6 +220,61 @@
 		            <param name="textcolor" value="$PARAM[textcolor]"/>
 							</include>
 						</control>
+					</control>
+				</focusedlayout>
+			</control>
+    </definition>
+  </include>
+
+	<include name="Simple_List">
+		<param name="id"/>
+		<param name="visible" default="true"/>
+		<param name="orientation" default="vertical"/>
+    <param name="left" default="780"/>
+		<param name="right" default="120"/>
+		<param name="height" default="500"/>
+		<param name="focusposition" default="4"/>
+    <definition>
+      <control type="fixedlist" id="$PARAM[id]">
+				<viewtype label="List">list</viewtype>
+				<visible>$PARAM[visible]</visible>
+				<left>$PARAM[left]</left>
+				<right>$PARAM[right]</right>
+				<centertop>50%</centertop>
+				<height>$PARAM[height]</height>
+				<include>Simple_List_Navigation</include>
+				<onup>$PARAM[id]</onup>
+				<ondown>$PARAM[id]</ondown>
+				<preloaditems>2</preloaditems>
+				<focusposition>$PARAM[focusposition]</focusposition>
+				<orientation>vertical</orientation>
+				<scrolltime tween="sine" easing="inout">360</scrolltime>
+				<itemlayout height="55" width="720">
+					<control type="group">
+						<visible>!$EXP[ContainerSwitching]</visible>
+						<include>Content_Delayed_Fade_Animation</include>
+						<include content="Common_List_Layout">
+							<param name="labelleft" value="0"/>
+	            <param name="label" value="$VAR[Unfocused_Title_Label]"/>
+	            <param name="textcolor" value="$PARAM[textcolor]"/>
+							<param name="nowplayingvisible" value="false"/>
+	            <param name="iconvisible" value="false"/>
+	          </include>
+					</control>
+				</itemlayout>
+				<focusedlayout height="60" width="100%">
+					<control type="group">
+						<visible>!$EXP[ContainerSwitching]</visible>
+						<include>Content_Delayed_Fade_Animation</include>
+						<include content="Common_List_Layout">
+	            <param name="label" value="$PARAM[label]"/>
+							<param name="labelleft" value="0"/>
+							<param name="labelmaxwidth" value="1020"/>
+							<param name="font" value="List_Title_Focused"/>
+	            <param name="textcolor" value="$PARAM[textcolor]"/>
+							<param name="nowplayingvisible" value="false"/>
+							<param name="iconvisible" value="false"/>
+						</include>
 					</control>
 				</focusedlayout>
 			</control>
@@ -268,9 +321,16 @@
 			<onright condition="![Player.HasAudio + ![$EXP[ListView_Display_IsThumbnails] + $EXP[Square_Containers]]] + Integer.IsGreater(Container.NumItems,12)">61</onright>
 			<onright condition="![Player.HasAudio + ![$EXP[ListView_Display_IsThumbnails] + $EXP[Square_Containers]]] + Integer.IsLessOrEqual(Container.NumItems,11)">SetFocus(3000,0)</onright>
 			<onback condition="String.IsEqual(window(movieinformation).property(SentFromInfo),true)">SetFocus(5005)</onback>
-			<onright condition="Window.IsVisible(favourites) + Player.HasAudio">SetFocus(91100,1)</onright>
-			<onright condition="Window.IsVisible(favourites) + !Player.HasAudio">0</onright>
-			<onleft condition="Window.IsVisible(favourites) + ">0</onleft>
+		</definition>
+	</include>
+
+	<include name="Simple_List_Navigation">
+		<definition>
+			<onright condition="Window.IsActive(favourites) + Player.HasAudio">SetFocus(91100,1)</onright>
+			<onright condition="Window.IsActive(favourites) + !Player.HasAudio">0</onright>
+			<onleft condition="Window.IsActive(favourites)">0</onleft>
+			<onright condition="Window.IsActive(selectdialog)">5</onright>
+			<onright condition="Window.IsVisible(filebrowser)">414</onright>
 		</definition>
 	</include>
 
@@ -367,6 +427,7 @@
 		<param name="width" default="100%"/>
 		<param name="height" default="100%"/>
 		<param name="visible" default="true"/>
+		<param name="align" default="center"/>
 		<param name="aspectratio" default="scale"/>
 		<param name="fallback" default="fallback.png"/>
 		<param name="texture" default="$VAR[Thumbnail(0)Content]"/>
@@ -383,7 +444,7 @@
 				<height>$PARAM[height]</height>
 				<visible>$PARAM[visible]</visible>
 				<control type="image">
-					<aspectratio align="center" aligny="center">$PARAM[aspectratio]</aspectratio>
+					<aspectratio align="$PARAM[align]" aligny="center">$PARAM[aspectratio]</aspectratio>
 					<texture fallback="$PARAM[fallback]" background="true">$PARAM[texture]</texture>
 					<fadetime>$PARAM[fadetime]</fadetime>
 				</control>
@@ -2131,6 +2192,10 @@
 
 	<include name="Breadcrumb_Label">
 		<param name="visible" default=""/>
+		<param name="title_label_id" default="980"/>
+		<param name="label_color" default="$VAR[ListFocusColor]"/>
+		<param name="info_label_id" default=""/>
+		<param name="info_label_visible" default="true"/>
 		<definition>
 			<control type="group">
 				<visible>![Window.IsVisible(1100) | Window.IsVisible(notification) | Window.IsVisible(extendedprogressdialog)]</visible>
@@ -2145,23 +2210,42 @@
 					<align>left</align>
 					<itemgap>12</itemgap>
 					<usecontrolcoords>true</usecontrolcoords>
-					<control type="label" id="980">
+					<control type="label" id="$PARAM[title_label_id]">
 						<height>60</height>
 						<width>auto</width>
 						<label>$VAR[Breadcrumb_Title_Label]</label>
 						<font>Breadcrumb_Title_Label</font>
-						<textcolor>$VAR[ListFocusColor]</textcolor>
+						<textcolor>$PARAM[label_color]</textcolor>
 					</control>
-					<control type="label">
+					<control type="label" id="$PARAM[info_label_id]">
 						<width>auto</width>
 						<height>35</height>
 						<top>11</top>
 						<label>$VAR[Breadcrumb_Info_Label]</label>
 						<font>Breadcrumb_Info_Label</font>
-						<textcolor>$VAR[ListFocusColor]</textcolor>
-						<visible>!String.IsEmpty(Control.GetLabel(980))</visible>
+						<textcolor>$PARAM[label_color]</textcolor>
+						<visible>$PARAM[info_label_visible]</visible>
+						<visible>!String.IsEmpty(Control.GetLabel($PARAM[title_label_id]))</visible>
 					</control>
 				</control>
+			</control>
+		</definition>
+	</include>
+
+	<include name="Description_Label">
+		<param name="id" default=""/>
+		<param name="label" default=""/>
+		<definition>
+			<control type="label" id="$PARAM[id]">
+				<left>60</left>
+				<width max="1620">auto</width>
+				<height>36</height>
+				<bottom>50</bottom>
+				<label>$PARAM[label]</label>
+				<font>Breadcrumb_Info_Label</font>
+				<textcolor>$VAR[PrimaryColor]</textcolor>
+				<scroll>true</scroll>
+				<scrollsuffix> / </scrollsuffix>
 			</control>
 		</definition>
 	</include>

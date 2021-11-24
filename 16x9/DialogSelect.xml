@@ -1,180 +1,61 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <window>
 	<!-- selectdialog -->
-	<backgroundcolor>$VAR[SecondaryColor]</backgroundcolor>
-	<include>FullscreenDimensions</include>
-	<include>My_Window_Fade_Animation</include>
 	<defaultcontrol always="true">3</defaultcontrol>
+	<include>Transparent_Dialog_Fade_Animation</include>
 	<controls>
 
-		<control type="image">
-			<texture colordiffuse="$VAR[SecondaryColor]">views/white_100.png</texture>
-		</control>
+		<control type="group">
+			<visible allowhiddenfocus="true">!Window.IsVisible(shutdownmenu)</visible>
+			<include>Content_Fade_Animation</include>
+			<include>Transparent_Dialog_Panel</include>
 
-		<!-- Heading -->
-		<control type="label" id="1">
-			<left>150</left>
-			<top>96</top>
-			<width>1620</width>
-			<height>72</height>
-			<font>List_Title_Unfocused</font>
-		</control>
+			<include content="Breadcrumb_Label">
+				<param name="visible" value="true"/>
+				<param name="title_label_id" value="1"/>
+				<param name="label_color" value="$VAR[PrimaryColor]"/>
+			</include>
 
-		<!-- Image -->
-		<control type="image">
-			<left>150</left>
-			<top>225</top>
-			<width>405</width>
-			<height>600</height>
-			<texture>$INFO[Container(6).ListItem.Icon]</texture>
-			<aspectratio aligny="center">keep</aspectratio>
-			<visible>Control.IsVisible(6) + !String.Contains(Container(6).ListItem.Icon,Default)</visible>
-		</control>
-		<control type="image">
-			<left>150</left>
-			<top>225</top>
-			<width>405</width>
-			<height>600</height>
-			<texture>$INFO[Container(6).ListItem.Icon]</texture>
-			<colordiffuse>$VAR[UnFocusedColor]</colordiffuse>
-			<aspectratio aligny="center">keep</aspectratio>
-			<visible>Control.IsVisible(6) + String.Contains(Container(6).ListItem.Icon,Default)</visible>
-		</control>
+			<include content="Description_Label">
+				<param name="label" value="$INFO[Container(6).ListItem.Label2]"/>
+			</include>
 
-		<!-- List -->
-		<control type="list" id="3">
-			<left>150</left>
-			<top>235</top>
-			<width>1620</width>
-			<height>580</height>
-			<onup>noop</onup>
-			<ondown>5</ondown>
-			<onleft>5</onleft>
-			<onright>5</onright>
-			<orientation>vertical</orientation>
-			<viewtype label="list">list</viewtype>
-			<scrolltime tween="sine" easing="out">240</scrolltime>
+			<include content="SimpleListIcon">
+				<param name="top" value="180"/>
+				<param name="width" value="720"/>
+				<param name="height" value="720"/>
+				<param name="visible" value="Control.IsVisible(6)"/>
+				<param name="fallback" value=""/>
+				<param name="align" value="right"/>
+				<param name="aspectratio" value="keep"/>
+				<param name="texture" value="$INFO[Container(6).ListItem.Icon]"/>
+			</include>
 
-			<itemlayout width="1620" height="58">
-				<control type="label">
-					<width>1620</width>
-					<height>58</height>
-					<font>Font36</font>
-					<textcolor>$VAR[UnFocusedColor]</textcolor>
-					<label>$INFO[ListItem.Label]</label>
-				</control>
-			</itemlayout>
+			<include content="Simple_List">
+				<param name="id" value="3"/>
+				<param name="textcolor" value="$VAR[LightColor]"/>
+			</include>
 
-			<focusedlayout width="1620" height="58">
-				<control type="label">
-					<width>1620</width>
-					<height>58</height>
-					<font>Font36</font>
-					<textcolor>$VAR[FocusedColor]</textcolor>
-					<label>$INFO[ListItem.Label]</label>
-					<animation effect="fade" start="100" end="75" time="0" condition="!Control.HasFocus(3)">Conditional</animation>
-				</control>
-			</focusedlayout>
+			<include content="Simple_List">
+				<param name="id" value="6"/>
+				<param name="textcolor" value="$VAR[LightColor]"/>
+			</include>
 
-		</control>
+			<include content="ButtonGroup">
+				<param name="onleft" value="3"/>
+				<param name="onup" value="3"/>
+			  <param name="button1id" value="5"/>
+				<param name="button2id" value="7"/>
+				<param name="buttonsvisible" value="[String.Contains(Control.GetLabel(5),Add) | String.Contains(Control.GetLabel(5),Get More)] + String.Contains(Control.GetLabel(7),Cancel)"/>
+				<param name="button1unfocused" value="Cross_Unfocused"/>
+				<param name="button1focused" value="Cross_Focused_Large"/>
+				<param name="button1rotated" value="false"/>
+				<param name="button2unfocused" value="Cross_Unfocused"/>
+				<param name="button2focused" value="Cross_Focused_Large"/>
+				<param name="button2rotated" value="true"/>
+			</include>
 
-		<!-- List -->
-		<control type="list" id="6">
-			<left>600</left>
-			<top>235</top>
-			<width>1170</width>
-			<height>576</height>
-			<onup>noop</onup>
-			<ondown>5</ondown>
-			<onleft>5</onleft>
-			<onright>5</onright>
-			<orientation>vertical</orientation>
-			<scrolltime tween="sine" easing="out">240</scrolltime>
-
-			<itemlayout width="1170" height="96">
-				<control type="image">
-					<width>96</width>
-					<height>96</height>
-					<bordersize>6</bordersize>
-					<aspectratio>scale</aspectratio>
-					<texture>$INFO[ListItem.Icon]</texture>
-				</control>
-				<control type="label">
-					<left>140</left>
-					<top>10</top>
-					<width>1030</width>
-					<height>36</height>
-					<font>Font36</font>
-					<textcolor>$VAR[UnFocusedColor]</textcolor>
-					<label>$INFO[ListItem.Label]</label>
-					<animation effect="slide" end="0,18" condition="String.IsEmpty(ListItem.Label2)">Conditional</animation>
-				</control>
-				<control type="label">
-					<left>140</left>
-					<top>54</top>
-					<width>1030</width>
-					<height>27</height>
-					<font>Font27</font>
-					<textcolor>$VAR[UnFocusedColor]</textcolor>
-					<label>$INFO[ListItem.Label2]</label>
-				</control>
-			</itemlayout>
-
-			<focusedlayout width="1170" height="96">
-				<control type="image">
-					<width>96</width>
-					<height>96</height>
-					<bordersize>6</bordersize>
-					<aspectratio>scale</aspectratio>
-					<texture>$INFO[ListItem.Icon]</texture>
-					<animation effect="fade" start="100" end="75" condition="!Control.HasFocus(6)">Conditional</animation>
-				</control>
-				<control type="label">
-					<left>140</left>
-					<top>10</top>
-					<width>1030</width>
-					<height>36</height>
-					<font>Font36</font>
-					<textcolor>$VAR[FocusedColor]</textcolor>
-					<label>$INFO[ListItem.Label]</label>
-					<animation effect="slide" end="0,18" condition="String.IsEmpty(ListItem.Label2)">Conditional</animation>
-				</control>
-				<control type="label">
-					<left>140</left>
-					<top>54</top>
-					<width>1030</width>
-					<height>27</height>
-					<font>Font27</font>
-					<textcolor>$VAR[FocusedColor]</textcolor>
-					<label>$INFO[ListItem.Label2]</label>
-				</control>
-			</focusedlayout>
-
-		</control>
-
-		<!-- Get more button -->
-		<control type="button" id="5">
-			<left>150</left>
-			<top>912</top>
-			<width>400</width>
-			<height>66</height>
-			<onleft>noop</onleft>
-			<onright>noop</onright>
-			<onup>3</onup>
-			<ondown>noop</ondown>
-		</control>
-
-		<control type="button" id="7">
-			<left>300</left>
-			<top>912</top>
-			<width>400</width>
-			<height>66</height>
-			<onleft>noop</onleft>
-			<onright>noop</onright>
-			<onup>3</onup>
-			<ondown>noop</ondown>
 		</control>
 
 	</controls>
-
 </window>
