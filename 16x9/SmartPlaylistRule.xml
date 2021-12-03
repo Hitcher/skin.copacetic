@@ -1,49 +1,137 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <window>
-	<!-- smartplaylistrule -->
-	<defaultcontrol always="true">15</defaultcontrol>
-	<controls>
-		<!-- Background -->
-		<include>DialogBackgroundImage</include>
-		<!-- Main group -->
-		<control type="group" id="1000">
-			<include content="DialogHeading">
-				<param name="DialogHeaderId" value="2" />
-				<param name="DialogHeaderLabel" value="$LOCALIZE[21421]" />
+  <!-- smartplaylistrule -->
+  <defaultcontrol always="true">2000</defaultcontrol>
+  <include>Delayed_Dialog_Fade_Animation</include>
+  <controls>
+    <include>Transparent_Dialog_Background</include>
+    <control type="group">
+      <visible allowhiddenfocus="true">!Window.IsVisible(shutdownmenu) + !Window.IsVisible(virtualkeyboardd) + !Window.IsVisible(selectdialog)</visible>
+      <include>Content_Fade_Animation</include>
+
+			<!--Hidden elements-->
+			<control type="group">
+				<visible>false</visible>
+				<control type="button" id="15"/>
+				<control type="button" id="16"/>
+			</control>
+
+      <control type="button" id="2000">
+        <animation effect="slide" end="0,0" time="1080" reversible="false">Focus</animation>
+        <visible allowhiddenfocus="true">false</visible>
+        <onfocus>SetFocus(1000)</onfocus>
+      </control>
+
+			<control type="group" id="3001">
+				<visible>Container(1000).OnPrevious</visible>
+				<animation effect="slide" end="0,0" time="360" reversible="false">Hidden</animation>
+			</control>
+			<control type="group" id="3002">
+				<visible>Container(1000).OnNext</visible>
+				<animation effect="slide" end="0,0" time="360" reversible="false">Hidden</animation>
+			</control>
+
+			<control type="wraplist" id="1000">
+				<visible allowhiddenfocus="true">true</visible>
+				<scrolltime tween="sine" easing="inout">360</scrolltime>
+				<onright>20</onright>
+				<orientation>vertical</orientation>
+				<focusposition>0</focusposition>
+				<itemlayout/>
+				<focusedlayout>
+					<control type="button">
+						<onfocus condition="String.IsEqual(Container(1000).CurrentItem,3)">SetFocus(17)</onfocus>
+					</control>
+				</focusedlayout>
+				<content>
+					<item>
+						<label>$INFO[Control.GetLabel(15)]</label>
+						<onclick>SendClick(15)</onclick>
+					</item>
+					<item>
+						<label>$INFO[Control.GetLabel(16)]</label>
+						<onclick>SendClick(16)</onclick>
+					</item>
+					<item>
+						<visible>String.IsEmpty(Control.GetLabel(17).index(1))</visible>
+						<label>Enter text here...</label>
+						<onclick></onclick>
+					</item>
+					<item>
+						<visible>!String.IsEmpty(Control.GetLabel(17).index(1))</visible>
+						<label>$INFO[Control.GetLabel(17).index(1)]</label>
+						<onclick></onclick>
+					</item>
+				</content>
+			</control>
+
+      <!--Window Furniture-->
+      <include content="Transparent_Dialog_Panel">
+        <param name="top" value="450"/>
+        <param name="bottom" value="360"/>
+      </include>
+
+			<include content="Breadcrumb_Label">
+				<param name="visible" value="true"/>
+				<param name="label_color" value="$VAR[PrimaryColor]"/>
 			</include>
-			<!-- Grouplist -->
-			<control type="grouplist">
-				<width>885</width>
-				<include>DialogGrouplist</include>
-				<!-- Rule Field -->
-				<control type="spincontrolex" id="15">
-					<label>31101</label>
+
+			<!--LIST-->
+			<control type="group">
+				<visible>!Control.HasFocus(2000)</visible>
+				<include>Content_Fade_Animation</include>
+				<width>900</width>
+				<centerleft>50%</centerleft>
+				<top>405</top>
+				<height>270</height>
+				<!--STATIC-->
+				<control type="group">
+					<visible>!Control.IsVisible(3001) + !Control.IsVisible(3002)</visible>
+					<include>SmartPlaylistRule_List_Layout</include>
+					<control type="edit" id="17">
+						<visible allowhiddenfocus="true">Control.HasFocus(17)</visible>
+						<onright>20</onright>
+						<ondown>Control.Move(1000,1)</ondown>
+						<ondown>SetFocus(1000)</ondown>
+						<onup>Control.Move(1000,-1)</onup>
+						<onup>SetFocus(1000)</onup>
+						<height>90</height>
+						<font>Breadcrumb_Title_Label</font>
+						<hinttext>Enter text here...</hinttext>
+					</control>
 				</control>
-				<!-- Rule operator -->
-				<control type="spincontrolex" id="16">
-					<label>31102</label>
+				<!--ONPREVIOUS-->
+				<control type="group">
+					<top>-90</top>
+					<visible>Container(1000).OnPrevious</visible>
+					<animation effect="slide" start="0" end="0,90" time="360" tween="sine" easing="inout" reversible="false">Hidden</animation>
+					<include>SmartPlaylistRule_List_Layout</include>
 				</control>
-				<!-- Rule value -->
-				<control type="edit" id="17">
-					<hinttext>31103</hinttext>
-				</control>
-				<!-- Browse Button -->
-				<control type="button" id="20">
-					<label>1024</label>
+				<!--ONNEXT-->
+				<control type="group">
+					<top>90</top>
+					<visible>Container(1000).OnNext</visible>
+					<animation effect="slide" start="0" end="0,-90" time="360" tween="sine" easing="inout" reversible="false">Hidden</animation>
+					<include>SmartPlaylistRule_List_Layout</include>
 				</control>
 			</control>
-		</control>
-		<include content="DialogButtons">
-			<param name="Button4Visible" value="false" />
-			<param name="Button3Visible" value="false" />
-			<!-- Cancel Button -->
-			<param name="Button2ID" value="19" />
-			<param name="Button2Label" value="X" />
-			<param name="Button2Visible" value="true" />
-			<!-- OK Button -->
-			<param name="Button1ID" value="18" />
-			<param name="Button1Label" value="$LOCALIZE[186]" />
-			<param name="Button1Visible" value="true" />
-		</include>
-	</controls>
+
+
+      <include content="ButtonGroup">
+				<param name="onleft" value="1000"/>
+				<param name="onup" value="1000"/>
+        <param name="button1id" value="20"/>
+				<param name="button1unfocused" value="Browse_Unfocused"/>
+				<param name="button1focused" value="Browse_Focused_Large"/>
+        <param name="button2id" value="19"/>
+				<param name="button2unfocused" value="Cross_Unfocused"/>
+				<param name="button2focused" value="Cross_Focused_Large"/>
+        <param name="button3id" value="18"/>
+				<param name="button3unfocused" value="Check_Unfocused"/>
+				<param name="button3focused" value="Check_Focused_Large"/>
+        <param name="buttonsvisible" value="true"/>
+      </include>
+
+    </control>
+  </controls>
 </window>
