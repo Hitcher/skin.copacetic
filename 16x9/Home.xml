@@ -2,27 +2,39 @@
 <window>
 	<!-- home -->
 	<backgroundcolor>$VAR[SecondaryColor]</backgroundcolor>
-	<defaultcontrol always="true">9000</defaultcontrol>
+	<defaultcontrol always="true">9001</defaultcontrol>
 	<onload>RunScript(script.skinshortcuts,type=buildxml&amp;mainmenuID=9000&amp;levels=0)</onload>
 	<onunload>ClearProperty(Music_Player_Controls,home)</onunload>
 	<include>My_Window_Fade_Animation</include>
-	<include>FullscreenDimensions</include>
 	<controls>
-		<include content="Music_Player_Buttons"/>
+
+		<!--Hidden Focus setter-->
+		<control type="button" id="9001">
+			<animation effect="slide" end="0,0" time="720" reversible="false">Focus</animation>
+			<visible allowhiddenfocus="true">false</visible>
+			<onfocus>SetFocus(9000)</onfocus>
+		</control>
+
 		<control type="image">
 			<texture colordiffuse="$VAR[DarkColor]">views/white_100.png</texture>
 		</control>
+
 		<include content="FanartSlideshow"/>
+
 		<control type="group">
-			<visible>!Window.IsActive(favourites)</visible>
-			<include>Content_Delayed_Fade_Animation</include>
-			<!-- Main controls -->
+			<visible>!Control.HasFocus(9001)</visible>
+			<include>Content_Fade_Animation</include>
+
+			<include content="Clock">
+				<param name="textcolor" value="$VAR[LightColor]"/>
+			</include>
+
 			<control type="group">
-				<visible>!Window.IsVisible(shutdownmenu)</visible>
+				<visible>!Window.IsActive(favourites) + !Window.IsVisible(shutdownmenu)</visible>
 				<include>Content_Delayed_Fade_Animation</include>
-				<include content="Clock">
-					<param name="textcolor" value="$VAR[LightColor]"/>
-				</include>
+
+				<include content="Music_Player_Buttons"/>
+
 				<!--Hidden list-->
 				<control type="list" id="9000">
 					<viewtype label="535">list</viewtype>
@@ -40,6 +52,7 @@
 						<include>skinshortcuts-mainmenu</include>
 					</content>
 				</control>
+
 				<!--Dummy Horizontal List-->
 				<control type="group">
 					<visible>!$EXP[TransparentDialog_IsVisible]</visible>
@@ -51,7 +64,9 @@
 						<param name="unfocusedtextcolor" value="$VAR[LightColor]"/>
 					</include>
 				</control>
+
 			</control>
 		</control>
+
 	</controls>
 </window>

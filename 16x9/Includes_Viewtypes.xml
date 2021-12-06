@@ -266,7 +266,7 @@
 	          </include>
 					</control>
 				</itemlayout>
-				<focusedlayout height="60" width="100%">
+				<focusedlayout height="60" width="100%" condition="Control.HasFocus($PARAM[id])">
 					<control type="group">
 						<visible>!$EXP[ContainerSwitching]</visible>
 						<include>Content_Delayed_Fade_Animation</include>
@@ -275,6 +275,22 @@
 							<param name="labelleft" value="0"/>
 							<param name="labelmaxwidth" value="1020"/>
 							<param name="font" value="List_Title_Focused"/>
+							<param name="textcolor" value="$PARAM[textcolor]"/>
+							<param name="selectedcolor" value="$PARAM[selectedcolor]"/>
+							<param name="nowplayingvisible" value="false"/>
+							<param name="iconvisible" value="false"/>
+						</include>
+					</control>
+				</focusedlayout>
+				<focusedlayout height="60" width="100%" condition="!Control.HasFocus($PARAM[id])">
+					<control type="group">
+						<top>5</top>
+						<visible>!$EXP[ContainerSwitching]</visible>
+						<include>Content_Delayed_Fade_Animation</include>
+						<include content="Common_List_Layout">
+	            <param name="label" value="$PARAM[label]"/>
+							<param name="labelleft" value="0"/>
+							<param name="labelmaxwidth" value="1020"/>
 							<param name="textcolor" value="$PARAM[textcolor]"/>
 							<param name="selectedcolor" value="$PARAM[selectedcolor]"/>
 							<param name="nowplayingvisible" value="false"/>
@@ -334,7 +350,7 @@
 			<onright condition="Window.IsActive(favourites) + Player.HasAudio">SetFocus(91100,1)</onright>
 			<onright condition="Window.IsActive(favourites) + !Player.HasAudio">0</onright>
 			<onleft condition="Window.IsActive(favourites)">0</onleft>
-			<onright condition="Window.IsActive(selectdialog)">5</onright>
+			<onright condition="Window.IsActive(selectdialog)">9000</onright>
 			<onright condition="Window.IsVisible(filebrowser)">414</onright>
 		</definition>
 	</include>
@@ -355,14 +371,15 @@
 		</definition>
 	</include>
 
+<visible>!Player.HasAudio | [Player.HasAudio + [$EXP[ShowcaseView_Details_Off] | $EXP[ShowcaseView_Display_IsSquare]]]</visible>
+
 	<include name="Showcase_Navigation">
 		<definition>
-			<onup condition="Player.HasAudio + $EXP[ShowcaseView_Display_IsSquare] + !$EXP[ShowcaseView_Details_Off]">SetFocus(91100,1)</onup>
-			<onup condition="![Player.HasAudio + $EXP[ShowcaseView_Display_IsSquare] + !$EXP[ShowcaseView_Details_Off]]">SetFocus(3000,0)</onup>
-			<ondown condition="Player.HasAudio + ![$EXP[ShowcaseView_Display_IsSquare] + !$EXP[ShowcaseView_Details_Off]]">SetFocus(91100,1)</ondown>
-			<ondown condition="Player.HasAudio + [$EXP[ShowcaseView_Display_IsSquare] + !$EXP[ShowcaseView_Details_Off]]">61</ondown>
-			<ondown condition="!Player.HasAudio + !$EXP[ShowcaseView_Details_Off] + Integer.IsGreater(Container.NumItems,1)">61</ondown>
-			<ondown condition="!Player.HasAudio + [$EXP[ShowcaseView_Details_Off] | Integer.IsEqual(Container.NumItems,1)]">SetFocus(3000,0)</ondown>
+			<onup condition="Player.HasAudio + [$EXP[ShowcaseView_Display_IsSquare] | $EXP[ShowcaseView_Details_Off]]">SetFocus(91100,1)</onup>
+			<onup condition="![Player.HasAudio + [$EXP[ShowcaseView_Display_IsSquare] | $EXP[ShowcaseView_Details_Off]]]">SetFocus(3000,0)</onup>
+			<ondown condition="Player.HasAudio + $EXP[ShowcaseView_Display_IsPosters] + !$EXP[ShowcaseView_Details_Off]">SetFocus(91100,1)</ondown>
+			<ondown condition="![Player.HasAudio + $EXP[ShowcaseView_Display_IsPosters] + !$EXP[ShowcaseView_Details_Off]] + Integer.IsGreater(Container.NumItems,1)">61</ondown>
+			<ondown condition="![Player.HasAudio + $EXP[ShowcaseView_Display_IsPosters] + !$EXP[ShowcaseView_Details_Off]] + Integer.IsEqual(Container.NumItems,1)]">SetFocus(3000,0)</ondown>
 			<onleft condition="Integer.IsGreater(Container.NumItems,10)">502</onleft>
 			<onleft condition="Integer.IsLessOrEqual(Container.NumItems,10) + Integer.IsGreater(Container.NumItems,1)">0</onleft>
 			<onleft condition="Integer.IsEqual(Container.NumItems,1)">SetFocus(3000,0)</onleft>
@@ -2209,7 +2226,7 @@
 		<param name="info_label_visible" default="true"/>
 		<definition>
 			<control type="group">
-				<visible>![Window.IsVisible(1100) | Window.IsVisible(notification) | Window.IsVisible(extendedprogressdialog)] | $EXP[TransparentDialog_IsVisible]</visible>
+				<visible>![Window.IsVisible(1100) | Window.IsVisible(notification) | Window.IsVisible(extendedprogressdialog)] | $EXP[TransparentDialog_IsVisible] | [$EXP[ListView_Display_IsThumbnails] + $EXP[Square_Containers]]</visible>
 				<include>Content_Fade_Animation</include>
 				<control type="grouplist">
 					<visible>$PARAM[visible]</visible>
@@ -2250,9 +2267,10 @@
 			<control type="label" id="$PARAM[id]">
 				<left>60</left>
 				<width max="1620">auto</width>
-				<height>36</height>
-				<bottom>50</bottom>
+				<height>120</height>
+				<bottom>0</bottom>
 				<label>$PARAM[label]</label>
+				<aligny>center</aligny>
 				<font>Breadcrumb_Info_Label</font>
 				<textcolor>$VAR[PrimaryColor]</textcolor>
 				<haspath>true</haspath>
