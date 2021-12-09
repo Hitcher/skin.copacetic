@@ -11,30 +11,54 @@
 				<right>$PARAM[right]</right>
 				<top>$PARAM[top]</top>
 				<bottom>$PARAM[bottom]</bottom>
-				<texture colordiffuse="$VAR[DarkGreyColor]">views/white_85.png</texture>
+				<texture colordiffuse="$VAR[Panel_Diffuse]">views/white_100.png</texture>
 			</control>
 		</definition>
 	</include>
 
-	<include name="Opaque_Dialog_Background">
-		<control type="image">
-			<aspectratio>scale</aspectratio>
-			<texture diffuse="views/white_20.png" fallback="fallback.png" background="true">$VAR[Dialog_Info_Background]</texture>
-		</control>
-	</include>
-
+	<!--settingdialog-->
 	<include name="DialogGrouplist">
 		<centerleft>50%</centerleft>
 		<centertop>50%</centertop>
-		<width>900</width>
+		<width>1200</width>
 		<height>542</height>
 		<onright>9000</onright>
 		<onleft>noop</onleft>
-		<ondown>9000</ondown>
 		<itemgap>0</itemgap>
 		<align>center</align>
 	</include>
 
+	<!--contextmenu-->
+	<include name="ContextMenuLabelFocused">
+		<definition>
+			<height>60</height>
+			<font>List_Title_Focused</font>
+			<textcolor>$VAR[Primary_Color]</textcolor>
+		</definition>
+	</include>
+
+	<include name="ContextMenuLabelUnfocused">
+		<definition>
+			<height>55</height>
+			<font>List_Title_Unfocused</font>
+			<textcolor>$VAR[Primary_Color]</textcolor>
+		</definition>
+	</include>
+
+	<include name="ContextMenuLabelTemplate">
+		<control type="label">
+			<include>ContextMenuLabelUnfocused</include>
+			<label>$INFO[Control.GetLabel($PARAM[id])]</label>
+			<visible>Control.IsVisible($PARAM[id]) + !Control.HasFocus($PARAM[id])</visible>
+		</control>
+		<control type="label">
+			<include>ContextMenuLabelFocused</include>
+			<label>$INFO[Control.GetLabel($PARAM[id])]</label>
+			<visible>Control.IsVisible($PARAM[id]) + Control.HasFocus($PARAM[id])</visible>
+		</control>
+	</include>
+
+	<!--virtualkeyboard-->
 	<include name="Keyboard_Label">
 		<definition>
 			<item>
@@ -44,6 +68,65 @@
 				<onclick>Sendclick($PARAM[id])</onclick>
 			</item>
 		</definition>
+	</include>
+
+	<include name="Settings_Content">
+		<content>
+			<item>
+				<label>$LOCALIZE[14206]</label>
+				<onclick>ActivateWindow(InterfaceSettings)</onclick>
+			</item>
+			<item>
+				<label>$LOCALIZE[14211]</label>
+				<onclick>ActivateWindow(MediaSettings)</onclick>
+			</item>
+			<item>
+				<label>$LOCALIZE[14200]</label>
+				<onclick>ActivateWindow(PlayerSettings)</onclick>
+			</item>
+			<item>
+				<label>$LOCALIZE[14036]</label>
+				<onclick>ActivateWindow(ServiceSettings)</onclick>
+			</item>
+			<item>
+				<label>$LOCALIZE[13000]</label>
+				<onclick>ActivateWindow(SystemSettings)</onclick>
+			</item>
+			<item>
+				<label>$LOCALIZE[14204]</label>
+				<onclick>ActivateWindow(PVRSettings)</onclick>
+			</item>
+			<item>
+				<label>$LOCALIZE[15016]</label>
+				<visible>System.GetBool(gamesgeneral.enable)</visible>
+				<onclick>ActivateWindow(GameSettings)</onclick>
+			</item>
+			<item>
+				<label>$LOCALIZE[13200]</label>
+				<onclick>ActivateWindow(Profiles)</onclick>
+			</item>
+			<item>
+				<label>LibreELEC</label>
+				<onclick>RunAddon(service.libreelec.settings)</onclick>
+				<visible>System.AddonIsEnabled(service.libreelec.settings)</visible>
+			</item>
+			<item>
+				<label>$LOCALIZE[10003]</label>
+				<onclick>ActivateWindow(filemanager)</onclick>
+			</item>
+			<item>
+				<label>$LOCALIZE[24001]</label>
+				<onclick>ActivateWindow(addonbrowser)</onclick>
+			</item>
+			<item>
+				<label>$LOCALIZE[138]</label>
+				<onclick>ActivateWindow(systeminfo)</onclick>
+			</item>
+			<item>
+				<label>$LOCALIZE[31067]</label>
+				<onclick>ActivateWindow(eventlog)</onclick>
+			</item>
+		</content>
 	</include>
 
 	<include name="Keyboard_Row_List">
@@ -176,7 +259,7 @@
 				<visible>Control.HasFocus($PARAM[id])</visible>
 				<label>$INFO[Container($PARAM[id]).ListItemNoWrap($PARAM[position]).Label]</label>
 				<font>Keyboard_Button_$PARAM[position]</font>
-				<textcolor>$VAR[LightColor]</textcolor>
+				<textcolor>$VAR[Light_Color]</textcolor>
 				<align>center</align>
 				<aligny>center</aligny>
 			</control>
@@ -186,7 +269,7 @@
 				<visible>!Control.HasFocus($PARAM[id])</visible>
 				<label>$INFO[Container($PARAM[id]).ListItemNoWrap($PARAM[position]).Label]</label>
 				<font>Keyboard_Button_5</font>
-				<textcolor>$VAR[LightColor]</textcolor>
+				<textcolor>$VAR[Light_Grey_Color]</textcolor>
 				<align>center</align>
 				<aligny>center</aligny>
 			</control>
@@ -203,7 +286,7 @@
 				<visible>Control.HasFocus($PARAM[id]) + Container($PARAM[id]).Position($PARAM[position])</visible>
 				<label>$INFO[Container($PARAM[id]).ListItemPosition($PARAM[position]).Label]</label>
 				<font>Keyboard_Button_0</font>
-				<textcolor>$VAR[LightColor]</textcolor>
+				<textcolor>$VAR[Light_Color]</textcolor>
 				<align>center</align>
 				<aligny>center</aligny>
 			</control>
@@ -213,7 +296,7 @@
 				<visible>![Control.HasFocus($PARAM[id] + Container($PARAM[id]).Position($PARAM[position])]</visible>
 				<label>$INFO[Container($PARAM[id]).ListItemPosition($PARAM[position]).Label]</label>
 				<font>Keyboard_Button_5</font>
-				<textcolor>$VAR[LightColor]</textcolor>
+				<textcolor>$VAR[Light_Grey_Color]</textcolor>
 				<align>center</align>
 				<aligny>center</aligny>
 			</control>
@@ -223,7 +306,6 @@
 	<include name="Numeric_Icon_Button">
 		<param name="id" default="1000"/>
 		<param name="position" default=""/>
-		<param name="color" default="$VAR[LightColor]"/>
 		<param name="focusedtexture" default=""/>
 		<param name="unfocusedtexture" default=""/>
 		<definition>
@@ -233,13 +315,13 @@
 				<control type="group">
 					<visible>Control.HasFocus($PARAM[id]) + Container($PARAM[id]).Position($PARAM[position])</visible>
 					<include content="$PARAM[focusedtexture]">
-						<param name="color" value="$PARAM[color]"/>
+						<param name="color" value="$Var[Light_Color]"/>
 					</include>
 				</control>
 				<control type="group">
 					<visible>![Control.HasFocus($PARAM[id]) + Container($PARAM[id]).Position($PARAM[position])]</visible>
 					<include content="$PARAM[unfocusedtexture]">
-						<param name="color" value="$PARAM[color]"/>
+						<param name="color" value="$VAR[Light_Grey_Color]"/>
 					</include>
 				</control>
 			</control>
@@ -321,14 +403,14 @@
 	<!--Position0-->
 	<control type="image">
 		<height>90</height>
-		<texture colordiffuse="$VAR[EditControlColor]">views/white_100.png</texture>
+		<texture colordiffuse="$VAR[Primary_Color]">views/white_100.png</texture>
 	</control>
 	<control type="label">
 		<height>90</height>
 		<left>15</left>
 		<right>15</right>
 		<aligny>center</aligny>
-		<textcolor>$VAR[SecondaryColor]</textcolor>
+		<textcolor>$VAR[Secondary_Color]</textcolor>
 		<font>List_Title_Focused</font>
 		<label>$INFO[Container(1000).ListItem.Label]</label>
 	</control>
@@ -339,7 +421,7 @@
 		<left>15</left>
 		<right>15</right>
 		<aligny>center</aligny>
-		<textcolor>$VAR[LightColor]</textcolor>
+		<textcolor>$VAR[Light_Color]</textcolor>
 		<font>List_Title_Unfocused</font>
 		<label>$INFO[Container(1000).ListItem(1).Label]</label>
 	</control>
@@ -349,7 +431,7 @@
 		<left>15</left>
 		<right>15</right>
 		<aligny>center</aligny>
-		<textcolor>$VAR[LightColor]</textcolor>
+		<textcolor>$VAR[Light_Color]</textcolor>
 		<font>List_Title_Unfocused</font>
 		<label>$INFO[Container(1000).ListItem(2).Label]</label>
 	</control>
@@ -454,15 +536,15 @@
 				<height>60</height>
 				<control type="image">
 					<visible>!$PARAM[focused]</visible>
-					<texture colordiffuse="$VAR[LightColor]">osd/icon_$PARAM[icon]_unfocused.png</texture>
+					<texture colordiffuse="$VAR[Light_Color]">osd/icon_$PARAM[icon]_unfocused.png</texture>
 				</control>
 				<control type="group">
 					<visible>$PARAM[focused]</visible>
 					<control type="image">
-						<texture colordiffuse="$VAR[AccentColor]">views/white_100.png</texture>
+						<texture colordiffuse="$VAR[Accent_Color]">views/white_100.png</texture>
 					</control>
 					<control type="image">
-						<texture colordiffuse="$VAR[LightColor]">osd/icon_$PARAM[icon]_focused.png</texture>
+						<texture colordiffuse="$VAR[Light_Color]">osd/icon_$PARAM[icon]_focused.png</texture>
 					</control>
 				</control>
 			</control>
@@ -511,7 +593,7 @@
 				</control>
 				<control type="label">
 					<visible>!String.IsEmpty(Window(home).Property(Music_Player_Controls))</visible>
-					<animation effect="fade" start="100" end="0" delay="2000" time="360" condition="!String.IsEmpty(Window(home).Property(Music_Player_Controls))" reversible="false">Focus</animation>
+					<animation effect="slide" end="60" time="0" condition="!String.IsEmpty(Window(home).Property(Music_Player_Controls)) + Window.IsVisible(home) + Window.IsVisible(volumebar)" reversible="false">Conditional</animation>
 					<include>Content_Fade_Animation</include>
 					<height>55</height>
 					<label>$VAR[Music_Player_Label]</label>
@@ -572,7 +654,6 @@
 									<visible>![Window.Next(home) | Window.Next(videos) | Window.Next(music) | Window.Next(programs) | Window.Next(pictures) | Window.Next(visualisation)] + !$EXP[ContainerSwitching] + !$EXP[OpaqueDialog_IsVisible]</visible>
 									<include>Music_Player_Content_Fade_Animation</include>
 									<control type="group">
-										<animation effect="slide" end="-60,0" time="0" condition="!String.IsEmpty(Window(home).Property(Music_Player_Controls)) + [[$EXP[Background_IsFanart] | Window.IsVisible(home) | Window.IsVisible(fullsreenvideo)] + !Window.IsVisible(visualisation)]">Conditional</animation>
 										<visible>$PARAM[content_visible]</visible>
 										<include>Notification_Label_Fade_Animation</include>
 										<include content="Music_Player_Label_Template">
@@ -598,7 +679,7 @@
 									<visible>$PARAM[background_visible]</visible>
 									<!--Background-->
 									<control type="image">
-										<texture colordiffuse="$VAR[DarkColor]">views/white_100.png</texture>
+										<texture colordiffuse="$VAR[Dark_Color]">views/white_100.png</texture>
 										<aspectratio>scale</aspectratio>
 									</control>
 									<!--Album Cover-->
@@ -616,7 +697,7 @@
 											<visible>[$EXP[GridView_Display_IsFanart] + String.IsEqual(Window(home).Property(GridView_Position),2)] | [[$EXP[GridView_Display_IsPosters] | $EXP[GridView_Display_IsSquare]] + String.IsEqual(Window(home).Property(GridView_Position),4)]</visible>
 											<bottom>0</bottom>
 											<height>120</height>
-											<texture colordiffuse="$VAR[ShadowColorWatched]">views/dropshadow_top_120.png</texture>
+											<texture colordiffuse="$VAR[Panel_Dropshadow_Color]">views/dropshadow_top_120.png</texture>
 											<aspectratio>stretch</aspectratio>
 										</control>
 									</control>
@@ -691,7 +772,7 @@
 											<width>120</width>
 											<height>120</height>
 											<include content="Now_Playing_Visualization_Fill">
-												<param name="color" value="$VAR[LightColor]"/>
+												<param name="color" value="$VAR[Light_Color]"/>
 											</include>
 										</control>
 										<!--Progress Bar-->
@@ -702,9 +783,9 @@
 											<top>$PARAM[progress_top]</top>
 											<height>$PARAM[progress_height]</height>
 											<info>$PARAM[progress_info]</info>
-											<texturebg colordiffuse="$VAR[LightColor]">views/white_20.png</texturebg>
+											<texturebg colordiffuse="$VAR[Light_Color]">views/white_20.png</texturebg>
 											<lefttexture></lefttexture>
-											<midtexture colordiffuse="$VAR[LightColor]">views/white_100.png</midtexture>
+											<midtexture colordiffuse="$VAR[Light_Color]">views/white_100.png</midtexture>
 											<righttexture></righttexture>
 											<overlaytexture></overlaytexture>
 										</control>
@@ -720,7 +801,7 @@
 												<param name="title_label_scroll" value="true"/>
 												<param name="label_1" value="$PARAM[label_1]"/>
 												<param name="label_2" value="$PARAM[label_2]"/>
-												<param name="text_color" value="$VAR[LightColor]"/>
+												<param name="text_color" value="$VAR[Light_Color]"/>
 											</include>
 										</control>
 									</control>
@@ -736,6 +817,7 @@
 									<visible>![Window.Next(home) | Window.Next(videos) | Window.Next(music) | Window.Next(programs) | Window.Next(pictures) | Window.Next(visualisation)] + !$EXP[ContainerSwitching] + !$EXP[OpaqueDialog_IsVisible]</visible>
 									<include>Music_Player_Content_Fade_Animation</include>
 									<control type="group">
+										<animation effect="slide" end="60,0" time="0" condition="!String.IsEmpty(Window(home).Property(Music_Player_Controls)) + [$EXP[Background_IsFanart] | Window.IsVisible(home) | Window.IsVisible(fullscreenvideo)]">Conditional</animation>
 										<visible>$PARAM[content_visible]</visible>
 										<include>Notification_Label_Fade_Animation</include>
 										<include content="Music_Player_Label_Template">
@@ -840,7 +922,7 @@
 											<visible>[$EXP[GridView_Display_IsFanart] + String.IsEqual(Window(home).Property(GridView_Position),2)] | [[$EXP[GridView_Display_IsPosters] | $EXP[GridView_Display_IsSquare]] + String.IsEqual(Window(home).Property(GridView_Position),4)]</visible>
 											<bottom>0</bottom>
 											<height>120</height>
-											<texture colordiffuse="$VAR[ShadowColorWatched]">views/dropshadow_top_120.png</texture>
+											<texture colordiffuse="$VAR[Panel_Dropshadow_Color]">views/dropshadow_top_120.png</texture>
 											<aspectratio>stretch</aspectratio>
 										</control>
 									</control>
@@ -869,8 +951,8 @@
 										<height>30</height>
 										<info>player.volume</info>
 										<reveal>true</reveal>
-										<texturebg colordiffuse="$VAR[LightColor]">views/white_20.png</texturebg>
-										<midtexture colordiffuse="$VAR[LightColor]">views/white_100.png</midtexture>
+										<texturebg colordiffuse="$VAR[Light_Color]">views/white_20.png</texturebg>
+										<midtexture colordiffuse="$VAR[Light_Color]">views/white_100.png</midtexture>
 									</control>
 									<control type="image">
 										<visible>Player.Muted</visible>
@@ -878,7 +960,7 @@
 										<centertop>50%</centertop>
 										<width>120</width>
 										<height>30</height>
-										<texture colordiffuse="$VAR[LightColor]">views/white_20.png</texture>
+										<texture colordiffuse="$VAR[Light_Color]">views/white_20.png</texture>
 									</control>
 									<control type="group">
 										<visible>Player.Muted</visible>
@@ -887,7 +969,7 @@
 										<width>60</width>
 										<height>60</height>
 										<include content="Cross_Focused_Large">
-											<param name="color" value="$VAR[LightColor]"/>
+											<param name="color" value="$VAR[Light_Color]"/>
 										</include>
 									</control>
 								</control>
@@ -902,7 +984,7 @@
 										<param name="title_label_scroll" value="true"/>
 										<param name="label_1" value="$PARAM[label_1]"/>
 										<param name="label_2" value="$PARAM[label_2]"/>
-										<param name="text_color" value="$VAR[LightColor]"/>
+										<param name="text_color" value="$VAR[Light_Color]"/>
 									</include>
 								</control>
 							</control>
@@ -949,7 +1031,7 @@
 				<visible>$PARAM[visible]</visible>
 				<!--GENERIC Full player-->
 				<control type="group">
-					<visible>!Window.IsVisible(home) + !Window.IsVisible(visualisation) + !Window.IsVisible(fullscreenvideo) + !$EXP[Background_IsFanart] + ![$EXP[ListView_Display_IsThumbnails] + $EXP[Square_Containers]] + ![$EXP[ShowcaseView_IsVisible] | $EXP[StripView_IsVisible] | $EXP[GridView_IsVisible]]</visible>
+					<visible>!Window.IsVisible(home) + !Window.IsActive(settings) + !Window.IsVisible(visualisation) + !Window.IsVisible(fullscreenvideo) + !$EXP[Background_IsFanart] + ![$EXP[ListView_Display_IsThumbnails] + $EXP[Square_Containers]] + ![$EXP[ShowcaseView_IsVisible] | $EXP[StripView_IsVisible] | $EXP[GridView_IsVisible]]</visible>
 					<include content="$PARAM[type]_Widget">
 						<param name="content_visible" value="$PARAM[content_visible]"/>
 						<param name="label_1" value="$PARAM[label_1]"/>
@@ -961,20 +1043,20 @@
 				<control type="group">
 					<visible>[Window.IsVisible(home) | $EXP[Background_IsFanart] | Window.IsVisible(fullscreenvideo)] + !Window.IsVisible(visualisation)</visible>
 					<include>Dialog_Fade_Animation</include>
-					<animation effect="slide" end="30,0" time="0" condition="String.IsEmpty(Window(home).Property(Music_Player_Controls))">Conditional</animation>
+					<animation effect="slide" end="-30,0" time="0" condition="String.IsEmpty(Window(home).Property(Music_Player_Controls))">Conditional</animation>
 					<include content="$PARAM[type]_Widget">
-						<param name="align" value="right"/>
+						<param name="align" value="left"/>
 						<param name="background_visible" value="false"/>
 						<param name="content_visible" value="$PARAM[content_visible]"/>
 						<param name="label_padding" value="-30"/>
 						<param name="label_1" value="$PARAM[label_1]"/>
 						<param name="label_2" value="$PARAM[label_2]"/>
-						<param name="left_label_visible" value="true"/>
+						<param name="right_label_visible" value="true"/>
 					</include>
 				</control>
 				<!--LISTVIEW Square-->
 				<control type="group">
-					<visible>$EXP[ListView_Display_IsThumbnails] + $EXP[Square_Containers]</visible>
+					<visible>[$EXP[ListView_Display_IsThumbnails] + $EXP[Square_Containers]] | Window.IsActive(settings)</visible>
 					<include>Dialog_Fade_Animation</include>
 					<include content="$PARAM[type]_Widget">
 						<param name="top" value="900"/>
@@ -1115,7 +1197,7 @@
 				<visible>$PARAM[visible]</visible>
 				<!--Generic-->
 				<control type="group">
-					<visible>!$EXP[ListView_Display_IsThumbnails] + !$EXP[ShowcaseView_Display_IsSquare] + !$EXP[ShowcaseView_Display_IsPosters] + !$EXP[GridView_IsVisible]</visible>
+					<visible>!$EXP[ListView_Display_IsThumbnails] + !$EXP[ShowcaseView_Display_IsSquare] + !$EXP[ShowcaseView_Display_IsPosters] + !$EXP[GridView_IsVisible] + !Window.IsVisible(home)</visible>
 					<include>Dialog_Fade_Animation</include>
 					<animation effect="slide" end="30,0" time="0" condition="true">Conditional</animation>
 					<include content="$PARAM[type]_Widget">
@@ -1127,6 +1209,21 @@
 						<param name="label_1" value="$PARAM[label_1]"/>
 						<param name="label_2" value="$PARAM[label_2]"/>
 						<param name="left_label_visible" value="true"/>
+					</include>
+				</control>
+				<control type="group">
+					<visible>Window.IsVisible(home)</visible>
+					<include>Dialog_Fade_Animation</include>
+					<animation effect="slide" end="-30,0" time="0" condition="true">Conditional</animation>
+					<include content="$PARAM[type]_Widget">
+						<param name="visible" value="Window.IsVisible(home)"/>
+						<param name="align" value="left"/>
+						<param name="background_visible" value="$PARAM[background_visible]"/>
+						<param name="label_padding" value="$PARAM[label_padding]"/>
+						<param name="content_visible" value="$PARAM[content_visible]"/>
+						<param name="label_1" value="$PARAM[label_1]"/>
+						<param name="label_2" value="$PARAM[label_2]"/>
+						<param name="right_label_visible" value="true"/>
 					</include>
 				</control>
 				<!--LISTVIEW-->
@@ -1209,7 +1306,7 @@
 	<include name="FlagLayout">
 		<param name="id" default=""/>
 		<param name="content" default=""/>
-		<param name="colordiffuse" default="$VAR[PrimaryColor]"/>
+		<param name="colordiffuse" default="$VAR[Primary_Color]"/>
 		<definition>
 			<control type="group">
 				<visible>!String.IsEqual(Control.GetLabel($PARAM[id]),flags/blank.png)</visible>

@@ -16,7 +16,6 @@
 				<visible allowhiddenfocus="true">false</visible>
 			</control>
 			<control type="radiobutton" id="7">
-				<include>HiddenControl</include>
 				<visible allowhiddenfocus="true">false</visible>
 			</control>
 			<control type="button" id="8">
@@ -171,20 +170,6 @@
 				<content sortby="year" sortorder="ascending">$VAR[Sets_Path]</content>
 			</control>
 
-			<!--Hidden artwork path checkers-->
-			<control type="label" id="4502">
-				<visible>false</visible>
-				<label>$VAR[Thumbnail(-1)Content]</label>
-			</control>
-			<control type="label" id="4503">
-				<visible>false</visible>
-				<label>$VAR[Thumbnail(0)Content]</label>
-			</control>
-			<control type="label" id="4504">
-				<visible>false</visible>
-				<label>$VAR[Thumbnail(1)Content]</label>
-			</control>
-
 			<!--On Previous Delay-->
 			<control type="group" id="5001">
 				<visible>Container.OnPrevious</visible>
@@ -193,18 +178,6 @@
 
 			<!--On Next Delay-->
 			<control type="group" id="5002">
-				<visible>Container.OnNext</visible>
-				<animation effect="slide" end="0,0" time="360" reversible="false">Hidden</animation>
-			</control>
-
-			<!--Progressbar Scroll Delay-->
-			<control type="group" id="5007">
-				<visible>Container.OnPrevious</visible>
-				<animation effect="slide" end="0,0" time="360" reversible="false">Hidden</animation>
-			</control>
-
-			<!--On Next Scroll Delay-->
-			<control type="group" id="5008">
 				<visible>Container.OnNext</visible>
 				<animation effect="slide" end="0,0" time="360" reversible="false">Hidden</animation>
 			</control>
@@ -293,9 +266,9 @@
 				<onback>62</onback>
 				<showonepage>false</showonepage>
 				<orientation>$PARAM[orientation]</orientation>
-				<texturesliderbackground colordiffuse="$VAR[ScrollBarColor]">views/white_10.png</texturesliderbackground>
-				<texturesliderbar colordiffuse="$VAR[ScrollBarColor]">views/white_50.png</texturesliderbar>
-				<texturesliderbarfocus colordiffuse="$VAR[ScrollBarColor]">views/white_100.png</texturesliderbarfocus>
+				<texturesliderbackground colordiffuse="$VAR[Scroll_Color]">views/white_20.png</texturesliderbackground>
+				<texturesliderbar colordiffuse="$VAR[Scroll_Color]">views/white_50.png</texturesliderbar>
+				<texturesliderbarfocus colordiffuse="$VAR[Scroll_Color]">views/white_100.png</texturesliderbarfocus>
 				<textureslidernib></textureslidernib>
 				<textureslidernibfocus></textureslidernibfocus>
 				<visible>$PARAM[visible]</visible>
@@ -395,20 +368,22 @@
 		<param name="top" default="230"/>
 		<definition>
 			<control type="group">
-				<visible>Control.HasFocus(3000)</visible>
-				<include>OptionsMenu_Fade_Animation</include>
+				<visible>String.IsEqual(Window(home).Property(OptionsMenu),Active)</visible>
+				<include>Options_Menu_Fade_Animation</include>
 				<control type="image">
-					<texture colordiffuse="$VAR[SecondaryColor]">$VAR[Dialog_Background_Diffuse]</texture>
+					<texture colordiffuse="$VAR[Transparent_Dialog_Diffuse]">views/white_100.png</texture>
 				</control>
 			</control>
 
 			<control type="group">
-				<visible>Control.HasFocus(3000) + !Window.IsVisible(shutdownmenu) + !Window.IsVisible(settingdialog) + !Window.IsVisible(virtualkeyboard)</visible>
-				<include>Content_Delayed_Fade_Animation</include>
+				<visible>String.IsEqual(Window(home).Property(OptionsMenu),Active)</visible>
+				<include>Delayed_Dialog_Fade_Animation</include>
 				<left>$PARAM[left]</left>
 				<top>$PARAM[top]</top>
 
 				<control type="group">
+					<visible>!Window.IsVisible(shutdownmenu)</visible>
+					<include>Content_Fade_Animation</include>
 					<control type="label">
 						<include>ContextMenuLabelFocused</include>
 						<label>$INFO[Container.ViewMode,‹ ,  ›]</label>
@@ -417,13 +392,14 @@
 					<control type="label">
 						<include>ContextMenuLabelUnfocused</include>
 						<label>$LOCALIZE[32100]$INFO[Container.ViewMode, / ]</label>
-						<visible>Control.HasFocus(3000) + !Container(3000).HasFocus(939) + Integer.IsGreater(Container(3000).ViewCount,1)</visible>
+						<visible>!Container(3000).HasFocus(939) + Integer.IsGreater(Container(3000).ViewCount,1)</visible>
 					</control>
 				</control>
 
 				<control type="fixedlist" id="3000">
 					<viewtype label="535">list</viewtype>
-					<visible allowhiddenfocus="true">Control.HasFocus(3000) + !Window.IsVisible(shutdownmenu) + !Window.IsVisible(settingdialog) + !Window.IsVisible(virtualkeyboard)</visible>
+					<visible allowhiddenfocus="true">!Window.IsVisible(shutdownmenu)</visible>
+					<include>Content_Fade_Animation</include>
 					<description>Options menu</description>
 					<width>1080</width>
 					<height>675</height>
@@ -492,10 +468,10 @@
 							<param name="label" value="$INFO[ListItem.Label2]"/>
 							<param name="labelleft" value="0"/>
 							<param name="labelmaxwidth" value="100%"/>
-							<param name="textcolor" value="$VAR[PrimaryColor]"/>
+							<param name="textcolor" value="$VAR[Primary_Color]"/>
 						</include>
 					</itemlayout>
-					<focusedlayout height="70" width="1080">
+					<focusedlayout height="60" width="1080">
 						<include content="Common_List_Layout">
 							<param name="groupvisible" value="true"/>
 							<param name="nowplayingvisible" value="false"/>
@@ -504,7 +480,7 @@
 							<param name="labelleft" value="0"/>
 							<param name="labelmaxwidth" value="100%"/>
 							<param name="font" value="List_Title_Focused"/>
-							<param name="textcolor" value="$VAR[PrimaryColor]"/>
+							<param name="textcolor" value="$VAR[Primary_Color]"/>
 						</include>
 					</focusedlayout>
 					<content>

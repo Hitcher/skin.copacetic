@@ -29,9 +29,9 @@
 		<param name="labelleft" default="120"/>
 		<param name="labelmaxwidth" default="720"/>
 		<param name="font" default="List_Title_Unfocused"/>
-		<param name="textcolor" default="$VAR[ListFocusColor]"/>
-		<param name="selectedcolor" default="$VAR[ListFocusColor]"/>
-		<param name="tracknumbercolor" default="$VAR[PlotColor]"/>
+		<param name="textcolor" default="$VAR[List_Color]"/>
+		<param name="selectedcolor" default="$VAR[List_Color]"/>
+		<param name="tracknumbercolor" default="$VAR[List_Color]"/>
 		<param name="scroll" default="false"/>
 		<definition>
 			<control type="group">
@@ -54,7 +54,9 @@
 					<height>60</height>
 					<left>30</left>
 					<top>$PARAM[icontop]</top>
-					<include content="$PARAM[icontexture]"/>
+					<include content="$PARAM[icontexture]">
+						<param name="color" value="$PARAM[tracknumbercolor]"/>
+					</include>
 				</control>
 				<control type="label">
 					<height>$PARAM[labelheight]</height>
@@ -64,7 +66,7 @@
 					<aligny>center</aligny>
 					<font>$PARAM[font]</font>
 					<textcolor>$PARAM[tracknumbercolor]</textcolor>
-					<disabledcolor>$VAR[MediumGreyColor]</disabledcolor>
+					<disabledcolor>$VAR[Light_Grey_Color]</disabledcolor>
 					<selectedcolor>$PARAM[selectedcolor]</selectedcolor>
 					<label>$VAR[TrackNumber_Label]</label>
 					<visible>!ListItem.IsPlaying</visible>
@@ -76,7 +78,7 @@
 					<aligny>center</aligny>
 					<font>$PARAM[font]</font>
 					<textcolor>$PARAM[textcolor]</textcolor>
-					<disabledcolor>$VAR[MediumGreyColor]</disabledcolor>
+					<disabledcolor>$VAR[Light_Grey_Color]</disabledcolor>
 					<selectedcolor>$PARAM[selectedcolor]</selectedcolor>
 					<label>$PARAM[label]</label>
 					<scroll>$PARAM[scroll]</scroll>
@@ -99,14 +101,14 @@
     <param name="unfocusediconvisible" default="String.IsEqual(ListItem.Overlay,OverlayWatched.png)"/>
     <param name="focusedicontexture" default="Check_Focused"/>
     <param name="focusediconvisible" default="String.IsEqual(ListItem.Overlay,OverlayWatched.png)"/>
-    <param name="textcolor" default="$VAR[ListFocusColor]"/>
+    <param name="textcolor" default="$VAR[List_Color]"/>
     <definition>
       <control type="$PARAM[type]" id="$PARAM[id]">
 				<viewtype label="$PARAM[viewtype_label]">$PARAM[viewtype]</viewtype>
 				<visible>$PARAM[visible]</visible>
 				<left>$PARAM[left]</left>
 				<top>180</top>
-				<width>1920</width>
+				<width>100%</width>
 				<height>720</height>
 				<include>$PARAM[viewtype_label]_Navigation</include>
 				<preloaditems>2</preloaditems>
@@ -235,8 +237,9 @@
 		<param name="right" default="120"/>
 		<param name="height" default="500"/>
 		<param name="focusposition" default="4"/>
-		<param name="textcolor" default="$VAR[LightColor]"/>
-		<param name="selectedcolor" default="$VAR[AccentColor]"/>
+		<param name="textcolor" default="$VAR[Light_Color]"/>
+		<param name="selectedcolor" default="$VAR[Accent_Color]"/>
+		<param name="include" default=""/>
     <definition>
       <control type="fixedlist" id="$PARAM[id]">
 				<viewtype label="List">list</viewtype>
@@ -252,7 +255,7 @@
 				<focusposition>$PARAM[focusposition]</focusposition>
 				<orientation>vertical</orientation>
 				<scrolltime tween="sine" easing="inout">360</scrolltime>
-				<itemlayout height="55" width="720">
+				<itemlayout height="55" width="100%">
 					<control type="group">
 						<visible>!$EXP[ContainerSwitching]</visible>
 						<include>Content_Delayed_Fade_Animation</include>
@@ -298,6 +301,7 @@
 						</include>
 					</control>
 				</focusedlayout>
+				<include>$PARAM[include]</include>
 			</control>
     </definition>
   </include>
@@ -313,8 +317,6 @@
 			<control type="$PARAM[type]" id="$PARAM[id]">
 				<viewtype label="$PARAM[viewtype_label]">$PARAM[viewtype]</viewtype>
 				<visible>$PARAM[visible]</visible>
-				<left>0</left>
-				<top>0</top>
 				<focusposition>0</focusposition>
 				<include>$PARAM[viewtype_label]_Navigation</include>
 				<pagecontrol>60</pagecontrol>
@@ -329,16 +331,15 @@
 		</definition>
 	</include>
 
-
 	<include name="List_Navigation">
 		<definition>
 			<onup condition="Integer.IsGreater(Container.NumItems,1)">50</onup>
 			<onup condition="Integer.IsEqual(Container.NumItems,1)">SetFocus(3000,0)</onup>
 			<ondown condition="Integer.IsGreater(Container.NumItems,1)">50</ondown>
 			<ondown condition="Integer.IsEqual(Container.NumItems,1)">SetFocus(3000,0)</ondown>
-			<onleft condition="Player.HasAudio + $EXP[ListView_Display_IsThumbnails] + $EXP[Square_Containers]">SetFocus(91100,1)</onleft>
-			<onleft condition="![Player.HasAudio + $EXP[ListView_Display_IsThumbnails] + $EXP[Square_Containers]]">SetFocus(3000,0)</onleft>
-			<onright condition="Player.HasAudio + ![$EXP[ListView_Display_IsThumbnails] + $EXP[Square_Containers]]">SetFocus(91100,1)</onright>
+			<onleft condition="Player.HasAudio + [$EXP[ListView_Display_IsThumbnails] + $EXP[Square_Containers] | $EXP[ListView_Display_IsBackground]]">SetFocus(91100,1)</onleft>
+			<onleft condition="![Player.HasAudio + [$EXP[ListView_Display_IsThumbnails] + $EXP[Square_Containers] | $EXP[ListView_Display_IsBackground]]]">SetFocus(3000,0)</onleft>
+			<onright condition="Player.HasAudio + ![$EXP[ListView_Display_IsThumbnails] + $EXP[Square_Containers]] + !$EXP[Background_IsFanart]]">SetFocus(91100,1)</onright>
 			<onright condition="![Player.HasAudio + ![$EXP[ListView_Display_IsThumbnails] + $EXP[Square_Containers]]] + Integer.IsGreater(Container.NumItems,12)">61</onright>
 			<onright condition="![Player.HasAudio + ![$EXP[ListView_Display_IsThumbnails] + $EXP[Square_Containers]]] + Integer.IsLessOrEqual(Container.NumItems,11)">SetFocus(3000,0)</onright>
 			<onback condition="String.IsEqual(window(movieinformation).property(SentFromInfo),true)">SetFocus(5005)</onback>
@@ -350,8 +351,7 @@
 			<onright condition="Window.IsActive(favourites) + Player.HasAudio">SetFocus(91100,1)</onright>
 			<onright condition="Window.IsActive(favourites) + !Player.HasAudio">0</onright>
 			<onleft condition="Window.IsActive(favourites)">0</onleft>
-			<onright condition="Window.IsActive(selectdialog)">9000</onright>
-			<onright condition="Window.IsVisible(filebrowser)">414</onright>
+			<onright condition="!Window.IsActive(favourites)">9000</onright>>
 		</definition>
 	</include>
 
@@ -370,8 +370,6 @@
 			<onback condition="String.IsEqual(window(movieinformation).property(SentFromInfo),true)">SetFocus(5005)</onback>
 		</definition>
 	</include>
-
-<visible>!Player.HasAudio | [Player.HasAudio + [$EXP[ShowcaseView_Details_Off] | $EXP[ShowcaseView_Display_IsSquare]]]</visible>
 
 	<include name="Showcase_Navigation">
 		<definition>
@@ -430,15 +428,14 @@
 
 	<include name="CustomViewsBackground">
 		<control type="group">
-			<include>FullscreenDimensions</include>
 			<control type="image">
 				<aspectratio>stretch</aspectratio>
-				<texture colordiffuse="$VAR[SecondaryColor]">views/white_100.png</texture>
+				<texture colordiffuse="$VAR[Secondary_Color]">views/white_100.png</texture>
 			</control>
 			<control type="image">
 				<visible>Skin.String(Theme,Light) + !$EXP[Background_IsFanart]</visible>
 				<aspectratio>stretch</aspectratio>
-				<texture colordiffuse="$VAR[LightGreyColor]">views/gradient_light-background.png</texture>
+				<texture colordiffuse="$VAR[Light_Grey_Color]">views/gradient_light-background.png</texture>
 			</control>
 		</control>
 	</include>
@@ -456,7 +453,7 @@
 		<param name="fadetime" default="0"/>
 		<param name="bordervisible" default="false"/>
 		<param name="bordersize" default="2"/>
-		<param name="bordercolor" default="$VAR[PrimaryColor]"/>
+		<param name="bordercolor" default="$VAR[Primary_Color]"/>
 		<param name="bordertexture" default="views/border_1px_10.png"/>
 		<definition>
 			<control type="group">
@@ -501,21 +498,21 @@
 		<param name="diffuse" default=""/>
 		<param name="fadetime" default="0"/>
 		<param name="showgradient" default="false"/>
-		<param name="unfocusedoverlay" default="false"/>
-		<param name="unfocusedoverlaydiffuse" default="$VAR[DarkColor]"/>
-		<param name="unfocusedoverlaytexture" default="views/white_50.png"/>
-		<param name="unfocusedoverlayanimationtype" default=""/>
-		<param name="unfocusedoverlayanimationeffect" default=""/>
-		<param name="unfocusedoverlayanimationstart" default=""/>
-		<param name="unfocusedoverlayanimationend" default=""/>
-		<param name="unfocusedoverlayanimationdelay" default="0"/>
-		<param name="unfocusedoverlayanimationcondition" default="true"/>
-		<param name="unfocusedoverlayanimationtween" default="sine"/>
-		<param name="unfocusedoverlayanimationeasing" default="inout"/>
+		<param name="artworkmask" default="false"/>
+		<param name="artworkmaskdiffuse" default="$VAR[Artwork_Mask]"/>
+		<param name="artworkmasktexture" default="views/white_100.png"/>
+		<param name="artworkmaskanimationtype" default=""/>
+		<param name="artworkmaskanimationeffect" default=""/>
+		<param name="artworkmaskanimationstart" default=""/>
+		<param name="artworkmaskanimationend" default=""/>
+		<param name="artworkmaskanimationdelay" default="0"/>
+		<param name="artworkmaskanimationcondition" default="true"/>
+		<param name="artworkmaskanimationtween" default="sine"/>
+		<param name="artworkmaskanimationeasing" default="inout"/>
 		<param name="bordervisible" default="false"/>
 		<param name="borderedge" default="0"/>
 		<param name="bordersize" default="2"/>
-		<param name="bordercolor" default="$VAR[PrimaryColor]"/>
+		<param name="bordercolor" default="$VAR[Primary_Color]"/>
 		<param name="bordertexture" default="views/border_1px_10.png"/>
 		<definition>
 			<control type="group">
@@ -530,15 +527,14 @@
 				<control type="image">
 					<include>Focus_Zoom_Animation</include>
 					<texture fallback="$PARAM[fallback]" background="true" diffuse="$PARAM[diffuse]">$VAR[Thumbnail($PARAM[position])Content]</texture>
-
 					<aspectratio align="center" aligny="center">$PARAM[aspectratio]</aspectratio>
 					<fadetime>$PARAM[fadetime]</fadetime>
 				</control>
-				<!--Unfocused overlay-->
+				<!--Artwork Mask-->
 				<control type="image">
-					<visible>$PARAM[unfocusedoverlay]</visible>
-					<animation effect="$PARAM[unfocusedoverlayanimationeffect]" start="$PARAM[unfocusedoverlayanimationstart]" end="$PARAM[unfocusedoverlayanimationend]" delay="$PARAM[unfocusedoverlayanimationdelay]" condition="$PARAM[unfocusedoverlayanimationcondition]" time="360" tween="$PARAM[unfocusedoverlayanimationtween]" easing="$PARAM[unfocusedoverlayanimationeasing]" reversible="false">$PARAM[unfocusedoverlayanimationtype]</animation>
-					<texture colordiffuse="$PARAM[unfocusedoverlaydiffuse]">$PARAM[unfocusedoverlaytexture]</texture>
+					<visible>$PARAM[artworkmask]</visible>
+					<animation effect="$PARAM[artworkmaskanimationeffect]" start="$PARAM[artworkmaskanimationstart]" end="$PARAM[artworkmaskanimationend]" delay="$PARAM[artworkmaskanimationdelay]" condition="$PARAM[artworkmaskanimationcondition]" time="360" tween="$PARAM[artworkmaskanimationtween]" easing="$PARAM[artworkmaskanimationeasing]" reversible="false">$PARAM[artworkmaskanimationtype]</animation>
+					<texture colordiffuse="$PARAM[artworkmaskdiffuse]">$PARAM[artworkmasktexture]</texture>
 				</control>
 				<!--Progress Bar backing overlay-->
 				<control type="image">
@@ -546,14 +542,14 @@
 					<visible>$EXP[Video_Containers]</visible>
 					<animation effect="fade" start="0" end="100" time="360" tween="sine" easing="out" reversible="false" condition="true">Visible</animation>
 					<aspectratio>stretch</aspectratio>
-					<texture colordiffuse="$VAR[DarkColor]">views/gradient_art-overlay.png</texture>
+					<texture colordiffuse="$VAR[Dark_Color]">views/gradient_art-overlay.png</texture>
 				</control>
 				<!--Now Playing Background-->
 				<control type="group">
 					<visible>[[$EXP[ShowcaseView_IsVisible] | $EXP[StripView_IsVisible]] + [ListItem($PARAM[position]).IsPlaying | [Container.Content(tvshows) + String.IsEqual(VideoPlayer.TVShowTitle,ListItem($PARAM[position]).Title)] | [Container.Content(seasons) + String.IsEqual(VideoPlayer.TVShowTitle,ListItem($PARAM[position]).TVShowTitle) + String.IsEqual(VideoPlayer.Season,ListItem($PARAM[position]).Season)] | [Container.Content(artists) + String.IsEqual(MusicPlayer.Artist, ListItem($PARAM[position]).Artist)] | [Container.Content(albums) + String.IsEqual(MusicPlayer.Artist, ListItem($PARAM[position]).Artist) + String.IsEqual(MusicPlayer.Album, ListItem($PARAM[position]).Album)]]] | [$EXP[GridView_IsVisible] + $EXP[StandardViews_NowPlaying]]</visible>
 					<control type="image">
 						<aspectratio>stretch</aspectratio>
-						<texture colordiffuse="$VAR[DarkColor]">views/white_75.png</texture>
+						<texture colordiffuse="$VAR[Panel_Diffuse_Dark_Color]">views/white_100.png</texture>
 					</control>
 					<control type="group">
 						<include content="Now_Playing_Visualization_Fill">
@@ -563,7 +559,7 @@
 							<param name="itemgap" value="8"/>
 							<param name="pausewidth" value="24"/>
 							<param name="pausegap" value="8"/>
-							<param name="color" value="$VAR[LightColor]"/>
+							<param name="color" value="$VAR[Light_Color]"/>
 						</include>
 					</control>
 				</control>
@@ -591,7 +587,7 @@
     <param name="flipx" default="false"/>
     <param name="flipy" default="false"/>
     <param name="texture" default="views/dropshadow_left_120.png"/>
-    <param name="colordiffuse" default="$VAR[ShadowColor]"/>
+    <param name="colordiffuse" default="$VAR[Artwork_Dropshadow]"/>
     <param name="visible" default="true"/>
     <param name="animationtype" default=""/>
     <param name="animationcondition" default="false"/>
@@ -640,7 +636,7 @@
 		<param name="focus_height" default="100%"/>
 		<param name="focus_border_visible" default="false"/>
 		<param name="focus_border_size" default="2"/>
-		<param name="focus_border_color" default="$VAR[PrimaryColor]"/>
+		<param name="focus_border_color" default="$VAR[Primary_Color]"/>
 		<param name="focus_border_texture" default="views/border_1px_10.png"/>
 		<param name="show_gradient" default="false"/>
 		<param name="unfocused_overlay" default="false"/>
@@ -666,7 +662,7 @@
 							<param name="fallback" value=""/>
 							<param name="visible" value="[$EXP[StripView_Display_IsPosters] | $EXP[StripView_Display_IsSquare]] + $EXP[StripView_Details_Off]"/>
 							<param name="showgradient" value="$PARAM[show_gradient]"/>
-							<param name="unfocusedoverlay" value="$PARAM[unfocused_overlay]"/>
+							<param name="artworkmask" value="$PARAM[unfocused_overlay]"/>
 						</include>
 						<control type="group">
 							<animation effect="slide" start="0,0" end="-$PARAM[item_width],0" time="0" condition="$EXP[StripView_Display_IsFanart]">Conditional</animation>
@@ -679,7 +675,7 @@
 								<param name="fallback" value=""/>
 								<param name="visible" value="$EXP[StripView_IsVisible] + $EXP[StripView_Details_Off]"/>
 								<param name="showgradient" value="$PARAM[show_gradient]"/>
-								<param name="unfocusedoverlay" value="$PARAM[unfocused_overlay]"/>
+								<param name="artworkmask" value="$PARAM[unfocused_overlay]"/>
 							</include>
 						</control>
 						<control type="group">
@@ -691,12 +687,12 @@
 								<param name="height" value="$PARAM[focus_height]"/>
 								<param name="fallback" value=""/>
 								<param name="showgradient" value="$PARAM[show_gradient]"/>
-								<param name="unfocusedoverlay" value="$EXP[ShowcaseView_IsVisible] + $EXP[ShowcaseView_Details_Overlay_IsVisible]"/>
-								<param name="unfocusedoverlayanimationtype" value="VisibleChange"/>
-								<param name="unfocusedoverlayanimationcondition" value="true"/>
-								<param name="unfocusedoverlayanimationeffect" value="fade"/>
-								<param name="unfocusedoverlayanimationstart" value="0"/>
-								<param name="unfocusedoverlayanimationend" value="100"/>
+								<param name="artworkmask" value="$EXP[ShowcaseView_IsVisible] + $EXP[ShowcaseView_Details_Overlay_IsVisible]"/>
+								<param name="artworkmaskanimationtype" value="VisibleChange"/>
+								<param name="artworkmaskanimationcondition" value="true"/>
+								<param name="artworkmaskanimationeffect" value="fade"/>
+								<param name="artworkmaskanimationstart" value="0"/>
+								<param name="artworkmaskanimationend" value="100"/>
 								<param name="bordervisible" value="$PARAM[focus_border_visible]"/>
 								<param name="bordersize" value="$PARAM[focus_border_size]"/>
 								<param name="bordercolor" value="$PARAM[focus_border_color]"/>
@@ -711,7 +707,7 @@
 								<param name="fallback" value=""/>
 								<param name="visible" value="[$EXP[ShowcaseView_IsVisible] + [$EXP[ShowcaseView_Details_Off] | $EXP[ShowcaseView_Details_Overlay_IsVisible]]] | $EXP[StripView_IsVisible]"/>
 								<param name="showgradient" value="$PARAM[show_gradient]"/>
-								<param name="unfocusedoverlay" value="$PARAM[unfocused_overlay]"/>
+								<param name="artworkmask" value="$PARAM[unfocused_overlay]"/>
 							</include>
 							<include content="ListIcon">
 								<param name="position" value="2"/>
@@ -722,7 +718,7 @@
 								<param name="fallback" value=""/>
 								<param name="visible" value="[$EXP[ShowcaseView_Display_IsPosters] + [$EXP[ShowcaseView_Details_Off] | $EXP[ShowcaseView_Details_Overlay_IsVisible]]] | [$EXP[StripView_IsVisible] + !$EXP[StripView_Display_IsFanart]]"/>
 								<param name="showgradient" value="$PARAM[show_gradient]"/>
-								<param name="unfocusedoverlay" value="$PARAM[unfocused_overlay]"/>
+								<param name="artworkmask" value="$PARAM[unfocused_overlay]"/>
 							</include>
 							<control type="group">
 								<visible>!$EXP[TransparentDialog_IsVisible] | $EXP[StripView_IsVisible]</visible>
@@ -752,7 +748,7 @@
 				<width>$PARAM[focus_width]</width>
 				<height>$PARAM[focus_height]</height>
 				<control type="group">
-					<visible>$EXP[ShowcaseView_Display_Is$PARAM[displaytype_label]]</visible>
+					<visible>$EXP[ShowcaseView_IsVisible] + $EXP[ShowcaseView_Display_Is$PARAM[displaytype_label]]</visible>
 					<include>Content_Delayed_Fade_Animation</include>
 					<control type="group">
 						<visible>!$EXP[ContainerSwitching] + !$EXP[OptionsSwitching] + !$EXP[ContentSwitching] + !$EXP[TransparentDialog_IsVisible] + !Control.HasFocus(60)</visible>
@@ -768,7 +764,7 @@
 								<visible>$EXP[ShowcaseView_Display_IsSquare]</visible>
 								<height max="180">auto</height>
 								<font>Showcase_Overlay_Title</font>
-								<textcolor>$VAR[LightColor]</textcolor>
+								<textcolor>$VAR[Light_Color]</textcolor>
 								<label>$VAR[Title_Label]</label>
 								<align>center</align>
 							</control>
@@ -776,7 +772,7 @@
 								<visible>$EXP[ShowcaseView_Display_IsPosters]</visible>
 								<height max="156">auto</height>
 								<font>Showcase_Title</font>
-								<textcolor>$VAR[LightColor]</textcolor>
+								<textcolor>$VAR[Light_Color]</textcolor>
 								<label>$VAR[Title_Label]</label>
 								<align>center</align>
 							</control>
@@ -784,7 +780,7 @@
 								<visible>$EXP[ShowcaseView_Details_Info_Overlay_IsVisible]</visible>
 								<height max="70">auto</height>
 								<font>Showcase_Info</font>
-								<textcolor>$VAR[LightColor]</textcolor>
+								<textcolor>$VAR[Light_Color]</textcolor>
 								<label>$VAR[Info_Label]</label>
 								<align>center</align>
 							</control>
@@ -799,8 +795,8 @@
 		<param name="visible"/>
 		<param name="target_id" default="50"/>
 		<param name="aspectratio" default="scale"/>
-		<param name="fallback" default="fallback.png"/>
-		<param name="unfocusedoverlay" default="true"/>
+		<param name="fallback" default=""/>
+		<param name="artworkmask" default="true"/>
 		<param name="showgradient" default="false"/>
 		<definition>
 			<control type="group">
@@ -818,7 +814,7 @@
 						<param name="animationcondition" value="true"/>
 						<param name="animationeffect" value="fade"/>
 						<param name="animationend" value="0"/>
-						<param name="unfocusedoverlay" value="$PARAM[unfocusedoverlay]"/>
+						<param name="artworkmask" value="$PARAM[artworkmask]"/>
 						<param name="showgradient" value="$PARAM[showgradient]"/>
 					</include>
 					<!--Hold in place Icon 0 if aspectratio is fixed-->
@@ -827,7 +823,7 @@
 						<param name="visible" value="$EXP[ContentPrevious] + !Container.Content(files)"/>
 						<param name="aspectratio" value="$PARAM[aspectratio]"/>
 						<param name="fallback" value="$PARAM[fallback]"/>
-						<param name="unfocusedoverlay" value="$PARAM[unfocusedoverlay]"/>
+						<param name="artworkmask" value="$PARAM[artworkmask]"/>
 						<param name="showgradient" value="$PARAM[showgradient]"/>
 					</include>
 					<!--Fade in Icon -1-->
@@ -839,7 +835,7 @@
 						<param name="animationcondition" value="true"/>
 						<param name="animationeffect" value="fade"/>
 						<param name="animationend" value="100"/>>
-						<param name="unfocusedoverlay" value="$PARAM[unfocusedoverlay]"/>
+						<param name="artworkmask" value="$PARAM[artworkmask]"/>
 						<param name="showgradient" value="$PARAM[showgradient]"/>
 					</include>
 				</control>
@@ -856,7 +852,7 @@
 				    <param name="animationcondition" value="true"/>
 				    <param name="animationeffect" value="fade"/>
 				    <param name="animationend" value="0"/>
-				    <param name="unfocusedoverlay" value="$PARAM[unfocusedoverlay]"/>
+				    <param name="artworkmask" value="$PARAM[artworkmask]"/>
 				    <param name="showgradient" value="$PARAM[showgradient]"/>
 				  </include>
 					<!--Hold in place Icon 0 if aspectratio is fixed-->
@@ -865,7 +861,7 @@
 						<param name="visible" value="$EXP[ContentNext] + !Container.Content(files)"/>
 						<param name="aspectratio" value="$PARAM[aspectratio]"/>
 						<param name="fallback" value="$PARAM[fallback]"/>
-						<param name="unfocusedoverlay" value="$PARAM[unfocusedoverlay]"/>
+						<param name="artworkmask" value="$PARAM[artworkmask]"/>
 						<param name="showgradient" value="$PARAM[showgradient]"/>
 					</include>
 					<!--Fade in Icon 1-->
@@ -877,7 +873,7 @@
 				    <param name="animationcondition" value="true"/>
 				    <param name="animationeffect" value="fade"/>
 				    <param name="animationend" value="100"/>
-				    <param name="unfocusedoverlay" value="$PARAM[unfocusedoverlay]"/>
+				    <param name="artworkmask" value="$PARAM[artworkmask]"/>
 				    <param name="showgradient" value="$PARAM[showgradient]"/>
 				  </include>
 				</control>
@@ -886,7 +882,7 @@
 					<param name="visible" value="!$EXP[ContentSwitching] | [$EXP[ContentPrevious] + $EXP[ContentNext]]"/>
 					<param name="aspectratio" value="$PARAM[aspectratio]"/>
 					<param name="fallback" value="$PARAM[fallback]"/>
-					<param name="unfocusedoverlay" value="$PARAM[unfocusedoverlay]"/>
+					<param name="artworkmask" value="$PARAM[artworkmask]"/>
 					<param name="showgradient" value="$PARAM[showgradient]"/>
 				</include>
 			</control>
@@ -902,7 +898,7 @@
 			<param name="2x_item_width_plus_focus_width" default="2160"/>
 			<param name="aspectratio" default="scale"/>
 			<param name="showgradient" default="!$EXP[ShowcaseView_Details_Overlay_IsVisible]"/>
-			<param name="unfocusedoverlay" default="!$EXP[ShowcaseView_Details_Overlay_IsVisible]"/>
+			<param name="artworkmask" default="!$EXP[ShowcaseView_Details_Overlay_IsVisible]"/>
 			<definition>
 				<control type="group">
 					<visible>$EXP[$PARAM[viewtype_label]View_Display_Is$PARAM[displaytype_label]] + !$EXP[ContainerSwitching]</visible>
@@ -951,12 +947,12 @@
 							<param name="animationeffect" value="slide"/>
 							<param name="animationend" value="$PARAM[item_width],0"/>
 							<param name="showgradient" value="!String.IsEmpty(Container.ListItemNoWrap(1).Label) + $PARAM[showgradient]"/>
-							<param name="unfocusedoverlay" value="!Container($PARAM[target_id]).OnPrevious + $PARAM[unfocusedoverlay]"/>
-							<param name="unfocusedoverlayanimationtype" value="Visible"/>
-							<param name="unfocusedoverlayanimationcondition" value="true"/>
-							<param name="unfocusedoverlayanimationeffect" value="fade"/>
-							<param name="unfocusedoverlayanimationstart" value="0"/>
-							<param name="unfocusedoverlayanimationend" value="100"/>
+							<param name="artworkmask" value="!Container($PARAM[target_id]).OnPrevious + $PARAM[artworkmask]"/>
+							<param name="artworkmaskanimationtype" value="Visible"/>
+							<param name="artworkmaskanimationcondition" value="true"/>
+							<param name="artworkmaskanimationeffect" value="fade"/>
+							<param name="artworkmaskanimationstart" value="0"/>
+							<param name="artworkmaskanimationend" value="100"/>
 						</include>
 						<!--Move Icon 0 to 1 (Overlay details on)-->
 						<include content="ListIcon">
@@ -970,7 +966,7 @@
 							<param name="animationeffect" value="slide"/>
 							<param name="animationend" value="$PARAM[item_width],0"/>
 							<param name="showgradient" value="!String.IsEmpty(Container.ListItemNoWrap(1).Label) + $PARAM[showgradient]"/>
-							<param name="unfocusedoverlay" value="true"/>
+							<param name="artworkmask" value="true"/>
 						</include>
 						<!--Move Icon 1 to 2-->
 						<include content="ListIcon">
@@ -984,7 +980,7 @@
 							<param name="animationeffect" value="slide"/>
 							<param name="animationend" value="$PARAM[item_width],0"/>
 							<param name="showgradient" value="!String.IsEmpty(Container.ListItemNoWrap(2).Label) + $PARAM[showgradient]"/>
-							<param name="unfocusedoverlay" value="true"/>
+							<param name="artworkmask" value="true"/>
 						</include>
 						<!--Move Icon 2 to 3-->
 						<include content="ListIcon">
@@ -998,7 +994,7 @@
 							<param name="animationeffect" value="slide"/>
 							<param name="animationend" value="$PARAM[item_width],0"/>
 							<param name="showgradient" value="!String.IsEmpty(Container.ListItemNoWrap(3).Label) + $PARAM[showgradient]"/>
-							<param name="unfocusedoverlay" value="true"/>
+							<param name="artworkmask" value="true"/>
 						</include>
 						<!--Dropshadow for icon -1 to 0-->
 						<!--Right Side-->
@@ -1059,14 +1055,14 @@
 							<param name="showgradient" value="$PARAM[showgradient]"/>
 							<param name="bordervisible" value="$EXP[$PARAM[viewtype_label]View_Details_Off] + !Control.HasFocus(60)"/>
 							<param name="bordersize" value="11"/>
-							<param name="bordercolor" value="$VAR[LightColor]"/>
+							<param name="bordercolor" value="$VAR[Light_Color]"/>
 							<param name="bordertexture" value="views/border_10px.png"/>
-							<param name="unfocusedoverlay" value="Container($PARAM[target_id]).OnPrevious + $PARAM[unfocusedoverlay]"/>
-							<param name="unfocusedoverlayanimationtype" value="Hidden"/>
-							<param name="unfocusedoverlayanimationcondition" value="true"/>
-							<param name="unfocusedoverlayanimationeffect" value="fade"/>
-							<param name="unfocusedoverlayanimationstart" value="100"/>
-							<param name="unfocusedoverlayanimationend" value="0"/>
+							<param name="artworkmask" value="Container($PARAM[target_id]).OnPrevious + $PARAM[artworkmask]"/>
+							<param name="artworkmaskanimationtype" value="Hidden"/>
+							<param name="artworkmaskanimationcondition" value="true"/>
+							<param name="artworkmaskanimationeffect" value="fade"/>
+							<param name="artworkmaskanimationstart" value="100"/>
+							<param name="artworkmaskanimationend" value="0"/>
 						</include>
 						<!--Move Icon -1 to 0 (Details off, fade out overlay), musicplayer-->
 						<include content="ListIcon">
@@ -1081,14 +1077,14 @@
 							<param name="showgradient" value="$PARAM[showgradient]"/>
 							<param name="bordervisible" value="$EXP[$PARAM[viewtype_label]View_Details_Off] + !Control.HasFocus(60)"/>
 							<param name="bordersize" value="11"/>
-							<param name="bordercolor" value="$VAR[LightColor]"/>
+							<param name="bordercolor" value="$VAR[Light_Color]"/>
 							<param name="bordertexture" value="views/border_10px.png"/>
-							<param name="unfocusedoverlay" value="Container($PARAM[target_id]).OnPrevious + $PARAM[unfocusedoverlay]"/>
-							<param name="unfocusedoverlayanimationtype" value="Hidden"/>
-							<param name="unfocusedoverlayanimationcondition" value="true"/>
-							<param name="unfocusedoverlayanimationeffect" value="fade"/>
-							<param name="unfocusedoverlayanimationstart" value="100"/>
-							<param name="unfocusedoverlayanimationend" value="0"/>
+							<param name="artworkmask" value="Container($PARAM[target_id]).OnPrevious + $PARAM[artworkmask]"/>
+							<param name="artworkmaskanimationtype" value="Hidden"/>
+							<param name="artworkmaskanimationcondition" value="true"/>
+							<param name="artworkmaskanimationeffect" value="fade"/>
+							<param name="artworkmaskanimationstart" value="100"/>
+							<param name="artworkmaskanimationend" value="0"/>
 						</include>
 						<!--Move Icon -1 to 0 (Overlay details on, no musicplayer)-->
 						<include content="ListIcon">
@@ -1103,9 +1099,9 @@
 							<param name="showgradient" value="$PARAM[showgradient]"/>
 							<param name="bordervisible" value="$EXP[$PARAM[viewtype_label]View_Details_Off] + !Control.HasFocus(60)"/>
 							<param name="bordersize" value="11"/>
-							<param name="bordercolor" value="$VAR[LightColor]"/>
+							<param name="bordercolor" value="$VAR[Light_Color]"/>
 							<param name="bordertexture" value="views/border_10px.png"/>
-							<param name="unfocusedoverlay" value="true"/>
+							<param name="artworkmask" value="true"/>
 						</include>
 						<!--Move Icon -1 to 0 (Overlay details on, musicplayer)-->
 						<include content="ListIcon">
@@ -1120,9 +1116,9 @@
 							<param name="showgradient" value="$PARAM[showgradient]"/>
 							<param name="bordervisible" value="$EXP[$PARAM[viewtype_label]View_Details_Off] + !Control.HasFocus(60)"/>
 							<param name="bordersize" value="11"/>
-							<param name="bordercolor" value="$VAR[LightColor]"/>
+							<param name="bordercolor" value="$VAR[Light_Color]"/>
 							<param name="bordertexture" value="views/border_10px.png"/>
-							<param name="unfocusedoverlay" value="true"/>
+							<param name="artworkmask" value="true"/>
 						</include>
 					</control>
 					<!--NEXT SCROLL-->
@@ -1172,12 +1168,12 @@
 							<param name="animationeffect" value="slide"/>
 							<param name="animationend" value="-$PARAM[item_width],0"/>
 							<param name="showgradient" value="$PARAM[showgradient]"/>
-							<param name="unfocusedoverlay" value="!Container($PARAM[target_id]).OnNext + $PARAM[unfocusedoverlay]"/>
-							<param name="unfocusedoverlayanimationtype" value="Visible"/>
-							<param name="unfocusedoverlayanimationcondition" value="true"/>
-							<param name="unfocusedoverlayanimationeffect" value="fade"/>
-							<param name="unfocusedoverlayanimationstart" value="0"/>
-							<param name="unfocusedoverlayanimationend" value="100"/>
+							<param name="artworkmask" value="!Container($PARAM[target_id]).OnNext + $PARAM[artworkmask]"/>
+							<param name="artworkmaskanimationtype" value="Visible"/>
+							<param name="artworkmaskanimationcondition" value="true"/>
+							<param name="artworkmaskanimationeffect" value="fade"/>
+							<param name="artworkmaskanimationstart" value="0"/>
+							<param name="artworkmaskanimationend" value="100"/>
 						</include>
 						<!--Move Icon 0 to -1 (Details off, fade in overlay, musicplayer)-->
 						<include content="ListIcon">
@@ -1191,12 +1187,12 @@
 							<param name="animationeffect" value="slide"/>
 							<param name="animationend" value="-$PARAM[2x_item_width],0"/>
 							<param name="showgradient" value="$PARAM[showgradient]"/>
-							<param name="unfocusedoverlay" value="!Container($PARAM[target_id]).OnNext + $PARAM[unfocusedoverlay]"/>
-							<param name="unfocusedoverlayanimationtype" value="Visible"/>
-							<param name="unfocusedoverlayanimationcondition" value="true"/>
-							<param name="unfocusedoverlayanimationeffect" value="fade"/>
-							<param name="unfocusedoverlayanimationstart" value="0"/>
-							<param name="unfocusedoverlayanimationend" value="100"/>
+							<param name="artworkmask" value="!Container($PARAM[target_id]).OnNext + $PARAM[artworkmask]"/>
+							<param name="artworkmaskanimationtype" value="Visible"/>
+							<param name="artworkmaskanimationcondition" value="true"/>
+							<param name="artworkmaskanimationeffect" value="fade"/>
+							<param name="artworkmaskanimationstart" value="0"/>
+							<param name="artworkmaskanimationend" value="100"/>
 						</include>
 						<!--Move Icon 0 to -1 (Overlay details on, no musicplayer)-->
 						<include content="ListIcon">
@@ -1210,7 +1206,7 @@
 							<param name="animationeffect" value="slide"/>
 							<param name="animationend" value="-$PARAM[item_width],0"/>
 							<param name="showgradient" value="$PARAM[showgradient]"/>
-							<param name="unfocusedoverlay" value="true"/>
+							<param name="artworkmask" value="true"/>
 						</include>
 						<!--Move Icon 0 to -1 (Overlay details on, musicplayer)-->
 						<include content="ListIcon">
@@ -1224,7 +1220,7 @@
 							<param name="animationeffect" value="slide"/>
 							<param name="animationend" value="-$PARAM[2x_item_width],0"/>
 							<param name="showgradient" value="$PARAM[showgradient]"/>
-							<param name="unfocusedoverlay" value="true"/>
+							<param name="artworkmask" value="true"/>
 						</include>
 						<!--Move Icon 2 to 1-->
 						<include content="ListIcon">
@@ -1238,7 +1234,7 @@
 							<param name="animationeffect" value="slide"/>
 							<param name="animationend" value="-$PARAM[item_width],0"/>
 							<param name="showgradient" value="!String.IsEmpty(Container.ListItemNoWrap(1).Label) + $PARAM[showgradient]"/>
-							<param name="unfocusedoverlay" value="!String.IsEmpty(Container.ListItemNoWrap(1).Label)"/>
+							<param name="artworkmask" value="!String.IsEmpty(Container.ListItemNoWrap(1).Label)"/>
 						</include>
 						<!--Move Icon 3 to 2-->
 						<include content="ListIcon">
@@ -1252,7 +1248,7 @@
 							<param name="animationeffect" value="slide"/>
 							<param name="animationend" value="-$PARAM[item_width],0"/>
 							<param name="showgradient" value="!String.IsEmpty(Container.ListItemNoWrap(2).Label) + $PARAM[showgradient]"/>
-							<param name="unfocusedoverlay" value="!String.IsEmpty(Container.ListItemNoWrap(2).Label)"/>
+							<param name="artworkmask" value="!String.IsEmpty(Container.ListItemNoWrap(2).Label)"/>
 						</include>
 						<!--Dropshadow for icon 0 to -1-->
 						<!--Right Side-->
@@ -1313,14 +1309,14 @@
 							<param name="showgradient" value="$PARAM[showgradient]"/>
 							<param name="bordervisible" value="$EXP[$PARAM[viewtype_label]View_Details_Off] + !Control.HasFocus(60)"/>
 							<param name="bordersize" value="11"/>
-							<param name="bordercolor" value="$VAR[LightColor]"/>
+							<param name="bordercolor" value="$VAR[Light_Color]"/>
 							<param name="bordertexture" value="views/border_10px.png"/>
-							<param name="unfocusedoverlay" value="Container($PARAM[target_id]).OnNext + $PARAM[unfocusedoverlay]"/>
-							<param name="unfocusedoverlayanimationtype" value="Hidden"/>
-							<param name="unfocusedoverlayanimationcondition" value="true"/>
-							<param name="unfocusedoverlayanimationeffect" value="fade"/>
-							<param name="unfocusedoverlayanimationstart" value="100"/>
-							<param name="unfocusedoverlayanimationend" value="0"/>
+							<param name="artworkmask" value="Container($PARAM[target_id]).OnNext + $PARAM[artworkmask]"/>
+							<param name="artworkmaskanimationtype" value="Hidden"/>
+							<param name="artworkmaskanimationcondition" value="true"/>
+							<param name="artworkmaskanimationeffect" value="fade"/>
+							<param name="artworkmaskanimationstart" value="100"/>
+							<param name="artworkmaskanimationend" value="0"/>
 						</include>
 						<!--Move Icon 1 to 0 (Overlay details on)-->
 						<include content="ListIcon">
@@ -1335,9 +1331,9 @@
 							<param name="showgradient" value="$PARAM[showgradient]"/>
 							<param name="bordervisible" value="$EXP[$PARAM[viewtype_label]View_Details_Off] + !Control.HasFocus(60)"/>
 							<param name="bordersize" value="11"/>
-							<param name="bordercolor" value="$VAR[LightColor]"/>
+							<param name="bordercolor" value="$VAR[Light_Color]"/>
 							<param name="bordertexture" value="views/border_10px.png"/>
-							<param name="unfocusedoverlay" value="true"/>
+							<param name="artworkmask" value="true"/>
 						</include>
 					</control>
 				</control>
@@ -1733,7 +1729,7 @@
 					<param name="focus_height" value="$PARAM[item_height]"/>
 					<param name="focus_border_visible" value="$EXP[ShowcaseView_Details_Off] + !Control.HasFocus(60)"/>
 					<param name="focus_border_size" value="11"/>
-					<param name="focus_border_color" value="$VAR[LightColor]"/>
+					<param name="focus_border_color" value="$VAR[Light_Color]"/>
 					<param name="focus_border_texture" value="views/border_10px.png"/>
 					<param name="show_gradient" value="!$EXP[ShowcaseView_Details_Overlay_IsVisible]"/>
 					<param name="unfocused_overlay" value="true"/>
@@ -1821,18 +1817,17 @@
 				<param name="visible" value="$EXP[GridView_Display_Is$PARAM[displaytype_label]]"/>
 				<param name="showgradient" value="true"/>
 				<param name="aspectratio" value="scale"/>
-				<param name="unfocusedoverlay" value="!$EXP[ContentSwitching] + !$EXP[GridView_Details_Off] + !$EXP[GridView_Details_Breadcrumb] + !$EXP[TransparentDialog_IsVisible] + !$EXP[StandardViews_NowPlaying]"/>
-				<param name="unfocusedoverlaytexture" value="views/white_75.png"/>
-				<param name="unfocusedoverlayanimationtype" value="Visible"/>
-				<param name="unfocusedoverlayanimationcondition" value="true"/>
-				<param name="unfocusedoverlayanimationeffect" value="fade"/>
-				<param name="unfocusedoverlayanimationstart" value="0"/>
-				<param name="unfocusedoverlayanimationend" value="100"/>
-				<param name="unfocusedoverlayanimationdelay" value="540"/>
+				<param name="artworkmask" value="!$EXP[ContentSwitching] + !$EXP[GridView_Details_Off] + !$EXP[GridView_Details_Breadcrumb] + !$EXP[TransparentDialog_IsVisible] + !$EXP[StandardViews_NowPlaying]"/>
+				<param name="artworkmaskanimationtype" value="Visible"/>
+				<param name="artworkmaskanimationcondition" value="true"/>
+				<param name="artworkmaskanimationeffect" value="fade"/>
+				<param name="artworkmaskanimationstart" value="0"/>
+				<param name="artworkmaskanimationend" value="100"/>
+				<param name="artworkmaskanimationdelay" value="540"/>
 				<param name="bordervisible" value="true"/>
 				<param name="borderedge" value="-10"/>
 				<param name="bordersize" value="11"/>
-				<param name="bordercolor" value="$VAR[AccentColor]"/>
+				<param name="bordercolor" value="$VAR[Accent_Color]"/>
 				<param name="bordertexture" value="views/border_10px.png"/>
 			</include>
 		</definition>
@@ -1875,8 +1870,8 @@
 					<param name="visible" value="$EXP[GridView_Display_IsFanart]"/>
 					<param name="showgradient" value="false"/>
 					<param name="aspectratio" value="scale"/>
-					<param name="unfocusedoverlay" value="String.IsEqual(ListItem.Overlay,OverlayWatched.png)"/>
-					<param name="unfocusedoverlaydiffuse" value="$VAR[SecondaryColor]"/>
+					<param name="artworkmask" value="String.IsEqual(ListItem.Overlay,OverlayWatched.png)"/>
+					<param name="artworkmaskdiffuse" value="$VAR[Unwatched_Artwork_Mask]"/>
 				</include>
 				<include content="ListIcon">
 					<param name="left" value="60"/>
@@ -1885,8 +1880,8 @@
 					<param name="visible" value="$EXP[GridView_Display_IsPosters]"/>
 					<param name="showgradient" value="false"/>
 					<param name="aspectratio" value="scale"/>
-					<param name="unfocusedoverlay" value="String.IsEqual(ListItem.Overlay,OverlayWatched.png)"/>
-					<param name="unfocusedoverlaydiffuse" value="$VAR[SecondaryColor]"/>
+					<param name="artworkmask" value="String.IsEqual(ListItem.Overlay,OverlayWatched.png)"/>
+					<param name="artworkmaskdiffuse" value="$VAR[Unwatched_Artwork_Mask]"/>
 				</include>
 				<include content="ListIcon">
 					<param name="left" value="60"/>
@@ -1895,8 +1890,8 @@
 					<param name="visible" value="$EXP[GridView_Display_IsSquare]"/>
 					<param name="showgradient" value="false"/>
 					<param name="aspectratio" value="scale"/>
-					<param name="unfocusedoverlay" value="String.IsEqual(ListItem.Overlay,OverlayWatched.png)"/>
-					<param name="unfocusedoverlaydiffuse" value="$VAR[SecondaryColor]"/>
+					<param name="artworkmask" value="String.IsEqual(ListItem.Overlay,OverlayWatched.png)"/>
+					<param name="artworkmaskdiffuse" value="$VAR[Unwatched_Artwork_Mask]"/>
 				</include>
 			</control>
 		</definition>
@@ -1924,7 +1919,7 @@
 						<param name="top" value="0"/>
 						<param name="width" value="120"/>
 						<param name="height" value="100%"/>
-						<param name="colordiffuse" value="$VAR[ShadowColorWatched]"/>
+						<param name="colordiffuse" value="$VAR[Artwork_Watched_Dropshadow]"/>
 						<param name="visible" value="$EXP[Grid_Shadow_Left_Visible] + $EXP[Grid_Shadow_Left_Watched]"/>
 					</include>
 					<!--Top Left Corner-->
@@ -1942,7 +1937,7 @@
 						<param name="width" value="120"/>
 						<param name="height" value="120"/>
 						<param name="texture" value="views/dropshadow_topleftcorner_120.png"/>
-						<param name="colordiffuse" value="$VAR[ShadowColorWatched]"/>
+						<param name="colordiffuse" value="$VAR[Artwork_Watched_Dropshadow]"/>
 						<param name="visible" value="$EXP[Grid_Shadow_Top-Left_Visible] + $EXP[Grid_Shadow_Top-Left_Watched]"/>
 					</include>
 					<!--Top Side-->
@@ -1960,7 +1955,7 @@
 						<param name="width" value="100%"/>
 						<param name="height" value="120"/>
 						<param name="texture" value="views/dropshadow_top_120.png"/>
-						<param name="colordiffuse" value="$VAR[ShadowColorWatched]"/>
+						<param name="colordiffuse" value="$VAR[Artwork_Watched_Dropshadow]"/>
 						<param name="visible" value="$EXP[Grid_Shadow_Top_Visible] + $EXP[Grid_Shadow_Top_Watched]"/>
 					</include>
 					<!--Top Right Corner-->
@@ -1980,7 +1975,7 @@
 						<param name="height" value="120"/>
 						<param name="flipx" value="true"/>
 						<param name="texture" value="views/dropshadow_topleftcorner_120.png"/>
-						<param name="colordiffuse" value="$VAR[ShadowColorWatched]"/>
+						<param name="colordiffuse" value="$VAR[Artwork_Watched_Dropshadow]"/>
 						<param name="visible" value="$EXP[Grid_Shadow_Top-Right_Visible] + $EXP[Grid_Shadow_Top-Right_Watched]"/>
 					</include>-->
 					<!--Rigt Side-->
@@ -1998,7 +1993,7 @@
 						<param name="width" value="120"/>
 						<param name="height" value="100%"/>
 						<param name="flipx" value="true"/>
-						<param name="colordiffuse" value="$VAR[ShadowColorWatched]"/>
+						<param name="colordiffuse" value="$VAR[Artwork_Watched_Dropshadow]"/>
 						<param name="visible" value="$EXP[Grid_Shadow_Right_Visible] + $EXP[Grid_Shadow_Right_Watched]"/>
 					</include>
 					<!--Bottom Right Corner-->
@@ -2020,7 +2015,7 @@
 						<param name="flipx" value="true"/>
 						<param name="flipy" value="true"/>
 						<param name="texture" value="views/dropshadow_topleftcorner_120.png"/>
-						<param name="colordiffuse" value="$VAR[ShadowColorWatched]"/>
+						<param name="colordiffuse" value="$VAR[Artwork_Watched_Dropshadow]"/>
 						<param name="visible" value="$EXP[Grid_Shadow_Bottom-Right_Visible] + $EXP[Grid_Shadow_Bottom-Right_Watched]"/>
 					</include>
 					<!--Bottom Side-->
@@ -2040,7 +2035,7 @@
 						<param name="height" value="120"/>
 						<param name="flipy" value="true"/>
 						<param name="texture" value="views/dropshadow_top_120.png"/>
-						<param name="colordiffuse" value="$VAR[ShadowColorWatched]"/>
+						<param name="colordiffuse" value="$VAR[Artwork_Watched_Dropshadow]"/>
 						<param name="visible" value="$EXP[Grid_Shadow_Bottom_Visible] + $EXP[Grid_Shadow_Bottom_Watched]"/>
 					</include>
 					<!--Bottom Left Corner-->
@@ -2060,7 +2055,7 @@
 						<param name="height" value="120"/>
 						<param name="flipy" value="true"/>
 						<param name="texture" value="views/dropshadow_topleftcorner_120.png"/>
-						<param name="colordiffuse" value="$VAR[ShadowColorWatched]"/>
+						<param name="colordiffuse" value="$VAR[Artwork_Watched_Dropshadow]"/>
 						<param name="visible" value="$EXP[Grid_Shadow_Bottom-Left_Visible] + $EXP[Grid_Shadow_Bottom-Left_Watched]"/>
 					</include>
 				</control>
@@ -2117,7 +2112,7 @@
 					<control type="textbox">
 						<height max="$PARAM[title_max_height]">auto</height>
 						<font>$PARAM[title_font]</font>
-						<textcolor>$VAR[LightColor]</textcolor>
+						<textcolor>$VAR[Light_Color]</textcolor>
 						<label>$VAR[Title_Label]</label>
 						<align>center</align>
 					</control>
@@ -2125,7 +2120,7 @@
 						<visible>$EXP[GridView_Details_Info]</visible>
 						<height>35</height>
 						<font>$PARAM[info_font]</font>
-						<textcolor>$VAR[LightColor]</textcolor>
+						<textcolor>$VAR[Light_Color]</textcolor>
 						<label>$VAR[Info_Label]</label>
 						<align>center</align>
 					</control>
@@ -2144,14 +2139,14 @@
     <param name="itemgap" default="0"/>
 		<param name="labeltype" default="textbox"/>
 		<param name="titleheight" default="146"/>
-    <param name="titlecolor" default="$VAR[ListFocusColor]"/>
+    <param name="titlecolor" default="$VAR[List_Color]"/>
 		<param name="titlealign" default="left"/>
     <param name="infogap" default="0"/>
     <param name="infoheight" default="35"/>
     <param name="plotfont" default="Body"/>
 		<param name="plotmaxheight" default="103"/>
     <param name="plotgap" default="60"/>
-    <param name="plotcolor" default="$VAR[PlotColor]"/>
+    <param name="plotcolor" default="$VAR[Plot_Color]"/>
 		<definition>
 			<control type="grouplist">
 				<animation effect="slide" start="0,0" end="180,0" time="0" condition="$EXP[ShowcaseView_IsVisible] + $EXP[ShowcaseView_Display_IsSquare]">Conditional</animation>
@@ -2221,7 +2216,7 @@
 	<include name="Breadcrumb_Label">
 		<param name="visible" default=""/>
 		<param name="title_label_id" default="980"/>
-		<param name="label_color" default="$VAR[ListFocusColor]"/>
+		<param name="label_color" default="$VAR[List_Color]"/>
 		<param name="info_label_id" default=""/>
 		<param name="info_label_visible" default="true"/>
 		<definition>
@@ -2262,18 +2257,27 @@
 
 	<include name="Description_Label">
 		<param name="id" default=""/>
+		<param name="type" default="label"/>
+		<param name="visible" default="true"/>
 		<param name="label" default=""/>
+		<param name="left" default="60"/>
+		<param name="right" default="240"/>
+		<param name="height" default="120"/>
+		<param name="bottom" default="0"/>
 		<definition>
-			<control type="label" id="$PARAM[id]">
-				<left>60</left>
-				<width max="1620">auto</width>
-				<height>120</height>
-				<bottom>0</bottom>
+			<control type="$PARAM[type]" id="$PARAM[id]">
+				<include>Content_Fade_Animation</include>
+				<visible>$PARAM[visible]</visible>
+				<left>$PARAM[left]</left>
+				<right>$PARAM[right]</right>
+				<height>$PARAM[height]</height>
+				<bottom>$PARAM[bottom]</bottom>
 				<label>$PARAM[label]</label>
 				<aligny>center</aligny>
 				<font>Breadcrumb_Info_Label</font>
-				<textcolor>$VAR[PrimaryColor]</textcolor>
-				<haspath>true</haspath>
+				<textcolor>$VAR[Primary_Color]</textcolor>
+				<haspath>false</haspath>
+				<autoscroll delay="3000" time="1000" repeat="10000">true</autoscroll>
 				<scroll>true</scroll>
 				<scrollsuffix> / </scrollsuffix>
 			</control>
@@ -2287,9 +2291,9 @@
     <param name="bottom"/>
 		<param name="width" default="360"/>
 		<param name="height" default="6"/>
-		<param name="backgroundcolor" default="$VAR[ProgressBarBackgroundColor]"/>
+		<param name="backgroundcolor" default="$VAR[Progress_Background_Color]"/>
 		<param name="backgoundtexture" default="views/white_20.png"/>
-		<param name="focuscolor" default="$VAR[ProgressBarFocusColor]"/>
+		<param name="focuscolor" default="$VAR[Progress_Focused_Color]"/>
 		<param name="focustexture" default="views/white_100.png"/>
 		<definition>
 			<control type="group">
@@ -2371,7 +2375,7 @@
 						<width>90</width>
 						<height>60</height>
 						<aspectratio>keep</aspectratio>
-						<texture colordiffuse="$VAR[FlagColor]" fallback="flags/blank.png">$VAR[Studio_Label]</texture>
+						<texture colordiffuse="$VAR[Flag_Color]" fallback="flags/blank.png">$VAR[Studio_Label]</texture>
 						<animation effect="slide" start="0,0" end="180,0" time="0" condition="$EXP[ListView_Flags_Studio_Shift] | $EXP[BillboardView_Flags_Studio_Shift] | $EXP[ShowcaseView_Flags_Studio_Shift] | $EXP[StripView_Flags_Studio_Shift]">Conditional</animation>
 						<animation effect="slide" start="0,0" end="-1560,0" time="0" condition="$EXP[StripView_IsVisible] + $EXP[StripView_Details_Title] + !$EXP[StripView_Details_Logo_IsOn] + !$EXP[StripView_Flags_Studio_Shift]">Conditional</animation>
 					</control>
@@ -2383,7 +2387,7 @@
 						<width>90</width>
 						<height>60</height>
 						<aspectratio>keep</aspectratio>
-						<texture colordiffuse="$VAR[FlagColor]" fallback="flags/blank.png">$VAR[MPAA_Label]</texture>
+						<texture colordiffuse="$VAR[Flag_Color]" fallback="flags/blank.png">$VAR[MPAA_Label]</texture>
 					</control>
 				</control>
 			</control>

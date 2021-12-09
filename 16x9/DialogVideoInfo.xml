@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <window>
 	<!-- movieinformation -->
+	<backgroundcolor>$VAR[Secondary_Color]</backgroundcolor>
 	<onload condition="!String.IsEqual(window(movieinformation).property(Breadcrumb_GoToNext),true) + !String.IsEqual(window(movieinformation).property(Breadcrumb_GoToPrevious),true)">SetProperty(Breadcrumb_Level,1,movieinformation)</onload>
 	<onload condition="!String.IsEqual(window(movieinformation).property(Breadcrumb_GoToNext),true) + !String.IsEqual(window(movieinformation).property(Breadcrumb_GoToPrevious),true)">SetProperty(ContainerPath_1,$INFO[Container.FolderPath],movieinformation)</onload>
 	<onload condition="!String.IsEqual(window(movieinformation).property(Breadcrumb_GoToNext),true) + !String.IsEqual(window(movieinformation).property(Breadcrumb_GoToPrevious),true)">ClearProperty(ContainerPath_2,movieinformation)</onload>
@@ -52,12 +53,10 @@
 	<onload condition="Container.Content(tvshows) + String.IsEmpty(window(movieinformation).property(TVShowPath))">SetProperty(TVShowPath,videodb://tvshows/titles/$INFO[ListItem.DBID]/,movieinformation)</onload>
 	<onunload condition="!String.IsEmpty(window(movieinformation).property(TVShowPath))">ClearProperty(TVShowPath,movieinformation)</onunload>
 	<onload>SetProperty(SelectedItem,$INFO[ListItem.Title],movieinformation)</onload>
-
 	<defaultcontrol always="true">65000</defaultcontrol>
 	<include>Delayed_Dialog_Fade_Animation</include>
 
 	<controls>
-		<include>FullscreenDimensions</include>
 
 		<!--HIDDEN-->
 		<control type="group">
@@ -189,16 +188,23 @@
 		<!--BACKGROUND-->
 		<control type="image">
 			<visible>Control.HasFocus(65002)</visible>
-			<include>OptionsMenuFadeAnimation</include>
+			<include>Dialog_Fade_Animation</include>
 			<aspectratio>scale</aspectratio>
-			<texture diffuse="views/white_30.png" fallback="fallback.png" background="true">$VAR[Dialog_Info_Background]</texture>
+			<texture colordiffuse="$VAR[Artwork_Diffuse]" fallback="fallback.png" background="true">$VAR[Dialog_Info_Background]</texture>
 		</control>
 		<control type="image">
 			<visible>Control.HasFocus(99)</visible>
-			<include>OptionsMenuFadeAnimation</include>
+			<include>Dialog_Fade_Animation</include>
 			<aspectratio>scale</aspectratio>
-			<texture diffuse="views/white_20.png" fallback="fallback.png" background="true">$VAR[Dialog_Info_Background]</texture>
+			<texture colordiffuse="$VAR[Plot_Dialog_Diffuse]" fallback="fallback.png" background="true">$VAR[Dialog_Info_Background]</texture>
 		</control>
+		<control type="image">
+			<visible>!Window.IsTopMost(movieinformation) + !Window.IsVisible(shutdownmenu)</visible>
+			<include>Dialog_Fade_Animation</include>
+			<aspectratio>scale</aspectratio>
+			<texture colordiffuse="$VAR[Opaque_Dialog_Diffuse]" fallback="fallback.png" background="true">$VAR[Dialog_Info_Background]</texture>
+		</control>
+
 
 
 
@@ -223,7 +229,7 @@
 						<height max="220">auto</height>
 						<align>center</align>
 						<font>Billboard_Title</font>
-						<textcolor>$VAR[PrimaryColor]</textcolor>
+						<textcolor>$VAR[Primary_Color]</textcolor>
 						<label>$VAR[Title_Label]</label>
 					</control>
 				</control>
@@ -233,7 +239,7 @@
 				<aligny>center</aligny>
 				<align>center</align>
 				<font>Plot</font>
-				<textcolor>$VAR[PrimaryColor]</textcolor>
+				<textcolor>$VAR[Primary_Color]</textcolor>
 			</control>
 		</control>
 
@@ -278,7 +284,7 @@
 								<height max="219">auto</height>
 								<align>center</align>
 								<font>Billboard_Title</font>
-								<textcolor>$VAR[PrimaryColor]</textcolor>
+								<textcolor>$VAR[Primary_Color]</textcolor>
 								<label>$VAR[Title_Label]</label>
 							</control>
 						</control>
@@ -289,7 +295,7 @@
 						<width>100%</width>
 						<height>35</height>
 						<font>Billboard_Info</font>
-						<textcolor>$VAR[PrimaryColor]</textcolor>
+						<textcolor>$VAR[Primary_Color]</textcolor>
 						<label>$VAR[Dialog_Info_Label]</label>
 						<align>center</align>
 					</control>
@@ -302,7 +308,7 @@
 						<control type="image">
 							<width>100%</width>
 							<aspectratio>keep</aspectratio>
-							<texture colordiffuse="$VAR[StarColor]">$VAR[StarRating_Label]</texture>
+							<texture colordiffuse="$VAR[Star_Color]">$VAR[StarRating_Label]</texture>
 							<visible>!Listitem.DBType(season)</visible>
 						</control>
 					</control>
@@ -312,7 +318,7 @@
 						<width>100%</width>
 						<height max="105">auto</height>
 						<font>Body</font>
-						<textcolor>$VAR[PrimaryColor]</textcolor>
+						<textcolor>$VAR[Primary_Color]</textcolor>
 						<label>$INFO[ListItem.Plot]</label>
 						<align>center</align>
 						<autoscroll delay="5000" time="1500" repeat="2000">true</autoscroll>
@@ -358,7 +364,7 @@
 					<bottom>0</bottom>
 					<width>60</width>
 					<height>60</height>
-					<texture colordiffuse="$VAR[PrimaryColor]">views/arrow_focused.png</texture>
+					<texture colordiffuse="$VAR[Primary_Color]">views/arrow_focused.png</texture>
 					<aspectratio>keep</aspectratio>
 					<visible>Control.HasFocus(65002)</visible>
 					<animation type="Visible" reversible="false">
@@ -376,11 +382,11 @@
 					<param name="itemgap" value="7"/>
 					<param name="focusedheight" value="60"/>
 					<param name="focusedfont" value="Dialog_Menu_Focused"/>
-					<param name="focusedtextcolor" value="$VAR[PrimaryColor]"/>
+					<param name="focusedtextcolor" value="$VAR[Primary_Color]"/>
 					<param name="unfocusedtop" value="12"/>
 					<param name="unfocusedheight" value="45"/>
 					<param name="unfocusedfont" value="Dialog_Menu_Unfocused"/>
-					<param name="unfocusedtextcolor" value="$VAR[PrimaryColor]"/>
+					<param name="unfocusedtextcolor" value="$VAR[Primary_Color]"/>
 				</include>
 			</control>
 
@@ -521,7 +527,7 @@
 				<visible>Control.IsVisible(65007)</visible>
 				<!--Background for Fake spinner-->
 				<control type="image">
-					<texture colordiffuse="$VAR[SecondaryColor]">views/white_100.png</texture>
+					<texture colordiffuse="$VAR[Secondary_Color]">views/white_100.png</texture>
 				</control>
 				<!--Fake spinner-->
 				<control type="image">
@@ -529,7 +535,7 @@
 					<top>55</top>
 					<left>224</left>
 					<width>120</width>
-					<texture colordiffuse="$VAR[PrimaryColor]">views/dialogs/busy.png</texture>
+					<texture colordiffuse="$VAR[Primary_Color]">views/dialogs/busy.png</texture>
 					<aspectratio aligny="top">keep</aspectratio>
 				</control>
 			</control>
