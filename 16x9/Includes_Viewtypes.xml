@@ -29,7 +29,7 @@
 		<param name="labelleft" default="120"/>
 		<param name="labelmaxwidth" default="720"/>
 		<param name="font" default="List_Title_Unfocused"/>
-		<param name="textcolor" default="$VAR[List_Color]"/>
+		<param name="textcolor" default="$VAR[Light_Color]"/>
 		<param name="selectedcolor" default="$VAR[List_Color]"/>
 		<param name="tracknumbercolor" default="$VAR[List_Color]"/>
 		<param name="scroll" default="false"/>
@@ -237,7 +237,7 @@
 		<param name="right" default="120"/>
 		<param name="height" default="500"/>
 		<param name="focusposition" default="4"/>
-		<param name="textcolor" default="$VAR[Light_Color]"/>
+		<param name="textcolor" default="$VAR[Primary_Color]"/>
 		<param name="selectedcolor" default="$VAR[Accent_Color]"/>
 		<param name="include" default=""/>
     <definition>
@@ -337,9 +337,9 @@
 			<onup condition="Integer.IsEqual(Container.NumItems,1)">SetFocus(3000,0)</onup>
 			<ondown condition="Integer.IsGreater(Container.NumItems,1)">50</ondown>
 			<ondown condition="Integer.IsEqual(Container.NumItems,1)">SetFocus(3000,0)</ondown>
-			<onleft condition="Player.HasAudio + [$EXP[ListView_Display_IsThumbnails] + $EXP[Square_Containers] | $EXP[ListView_Display_IsBackground]]">SetFocus(91100,1)</onleft>
-			<onleft condition="![Player.HasAudio + [$EXP[ListView_Display_IsThumbnails] + $EXP[Square_Containers] | $EXP[ListView_Display_IsBackground]]]">SetFocus(3000,0)</onleft>
-			<onright condition="Player.HasAudio + ![$EXP[ListView_Display_IsThumbnails] + $EXP[Square_Containers]] + !$EXP[Background_IsFanart]]">SetFocus(91100,1)</onright>
+			<onleft condition="Player.HasAudio + $EXP[ListView_Display_IsThumbnails] + $EXP[Square_Containers]">SetFocus(91100,1)</onleft>
+			<onleft condition="![Player.HasAudio + $EXP[ListView_Display_IsThumbnails] + $EXP[Square_Containers]]">SetFocus(3000,0)</onleft>
+			<onright condition="Player.HasAudio + ![$EXP[ListView_Display_IsThumbnails] + $EXP[Square_Containers]]">SetFocus(91100,1)</onright>
 			<onright condition="![Player.HasAudio + ![$EXP[ListView_Display_IsThumbnails] + $EXP[Square_Containers]]] + Integer.IsGreater(Container.NumItems,12)">61</onright>
 			<onright condition="![Player.HasAudio + ![$EXP[ListView_Display_IsThumbnails] + $EXP[Square_Containers]]] + Integer.IsLessOrEqual(Container.NumItems,11)">SetFocus(3000,0)</onright>
 			<onback condition="String.IsEqual(window(movieinformation).property(SentFromInfo),true)">SetFocus(5005)</onback>
@@ -2214,14 +2214,14 @@
 	</include>
 
 	<include name="Breadcrumb_Label">
-		<param name="visible" default=""/>
+		<param name="visible" default="true"/>
 		<param name="title_label_id" default="980"/>
-		<param name="label_color" default="$VAR[List_Color]"/>
+		<param name="label_color" default="$VAR[Primary_Color]"/>
 		<param name="info_label_id" default=""/>
 		<param name="info_label_visible" default="true"/>
 		<definition>
 			<control type="group">
-				<visible>![Window.IsVisible(1100) | Window.IsVisible(notification) | Window.IsVisible(extendedprogressdialog)] | $EXP[TransparentDialog_IsVisible] | [$EXP[ListView_Display_IsThumbnails] + $EXP[Square_Containers]]</visible>
+				<visible>$PARAM[visible]</visible>
 				<include>Content_Fade_Animation</include>
 				<control type="grouplist">
 					<visible>$PARAM[visible]</visible>
@@ -2263,6 +2263,7 @@
 		<param name="left" default="60"/>
 		<param name="right" default="240"/>
 		<param name="height" default="120"/>
+		<param name="haspath" default="false"/>
 		<param name="bottom" default="0"/>
 		<definition>
 			<control type="$PARAM[type]" id="$PARAM[id]">
@@ -2273,13 +2274,12 @@
 				<height>$PARAM[height]</height>
 				<bottom>$PARAM[bottom]</bottom>
 				<label>$PARAM[label]</label>
+				<align>left</align>
 				<aligny>center</aligny>
 				<font>Breadcrumb_Info_Label</font>
 				<textcolor>$VAR[Primary_Color]</textcolor>
-				<haspath>false</haspath>
-				<autoscroll delay="3000" time="1000" repeat="10000">true</autoscroll>
-				<scroll>true</scroll>
-				<scrollsuffix> / </scrollsuffix>
+				<haspath>$PARAM[haspath]</haspath>
+
 			</control>
 		</definition>
 	</include>

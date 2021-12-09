@@ -23,7 +23,7 @@
 	<expression name="Poster_Containers">Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | Container.Content(actors)</expression>
 	<expression name="Square_Containers">Container.Content(artists) | Container.Content(albums) | Container.Content(songs)</expression>
   <expression name="Background_IsFanart">[$EXP[ListView_IsVisible] + $EXP[ListView_Display_IsBackground]] | $EXP[BillboardView_IsVisible] | [$EXP[ShowcaseView_IsVisible] + $EXP[ShowcaseView_Details_Off]]</expression>
-	<expression name="OpaqueDialog_IsVisible">Window.IsVisible(movieinformation) | Window.IsVisible(musicinformation) | Window.IsVisible(systemsettings) | Window.IsVisible(servicesettings) | Window.IsVisible(pvrsettings) | Window.IsVisible(gamesettings) | Window.IsVisible(playersettings) | Window.IsVisible(mediasettings) | Window.IsVisible(interfacesettings) | Window.IsVisible(smartplaylisteditor)</expression>
+	<expression name="OpaqueDialog_IsVisible">Window.IsVisible(movieinformation) | Window.IsVisible(musicinformation) | Window.IsVisible(smartplaylisteditor)</expression>
 	<expression name="TransparentDialog_IsVisible">Window.IsVisible(shutdownmenu) | String.IsEqual(Window(home).Property(OptionsMenu),Active) | Window.IsVisible(contextmenu) | Window.IsVisible(okdialog) | Window.IsVisible(yesnodialog) | Window.IsVisible(progressdialog) | Window.IsVisible(selectdialog) | Window.IsVisible(filebrowser) | Window.IsVisible(virtualkeyboard) | Window.IsVisible(numericinput) | Window.IsVisible(smartplaylistrule) | Window.IsVisible(osdsubtitlesettings) | Window.IsVisible(osdvideosettings) | Window.IsVisible(osdaudiosettings) | Window.IsVisible(networksetup) | Window.IsVisible(profilesettings) | Window.IsVisible(locksettings) | Window.IsVisible(contentsettings) | Window.IsVisible(libexportsettings) | Window.IsVisible(peripheralsettings) | Window.IsVisible(mediafilter) | Window.IsVisible(osdcmssettings) | Window.IsVisible(infoprovidersettings) | Window.IsVisible(pvrtimersetting) | Window.IsVisible(pvrrecordingsetting) | Window.IsVisible(gamevideofilter)</expression>
 	<expression name="TransparentDialog_ExcludingMenuOptions">Window.IsVisible(shutdownmenu) | Window.IsVisible(contextmenu) | Window.IsVisible(okdialog) | Window.IsVisible(yesnodialog) | Window.IsVisible(progressdialog) | Window.IsVisible(selectdialog) | Window.IsVisible(filebrowser) | Window.IsVisible(virtualkeyboard) | Window.IsVisible(numericinput) | Window.IsVisible(smartplaylistrule) | Window.IsVisible(osdsubtitlesettings) | Window.IsVisible(osdvideosettings) | Window.IsVisible(osdaudiosettings) | Window.IsVisible(networksetup) | Window.IsVisible(profilesettings) | Window.IsVisible(locksettings) | Window.IsVisible(contentsettings) | Window.IsVisible(libexportsettings) | Window.IsVisible(peripheralsettings) | Window.IsVisible(mediafilter) | Window.IsVisible(osdcmssettings) | Window.IsVisible(infoprovidersettings) | Window.IsVisible(pvrtimersetting) | Window.IsVisible(pvrrecordingsetting) | Window.IsVisible(gamevideofilter)</expression>
 	<expression name="ContainerSwitching">![[Container.Content(movies) + !Window.IsVisible(1101)] | [Container.Content(sets) + !Window.IsVisible(1102)] | [Container.Content(tvshows) + !Window.IsVisible(1103)] | [Container.Content(seasons) + !Window.IsVisible(1104)] | [Container.Content(episodes) + !Window.IsVisible(1105)] | [Container.Content(artists) + !Window.IsVisible(1107)] | [Container.Content(albums) + !Window.IsVisible(1108)] | [Container.Content(songs) + !Window.IsVisible(1109)] | [Container.Content(actors) + !Window.IsVisible(1110)] | [Container.Content(addons) + !Window.IsVisible(1111)] | [Container.Content() + !Window.IsVisible(1112)] | [[Container.Content(files) | Container.Content(genres) | Container.Content(years) | Container.Content(playlists) | Container.Content(plugins) | Container.Content(studios) | Container.Content(directors) | Container.Content(tags) | Container.Content(countries) | Container.Content(roles) | Container.Content(images) | Container.Content(sources)] + !Window.IsVisible(1113)]]</expression>
@@ -1678,42 +1678,46 @@
 		<param name="textcolor" default="$VAR[Shutdown_Menu_Color]"/>
 		<definition>
 			<control type="group">
-				<visible>$PARAM[visible]</visible>
-				<right>$PARAM[right]</right>
-				<top>0</top>
-				<width>$PARAM[size]</width>
-				<height>$PARAM[size]</height>
-				<include>Content_Delayed_Fade_Animation</include>
-				<control type="image">
-					<texture colordiffuse="$PARAM[backgroundcolor]">views/white_100.png</texture>
-				</control>
-				<control type="grouplist">
-					<left>15</left>
-					<right>15</right>
-					<centertop>50%</centertop>
-					<height>70</height>
-					<align>center</align>
-					<itemgap>3</itemgap>
-					<orientation>horizontal</orientation>
-					<usecontrolcoords>true</usecontrolcoords>
-					<control type="label">
-						<width>auto</width>
-						<height>70</height>
-						<font>List_Title_Focused</font>
-						<align>right</align>
-						<aligny>center</aligny>
-						<textcolor>$PARAM[textcolor]</textcolor>
-						<label>$INFO[System.Time(hh)]</label>
+				<visible>![Window.IsVisible(1100) | Window.IsVisible(volumebar) | Window.IsVisible(progressdialog) | Window.IsVisible(extendedprogressdialog)] | Window.IsVisible(shutdownmenu)</visible>
+				<include>Content_Fade_Animation</include>
+				<control type="group">
+					<visible>$PARAM[visible]</visible>
+					<right>$PARAM[right]</right>
+					<top>0</top>
+					<width>$PARAM[size]</width>
+					<height>$PARAM[size]</height>
+					<include>Content_Delayed_Fade_Animation</include>
+					<control type="image">
+						<texture colordiffuse="$PARAM[backgroundcolor]">views/white_100.png</texture>
 					</control>
-					<control type="label">
-						<width>auto</width>
-						<height>55</height>
-						<top>13</top>
-						<font>Main_Menu_Unfocused</font>
-						<align>left</align>
-						<aligny>center</aligny>
-						<textcolor>$PARAM[textcolor]</textcolor>
-						<label>$INFO[System.Time(mm)]</label>
+					<control type="grouplist">
+						<left>15</left>
+						<right>15</right>
+						<centertop>50%</centertop>
+						<height>70</height>
+						<align>center</align>
+						<itemgap>3</itemgap>
+						<orientation>horizontal</orientation>
+						<usecontrolcoords>true</usecontrolcoords>
+						<control type="label">
+							<width>auto</width>
+							<height>70</height>
+							<font>List_Title_Focused</font>
+							<align>right</align>
+							<aligny>center</aligny>
+							<textcolor>$PARAM[textcolor]</textcolor>
+							<label>$INFO[System.Time(hh)]</label>
+						</control>
+						<control type="label">
+							<width>auto</width>
+							<height>55</height>
+							<top>13</top>
+							<font>Main_Menu_Unfocused</font>
+							<align>left</align>
+							<aligny>center</aligny>
+							<textcolor>$PARAM[textcolor]</textcolor>
+							<label>$INFO[System.Time(mm)]</label>
+						</control>
 					</control>
 				</control>
 			</control>

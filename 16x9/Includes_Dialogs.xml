@@ -654,6 +654,7 @@
 									<visible>![Window.Next(home) | Window.Next(videos) | Window.Next(music) | Window.Next(programs) | Window.Next(pictures) | Window.Next(visualisation)] + !$EXP[ContainerSwitching] + !$EXP[OpaqueDialog_IsVisible]</visible>
 									<include>Music_Player_Content_Fade_Animation</include>
 									<control type="group">
+										<animation effect="slide" end="-60,0" time="0" condition="!String.IsEmpty(Window(home).Property(Music_Player_Controls)) + [$EXP[Background_IsFanart] | ![Window.IsMedia | Window.IsVisible(visualisation)]]">Conditional</animation>
 										<visible>$PARAM[content_visible]</visible>
 										<include>Notification_Label_Fade_Animation</include>
 										<include content="Music_Player_Label_Template">
@@ -697,7 +698,7 @@
 											<visible>[$EXP[GridView_Display_IsFanart] + String.IsEqual(Window(home).Property(GridView_Position),2)] | [[$EXP[GridView_Display_IsPosters] | $EXP[GridView_Display_IsSquare]] + String.IsEqual(Window(home).Property(GridView_Position),4)]</visible>
 											<bottom>0</bottom>
 											<height>120</height>
-											<texture colordiffuse="$VAR[Panel_Dropshadow_Color]">views/dropshadow_top_120.png</texture>
+											<texture colordiffuse="$VAR[Artwork_Dropshadow]">views/dropshadow_top_120.png</texture>
 											<aspectratio>stretch</aspectratio>
 										</control>
 									</control>
@@ -817,7 +818,6 @@
 									<visible>![Window.Next(home) | Window.Next(videos) | Window.Next(music) | Window.Next(programs) | Window.Next(pictures) | Window.Next(visualisation)] + !$EXP[ContainerSwitching] + !$EXP[OpaqueDialog_IsVisible]</visible>
 									<include>Music_Player_Content_Fade_Animation</include>
 									<control type="group">
-										<animation effect="slide" end="60,0" time="0" condition="!String.IsEmpty(Window(home).Property(Music_Player_Controls)) + [$EXP[Background_IsFanart] | Window.IsVisible(home) | Window.IsVisible(fullscreenvideo)]">Conditional</animation>
 										<visible>$PARAM[content_visible]</visible>
 										<include>Notification_Label_Fade_Animation</include>
 										<include content="Music_Player_Label_Template">
@@ -922,7 +922,7 @@
 											<visible>[$EXP[GridView_Display_IsFanart] + String.IsEqual(Window(home).Property(GridView_Position),2)] | [[$EXP[GridView_Display_IsPosters] | $EXP[GridView_Display_IsSquare]] + String.IsEqual(Window(home).Property(GridView_Position),4)]</visible>
 											<bottom>0</bottom>
 											<height>120</height>
-											<texture colordiffuse="$VAR[Panel_Dropshadow_Color]">views/dropshadow_top_120.png</texture>
+											<texture colordiffuse="$VAR[Artwork_Dropshadow]">views/dropshadow_top_120.png</texture>
 											<aspectratio>stretch</aspectratio>
 										</control>
 									</control>
@@ -1029,34 +1029,24 @@
 		<definition>
 			<control type="group">
 				<visible>$PARAM[visible]</visible>
-				<!--GENERIC Full player-->
+				<!--Background_IsFanart Mini player-->
 				<control type="group">
-					<visible>!Window.IsVisible(home) + !Window.IsActive(settings) + !Window.IsVisible(visualisation) + !Window.IsVisible(fullscreenvideo) + !$EXP[Background_IsFanart] + ![$EXP[ListView_Display_IsThumbnails] + $EXP[Square_Containers]] + ![$EXP[ShowcaseView_IsVisible] | $EXP[StripView_IsVisible] | $EXP[GridView_IsVisible]]</visible>
-					<include content="$PARAM[type]_Widget">
-						<param name="content_visible" value="$PARAM[content_visible]"/>
-						<param name="label_1" value="$PARAM[label_1]"/>
-						<param name="label_2" value="$PARAM[label_2]"/>
-						<param name="left_label_visible" value="true"/>
-					</include>
-				</control>
-				<!--HOME/Background_IsFanart Mini player-->
-				<control type="group">
-					<visible>[Window.IsVisible(home) | $EXP[Background_IsFanart] | Window.IsVisible(fullscreenvideo)] + !Window.IsVisible(visualisation)</visible>
+					<visible>$EXP[Background_IsFanart] | ![Window.IsMedia | Window.IsVisible(visualisation)]</visible>
 					<include>Dialog_Fade_Animation</include>
-					<animation effect="slide" end="-30,0" time="0" condition="String.IsEmpty(Window(home).Property(Music_Player_Controls))">Conditional</animation>
+					<animation effect="slide" end="30,0" time="0" condition="String.IsEmpty(Window(home).Property(Music_Player_Controls))">Conditional</animation>
 					<include content="$PARAM[type]_Widget">
-						<param name="align" value="left"/>
+						<param name="align" value="right"/>
 						<param name="background_visible" value="false"/>
 						<param name="content_visible" value="$PARAM[content_visible]"/>
 						<param name="label_padding" value="-30"/>
 						<param name="label_1" value="$PARAM[label_1]"/>
 						<param name="label_2" value="$PARAM[label_2]"/>
-						<param name="right_label_visible" value="true"/>
+						<param name="left_label_visible" value="true"/>
 					</include>
 				</control>
 				<!--LISTVIEW Square-->
 				<control type="group">
-					<visible>[$EXP[ListView_Display_IsThumbnails] + $EXP[Square_Containers]] | Window.IsActive(settings)</visible>
+					<visible>$EXP[ListView_Display_IsThumbnails] + $EXP[Square_Containers]</visible>
 					<include>Dialog_Fade_Animation</include>
 					<include content="$PARAM[type]_Widget">
 						<param name="top" value="900"/>
@@ -1195,13 +1185,13 @@
 		<definition>
 			<control type="group">
 				<visible>$PARAM[visible]</visible>
-				<!--Generic-->
+				<!--GENERIC-->
 				<control type="group">
-					<visible>!$EXP[ListView_Display_IsThumbnails] + !$EXP[ShowcaseView_Display_IsSquare] + !$EXP[ShowcaseView_Display_IsPosters] + !$EXP[GridView_IsVisible] + !Window.IsVisible(home)</visible>
+					<visible>$EXP[Background_IsFanart] | ![Window.IsMedia | Window.IsVisible(visualisation)]</visible>
 					<include>Dialog_Fade_Animation</include>
 					<animation effect="slide" end="30,0" time="0" condition="true">Conditional</animation>
 					<include content="$PARAM[type]_Widget">
-						<param name="visible" value="!$EXP[ListView_Display_IsThumbnails] + !$EXP[ShowcaseView_Display_IsSquare] + !$EXP[ShowcaseView_Display_IsPosters] + !$EXP[GridView_IsVisible]"/>
+						<param name="visible" value="Window.IsVisible(home)"/>
 						<param name="align" value="right"/>
 						<param name="background_visible" value="$PARAM[background_visible]"/>
 						<param name="label_padding" value="$PARAM[label_padding]"/>
@@ -1209,21 +1199,6 @@
 						<param name="label_1" value="$PARAM[label_1]"/>
 						<param name="label_2" value="$PARAM[label_2]"/>
 						<param name="left_label_visible" value="true"/>
-					</include>
-				</control>
-				<control type="group">
-					<visible>Window.IsVisible(home)</visible>
-					<include>Dialog_Fade_Animation</include>
-					<animation effect="slide" end="-30,0" time="0" condition="true">Conditional</animation>
-					<include content="$PARAM[type]_Widget">
-						<param name="visible" value="Window.IsVisible(home)"/>
-						<param name="align" value="left"/>
-						<param name="background_visible" value="$PARAM[background_visible]"/>
-						<param name="label_padding" value="$PARAM[label_padding]"/>
-						<param name="content_visible" value="$PARAM[content_visible]"/>
-						<param name="label_1" value="$PARAM[label_1]"/>
-						<param name="label_2" value="$PARAM[label_2]"/>
-						<param name="right_label_visible" value="true"/>
 					</include>
 				</control>
 				<!--LISTVIEW-->
