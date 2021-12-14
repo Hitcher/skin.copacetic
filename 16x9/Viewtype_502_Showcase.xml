@@ -51,10 +51,22 @@
 						<param name="3x_item_width_plus_focus_width" value="2880"/>
 					</include>
 				</control>
+				<control type="group">
+					<visible>$EXP[TransparentDialog_IsVisible] + $EXP[ShowcaseView_IsVisible] + !$EXP[OptionsSwitching]</visible>
+					<include>Options_Menu_Fade_Animation</include>
+					<control type="image">
+						<animation effect="zoom" end="0,0,1080,1080" time="0" condition="$EXP[ShowcaseView_Display_IsSquare]">Conditional</animation>
+						<width>720</width>
+						<height>1080</height>
+						<texture colordiffuse="$VAR[Artwork_Mask]">views/white_100.png</texture>
+						<visible>$EXP[ShowcaseView_IsVisible] + $EXP[ShowcaseView_Details_Off] + !$EXP[ShowcaseView_Details_Overlay_IsVisible]</visible>
+						<include>Content_Fade_Animation</include>
+					</control>
+				</control>
 				<!--DETAILS-->
 				<control type="group">
 					<visible>!$EXP[ContainerSwitching] + !$EXP[ContentSwitching] + !$EXP[TransparentDialog_IsVisible] + !Control.HasFocus(60)</visible>
-					<include>Content_Delayed_Fade_Animation</include>
+					<include>Delayed_Content_Fade_Animation</include>
 					<control type="group">
 						<animation effect="slide" start="0,0" end="-180,0" time="1" reversible="true" condition="$EXP[$PARAM[viewtype_label]View_Display_IsPosters] + Player.HasAudio">Conditional</animation>
 						<include content="Common_Details">
@@ -72,6 +84,8 @@
 						<include content="MediaFlags"/>
 					</control>
 					<control type="group">
+						<visible>!$EXP[Secondary_List_ContentSwitching] + [!Window.IsVisible(1121) | Control.HasFocus($PARAM[id])]</visible>
+						<include>Delayed_Content_Fade_Animation</include>
 						<animation effect="slide" start="0,0" end="180,0" time="0" condition="$EXP[ShowcaseView_Display_IsSquare]">Conditional</animation>
 						<include content="ProgressBar">
 							<param name="left" value="180"/>

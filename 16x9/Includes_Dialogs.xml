@@ -5,13 +5,22 @@
 		<param name="right" default="60"/>
 		<param name="top" default="240"/>
 		<param name="bottom" default="240"/>
+		<param name="colordiffuse" default="$VAR[Panel_Diffuse]"/>
 		<definition>
 			<control type="image">
 				<left>$PARAM[left]</left>
 				<right>$PARAM[right]</right>
 				<top>$PARAM[top]</top>
 				<bottom>$PARAM[bottom]</bottom>
-				<texture colordiffuse="$VAR[Panel_Diffuse]">views/white_100.png</texture>
+				<texture colordiffuse="$PARAM[colordiffuse]">views/white_100.png</texture>
+			</control>
+		</definition>
+	</include>
+
+	<include name="Transparent_Dialog_Background">
+		<definition>
+			<control type="image">
+				<texture colordiffuse="$VAR[Transparent_Dialog_Mask]">views/white_100.png</texture>
 			</control>
 		</definition>
 	</include>
@@ -447,11 +456,9 @@
 				<onup condition="Window.IsVisible(home)">9000</onup>
 				<ondown condition="Window.IsVisible(home)">9000</ondown>
 				<onback condition="$EXP[ListView_IsVisible]">50</onback>
-				<onright condition="$EXP[ListView_IsVisible] + $EXP[ListView_Display_IsThumbnails] + $EXP[Square_Containers]">50</onright>
-				<onleft condition="$EXP[ListView_IsVisible] + $EXP[ListView_Display_IsThumbnails] + $EXP[Square_Containers]">SetFocus(3000,0)</onleft>
-				<onleft condition="$EXP[ListView_IsVisible] + ![$EXP[ListView_Display_IsThumbnails] + $EXP[Square_Containers]]">50</onleft>
-				<onright condition="$EXP[ListView_IsVisible] + ![$EXP[ListView_Display_IsThumbnails] + $EXP[Square_Containers]] + Integer.IsLessOrEqual(Container.NumItems,11)">SetFocus(3000,0)</onright>
-				<onright condition="$EXP[ListView_IsVisible] + ![$EXP[ListView_Display_IsThumbnails] + $EXP[Square_Containers]] + Integer.IsGreater(Container.NumItems,12)">61</onright>
+				<onleft condition="$EXP[ListView_IsVisible]">50</onleft>
+				<onright condition="$EXP[ListView_IsVisible] + Integer.IsLessOrEqual(Container.NumItems,11)">SetFocus(3000,0)</onright>
+				<onright condition="$EXP[ListView_IsVisible] + Integer.IsGreater(Container.NumItems,12)">61</onright>
 				<onback condition="$EXP[BillboardView_IsVisible]">501</onback>
 				<onup condition="$EXP[BillboardView_IsVisible]">SetFocus(3000,0)</onup>
 				<ondown condition="$EXP[BillboardView_IsVisible]">501</ondown>
@@ -636,7 +643,7 @@
 						<include>My_Window_Fade_Animation</include>
 						<control type="grouplist">
 							<visible>!$EXP[TransparentDialog_IsVisible]</visible>
-							<include>Content_Delayed_Fade_Animation</include>
+							<include>Delayed_Content_Fade_Animation</include>
 							<width>$PARAM[width]</width>
 							<top>$PARAM[top]</top>
 							<height>$PARAM[height]</height>
@@ -678,14 +685,14 @@
 									<visible>![Window.Next(home) | Window.Next(videos) | Window.Next(music) | Window.Next(programs) | Window.Next(pictures) | Window.Next(visualisation)] + !$EXP[OpaqueDialog_IsVisible]</visible>
 									<include>Music_Player_Artwork_Fade_Animation</include>
 									<visible>$PARAM[background_visible]</visible>
-									<!--Background-->
-									<control type="image">
-										<texture colordiffuse="$VAR[Dark_Color]">views/white_100.png</texture>
-										<aspectratio>scale</aspectratio>
-									</control>
 									<!--Album Cover-->
 									<control type="image">
-										<texture fallback="fallback.png" diffuse="views/white_30.png">$INFO[Player.Art(album.thumb)]</texture>
+										<texture fallback="fallback.png">$INFO[Player.Art(album.thumb)]</texture>
+										<aspectratio>scale</aspectratio>
+									</control>
+									<!--Mask-->
+									<control type="image">
+										<texture colordiffuse="$VAR[Now_Playing_Mask]">views/white_100.png</texture>
 										<aspectratio>scale</aspectratio>
 									</control>
 									<!--Shadow for Gridview-->
@@ -866,7 +873,7 @@
 						<include>My_Window_Fade_Animation</include>
 						<control type="grouplist">
 							<visible>!$EXP[TransparentDialog_IsVisible]</visible>
-							<include>Content_Delayed_Fade_Animation</include>
+							<include>Delayed_Content_Fade_Animation</include>
 							<width>$PARAM[width]</width>
 							<top>$PARAM[top]</top>
 							<height>$PARAM[height]</height>
@@ -1044,18 +1051,20 @@
 						<param name="left_label_visible" value="true"/>
 					</include>
 				</control>
-				<!--LISTVIEW Square-->
+				<!--LISTVIEW Thumbnails-->
 				<control type="group">
-					<visible>$EXP[ListView_Display_IsThumbnails] + $EXP[Square_Containers]</visible>
+					<visible>$EXP[ListView_Display_IsThumbnails]</visible>
 					<include>Dialog_Fade_Animation</include>
+					<animation effect="slide" end="-60,0" time="0" condition="true">Conditional</animation>
+					<animation effect="slide" end="0,900" time="0" condition="$EXP[Square_Containers]">Conditional</animation>
 					<include content="$PARAM[type]_Widget">
-						<param name="top" value="900"/>
-						<param name="align" value="left"/>
+						<param name="align" value="right"/>
 						<param name="progress_top" value="174"/>
 						<param name="content_visible" value="$PARAM[content_visible]"/>
+						<param name="label_width" value="960"/>
 						<param name="label_1" value="$PARAM[label_1]"/>
 						<param name="label_2" value="$PARAM[label_2]"/>
-						<param name="right_label_visible" value="true"/>
+						<param name="left_label_visible" value="true"/>
 					</include>
 				</control>
 				<!--SHOWCASEVIEW-->
@@ -1205,31 +1214,17 @@
 				<control type="group">
 					<visible>$EXP[ListView_Display_IsThumbnails]</visible>
 					<include>Dialog_Fade_Animation</include>
-					<control type="group">
-						<animation effect="slide" end="-30,0" time="0" condition="true">Conditional</animation>
-						<include content="$PARAM[type]_Widget">
-							<param name="visible" value="$EXP[ListView_Display_IsThumbnails] + !$EXP[Square_Containers]"/>
-							<param name="background_visible" value="$PARAM[background_visible]"/>
-							<param name="label_padding" value="$PARAM[label_padding]"/>
-							<param name="content_visible" value="$PARAM[content_visible]"/>
-							<param name="label_1" value="$PARAM[label_1]"/>
-							<param name="label_2" value="$PARAM[label_2]"/>
-							<param name="left_label_visible" value="true"/>
-						</include>
-					</control>
-					<control type="group">
-						<animation effect="slide" end="30,0" time="0" condition="true">Conditional</animation>
-						<include content="$PARAM[type]_Widget">
-							<param name="visible" value="$EXP[ListView_Display_IsThumbnails] + $EXP[Square_Containers]"/>
-							<param name="top" value="900"/>
-							<param name="align" value="left"/>
-							<param name="content_visible" value="$PARAM[content_visible]"/>
-							<param name="label_padding" value="$PARAM[label_padding]"/>
-							<param name="label_1" value="$PARAM[label_1]"/>
-							<param name="label_2" value="$PARAM[label_2]"/>
-							<param name="right_label_visible" value="true"/>
-						</include>
-					</control>
+					<animation effect="slide" end="30,0" time="0" condition="true">Conditional</animation>
+					<include content="$PARAM[type]_Widget">
+						<param name="visible" value="$EXP[ListView_Display_IsThumbnails]"/>
+						<param name="background_visible" value="$PARAM[background_visible]"/>
+						<param name="label_width" value="960"/>
+						<param name="label_padding" value="$PARAM[label_padding]"/>
+						<param name="content_visible" value="$PARAM[content_visible]"/>
+						<param name="label_1" value="$PARAM[label_1]"/>
+						<param name="label_2" value="$PARAM[label_2]"/>
+						<param name="left_label_visible" value="true"/>
+					</include>
 				</control>
 				<!--SHOWCASEVIEW/-->
 				<control type="group">
