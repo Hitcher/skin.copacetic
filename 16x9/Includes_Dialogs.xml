@@ -1,6 +1,7 @@
 <includes>
 
 	<include name="Transparent_Dialog_Panel">
+		<param name="visible" default="true"/>
 		<param name="left" default="60"/>
 		<param name="right" default="60"/>
 		<param name="top" default="240"/>
@@ -8,6 +9,7 @@
 		<param name="colordiffuse" default="$VAR[Panel_Diffuse]"/>
 		<definition>
 			<control type="image">
+				<visible>$PARAM[visible]</visible>
 				<left>$PARAM[left]</left>
 				<right>$PARAM[right]</right>
 				<top>$PARAM[top]</top>
@@ -463,11 +465,8 @@
 				<onup condition="$EXP[BillboardView_IsVisible]">SetFocus(3000,0)</onup>
 				<ondown condition="$EXP[BillboardView_IsVisible]">501</ondown>
 				<onback condition="$EXP[ShowcaseView_IsVisible]">502</onback>
-				<onup condition="$EXP[ShowcaseView_IsVisible] + [$EXP[ShowcaseView_Display_IsSquare] | $EXP[ShowcaseView_Details_Off]]">SetFocus(3000,0)</onup>
-				<ondown condition="$EXP[ShowcaseView_IsVisible] + [$EXP[ShowcaseView_Display_IsSquare] | $EXP[ShowcaseView_Details_Off]]">502</ondown>
-				<onup condition="$EXP[ShowcaseView_Display_IsPosters] + !$EXP[ShowcaseView_Details_Off]">502</onup>
-				<ondown condition="$EXP[ShowcaseView_Display_IsPosters] + !$EXP[ShowcaseView_Details_Off] + Integer.IsGreater(Container.NumItems,1)">61</ondown>
-				<ondown condition="$EXP[ShowcaseView_Display_IsPosters] + !$EXP[ShowcaseView_Details_Off] + Integer.IsEqual(Container.NumItems,1)">SetFocus(3000,0)</ondown>
+				<onup condition="$EXP[ShowcaseView_IsVisible]">SetFocus(3000,0)</onup>
+				<ondown condition="$EXP[ShowcaseView_IsVisible]">502</ondown>
 				<onback condition="$EXP[StripView_IsVisible]">504</onback>
 				<onup condition="$EXP[StripView_IsVisible]">SetFocus(3000,0)</onup>
 				<ondown condition="$EXP[StripView_IsVisible]">504</ondown>
@@ -888,6 +887,7 @@
 								<width>$PARAM[label_width]</width>
 								<visible>$PARAM[left_label_visible]</visible>
 								<control type="group">
+									<animation effect="slide" end="-60,0" time="0" condition="!String.IsEmpty(Window(home).Property(Music_Player_Controls)) + [$EXP[Background_IsFanart] | ![Window.IsMedia | Window.IsVisible(visualisation)]]">Conditional</animation>
 									<visible>![Window.Next(home) | Window.Next(videos) | Window.Next(music) | Window.Next(programs) | Window.Next(pictures) | Window.Next(visualisation)] + !$EXP[ContainerSwitching] + !$EXP[OpaqueDialog_IsVisible]</visible>
 									<include>Music_Player_Content_Fade_Animation</include>
 									<control type="group">
@@ -1092,9 +1092,7 @@
 					</include>
 					<include content="$PARAM[type]_Widget">
 						<param name="visible" value="Player.HasAudio + [$EXP[ShowcaseView_Display_IsPosters] | [$EXP[ShowcaseView_Display_IsSquare] + $EXP[ShowcaseView_Details_Off]]]"/>
-						<param name="top" value="720"/>
 						<param name="height" value="360"/>
-						<param name="label_width" value="600"/>
 						<param name="align" value="left"/>
 						<param name="content_visible" value="$PARAM[content_visible]"/>
 						<param name="label_1" value="$PARAM[label_1]"/>

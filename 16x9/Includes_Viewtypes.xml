@@ -25,7 +25,6 @@
 		<control type="button">
 			<visible allowhiddenfocus="true">false</visible>
 			<onfocus>SetProperty(Secondary_List,true,home)</onfocus>
-			<onunfocus>SetProperty(Secondary_List,false,home)</onunfocus>
 		</control>
 	</include>
 
@@ -196,7 +195,7 @@
 					</control>
 				</focusedlayout>
 				<!--Thumbnails + !Details-->
-				<focusedlayout height="60" width="1020" condition="[$EXP[$PARAM[viewtype_label]View_Display_IsThumbnails] + !$EXP[$PARAM[viewtype_label]View_Details_Info_IsVisible]]">
+				<focusedlayout height="60" width="990" condition="[$EXP[$PARAM[viewtype_label]View_Display_IsThumbnails] + !$EXP[$PARAM[viewtype_label]View_Details_Info_IsVisible]]">
 					<include>HiddenFocusButton</include>
 					<control type="group">
 						<visible>$EXP[$PARAM[viewtype_label]View_IsVisible] | Window.IsVisible(favourites)</visible>
@@ -210,7 +209,7 @@
 								<param name="icontexture" value="$PARAM[focusedicontexture]"/>
 								<param name="iconvisible" value="$PARAM[focusediconvisible]"/>
 		            <param name="label" value="$PARAM[label]"/>
-								<param name="labelmaxwidth" value="1020"/>
+								<param name="labelmaxwidth" value="990"/>
 								<param name="font" value="List_Title_Focused"/>
 								<param name="tracknumbercolor" value="$PARAM[textcolor]"/>
 		            <param name="textcolor" value="$PARAM[textcolor]"/>
@@ -219,7 +218,7 @@
 					</control>
 				</focusedlayout>
 				<!--Thumbnails + Details-->
-				<focusedlayout height="60" width="840" condition="$EXP[$PARAM[viewtype_label]View_Display_IsThumbnails] + $EXP[$PARAM[viewtype_label]View_Details_Info_IsVisible]">
+				<focusedlayout height="60" width="780" condition="$EXP[$PARAM[viewtype_label]View_Display_IsThumbnails] + $EXP[$PARAM[viewtype_label]View_Details_Info_IsVisible]">
 					<include>HiddenFocusButton</include>
 					<control type="group">
 						<visible>$EXP[$PARAM[viewtype_label]View_IsVisible]</visible>
@@ -233,7 +232,7 @@
 								<param name="icontexture" value="$PARAM[focusedicontexture]"/>
 								<param name="iconvisible" value="$PARAM[focusediconvisible]"/>
 		            <param name="label" value="$PARAM[label]"/>
-								<param name="labelmaxwidth" value="840"/>
+								<param name="labelmaxwidth" value="780"/>
 								<param name="font" value="List_Title_Focused"/>
 								<param name="tracknumbercolor" value="$PARAM[textcolor]"/>
 		            <param name="textcolor" value="$PARAM[textcolor]"/>
@@ -349,27 +348,22 @@
 	</include>
 
 	<include name="Secondary_List">
-		<param name="type" default="list"/>
+		<param name="type" default="fixedlist"/>
 		<param name="left" default="0"/>
 		<param name="top" default="1080"/>
 		<param name="height" default="1080"/>
 		<param name="width" default="720"/>
 		<param name="visible" default="[$EXP[ListView_Display_IsThumbnails] | $EXP[ShowcaseView_Display_IsPosters]] + Container.Content(tvshows)"/>
 		<param name="layout" default="1080x720"/>
-		<param name="container" default="tvshows"/>
 		<param name="target" default="videos"/>
 		<param name="sortby" default="title"/>
 		<param name="sortorder" default="ascending"/>
 		<definition>
 			<control type="group">
-
-
-
 				<control type="$PARAM[type]" id="4501">
 					<animation effect="slide" start="0" end="0,-$PARAM[height]" reversible="true" time="360" tween="sine" easing="inout" condition="Control.HasFocus(4501) + [[$EXP[ListView_Display_IsThumbnails] + !Container.Content(artists)] | $EXP[ShowcaseView_IsVisible]]">Conditional</animation>
-					<animation effect="slide" start="0" end="$PARAM[width],0" time="0" tween="sine" easing="inout" condition="$EXP[ListView_Display_IsThumbnails] + [Control.HasFocus(4501) | Control.HasFocus(4502)] + Container.Content(artists)">Conditional</animation>
+					<animation effect="slide" start="0" end="$PARAM[width],0" time="0" tween="sine" easing="inout" condition="$EXP[ListView_Display_IsThumbnails] + [Control.HasFocus(4501) | $EXP[Secondary_List_ContainerSwitching]] + Container.Content(artists)">Conditional</animation>
 					<animation effect="slide" start="0" end="-$PARAM[width],0" time="360" reversible="true" tween="sine" easing="inout" condition="$EXP[ListView_Display_IsThumbnails] + Control.HasFocus(4501) + Container.Content(artists)">Conditional</animation>
-
 					<animation effect="slide" start="0,0" end="360,0" time="360" tween="sine" easing="out" reversible="true" condition="Player.HasAudio + $EXP[ShowcaseView_Display_IsPosters] + !$EXP[ShowcaseView_Details_Off]">Conditional</animation>
 
 					<visible>$PARAM[visible]</visible>
@@ -386,17 +380,40 @@
 					<onup condition="Integer.IsGreater(Container(4501).NumItems,1)">4501</onup>
 					<scrolltime tween="sine" easing="inout">360</scrolltime>
 					<include>$PARAM[layout]_Layout</include>
-					<content condition="Container.Content($PARAM[container])" target="$PARAM[target]" sortby="$PARAM[sortby]" sortorder="$PARAM[sortorder]">$INFO[ListItem.FolderPath]</content>
+					<content target="$PARAM[target]" sortby="$PARAM[sortby]" sortorder="$PARAM[sortorder]">$INFO[ListItem.FolderPath]</content>
 				</control>
 				<control type="button" id="4502">
 					<visible allowhiddenfocus="true">false</visible>
-					<animation effect="slide" end="0,0" time="360">Focus</animation>
+					<onfocus>ClearProperty(Secondary_List,home)</onfocus>
 					<onfocus>SetFocus(4503)</onfocus>
 				</control>
 				<control type="button" id="4503">
 					<visible allowhiddenfocus="true">false</visible>
+					<animation effect="slide" end="0,0" time="360">Focus</animation>
 					<onfocus>SetFocus(4501,0,absolute)</onfocus>
 					<onfocus>SetFocus(50)</onfocus>
+				</control>
+				<control type="button" id="4504">
+					<visible allowhiddenfocus="true">false</visible>>
+					<onfocus>ClearProperty(Secondary_List,home)</onfocus>
+					<onfocus>SetFocus(4505)</onfocus>
+				</control>
+				<control type="button" id="4505">
+					<visible allowhiddenfocus="true">false</visible>
+					<animation effect="slide" end="0,0" time="360">Focus</animation>
+					<onfocus>SetFocus(4501,0,absolute)</onfocus>
+					<onfocus>SetFocus(61)</onfocus>
+				</control>
+				<control type="button" id="4506">
+					<visible allowhiddenfocus="true">false</visible>
+					<onfocus>ClearProperty(Secondary_List,home)</onfocus>
+					<onfocus>SetFocus(4507)</onfocus>
+				</control>
+				<control type="button" id="4507">
+					<visible allowhiddenfocus="true">false</visible>
+			 		<animation effect="slide" end="0,0" time="360">Focus</animation>
+					<onfocus>SetFocus(4501,0,absolute)</onfocus>
+					<onfocus>SetFocus(3000,0)</onfocus>
 				</control>
 			</control>
 		</definition>
@@ -480,10 +497,13 @@
 	<include name="Secondary_List_Navigation">
 		<definition>
 			<onright condition="$EXP[ListView_Display_IsThumbnails]">SetFocus(4502)</onright>
-			<onleft condition="$EXP[ListView_Display_IsThumbnails]">SetFocus(3000,0)</onleft>
+			<onleft condition="$EXP[ListView_Display_IsThumbnails]">SetFocus(4506)</onleft>
+			<onup condition="$EXP[ListView_Display_IsThumbnails]">0</onup>
+			<ondown condition="$EXP[ListView_Display_IsThumbnails]">0</ondown>
 			<onleft condition="$EXP[ShowcaseView_IsVisible]">SetFocus(4502)</onleft>
 			<onright condition="$EXP[ShowcaseView_IsVisible]">SetFocus(4502)</onright>
-
+			<onup condition="$EXP[ShowcaseView_IsVisible]">0</onup>
+			<ondown condition="$EXP[ShowcaseView_IsVisible]">0</ondown>
 		</definition>
 	</include>
 
@@ -505,12 +525,11 @@
 
 	<include name="Showcase_Navigation">
 		<definition>
-			<onup condition="Player.HasAudio + [$EXP[ShowcaseView_Display_IsSquare] | $EXP[ShowcaseView_Details_Off]]">SetFocus(91100,1)</onup>
-			<onup condition="![Player.HasAudio + [$EXP[ShowcaseView_Display_IsSquare] | $EXP[ShowcaseView_Details_Off]]]">SetFocus(3000,0)</onup>
-			<ondown condition="Player.HasAudio + $EXP[ShowcaseView_Display_IsPosters] + !$EXP[ShowcaseView_Details_Off]">SetFocus(4501,0)</ondown>
-			<ondown condition="![Player.HasAudio + $EXP[ShowcaseView_Display_IsPosters] + !$EXP[ShowcaseView_Details_Off]] + [[Container.Content(tvshows) + Integer.IsGreater(Container(4501).NumItems,1)] | Container.Content(sets) | Container.Content(artists)]">SetFocus(4501,0)</ondown>
-			<ondown condition="![Player.HasAudio + $EXP[ShowcaseView_Display_IsPosters] + !$EXP[ShowcaseView_Details_Off]] + ![[Container.Content(tvshows) + Integer.IsGreater(Container(4501).NumItems,1)] | Container.Content(sets) | Container.Content(artists)] + Integer.IsGreater(Container.NumItems,1)">SetFocus(61)</ondown>
-			<ondown condition="![Player.HasAudio + $EXP[ShowcaseView_Display_IsPosters] + !$EXP[ShowcaseView_Details_Off]] + ![[Container.Content(tvshows) + Integer.IsGreater(Container(4501).NumItems,1)] | Container.Content(sets) | Container.Content(artists)] + Integer.IsEqual(Container.NumItems,1)">SetFocus(3000,0)</ondown>
+			<onup condition="Player.HasAudio">SetFocus(91100,1)</onup>
+			<onup condition="!Player.HasAudio">SetFocus(3000,0)</onup>
+			<ondown condition="[Container.Content(tvshows) + Integer.IsGreater(Container(4501).NumItems,1)] | Container.Content(sets) | Container.Content(artists)">SetFocus(4501,0)</ondown>
+			<ondown condition="![[Container.Content(tvshows) + Integer.IsGreater(Container(4501).NumItems,1)] | Container.Content(sets) | Container.Content(artists)] + Integer.IsGreater(Container.NumItems,1)">SetFocus(61)</ondown>
+			<ondown condition="![[Container.Content(tvshows) + Integer.IsGreater(Container(4501).NumItems,1)] | Container.Content(sets) | Container.Content(artists)] + Integer.IsEqual(Container.NumItems,1)">SetFocus(3000,0)</ondown>
 			<onleft condition="Integer.IsGreater(Container.NumItems,10)">502</onleft>
 			<onleft condition="Integer.IsLessOrEqual(Container.NumItems,10) + Integer.IsGreater(Container.NumItems,1)">0</onleft>
 			<onleft condition="Integer.IsEqual(Container.NumItems,1)">SetFocus(3000,0)</onleft>
@@ -887,7 +906,7 @@
 					<visible>$EXP[ShowcaseView_Display_Is$PARAM[displaytype_label]]</visible>
 					<include>Delayed_Content_Fade_Animation</include>
 					<control type="group">
-						<visible>!$EXP[ContainerSwitching] + !$EXP[OptionsSwitching] + !$EXP[ContentSwitching] + !$EXP[TransparentDialog_IsVisible] + !Control.HasFocus(60)</visible>
+						<visible>!$EXP[ContainerSwitching] + !$EXP[OptionsSwitching] + !$EXP[ContentSwitching] + !$EXP[TransparentDialog_IsVisible] + !Control.HasFocus(60) + !$EXP[Secondary_List_ContainerSwitching] + !$EXP[Secondary_List_ContentSwitching] + [!Window.IsVisible(1121) | Control.HasFocus(502)]</visible>
 						<include>Delayed_Content_Fade_Animation</include>
 						<control type="grouplist">
 							<left>30</left>
@@ -895,7 +914,7 @@
 							<visible>$EXP[ShowcaseView_Details_Overlay_IsVisible] + !$EXP[StandardViews_NowPlaying]</visible>
 							<orientation>vertical</orientation>
 							<align>center</align>
-							<itemgap>5</itemgap>
+							<itemgap>0</itemgap>
 							<control type="textbox">
 								<visible>$EXP[ShowcaseView_Display_IsSquare]</visible>
 								<height max="180">auto</height>
@@ -2275,11 +2294,15 @@
 		<param name="align" default="center"/>
     <param name="itemgap" default="0"/>
 		<param name="labeltype" default="textbox"/>
+		<param name="logopath" default="$VAR[Logo_Path]"/>
+		<param name="titlelabel" default="$VAR[Title_Label]"/>
 		<param name="titleheight" default="146"/>
     <param name="titlecolor" default="$VAR[List_Color]"/>
 		<param name="titlealign" default="left"/>
+		<param name="infolabel" default="$VAR[Info_Label]"/>
     <param name="infogap" default="0"/>
     <param name="infoheight" default="35"/>
+		<param name="plotlabel" default="$VAR[Plot_Label]"/>
     <param name="plotfont" default="Body"/>
 		<param name="plotmaxheight" default="103"/>
     <param name="plotgap" default="60"/>
@@ -2298,8 +2321,6 @@
 					<align>$PARAM[align]</align>
 					<itemgap>$PARAM[itemgap]</itemgap>
 	        <usecontrolcoords>true</usecontrolcoords>
-					<visible>!Control.HasFocus(4501)</visible>
-					<include>Delayed_Content_Fade_Animation</include>
 					<!--Logo-->
 					<control type="image">
 						<width>560</width>
@@ -2309,7 +2330,7 @@
 						<animation effect="slide" start="0,0" end="0,-10" time="0" condition="$EXP[$PARAM[viewtype_label]View_Details_Info_IsVisible] | $EXP[$PARAM[viewtype_label]View_Details_Plot_IsVisible]">Conditional</animation>
 						<visible>$EXP[$PARAM[viewtype_label]View_Details_Logo_IsVisible]</visible>
 						<aspectratio>keep</aspectratio>
-						<texture background="true">$VAR[Logo_Path]</texture>
+						<texture background="true">$PARAM[logopath]</texture>
 					</control>
 					<!--Title-->
 					<control type="$PARAM[labeltype]">
@@ -2317,7 +2338,7 @@
 						<height max="$PARAM[titleheight]">auto</height>
 						<font>$PARAM[viewtype_label]_Title</font>
 						<textcolor>$PARAM[titlecolor]</textcolor>
-						<label>$VAR[Title_Label]</label>
+						<label>$PARAM[titlelabel]</label>
 						<align>$PARAM[titlealign]</align>
 						<scroll>true</scroll>
 						<scrollsuffix> / </scrollsuffix>
@@ -2330,7 +2351,7 @@
 	          <height max="$PARAM[infoheight]">auto</height>
 						<font>$PARAM[viewtype_label]_Info</font>
 						<textcolor>$PARAM[titlecolor]</textcolor>
-						<label>$VAR[Info_Label]</label>
+						<label>$PARAM[infolabel]</label>
 						<align>$PARAM[titlealign]</align>
 						<scroll>true</scroll>
 						<scrollsuffix> / </scrollsuffix>
@@ -2340,44 +2361,12 @@
 	          <top>$PARAM[plotgap]</top>
 						<height max="$PARAM[plotmaxheight]">auto</height>
 						<visible>$EXP[$PARAM[viewtype_label]View_Details_Plot_IsVisible]</visible>
-						<visible>!String.IsEmpty(Control.GetLabel(916))</visible>
+						<visible>![Control.HasFocus(4501) + Container.Content(tvshows)] + !String.IsEmpty(Control.GetLabel(916))</visible>
 						<font>$PARAM[plotfont]</font>
 						<textcolor>$PARAM[plotcolor]</textcolor>
-						<label>$VAR[Plot_Label]</label>
+						<label>$PARAM[plotlabel]</label>
 						<align>$PARAM[titlealign]</align>
 						<autoscroll delay="5000" time="1500" repeat="2000">true</autoscroll>
-					</control>
-				</control>
-				<!--Secondary List-->
-				<control type="grouplist">
-					<orientation>vertical</orientation>
-					<align>$PARAM[align]</align>
-					<itemgap>$PARAM[itemgap]</itemgap>
-	        <usecontrolcoords>true</usecontrolcoords>
-					<visible>Control.HasFocus(4501)</visible>
-					<include>Delayed_Content_Fade_Animation</include>
-					<!--Title-->
-					<control type="$PARAM[labeltype]">
-						<height max="$PARAM[titleheight]">auto</height>
-						<font>$PARAM[viewtype_label]_Title</font>
-						<textcolor>$PARAM[titlecolor]</textcolor>
-						<label>$VAR[Secondary_List_Title_Label]</label>
-						<align>$PARAM[titlealign]</align>
-						<scroll>true</scroll>
-						<scrollsuffix> / </scrollsuffix>
-					</control>
-					<!--Info-->
-					<control type="$PARAM[labeltype]">
-	          <top>$PARAM[infogap]</top>
-	          <visible>$EXP[$PARAM[viewtype_label]View_Details_Info_IsVisible]</visible>
-						<visible>!String.IsEmpty(Control.GetLabel(917))</visible>
-	          <height max="$PARAM[infoheight]">auto</height>
-						<font>$PARAM[viewtype_label]_Info</font>
-						<textcolor>$PARAM[titlecolor]</textcolor>
-						<label>$VAR[Secondary_List_Info_Label]</label>
-						<align>$PARAM[titlealign]</align>
-						<scroll>true</scroll>
-						<scrollsuffix> / </scrollsuffix>
 					</control>
 				</control>
 			</control>
@@ -2487,7 +2476,7 @@
 				</control>
 				<!--Video watched-->
 				<control type="image">
-					<visible>!ListItem.IsResumable + String.IsEqual(ListItem.Overlay,OverlayWatched.png) + !$EXP[ListView_IsVisible]</visible>
+					<visible>!ListItem.IsResumable + String.IsEqual(ListItem.Overlay,OverlayWatched.png)</visible>
 					<width>$PARAM[width]</width>
 					<height>$PARAM[height]</height>
 					<texture colordiffuse="$PARAM[focuscolor]">$PARAM[focustexture]</texture>
