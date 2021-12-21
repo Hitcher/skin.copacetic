@@ -31,9 +31,7 @@
 				<control type="group">
 					<visible>$EXP[$PARAM[viewtype_label]View_Display_IsBackground] + !$EXP[OptionsSwitching]</visible>
 					<include>Artwork_Fade_Animation</include>
-					<include content="Artwork_Transition_Fade">
-						<param name="visible" value="true"/>
-					</include>
+					<include content="Artwork_Transition_Fade"/>
 				</control>
 
 				<!--THUMBNAIL ART-->
@@ -124,7 +122,7 @@
 						<!--Abbreviated Details-->
 						<control type="label">
 							<width>480</width>
-							<top>20</top>
+							<top>19</top>
 							<height>35</height>
 							<font>List_Info</font>
 							<textcolor>$VAR[Light_Color]</textcolor>
@@ -143,7 +141,7 @@
 							<itemgap>12</itemgap>
 							<orientation>horizontal</orientation>
 							<usecontrolcoords>true</usecontrolcoords>
-							<visible>!Control.HasFocus(4501)</visible>
+							<visible>!Control.HasFocus(4501) + !$EXP[Secondary_List_ContainerSwitching]</visible>
 							<include>Delayed_Content_Fade_Animation</include>
 							<!--Title Gap-->
 							<control type="label">
@@ -157,7 +155,7 @@
 							<!--Abbreviated Details-->
 							<control type="label">
 								<width>180</width>
-								<top>20</top>
+								<top>19</top>
 								<height>35</height>
 								<font>List_Info</font>
 								<textcolor>$VAR[Light_Color]</textcolor>
@@ -167,18 +165,17 @@
 						</control>
 					</control>
 					<control type="grouplist">
-						<visible>Control.HasFocus(4501) + !$EXP[Secondary_List_ContentSwitching] + !Window.IsVisible(1121)</visible>
+						<visible>Control.HasFocus(4501) + !Window.IsVisible(1121) + Container.Content(sets)</visible>
 						<include>Delayed_Content_Fade_Animation</include>
 						<left>840</left>
-						<top>510</top>
-						<width>1050</width>
-						<height>70</height>
-						<itemgap>12</itemgap>
-						<orientation>horizontal</orientation>
+						<width>960</width>
+						<itemgap>5</itemgap>
+						<align>center</align>
+						<orientation>vertical</orientation>
 						<usecontrolcoords>true</usecontrolcoords>
 						<!--4501-->
 						<control type="label">
-							<width max="840">auto</width>
+							<width>100%</width>
 							<height>60</height>
 							<aligny>center</aligny>
 							<font>List_Title_Focused</font>
@@ -186,13 +183,55 @@
 							<label>$VAR[Title_Label]</label>
 						</control>
 						<control type="label">
-							<width>auto</width>
-							<top>20</top>
+							<width>100%</width>
 							<height>35</height>
 							<font>List_Info</font>
 							<textcolor>$VAR[Light_Color]</textcolor>
 							<label>$VAR[Info_Label]</label>
 							<aligny>center</aligny>
+						</control>
+					</control>
+					<control type="group">
+						<visible>Control.HasFocus(4501) + !Window.IsVisible(1121) + !Container.Content(sets)</visible>
+						<include>Delayed_Content_Fade_Animation</include>
+						<top>510</top>
+						<width>1050</width>
+						<height>70</height>
+						<control type="group">
+							<left>720</left>
+							<width>120</width>
+							<height>120</height>
+							<top>-27</top>
+							<visible>[Container.Content(tvshows) + String.IsEqual(VideoPlayer.TVShowTitle,Container(4501).ListItem.TVShowTitle) + String.IsEqual(VideoPlayer.Season,Container(4501).ListItem.Season)] | [Container.Content(artists) + String.IsEqual(MusicPlayer.Artist, Container(4501).ListItem.Artist) + String.IsEqual(MusicPlayer.Album, Container(4501).ListItem.Album)]</visible>
+							<include content="Now_Playing_Visualization_Fill">
+								<param name="color" variable="$VAR[Light_Color]"/>
+							</include>
+						</control>
+						<control type="grouplist">
+							<left>840</left>
+							<width>100%</width>
+							<height>70</height>
+							<itemgap>12</itemgap>
+							<orientation>horizontal</orientation>
+							<usecontrolcoords>true</usecontrolcoords>
+							<!--4501-->
+							<control type="label">
+								<width max="840">auto</width>
+								<height>60</height>
+								<aligny>center</aligny>
+								<font>List_Title_Focused</font>
+								<textcolor>$VAR[Light_Color]</textcolor>
+								<label>$VAR[Title_Label]</label>
+							</control>
+							<control type="label">
+								<width>auto</width>
+								<top>19</top>
+								<height>35</height>
+								<font>List_Info</font>
+								<textcolor>$VAR[Light_Color]</textcolor>
+								<label>$VAR[Info_Label]</label>
+								<aligny>center</aligny>
+							</control>
 						</control>
 					</control>
 				</control>

@@ -149,6 +149,18 @@
 				<visible>false</visible>
 				<label>$VAR[Info_Label]</label>
 			</control>
+			<control type="label" id="918">
+				<visible>false</visible>
+				<label>$VAR[Thumbnail(-1)Content]</label>
+			</control>
+			<control type="label" id="919">
+				<visible>false</visible>
+				<label>$VAR[Thumbnail(0)Content]</label>
+			</control>
+			<control type="label" id="920">
+				<visible>false</visible>
+				<label>$VAR[Thumbnail(1)Content]</label>
+			</control>
 
 			<!--Hidden set/actor/seasons list-->
 			<control type="list" id="4500">
@@ -243,7 +255,7 @@
 			</include>
 
 			<include content="Secondary_List">
-				<param name="visible" value="[$EXP[ListView_Display_IsThumbnails] | $EXP[ShowcaseView_IsVisible]] + Container.Content(sets)"/>
+				<param name="visible" value="[$EXP[ListView_Display_IsThumbnails] | $EXP[ShowcaseView_Display_IsPosters]] + Container.Content(sets)"/>
 				<param name="target" value="videos"/>
 				<param name="sortby" value="year"/>
 				<param name="sortorder" value="descending"/>
@@ -253,7 +265,6 @@
 				<param name="visible" value="$EXP[ShowcaseView_Display_IsSquare] + Container.Content(sets)"/>
 				<param name="width" value="1080"/>
 				<param name="layout" value="1080x1080"/>
-				<param name="target" value="videos"/>
 				<param name="sortby" value="year"/>
 				<param name="sortorder" value="descending"/>
 			</include>
@@ -365,9 +376,9 @@
 				<param name="onup" value="62"/>
 				<param name="ondown" value="SetFocus(3000,0)"/>
 				<param name="orientation" value="horizontal"/>
-				<param name="visible" value="$EXP[BillboardView_IsVisible] | $EXP[StripView_IsVisible]"/>
+				<param name="visible" value="$EXP[BillboardView_IsVisible] | [$EXP[ShowcaseView_IsVisible] + $EXP[ShowcaseView_Details_Off]] | $EXP[StripView_IsVisible]"/>
 			</include>
-			<!--Horizontal: Showcase Square-->
+			<!--Horizontal: Showcase Square + Details-->
 			<include content="Scrollbars">
 				<param name="right" value="120"/>
 				<param name="bottom" value="27"/>
@@ -378,9 +389,9 @@
 				<param name="onup" value="62"/>
 				<param name="ondown" value="SetFocus(3000,0)"/>
 				<param name="orientation" value="horizontal"/>
-				<param name="visible" value="$EXP[ShowcaseView_Display_IsSquare]"/>
+				<param name="visible" value="$EXP[ShowcaseView_Display_IsSquare] + !$EXP[ShowcaseView_Details_Off]"/>
 			</include>
-			<!--Horizontal: Showcase Posters + !Bottom Left Player-->
+			<!--Horizontal: Showcase Posters + Details + !Left Player-->
 			<include content="Scrollbars">
 				<param name="right" value="180"/>
 				<param name="bottom" value="27"/>
@@ -391,9 +402,9 @@
 				<param name="onup" value="62"/>
 				<param name="ondown" value="SetFocus(3000,0)"/>
 				<param name="orientation" value="horizontal"/>
-				<param name="visible" value="$EXP[ShowcaseView_Display_IsPosters] + [!Player.HasAudio | $EXP[ShowcaseView_Details_Off]]"/>
+				<param name="visible" value="$EXP[ShowcaseView_Display_IsPosters] + !$EXP[ShowcaseView_Details_Off] + !Player.HasAudio"/>
 			</include>
-			<!--Horizontal: Showcase Posters + Bottom Left Player-->
+			<!--Horizontal: Showcase Posters + Details + Left Player-->
 			<include content="Scrollbars">
 				<param name="right" value="180"/>
 				<param name="bottom" value="27"/>
@@ -404,7 +415,7 @@
 				<param name="onup" value="62"/>
 				<param name="ondown" value="SetFocus(3000,0)"/>
 				<param name="orientation" value="horizontal"/>
-				<param name="visible" value="$EXP[ShowcaseView_Display_IsPosters] + Player.HasAudio + !$EXP[ShowcaseView_Details_Off]"/>
+				<param name="visible" value="$EXP[ShowcaseView_Display_IsPosters] + !$EXP[ShowcaseView_Details_Off] + Player.HasAudio"/>
 			</include>
 
 		</control>

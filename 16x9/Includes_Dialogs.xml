@@ -683,12 +683,11 @@
 									<visible>$PARAM[background_visible]</visible>
 									<!--Album Cover-->
 									<control type="image">
-										<texture fallback="fallback.png">$INFO[Player.Art(album.thumb)]</texture>
+										<texture colordiffuse="$VAR[Dark_Color]">views/white_100.png</texture>
 										<aspectratio>scale</aspectratio>
 									</control>
-									<!--Mask-->
 									<control type="image">
-										<texture colordiffuse="$VAR[Now_Playing_Mask]">views/white_100.png</texture>
+										<texture colordiffuse="$VAR[Home_Artwork_Diffuse]" fallback="fallback.png">$INFO[Player.Art(album.thumb)]</texture>
 										<aspectratio>scale</aspectratio>
 									</control>
 									<!--Shadow for Gridview-->
@@ -1070,12 +1069,13 @@
 					<include>Dialog_Fade_Animation</include>
 					<include content="$PARAM[type]_Widget">
 						<param name="visible" value="$EXP[ShowcaseView_Display_IsSquare] + [!Player.HasAudio | !$EXP[ShowcaseView_Details_Off]]"/>
+						<param name="align" value="right"/>
 						<param name="height" value="240"/>
 						<param name="label_width" value="600"/>
 						<param name="content_visible" value="$PARAM[content_visible]"/>
 						<param name="label_1" value="$PARAM[label_1]"/>
 						<param name="label_2" value="$PARAM[label_2]"/>
-						<param name="right_label_visible" value="true"/>
+						<param name="left_label_visible" value="true"/>
 						<param name="label_scroll" value="true"/>
 					</include>
 					<include content="$PARAM[type]_Widget">
@@ -1191,7 +1191,7 @@
 				<visible>$PARAM[visible]</visible>
 				<!--GENERIC-->
 				<control type="group">
-					<visible>$EXP[Background_IsFanart] | ![Window.IsMedia | Window.IsVisible(visualisation)]</visible>
+					<visible>!$EXP[ListView_Display_IsThumbnails] + ![$EXP[ShowcaseView_IsVisible] + !$EXP[Background_IsFanart]] + !$EXP[GridView_IsVisible]</visible>
 					<include>Dialog_Fade_Animation</include>
 					<animation effect="slide" end="30,0" time="0" condition="true">Conditional</animation>
 					<include content="$PARAM[type]_Widget">
