@@ -3,6 +3,7 @@
 	<include name="HiddenFocusButton">
 		<control type="button">
 			<visible allowhiddenfocus="true">false</visible>
+			<onfocus>SetProperty(Next_Art,$INFO[Container.ListItemNoWrap(1).Label],home)</onfocus>
 			<onfocus>SetProperty(WatchedPercentage,0,home)</onfocus>
 			<onfocus condition="!Control.HasFocus(4501) + !$EXP[ContentSwitching] + System.HasAddon(script.embuary.helper) + Integer.IsGreater(ListItem.Property(TotalEpisodes),0) + !String.IsEqual(ListItem.Overlay,OverlayWatched.png) + [Container.Content(tvshows) | Container.Content(seasons)]">RunScript(script.embuary.helper,action=calc,do='"($INFO[ListItem.Property(WatchedEpisodes)] / $INFO[ListItem.Property(TotalEpisodes)]) * 100"',prop=WatchedPercentage)</onfocus>
 			<onfocus condition="Control.HasFocus(4501) + !$EXP[Secondary_List_ContentSwitching] + System.HasAddon(script.embuary.helper) + Integer.IsGreater(Container(4501).ListItem.Property(TotalEpisodes),0) + !String.IsEqual(Container(4501).ListItem.Overlay,OverlayWatched.png) + Container.Content(tvshows)">RunScript(script.embuary.helper,action=calc,do='"($INFO[Container(4501).ListItem.Property(WatchedEpisodes)] / $INFO[Container(4501).ListItem.Property(TotalEpisodes)]) * 100"',prop=WatchedPercentage)</onfocus>
@@ -253,7 +254,7 @@
 		<param name="right" default="120"/>
 		<param name="height" default="500"/>
 		<param name="focusposition" default="4"/>
-		<param name="textcolor" default="$VAR[Primary_Color]"/>
+		<param name="textcolor" default="$VAR[Light_Color]"/>
 		<param name="selectedcolor" default="$VAR[Accent_Color]"/>
 		<param name="include" default=""/>
     <definition>
@@ -435,6 +436,7 @@
 				<texture background="true">$VAR[Thumbnail(0)Content]</texture>
 				<aspectratio>scale</aspectratio>
 			</control>
+			<include>Secondary_List_Now_Playing</include>
 		</focusedlayout>
 	</include>
 
@@ -444,6 +446,7 @@
 				<texture background="true">$VAR[Thumbnail(0)Content]</texture>
 				<aspectratio>scale</aspectratio>
 			</control>
+			<include>Secondary_List_Now_Playing</include>
 		</itemlayout>
 		<focusedlayout width="1080" height="1080">
 			<include>HiddenFocusButton</include>
@@ -452,6 +455,7 @@
 				<texture background="true">$VAR[Thumbnail(0)Content]</texture>
 				<aspectratio>scale</aspectratio>
 			</control>
+			<include>Secondary_List_Now_Playing</include>
 		</focusedlayout>
 	</include>
 
@@ -469,7 +473,28 @@
 				<texture background="true">$VAR[Thumbnail(0)Content]</texture>
 				<aspectratio>scale</aspectratio>
 			</control>
+			<include>Secondary_List_Now_Playing</include>
 		</focusedlayout>
+	</include>
+
+	<include name="Secondary_List_Now_Playing">
+		<control type="group">
+			<visible>[Container.Content(tvshows) + String.IsEqual(VideoPlayer.TVShowTitle,ListItem.TVShowTitle) + String.IsEqual(VideoPlayer.Season,ListItem.Season)] | [Container.Content(artists) + String.IsEqual(MusicPlayer.Artist,ListItem.Artist) + String.IsEqual(MusicPlayer.Album,ListItem.Album)]</visible>
+			<visible>$EXP[ShowcaseView_IsVisible]</visible>
+			<control type="image">
+				<aspectratio>stretch</aspectratio>
+				<texture colordiffuse="$VAR[Now_Playing_Mask]">views/white_100.png</texture>
+			</control>
+			<include content="Now_Playing_Visualization_Fill">
+				<param name="width" value="120"/>
+				<param name="barwidth" value="24"/>
+				<param name="bottom" value="24"/>
+				<param name="itemgap" value="8"/>
+				<param name="pausewidth" value="24"/>
+				<param name="pausegap" value="8"/>
+				<param name="color" value="$VAR[Light_Color]"/>
+			</include>
+		</control>
 	</include>
 
 	<include name="List_Navigation">
@@ -702,22 +727,21 @@
 				</control>
 				<!--Now Playing Background-->
 				<control type="group">
+					<include>$PARAM[switchingtosecondarylistanimation]</include>
 					<visible>[[$EXP[ShowcaseView_IsVisible] | $EXP[StripView_IsVisible]] + [ListItem($PARAM[position]).IsPlaying | [Container.Content(tvshows) + String.IsEqual(VideoPlayer.TVShowTitle,ListItem($PARAM[position]).Title)] | [Container.Content(seasons) + String.IsEqual(VideoPlayer.TVShowTitle,ListItem($PARAM[position]).TVShowTitle) + String.IsEqual(VideoPlayer.Season,ListItem($PARAM[position]).Season)] | [Container.Content(artists) + String.IsEqual(MusicPlayer.Artist, ListItem($PARAM[position]).Artist)] | [Container.Content(albums) + String.IsEqual(MusicPlayer.Artist, ListItem($PARAM[position]).Artist) + String.IsEqual(MusicPlayer.Album, ListItem($PARAM[position]).Album)]]] | [$EXP[GridView_IsVisible] + $EXP[StandardViews_NowPlaying]]</visible>
 					<control type="image">
 						<aspectratio>stretch</aspectratio>
 						<texture colordiffuse="$VAR[Now_Playing_Mask]">views/white_100.png</texture>
 					</control>
-					<control type="group">
-						<include content="Now_Playing_Visualization_Fill">
-							<param name="width" value="120"/>
-							<param name="barwidth" value="24"/>
-							<param name="bottom" value="24"/>
-							<param name="itemgap" value="8"/>
-							<param name="pausewidth" value="24"/>
-							<param name="pausegap" value="8"/>
-							<param name="color" value="$VAR[Light_Color]"/>
-						</include>
-					</control>
+					<include content="Now_Playing_Visualization_Fill">
+						<param name="width" value="120"/>
+						<param name="barwidth" value="24"/>
+						<param name="bottom" value="24"/>
+						<param name="itemgap" value="8"/>
+						<param name="pausewidth" value="24"/>
+						<param name="pausegap" value="8"/>
+						<param name="color" value="$VAR[Light_Color]"/>
+					</include>
 				</control>
 				<!--Border-->
 				<control type="image">
@@ -788,6 +812,7 @@
 		<param name="item_top" default="0"/>
 		<param name="item_width" default=""/>
 		<param name="item_height" default="100%"/>
+		<param name="fallback" default=""/>
 		<param name="focus_width" default=""/>
 		<param name="focus_height" default="100%"/>
 		<param name="focus_border_visible" default="false"/>
@@ -815,7 +840,7 @@
 							<param name="top" value="$PARAM[item_top]"/>
 							<param name="width" value="$PARAM[item_width]"/>
 							<param name="height" value="$PARAM[item_height]"/>
-							<param name="fallback" value=""/>
+							<param name="fallback" value="$PARAM[fallback]"/>
 							<param name="visible" value="[$EXP[StripView_Display_IsPosters] | $EXP[StripView_Display_IsSquare]] + $EXP[StripView_Details_Off]"/>
 							<param name="showgradient" value="$PARAM[show_gradient]"/>
 							<param name="artworkmask" value="$PARAM[unfocused_overlay]"/>
@@ -828,7 +853,7 @@
 								<param name="top" value="$PARAM[item_top]"/>
 								<param name="width" value="$PARAM[item_width]"/>
 								<param name="height" value="$PARAM[item_height]"/>
-								<param name="fallback" value=""/>
+								<param name="fallback" value="$PARAM[fallback]"/>
 								<param name="visible" value="$EXP[StripView_IsVisible] + $EXP[StripView_Details_Off]"/>
 								<param name="showgradient" value="$PARAM[show_gradient]"/>
 								<param name="artworkmask" value="$PARAM[unfocused_overlay]"/>
@@ -842,7 +867,7 @@
 								<param name="width" value="$PARAM[focus_width]"/>
 								<param name="height" value="$PARAM[focus_height]"/>
 								<param name="switchingtosecondarylistanimation" value="Secondary_List_Scroll_Animation"/>
-								<param name="fallback" value=""/>
+								<param name="fallback" value="$PARAM[fallback]"/>
 								<param name="showgradient" value="$PARAM[show_gradient]"/>
 								<param name="artworkmask" value="$EXP[ShowcaseView_IsVisible] + $EXP[ShowcaseView_Details_Overlay_IsVisible]"/>
 								<param name="artworkmaskanimationtype" value="VisibleChange"/>
@@ -861,7 +886,7 @@
 								<param name="top" value="$PARAM[item_top]"/>
 								<param name="width" value="$PARAM[item_width]"/>
 								<param name="height" value="$PARAM[item_height]"/>
-								<param name="fallback" value=""/>
+								<param name="fallback" value="$PARAM[fallback]"/>
 								<param name="visible" value="[$EXP[ShowcaseView_IsVisible] + [$EXP[ShowcaseView_Details_Off] | $EXP[ShowcaseView_Details_Overlay_IsVisible]]] | $EXP[StripView_IsVisible]"/>
 								<param name="showgradient" value="$PARAM[show_gradient]"/>
 								<param name="artworkmask" value="$PARAM[unfocused_overlay]"/>
@@ -872,7 +897,7 @@
 								<param name="top" value="$PARAM[item_top]"/>
 								<param name="width" value="$PARAM[item_width]"/>
 								<param name="height" value="$PARAM[item_height]"/>
-								<param name="fallback" value=""/>
+								<param name="fallback" value="$PARAM[fallback]"/>
 								<param name="visible" value="[$EXP[ShowcaseView_Display_IsPosters] + [$EXP[ShowcaseView_Details_Off] | $EXP[ShowcaseView_Details_Overlay_IsVisible]]] | [$EXP[StripView_IsVisible] + !$EXP[StripView_Display_IsFanart]]"/>
 								<param name="showgradient" value="$PARAM[show_gradient]"/>
 								<param name="artworkmask" value="$PARAM[unfocused_overlay]"/>
@@ -913,7 +938,7 @@
 						<control type="grouplist">
 							<left>30</left>
 							<right>30</right>
-							<visible>$EXP[ShowcaseView_Details_Overlay_IsVisible] + !$EXP[StandardViews_NowPlaying]</visible>
+							<visible>$EXP[ShowcaseView_Details_Overlay_IsVisible] + [[!Control.HasFocus(4501) + !$EXP[StandardViews_NowPlaying]] | [Control.HasFocus(4501) + !$EXP[SecondaryViews_NowPlaying]]]</visible>
 							<orientation>vertical</orientation>
 							<align>center</align>
 							<itemgap>0</itemgap>
@@ -985,7 +1010,7 @@
 					</include>
 					<!--Fade in Icon -1-->
 					<control type="group">
-						<animation effect="zoom" start="0,0,1950,1080" end="0,0,1920,1080" time="135" reversible="false" condition="$EXP[BillboardView_IsVisible] + !Container($PARAM[target_id]).OnPrevious">Conditional</animation>
+						<animation effect="zoom" start="0,0,1965,1080" end="0,0,1920,1080" time="135" reversible="false" condition="$EXP[BillboardView_IsVisible] + !Container($PARAM[target_id]).OnPrevious">Conditional</animation>
 						<include content="ListIcon">
 							<param name="visible" value="!Container($PARAM[target_id]).OnPrevious"/>
 							<param name="aspectratio" value="$PARAM[aspectratio]"/>
@@ -1026,7 +1051,7 @@
 					</include>
 					<!--Fade in Icon 1-->
 					<control type="group">
-						<animation effect="zoom" start="-30,0,1950,1080" end="0,0,1920,1080" time="135" reversible="false" condition="$EXP[BillboardView_IsVisible] + !Container($PARAM[target_id]).OnNext">Conditional</animation>
+						<animation effect="zoom" start="-45,0,1965,1080" end="0,0,1920,1080" time="135" reversible="false" condition="$EXP[BillboardView_IsVisible] + !Container($PARAM[target_id]).OnNext">Conditional</animation>
 					  <include content="ListIcon">
 					    <param name="visible" value="!Container($PARAM[target_id]).OnNext"/>
 					    <param name="aspectratio" value="$PARAM[aspectratio]"/>
@@ -1057,6 +1082,7 @@
 			<param name="target_id" default="504"/>
 			<param name="viewtype_label" default="Showcase"/>
 			<param name="displaytype_label" default="Posters"/>
+			<param name="fallback" default=""/>
 			<param name="item_width" default="720"/>
 			<param name="2x_item_width" default="1440"/>
 			<param name="2x_item_width_plus_focus_width" default="2160"/>
@@ -1077,7 +1103,7 @@
 							<param name="left" value="-1920"/>
 							<param name="width" value="$PARAM[item_width]"/>
 							<param name="height" value="100%"/>
-							<param name="fallback" value=""/>
+							<param name="fallback" value="$PARAM[fallback]"/>
 							<param name="visible" value="Container($PARAM[target_id]).OnPrevious + !$EXP[$PARAM[viewtype_label]View_Details_Off]"/>
 							<param name="animationtype" value="Hidden"/>
 							<param name="animationcondition" value="true"/>
@@ -1090,7 +1116,7 @@
 							<param name="position" value="1"/>
 							<param name="width" value="$PARAM[item_width]"/>
 							<param name="height" value="100%"/>
-							<param name="fallback" value=""/>
+							<param name="fallback" value="$PARAM[fallback]"/>
 							<param name="visible" value="Container($PARAM[target_id]).OnPrevious + !$EXP[$PARAM[viewtype_label]View_Details_Off]"/>
 							<param name="animationtype" value="Hidden"/>
 							<param name="animationcondition" value="true"/>
@@ -1104,7 +1130,7 @@
 							<param name="position" value="1"/>
 							<param name="left" value="0"/>
 							<param name="width" value="$PARAM[item_width]"/>
-							<param name="fallback" value=""/>
+							<param name="fallback" value="$PARAM[fallback]"/>
 							<param name="visible" value="Container($PARAM[target_id]).OnPrevious + $EXP[ShowcaseView_Details_Off] + !$EXP[ShowcaseView_Details_Overlay_IsVisible]"/>
 							<param name="animationtype" value="Hidden"/>
 							<param name="animationcondition" value="true"/>
@@ -1123,7 +1149,7 @@
 							<param name="position" value="1"/>
 							<param name="left" value="0"/>
 							<param name="width" value="$PARAM[item_width]"/>
-							<param name="fallback" value=""/>
+							<param name="fallback" value="$PARAM[fallback]"/>
 							<param name="visible" value="Container($PARAM[target_id]).OnPrevious + $EXP[$PARAM[viewtype_label]View_Details_Off] + $EXP[ShowcaseView_Details_Overlay_IsVisible]"/>
 							<param name="animationtype" value="Hidden"/>
 							<param name="animationcondition" value="true"/>
@@ -1137,7 +1163,7 @@
 							<param name="left" value="$PARAM[item_width]"/>
 							<param name="position" value="2"/>
 							<param name="width" value="$PARAM[item_width]"/>
-							<param name="fallback" value=""/>
+							<param name="fallback" value="$PARAM[fallback]"/>
 							<param name="visible" value="Container($PARAM[target_id]).OnPrevious + $EXP[$PARAM[viewtype_label]View_Details_Off]"/>
 							<param name="animationtype" value="Hidden"/>
 							<param name="animationcondition" value="true"/>
@@ -1151,7 +1177,7 @@
 							<param name="left" value="$PARAM[2x_item_width]"/>
 							<param name="position" value="3"/>
 							<param name="width" value="$PARAM[item_width]"/>
-							<param name="fallback" value=""/>
+							<param name="fallback" value="$PARAM[fallback]"/>
 							<param name="visible" value="Container($PARAM[target_id]).OnPrevious + $EXP[$PARAM[viewtype_label]View_Display_IsPosters] + $EXP[$PARAM[viewtype_label]View_Details_Off]"/>
 							<param name="animationtype" value="Hidden"/>
 							<param name="animationcondition" value="true"/>
@@ -1210,34 +1236,12 @@
 						<include content="ListIcon">
 							<param name="left" value="-$PARAM[item_width]"/>
 							<param name="width" value="$PARAM[item_width]"/>
-							<param name="fallback" value=""/>
-							<param name="visible" value="Container($PARAM[target_id]).OnPrevious + $EXP[$PARAM[viewtype_label]View_Details_Off] + !$EXP[ShowcaseView_Details_Overlay_IsVisible] + !Player.HasAudio"/>
+							<param name="fallback" value="$PARAM[fallback]"/>
+							<param name="visible" value="Container($PARAM[target_id]).OnPrevious + $EXP[$PARAM[viewtype_label]View_Details_Off] + !$EXP[ShowcaseView_Details_Overlay_IsVisible]"/>
 							<param name="animationtype" value="Hidden"/>
 							<param name="animationcondition" value="true"/>
 							<param name="animationeffect" value="slide"/>
 							<param name="animationend" value="$PARAM[item_width],0"/>
-							<param name="showgradient" value="$PARAM[showgradient]"/>
-							<param name="bordervisible" value="$EXP[$PARAM[viewtype_label]View_Details_Off] + !Control.HasFocus(60)"/>
-							<param name="bordersize" value="11"/>
-							<param name="bordercolor" value="$VAR[Light_Color]"/>
-							<param name="bordertexture" value="views/border_10px.png"/>
-							<param name="artworkmask" value="Container($PARAM[target_id]).OnPrevious + $PARAM[artworkmask]"/>
-							<param name="artworkmaskanimationtype" value="Hidden"/>
-							<param name="artworkmaskanimationcondition" value="true"/>
-							<param name="artworkmaskanimationeffect" value="fade"/>
-							<param name="artworkmaskanimationstart" value="100"/>
-							<param name="artworkmaskanimationend" value="0"/>
-						</include>
-						<!--Move Icon -1 to 0 (Details off, fade out overlay), musicplayer-->
-						<include content="ListIcon">
-							<param name="left" value="-$PARAM[2x_item_width]"/>
-							<param name="width" value="$PARAM[item_width]"/>
-							<param name="fallback" value=""/>
-							<param name="visible" value="Container($PARAM[target_id]).OnPrevious + $EXP[$PARAM[viewtype_label]View_Details_Off] + !$EXP[ShowcaseView_Details_Overlay_IsVisible] + Player.HasAudio"/>
-							<param name="animationtype" value="Hidden"/>
-							<param name="animationcondition" value="true"/>
-							<param name="animationeffect" value="slide"/>
-							<param name="animationend" value="$PARAM[2x_item_width],0"/>
 							<param name="showgradient" value="$PARAM[showgradient]"/>
 							<param name="bordervisible" value="$EXP[$PARAM[viewtype_label]View_Details_Off] + !Control.HasFocus(60)"/>
 							<param name="bordersize" value="11"/>
@@ -1254,29 +1258,12 @@
 						<include content="ListIcon">
 							<param name="left" value="-$PARAM[item_width]"/>
 							<param name="width" value="$PARAM[item_width]"/>
-							<param name="fallback" value=""/>
-							<param name="visible" value="Container($PARAM[target_id]).OnPrevious + $EXP[$PARAM[viewtype_label]View_Details_Off] + $EXP[ShowcaseView_Details_Overlay_IsVisible] + !Player.HasAudio"/>
+							<param name="fallback" value="$PARAM[fallback]"/>
+							<param name="visible" value="Container($PARAM[target_id]).OnPrevious + $EXP[$PARAM[viewtype_label]View_Details_Off] + $EXP[ShowcaseView_Details_Overlay_IsVisible]"/>
 							<param name="animationtype" value="Hidden"/>
 							<param name="animationcondition" value="true"/>
 							<param name="animationeffect" value="slide"/>
 							<param name="animationend" value="$PARAM[item_width],0"/>
-							<param name="showgradient" value="$PARAM[showgradient]"/>
-							<param name="bordervisible" value="$EXP[$PARAM[viewtype_label]View_Details_Off] + !Control.HasFocus(60)"/>
-							<param name="bordersize" value="11"/>
-							<param name="bordercolor" value="$VAR[Light_Color]"/>
-							<param name="bordertexture" value="views/border_10px.png"/>
-							<param name="artworkmask" value="true"/>
-						</include>
-						<!--Move Icon -1 to 0 (Overlay details on, musicplayer)-->
-						<include content="ListIcon">
-							<param name="left" value="-$PARAM[2x_item_width]"/>
-							<param name="width" value="$PARAM[item_width]"/>
-							<param name="fallback" value=""/>
-							<param name="visible" value="Container($PARAM[target_id]).OnPrevious + $EXP[$PARAM[viewtype_label]View_Details_Off] + $EXP[ShowcaseView_Details_Overlay_IsVisible] + Player.HasAudio"/>
-							<param name="animationtype" value="Hidden"/>
-							<param name="animationcondition" value="true"/>
-							<param name="animationeffect" value="slide"/>
-							<param name="animationend" value="$PARAM[2x_item_width],0"/>
 							<param name="showgradient" value="$PARAM[showgradient]"/>
 							<param name="bordervisible" value="$EXP[$PARAM[viewtype_label]View_Details_Off] + !Control.HasFocus(60)"/>
 							<param name="bordersize" value="11"/>
@@ -1296,7 +1283,7 @@
 							<param name="top" value="0"/>
 							<param name="width" value="$PARAM[item_width]"/>
 							<param name="height" value="100%"/>
-							<param name="fallback" value=""/>
+							<param name="fallback" value="$PARAM[fallback]"/>
 							<param name="visible" value="Container($PARAM[target_id]).OnNext + !$EXP[$PARAM[viewtype_label]View_Details_Off]"/>
 							<param name="animationtype" value="Hidden"/>
 							<param name="animationcondition" value="true"/>
@@ -1310,7 +1297,7 @@
 							<param name="top" value="0"/>
 							<param name="width" value="$PARAM[item_width]"/>
 							<param name="height" value="100%"/>
-							<param name="fallback" value=""/>
+							<param name="fallback" value="$PARAM[fallback]"/>
 							<param name="visible" value="Container($PARAM[target_id]).OnNext + !$EXP[$PARAM[viewtype_label]View_Details_Off]"/>
 							<param name="animationtype" value="Hidden"/>
 							<param name="animationcondition" value="true"/>
@@ -1325,31 +1312,12 @@
 							<param name="position" value="-1"/>
 							<param name="left" value="0"/>
 							<param name="width" value="$PARAM[item_width]"/>
-							<param name="fallback" value=""/>
-							<param name="visible" value="Container($PARAM[target_id]).OnNext + !String.IsEmpty(Container.ListItemNoWrap(-1).Label) + $EXP[ShowcaseView_Details_Off] + !$EXP[ShowcaseView_Details_Overlay_IsVisible] + !Player.HasAudio"/>
+							<param name="fallback" value="$PARAM[fallback]"/>
+							<param name="visible" value="Container($PARAM[target_id]).OnNext + !String.IsEmpty(Container.ListItemNoWrap(-1).Label) + $EXP[ShowcaseView_Details_Off] + !$EXP[ShowcaseView_Details_Overlay_IsVisible]"/>
 							<param name="animationtype" value="Hidden"/>
 							<param name="animationcondition" value="true"/>
 							<param name="animationeffect" value="slide"/>
 							<param name="animationend" value="-$PARAM[item_width],0"/>
-							<param name="showgradient" value="$PARAM[showgradient]"/>
-							<param name="artworkmask" value="!Container($PARAM[target_id]).OnNext + $PARAM[artworkmask]"/>
-							<param name="artworkmaskanimationtype" value="Visible"/>
-							<param name="artworkmaskanimationcondition" value="true"/>
-							<param name="artworkmaskanimationeffect" value="fade"/>
-							<param name="artworkmaskanimationstart" value="0"/>
-							<param name="artworkmaskanimationend" value="100"/>
-						</include>
-						<!--Move Icon 0 to -1 (Details off, fade in overlay, musicplayer)-->
-						<include content="ListIcon">
-							<param name="position" value="-1"/>
-							<param name="left" value="0"/>
-							<param name="width" value="$PARAM[item_width]"/>
-							<param name="fallback" value=""/>
-							<param name="visible" value="Container($PARAM[target_id]).OnNext + !String.IsEmpty(Container.ListItemNoWrap(-1).Label) + $EXP[ShowcaseView_Details_Off] + !$EXP[ShowcaseView_Details_Overlay_IsVisible] + Player.HasAudio"/>
-							<param name="animationtype" value="Hidden"/>
-							<param name="animationcondition" value="true"/>
-							<param name="animationeffect" value="slide"/>
-							<param name="animationend" value="-$PARAM[2x_item_width],0"/>
 							<param name="showgradient" value="$PARAM[showgradient]"/>
 							<param name="artworkmask" value="!Container($PARAM[target_id]).OnNext + $PARAM[artworkmask]"/>
 							<param name="artworkmaskanimationtype" value="Visible"/>
@@ -1363,26 +1331,12 @@
 							<param name="position" value="-1"/>
 							<param name="left" value="0"/>
 							<param name="width" value="$PARAM[item_width]"/>
-							<param name="fallback" value=""/>
-							<param name="visible" value="Container($PARAM[target_id]).OnNext + !String.IsEmpty(Container.ListItemNoWrap(-1).Label) + $EXP[ShowcaseView_Details_Off] + $EXP[ShowcaseView_Details_Overlay_IsVisible] + !Player.HasAudio"/>
+							<param name="fallback" value="$PARAM[fallback]"/>
+							<param name="visible" value="Container($PARAM[target_id]).OnNext + !String.IsEmpty(Container.ListItemNoWrap(-1).Label) + $EXP[ShowcaseView_Details_Off] + $EXP[ShowcaseView_Details_Overlay_IsVisible]"/>
 							<param name="animationtype" value="Hidden"/>
 							<param name="animationcondition" value="true"/>
 							<param name="animationeffect" value="slide"/>
 							<param name="animationend" value="-$PARAM[item_width],0"/>
-							<param name="showgradient" value="$PARAM[showgradient]"/>
-							<param name="artworkmask" value="true"/>
-						</include>
-						<!--Move Icon 0 to -1 (Overlay details on, musicplayer)-->
-						<include content="ListIcon">
-							<param name="position" value="-1"/>
-							<param name="left" value="0"/>
-							<param name="width" value="$PARAM[item_width]"/>
-							<param name="fallback" value=""/>
-							<param name="visible" value="Container($PARAM[target_id]).OnNext + !String.IsEmpty(Container.ListItemNoWrap(-1).Label) + $EXP[ShowcaseView_Details_Off] + $EXP[ShowcaseView_Details_Overlay_IsVisible] + Player.HasAudio"/>
-							<param name="animationtype" value="Hidden"/>
-							<param name="animationcondition" value="true"/>
-							<param name="animationeffect" value="slide"/>
-							<param name="animationend" value="-$PARAM[2x_item_width],0"/>
 							<param name="showgradient" value="$PARAM[showgradient]"/>
 							<param name="artworkmask" value="true"/>
 						</include>
@@ -1391,7 +1345,7 @@
 							<param name="left" value="$PARAM[2x_item_width]"/>
 							<param name="position" value="1"/>
 							<param name="width" value="$PARAM[item_width]"/>
-							<param name="fallback" value=""/>
+							<param name="fallback" value="$PARAM[fallback]"/>
 							<param name="visible" value="Container($PARAM[target_id]).OnNext + !String.IsEmpty(Container.ListItemNoWrap(1).Label) + $EXP[$PARAM[viewtype_label]View_Details_Off]"/>
 							<param name="animationtype" value="Hidden"/>
 							<param name="animationcondition" value="true"/>
@@ -1405,7 +1359,7 @@
 							<param name="left" value="$PARAM[2x_item_width_plus_focus_width]"/>
 							<param name="position" value="2"/>
 							<param name="width" value="$PARAM[item_width]"/>
-							<param name="fallback" value=""/>
+							<param name="fallback" value="$PARAM[fallback]"/>
 							<param name="visible" value="Container($PARAM[target_id]).OnNext + !String.IsEmpty(Container.ListItemNoWrap(2).Label) + $EXP[$PARAM[viewtype_label]View_Details_Off]"/>
 							<param name="animationtype" value="Hidden"/>
 							<param name="animationcondition" value="true"/>
@@ -1464,7 +1418,7 @@
 						<include content="ListIcon">
 							<param name="left" value="$PARAM[item_width]"/>
 							<param name="width" value="$PARAM[item_width]"/>
-							<param name="fallback" value=""/>
+							<param name="fallback" value="$PARAM[fallback]"/>
 							<param name="visible" value="Container($PARAM[target_id]).OnNext + $EXP[$PARAM[viewtype_label]View_Details_Off] + !$EXP[ShowcaseView_Details_Overlay_IsVisible]"/>
 							<param name="animationtype" value="Hidden"/>
 							<param name="animationcondition" value="true"/>
@@ -1486,7 +1440,7 @@
 						<include content="ListIcon">
 							<param name="left" value="$PARAM[item_width]"/>
 							<param name="width" value="$PARAM[item_width]"/>
-							<param name="fallback" value=""/>
+							<param name="fallback" value="$PARAM[fallback]"/>
 							<param name="visible" value="Container($PARAM[target_id]).OnNext + $EXP[$PARAM[viewtype_label]View_Details_Off] + $EXP[ShowcaseView_Details_Overlay_IsVisible]"/>
 							<param name="animationtype" value="Hidden"/>
 							<param name="animationcondition" value="true"/>
@@ -1877,6 +1831,7 @@
 			<param name="target_id" default="502"/>
 			<param name="viewtype_label" default="Showcase"/>
 			<param name="displaytype_label" default="Posters"/>
+			<param name="fallback" default="fallback.png"/>
 			<param name="item_width" default="720"/>
 			<param name="item_height" default="100%"/>
 			<param name="2x_item_width" default="1440"/>
@@ -1889,6 +1844,7 @@
 					<param name="displaytype_label" value="$PARAM[displaytype_label]"/>
 					<param name="item_width" value="$PARAM[item_width]"/>
 					<param name="item_height" value="$PARAM[item_height]"/>
+					<param name="fallback" value="$PARAM[fallback]"/>
 					<param name="focus_width" value="$PARAM[item_width]"/>
 					<param name="focus_height" value="$PARAM[item_height]"/>
 					<param name="focus_border_visible" value="$EXP[ShowcaseView_Details_Off] + !Control.HasFocus(60)"/>
@@ -1906,6 +1862,7 @@
 					<param name="target_id" value="$PARAM[target_id]"/>
 					<param name="viewtype_label" value="$PARAM[viewtype_label]"/>
 					<param name="displaytype_label" value="$PARAM[displaytype_label]"/>
+					<param name="fallback" value="$PARAM[fallback]"/>
 					<param name="item_width" value="$PARAM[item_width]"/>
 					<param name="item_height" value="$PARAM[item_height]"/>
 					<param name="focus_width" value="$PARAM[item_width]"/>
@@ -2449,7 +2406,7 @@
 				<align>left</align>
 				<aligny>center</aligny>
 				<font>Breadcrumb_Info_Label</font>
-				<textcolor>$VAR[Primary_Color]</textcolor>
+				<textcolor>$VAR[List_Color]</textcolor>
 				<haspath>$PARAM[haspath]</haspath>
 
 			</control>
