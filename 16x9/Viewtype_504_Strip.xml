@@ -25,9 +25,40 @@
 		<param name="id" default="504"/>
 		<param name="viewtype_label" default="Strip"/>
 		<definition>
+
+			<control type="group">
+				<visible>$EXP[StripView_Display_IsFanart] | $EXP[StripView_Display_IsSquare]</visible>
+				<height>210</height>
+				<bottom>0</bottom>
+				<control type="image">
+					<aspectratio>stretch</aspectratio>
+					<texture colordiffuse="$VAR[Secondary_Color]">views/white_100.png</texture>
+				</control>
+				<control type="image">
+					<visible>Skin.String(Theme,Light) + !$EXP[ListView_Display_IsBackground] + !$EXP[BillboardView_IsVisible]</visible>
+					<aspectratio>stretch</aspectratio>
+					<texture colordiffuse="$VAR[Light_Grey_Color]">views/gradient_light-background_stripview.png</texture>
+				</control>
+			</control>
+			<control type="group">
+				<visible>$EXP[StripView_Display_IsPosters]</visible>
+				<height>180</height>
+				<bottom>0</bottom>
+				<control type="image">
+					<aspectratio>stretch</aspectratio>
+					<texture colordiffuse="$VAR[Secondary_Color]">views/white_100.png</texture>
+				</control>
+				<control type="image">
+					<visible>Skin.String(Theme,Light) + !$EXP[ListView_Display_IsBackground] + !$EXP[BillboardView_IsVisible]</visible>
+					<aspectratio>stretch</aspectratio>
+					<texture colordiffuse="$VAR[Light_Grey_Color]">views/gradient_light-background_stripview.png</texture>
+				</control>
+			</control>
+			
 			<control type="group">
 				<visible>$EXP[$PARAM[viewtype_label]View_IsVisible]</visible>
 				<include>Viewtype_Fade_Animation</include>
+
 				<!--ARTWORK-->
 				<control type="group">
 					<animation effect="slide" start="0,0" end="-80,0" time="0" condition="$EXP[$PARAM[viewtype_label]View_Display_IsPosters]">Conditional</animation>
@@ -83,42 +114,61 @@
 						<param name="4x_item_width_plus_focus_width" value="2790"/>
 					</include>
 				</control>
+				<!--MASK for STRIPVIEW-->
+				<control type="image">
+					<visible>$EXP[StripView_Display_IsPosters]</visible>
+					<height>180</height>
+					<texture colordiffuse="$VAR[Secondary_Color]">views/white_100.png</texture>
+				</control>
+				<control type="image">
+					<visible>$EXP[StripView_Display_IsFanart] | $EXP[StripView_Display_IsSquare]</visible>
+					<height>240</height>
+					<texture colordiffuse="$VAR[Secondary_Color]">views/white_100.png</texture>
+				</control>
 				<!--DETAILS-->
 				<control type="group">
 					<visible>!$EXP[ContainerSwitching] + !$EXP[ContentSwitching] + !$EXP[TransparentDialog_IsVisible] + !Control.HasFocus(60)</visible>
 					<include>Delayed_Content_Fade_Animation</include>
 					<include content="MediaFlags"/>
 					<control type="group">
-						<animation effect="slide" end="0,-30" time="0" condition="$EXP[$PARAM[viewtype_label]View_Display_IsSquare] | $EXP[$PARAM[viewtype_label]View_Display_IsFanart]">Conditional</animation>
-						<animation effect="slide" end="75,0" time="0" condition="$EXP[$PARAM[viewtype_label]View_Display_IsSquare] + !$EXP[$PARAM[viewtype_label]View_Details_Off]">Conditional</animation>
-						<animation effect="slide" end="320,0" time="0" condition="$EXP[$PARAM[viewtype_label]View_Display_IsFanart] + !$EXP[$PARAM[viewtype_label]View_Details_Off]">Conditional</animation>
-						<include content="ProgressBar">
-							<param name="top" value="930"/>
+						<visible>!$EXP[Secondary_List_ContainerSwitching] + ![Control.HasFocus(4501) + Window.IsVisible(1121)]</visible>
+						<include>Delayed_Content_Fade_Animation</include>
+						<include content="Common_Details">
+							<param name="viewtype_label" value="$PARAM[viewtype_label]"/>
+							<param name="left" value="60"/>
+							<param name="width" value="600"/>
+							<param name="titleheight" value="156"/>
+							<param name="infoheight" value="70"/>
+							<param name="plotmaxheight" value="235"/>
 						</include>
 					</control>
-					<include content="Common_Details">
-						<param name="viewtype_label" value="$PARAM[viewtype_label]"/>
-						<param name="left" value="60"/>
-						<param name="width" value="600"/>
-						<param name="titleheight" value="156"/>
-						<param name="infoheight" value="70"/>
-						<param name="plotmaxheight" value="235"/>
-					</include>
-					<!--Bottom Label-->
-					<control type="label">
-						<animation effect="slide" end="0,-15" time="0" condition="$EXP[$PARAM[viewtype_label]View_Display_IsSquare] | [$EXP[$PARAM[viewtype_label]View_Display_IsFanart] + !$EXP[$PARAM[viewtype_label]View_Flags_IsOn]]">Conditional</animation>
-						<visible>$EXP[$PARAM[viewtype_label]View_Details_Title] + !$EXP[$PARAM[viewtype_label]View_Details_Logo_IsOn]</visible>
-						<left>240</left>
-						<top>964</top>
-						<width>1440</width>
-						<height>52</height>
-						<font>$PARAM[viewtype_label]_Title</font>
-						<textcolor>$VAR[Primary_Color]</textcolor>
-						<label>$VAR[Title_Label]</label>
-						<align>center</align>
-						<aligny>center</aligny>
-						<scroll>true</scroll>
-						<scrollsuffix> / </scrollsuffix>
+					<control type="group">
+						<visible>!$EXP[Secondary_List_ContainerSwitching] + !$EXP[Secondary_List_ContentSwitching] + [!Window.IsVisible(1121) | Control.HasFocus($PARAM[id])]</visible>
+						<include>Delayed_Content_Fade_Animation</include>
+						<!--Bottom Label-->
+						<control type="label">
+							<animation effect="slide" end="0,-15" time="0" condition="$EXP[$PARAM[viewtype_label]View_Display_IsSquare] | [$EXP[$PARAM[viewtype_label]View_Display_IsFanart] + !$EXP[$PARAM[viewtype_label]View_Flags_IsOn]]">Conditional</animation>
+							<visible>$EXP[$PARAM[viewtype_label]View_Details_Title] + !$EXP[$PARAM[viewtype_label]View_Details_Logo_IsOn]</visible>
+							<left>240</left>
+							<top>964</top>
+							<width>1440</width>
+							<height>52</height>
+							<font>$PARAM[viewtype_label]_Title</font>
+							<textcolor>$VAR[Primary_Color]</textcolor>
+							<label>$VAR[Title_Label]</label>
+							<align>center</align>
+							<aligny>center</aligny>
+							<scroll>true</scroll>
+							<scrollsuffix> / </scrollsuffix>
+						</control>
+						<control type="group">
+							<animation effect="slide" end="0,-30" time="0" condition="$EXP[$PARAM[viewtype_label]View_Display_IsSquare] | $EXP[$PARAM[viewtype_label]View_Display_IsFanart]">Conditional</animation>
+							<animation effect="slide" end="75,0" time="0" condition="$EXP[$PARAM[viewtype_label]View_Display_IsSquare] + !$EXP[$PARAM[viewtype_label]View_Details_Off]">Conditional</animation>
+							<animation effect="slide" end="320,0" time="0" condition="$EXP[$PARAM[viewtype_label]View_Display_IsFanart] + !$EXP[$PARAM[viewtype_label]View_Details_Off]">Conditional</animation>
+							<include content="ProgressBar">
+								<param name="top" value="930"/>
+							</include>
+						</control>
 					</control>
 				</control>
 			</control>

@@ -320,15 +320,22 @@
 
 	<variable name="Info_Label">
 		<!--SECONDARY LIST VISIBLE-->
-		<value condition="Control.HasFocus(4501) + $EXP[ShowcaseView_IsVisible] + Container.Content(tvshows) + !String.IsEmpty(Container(4501).ListItem.Year)">[UPPERCASE]$INFO[Container(4501).ListItem.Year]$INFO[Container(4501).ListItem.Property(WatchedEpisodes), / ,/]$INFO[Container(4501).ListItem.Property(NumEpisodes),, ]$LOCALIZE[32001][/UPPERCASE]</value>
-		<value condition="Control.HasFocus(4501) + $EXP[ShowcaseView_IsVisible] + Container.Content(tvshows) + !String.IsEmpty(Container(4501).ListItem.Property(WatchedEpisodes))">[UPPERCASE]$INFO[Container(4501).ListItem.Property(WatchedEpisodes),,/]$INFO[Container(4501).ListItem.Property(NumEpisodes),, ]$LOCALIZE[32001][/UPPERCASE]</value>
+		<value condition="Control.HasFocus(4501) + !$EXP[ListView_IsVisible] + Container.Content(tvshows) + !String.IsEmpty(Container(4501).ListItem.Year)">[UPPERCASE]$INFO[Container(4501).ListItem.Year]$INFO[Container(4501).ListItem.Property(WatchedEpisodes), / ,/]$INFO[Container(4501).ListItem.Property(NumEpisodes),, ]$LOCALIZE[32001][/UPPERCASE]</value>
+		<value condition="Control.HasFocus(4501) + !$EXP[ListView_IsVisible] + Container.Content(tvshows) + !String.IsEmpty(Container(4501).ListItem.Property(WatchedEpisodes))">[UPPERCASE]$INFO[Container(4501).ListItem.Property(WatchedEpisodes),,/]$INFO[Container(4501).ListItem.Property(NumEpisodes),, ]$LOCALIZE[32001][/UPPERCASE]</value>
 		<value condition="Control.HasFocus(4501) + Container.Content(tvshows) + !String.IsEmpty(Container(4501).ListItem.Year)">[UPPERCASE]$INFO[Container(4501).ListItem.Year,/ ]$INFO[Container(4501).ListItem.Property(WatchedEpisodes), / ,/]$INFO[Container(4501).ListItem.Property(NumEpisodes),, ]$LOCALIZE[32001][/UPPERCASE]</value>
 		<value condition="Control.HasFocus(4501) + Container.Content(tvshows) + !String.IsEmpty(Container(4501).ListItem.Property(WatchedEpisodes))">[UPPERCASE]$INFO[Container(4501).ListItem.Property(WatchedEpisodes),/ ,/]$INFO[Container(4501).ListItem.Property(NumEpisodes),, ]$LOCALIZE[32001][/UPPERCASE]</value>
-		<value condition="Control.HasFocus(4501) + Container.Content(sets) + !String.IsEmpty(Container(4501).ListItem.Year)">[UPPERCASE]$INFO[Container(4501).ListItem.Year]$INFO[Container(4501).ListItem.Duration(mins), / , $LOCALIZE[31138]]$VAR[Resolution_Label, / ][/UPPERCASE]</value>
-		<value condition="Control.HasFocus(4501) + Container.Content(sets) + !String.IsEmpty(Container(4501).ListItem.Year)">[UPPERCASE]$INFO[Container(4501).ListItem.Year]$INFO[Container(4501).ListItem.Duration(mins), / , $LOCALIZE[31138]][/UPPERCASE]</value>
-		<value condition="Control.HasFocus(4501) + Container.Content(sets) + !String.IsEmpty(Container(4501).ListItem.Duration)">[UPPERCASE]$INFO[Container(4501).ListItem.Duration(mins),, $LOCALIZE[31138]][/UPPERCASE]</value>
+		<value condition="Control.HasFocus(4501) + [Container.Content(movies) | Container.Content(sets)] + $EXP[ListView_Display_IsThumbnails] + !String.IsEmpty(Container(4501).ListItem.Year)">[UPPERCASE]$INFO[Container(4501).ListItem.Year,/ ][/UPPERCASE]</value>
+		<value condition="Control.HasFocus(4501) + [Container.Content(movies) | Container.Content(sets)] + $EXP[ListView_Display_IsBackground] + !String.IsEmpty(Container(4501).ListItem.Year)">[UPPERCASE]$INFO[Container(4501).ListItem.Year,/ ]$INFO[Container(4501).ListItem.Duration(mins), / , $LOCALIZE[31138]][/UPPERCASE]</value>
+		<value condition="Control.HasFocus(4501) + [Container.Content(movies) | Container.Content(sets)] + !String.IsEmpty(Container(4501).ListItem.Year)">[UPPERCASE]$INFO[Container(4501).ListItem.Year]$INFO[Container(4501).ListItem.Duration(mins), / , $LOCALIZE[31138]]$VAR[Resolution_Label, / ][/UPPERCASE]</value>
+		<value condition="Control.HasFocus(4501) + [Container.Content(movies) | Container.Content(sets)] + !String.IsEmpty(Container(4501).ListItem.Duration)">[UPPERCASE]$INFO[Container(4501).ListItem.Duration(mins),, $LOCALIZE[31138]][/UPPERCASE]</value>
 		<value condition="Control.HasFocus(4501) + $EXP[ShowcaseView_IsVisible] + Container.Content(artists) + !String.IsEmpty(Container(4501).ListItem.Year)">[UPPERCASE]$INFO[Container(4501).ListItem.Year][/UPPERCASE]</value>
-		<value condition="Control.HasFocus(4501) + Container.Content(artists) + !String.IsEmpty(Container(4501).ListItem.Year)">[UPPERCASE]$INFO[Container(4501).ListItem.Year,/ ][/UPPERCASE]</value>
+		<value condition="Control.HasFocus(4501) + Container.Content(artists) + $EXP[ListView_Display_IsThumbnails] + !String.IsEmpty(Container(4501).ListItem.Year)">[UPPERCASE]$INFO[Container(4501).ListItem.Year,/ ][/UPPERCASE]</value>
+		<value condition="Control.HasFocus(4501) + Container.Content(artists) + !String.IsEmpty(Container(4501).ListItem.Year)">[UPPERCASE]$INFO[Container(4501).ListItem.Year][/UPPERCASE]</value>
+		<!-- SETS -->
+		<!-- Listview/Thumbnails: 3 Movies -->
+		<!-- Others: 2005-2012 / 3 Movies -->
+		<value condition="ListItem.IsCollection + !$EXP[ListView_Display_IsThumbnails] + !String.IsEmpty(Container(4500).ListItem(0).Year)">[UPPERCASE]$INFO[Container(4500).ListItem(0).Year]$INFO[Container(4500).ListItem(-1).Year,-]$INFO[Container(4500).NumItems, / , Movies][/UPPERCASE]</value>
+		<value condition="ListItem.IsCollection + !String.IsEmpty(Container(4500).NumItems)">[UPPERCASE]$INFO[Container(4500).NumItems,, Movies][/UPPERCASE]</value>
 		<!-- MOVIES -->
 		<!-- ListView/Thumbnails: 2019 -->
 		<!-- Gridview: 2019 / 152 mins -->
@@ -337,11 +344,6 @@
 		<value condition="Container.Content(movies) + !$EXP[ListView_IsVisible] + !$EXP[GridView_IsVisible] + !String.IsEmpty(ListItem.Year)">[UPPERCASE]$INFO[ListItem.Year]$INFO[ListItem.Duration(mins), / , $LOCALIZE[31138]]$VAR[Resolution_Label, / ][/UPPERCASE]</value>
 		<value condition="Container.Content(movies) + !String.IsEmpty(ListItem.Year)">[UPPERCASE]$INFO[ListItem.Year]$INFO[ListItem.Duration(mins), / , $LOCALIZE[31138]][/UPPERCASE]</value>
 		<value condition="Container.Content(movies) + !String.IsEmpty(ListItem.Duration)">[UPPERCASE]$INFO[ListItem.Duration(mins),, $LOCALIZE[31138]][/UPPERCASE]</value>
-		<!-- SETS -->
-		<!-- Listview/Thumbnails: 3 Movies -->
-		<!-- Others: 2005-2012 / 3 Movies -->
-		<value condition="ListItem.IsCollection + !$EXP[ListView_Display_IsThumbnails] + !String.IsEmpty(Container(4500).ListItem(0).Year)">[UPPERCASE]$INFO[Container(4500).ListItem(0).Year]$INFO[Container(4500).ListItem(-1).Year,-]$INFO[Container(4500).NumItems, / , Movies][/UPPERCASE]</value>
-		<value condition="ListItem.IsCollection + !String.IsEmpty(Container(4500).NumItems)">[UPPERCASE]$INFO[Container(4500).NumItems,, Movies][/UPPERCASE]</value>
 		<!-- TV SHOWS -->
 		<!-- ListView/Thumbnails: 2019 -->
 		<!-- ListView/GridView: 2019 / 5 Seasons -->

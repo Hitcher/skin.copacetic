@@ -101,39 +101,42 @@
 					</control>
 
 					<!--Background-->
-					<control type="grouplist">
-						<visible>$EXP[$PARAM[viewtype_label]View_Display_IsBackground] + $EXP[$PARAM[viewtype_label]View_Details_Info_IsVisible]</visible>
-						<left>120</left>
-						<top>510</top>
-						<width>1680</width>
-						<height>60</height>
-						<itemgap>12</itemgap>
-						<orientation>horizontal</orientation>
-						<usecontrolcoords>true</usecontrolcoords>
-						<!--Title Gap-->
-						<control type="label">
-							<width max="1200">auto</width>
-							<height>60</height>
-							<aligny>center</aligny>
-							<font>List_Title_Focused</font>
-							<textcolor>$VAR[Blank_Color]</textcolor>
-							<label>$VAR[Title_Label]</label>
-						</control>
-						<!--Abbreviated Details-->
-						<control type="label">
-							<width>480</width>
-							<top>19</top>
-							<height>35</height>
-							<font>List_Info</font>
-							<textcolor>$VAR[Light_Color]</textcolor>
-							<label>$VAR[Info_Label,/ ]</label>
-							<aligny>center</aligny>
-						</control>
-					</control>
-					<!--Thumbnails-->
 					<control type="group">
-						<visible>$EXP[$PARAM[viewtype_label]View_Display_IsThumbnails] + !Container.Content(artists) + $EXP[$PARAM[viewtype_label]View_Details_Info_IsVisible]</visible>
+						<visible>!Control.HasFocus(4501) + !$EXP[Secondary_List_ContainerSwitching]</visible>
+						<include>Delayed_Content_Fade_Animation</include>
 						<control type="grouplist">
+							<visible>$EXP[$PARAM[viewtype_label]View_Display_IsBackground] + $EXP[$PARAM[viewtype_label]View_Details_Info_IsVisible]</visible>
+							<left>120</left>
+							<top>510</top>
+							<width>1680</width>
+							<height>60</height>
+							<itemgap>12</itemgap>
+							<orientation>horizontal</orientation>
+							<usecontrolcoords>true</usecontrolcoords>
+							<!--Title Gap-->
+							<control type="label">
+								<width max="1200">auto</width>
+								<height>60</height>
+								<aligny>center</aligny>
+								<font>List_Title_Focused</font>
+								<textcolor>$VAR[Blank_Color]</textcolor>
+								<label>$VAR[Title_Label]</label>
+							</control>
+							<!--Abbreviated Details-->
+							<control type="label">
+								<width>480</width>
+								<top>22</top>
+								<height>35</height>
+								<font>List_Info</font>
+								<textcolor>$VAR[Light_Color]</textcolor>
+								<label>$VAR[Info_Label,/ ]</label>
+								<aligny>center</aligny>
+							</control>
+						</control>
+
+						<!--Thumbnails-->
+						<control type="grouplist">
+							<visible>$EXP[$PARAM[viewtype_label]View_Display_IsThumbnails] + !Container.Content(artists) + $EXP[$PARAM[viewtype_label]View_Details_Info_IsVisible]</visible>
 							<left>840</left>
 							<top>510</top>
 							<width>990</width>
@@ -141,8 +144,6 @@
 							<itemgap>12</itemgap>
 							<orientation>horizontal</orientation>
 							<usecontrolcoords>true</usecontrolcoords>
-							<visible>!Control.HasFocus(4501) + !$EXP[Secondary_List_ContainerSwitching]</visible>
-							<include>Delayed_Content_Fade_Animation</include>
 							<!--Title Gap-->
 							<control type="label">
 								<width max="780">auto</width>
@@ -155,7 +156,7 @@
 							<!--Abbreviated Details-->
 							<control type="label">
 								<width>180</width>
-								<top>19</top>
+								<top>22</top>
 								<height>35</height>
 								<font>List_Info</font>
 								<textcolor>$VAR[Light_Color]</textcolor>
@@ -164,59 +165,44 @@
 							</control>
 						</control>
 					</control>
-					<control type="grouplist">
-						<visible>Control.HasFocus(4501) + !Window.IsVisible(1121) + Container.Content(sets)</visible>
-						<include>Delayed_Content_Fade_Animation</include>
-						<left>840</left>
-						<width>960</width>
-						<itemgap>5</itemgap>
-						<align>center</align>
-						<orientation>vertical</orientation>
-						<usecontrolcoords>true</usecontrolcoords>
-						<!--4501-->
-						<control type="label">
-							<width>100%</width>
-							<height>60</height>
-							<aligny>center</aligny>
-							<font>List_Title_Focused</font>
-							<textcolor>$VAR[Light_Color]</textcolor>
-							<label>$VAR[Title_Label]</label>
-						</control>
-						<control type="label">
-							<width>100%</width>
-							<height>35</height>
-							<font>List_Info</font>
-							<textcolor>$VAR[Light_Color]</textcolor>
-							<label>$VAR[Info_Label]</label>
-							<aligny>center</aligny>
-						</control>
-					</control>
+
+					<!--Secondary List-->
 					<control type="group">
-						<visible>Control.HasFocus(4501) + !Window.IsVisible(1121) + !Container.Content(sets)</visible>
+						<animation effect="slide" end="720,0" time="0" condition="$EXP[ListView_Display_IsThumbnails]">Conditional</animation>
+						<visible>Control.HasFocus(4501) + !Window.IsVisible(1121) + ![$EXP[ListView_Display_IsBackground] + $EXP[Secondary_List_ContentSwitching]]</visible>
 						<include>Delayed_Content_Fade_Animation</include>
-						<top>510</top>
-						<width>1050</width>
+						<width>1680</width>
 						<height>70</height>
+						<top>510</top>
 						<control type="group">
-							<left>720</left>
 							<width>120</width>
-							<height>120</height>
-							<top>-27</top>
-							<visible>[Container.Content(tvshows) + String.IsEqual(VideoPlayer.TVShowTitle,Container(4501).ListItem.TVShowTitle) + String.IsEqual(VideoPlayer.Season,Container(4501).ListItem.Season)] | [Container.Content(artists) + String.IsEqual(MusicPlayer.Artist, Container(4501).ListItem.Artist) + String.IsEqual(MusicPlayer.Album, Container(4501).ListItem.Album)]</visible>
+							<height>100%</height>
+							<top>-37</top>
+							<visible>$EXP[SecondaryViews_NowPlaying]</visible>
 							<include content="Now_Playing_Visualization_Fill">
 								<param name="color" variable="$VAR[Light_Color]"/>
 							</include>
 						</control>
+						<control type="group">
+							<visible>!$EXP[SecondaryViews_NowPlaying]</visible>
+							<visible>String.IsEqual(ListItem.Overlay,OverlayWatched.png)</visible>
+							<width>120</width>
+							<height>60</height>
+							<top>0</top>
+							<include content="Check_Focused">
+								<param name="color" value="$VAR[Light_Color]"/>
+							</include>
+						</control>
+						<!--horizontal-->
 						<control type="grouplist">
-							<left>840</left>
 							<width>100%</width>
-							<height>70</height>
+							<left>120</left>
+							<height>100%</height>
 							<itemgap>12</itemgap>
 							<orientation>horizontal</orientation>
 							<usecontrolcoords>true</usecontrolcoords>
-							<!--4501-->
 							<control type="label">
-								<width max="840">auto</width>
+								<width max="1200">auto</width>
 								<height>60</height>
 								<aligny>center</aligny>
 								<font>List_Title_Focused</font>
@@ -224,8 +210,8 @@
 								<label>$VAR[Title_Label]</label>
 							</control>
 							<control type="label">
-								<width>auto</width>
-								<top>19</top>
+								<width max="480">auto</width>
+								<top>22</top>
 								<height>35</height>
 								<font>List_Info</font>
 								<textcolor>$VAR[Light_Color]</textcolor>
