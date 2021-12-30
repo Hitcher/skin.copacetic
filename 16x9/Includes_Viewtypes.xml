@@ -368,16 +368,17 @@
 			<control type="group">
 				<visible>![Window.Next(home) | Window.Next(videos) | Window.Next(music) | Window.Next(programs) | Window.Next(pictures) | Window.Next(visualisation)] + !$EXP[ContainerSwitching] + !$EXP[OpaqueDialog_IsVisible]</visible>
 				<include>Secondary_List_Fade_Animation</include>
-
 				<control type="group">
 					<visible>!$EXP[OptionsSwitching] + !$EXP[ContainerSwitching]</visible>
 					<include>Artwork_Fade_Animation</include>
 					<control type="$PARAM[type]" id="4501">
 						<animation effect="slide" start="0" end="0,-$PARAM[height]" reversible="true" time="360" tween="sine" easing="inout" condition="Control.HasFocus(4501) + [[$EXP[ListView_Display_IsThumbnails] + !Container.Content(artists)] | $EXP[BillboardView_IsVisible] | $EXP[ShowcaseView_IsVisible] | $EXP[StripView_IsVisible]]">Conditional</animation>
+
 						<animation effect="slide" start="0" end="$PARAM[width],0" time="0" condition="$EXP[ListView_Display_IsThumbnails] + [Control.HasFocus(4501) | $EXP[Secondary_List_ContainerSwitching]] + Container.Content(artists)">Conditional</animation>
 						<animation effect="slide" start="0" end="-$PARAM[width],0" time="360" reversible="true" tween="sine" easing="inout" condition="$EXP[ListView_Display_IsThumbnails] + Control.HasFocus(4501) + Container.Content(artists)">Conditional</animation>
-						<animation effect="slide" start="0,0" end="$PARAM[width],-$PARAM[height]" time="0" condition="$EXP[ListView_Display_Background]">Conditional</animation>
-						<animation effect="slide" start="0" end="-$PARAM[width],0" reversible="true" time="360" tween="sine" easing="inout"  condition="$EXP[ListView_Display_Background]">Conditional</animation>
+						<animation effect="slide" start="0,0" end="$PARAM[width],-$PARAM[height]" time="0" condition="$EXP[ListView_Display_IsBackground]">Conditional</animation>
+						<animation effect="slide" start="0" end="-$PARAM[width],0" reversible="true" time="360" tween="sine" easing="inout"  condition="Control.HasFocus(4501) + $EXP[ListView_Display_IsBackground]">Conditional</animation>
+
 						<animation effect="slide" start="0,0" end="360,0" time="360" tween="sine" easing="out" reversible="true" condition="Player.HasAudio + $EXP[ShowcaseView_Display_IsPosters] + !$EXP[ShowcaseView_Details_Off]">Conditional</animation>
 						<animation effect="slide" start="0,0" end="320,0" time="0" condition="$EXP[StripView_Display_IsFanart] + !$EXP[StripView_Details_Off]">Conditional</animation>
 						<animation effect="slide" start="0,0" end="75,0" time="0" condition="$EXP[StripView_Display_IsSquare] + !$EXP[StripView_Details_Off]">Conditional</animation>
@@ -498,6 +499,7 @@
 				<texture background="true">$VAR[Thumbnail(0)Content]</texture>
 				<aspectratio>scale</aspectratio>
 			</control>
+			<include>Secondary_List_Now_Playing</include>
 		</itemlayout>
 		<focusedlayout width="720" height="720">
 			<include>Hidden_Secondary_List_Focus_Button</include>
@@ -516,6 +518,7 @@
 				<texture background="true">$VAR[Thumbnail(0)Content]</texture>
 				<aspectratio>scale</aspectratio>
 			</control>
+			<include>Secondary_List_Now_Playing</include>
 		</itemlayout>
 		<focusedlayout width="480" height="720">
 			<include>Hidden_Secondary_List_Focus_Button</include>
@@ -534,6 +537,7 @@
 				<texture background="true">$VAR[Thumbnail(0)Content]</texture>
 				<aspectratio>scale</aspectratio>
 			</control>
+			<include>Secondary_List_Now_Playing</include>
 		</itemlayout>
 		<focusedlayout width="1120" height="630">
 			<include>Hidden_Secondary_List_Focus_Button</include>
@@ -552,6 +556,7 @@
 				<texture background="true">$VAR[Thumbnail(0)Content]</texture>
 				<aspectratio>scale</aspectratio>
 			</control>
+			<include>Secondary_List_Now_Playing</include>
 		</itemlayout>
 		<focusedlayout width="630" height="630">
 			<include>Hidden_Secondary_List_Focus_Button</include>
@@ -566,8 +571,8 @@
 
 	<include name="Secondary_List_Now_Playing">
 		<control type="group">
-			<visible>[Container.Content(tvshows) + String.IsEqual(VideoPlayer.TVShowTitle,ListItem.TVShowTitle) + String.IsEqual(VideoPlayer.Season,ListItem.Season)] | [Container.Content(artists) + String.IsEqual(MusicPlayer.Artist,ListItem.Artist) + String.IsEqual(MusicPlayer.Album,ListItem.Album)]</visible>
-			<visible>$EXP[ShowcaseView_IsVisible]</visible>
+			<visible>$EXP[SecondaryViews_NowPlaying] + [$EXP[ShowcaseView_IsVisible] | $EXP[StripView_IsVisible]]</visible>
+			<visible></visible>
 			<control type="image">
 				<aspectratio>stretch</aspectratio>
 				<texture colordiffuse="$VAR[Now_Playing_Mask]">views/white_100.png</texture>
@@ -1024,6 +1029,7 @@
 				</control>
 			</control>
 			<control type="group">
+				<visible>$EXP[ShowcaseView_IsVisible]</visible>
 				<width>$PARAM[focus_width]</width>
 				<height>$PARAM[focus_height]</height>
 				<control type="group">
