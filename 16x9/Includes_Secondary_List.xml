@@ -1,0 +1,187 @@
+<includes>
+	
+	<include name="Secondary_List">
+		<param name="type" default="fixedlist"/>
+		<param name="left" default="0"/>
+		<param name="top" default="1080"/>
+		<param name="width" default="720"/>
+		<param name="height" default="1080"/>
+		<param name="visible" default="[$EXP[ListView_Display_IsThumbnails] | $EXP[ShowcaseView_Display_IsPosters]] + [Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows)]"/>
+		<param name="layout" default="720x1080"/>
+		<param name="target" default="videos"/>
+		<param name="sortby" default="year"/>
+		<param name="sortorder" default="ascending"/>
+		<definition>
+			<control type="group">
+				<visible>!$EXP[OptionsSwitching] + !$EXP[ContainerSwitching] + !$EXP[OpaqueDialog_IsVisible]</visible>
+				<include>Artwork_Fade_Animation</include>
+				<control type="$PARAM[type]" id="4501">
+					<animation effect="slide" start="0" end="0,-$PARAM[height]" reversible="true" time="360" tween="sine" easing="inout" condition="Control.HasFocus(4501) + [[$EXP[ListView_Display_IsThumbnails] + !Container.Content(artists)] | $EXP[BillboardView_IsVisible] | $EXP[ShowcaseView_IsVisible] | $EXP[StripView_IsVisible]]">Conditional</animation>
+
+					<animation effect="slide" start="0" end="$PARAM[width],0" time="0" condition="$EXP[ListView_Display_IsThumbnails] + [Control.HasFocus(4501) | $EXP[Secondary_List_ContainerSwitching]] + Container.Content(artists)">Conditional</animation>
+					<animation effect="slide" start="0" end="-$PARAM[width],0" time="360" reversible="true" tween="sine" easing="inout" condition="$EXP[ListView_Display_IsThumbnails] + Control.HasFocus(4501) + Container.Content(artists)">Conditional</animation>
+					<animation effect="slide" start="0,0" end="$PARAM[width],-$PARAM[height]" time="0" condition="$EXP[ListView_Display_IsBackground]">Conditional</animation>
+					<animation effect="slide" start="0" end="-$PARAM[width],0" reversible="true" time="360" tween="sine" easing="inout"  condition="Control.HasFocus(4501) + $EXP[ListView_Display_IsBackground]">Conditional</animation>
+
+					<animation effect="slide" start="0,0" end="360,0" time="360" tween="sine" easing="out" reversible="true" condition="Player.HasAudio + $EXP[ShowcaseView_Display_IsPosters] + !$EXP[ShowcaseView_Details_Off]">Conditional</animation>
+					<animation effect="slide" start="0,0" end="320,0" time="0" condition="$EXP[StripView_Display_IsFanart] + !$EXP[StripView_Details_Off]">Conditional</animation>
+					<animation effect="slide" start="0,0" end="75,0" time="0" condition="$EXP[StripView_Display_IsSquare] + !$EXP[StripView_Details_Off]">Conditional</animation>
+
+					<visible>$PARAM[visible]</visible>
+					<include>Secondary_List_Navigation</include>
+					<preloaditems>2</preloaditems>
+					<left>$PARAM[left]</left>
+					<top>$PARAM[top]</top>
+					<width>$PARAM[width]</width>
+					<height>$PARAM[height]</height>
+					<orientation>vertical</orientation>
+					<ondown condition="Integer.IsLessOrEqual(Container(4501).NumItems,1)">0</ondown>
+					<ondown condition="Integer.IsLessOrEqual(Container(4501).NumItems,1)">4501</ondown>
+					<onup condition="Integer.IsLessOrEqual(Container(4501).NumItems,1)">0</onup>
+					<onup condition="Integer.IsGreater(Container(4501).NumItems,1)">4501</onup>
+					<scrolltime tween="sine" easing="inout">360</scrolltime>
+					<include>$PARAM[layout]_Layout</include>
+					<content target="$PARAM[target]" sortby="$PARAM[sortby]" sortorder="$PARAM[sortorder]">$INFO[ListItem.FolderPath]</content>
+				</control>
+				<control type="button" id="4502">
+					<visible allowhiddenfocus="true">false</visible>
+					<onfocus>ClearProperty(Secondary_List,home)</onfocus>
+					<onfocus>SetFocus(4503)</onfocus>
+				</control>
+				<control type="button" id="4503">
+					<visible allowhiddenfocus="true">false</visible>
+					<animation effect="slide" end="0,0" time="360">Focus</animation>
+					<onfocus>SetFocus(4501,0,absolute)</onfocus>
+					<onfocus>SetFocus(50)</onfocus>
+				</control>
+				<control type="button" id="4504">
+					<visible allowhiddenfocus="true">false</visible>
+					<onfocus>ClearProperty(Secondary_List,home)</onfocus>
+					<onfocus>SetFocus(4505)</onfocus>
+				</control>
+				<control type="button" id="4505">
+					<visible allowhiddenfocus="true">false</visible>
+					<animation effect="slide" end="0,0" time="360">Focus</animation>
+					<onfocus>SetFocus(4501,0,absolute)</onfocus>
+					<onfocus>SetFocus(61)</onfocus>
+				</control>
+				<control type="button" id="4506">
+					<visible allowhiddenfocus="true">false</visible>
+					<onfocus>ClearProperty(Secondary_List,home)</onfocus>
+					<onfocus>SetFocus(4507)</onfocus>
+				</control>
+				<control type="button" id="4507">
+					<visible allowhiddenfocus="true">false</visible>
+			 		<animation effect="slide" end="0,0" time="360">Focus</animation>
+					<onfocus>SetFocus(4501,0,absolute)</onfocus>
+					<onfocus>SetFocus(3000,0)</onfocus>
+				</control>
+			</control>
+		</definition>
+	</include>
+
+	<include name="Secondary_List_Layout">
+		<param name="width" default="1080"/>
+		<param name="height" default="720"/>
+		<definition>
+			<itemlayout width="$PARAM[width]" height="$PARAM[height]">
+				<control type="image">
+					<texture background="true">$VAR[Thumbnail(0)Content]</texture>
+					<aspectratio>scale</aspectratio>
+				</control>
+				<!--Artwork Mask-->
+				<control type="image">
+					<visible>$EXP[ShowcaseView_IsVisible] + $EXP[ShowcaseView_Details_Off]</visible>
+					<texture colordiffuse="$VAR[Artwork_Mask]">views/white_100.png</texture>
+				</control>
+				<include>Secondary_List_Now_Playing</include>
+			</itemlayout>
+			<focusedlayout width="$PARAM[width]" height="$PARAM[height]">
+				<control type="group">
+					<visible>![Control.HasFocus(50) | Control.HasFocus(501) | Control.HasFocus(502) | Control.HasFocus(504)]</visible>
+					<include>HiddenFocusButton</include>
+					<include>Hidden_Secondary_List_Focus_Button</include>
+					<control type="image">
+						<texture background="true">$VAR[Thumbnail(0)Content]</texture>
+						<aspectratio>scale</aspectratio>
+					</control>
+					<!--Artwork Mask-->
+					<control type="image">
+						<visible>$EXP[ShowcaseView_IsVisible] + $EXP[ShowcaseView_Details_Off]</visible>
+						<texture colordiffuse="$VAR[Artwork_Mask]">views/white_100.png</texture>
+					</control>
+					<include>Secondary_List_Now_Playing</include>
+				</control>
+			</focusedlayout>
+		</definition>
+	</include>
+
+	<include name="Secondary_List_Now_Playing">
+		<control type="group">
+			<visible>$EXP[Secondary_List_NowPlaying] + [$EXP[ShowcaseView_IsVisible] | $EXP[StripView_IsVisible]]</visible>
+			<control type="image">
+				<aspectratio>stretch</aspectratio>
+				<texture colordiffuse="$VAR[Now_Playing_Mask]">views/white_100.png</texture>
+			</control>
+			<include content="Now_Playing_Visualization_Fill">
+				<param name="width" value="120"/>
+				<param name="barwidth" value="24"/>
+				<param name="bottom" value="24"/>
+				<param name="itemgap" value="8"/>
+				<param name="pausewidth" value="24"/>
+				<param name="pausegap" value="8"/>
+				<param name="color" value="$VAR[Light_Color]"/>
+			</include>
+		</control>
+	</include>
+
+	<include name="720x1080_Layout">
+		<include content="Secondary_List_Layout">
+			<param name="width" value="720"/>
+			<param name="height" value="1080"/>
+		</include>
+	</include>
+
+	<include name="1080x1080_Layout">
+		<include content="Secondary_List_Layout">
+			<param name="width" value="1080"/>
+			<param name="height" value="1080"/>
+		</include>
+	</include>
+
+	<include name="1920x1080_Layout">
+		<include content="Secondary_List_Layout">
+			<param name="width" value="1920"/>
+			<param name="height" value="1080"/>
+		</include>
+	</include>
+
+	<include name="720x720_Layout">
+		<include content="Secondary_List_Layout">
+			<param name="width" value="720"/>
+			<param name="height" value="720"/>
+		</include>
+	</include>
+
+	<include name="480x720_Layout">
+		<include content="Secondary_List_Layout">
+			<param name="width" value="480"/>
+			<param name="height" value="720"/>
+		</include>
+	</include>
+
+	<include name="1120x630_Layout">
+		<include content="Secondary_List_Layout">
+			<param name="width" value="1120"/>
+			<param name="height" value="630"/>
+		</include>
+	</include>
+
+	<include name="630x630_Layout">
+		<include content="Secondary_List_Layout">
+			<param name="width" value="630"/>
+			<param name="height" value="630"/>
+		</include>
+	</include>
+
+</includes>
