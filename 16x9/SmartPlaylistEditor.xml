@@ -5,218 +5,135 @@
 	<backgroundcolor>$VAR[Secondary_Color]</backgroundcolor>
 	<include>Delayed_Dialog_Fade_Animation</include>
 	<controls>
-		<include>DialogFanartSlideshow</include>
+
 		<control type="group">
-			<visible>!$EXP[TransparentDialog_IsVisible]</visible>
+			<include>DialogFanartSlideshow</include>
+			<visible>!$EXP[All_Containers]</visible>
+		</control>
+		<control type="group">
+			<visible>![Window.IsVisible(smartplaylistrule) | Window.IsVisible(shutdownmenu)]</visible>
 			<include>Content_Fade_Animation</include>
+
+			<include content="Breadcrumb_Label">
+				<param name="visible" value="true"/>
+				<param name="id" value="2"/>
+			</include>
+
+			<include content="Transparent_Dialog_Panel">
+				<param name="top" value="150"/>
+				<param name="bottom" value="150"/>
+			</include>
+
+			<include content="DialogDivider">
+				<param name="left" value="840"/>
+				<param name="height" value="720"/>
+			</include>
+
+			<!-- Main group -->
+			<control type="group" id="1000">
+				<!-- Left grouplist -->
+				<control type="grouplist" id="100">
+					<left>60</left>
+					<width>780</width>
+					<height>720</height>
+					<centertop>50%</centertop>
+					<itemgap>0</itemgap>
+					<onright>10</onright>
+					<onleft>noop</onleft>
+					<onup>noop</onup>
+					<ondown>9001</ondown>
+					<orientation>vertical</orientation>
+					<align>top</align>
+					<scrolltime tween="sine" easing="inout">360</scrolltime>
+					<control type="button" id="22">
+						<description>Set Playlist type</description>
+						<label>Type</label>
+						<width>780</width>
+						<textoffsetx>60</textoffsetx>
+						<texturefocus border="61,2,2,2" colordiffuse="$VAR[Light_Color]">dialogs/smartplaylist_button_underline_focused_20.png</texturefocus>
+					</control>
+					<control type="button" id="12">
+						<description>Name of the playlist</description>
+						<label>Name</label>
+						<width>780</width>
+						<textoffsetx>60</textoffsetx>
+						<texturefocus border="61,2,2,2" colordiffuse="$VAR[Light_Color]">dialogs/smartplaylist_button_underline_focused_20.png</texturefocus>
+					</control>
+					<control type="button" id="16">
+						<description>Match rules option</description>
+						<label>Match</label>
+						<width>780</width>
+						<textoffsetx>60</textoffsetx>
+						<texturefocus border="61,2,2,2" colordiffuse="$VAR[Light_Color]">dialogs/smartplaylist_button_underline_focused_20.png</texturefocus>
+					</control>
+					<control type="button" id="17">
+						<description>Limit rules option</description>
+						<label>Limit</label>
+						<width>780</width>
+						<textoffsetx>60</textoffsetx>
+						<texturefocus border="61,2,2,2" colordiffuse="$VAR[Light_Color]">dialogs/smartplaylist_button_underline_focused_20.png</texturefocus>
+					</control>
+					<control type="button" id="18">
+						<description>Sort rules option</description>
+						<label>Sort</label>
+						<width>780</width>
+						<textoffsetx>60</textoffsetx>
+						<texturefocus border="61,2,2,2" colordiffuse="$VAR[Light_Color]">dialogs/smartplaylist_button_underline_focused_20.png</texturefocus>
+					</control>
+					<control type="button" id="19">
+						<description>Sort direction option</description>
+						<width>780</width>
+						<textoffsetx>60</textoffsetx>
+						<texturefocus border="61,2,2,2" colordiffuse="$VAR[Light_Color]">dialogs/smartplaylist_button_underline_focused_20.png</texturefocus>
+					</control>
+					<control type="button" id="23">
+						<description>Group by</description>
+						<label>Group</label>
+						<width>780</width>
+						<textoffsetx>60</textoffsetx>
+						<texturefocus border="61,2,2,2" colordiffuse="$VAR[Light_Color]">dialogs/smartplaylist_button_underline_focused_20.png</texturefocus>
+					</control>
+					<control type="radiobutton" id="24">
+						<description>Mixed</description>
+						<label>$LOCALIZE[467]: $LOCALIZE[21459]</label>
+						<width>780</width>
+						<textoffsetx>60</textoffsetx>
+						<texturefocus border="61,2,2,2" colordiffuse="$VAR[Light_Color]">dialogs/smartplaylist_button_underline_focused_20.png</texturefocus>
+					</control>
+				</control>
+
+				<include content="Simple_List">
+					<param name="id" value="10"/>
+					<param name="left" value="900"/>
+					<param name="right" value="90"/>
+					<param name="labelmaxwidth" value="860"/>
+					<param name="selectedcolor" value="$VAR[Light_Color]"/>
+					<param name="focusedinclude" value="Smart_Playlist_X"/>
+				</include>
+
+			</control>
 
 			<!-- Edit Rule Button -->
 			<control type="button" id="15">
-				<left>-10</left>
-				<top>-10</top>
-				<width>1</width>
-				<height>1</height>
+				<visible allowhiddenfocus="true">false</visible>
 			</control>
-			<!-- Add Rule Button -->
 			<control type="button" id="13">
-				<left>-10</left>
-				<top>-10</top>
-				<width>1</width>
-				<height>1</height>
-				<onup condition="!String.IsEmpty(Container(10).ListItemNoWrap(-1).Label)">Control.Move(10,-1)</onup>
-				<onup condition="!String.IsEmpty(Container(10).ListItemNoWrap(1).Label)">SetFocus(10)</onup>
-				<onup condition="!String.IsEmpty(Container(10).ListItemNoWrap(1).Label)">SetFocus(13)</onup>
-				<ondown condition="!String.IsEmpty(Container(10).ListItemNoWrap(1).Label)">Control.Move(10,1)</ondown>
-				<ondown condition="!String.IsEmpty(Container(10).ListItemNoWrap(1).Label)">SetFocus(10)</ondown>
-				<ondown condition="!String.IsEmpty(Container(10).ListItemNoWrap(1).Label)">SetFocus(13)</ondown>
-				<ondown condition="String.IsEmpty(Container(10).ListItemNoWrap(1).Label)">9000</ondown>
-				<onleft>10</onleft>
-				<onright>14</onright>
+				<visible allowhiddenfocus="true">false</visible>
 			</control>
 			<!-- Remove Rule Button -->
 			<control type="button" id="14">
-				<left>-10</left>
-				<top>-10</top>
-				<width>1</width>
-				<height>1</height>
-				<onup condition="!String.IsEmpty(Container(10).ListItemNoWrap(-1).Label)">Control.Move(10,-1)</onup>
-				<onup condition="!String.IsEmpty(Container(10).ListItemNoWrap(1).Label)">SetFocus(10)</onup>
-				<onup condition="!String.IsEmpty(Container(10).ListItemNoWrap(1).Label)">SetFocus(14)</onup>
-				<ondown condition="!String.IsEmpty(Container(10).ListItemNoWrap(1).Label)">Control.Move(10,1)</ondown>
-				<ondown condition="!String.IsEmpty(Container(10).ListItemNoWrap(1).Label)">SetFocus(10)</ondown>
-				<ondown condition="!String.IsEmpty(Container(10).ListItemNoWrap(1).Label)">SetFocus(14)</ondown>
-				<ondown condition="String.IsEmpty(Container(10).ListItemNoWrap(1).Label)">9000</ondown>
-				<onleft>13</onleft>
-				<ondown>14</ondown>
-				<onright>noop</onright>
+				<visible allowhiddenfocus="true">false</visible>
+				<onleft>10</onleft>
+				<ondown>9000</ondown>
+				<onright>9000</onright>
 			</control>
-			<!-- Background -->
-			<!-- Main group -->
-			<control type="group" id="1000">
-				<include content="DialogHeading">
-					<param name="DialogHeaderId" value="2" />
-					<param name="DialogHeaderLabel" value="$LOCALIZE[21432]" />
-				</include>
-				<!-- Left grouplist -->
-				<control type="grouplist" id="100">
-					<width>885</width>
-					<height>775</height>
-					<onright>10</onright>
-					<onleft>noop</onleft>
-					<ondown>9000</ondown>
-					<onup>noop</onup>
-					<itemgap>25</itemgap>
-					<!-- Set Playlist type -->
-					<control type="spincontrolex" id="22">
-						<height>75</height>
-						<label>467</label>
-					</control>
-					<!-- Name Button -->
-					<control type="edit" id="12">
-						<hinttext>21381</hinttext>
-					</control>
-					<!-- Default spin control -->
-					<control type="spincontrolex" id="16">
-						<label>21424</label>
-					</control>
-					<!-- Default spin control -->
-					<control type="spincontrolex" id="17">
-						<label>21427</label>
-					</control>
-					<!-- Default spin control -->
-					<control type="spincontrolex" id="18">
-						<label>21429</label>
-					</control>
-					<!-- Default toggle -->
-					<control type="togglebutton" id="19">
-						<label>$LOCALIZE[31107]: $LOCALIZE[21431]</label>
-						<altlabel>$LOCALIZE[31107]: $LOCALIZE[21430]</altlabel>
-					</control>
-					<!-- Default spin control -->
-					<control type="spincontrolex" id="23">
-						<label>21458</label>
-					</control>
-					<!-- Default radio button -->
-					<control type="radiobutton" id="24">
-						<label>21459</label>
-					</control>
-				</control>
-				<!-- Rules list -->
-				<control type="list" id="10">
-					<right>0</right>
-					<width>885</width>
-					<height>800</height>
-					<onup>noop</onup>
-					<ondown>9000</ondown>
-					<onleft>100</onleft>
-					<onright>13</onright>
-					<scrolltime>0</scrolltime>
-					<itemlayout width="885" height="100">
-						<control type="image">
-							<width>885</width>
-							<height>75</height>
-							<texture colordiffuse="$VAR[DisabledColor]">views/white_10.png</texture>
-						</control>
-						<control type="label">
-							<left>10</left>
-							<width>725</width>
-							<height>75</height>
-							<textcolor>$VAR[TextColor]</textcolor>
-							<label>$INFO[ListItem.Label]</label>
-						</control>
-					</itemlayout>
-					<focusedlayout width="885" height="100">
-						<control type="group">
-							<height>75</height>
-							<visible>!Control.HasFocus(10) + !Control.HasFocus(13) + !Control.HasFocus(14)</visible>
-							<control type="image">
-								<width>885</width>
-								<height>75</height>
-								<texture colordiffuse="$VAR[DisabledColor]">views/white_10.png</texture>
-							</control>
-							<control type="label">
-								<left>10</left>
-								<width>725</width>
-								<height>75</height>
-								<textcolor>$VAR[TextColor]</textcolor>
-								<label>$INFO[ListItem.Label]</label>
-							</control>
-						</control>
-						<control type="group">
-							<height>75</height>
-							<visible>Control.HasFocus(10) | Control.HasFocus(13) | Control.HasFocus(14)</visible>
-							<control type="image">
-								<width>885</width>
-								<height>75</height>
-								<texture colordiffuse="$VAR[ButtonColor]">views/white_100.png</texture>
-							</control>
-							<control type="label">
-								<left>10</left>
-								<width>725</width>
-								<height>75</height>
-								<textcolor>$VAR[TextColor]</textcolor>
-								<label>$INFO[ListItem.Label]</label>
-								<visible>Control.HasFocus(10)</visible>
-							</control>
-							<control type="label">
-								<left>10</left>
-								<width>725</width>
-								<height>75</height>
-								<textcolor>$VAR[TextColor]</textcolor>
-								<selectedcolor>$VAR[TextColor]</selectedcolor>
-								<label>$INFO[ListItem.Label]</label>
-								<visible>Control.HasFocus(13) | Control.HasFocus(14)</visible>
-							</control>
-						</control>
-						<control type="image">
-							<left>735</left>
-							<width>75</width>
-							<height>75</height>
-							<texture colordiffuse="$VAR[TextColor]">old_dialogs/add.png</texture>
-							<visible>!Control.HasFocus(13)</visible>
-						</control>
-						<control type="image">
-							<left>810</left>
-							<width>75</width>
-							<height>75</height>
-							<texture colordiffuse="$VAR[TextColor]">old_dialogs/delete.png</texture>
-							<visible>!Control.HasFocus(14)</visible>
-						</control>
-						<control type="image">
-							<left>735</left>
-							<width>75</width>
-							<height>75</height>
-							<texture colordiffuse="$VAR[TextColor]">old_dialogs/add.png</texture>
-							<visible>Control.HasFocus(13)</visible>
-						</control>
-						<control type="image">
-							<left>810</left>
-							<width>75</width>
-							<height>75</height>
-							<texture colordiffuse="$VAR[TextColor]">old_dialogs/delete.png</texture>
-							<visible>Control.HasFocus(14)</visible>
-						</control>
-						<control type="image">
-							<left>810</left>
-							<width>75</width>
-							<height>75</height>
-							<texture colordiffuse="$VAR[DisabledColor]">old_dialogs/delete.png</texture>
-							<visible>!Control.IsEnabled(14)</visible>
-						</control>
-					</focusedlayout>
-				</control>
-			</control>
-			<include content="DialogButtons">
-				<param name="Button4Visible" value="false" />
-				<param name="Button3Visible" value="false" />
-				<!-- Cancel Button -->
-				<param name="Button2ID" value="21" />
-				<param name="Button2Label" value="X" />
-				<param name="Button2Visible" value="true" />
-				<!-- OK Button -->
-				<param name="Button1ID" value="20" />
-				<param name="Button1Label" value="$LOCALIZE[186]" />
-				<param name="Button1Visible" value="true" />
+
+			<include content="ButtonGroup">
+				<param name="onleft" value="10"/>
+				<param name="onup" value="10"/>
+				<param name="buttonsvisible" value="true"/>
+				<param name="button1id" value="21"/>
+				<param name="button2id" value="20"/>
 			</include>
 		</control>
 	</controls>

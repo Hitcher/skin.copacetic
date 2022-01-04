@@ -4,32 +4,44 @@
 	<backgroundcolor>$VAR[Secondary_Color]</backgroundcolor>
 	<include>Delayed_Dialog_Fade_Animation</include>
 	<controls>
+
 		<include>DialogFanartSlideshow</include>
+
 		<control type="group">
 			<visible>!$EXP[TransparentDialog_IsVisible]</visible>
 			<include>Content_Fade_Animation</include>
 
-			<control type="group">
-				<left>1920</left>
-				<width>1920</width>
-				<animation effect="slide" end="-1920" time="180" tween="sine" easing="inout" reversible="true" condition="!Integer.IsEqual(Container(5).CurrentItem,-1) | Control.HasFocus(30)">Conditional</animation>
-				<animation effect="fade" start="100" end="0" time="180" tween="sine" easing="inout" condition="Integer.IsEqual(Container(5).CurrentItem,-1) + !Control.HasFocus(30)">Conditional</animation>
-				<include content="Transparent_Dialog_Panel">
-					<param name="left" value="360"/>
-					<param name="right" value="60"/>
-					<param name="top" value="180"/>
-					<param name="bottom" value="180"/>
-				</include>
+			<include content="Transparent_Dialog_Panel"/>
+
+			<!-- Main list -->
+			<control type="grouplist" id="3">
+				<left>120</left>
+				<width>480</width>
+				<height>540</height>
+				<centertop>50%</centertop>
+				<itemgap>0</itemgap>
+				<onright>5</onright>
+				<onleft>20</onleft>
+				<orientation>vertical</orientation>
+				<align>top</align>
+				<scrolltime tween="sine" easing="inout">360</scrolltime>
 			</control>
+
+			<control type="button" id="10">
+				<onclick>SetFocus(5)</onclick>
+				<textoffsetx>10</textoffsetx>
+			</control>
+
+			<include content="DialogDivider">
+				<param name="left" value="600"/>
+			</include>
 
 			<!-- Sub list -->
 			<control type="grouplist" id="5">
-				<animation effect="slide" start="1920" end="0" time="180" tween="sine" easing="inout" reversible="true" condition="!Integer.IsEqual(Container(5).CurrentItem,-1) | Control.HasFocus(30)">Conditional</animation>
-				<animation effect="fade" start="100" end="0" time="180" tween="sine" easing="inout" condition="Integer.IsEqual(Container(5).CurrentItem,-1) + !Control.HasFocus(30)">Conditional</animation>
 				<width>1200</width>
-				<left>630</left>
-				<top>268</top>
-				<bottom>268</bottom>
+				<left>600</left>
+				<height>540</height>
+				<centertop>50%</centertop>
 				<itemgap>0</itemgap>
 				<onleft>3</onleft>
 				<onback>3</onback>
@@ -38,119 +50,30 @@
 				<scrolltime tween="sine" easing="inout">360</scrolltime>
 			</control>
 
-
-			<!--Dynamic panel for Main List-->
-			<control type="grouplist">
-				<animation effect="slide" end="-1320" time="180" tween="sine" easing="inout" reversible="true" condition="!Integer.IsEqual(Container(5).CurrentItem,-1) | Control.HasFocus(30)">Conditional</animation>
-				<animation effect="fade" start="100" end="66" time="180" tween="sine" easing="inout" reversible="true" condition="Integer.IsEqual(Container(5).CurrentItem,-1)">Conditional</animation>
-
-				<left>360</left>
-				<right>60</right>
-				<height>1080</height>
-				<align>center</align>
-				<itemgap>0</itemgap>
-				<orientation>vertical</orientation>
-				<control type="image">
-					<height>120</height>
-					<texture colordiffuse="$VAR[Dark_Grey_Color]">views/white_100.png</texture>
-				</control>
-				<control type="image">
-					<height>120</height>
-					<texture colordiffuse="$VAR[Dark_Grey_Color]">views/white_100.png</texture>
-					<visible>Integer.IsGreater(Container(3).NumItems,1)</visible>
-				</control>
-				<control type="image">
-					<height>120</height>
-					<texture colordiffuse="$VAR[Dark_Grey_Color]">views/white_100.png</texture>
-					<visible>Integer.IsGreater(Container(3).NumItems,2)</visible>
-				</control>
-				<control type="image">
-					<height>120</height>
-					<texture colordiffuse="$VAR[Dark_Grey_Color]">views/white_100.png</texture>
-					<visible>Integer.IsGreater(Container(3).NumItems,3)</visible>
-				</control>
-				<control type="image">
-					<height>120</height>
-					<texture colordiffuse="$VAR[Dark_Grey_Color]">views/white_100.png</texture>
-					<visible>Integer.IsGreater(Container(3).NumItems,4)</visible>
-				</control>
-				<control type="image">
-					<height>120</height>
-					<texture colordiffuse="$VAR[Dark_Grey_Color]">views/white_100.png</texture>
-					<visible>Integer.IsGreater(Container(3).NumItems,5)</visible>
-				</control>
-				<control type="image">
-					<height>120</height>
-					<texture colordiffuse="$VAR[Dark_Grey_Color]">views/white_100.png</texture>
-					<visible>Integer.IsGreater(Container(3).NumItems,6)</visible>
-				</control>
+			<control type="label" id="14">
+				<height>90</height>
+				<textoffsetx>20</textoffsetx>
+				<font>Default_Settings_Header</font>
+				<textcolor>$VAR[Light_Color]</textcolor>
 			</control>
 
-			<!-- Main list -->
-			<control type="group">
-				<left>840</left>
-				<top>510</top>
-				<width>720</width>
-				<animation effect="slide" end="-810" time="180" tween="sine" easing="inout" reversible="true" condition="!Integer.IsEqual(Container(5).CurrentItem,-1) | Control.HasFocus(30)">Conditional</animation>
-				<animation effect="slide" end="0,-60" time="0" condition="Window.IsActive(pvrsettings) + Integer.IsLessOrEqual(Container(3).CurrentItem,1)">Conditional</animation>
-				<animation effect="slide" end="0,-60" time="0" condition="Window.IsActive(pvrsettings) + Integer.IsLessOrEqual(Container(3).CurrentItem,2)">Conditional</animation>
-				<animation effect="slide" end="0,60" time="0" condition="Window.IsActive(pvrsettings) + Integer.IsGreaterOrEqual(Container(3).CurrentItem,7)">Conditional</animation>
-				<animation effect="slide" end="0,60" time="0" condition="Window.IsActive(pvrsettings) + Integer.IsGreaterOrEqual(Container(3).CurrentItem,8)">Conditional</animation>
-				<control type="grouplist" id="3">
-					<animation effect="slide" end="0,-60" time="0" tween="sine" easing="inout" reversible="true" condition="Integer.IsGreater(Container(3).CurrentItem,1)">Conditional</animation>
-					<animation effect="slide" end="0,-60" time="0" tween="sine" easing="inout" reversible="true" condition="Integer.IsGreater(Container(3).CurrentItem,2)">Conditional</animation>
-					<animation effect="slide" end="0,-60" time="0" tween="sine" easing="inout" reversible="true" condition="Integer.IsGreater(Container(3).CurrentItem,3)">Conditional</animation>
-					<animation effect="slide" end="0,-60" time="0" tween="sine" easing="inout" reversible="true" condition="Integer.IsGreater(Container(3).CurrentItem,4)">Conditional</animation>
-					<animation effect="slide" end="0,-60" time="0" tween="sine" easing="inout" reversible="true" condition="Integer.IsGreater(Container(3).CurrentItem,5)">Conditional</animation>
-					<animation effect="slide" end="0,-60" time="0" tween="sine" easing="inout" reversible="true" condition="Integer.IsGreater(Container(3).CurrentItem,6)">Conditional</animation>
-					<animation effect="slide" end="0,-60" time="0" tween="sine" easing="inout" reversible="true" condition="Integer.IsGreater(Container(3).CurrentItem,7)">Conditional</animation>
-					<animation effect="slide" end="0,-60" time="0" tween="sine" easing="inout" reversible="true" condition="Integer.IsGreater(Container(3).CurrentItem,8)">Conditional</animation>
-					<width>100%</width>
-					<height>540</height>
-					<itemgap>0</itemgap>
-					<onright>5</onright>
-					<onleft>20</onleft>
-					<orientation>vertical</orientation>
-					<align>top</align>
-				</control>
-				<control type="label">
-					<width>100%</width>
-					<height>60</height>
-					<font>List_Title_Focused</font>
-					<textoffsetx>0</textoffsetx>
-					<align>left</align>
-					<textcolor>$VAR[Light_Color]</textcolor>
-					<label>$INFO[Window(systemsettings).Property(focused),‹ , ›]</label>
-					<visible>!Control.HasFocus(20) + Integer.IsEqual(Container(5).CurrentItem,-1)</visible>
-				</control>
-				<control type="label">
-					<width>100%</width>
-					<height>60</height>
-					<font>List_Title_Unfocused</font>
-					<textoffsetx>0</textoffsetx>
-					<align>left</align>
-					<textcolor>$VAR[Light_Color]</textcolor>
-					<label>$INFO[Window(systemsettings).Property(focused)]</label>
-					<visible>Control.HasFocus(20) + Integer.IsEqual(Container(5).CurrentItem,-1)</visible>
-				</control>
-				<control type="label">
-					<width>100%</width>
-					<height>60</height>
-					<font>List_Title_Focused</font>
-					<textoffsetx>0</textoffsetx>
-					<align>left</align>
-					<textcolor>$VAR[Accent_Color]</textcolor>
-					<label>$INFO[Window(systemsettings).Property(focused)]</label>
-					<visible>!Integer.IsEqual(Container(5).CurrentItem,-1)</visible>
-				</control>
+			<control type="image" id="11">
+				<height>1</height>
+				<texture colordiffuse="$VAR[Blank_Color]">views/white_20.png</texture>
 			</control>
+
+			<control type="button" id="7"/>
+			<control type="radiobutton" id="8"/>
+			<control type="spincontrolex" id="9"/>
+			<control type="sliderex" id="13"/>
+
 
 			<!--Settings Level Panel-->
 			<control type="group">
-				<animation effect="slide" end="-720" time="180" tween="sine" easing="inout" reversible="true" condition="!Integer.IsEqual(Container(5).CurrentItem,-1) | Control.HasFocus(30)">Conditional</animation>
+				<animation effect="slide" end="-360" time="180" tween="sine" easing="inout" reversible="true" condition="!Control.HasFocus(20)">Conditional</animation>
 				<height>120</height>
-				<centertop>50%</centertop>
-				<width>540</width>
+				<top>60</top>
+				<width>480</width>
 				<control type="image">
 					<centertop>50%</centertop>
 					<height>120</height>
@@ -166,63 +89,23 @@
 					<onup>3</onup>
 					<font>List_Title_Focused</font>
 					<textoffsetx>0</textoffsetx>
-					<textcolor>$VAR[Accent_Color]</textcolor>
-					<focusedcolor>$VAR[Blank_Color]</focusedcolor>
+					<textcolor>$VAR[Light_Color]</textcolor>
+					<focusedcolor>$VAR[Light_Color]</focusedcolor>
 					<texturefocus></texturefocus>
 				</control>
-				<control type="label">
-					<left>30</left>
-					<width>100%</width>
-					<centertop>50%</centertop>
-					<width>100%</width>
-					<height>60</height>
-					<font>List_Title_Focused</font>
-					<textoffsetx>0</textoffsetx>
-					<textcolor>$VAR[Light_Color]</textcolor>
-					<label>$INFO[Control.GetLabel(20),, ›]</label>
-					<visible>Control.HasFocus(20)</visible>
-				</control>
 			</control>
-
 
 			<control type="textbox" id="6">
 				<visible>!Integer.IsEqual(Container(5).CurrentItem,-1) | Control.HasFocus(30)</visible>
 				<include>Content_Fade_Animation</include>
-				<left>660</left>
-				<bottom>15</bottom>
-				<width>1140</width>
+				<left>120</left>
+				<bottom>70</bottom>
+				<right>120</right>
 				<height>102</height>
 				<font>Description</font>
 				<align>left</align>
-				<textcolor>$VAR[Primary_Color]</textcolor>
 			</control>
 
-			<control type="label" id="14">
-				<height>90</height>
-				<font>Default_Settings_Header</font>
-				<textcolor>$VAR[Light_Color]</textcolor>
-			</control>
-
-			<control type="button" id="7"/>
-			<control type="radiobutton" id="8"/>
-			<control type="spincontrolex" id="9"/>
-			<control type="sliderex" id="13"/>
-			<control type="image" id="11">
-				<height>1</height>
-				<texture colordiffuse="$VAR[Blank_Color]">views/white_100.png</texture>
-			</control>
-
-			<control type="button" id="10">
-				<onfocus condition="!Control.HasFocus(30) + String.IsEqual(Container(5).CurrentItem,-1) + !String.IsEqual(System.CurrentControl,Basic) + !String.IsEqual(System.CurrentControl,Standard) + !String.IsEqual(System.CurrentControl,Advanced) + !String.IsEqual(System.CurrentControl,Expert)">SetProperty(focused,$INFO[System.CurrentControl],systemsettings)</onfocus>
-				<onclick>SetFocus(5)</onclick>
-				<height>60</height>
-				<font>List_Title_Unfocused</font>
-				<textoffsetx>0</textoffsetx>
-				<align>left</align>
-				<textcolor>$VAR[Light_Color]</textcolor>
-				<focusedcolor>$VAR[Blank_Color]</focusedcolor>
-				<texturefocus></texturefocus>
-			</control>
 		</control>
 	</controls>
 </window>
