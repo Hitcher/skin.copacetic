@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <window>
 	<!-- home -->
-	<backgroundcolor>$VAR[Secondary_Color]</backgroundcolor>
+	<backgroundcolor>$VAR[Dark_Color]</backgroundcolor>
 	<defaultcontrol always="true">9001</defaultcontrol>
-	<onload>RunScript(script.skinshortcuts,type=buildxml&amp;mainmenuID=9000&amp;levels=0)</onload>
+
 	<onunload>ClearProperty(Music_Player_Controls,home)</onunload>
 	<include>My_Window_Fade_Animation</include>
 	<controls>
@@ -15,15 +15,35 @@
 			<onfocus>SetFocus(9000)</onfocus>
 		</control>
 
-		<include content="FanartSlideshow"/>
+		<!--On Previous Delay-->
+		<control type="group" id="5001">
+			<visible>Container(9010).OnPrevious | Container(9020).OnPrevious | Container(9030).OnPrevious | Container(9040).OnPrevious | Container(9050).OnPrevious</visible>
+			<animation effect="slide" end="0,0" time="360" reversible="false">Hidden</animation>
+		</control>
+
+		<!--On Next Delay-->
+		<control type="group" id="5002">
+			<visible>Container(9010).OnNext | Container(9020).OnNext | Container(9030).OnNext | Container(9040).OnNext | Container(9050).OnNext</visible>
+			<animation effect="slide" end="0,0" time="360" reversible="false">Hidden</animation>
+		</control>
+
+		<control type="group">
+			<visible>Control.HasFocus(9001) | Control.HasFocus(9000) | Control.HasFocus(91100)</visible>
+			<include>Dialog_Fade_Animation</include>
+			<include content="FanartSlideshow"/>
+		</control>
 
 		<control type="group">
 			<visible>!Control.HasFocus(9001)</visible>
 			<include>Content_Fade_Animation</include>
 
-			<include content="Clock">
-				<param name="textcolor" value="$VAR[Light_Color]"/>
-			</include>
+			<control type="group">
+				<visible>!Control.HasFocus(91100) + !Window.IsVisible(contextmenu) + ![String.IsEqual(Window(home).Property(HomeWidget),Active) + Window.IsVisible(shutdownmenu)]</visible>
+				<include>Delayed_Content_Fade_Animation</include>
+				<include content="Clock">
+					<param name="textcolor" value="$VAR[Light_Color]"/>
+				</include>
+			</control>
 
 			<control type="group">
 				<visible>!Window.IsActive(favourites) + !Window.IsVisible(shutdownmenu)</visible>
@@ -40,7 +60,7 @@
 					<onup condition="Player.HasAudio">SetFocus(91100,1)</onup>
 					<onleft>0</onleft>
 					<onright>0</onright>
-					<!--<onup>999</onup>-->
+					<ondown>9010</ondown>
 					<orientation>horizontal</orientation>
 					<itemlayout width="100"/>
 					<focusedlayout width="100"/>
@@ -53,6 +73,8 @@
 				<control type="group">
 					<visible>!$EXP[TransparentDialog_IsVisible]</visible>
 					<include>Delayed_Content_Fade_Animation</include>
+					<animation effect="slide" start="0" end="0,660" time="0" condition="true">Conditional</animation>
+					<animation effect="slide" start="0" end="0,-660" time="180" tween="sine" easing="out" reversible="false" condition="Control.HasFocus(9001) | Control.HasFocus(9000) | Control.HasFocus(91100)">Conditional</animation>
 					<include content="DummyHorizontalList">
 						<param name="dummyid" value="9001"/>
 						<param name="hiddenid" value="9000"/>
@@ -63,6 +85,10 @@
 
 			</control>
 		</control>
+
+		<include condition="Skin.HasSetting(Widgets_Enabled)" content="Widget_1"/>
+		<include condition="Skin.HasSetting(Widgets_Enabled)" content="Widget_2"/>
+		<include condition="Skin.HasSetting(Widgets_Enabled)" content="Widget_3"/>
 
 	</controls>
 </window>

@@ -29,10 +29,15 @@
 	<expression name="Square_Containers">Container.Content(artists) | Container.Content(albums) | Container.Content(songs)</expression>
   <expression name="Background_IsFanart">[$EXP[ListView_IsVisible] + $EXP[ListView_Display_IsBackground]] | $EXP[BillboardView_IsVisible] | [$EXP[ShowcaseView_IsVisible] + $EXP[ShowcaseView_Details_Off]]</expression>
 
-	<expression name="OpaqueDialog_IsVisible">Window.IsVisible(movieinformation) | Window.IsVisible(musicinformation) | [[Window.IsVisible(smartplaylisteditor) | Window.IsVisible(smartplaylistrule)] + !$EXP[All_Containers]] | Window.IsVisible(settings)</expression>
-	<expression name="PanelDialog_IsVisible">Window.IsVisible(selectdialog) | Window.IsVisible(musicinformation) | Window.IsVisible(filebrowser) | Window.IsVisible(virtualkeyboard) | Window.IsVisible(numericinput) | Window.IsVisible(osdsubtitlesettings) | Window.IsVisible(osdvideosettings) | Window.IsVisible(osdaudiosettings) | Window.IsVisible(networksetup) | Window.IsVisible(profilesettings) | Window.IsVisible(locksettings) | Window.IsVisible(contentsettings) | Window.IsVisible(libexportsettings) | Window.IsVisible(peripheralsettings) | Window.IsVisible(mediafilter) | Window.IsVisible(osdcmssettings) | Window.IsVisible(infoprovidersettings) | Window.IsVisible(pvrtimersetting) | Window.IsVisible(gamevideofilter) | [[Window.IsVisible(smartplaylisteditor) | Window.IsVisible(smartplaylistrule)] + $EXP[All_Containers]]</expression>
-	<expression name="TransparentDialog_IsVisible">Window.IsVisible(shutdownmenu) | String.IsEqual(Window(home).Property(OptionsMenu),Active) | Window.IsVisible(contextmenu) | Window.IsVisible(okdialog) | Window.IsVisible(yesnodialog) | Window.IsVisible(progressdialog) | Window.IsVisible(selectdialog) | Window.IsVisible(filebrowser) | Window.IsVisible(virtualkeyboard) | Window.IsVisible(numericinput) | Window.IsVisible(smartplaylisteditor) | Window.IsVisible(smartplaylistrule) | Window.IsVisible(osdsubtitlesettings) | Window.IsVisible(osdvideosettings) | Window.IsVisible(osdaudiosettings) | Window.IsVisible(networksetup) | Window.IsVisible(profilesettings) | Window.IsVisible(locksettings) | Window.IsVisible(contentsettings) | Window.IsVisible(libexportsettings) | Window.IsVisible(peripheralsettings) | Window.IsVisible(mediafilter) | Window.IsVisible(osdcmssettings) | Window.IsVisible(infoprovidersettings) | Window.IsVisible(pvrtimersetting) | Window.IsVisible(gamevideofilter)</expression>
-	<expression name="TransparentDialog_ExcludingOptionsMenu">Window.IsVisible(shutdownmenu) | Window.IsVisible(contextmenu) | Window.IsVisible(okdialog) | Window.IsVisible(yesnodialog) | Window.IsVisible(progressdialog) | Window.IsVisible(selectdialog) | Window.IsVisible(filebrowser) | Window.IsVisible(virtualkeyboard) | Window.IsVisible(numericinput) | Window.IsVisible(smartplaylistrule) | Window.IsVisible(osdsubtitlesettings) | Window.IsVisible(osdvideosettings) | Window.IsVisible(osdaudiosettings) | Window.IsVisible(networksetup) | Window.IsVisible(profilesettings) | Window.IsVisible(locksettings) | Window.IsVisible(contentsettings) | Window.IsVisible(libexportsettings) | Window.IsVisible(peripheralsettings) | Window.IsVisible(mediafilter) | Window.IsVisible(osdcmssettings) | Window.IsVisible(infoprovidersettings) | Window.IsVisible(pvrtimersetting) | Window.IsVisible(gamevideofilter)</expression>
+	<expression name="Settings_IsVisible">Window.IsVisible(settings) | Window.IsVisible(appearancesettings) | Window.IsVisible(mediasettings) | Window.IsVisible(playersettings) | Window.IsVisible(servicesettings) | Window.IsVisible(systemsettings) | Window.IsVisible(pvrsettings) | Window.IsVisible(gamesettings) | Window.IsVisible(profiles) | Window.IsVisible(systeminfo)</expression>
+
+	<expression name="OpaqueDialog_IsVisible">$EXP[Settings_IsVisible] | Window.IsVisible(skinsettings) | Window.IsVisible(movieinformation) | Window.IsVisible(musicinformation) | Window.IsVisible(filemanager) | [[Window.IsVisible(smartplaylisteditor) | Window.IsVisible(smartplaylistrule)] + !$EXP[All_Containers]]</expression>
+
+	<expression name="PanelDialog_IsVisible">[[Window.IsVisible(smartplaylisteditor) | Window.IsVisible(smartplaylistrule)] + $EXP[All_Containers]] | Window.IsVisible(selectdialog) | Window.IsVisible(filebrowser) | Window.IsVisible(virtualkeyboard) | Window.IsVisible(numericinput) | Window.IsVisible(mediafilter) | Window.IsVisible(osdsubtitlesettings) | Window.IsVisible(osdvideosettings) | Window.IsVisible(osdaudiosettings) | Window.IsVisible(networksetup) | Window.IsVisible(profilesettings) | Window.IsVisible(locksettings) | Window.IsVisible(contentsettings) | Window.IsVisible(libexportsettings) | Window.IsVisible(peripheralsettings) | Window.IsVisible(osdcmssettings) | Window.IsVisible(infoprovidersettings) | Window.IsVisible(pvrtimersetting) | Window.IsVisible(gamevideofilter)</expression>
+
+	<expression name="TransparentDialog_IsVisible">String.IsEqual(Window(home).Property(OptionsMenu),Active) | $EXP[PanelDialog_IsVisible] | Window.IsVisible(shutdownmenu) | Window.IsVisible(contextmenu) | Window.IsVisible(okdialog) | Window.IsVisible(yesnodialog) | Window.IsVisible(progressdialog)</expression>
+
+	<expression name="TransparentDialog_ExcludingOptionsMenu">$EXP[PanelDialog_IsVisible] | Window.IsVisible(shutdownmenu) | Window.IsVisible(contextmenu) | Window.IsVisible(okdialog) | Window.IsVisible(yesnodialog) | Window.IsVisible(progressdialog)</expression>
 
 	<expression name="ContainerSwitching">![[Container.Content(movies) + [String.Contains(ListItem.FolderPath,titles) | ListItem.IsCollection] + !Window.IsVisible(1101)] | [Container.Content(movies) + !ListItem.IsCollection + String.Contains(ListItem.FolderPath,sets) + !Window.IsVisible(1122)] | [Container.Content(movies) + ListItem.IsCollection + !Window.IsVisible(1122)] | [Container.Content(sets) + !Window.IsVisible(1102)] | [Container.Content(tvshows) + !Window.IsVisible(1103)] | [Container.Content(seasons) + !Window.IsVisible(1104)] | [Container.Content(episodes) + !Window.IsVisible(1105)] | [Container.Content(artists) + !Window.IsVisible(1107)] | [Container.Content(albums) + !Window.IsVisible(1108)] | [Container.Content(songs) + !Window.IsVisible(1109)] | [Container.Content(actors) + !Window.IsVisible(1110)] | [Container.Content(addons) + !Window.IsVisible(1111)] | [Container.Content() + !Window.IsVisible(1112)] | [[Container.Content(files) | Container.Content(genres) | Container.Content(years) | Container.Content(playlists) | Container.Content(plugins) | Container.Content(studios) | Container.Content(directors) | Container.Content(tags) | Container.Content(countries) | Container.Content(roles) | Container.Content(images) | Container.Content(sources)] + !Window.IsVisible(1113)]]</expression>
 	<expression name="OptionsSwitching">Control.IsVisible(941)</expression>
@@ -104,7 +109,10 @@
 	<expression name="ListView_Flags_Studio_Shift_Seasons">Container.Content(seasons) + [Skin.String(ListView_Flags_Seasons,Studio) | [Skin.String(ListView_Flags_Seasons,All) + String.IsEqual(Control.GetLabel(915),flags/blank.png)]]</expression>
 	<expression name="ListView_Flags_Studio_Shift_Episodes">Container.Content(episodes) + [Skin.String(ListView_Flags_Episodes,Studio) | [Skin.String(ListView_Flags_Episodes,All) + String.IsEqual(Control.GetLabel(915),flags/blank.png)]]</expression>
 
-	<expression name="BillboardView_IsVisible">String.IsEqual(Container.ViewMode,Billboard)</expression>
+	<expression name="BillboardView_IsVisible">String.IsEqual(Container.ViewMode,Billboard) | $EXP[BillboardView_Display_IsFanart_Widget1] | $EXP[BillboardView_Display_IsFanart_Widget2] | $EXP[BillboardView_Display_IsFanart_Widget3]</expression>
+	<expression name="BillboardView_Display_IsFanart_Widget1">Window.IsActive(home) + Skin.HasSetting(Widget1_View_Billboard)</expression>
+	<expression name="BillboardView_Display_IsFanart_Widget2">Window.IsActive(home) + Skin.HasSetting(Widget2_View_Billboard)</expression>
+	<expression name="BillboardView_Display_IsFanart_Widget3">Window.IsActive(home) + Skin.HasSetting(Widget3_View_Billboard)</expression>
 	<expression name="BillboardView_Details_NowPlaying_Left_IsVisible">!$EXP[BillboardView_Details_Off] + !$EXP[BillboardView_Details_Plot_IsVisible] + !$EXP[BillboardView_Details_Logo_IsVisible]</expression>
 	<expression name="BillboardView_Details_Off">[Container.Content(movies) + Skin.String(BillboardView_Details_Movies,Off)] | [Container.Content(sets) + Skin.String(BillboardView_Details_Sets,Off)] | [Container.Content(tvshows) + Skin.String(BillboardView_Details_TVShows,Off)] | [Container.Content(seasons) + Skin.String(BillboardView_Details_Seasons,Off)] | [Container.Content(episodes) + Skin.String(BillboardView_Details_Episodes,Off)] | [Container.Content(artists) + Skin.String(BillboardView_Details_Artists,Off)]</expression>
 	<expression name="BillboardView_Details_Info_IsVisible">$EXP[BillboardView_Details_Info_IsVisible_Movies] | $EXP[BillboardView_Details_Info_IsVisible_Sets] | $EXP[BillboardView_Details_Info_IsVisible_TVShows] | $EXP[BillboardView_Details_Info_IsVisible_Seasons] | $EXP[BillboardView_Details_Info_IsVisible_Episodes] | $EXP[BillboardView_Details_Info_IsVisible_Artists]</expression>
@@ -232,20 +240,29 @@
   <expression name="ShowcaseView_Flags_Studio_Shift_Seasons">Container.Content(seasons) + [Skin.String(ShowcaseView_Flags_Seasons,Studio) | [Skin.String(ShowcaseView_Flags_Seasons,All) + String.IsEqual(Control.GetLabel(915),flags/blank.png)]]</expression>
   <expression name="ShowcaseView_Flags_Studio_Shift_Episodes">Container.Content(episodes) + [Skin.String(ShowcaseView_Flags_Episodes,Studio) | [Skin.String(ShowcaseView_Flags_Episodes,All) + String.IsEqual(Control.GetLabel(915),flags/blank.png)]]</expression>
 
-  <expression name="StripView_IsVisible">String.IsEqual(Container.ViewMode,Strip)</expression>
-  <expression name="StripView_Display_IsPosters">$EXP[StripView_IsVisible] + [$EXP[StripView_Display_IsPosters_Movies] | $EXP[StripView_Display_IsPosters_Sets] | $EXP[StripView_Display_IsPosters_TVShows] | $EXP[StripView_Display_IsPosters_Seasons]]</expression>
+	<expression name="StripView_IsVisible">String.IsEqual(Container.ViewMode,Strip) | Window.IsActive(home)</expression>
+  <expression name="StripView_Display_IsPosters">[$EXP[StripView_IsVisible] + [$EXP[StripView_Display_IsPosters_Movies] | $EXP[StripView_Display_IsPosters_Sets] | $EXP[StripView_Display_IsPosters_TVShows] | $EXP[StripView_Display_IsPosters_Seasons]]] | $EXP[StripView_Display_IsPosters_Widget1] | $EXP[StripView_Display_IsPosters_Widget2] | $EXP[StripView_Display_IsPosters_Widget3]</expression>
   <expression name="StripView_Display_IsPosters_Movies">Container.Content(movies) + [Skin.String(StripView_Display_Movies,Posters) | String.IsEmpty(Skin.String(StripView_Display_Movies))]</expression>
   <expression name="StripView_Display_IsPosters_Sets">Container.Content(sets) + [Skin.String(StripView_Display_Sets,Posters) | String.IsEmpty(Skin.String(StripView_Display_Sets))]</expression>
   <expression name="StripView_Display_IsPosters_TVShows">Container.Content(tvshows) + [Skin.String(StripView_Display_TVShows,Posters) | String.IsEmpty(Skin.String(StripView_Display_TVShows))]</expression>
   <expression name="StripView_Display_IsPosters_Seasons">Container.Content(seasons) + [Skin.String(StripView_Display_Seasons,Posters) | String.IsEmpty(Skin.String(StripView_Display_Seasons))]</expression>
-	<expression name="StripView_Display_IsFanart">$EXP[StripView_IsVisible] + [$EXP[StripView_Display_IsFanart_Movies] | $EXP[StripView_Display_IsFanart_Sets] | $EXP[StripView_Display_IsFanart_TVShows] | $EXP[StripView_Display_IsFanart_Seasons] | container.content(episodes) | $EXP[StripView_Display_IsFanart_Artists]]</expression>
+	<expression name="StripView_Display_IsPosters_Widget1">Control.HasFocus(9010)  + Skin.HasSetting(Widget1_View_Strip) + Skin.HasSetting(Widget1_Display_Posters)</expression>
+	<expression name="StripView_Display_IsPosters_Widget2">Control.HasFocus(9020)  + Skin.HasSetting(Widget2_View_Strip) + Skin.HasSetting(Widget2_Display_Posters)</expression>
+	<expression name="StripView_Display_IsPosters_Widget3">Control.HasFocus(9030)  + Skin.HasSetting(Widget3_View_Strip) + Skin.HasSetting(Widget3_Display_Posters)</expression>
+	<expression name="StripView_Display_IsFanart">[$EXP[StripView_IsVisible] + [$EXP[StripView_Display_IsFanart_Movies] | $EXP[StripView_Display_IsFanart_Sets] | $EXP[StripView_Display_IsFanart_TVShows] | $EXP[StripView_Display_IsFanart_Seasons] | container.content(episodes) | $EXP[StripView_Display_IsFanart_Artists]]] | $EXP[StripView_Display_IsFanart_Widget1] | $EXP[StripView_Display_IsFanart_Widget2] | $EXP[StripView_Display_IsFanart_Widget3]</expression>
   <expression name="StripView_Display_IsFanart_Movies">Container.Content(movies) + Skin.String(StripView_Display_Movies,Fanart)</expression>
   <expression name="StripView_Display_IsFanart_Sets">Container.Content(sets) + Skin.String(StripView_Display_Sets,Fanart)</expression>
   <expression name="StripView_Display_IsFanart_TVShows">Container.Content(tvshows) + Skin.String(StripView_Display_TVShows,Fanart)</expression>
   <expression name="StripView_Display_IsFanart_Seasons">Container.Content(seasons) + Skin.String(StripView_Display_Seasons,Fanart)</expression>
   <expression name="StripView_Display_IsFanart_Artists">Container.Content(artists) + [Skin.String(StripView_Display_Artists,Fanart) | String.IsEmpty(Skin.String(StripView_Display_Artists))]</expression>
+	<expression name="StripView_Display_IsFanart_Widget1">Control.HasFocus(9010) + Skin.HasSetting(Widget1_View_Strip) + Skin.HasSetting(Widget1_Display_Fanart)</expression>
+	<expression name="StripView_Display_IsFanart_Widget2">Control.HasFocus(9020) + Skin.HasSetting(Widget2_View_Strip) + Skin.HasSetting(Widget2_Display_Fanart)</expression>
+	<expression name="StripView_Display_IsFanart_Widget3">Control.HasFocus(9030) + Skin.HasSetting(Widget3_View_Strip) + Skin.HasSetting(Widget3_Display_Fanart)</expression>
   <expression name="StripView_Display_IsSquare">$EXP[StripView_IsVisible] + [$EXP[StripView_Display_IsSquare_Artists] | Container.Content(albums)]</expression>
 	<expression name="StripView_Display_IsSquare_Artists">Container.Content(artists) + Skin.String(StripView_Display_Artists,Square)</expression>
+	<expression name="StripView_Display_IsFanart_Widget1">Window.IsActive(home) + Skin.HasSetting(Widget1_View_Strip) + Skin.HasSetting(Widget1_Display_Square)</expression>
+	<expression name="StripView_Display_IsFanart_Widget2">Window.IsActive(home) + Skin.HasSetting(Widget2_View_Strip) + Skin.HasSetting(Widget2_Display_Square)</expression>
+	<expression name="StripView_Display_IsFanart_Widget3">Window.IsActive(home) + Skin.HasSetting(Widget3_View_Strip) + Skin.HasSetting(Widget3_Display_Square)</expression>
 	<expression name="StripView_Display_Keyart_IsVisible">[[$EXP[StripView_Display_IsPosters] + [!String.IsEmpty(ListItem(0).Art(keyart)) | !String.IsEmpty(ListItemNoWrap(1).Art(keyart)) | !String.IsEmpty(ListItemNoWrap(2).Art(keyart))]] | [$EXP[StripView_Details_Title] + !String.IsEqual(Container(504).CurrentItem,1)]]</expression>
 	<expression name="StripView_Details_Off">$EXP[StripView_Details_Off_Movies] | $EXP[StripView_Details_Off_Sets] | $EXP[StripView_Details_Off_TVShows] | $EXP[StripView_Details_Off_Seasons] | $EXP[StripView_Details_Off_Episodes] | $EXP[StripView_Details_Off_Artists] | $EXP[StripView_Details_Off_Albums] | [$EXP[StripView_Details_Title] + !$EXP[StripView_Details_Logo_IsOn]]</expression>
 	<expression name="StripView_Details_Off_Movies">Container.Content(movies) + Skin.String(StripView_Details_Movies,Off)</expression>
@@ -448,11 +465,11 @@
 		<param name="focusedtop" default="0"/>
 		<param name="focusedheight" default="80"/>
 		<param name="focusedfont" default="List_Title_Focused"/>
-		<param name="focusedtextcolor" default="$VAR[List_Color]"/>
+		<param name="focusedtextcolor" default="$VAR[List_Text_Color]"/>
 		<param name="unfocusedtop" default="16"/>
 		<param name="unfocusedheight" default="55"/>
 		<param name="unfocusedfont" default="Main_Menu_Unfocused"/>
-		<param name="unfocusdtextcolor" default="$VAR[List_Color]"/>
+		<param name="unfocusdtextcolor" default="$VAR[List_Text_Color]"/>
 		<definition>
 			<control type="label">
 				<top>$PARAM[focusedtop]</top>
@@ -821,7 +838,7 @@
 		<param name="sidebar" default="13"/>
 		<param name="thickness" default="2"/>
 		<param name="rotated" default="true"/>
-		<param name="color" default="$VAR[Primary_Color]"/>
+		<param name="color" default="$VAR[Overlay_Text_Color]"/>
 		<definition>
 			<control type="group">
 				<width>100%</width>
@@ -858,7 +875,7 @@
 	</include>
 
 	<include name="Cross_Unfocused">
-		<param name="color" default="$VAR[Primary_Color]"/>
+		<param name="color" default="$VAR[Overlay_Text_Color]"/>
 		<param name="rotated" default="true"/>
 		<definition>
 			<include content="Cross_Template">
@@ -872,7 +889,7 @@
 	</include>
 
 	<include name="Cross_Focused">
-		<param name="color" default="$VAR[Primary_Color]"/>
+		<param name="color" default="$VAR[Overlay_Text_Color]"/>
 		<param name="rotated" default="true"/>
 		<definition>
 			<include content="Cross_Template">
@@ -886,7 +903,7 @@
 	</include>
 
 	<include name="Cross_Unfocused_Large">
-		<param name="color" default="$VAR[Primary_Color]"/>
+		<param name="color" default="$VAR[Overlay_Text_Color]"/>
 		<param name="rotated" default="true"/>
 		<definition>
 			<include content="Cross_Template">
@@ -900,7 +917,7 @@
 	</include>
 
 	<include name="Cross_Focused_Large">
-		<param name="color" default="$VAR[Primary_Color]"/>
+		<param name="color" default="$VAR[Overlay_Text_Color]"/>
 		<param name="rotated" default="true"/>
 		<definition>
 			<include content="Cross_Template">
@@ -917,7 +934,7 @@
 		<param name="width" default="27"/>
 		<param name="height" default="14"/>
 		<param name="thickness" default="2"/>
-		<param name="color" default="$VAR[Primary_Color]"/>
+		<param name="color" default="$VAR[Overlay_Text_Color]"/>
 		<definition>
 			<control type="group">
 				<width>100%</width>
@@ -947,7 +964,7 @@
 	</include>
 
 	<include name="Check_Unfocused">
-		<param name="color" default="$VAR[Primary_Color]"/>
+		<param name="color" default="$VAR[Overlay_Text_Color]"/>
 		<definition>
 			<include content="Check_Template">
 				<param name="width" value="28"/>
@@ -959,7 +976,7 @@
 	</include>
 
 	<include name="Check_Focused">
-		<param name="color" default="$VAR[List_Color]"/>
+		<param name="color" default="$VAR[Overlay_Text_Color]"/>
 		<definition>
 			<include content="Check_Template">
 				<param name="width" value="36"/>
@@ -971,7 +988,7 @@
 	</include>
 
 	<include name="Check_Unfocused_Large">
-		<param name="color" default="$VAR[Primary_Color]"/>
+		<param name="color" default="$VAR[Overlay_Text_Color]"/>
 		<definition>
 			<include content="Check_Template">
 				<param name="width" value="40"/>
@@ -983,7 +1000,7 @@
 	</include>
 
 	<include name="Check_Focused_Large">
-		<param name="color" default="$VAR[Primary_Color]"/>
+		<param name="color" default="$VAR[Overlay_Text_Color]"/>
 		<definition>
 			<include content="Check_Template">
 				<param name="width" value="48"/>
@@ -998,7 +1015,7 @@
 		<param name="width" default="20"/>
 		<param name="thickness" default="2"/>
 		<param name="rotateend" default="-45"/>
-		<param name="color" default="$VAR[Primary_Color]"/>
+		<param name="color" default="$VAR[Overlay_Text_Color]"/>
 		<definition>
 			<control type="group">
 				<width>100%</width>
@@ -1026,51 +1043,123 @@
 		</definition>
 	</include>
 
-	<include name="Right_Arrow_Unfocused">
-		<param name="color" default="$VAR[Primary_Color]"/>
-		<definition>
-			<include content="Arrow_Template">
-				<param name="width" value="20"/>
-				<param name="thickness" value="2"/>
-				<param name="rotateend" value="-45"/>
-				<param name="color" value="$PARAM[color]"/>
-			</include>
-		</definition>
-	</include>
-
-	<include name="Right_Arrow_Focused_Large">
-		<param name="color" default="$VAR[Primary_Color]"/>
-		<definition>
-			<include content="Arrow_Template">
-				<param name="width" value="33"/>
-				<param name="thickness" value="9"/>
-				<param name="rotateend" value="-45"/>
-				<param name="color" value="$PARAM[color]"/>
-			</include>
-		</definition>
-	</include>
-
 	<include name="Left_Arrow_Unfocused">
-		<param name="color" default="$VAR[Primary_Color]"/>
+		<param name="color" default="$VAR[Overlay_Text_Color]"/>
 		<definition>
-			<include content="Arrow_Template">
-				<param name="width" value="20"/>
-				<param name="thickness" value="2"/>
-				<param name="rotateend" value="135"/>
-				<param name="color" value="$PARAM[color]"/>
-			</include>
+			<control type="group">
+				<animation effect="slide" end="6,0"  time="0" condition="true" reversible="false">Conditional</animation>
+				<include content="Arrow_Template">
+					<param name="width" value="20"/>
+					<param name="thickness" value="2"/>
+					<param name="rotateend" value="135"/>
+					<param name="color" value="$PARAM[color]"/>
+				</include>
+			</control>
 		</definition>
 	</include>
 
 	<include name="Left_Arrow_Focused_Large">
-		<param name="color" default="$VAR[Primary_Color]"/>
+		<param name="color" default="$VAR[Overlay_Text_Color]"/>
 		<definition>
-			<include content="Arrow_Template">
-				<param name="width" value="33"/>
-				<param name="thickness" value="9"/>
-				<param name="rotateend" value="135"/>
-				<param name="color" value="$PARAM[color]"/>
-			</include>
+			<control type="group">
+				<animation effect="slide" end="6,0"  time="0" condition="true" reversible="false">Conditional</animation>
+				<include content="Arrow_Template">
+					<param name="width" value="33"/>
+					<param name="thickness" value="9"/>
+					<param name="rotateend" value="135"/>
+					<param name="color" value="$PARAM[color]"/>
+				</include>
+			</control>
+		</definition>
+	</include>
+
+	<include name="Right_Arrow_Unfocused">
+		<param name="color" default="$VAR[Overlay_Text_Color]"/>
+		<definition>
+			<control type="group">
+				<animation effect="slide" end="-6,0"  time="0" condition="true" reversible="false">Conditional</animation>
+				<include content="Arrow_Template">
+					<param name="width" value="20"/>
+					<param name="thickness" value="2"/>
+					<param name="rotateend" value="-45"/>
+					<param name="color" value="$PARAM[color]"/>
+				</include>
+			</control>
+		</definition>
+	</include>
+
+	<include name="Right_Arrow_Focused_Large">
+		<param name="color" default="$VAR[Overlay_Text_Color]"/>
+		<definition>
+			<control type="group">
+				<animation effect="slide" end="-6,0"  time="0" condition="true" reversible="false">Conditional</animation>
+				<include content="Arrow_Template">
+					<param name="width" value="33"/>
+					<param name="thickness" value="9"/>
+					<param name="rotateend" value="-45"/>
+					<param name="color" value="$PARAM[color]"/>
+				</include>
+			</control>
+		</definition>
+	</include>
+
+	<include name="Up_Arrow_Unfocused">
+		<param name="color" default="$VAR[Overlay_Text_Color]"/>
+		<definition>
+			<control type="group">
+				<animation effect="slide" end="0,6"  time="0" condition="true" reversible="false">Conditional</animation>
+				<include content="Arrow_Template">
+					<param name="width" value="20"/>
+					<param name="thickness" value="2"/>
+					<param name="rotateend" value="45"/>
+					<param name="color" value="$PARAM[color]"/>
+				</include>
+			</control>
+		</definition>
+	</include>
+
+	<include name="Up_Arrow_Focused_Large">
+		<param name="color" default="$VAR[Overlay_Text_Color]"/>
+		<definition>
+			<control type="group">
+				<animation effect="slide" end="0,6"  time="0" condition="true" reversible="false">Conditional</animation>
+				<include content="Arrow_Template">
+					<param name="width" value="33"/>
+					<param name="thickness" value="9"/>
+					<param name="rotateend" value="45"/>
+					<param name="color" value="$PARAM[color]"/>
+				</include>
+			</control>
+		</definition>
+	</include>
+
+	<include name="Down_Arrow_Unfocused">
+		<param name="color" default="$VAR[Overlay_Text_Color]"/>
+		<definition>
+			<control type="group">
+				<animation effect="slide" end="0,-6"  time="0" condition="true" reversible="false">Conditional</animation>
+				<include content="Arrow_Template">
+					<param name="width" value="20"/>
+					<param name="thickness" value="2"/>
+					<param name="rotateend" value="-135"/>
+					<param name="color" value="$PARAM[color]"/>
+				</include>
+			</control>
+		</definition>
+	</include>
+
+	<include name="Down_Arrow_Focused_Large">
+		<param name="color" default="$VAR[Overlay_Text_Color]"/>
+		<definition>
+			<control type="group">
+				<animation effect="slide" end="0,-6"  time="0" condition="true" reversible="false">Conditional</animation>
+				<include content="Arrow_Template">
+					<param name="width" value="33"/>
+					<param name="thickness" value="9"/>
+					<param name="rotateend" value="-135"/>
+					<param name="color" value="$PARAM[color]"/>
+				</include>
+			</control>
 		</definition>
 	</include>
 
@@ -1081,7 +1170,7 @@
 		<param name="thickness" default="2"/>
 		<param name="basevisible" default="false"/>
 		<param name="rotateend" default="45"/>
-		<param name="color" default="$VAR[Primary_Color]"/>
+		<param name="color" default="$VAR[Overlay_Text_Color]"/>
 		<definition>
 			<control type="group">
 				<width>100%</width>
@@ -1132,7 +1221,7 @@
 	</include>
 
 	<include name="Backspace_Unfocused">
-		<param name="color" default="$VAR[Primary_Color]"/>
+		<param name="color" default="$VAR[Overlay_Text_Color]"/>
 		<definition>
 			<include content="Arrow_With_Tail_Template">
 				<param name="width" value="28"/>
@@ -1146,7 +1235,7 @@
 	</include>
 
 	<include name="Backspace_Focused_Large">
-		<param name="color" default="$VAR[Primary_Color]"/>
+		<param name="color" default="$VAR[Overlay_Text_Color]"/>
 		<definition>
 			<include content="Arrow_With_Tail_Template">
 				<param name="width" value="50"/>
@@ -1160,7 +1249,7 @@
 	</include>
 
 	<include name="Shift_Unfocused">
-		<param name="color" default="$VAR[Primary_Color]"/>
+		<param name="color" default="$VAR[Overlay_Text_Color]"/>
 		<definition>
 			<include content="Arrow_With_Tail_Template">
 				<param name="width" value="28"/>
@@ -1174,7 +1263,7 @@
 	</include>
 
 	<include name="Shift_Focused_Large">
-		<param name="color" default="$VAR[Primary_Color]"/>
+		<param name="color" default="$VAR[Overlay_Text_Color]"/>
 		<definition>
 			<include content="Arrow_With_Tail_Template">
 				<param name="width" value="50"/>
@@ -1188,7 +1277,7 @@
 	</include>
 
 	<include name="Caps_Unfocused">
-		<param name="color" default="$VAR[Primary_Color]"/>
+		<param name="color" default="$VAR[Overlay_Text_Color]"/>
 		<definition>
 			<include content="Arrow_With_Tail_Template">
 				<param name="width" value="28"/>
@@ -1203,7 +1292,7 @@
 	</include>
 
 	<include name="Caps_Focused_Large">
-		<param name="color" default="$VAR[Primary_Color]"/>
+		<param name="color" default="$VAR[Overlay_Text_Color]"/>
 		<definition>
 			<include content="Arrow_With_Tail_Template">
 				<param name="width" value="50"/>
@@ -1222,7 +1311,7 @@
 		<param name="height" default="24"/>
 		<param name="halfwidth" default="17"/>
 		<param name="thickness" default="2"/>
-		<param name="color" default="$VAR[Primary_Color]"/>
+		<param name="color" default="$VAR[Overlay_Text_Color]"/>
 		<definition>
 			<control type="group">
 				<width>100%</width>
@@ -1257,7 +1346,7 @@
 	</include>
 
 	<include name="Layout_Unfocused">
-		<param name="color" default="$VAR[Primary_Color]"/>
+		<param name="color" default="$VAR[Overlay_Text_Color]"/>
 		<definition>
 			<include content="Layout_Button_Template">
 				<param name="width" value="35"/>
@@ -1270,7 +1359,7 @@
 	</include>
 
 	<include name="Layout_Focused_Large">
-		<param name="color" default="$VAR[Primary_Color]"/>
+		<param name="color" default="$VAR[Overlay_Text_Color]"/>
 		<definition>
 			<include content="Layout_Button_Template">
 				<param name="width" value="48"/>
@@ -1286,7 +1375,7 @@
 		<param name="width" default="34"/>
 		<param name="height" default="14"/>
 		<param name="thickness" default="2"/>
-		<param name="color" default="$VAR[Primary_Color]"/>
+		<param name="color" default="$VAR[Overlay_Text_Color]"/>
 		<definition>
 			<control type="group">
 				<width>100%</width>
@@ -1322,7 +1411,7 @@
 	</include>
 
 	<include name="Space_Unfocused">
-		<param name="color" default="$VAR[Primary_Color]"/>
+		<param name="color" default="$VAR[Overlay_Text_Color]"/>
 		<definition>
 			<include content="Space_Template">
 				<param name="width" value="34"/>
@@ -1334,7 +1423,7 @@
 	</include>
 
 	<include name="Space_Focused_Large">
-		<param name="color" default="$VAR[Primary_Color]"/>
+		<param name="color" default="$VAR[Overlay_Text_Color]"/>
 		<definition>
 			<include content="Space_Template">
 				<param name="width" value="48"/>
@@ -1348,7 +1437,7 @@
 	<include name="Texture_Button_Template">
 		<param name="width" default="120"/>
 		<param name="texture" default="osd/IP_Unfocused.png"/>
-		<param name="color" default="$VAR[Primary_Color]"/>
+		<param name="color" default="$VAR[Overlay_Text_Color]"/>
 		<definition>
 			<control type="image">
 				<width>$PARAM[width]</width>
@@ -1360,7 +1449,7 @@
 	</include>
 
 	<include name="IP_Unfocused">
-		<param name="color" default="$VAR[Primary_Color]"/>
+		<param name="color" default="$VAR[Overlay_Text_Color]"/>
 		<definition>
 			<include content="Texture_Button_Template">
 				<param name="texture" value="osd/IP_Unfocused.png"/>
@@ -1370,7 +1459,7 @@
 	</include>
 
 	<include name="IP_Focused_Large">
-		<param name="color" default="$VAR[Primary_Color]"/>
+		<param name="color" default="$VAR[Overlay_Text_Color]"/>
 		<definition>
 			<include content="Texture_Button_Template">
 				<param name="texture" value="osd/IP_Focused_Large.png"/>
@@ -1380,7 +1469,7 @@
 	</include>
 
 	<include name="Symbols_Unfocused">
-		<param name="color" default="$VAR[Primary_Color]"/>
+		<param name="color" default="$VAR[Overlay_Text_Color]"/>
 		<definition>
 			<include content="Texture_Button_Template">
 				<param name="texture" value="osd/Symbols_Unfocused.png"/>
@@ -1390,7 +1479,7 @@
 	</include>
 
 	<include name="Symbols_Focused_Large">
-		<param name="color" default="$VAR[Primary_Color]"/>
+		<param name="color" default="$VAR[Overlay_Text_Color]"/>
 		<definition>
 			<include content="Texture_Button_Template">
 				<param name="texture" value="osd/Symbols_Focused_Large.png"/>
@@ -1400,7 +1489,7 @@
 	</include>
 
 	<include name="Mirrored_Unfocused">
-		<param name="color" default="$VAR[Primary_Color]"/>
+		<param name="color" default="$VAR[Overlay_Text_Color]"/>
 		<definition>
 			<include content="Texture_Button_Template">
 				<param name="texture" value="osd/Mirrored_Unfocused.png"/>
@@ -1410,7 +1499,7 @@
 	</include>
 
 	<include name="Mirrored_Focused_Large">
-		<param name="color" default="$VAR[Primary_Color]"/>
+		<param name="color" default="$VAR[Overlay_Text_Color]"/>
 		<definition>
 			<include content="Texture_Button_Template">
 				<param name="texture" value="osd/Mirrored_Focused_Large.png"/>
@@ -1420,7 +1509,7 @@
 	</include>
 
 	<include name="Browse_Unfocused">
-		<param name="color" default="$VAR[Primary_Color]"/>
+		<param name="color" default="$VAR[Overlay_Text_Color]"/>
 		<definition>
 			<include content="Texture_Button_Template">
 				<param name="texture" value="osd/Browse_Unfocused.png"/>
@@ -1430,7 +1519,7 @@
 	</include>
 
 	<include name="Browse_Focused_Large">
-		<param name="color" default="$VAR[Primary_Color]"/>
+		<param name="color" default="$VAR[Overlay_Text_Color]"/>
 		<definition>
 			<include content="Texture_Button_Template">
 				<param name="texture" value="osd/Browse_Focused_Large.png"/>
@@ -1444,9 +1533,9 @@
 		<param name="left" default="0"/>
     <param name="width" default="120"/>
 		<param name="rotated" default="true"/>
-    <param name="unfocusedcolor" default="$VAR[List_Color]"/>
+    <param name="unfocusedcolor" default="$VAR[List_Text_Color]"/>
     <param name="unfocusedtexture" default="Cross_Unfocused"/>
-    <param name="focusedcolor" default="$VAR[List_Color]"/>
+    <param name="focusedcolor" default="$VAR[List_Text_Color]"/>
     <param name="focusedtexture" default="Cross_Focused_Large"/>
     <definition>
 			<control type="group">
@@ -1455,6 +1544,8 @@
 				<width>$PARAM[width]</width>
 				<height>$PARAM[width]</height>
 				<control type="group">
+					<centertop>50%</centertop>
+					<centerleft>50%</centerleft>
 					<visible>!Control.HasFocus($PARAM[buttonid])</visible>
 					<include content="$PARAM[unfocusedtexture]">
 						<param name="rotated" value="$PARAM[rotated]"/>
@@ -1462,6 +1553,8 @@
 					</include>
 				</control>
 				<control type="group">
+					<centertop>50%</centertop>
+					<centerleft>50%</centerleft>
 					<visible>Control.HasFocus($PARAM[buttonid])</visible>
 					<include content="$PARAM[focusedtexture]">
 						<param name="rotated" value="$PARAM[rotated]"/>
@@ -1474,9 +1567,9 @@
 
 	<include name="ButtonText">
     <param name="buttonid" default=""/>
-    <param name="unfocusedcolor" default="$VAR[List_Color]"/>
+    <param name="unfocusedcolor" default="$VAR[List_Text_Color]"/>
     <param name="unfocusedfont" default="Default_Button_Unfocused"/>
-    <param name="focusedcolor" default="$VAR[List_Color]"/>
+    <param name="focusedcolor" default="$VAR[List_Text_Color]"/>
     <param name="focusedfont" default="Default_Button_Focused"/>
 		<param name="unfocusedtop" default="0"/>
 		<param name="align" default="left"/>
@@ -1526,6 +1619,7 @@
 		<param name="button1rotated" default="true"/>
 		<param name="button2id" default=""/>
 		<param name="button2onclick" default=""/>
+		<param name="button2onclick2" default=""/>
 		<param name="button2left" default="0"/>
 		<param name="button2unfocused" default="Check_Unfocused"/>
 		<param name="button2focused" default="Check_Focused_Large"/>
@@ -1544,9 +1638,9 @@
 		<param name="button4rotated" default="true"/>
 		<param name="buttonsvisible" default="[String.IsEqual(Control.GetLabel(11),Yes) | String.IsEqual(Control.GetLabel(11),Ok)]"/>
 		<param name="labelgroupheight" default="60"/>
-		<param name="unfocusedcolor" default="$VAR[Button_Color]"/>
+		<param name="unfocusedcolor" default="$VAR[Overlay_Text_Color]"/>
 		<param name="unfocusedfont" default="Default_Button_Unfocused"/>
-		<param name="focusedcolor" default="$VAR[Button_Color]"/>
+		<param name="focusedcolor" default="$VAR[Overlay_Text_Color]"/>
 		<param name="focusedfont" default="Default_Button_Focused"/>
 		<param name="unfocusedtop" default="10"/>
 	  <definition>
@@ -1567,6 +1661,7 @@
 		      <control type="button" id="$PARAM[button2id]">
 						<visible>Control.IsEnabled($PARAM[button2id])</visible>
 						<onclick>$PARAM[button2onclick]</onclick>
+						<onclick>$PARAM[button2onclick2]</onclick>
 					</control>
 					<control type="button" id="$PARAM[button3id]">
 						<visible>Control.IsEnabled($PARAM[button3id])</visible>
@@ -1707,7 +1802,7 @@
 		<param name="size" default="180"/>
 		<param name="right" default="0"/>
 		<param name="backgroundcolor" default="$VAR[Blank_Color]"/>
-		<param name="textcolor" default="$VAR[Shutdown_Menu_Color]"/>
+		<param name="textcolor" default="$VAR[Overlay_Text_Color]"/>
 		<definition>
 			<control type="group">
 				<visible>![Window.IsVisible(1100) | Window.IsVisible(volumebar) | Window.IsVisible(progressdialog) | Window.IsVisible(extendedprogressdialog)] | Window.IsVisible(shutdownmenu)</visible>
@@ -1763,7 +1858,7 @@
 	  <param name="delay" default="0"/>
 	  <param name="time" default="180"/>
 	  <param name="pulse" default="true"/>
-		<param name="color" default="$VAR[List_Color]"/>
+		<param name="color" default="$VAR[List_Text_Color]"/>
 	  <definition>
 	    <control type="image">
 				<animation effect="zoom" end="100, $PARAM[maxheight]" center="0, $PARAM[centerpoint]" time="$PARAM[time]" delay="$PARAM[delay]" tween="sine" easing="out" pulse="$PARAM[pulse]" condition="true">Conditional</animation>
@@ -1775,7 +1870,7 @@
 	</include>
 
 	<include name="Now_Playing_Visualization_Fill">
-	  <param name="visible" default="Player.HasMedia"/>
+	  <param name="visible" default="Player.HasAudio"/>
 	  <param name="width" default="60"/>
 		<param name="barwidth" default="12"/>
 		<param name="bottom" default="12"/>
@@ -1785,7 +1880,7 @@
 	  <param name="barheight1" default="160"/>
 	  <param name="barheight2" default="300"/>
 	  <param name="barheight3" default="240"/>
-		<param name="color" default="$VAR[List_Color]"/>
+		<param name="color" default="$VAR[List_Text_Color]"/>
 	  <definition>
 	    <control type="group">
 				<centerleft>50%</centerleft>

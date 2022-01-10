@@ -34,9 +34,9 @@
 		<param name="labelleft" default="120"/>
 		<param name="labelmaxwidth" default="720"/>
 		<param name="font" default="List_Title_Unfocused"/>
-		<param name="textcolor" default="$VAR[List_Color]"/>
-		<param name="selectedcolor" default="$VAR[List_Color]"/>
-		<param name="tracknumbercolor" default="$VAR[List_Color]"/>
+		<param name="textcolor" default="$VAR[List_Text_Color]"/>
+		<param name="selectedcolor" default="$VAR[List_Text_Color]"/>
+		<param name="tracknumbercolor" default="$VAR[List_Text_Color]"/>
 		<param name="scroll" default="false"/>
 		<definition>
 			<control type="group">
@@ -110,7 +110,7 @@
     <param name="unfocusediconvisible" default="String.IsEqual(ListItem.Overlay,OverlayWatched.png)"/>
     <param name="focusedicontexture" default="Check_Focused"/>
     <param name="focusediconvisible" default="String.IsEqual(ListItem.Overlay,OverlayWatched.png)"/>
-    <param name="textcolor" default="$VAR[List_Color]"/>
+    <param name="textcolor" default="$VAR[List_Text_Color]"/>
     <definition>
       <control type="$PARAM[type]" id="$PARAM[id]">
 				<viewtype label="$PARAM[viewtype_label]">$PARAM[viewtype]</viewtype>
@@ -339,6 +339,7 @@
 		<param name="orientation"/>
 		<definition>
 			<control type="$PARAM[type]" id="$PARAM[id]">
+				<width>1920</width>
 				<viewtype label="$PARAM[viewtype_label]">$PARAM[viewtype]</viewtype>
 				<visible>$PARAM[visible]</visible>
 				<focusposition>0</focusposition>
@@ -347,13 +348,73 @@
 				<preloaditems>2</preloaditems>
 				<orientation>$PARAM[orientation]</orientation>
 				<scrolltime tween="sine" easing="inout">360</scrolltime>
-				<focusedlayout>
+				<focusedlayout width="1920" condition="$EXP[BillboardView_IsVisible]">
 					<include>HiddenFocusButton</include>
 				</focusedlayout>
-				<itemlayout/>
+				<itemlayout width="1920" condition="$EXP[BillboardView_IsVisible]"/>
+				<focusedlayout width="1080" condition="$EXP[ShowcaseView_IsVisible] + $EXP[ShowcaseView_Display_IsSquare]">
+					<include>HiddenFocusButton</include>
+				</focusedlayout>
+				<itemlayout width="1080" condition="$EXP[ShowcaseView_IsVisible] + $EXP[ShowcaseView_Display_IsSquare]"/>
+				<focusedlayout width="720" condition="$EXP[ShowcaseView_IsVisible] + $EXP[ShowcaseView_Display_IsPosters]">
+					<include>HiddenFocusButton</include>
+				</focusedlayout>
+				<itemlayout width="720" condition="$EXP[ShowcaseView_IsVisible] + $EXP[ShowcaseView_Display_IsPosters]"/>
+				<focusedlayout width="640" condition="$EXP[StripView_IsVisible] + [$EXP[StripView_Display_IsPosters] | $EXP[StripView_Display_IsSquare]]">
+					<include>HiddenFocusButton</include>
+				</focusedlayout>
+				<itemlayout width="640" condition="$EXP[StripView_IsVisible] + [$EXP[StripView_Display_IsPosters] | $EXP[StripView_Display_IsSquare]]"/>
+				<focusedlayout width="960" condition="$EXP[StripView_IsVisible] + $EXP[StripView_Display_IsFanart]">
+					<include>HiddenFocusButton</include>
+				</focusedlayout>
+				<itemlayout width="960" condition="$EXP[StripView_IsVisible] + $EXP[StripView_Display_IsFanart]"/>
 			</control>
 		</definition>
 	</include>
+
+	<include name="List_Info_Label">
+		<param name="visible" default="$EXP[$PARAM[viewtype_label]View_Display_IsBackground] + $EXP[$PARAM[viewtype_label]View_Details_Info_IsVisible]"/>
+		<param name="visibleanimation" default="Blank_Include"/>
+		<param name="width" default="1680"/>
+		<param name="left" default="120"/>
+		<param name="hiddenlabel" default="$VAR[Title_Label]"/>
+		<param name="hiddenlabelmaxwidth" default="1200"/>
+		<param name="infolabel" default="$VAR[Info_Label,/ ]"/>
+		<param name="infolabelwidth" default="180"/>
+		<definition>
+			<control type="grouplist">
+				<visible>$PARAM[visible]</visible>
+				<include>$PARAM[visibleanimation]</include>
+				<left>$PARAM[left]</left>
+				<top>510</top>
+				<width>$PARAM[width]</width>
+				<height>60</height>
+				<itemgap>12</itemgap>
+				<orientation>horizontal</orientation>
+				<usecontrolcoords>true</usecontrolcoords>
+				<!--Title Gap-->
+				<control type="label">
+					<width max="$PARAM[hiddenlabelmaxwidth]">auto</width>
+					<height>60</height>
+					<aligny>center</aligny>
+					<font>List_Title_Focused</font>
+					<textcolor>$VAR[Blank_Color]</textcolor>
+					<label>$PARAM[hiddenlabel]</label>
+				</control>
+				<!--Abbreviated Details-->
+				<control type="label">
+					<width>$PARAM[infolabelwidth]</width>
+					<top>22</top>
+					<height>35</height>
+					<font>List_Info</font>
+					<textcolor>$VAR[Light_Color]</textcolor>
+					<label>$PARAM[infolabel]</label>
+					<aligny>center</aligny>
+				</control>
+			</control>
+		</definition>
+	</include>
+
 
 
 	<include name="CustomViewsBackground">
@@ -418,6 +479,7 @@
 	</include>
 
 	<include name="ListIcon">
+		<param name="artwork_icon" default="Thumbnail"/>
 		<param name="position" default="0"/>
 		<param name="left" default="0"/>
 		<param name="top" default="0"/>
@@ -467,7 +529,7 @@
 				<control type="image">
 					<include>$PARAM[switchingtosecondarylistanimation]</include>
 					<include>Focus_Zoom_Animation</include>
-					<texture fallback="$PARAM[fallback]" background="true" diffuse="$PARAM[diffuse]">$VAR[Thumbnail($PARAM[position])Content]</texture>
+					<texture fallback="$PARAM[fallback]" background="true" diffuse="$PARAM[diffuse]">$VAR[$PARAM[artwork_icon]($PARAM[position])Content]</texture>
 					<aspectratio align="center" aligny="center">$PARAM[aspectratio]</aspectratio>
 					<fadetime>$PARAM[fadetime]</fadetime>
 				</control>
@@ -567,8 +629,10 @@
   </include>
 
 	<include name="Artwork_Static">
+		<param name="target_id"/>
 		<param name="viewtype_label" default="Showcase"/>
 		<param name="displaytype_label" default="Posters"/>
+		<param name="artwork_icon"/>
 		<param name="top" default="0"/>
 		<param name="item_top" default="0"/>
 		<param name="item_width" default=""/>
@@ -591,11 +655,12 @@
 				<left>$PARAM[left]</left>
 				<top>$PARAM[top]</top>
 				<control type="group">
-					<visible>$EXP[$PARAM[viewtype_label]View_Display_Is$PARAM[displaytype_label]] + !$EXP[ContainerSwitching] + !$EXP[OptionsSwitching]</visible>
+					<visible>Control.HasFocus($PARAM[target_id]) + $EXP[$PARAM[viewtype_label]View_Display_Is$PARAM[displaytype_label]] + !$EXP[ContainerSwitching] + !$EXP[OptionsSwitching]</visible>
 					<include>Artwork_Fade_Animation</include>
 					<control type="group">
 						<visible>!$EXP[ContentSwitching]</visible>
 						<include content="ListIcon">
+							<param name="artwork_icon" value="$PARAM[artwork_icon]"/>
 							<param name="position" value="-2"/>
 							<param name="left" value="0"/>
 							<param name="top" value="$PARAM[item_top]"/>
@@ -609,6 +674,7 @@
 						<control type="group">
 							<animation effect="slide" start="0,0" end="-$PARAM[item_width],0" time="0" condition="$EXP[StripView_Display_IsFanart]">Conditional</animation>
 							<include content="ListIcon">
+								<param name="artwork_icon" value="$PARAM[artwork_icon]"/>
 								<param name="position" value="-1"/>
 								<param name="left" value="$PARAM[item_width]"/>
 								<param name="top" value="$PARAM[item_top]"/>
@@ -624,6 +690,7 @@
 							<animation effect="slide" start="0,0" end="-$PARAM[2x_item_width],0" time="0" condition="$EXP[ShowcaseView_IsVisible]">Conditional</animation>
 							<animation effect="slide" start="0,0" end="-$PARAM[item_width],0" time="0" condition="$EXP[StripView_Display_IsFanart]">Conditional</animation>
 							<include content="ListIcon">
+								<param name="artwork_icon" value="$PARAM[artwork_icon]"/>
 								<param name="left" value="$PARAM[2x_item_width]"/>
 								<param name="width" value="$PARAM[focus_width]"/>
 								<param name="height" value="$PARAM[focus_height]"/>
@@ -642,6 +709,7 @@
 								<param name="bordertexture" value="$PARAM[focus_border_texture]"/>
 							</include>
 							<include content="ListIcon">
+								<param name="artwork_icon" value="$PARAM[artwork_icon]"/>
 								<param name="position" value="1"/>
 								<param name="left" value="$PARAM[2x_item_width_plus_focus_width]"/>
 								<param name="top" value="$PARAM[item_top]"/>
@@ -653,6 +721,7 @@
 								<param name="artworkmask" value="$PARAM[unfocused_overlay]"/>
 							</include>
 							<include content="ListIcon">
+								<param name="artwork_icon" value="$PARAM[artwork_icon]"/>
 								<param name="position" value="2"/>
 								<param name="left" value="$PARAM[3x_item_width_plus_focus_width]"/>
 								<param name="top" value="$PARAM[item_top]"/>
@@ -673,7 +742,6 @@
 									<param name="height" value="$PARAM[item_height]"/>
 									<param name="visible" value="!String.IsEmpty(Container.ListItemNoWrap(-1).Label) + $EXP[StripView_IsVisible] + $EXP[StripView_Details_Off]"/>
 								</include>
-
 								<!--Dropshadow Right Side-->
 								<include content="DropShadow">
 									<param name="left" value="$PARAM[2x_item_width_plus_focus_width]"/>
@@ -739,10 +807,11 @@
 
 	<include name="Artwork_Transition_Fade">
 		<param name="visible" default="true"/>
-		<param name="target_id" default="50"/>
+		<param name="target_id"/>
+		<param name="artwork_icon" default="Thumbnail"/>
 		<param name="aspectratio" default="scale"/>
-		<param name="fallback" default=""/>
-		<param name="artworkmask" default="true"/>
+		<param name="fallback"/>
+		<param name="artworkmask" default="false"/>
 		<param name="showgradient" default="false"/>
 		<definition>
 			<control type="group">
@@ -752,6 +821,7 @@
 					<visible>$EXP[ContentPrevious] + !$EXP[ContentNext] + !String.IsEqual(Control.GetLabel(919),Control.GetLabel(920))</visible>
 					<!--Fade Out Icon 0 if aspect ratio not fixed-->
 					<include content="ListIcon">
+						<param name="artwork_icon" value="$PARAM[artwork_icon]"/>
 						<param name="position" value="1"/>
 						<param name="visible" value="Container($PARAM[target_id]).OnPrevious + Container.Content(files)"/>
 						<param name="aspectratio" value="$PARAM[aspectratio]"/>
@@ -765,8 +835,9 @@
 					</include>
 					<!--Hold in place Icon 0 if aspectratio is fixed-->
 					<include content="ListIcon">
+						<param name="artwork_icon" value="$PARAM[artwork_icon]"/>
 						<param name="position" value="1"/>
-						<param name="visible" value="$EXP[ContentPrevious] + !Container.Content(files)"/>
+						<param name="visible" value="$EXP[ContentPrevious] + [!Container.Content(files) | $EXP[BillboardView_IsVisible]]"/>
 						<param name="aspectratio" value="$PARAM[aspectratio]"/>
 						<param name="fallback" value="$PARAM[fallback]"/>
 						<param name="artworkmask" value="$PARAM[artworkmask]"/>
@@ -776,6 +847,7 @@
 					<control type="group">
 						<animation effect="zoom" start="-45,0,1965,1080" end="0,0,1920,1080" time="135" reversible="false" condition="$EXP[BillboardView_IsVisible] + !Container($PARAM[target_id]).OnPrevious">Conditional</animation>
 						<include content="ListIcon">
+							<param name="artwork_icon" value="$PARAM[artwork_icon]"/>
 							<param name="visible" value="!Container($PARAM[target_id]).OnPrevious"/>
 							<param name="aspectratio" value="$PARAM[aspectratio]"/>
 							<param name="fallback" value="$PARAM[fallback]"/>
@@ -793,8 +865,9 @@
 				  <visible>$EXP[ContentNext] + !$EXP[ContentPrevious] + !String.IsEqual(Control.GetLabel(919),Control.GetLabel(918))</visible>
 					<!--Fade Out Icon 0 if aspect ratio not fixed-->
 				  <include content="ListIcon">
+						<param name="artwork_icon" value="$PARAM[artwork_icon]"/>
 				    <param name="position" value="-1"/>
-				    <param name="visible" value="Container($PARAM[target_id]).OnNext + Container.Content(files)"/>
+				    <param name="visible" value="Container($PARAM[target_id]).OnNext + Container.Content(files) + !$EXP[BillboardView_IsVisible]"/>
 				    <param name="aspectratio" value="$PARAM[aspectratio]"/>
 				    <param name="fallback" value="$PARAM[fallback]"/>
 				    <param name="animationtype" value="Hidden"/>
@@ -806,8 +879,9 @@
 				  </include>
 					<!--Hold in place Icon 0 if aspectratio is fixed-->
 					<include content="ListIcon">
+						<param name="artwork_icon" value="$PARAM[artwork_icon]"/>
 						<param name="position" value="-1"/>
-						<param name="visible" value="$EXP[ContentNext] + !Container.Content(files)"/>
+						<param name="visible" value="$EXP[ContentNext] + [!Container.Content(files) | $EXP[BillboardView_IsVisible]]"/>
 						<param name="aspectratio" value="$PARAM[aspectratio]"/>
 						<param name="fallback" value="$PARAM[fallback]"/>
 						<param name="artworkmask" value="$PARAM[artworkmask]"/>
@@ -817,6 +891,7 @@
 					<control type="group">
 						<animation effect="zoom" start="0,0,1965,1080" end="0,0,1920,1080" time="135" reversible="false" condition="$EXP[BillboardView_IsVisible] + !Container($PARAM[target_id]).OnNext">Conditional</animation>
 					  <include content="ListIcon">
+							<param name="artwork_icon" value="$PARAM[artwork_icon]"/>
 					    <param name="visible" value="!Container($PARAM[target_id]).OnNext"/>
 					    <param name="aspectratio" value="$PARAM[aspectratio]"/>
 					    <param name="fallback" value="$PARAM[fallback]"/>
@@ -831,6 +906,7 @@
 				</control>
 				<!--STATIC or during overlap of ContentPrev and ContentNext-->
 				<include content="ListIcon">
+					<param name="artwork_icon" value="$PARAM[artwork_icon]"/>
 					<param name="visible" value="!$EXP[ContentSwitching] | [$EXP[ContentPrevious] + $EXP[ContentNext]] | [$EXP[ContentPrevious] + String.IsEqual(Control.GetLabel(919),Control.GetLabel(920))] | [$EXP[ContentNext] + String.IsEqual(Control.GetLabel(919),Control.GetLabel(918))]"/>
 					<param name="switchingtosecondarylistanimation" value="Secondary_List_Scroll_Animation"/>
 					<param name="aspectratio" value="$PARAM[aspectratio]"/>
@@ -846,6 +922,7 @@
 			<param name="target_id" default="504"/>
 			<param name="viewtype_label" default="Showcase"/>
 			<param name="displaytype_label" default="Posters"/>
+			<param name="artwork_icon"/>
 			<param name="fallback" default=""/>
 			<param name="item_width" default="720"/>
 			<param name="2x_item_width" default="1440"/>
@@ -864,6 +941,7 @@
 						<!--Unfocused Items-->
 						<!--Move Icon -1 to 0, no player-->
 						<include content="ListIcon">
+							<param name="artwork_icon" value="$PARAM[artwork_icon]"/>
 							<param name="left" value="-1920"/>
 							<param name="width" value="$PARAM[item_width]"/>
 							<param name="height" value="100%"/>
@@ -877,6 +955,7 @@
 						</include>
 						<!--Move Icon 0 to 1-->
 						<include content="ListIcon">
+							<param name="artwork_icon" value="$PARAM[artwork_icon]"/>
 							<param name="position" value="1"/>
 							<param name="width" value="$PARAM[item_width]"/>
 							<param name="height" value="100%"/>
@@ -891,6 +970,7 @@
 						<!--Details Off-->
 						<!--Move Icon 0 to 1 (Details off, fade in overlay, no musicplayer)-->
 						<include content="ListIcon">
+							<param name="artwork_icon" value="$PARAM[artwork_icon]"/>
 							<param name="position" value="1"/>
 							<param name="left" value="0"/>
 							<param name="width" value="$PARAM[item_width]"/>
@@ -910,6 +990,7 @@
 						</include>
 						<!--Move Icon 0 to 1 (Overlay details on)-->
 						<include content="ListIcon">
+							<param name="artwork_icon" value="$PARAM[artwork_icon]"/>
 							<param name="position" value="1"/>
 							<param name="left" value="0"/>
 							<param name="width" value="$PARAM[item_width]"/>
@@ -924,6 +1005,7 @@
 						</include>
 						<!--Move Icon 1 to 2-->
 						<include content="ListIcon">
+							<param name="artwork_icon" value="$PARAM[artwork_icon]"/>
 							<param name="left" value="$PARAM[item_width]"/>
 							<param name="position" value="2"/>
 							<param name="width" value="$PARAM[item_width]"/>
@@ -938,6 +1020,7 @@
 						</include>
 						<!--Move Icon 2 to 3-->
 						<include content="ListIcon">
+							<param name="artwork_icon" value="$PARAM[artwork_icon]"/>
 							<param name="left" value="$PARAM[2x_item_width]"/>
 							<param name="position" value="3"/>
 							<param name="width" value="$PARAM[item_width]"/>
@@ -998,6 +1081,7 @@
 						<!--Focused Item-->
 						<!--Move Icon -1 to 0 (Details off, fade out overlay), no musicplayer-->
 						<include content="ListIcon">
+							<param name="artwork_icon" value="$PARAM[artwork_icon]"/>
 							<param name="left" value="-$PARAM[item_width]"/>
 							<param name="width" value="$PARAM[item_width]"/>
 							<param name="fallback" value="$PARAM[fallback]"/>
@@ -1020,6 +1104,7 @@
 						</include>
 						<!--Move Icon -1 to 0 (Overlay details on, no musicplayer)-->
 						<include content="ListIcon">
+							<param name="artwork_icon" value="$PARAM[artwork_icon]"/>
 							<param name="left" value="-$PARAM[item_width]"/>
 							<param name="width" value="$PARAM[item_width]"/>
 							<param name="fallback" value="$PARAM[fallback]"/>
@@ -1042,6 +1127,7 @@
 						<!--Details On-->
 						<!--Move Icon 0 to -1-->
 						<include content="ListIcon">
+							<param name="artwork_icon" value="$PARAM[artwork_icon]"/>
 							<param name="position" value="-1"/>
 							<param name="left" value="0"/>
 							<param name="top" value="0"/>
@@ -1057,6 +1143,7 @@
 						</include>
 						<!--Move Icon 1 to 0-->
 						<include content="ListIcon">
+							<param name="artwork_icon" value="$PARAM[artwork_icon]"/>
 							<param name="left" value="2300"/>
 							<param name="top" value="0"/>
 							<param name="width" value="$PARAM[item_width]"/>
@@ -1073,6 +1160,7 @@
 						<!--Unfocused Items-->
 						<!--Move Icon 0 to -1 (Details off, fade in overlay, no musicplayer)-->
 						<include content="ListIcon">
+							<param name="artwork_icon" value="$PARAM[artwork_icon]"/>
 							<param name="position" value="-1"/>
 							<param name="left" value="0"/>
 							<param name="width" value="$PARAM[item_width]"/>
@@ -1092,6 +1180,7 @@
 						</include>
 						<!--Move Icon 0 to -1 (Overlay details on, no musicplayer)-->
 						<include content="ListIcon">
+							<param name="artwork_icon" value="$PARAM[artwork_icon]"/>
 							<param name="position" value="-1"/>
 							<param name="left" value="0"/>
 							<param name="width" value="$PARAM[item_width]"/>
@@ -1107,6 +1196,7 @@
 						<!--Move Icon 2 to 1-->
 						<include content="ListIcon">
 							<param name="left" value="$PARAM[2x_item_width]"/>
+							<param name="artwork_icon" value="$PARAM[artwork_icon]"/>
 							<param name="position" value="1"/>
 							<param name="width" value="$PARAM[item_width]"/>
 							<param name="fallback" value="$PARAM[fallback]"/>
@@ -1121,6 +1211,7 @@
 						<!--Move Icon 3 to 2-->
 						<include content="ListIcon">
 							<param name="left" value="$PARAM[2x_item_width_plus_focus_width]"/>
+							<param name="artwork_icon" value="$PARAM[artwork_icon]"/>
 							<param name="position" value="2"/>
 							<param name="width" value="$PARAM[item_width]"/>
 							<param name="fallback" value="$PARAM[fallback]"/>
@@ -1180,6 +1271,7 @@
 						<!--Focused Item-->
 						<!--Move Icon 1 to 0 (Details off, fade out overlay)-->
 						<include content="ListIcon">
+							<param name="artwork_icon" value="$PARAM[artwork_icon]"/>
 							<param name="left" value="$PARAM[item_width]"/>
 							<param name="width" value="$PARAM[item_width]"/>
 							<param name="fallback" value="$PARAM[fallback]"/>
@@ -1202,6 +1294,7 @@
 						</include>
 						<!--Move Icon 1 to 0 (Overlay details on)-->
 						<include content="ListIcon">
+							<param name="artwork_icon" value="$PARAM[artwork_icon]"/>
 							<param name="left" value="$PARAM[item_width]"/>
 							<param name="width" value="$PARAM[item_width]"/>
 							<param name="fallback" value="$PARAM[fallback]"/>
@@ -1223,31 +1316,33 @@
 		</include>
 
 		<include name="Artwork_Transition_Slide_and_Zoom">
-			<param name="target_id" default="504"/>
-			<param name="viewtype_label" default="Strip"/>
-			<param name="displaytype_label" default="Posters"/>
-			<param name="top" default="180"/>
-			<param name="item_top" default="60"/>
-			<param name="item_width" default="400"/>
-			<param name="item_height" default="600"/>
-			<param name="focus_width" default="480"/>
-			<param name="focus_height" default="720"/>
-			<param name="2x_item_width" default="800"/>
-			<param name="2x_item_width_plus_focus_width" default="1280"/>
-			<param name="2x_item_width_minus_dropshadow_width" default="680"/>
-			<param name="3x_item_width_plus_focus_width" default="1680"/>
-			<param name="4x_item_width_plus_focus_width" default="2080"/>
+			<param name="target_id"/>
+			<param name="viewtype_label"/>
+			<param name="displaytype_label"/>
+			<param name="artwork_icon"/>
+			<param name="top"/>
+			<param name="item_top"/>
+			<param name="item_width"/>
+			<param name="item_height"/>
+			<param name="focus_width"/>
+			<param name="focus_height"/>
+			<param name="2x_item_width"/>
+			<param name="2x_item_width_plus_focus_width"/>
+			<param name="2x_item_width_minus_dropshadow_width"/>
+			<param name="3x_item_width_plus_focus_width"/>
+			<param name="4x_item_width_plus_focus_width"/>
 			<definition>
 				<control type="group">
-					<top>$PARAM[top]</top>
 					<visible>$EXP[$PARAM[viewtype_label]View_Display_Is$PARAM[displaytype_label]] + !$EXP[ContainerSwitching]</visible>
 					<include>Artwork_Fade_Animation</include>
+					<top>$PARAM[top]</top>
 					<animation effect="slide" start="0,0" end="-960,0" time="0" condition="$EXP[StripView_Display_IsFanart]">Conditional</animation>
 					<!--PREVIOUS SCROLL-->
 					<control type="group">
 						<visible>$EXP[ContentPrevious]</visible>
 						<!--Move Icon -3 to -2-->
 						<include content="ListIcon">
+							<param name="artwork_icon" value="$PARAM[artwork_icon]"/>
 							<param name="position" value="-2"/>
 							<param name="left" value="-$PARAM[item_width]"/>
 							<param name="top" value="$PARAM[item_top]"/>
@@ -1262,6 +1357,7 @@
 						</include>
 						<!--Move Icon -2 to -1-->
 						<include content="ListIcon">
+							<param name="artwork_icon" value="$PARAM[artwork_icon]"/>
 							<param name="position" value="-1"/>
 							<param name="left" value="0"/>
 							<param name="top" value="$PARAM[item_top]"/>
@@ -1276,6 +1372,7 @@
 						</include>
 						<!--Move Icon -1 to 0-->
 						<include content="ListIcon">
+							<param name="artwork_icon" value="$PARAM[artwork_icon]"/>
 							<param name="left" value="$PARAM[item_width]"/>
 							<param name="top" value="$PARAM[item_top]"/>
 							<param name="width" value="$PARAM[item_width]"/>
@@ -1289,6 +1386,7 @@
 						</include>
 						<!--Alternative Animation if Details On-->
 						<include content="ListIcon">
+							<param name="artwork_icon" value="$PARAM[artwork_icon]"/>
 							<param name="left" value="-$PARAM[focus_width]"/>
 							<param name="top" value="0"/>
 							<param name="width" value="$PARAM[focus_width]"/>
@@ -1302,6 +1400,7 @@
 						</include>
 						<!--Move Icon 0 to 1-->
 						<include content="ListIcon">
+							<param name="artwork_icon" value="$PARAM[artwork_icon]"/>
 							<param name="position" value="1"/>
 							<param name="left" value="$PARAM[2x_item_width]"/>
 							<param name="top" value="0"/>
@@ -1316,6 +1415,7 @@
 						</include>
 						<!--Move Icon 1 to 2-->
 						<include content="ListIcon">
+							<param name="artwork_icon" value="$PARAM[artwork_icon]"/>
 							<param name="position" value="2"/>
 							<param name="left" value="$PARAM[2x_item_width_plus_focus_width]"/>
 							<param name="top" value="$PARAM[item_top]"/>
@@ -1330,6 +1430,7 @@
 						</include>
 						<!--Move Icon 2 to 3-->
 						<include content="ListIcon">
+							<param name="artwork_icon" value="$PARAM[artwork_icon]"/>
 							<param name="position" value="3"/>
 							<param name="left" value="$PARAM[3x_item_width_plus_focus_width]"/>
 							<param name="top" value="$PARAM[item_top]"/>
@@ -1420,6 +1521,7 @@
 						<visible>$EXP[ContentNext]</visible>
 						<!--Move Icon -2 to -3-->
 						<include content="ListIcon">
+							<param name="artwork_icon" value="$PARAM[artwork_icon]"/>
 							<param name="position" value="-3"/>
 							<param name="left" value="0"/>
 							<param name="top" value="$PARAM[item_top]"/>
@@ -1434,6 +1536,7 @@
 						</include>
 						<!--Move Icon -1 to -2-->
 						<include content="ListIcon">
+							<param name="artwork_icon" value="$PARAM[artwork_icon]"/>
 							<param name="position" value="-2"/>
 							<param name="left" value="$PARAM[item_width]"/>
 							<param name="top" value="$PARAM[item_top]"/>
@@ -1448,6 +1551,7 @@
 						</include>
 						<!--Move Icon 0 to -1-->
 						<include content="ListIcon">
+							<param name="artwork_icon" value="$PARAM[artwork_icon]"/>
 							<param name="position" value="-1"/>
 							<param name="left" value="$PARAM[2x_item_width]"/>
 							<param name="top" value="0"/>
@@ -1462,6 +1566,7 @@
 						</include>
 						<!--Alternative Animation if Details On-->
 						<include content="ListIcon">
+							<param name="artwork_icon" value="$PARAM[artwork_icon]"/>
 							<param name="position" value="-1"/>
 							<param name="left" value="$PARAM[2x_item_width]"/>
 							<param name="top" value="0"/>
@@ -1476,6 +1581,7 @@
 						</include>
 						<!--Move Icon 1 to 0-->
 						<include content="ListIcon">
+							<param name="artwork_icon" value="$PARAM[artwork_icon]"/>
 							<param name="left" value="$PARAM[2x_item_width_plus_focus_width]"/>
 							<param name="top" value="$PARAM[item_top]"/>
 							<param name="width" value="$PARAM[item_width]"/>
@@ -1489,6 +1595,7 @@
 						</include>
 						<!--Move Icon 2 to 1-->
 						<include content="ListIcon">
+							<param name="artwork_icon" value="$PARAM[artwork_icon]"/>
 							<param name="position" value="1"/>
 							<param name="left" value="$PARAM[3x_item_width_plus_focus_width]"/>
 							<param name="top" value="$PARAM[item_top]"/>
@@ -1503,6 +1610,7 @@
 						</include>
 						<!--Move Icon 3 to 2-->
 						<include content="ListIcon">
+							<param name="artwork_icon" value="$PARAM[artwork_icon]"/>
 							<param name="position" value="2"/>
 							<param name="left" value="$PARAM[4x_item_width_plus_focus_width]"/>
 							<param name="top" value="$PARAM[item_top]"/>
@@ -1592,20 +1700,22 @@
 		</include>
 
 		<include name="ShowcaseView_Art">
-			<param name="target_id" default="502"/>
-			<param name="viewtype_label" default="Showcase"/>
-			<param name="displaytype_label" default="Posters"/>
+			<param name="target_id"/>
+			<param name="displaytype_label"/>
+			<param name="artwork_icon"/>
 			<param name="fallback" default="fallback.png"/>
-			<param name="item_width" default="720"/>
+			<param name="item_width"/>
 			<param name="item_height" default="100%"/>
-			<param name="2x_item_width" default="1440"/>
-			<param name="2x_item_width_plus_focus_width" default="2160"/>
-			<param name="3x_item_width_plus_focus_width" default="2880"/>
-			<param name="2x_item_width_minus_dropshadow_width" default=""/>
+			<param name="2x_item_width"/>
+			<param name="2x_item_width_plus_focus_width"/>
+			<param name="3x_item_width_plus_focus_width"/>
+			<param name="2x_item_width_minus_dropshadow_width"/>
 			<definition>
 				<include content="Artwork_Static">
-					<param name="viewtype_label" value="$PARAM[viewtype_label]"/>
+					<param name="target_id" value="$PARAM[target_id]"/>
+					<param name="viewtype_label" value="Showcase"/>
 					<param name="displaytype_label" value="$PARAM[displaytype_label]"/>
+					<param name="artwork_icon" value="$PARAM[artwork_icon]"/>
 					<param name="item_width" value="$PARAM[item_width]"/>
 					<param name="item_height" value="$PARAM[item_height]"/>
 					<param name="fallback" value="$PARAM[fallback]"/>
@@ -1624,8 +1734,9 @@
 				</include>
 				<include content="Artwork_Transition_Slide">
 					<param name="target_id" value="$PARAM[target_id]"/>
-					<param name="viewtype_label" value="$PARAM[viewtype_label]"/>
+					<param name="viewtype_label" value="Showcase"/>
 					<param name="displaytype_label" value="$PARAM[displaytype_label]"/>
+					<param name="artwork_icon" value="$PARAM[artwork_icon]"/>
 					<param name="fallback" value="$PARAM[fallback]"/>
 					<param name="item_width" value="$PARAM[item_width]"/>
 					<param name="item_height" value="$PARAM[item_height]"/>
@@ -1637,25 +1748,60 @@
 			</definition>
 		</include>
 
+		<include name="ShowcaseView_Art_Posters">
+			<param name="target_id"/>
+			<param name="artwork_icon"/>
+			<definition>
+				<include content="ShowcaseView_Art">
+					<param name="target_id" value="$PARAM[target_id]"/>
+					<param name="displaytype_label" value="Posters"/>
+					<param name="artwork_icon" value="$PARAM[artwork_icon]"/>
+					<param name="item_width" value="720"/>
+					<param name="2x_item_width" value="1440"/>
+					<param name="2x_item_width_plus_focus_width" value="2160"/>
+					<param name="3x_item_width_plus_focus_width" value="2880"/>
+					<param name="2x_item_width_minus_dropshadow_width" value=""/>
+				</include>
+			</definition>
+		</include>
+
+		<include name="ShowcaseView_Art_Square">
+			<param name="target_id"/>
+			<param name="artwork_icon"/>
+			<definition>
+				<include content="ShowcaseView_Art">
+					<param name="target_id" value="$PARAM[target_id]"/>
+					<param name="displaytype_label" value="Square"/>
+					<param name="artwork_icon" value="$PARAM[artwork_icon]"/>
+					<param name="item_width" value="1080"/>
+					<param name="2x_item_width" value="2160"/>
+					<param name="2x_item_width_plus_focus_width" value="3240"/>
+					<param name="3x_item_width_plus_focus_width" value="2880"/>
+				</include>
+			</definition>
+		</include>
+
 		<include name="StripView_Art">
-			<param name="target_id" default="504"/>
-			<param name="viewtype_label" default="Strip"/>
-			<param name="displaytype_label" default="Posters"/>
-			<param name="top" default="180"/>
-			<param name="item_top" default="60"/>
-			<param name="item_width" default="400"/>
-			<param name="item_height" default="600"/>
-			<param name="focus_width" default="480"/>
-			<param name="focus_height" default="720"/>
-			<param name="2x_item_width" default="800"/>
-			<param name="2x_item_width_plus_focus_width" default="1280"/>
-			<param name="2x_item_width_minus_dropshadow_width" default="680"/>
-			<param name="3x_item_width_plus_focus_width" default="1680"/>
-			<param name="4x_item_width_plus_focus_width" default="2080"/>
+			<param name="target_id"/>
+			<param name="displaytype_label"/>
+			<param name="artwork_icon"/>
+			<param name="top"/>
+			<param name="item_top"/>
+			<param name="item_width"/>
+			<param name="item_height"/>
+			<param name="focus_width"/>
+			<param name="focus_height"/>
+			<param name="2x_item_width"/>
+			<param name="2x_item_width_plus_focus_width"/>
+			<param name="2x_item_width_minus_dropshadow_width"/>
+			<param name="3x_item_width_plus_focus_width"/>
+			<param name="4x_item_width_plus_focus_width"/>
 			<definition>
 				<include content="Artwork_Static">
-					<param name="viewtype_label" value="$PARAM[viewtype_label]"/>
+					<param name="target_id" value="$PARAM[target_id]"/>
+					<param name="viewtype_label" value="Strip"/>
 					<param name="displaytype_label" value="$PARAM[displaytype_label]"/>
+					<param name="artwork_icon" value="$PARAM[artwork_icon]"/>
 					<param name="top" value="$PARAM[top]"/>
 					<param name="item_top" value="$PARAM[item_top]"/>
 					<param name="item_width" value="$PARAM[item_width]"/>
@@ -1672,8 +1818,9 @@
 				</include>
 				<include content="Artwork_Transition_Slide_and_Zoom">
 					<param name="target_id" value="$PARAM[target_id]"/>
-					<param name="viewtype_label" value="$PARAM[viewtype_label]"/>
+					<param name="viewtype_label" value="Strip"/>
 					<param name="displaytype_label" value="$PARAM[displaytype_label]"/>
+					<param name="artwork_icon" value="$PARAM[artwork_icon]"/>
 					<param name="top" value="$PARAM[top]"/>
 					<param name="item_top" value="$PARAM[item_top]"/>
 					<param name="item_width" value="$PARAM[item_width]"/>
@@ -1689,6 +1836,74 @@
 			</definition>
 		</include>
 
+		<include name="StripView_Art_Posters">
+			<param name="target_id"/>
+			<param name="artwork_icon"/>
+			<definition>
+				<include content="StripView_Art">
+					<param name="target_id" value="$PARAM[target_id]"/>
+					<param name="displaytype_label" value="Posters"/>
+					<param name="artwork_icon" value="$PARAM[artwork_icon]"/>
+					<param name="top" value="180"/>
+					<param name="item_top" value="60"/>
+					<param name="item_width" value="400"/>
+					<param name="item_height" value="600"/>
+					<param name="focus_width" value="480"/>
+					<param name="focus_height" value="720"/>
+					<param name="2x_item_width" value="800"/>
+					<param name="2x_item_width_plus_focus_width" value="1280"/>
+					<param name="2x_item_width_minus_dropshadow_width" value="680"/>
+					<param name="3x_item_width_plus_focus_width" value="1680"/>
+					<param name="4x_item_width_plus_focus_width" value="2080"/>
+				</include>
+			</definition>
+		</include>
+
+		<include name="StripView_Art_Fanart">
+			<param name="target_id"/>
+			<param name="artwork_icon"/>
+			<definition>
+				<include content="StripView_Art">
+					<param name="target_id" value="$PARAM[target_id]"/>
+					<param name="displaytype_label" value="Fanart"/>
+					<param name="artwork_icon" value="$PARAM[artwork_icon]"/>
+					<param name="top" value="240"/>
+					<param name="item_top" value="45"/>
+					<param name="item_width" value="960"/>
+					<param name="item_height" value="540"/>
+					<param name="focus_width" value="1120"/>
+					<param name="focus_height" value="630"/>
+					<param name="2x_item_width" value="1920"/>
+					<param name="2x_item_width_plus_focus_width" value="3040"/>
+					<param name="2x_item_width_minus_dropshadow_width" value="1800"/>
+					<param name="3x_item_width_plus_focus_width" value="4000"/>
+				</include>
+			</definition>
+		</include>
+
+		<include name="StripView_Art_Square">
+			<param name="target_id"/>
+			<param name="artwork_icon"/>
+			<definition>
+				<include content="StripView_Art">
+					<param name="target_id" value="$PARAM[target_id]"/>
+					<param name="displaytype_label" value="Square"/>
+					<param name="artwork_icon" value="$PARAM[artwork_icon]"/>
+					<param name="top" value="240"/>
+					<param name="item_top" value="45"/>
+					<param name="item_width" value="540"/>
+					<param name="item_height" value="540"/>
+					<param name="focus_width" value="630"/>
+					<param name="focus_height" value="630"/>
+					<param name="2x_item_width" value="1080"/>
+					<param name="2x_item_width_plus_focus_width" value="1710"/>
+					<param name="2x_item_width_minus_dropshadow_width" value="960"/>
+					<param name="3x_item_width_plus_focus_width" value="2250"/>
+					<param name="4x_item_width_plus_focus_width" value="2790"/>
+				</include>
+			</definition>
+		</include>
+
 	<include name="GridView_Art">
 		<param name="displaytype_label"/>
 		<param name="left"/>
@@ -1696,6 +1911,7 @@
 		<param name="height"/>
 		<definition>
 			<include content="ListIcon">
+				<param name="artwork_icon" value="Thumbnail"/>
 				<param name="left" value="$PARAM[left]"/>
 				<param name="width" value="$PARAM[width]"/>
 				<param name="height" value="$PARAM[height]"/>
@@ -1749,6 +1965,7 @@
 		<definition>
 			<control type="group">
 				<include content="ListIcon">
+					<param name="artwork_icon" value="Thumbnail"/>
 					<param name="left" value="72"/>
 					<param name="width" value="592"/>
 					<param name="height" value="333"/>
@@ -1759,6 +1976,7 @@
 					<param name="artworkmaskdiffuse" value="$VAR[Unwatched_Artwork_Mask]"/>
 				</include>
 				<include content="ListIcon">
+					<param name="artwork_icon" value="Thumbnail"/>
 					<param name="left" value="60"/>
 					<param name="width" value="360"/>
 					<param name="height" value="540"/>
@@ -1769,6 +1987,7 @@
 					<param name="artworkmaskdiffuse" value="$VAR[Unwatched_Artwork_Mask]"/>
 				</include>
 				<include content="ListIcon">
+					<param name="artwork_icon" value="Thumbnail"/>
 					<param name="left" value="60"/>
 					<param name="width" value="360"/>
 					<param name="height" value="360"/>
@@ -2026,7 +2245,7 @@
 		<param name="logopath" default="$VAR[Logo_Path]"/>
 		<param name="titlelabel" default="$VAR[Title_Label]"/>
 		<param name="titleheight" default="146"/>
-    <param name="titlecolor" default="$VAR[List_Color]"/>
+    <param name="titlecolor" default="$VAR[List_Text_Color]"/>
 		<param name="titlealign" default="left"/>
 		<param name="infolabel" default="$VAR[Info_Label]"/>
     <param name="infogap" default="0"/>
@@ -2078,8 +2297,8 @@
 						<!--Info-->
 						<control type="$PARAM[labeltype]">
 		          <top>$PARAM[infogap]</top>
-		          <visible>$EXP[$PARAM[viewtype_label]View_Details_Info_IsVisible]</visible>
-							<visible>!String.IsEmpty(Control.GetLabel(917))</visible>
+		          <visible>$EXP[$PARAM[viewtype_label]View_Details_Info_IsVisible] | Window.IsActive(home)</visible>
+							<visible>!String.IsEmpty(Control.GetLabel(917)) | Window.IsActive(home)</visible>
 		          <height max="$PARAM[infoheight]">auto</height>
 							<font>$PARAM[viewtype_label]_Info</font>
 							<textcolor>$PARAM[titlecolor]</textcolor>
@@ -2109,19 +2328,25 @@
 	<include name="Breadcrumb_Label">
 		<param name="visible" default="true"/>
 		<param name="title_label_id" default="980"/>
-		<param name="label_color" default="$VAR[Button_Color]"/>
+		<param name="title_label" default="$VAR[Breadcrumb_Title_Label]"/>
+		<param name="maxtitlelabelwidth" default="1200"/>
+		<param name="haspath" default="false"/>
+		<param name="label_color" default="$VAR[Overlay_Text_Color]"/>
 		<param name="info_label_id" default=""/>
+		<param name="info_label" default="$VAR[Breadcrumb_Info_Label]"/>
 		<param name="info_label_visible" default="true"/>
+		<param name="maxinfolabelwidth" default="600"/>
+		<param name="left" default="60"/>
+		<param name="right" default="60"/>
+		<param name="top" default="60"/>
 		<definition>
 			<control type="group">
 				<visible>$PARAM[visible]</visible>
-				<visible>![[$EXP[ListView_Display_IsBackground] | $EXP[GridView_IsVisible]] + Player.HasMedia]</visible>
 				<include>Content_Fade_Animation</include>
 				<control type="grouplist">
-					<visible>$PARAM[visible]</visible>
-					<left>60</left>
-					<right>60</right>
-					<top>60</top>
+					<left>$PARAM[left]</left>
+					<right>$PARAM[right]</right>
+					<top>$PARAM[top]</top>
 					<height>60</height>
 					<orientation>horizontal</orientation>
 					<align>left</align>
@@ -2129,16 +2354,17 @@
 					<usecontrolcoords>true</usecontrolcoords>
 					<control type="label" id="$PARAM[title_label_id]">
 						<height>60</height>
-						<width>auto</width>
-						<label>$VAR[Breadcrumb_Title_Label]</label>
+						<width max="$PARAM[maxtitlelabelwidth]">auto</width>
+						<label>$PARAM[title_label]</label>
 						<font>Breadcrumb_Title_Label</font>
 						<textcolor>$PARAM[label_color]</textcolor>
+						<haspath>$PARAM[haspath]</haspath>
 					</control>
 					<control type="label" id="$PARAM[info_label_id]">
-						<width>auto</width>
+						<width max="$PARAM[maxinfolabelwidth]">auto</width>
 						<height>35</height>
 						<top>16</top>
-						<label>$VAR[Breadcrumb_Info_Label]</label>
+						<label>$PARAM[info_label]</label>
 						<font>Breadcrumb_Info_Label</font>
 						<textcolor>$PARAM[label_color]</textcolor>
 						<visible>$PARAM[info_label_visible]</visible>
@@ -2171,7 +2397,7 @@
 				<align>left</align>
 				<aligny>center</aligny>
 				<font>Breadcrumb_Info_Label</font>
-				<textcolor>$VAR[List_Color]</textcolor>
+				<textcolor>$VAR[Overlay_Text_Color]</textcolor>
 				<haspath>$PARAM[haspath]</haspath>
 
 			</control>
@@ -2282,7 +2508,7 @@
 						<width>90</width>
 						<height>60</height>
 						<aspectratio>keep</aspectratio>
-						<texture colordiffuse="$VAR[List_Color]" fallback="flags/blank.png">$VAR[Studio_Label]</texture>
+						<texture colordiffuse="$VAR[View_Furniture_Color]" fallback="flags/blank.png">$VAR[Studio_Label]</texture>
 						<animation effect="slide" start="0,0" end="180,0" time="0" condition="$EXP[ListView_Flags_Studio_Shift] | $EXP[BillboardView_Flags_Studio_Shift] | $EXP[ShowcaseView_Flags_Studio_Shift] | $EXP[StripView_Flags_Studio_Shift]">Conditional</animation>
 						<animation effect="slide" start="0,0" end="-1560,0" time="0" condition="$EXP[StripView_IsVisible] + $EXP[StripView_Details_Title] + !$EXP[StripView_Details_Logo_IsOn] + !$EXP[StripView_Flags_Studio_Shift]">Conditional</animation>
 					</control>
@@ -2294,7 +2520,7 @@
 						<width>90</width>
 						<height>60</height>
 						<aspectratio>keep</aspectratio>
-						<texture colordiffuse="$VAR[List_Color]" fallback="flags/blank.png">$VAR[MPAA_Label]</texture>
+						<texture colordiffuse="$VAR[View_Furniture_Color]" fallback="flags/blank.png">$VAR[MPAA_Label]</texture>
 					</control>
 				</control>
 			</control>
