@@ -488,8 +488,9 @@
 
 	<variable name="Title_Label">
 		<!--WIDGETS-->
-		<value condition="Control.HasFocus(9010) + !Integer.IsGreater(ListItem.Episode,9)">$INFO[ListItem.Season]$INFO[ListItem.Episode,x,.]$INFO[ListItem.Title, ]</value>
-		<value condition="Control.HasFocus(9010) + !String.IsEmpty(ListItem.Title)">$INFO[ListItem.Season]$INFO[ListItem.Episode,x,.]$INFO[ListItem.Title, ]</value>
+		<value condition="Window.IsActive(home) + String.IsEqual(ListItem.DBType,episode) + !Integer.IsGreater(ListItem.Episode,9) + !String.IsEmpty(ListItem.Episode)">$INFO[ListItem.Season]$INFO[ListItem.Episode,x0,.]$INFO[ListItem.Title, ]</value>
+		<value condition="Window.IsActive(home) + String.IsEqual(ListItem.DBType,episode) + !String.IsEmpty(ListItem.Episode)">$INFO[ListItem.Season]$INFO[ListItem.Episode,x,.]$INFO[ListItem.Title, ]</value>
+		<value condition="Window.IsActive(home) + !String.IsEmpty(ListItem.Title)">$INFO[ListItem.Title]</value>
 		<!--SECONDARY LIST-->
 		<value condition="Control.HasFocus(4501) + Container.Content(tvshows)">$INFO[Container(4501).ListItem.Season,Season ]</value>
 		<value condition="Control.HasFocus(4501) + Container.Content(set)">hello$INFO[Container(4501).ListItem.Title]</value>
@@ -515,9 +516,12 @@
 	</variable>
 
 	<variable name="Info_Label">
-		<!--WIDGETS-->
-		<value condition="Control.HasFocus(9010) + !String.IsEmpty(ListItem.TVShowTitle)">[UPPERCASE]$INFO[ListItem.TVShowTitle]$INFO[ListItem.Duration(mins), / , $LOCALIZE[31138]][/UPPERCASE]</value>
-		<value condition="Control.HasFocus(9010) + !String.IsEmpty(ListItem.Duration)">[UPPERCASE]$INFO[ListItem.Duration(mins),, $LOCALIZE[31138]][/UPPERCASE]</value>
+		<!--WIDGETS
+		2016 / 104mins/fullhd
+		2019/ 1 season / 0/6 watched-->
+		<value condition="Window.IsActive(home) + String.IsEqual(ListItem.DBType,episode) + !String.IsEmpty(ListItem.TVShowTitle)">[UPPERCASE]$INFO[ListItem.TVShowTitle]$INFO[ListItem.Duration(mins), / , $LOCALIZE[31138]][/UPPERCASE]</value>
+		<value condition="Window.IsActive(home) + String.IsEqual(ListItem.DBType,tvshow) + !String.IsEmpty(ListItem.Year)">[UPPERCASE]$INFO[ListItem.Year]$INFO[ListItem.Property(TotalSeasons), / , ]$VAR[Seasons_Label]$INFO[ListItem.Property(WatchedEpisodes), / ,/]$INFO[ListItem.Property(TotalEpisodes),, ]$LOCALIZE[32001][/UPPERCASE]</value>
+		<value condition="Window.IsActive(home) + !String.IsEmpty(ListItem.Duration)">[UPPERCASE]$INFO[ListItem.Year]$INFO[ListItem.Duration(mins), / , $LOCALIZE[31138]]$VAR[Resolution_Label, / ][/UPPERCASE]</value>
 		<!--SECONDARY LIST VISIBLE-->
 		<value condition="Control.HasFocus(4501) + !$EXP[ListView_IsVisible] + Container.Content(tvshows) + !String.IsEmpty(Container(4501).ListItem.Year)">[UPPERCASE]$INFO[Container(4501).ListItem.Year]$INFO[Container(4501).ListItem.Property(WatchedEpisodes), / ,/]$INFO[Container(4501).ListItem.Property(NumEpisodes),, ]$LOCALIZE[32001][/UPPERCASE]</value>
 		<value condition="Control.HasFocus(4501) + !$EXP[ListView_IsVisible] + Container.Content(tvshows) + !String.IsEmpty(Container(4501).ListItem.Property(WatchedEpisodes))">[UPPERCASE]$INFO[Container(4501).ListItem.Property(WatchedEpisodes),,/]$INFO[Container(4501).ListItem.Property(NumEpisodes),, ]$LOCALIZE[32001][/UPPERCASE]</value>

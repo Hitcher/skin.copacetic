@@ -13,6 +13,17 @@
 		</control>
 	</include>
 
+	<include name="HiddenWidgetFocusButton">
+		<control type="button">
+			<visible allowhiddenfocus="true">false</visible>
+			<onload condition="!String.IsEmpty(Container.ListItemAbsolute(0).DBID)">RunScript(script.embuary.helper,action=details_by_season,dbid=$INFO[Container.ListItemAbsolute(0).DBID])</onload>
+			<onfocus>SetProperty(WatchedPercentage,0,home)</onfocus>
+			<onfocus condition="!$EXP[ContentSwitching] + System.HasAddon(script.embuary.helper) + Integer.IsGreater(ListItem.Property(TotalEpisodes),0) + !String.IsEqual(ListItem.Overlay,OverlayWatched.png)">RunScript(script.embuary.helper,action=calc,do='"($INFO[ListItem.Property(WatchedEpisodes)] / $INFO[ListItem.Property(TotalEpisodes)]) * 100"',prop=WatchedPercentage)</onfocus>
+			<animation effect="slide" end="0,0" time="420" reversible="false">Focus</animation>
+			<onfocus condition="!$EXP[ContentSwitching] + System.HasAddon(script.embuary.helper) + Integer.IsGreater(ListItem.Property(TotalEpisodes),0) + !String.IsEqual(ListItem.Overlay,OverlayWatched.png)">RunScript(script.embuary.helper,action=calc,do='"($INFO[ListItem.Property(WatchedEpisodes)] / $INFO[ListItem.Property(TotalEpisodes)]) * 100"',prop=WatchedPercentage)</onfocus>
+		</control>
+	</include>
+
 	<include name="HiddenGridFocusButton">
 		<control type="button">
 			<visible allowhiddenfocus="true">false</visible>
@@ -655,7 +666,7 @@
 				<left>$PARAM[left]</left>
 				<top>$PARAM[top]</top>
 				<control type="group">
-					<visible>Control.HasFocus($PARAM[target_id]) + $EXP[$PARAM[viewtype_label]View_Display_Is$PARAM[displaytype_label]] + !$EXP[ContainerSwitching] + !$EXP[OptionsSwitching]</visible>
+					<visible>$EXP[$PARAM[viewtype_label]View_Display_Is$PARAM[displaytype_label]] + !$EXP[ContainerSwitching] + !$EXP[OptionsSwitching]</visible>
 					<include>Artwork_Fade_Animation</include>
 					<control type="group">
 						<visible>!$EXP[ContentSwitching]</visible>
@@ -2259,7 +2270,7 @@
 			<control type="group">
 				<animation effect="slide" start="0,0" end="180,0" time="0" condition="$EXP[ShowcaseView_IsVisible] + $EXP[ShowcaseView_Display_IsSquare]">Conditional</animation>
 				<animation effect="slide" start="0,0" end="80,0" time="0" condition="$EXP[ShowcaseView_IsVisible] + $EXP[ShowcaseView_Details_Logo_IsVisible] + !$EXP[ShowcaseView_Details_Plot_IsVisible]">Conditional</animation>
-				<visible>!$EXP[$PARAM[viewtype_label]View_Details_Off] + ![$EXP[StripView_IsVisible] + $EXP[StripView_Details_Title] + !$EXP[StripView_Details_Logo_IsOn]]</visible>
+				<visible>[!$EXP[$PARAM[viewtype_label]View_Details_Off] + ![$EXP[StripView_IsVisible] + $EXP[StripView_Details_Title] + !$EXP[StripView_Details_Logo_IsOn]]] | Window.IsActive(home)</visible>
 				<left>$PARAM[left]</left>
 				<width>$PARAM[width]</width>
 				<height>$PARAM[height]</height>
@@ -2405,7 +2416,7 @@
 	</include>
 
 	<include name="ProgressBar">
-		<param name="visible" default="[$EXP[Video_Containers] | Container.Content(files) | Window.IsActive(movieinformation)]"/>
+		<param name="visible" default="[$EXP[Video_Containers] | Container.Content(files) | Window.IsActive(movieinformation) | Window.IsActive(home)]"/>
 		<param name="left" default="780"/>
 		<param name="top" default="1047"/>
     <param name="bottom"/>
@@ -2454,7 +2465,7 @@
 				</control>
         <!--Sets, TVshows and Episodes-->
         <control type="group">
-          <visible>[[!Control.HasFocus(4501) + !String.IsEqual(ListItem.Overlay,OverlayWatched.png)] | [Control.HasFocus(4501) + !String.IsEqual(Container(4501).ListItem.Overlay,OverlayWatched.png)]] + Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],0) + [Container.Content(tvshows) | Container.Content(seasons)]</visible>
+          <visible>[[!Control.HasFocus(4501) + !String.IsEqual(ListItem.Overlay,OverlayWatched.png)] | [Control.HasFocus(4501) + !String.IsEqual(Container(4501).ListItem.Overlay,OverlayWatched.png)]] + Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],0) + [String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,season)]</visible>
           <!--Background-->
           <control type="image">
   					<width>$PARAM[width]</width>
