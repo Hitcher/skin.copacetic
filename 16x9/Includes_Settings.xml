@@ -1,0 +1,219 @@
+<includes>
+
+	<!--settingdialog-->
+	<include name="DialogGrouplist">
+		<width>1200</width>
+		<centerleft>50%</centerleft>
+		<centertop>50%</centertop>
+		<height>540</height>
+		<onright condition="Window.IsVisible(smartplaylistrule)">20</onright>
+		<onright condition="!Window.IsVisible(smartplaylistrule)">9000</onright>
+		<onleft>noop</onleft>
+		<itemgap>0</itemgap>
+		<align>center</align>
+	</include>
+
+	<include name="skinnsettings_Default_Button">
+		<radiowidth/>
+		<radioheight/>
+		<textureradioonfocus/>
+		<textureradioofffocus/>
+		<textureradioonnofocus/>
+		<textureradiooffnofocus/>
+		<textureradioondisabled/>
+		<textureradiooffdisabled/>
+	</include>
+
+	<include name="Widget_Settings_Content">
+		<param name="widget_position"/>
+		<param name="previous_widget_position"/>
+		<definition>
+			<control type="group" id="11$PARAM[widget_position]">
+				<height>180</height>
+				<width>100%</width>
+				<visible>ControlGroup(9).HasFocus(11)</visible>
+				<control type="label">
+					<top>0</top>
+					<height>90</height>
+					<description>Widget Label</description>
+					<label>$LOCALIZE[31222] $PARAM[widget_position]</label>
+					<height>90</height>
+					<textoffsetx>20</textoffsetx>
+					<font>Default_Settings_Header</font>
+					<textcolor>$VAR[Settings_Unfocused_Color]</textcolor>
+				</control>
+				<control type="button" id="11$PARAM[widget_position]0">
+					<top>90</top>
+					<description>Content Button</description>
+					<label>$LOCALIZE[31223]</label>
+					<label2>$VAR[Widget$PARAM[widget_position]_Content]</label2>
+					<onclick>Skin.SelectBool(424, 1223|Widget$PARAM[widget_position]_Content_Disabled,  31226|Widget$PARAM[widget_position]_Content_InProgress, 31227|Widget$PARAM[widget_position]_Content_NextUp, 31228|Widget$PARAM[widget_position]_Content_LatestMovies, 31229|Widget$PARAM[widget_position]_Content_LatestTVShows)</onclick>
+					<visible>ControlGroup(9).HasFocus(11)</visible>
+					<onup>11$PARAM[previous_widget_position]4</onup>
+					<ondown>11$PARAM[widget_position]1</ondown>
+					<include content="skinnsettings_Default_Button"/>
+				</control>
+			</control>
+		</definition>
+	</include>
+
+	<include name="Widget_Settings_View">
+		<param name="widget_position"/>
+		<definition>
+			<control type="group" id="11$PARAM[widget_position]1">
+				<height>90</height>
+				<width>100%</width>
+				<visible>ControlGroup(9).HasFocus(11)</visible>
+				<control type="button" id="11$PARAM[widget_position]2">
+					<description>Widget View Button</description>
+					<label>$LOCALIZE[31224]</label>
+					<label2>$VAR[Widget$PARAM[widget_position]_View]</label2>
+					<onclick condition="Skin.HasSetting(Widget$PARAM[widget_position]_Display_Posters)">Skin.ToggleSetting(Widget$PARAM[widget_position]_Display_Posters)</onclick>
+					<onclick condition="Skin.HasSetting(Widget$PARAM[widget_position]_Display_Fanart)">Skin.ToggleSetting(Widget$PARAM[widget_position]_Display_Fanart)</onclick>
+					<onclick condition="Skin.HasSetting(Widget$PARAM[widget_position]_Display_Square)">Skin.ToggleSetting(Widget$PARAM[widget_position]_Display_Square)</onclick>
+					<onclick>Skin.SelectBool(424, 31202|Widget$PARAM[widget_position]_View_Billboard, 31203|Widget$PARAM[widget_position]_View_Showcase, 31204|Widget$PARAM[widget_position]_View_Strip)</onclick>
+					<onup>11$PARAM[widget_position]0</onup>
+					<ondown>11$PARAM[widget_position]4</ondown>
+					<visible>!Skin.HasSetting(Widget$PARAM[widget_position]_Content_Disabled)</visible>
+					<include content="skinnsettings_Default_Button"/>
+				</control>
+				<control type="button" id="11$PARAM[widget_position]3">
+					<description>Widget View Button</description>
+					<label>$LOCALIZE[31224]</label>
+					<label2>$VAR[Widget$PARAM[widget_position]_View]</label2>
+					<onup>11$PARAM[widget_position]0</onup>
+					<ondown>11$PARAM[widget_position]4</ondown>
+					<textcolor>$VAR[Dark_Color]</textcolor>
+					<visible>Skin.HasSetting(Widget$PARAM[widget_position]_Content_Disabled)</visible>
+					<include content="skinnsettings_Default_Button"/>
+				</control>
+			</control>
+		</definition>
+	</include>
+
+	<include name="Widget_Settings_Display">
+		<param name="widget_position"/>
+		<param name="next_widget_position"/>
+		<definition>
+			<control type="group" id="11$PARAM[widget_position]4">
+				<height>90</height>
+				<width>100%</width>
+				<visible>ControlGroup(9).HasFocus(11)</visible>
+				<control type="button" id="11$PARAM[widget_position]5">
+					<description>Widget Display Button</description>
+					<label>$LOCALIZE[31225]</label>
+					<label2>$VAR[Widget$PARAM[widget_position]_Display]</label2>
+					<visible>Skin.HasSetting(Widget$PARAM[widget_position]_Content_Disabled)</visible>
+					<textcolor>$VAR[Dark_Color]</textcolor>
+					<onup>11$PARAM[widget_position]1</onup>
+					<ondown>11$PARAM[next_widget_position]0</ondown>
+					<include content="skinnsettings_Default_Button"/>
+				</control>
+				<control type="button" id="11$PARAM[widget_position]6">
+					<description>Widget Display Button</description>
+					<label>$LOCALIZE[31225]</label>
+					<label2>$VAR[Widget$PARAM[widget_position]_Display]</label2>
+					<visible>Skin.HasSetting(Widget$PARAM[widget_position]_View_Billboard) + !Skin.HasSetting(Widget$PARAM[widget_position]_Content_Disabled)</visible>
+					<textcolor>$VAR[Dark_Color]</textcolor>
+					<onup>11$PARAM[widget_position]1</onup>
+					<ondown>11$PARAM[next_widget_position]0</ondown>
+					<include content="skinnsettings_Default_Button"/>
+				</control>
+				<control type="button" id="11$PARAM[widget_position]7">
+					<description>Widget Display Button</description>
+					<label>$LOCALIZE[31225]</label>
+					<label2>$VAR[Widget$PARAM[widget_position]_Display]</label2>
+					<onclick>Skin.SelectBool(424, 31206|Widget$PARAM[widget_position]_Display_Posters, 31208|Widget$PARAM[widget_position]_Display_Square)</onclick>
+					<visible>Skin.HasSetting(Widget$PARAM[widget_position]_View_Showcase) + !Skin.HasSetting(Widget$PARAM[widget_position]_Content_Disabled)</visible>
+					<onup>11$PARAM[widget_position]1</onup>
+					<ondown>11$PARAM[next_widget_position]0</ondown>
+					<include content="skinnsettings_Default_Button"/>
+				</control>
+				<control type="button" id="11$PARAM[widget_position]8">
+					<description>Widget Display Button</description>
+					<label>$LOCALIZE[31225]</label>
+					<label2>$VAR[Widget$PARAM[widget_position]_Display]</label2>
+					<onclick>Skin.SelectBool(424, 31207|Widget$PARAM[widget_position]_Display_Fanart, 31206|Widget$PARAM[widget_position]_Display_Posters, 31208|Widget$PARAM[widget_position]_Display_Square)</onclick>
+					<visible>Skin.HasSetting(Widget$PARAM[widget_position]_View_Strip) + !Skin.HasSetting(Widget$PARAM[widget_position]_Content_Disabled)</visible>
+					<onup>11$PARAM[widget_position]1</onup>
+					<ondown>11$PARAM[next_widget_position]0</ondown>
+					<include content="skinnsettings_Default_Button"/>
+				</control>
+			</control>
+		</definition>
+	</include>
+
+	<include name="Widget_Settings">
+		<include content="Widget_Settings_Content">
+			<param name="previous_widget_position" value="$PARAM[previous_widget_position]"/>
+			<param name="widget_position" value="$PARAM[widget_position]"/>
+		</include>
+		<include content="Widget_Settings_View">
+			<param name="widget_position" value="$PARAM[widget_position]"/>
+		</include>
+		<include content="Widget_Settings_Display">
+			<param name="widget_position" value="$PARAM[widget_position]"/>
+			<param name="next_widget_position" value="$PARAM[next_widget_position]"/>
+		</include>
+	</include>
+
+	<include name="Settings_Content">
+		<content>
+			<item>
+				<label>$LOCALIZE[14206]</label>
+				<onclick>ActivateWindow(InterfaceSettings)</onclick>
+			</item>
+			<item>
+				<label>$LOCALIZE[14211]</label>
+				<onclick>ActivateWindow(MediaSettings)</onclick>
+			</item>
+			<item>
+				<label>$LOCALIZE[14200]</label>
+				<onclick>ActivateWindow(PlayerSettings)</onclick>
+			</item>
+			<item>
+				<label>$LOCALIZE[14036]</label>
+				<onclick>ActivateWindow(ServiceSettings)</onclick>
+			</item>
+			<item>
+				<label>$LOCALIZE[13000]</label>
+				<onclick>ActivateWindow(SystemSettings)</onclick>
+			</item>
+			<item>
+				<label>$LOCALIZE[14204]</label>
+				<onclick>ActivateWindow(PVRSettings)</onclick>
+			</item>
+			<item>
+				<label>$LOCALIZE[15016]</label>
+				<visible>System.GetBool(gamesgeneral.enable)</visible>
+				<onclick>ActivateWindow(GameSettings)</onclick>
+			</item>
+			<item>
+				<label>$LOCALIZE[13200]</label>
+				<onclick>ActivateWindow(Profiles)</onclick>
+			</item>
+			<item>
+				<label>LibreELEC</label>
+				<onclick>RunAddon(service.libreelec.settings)</onclick>
+				<visible>System.AddonIsEnabled(service.libreelec.settings)</visible>
+			</item>
+			<item>
+				<label>$LOCALIZE[10003]</label>
+				<onclick>ActivateWindow(filemanager)</onclick>
+			</item>
+			<item>
+				<label>$LOCALIZE[24001]</label>
+				<onclick>ActivateWindow(addonbrowser)</onclick>
+			</item>
+			<item>
+				<label>$LOCALIZE[138]</label>
+				<onclick>ActivateWindow(systeminfo)</onclick>
+			</item>
+			<item>
+				<label>$LOCALIZE[31067]</label>
+				<onclick>ActivateWindow(eventlog)</onclick>
+			</item>
+		</content>
+	</include>
+
+</includes>

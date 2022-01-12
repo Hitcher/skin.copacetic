@@ -8,25 +8,45 @@
 
 	<include name="Widget_List">
 		<param name="id"/>
-		<param name="visible"/>
-		<param name="onup"/>
-		<param name="ondown"/>
-		<param name="onback"/>
 		<param name="use_custom_content"/>
 		<definition>
 			<control type="fixedlist" id="$PARAM[id]">
+				<visible>Integer.IsGreater(Container($PARAM[id]).NumItems,0) | Container($PARAM[id]).IsUpdating</visible>
 				<onfocus>SetProperty(HomeWidget,Active,home)</onfocus>
 				<onunfocus condition="!String.IsEmpty(window(home).property(HomeWidget))">ClearProperty(HomeWidget,home)</onunfocus>
 				<viewtype label="widgetlist">list</viewtype>
-				<visible>$PARAM[visible]</visible>
 				<preloaditems>2</preloaditems>
 				<orientation>horizontal</orientation>
 				<scrolltime tween="sine" easing="inout">360</scrolltime>
 				<onleft>0</onleft>
 				<onright>0</onright>
-				<onup>$PARAM[onup]</onup>
-				<ondown>$PARAM[ondown]</ondown>
-				<onback>$PARAM[onback]</onback>
+				<onup condition="Control.HasFocus(9010)">9000</onup>
+				<onup condition="Control.HasFocus(9020)">9010</onup>
+				<onup condition="Control.HasFocus(9030)">9020</onup>
+				<onup condition="Control.HasFocus(9040)">9030</onup>
+				<onup condition="Control.HasFocus(9050)">9040</onup>
+				<onup condition="Control.HasFocus(9060)">9050</onup>
+				<onup condition="Control.HasFocus(9070)">9060</onup>
+				<onup condition="Control.HasFocus(9080)">9070</onup>
+				<onup condition="Control.HasFocus(9090)">9080</onup>
+				<ondown condition="Control.HasFocus(9010) + Control.IsVisible(9020)">9020</ondown>
+				<ondown condition="Control.HasFocus(9010) + !Control.IsVisible(9020)">9000</ondown>
+				<ondown condition="Control.HasFocus(9020) + Control.IsVisible(9030)">9030</ondown>
+				<ondown condition="Control.HasFocus(9020) + !Control.IsVisible(9030)">9000</ondown>
+				<ondown condition="Control.HasFocus(9030) + Control.IsVisible(9040)">9040</ondown>
+				<ondown condition="Control.HasFocus(9030) + !Control.IsVisible(9040)">9000</ondown>
+				<ondown condition="Control.HasFocus(9040) + Control.IsVisible(9050)">9050</ondown>
+				<ondown condition="Control.HasFocus(9040) + !Control.IsVisible(9050)">9000</ondown>
+				<ondown condition="Control.HasFocus(9050) + Control.IsVisible(9060)">9060</ondown>
+				<ondown condition="Control.HasFocus(9050) + !Control.IsVisible(9060)">9000</ondown>
+				<ondown condition="Control.HasFocus(9060) + Control.IsVisible(9070)">9070</ondown>
+				<ondown condition="Control.HasFocus(9060) + !Control.IsVisible(9070)">9000</ondown>
+				<ondown condition="Control.HasFocus(9070) + Control.IsVisible(9080)">9080</ondown>
+				<ondown condition="Control.HasFocus(9070) + !Control.IsVisible(9080)">9000</ondown>
+				<ondown condition="Control.HasFocus(9080) + Control.IsVisible(9090)">9090</ondown>
+				<ondown condition="Control.HasFocus(9080) + !Control.IsVisible(9090)">9000</ondown>
+				<ondown condition="Control.HasFocus(9090)">9000</ondown>
+				<onback>9000</onback>
 				<focusedlayout>
 					<include>HiddenWidgetFocusButton</include>
 				</focusedlayout>
@@ -48,9 +68,6 @@
 			<param name="widget_header"/>
 			<param name="id" value="$PARAM[id]"/>
 			<param name="visible" value="$PARAM[visible]"/>
-			<param name="onup" value="$PARAM[onup]"/>
-			<param name="ondown" value="$PARAM[ondown]"/>
-			<param name="onback" value="$PARAM[onback]"/>
 			<param name="use_custom_content" value="true"/>
 			<param name="target" value="$PARAM[target]"/>
 			<param name="sortby" value="$PARAM[sortby]"/>
@@ -59,7 +76,7 @@
 		</include>
 		<include condition="Skin.HasSetting(Widget$PARAM[widget_position]_View_Strip)" content="StripView_Display">
 			<param name="id" value="$PARAM[id]"/>
-			<param name="artwork_icon" value="Widget_$PARAM[widget_position]_Thumbnail"/>
+			<param name="artwork_icon" value="Widget$PARAM[widget_position]_Thumbnail"/>
 			<param name="media_view" value="false"/>
 			<param name="widget_view" value="true"/>
 			<param name="widget_position" value="$PARAM[widget_position]"/>
@@ -67,7 +84,15 @@
 		</include>
 		<include condition="Skin.HasSetting(Widget$PARAM[widget_position]_View_Billboard)" content="BillboardView_Display">
 			<param name="id" value="$PARAM[id]"/>
-			<param name="artwork_icon" value="Widget_$PARAM[widget_position]_Thumbnail"/>
+			<param name="artwork_icon" value="Widget$PARAM[widget_position]_Thumbnail"/>
+			<param name="media_view" value="false"/>
+			<param name="widget_view" value="true"/>
+			<param name="widget_position" value="$PARAM[widget_position]"/>
+			<param name="widget_header" value="$PARAM[widget_header]"/>
+		</include>
+		<include condition="Skin.HasSetting(Widget$PARAM[widget_position]_View_Showcase)" content="ShowcaseView_Display">
+			<param name="id" value="$PARAM[id]"/>
+			<param name="artwork_icon" value="Widget$PARAM[widget_position]_Thumbnail"/>
 			<param name="media_view" value="false"/>
 			<param name="widget_view" value="true"/>
 			<param name="widget_position" value="$PARAM[widget_position]"/>
@@ -75,34 +100,28 @@
 		</include>
 		<control type="label" id="918">
 			<visible>false</visible>
-			<label>$VAR[Widget_$PARAM[widget_position]_Thumbnail(-1)Content]</label>
+			<label>$VAR[Widget$PARAM[widget_position]_Thumbnail(-1)Content]</label>
 		</control>
 		<control type="label" id="919">
 			<visible>false</visible>
-			<label>$VAR[Widget_$PARAM[widget_position]_Thumbnail(0)Content]</label>
+			<label>$VAR[Widget$PARAM[widget_position]_Thumbnail(0)Content]</label>
 		</control>
 		<control type="label" id="920">
 			<visible>false</visible>
-			<label>$VAR[Widget_$PARAM[widget_position]_Thumbnail(1)Content]</label>
+			<label>$VAR[Widget$PARAM[widget_position]_Thumbnail(1)Content]</label>
 		</control>
 	</include>
 
 	<include name="Widget_InProgress">
 		<param name="id" value="$PARAM[id]"/>
 		<param name="visible" value="true"/>
-		<param name="onup" value="$PARAM[onup]"/>
-		<param name="ondown" value="$PARAM[ondown]"/>
-		<param name="onback" value="$PARAM[onback]"/>
 		<definition>
 		<include content="Widget_Template">
 			<param name="widget_name" value="InProgress"/>
 			<param name="widget_position" value="$PARAM[widget_position]"/>
-			<param name="widget_header" value="In Progress"/>
+			<param name="widget_header" value="$LOCALIZE[31226]"/>
 			<param name="id" value="$PARAM[id]"/>
 			<param name="visible" value="$PARAM[visible]"/>
-			<param name="onup" value="$PARAM[onup]"/>
-			<param name="ondown" value="$PARAM[ondown]"/>
-			<param name="onback" value="$PARAM[onback]"/>
 			<param name="target" value="videos"/>
 			<param name="sortby" value="lastplayed"/>
 			<param name="sortorder" value="descending"/>
@@ -115,12 +134,9 @@
 		<include content="Widget_Template">
 			<param name="widget_name" value="NextUp"/>
 			<param name="widget_position" value="$PARAM[widget_position]"/>
-			<param name="widget_header" value="Next up"/>
+			<param name="widget_header" value="$LOCALIZE[31227]"/>
 			<param name="id" value="$PARAM[id]"/>
 			<param name="visible" value="$PARAM[visible]"/>
-			<param name="onup" value="$PARAM[onup]"/>
-			<param name="ondown" value="$PARAM[ondown]"/>
-			<param name="onback" value="$PARAM[onback]"/>
 			<param name="content" value="plugin://script.embuary.helper/?info=getnextup&amp;reload=$INFO[Window(home).Property(EmbuaryWidgetUpdate)]"/>
 		</include>
 	</include>
@@ -129,12 +145,9 @@
 		<include content="Widget_Template">
 			<param name="widget_name" value="LatestMovies"/>
 			<param name="widget_position" value="$PARAM[widget_position]"/>
-			<param name="widget_header" value="Latest movies"/>
+			<param name="widget_header" value="$LOCALIZE[31228]"/>
 			<param name="id" value="$PARAM[id]"/>
 			<param name="visible" value="$PARAM[visible]"/>
-			<param name="onup" value="$PARAM[onup]"/>
-			<param name="ondown" value="$PARAM[ondown]"/>
-			<param name="onback" value="$PARAM[onback]"/>
 			<param name="target" value="videos"/>
 			<param name="sortby" value="dateadded"/>
 			<param name="sortorder" value="descending"/>
@@ -146,92 +159,102 @@
 		<include content="Widget_Template">
 			<param name="widget_name" value="LatestTVShows"/>
 			<param name="widget_position" value="$PARAM[widget_position]"/>
-			<param name="widget_header" value="Latest TV shows"/>
+			<param name="widget_header" value="$LOCALIZE[31229]"/>
 			<param name="id" value="$PARAM[id]"/>
 			<param name="visible" value="$PARAM[visible]"/>
-			<param name="onup" value="$PARAM[onup]"/>
-			<param name="ondown" value="$PARAM[ondown]"/>
-			<param name="onback" value="$PARAM[onback]"/>
 			<param name="target" value="videos"/>
 			<param name="content" value="plugin://script.embuary.helper/?info=getnewshows&amp;reload=$INFO[Window(home).Property(EmbuaryWidgetUpdate)]"/>
 		</include>
 	</include>
 
-	<include name="Widget_1">
-		<param name="id" default="9010"/>
-		<param name="onup" default="9000"/>
-		<param name="ondown" default="9020"/>
-		<param name="onback" default="9000"/>
+	<include name="Widget_Item">
+		<param name="widget_position"/>
+		<param name="id"/>
 		<definition>
 			<control type="group">
-				<include content="Widget_InProgress">
-					<param name="widget_position" value="1"/>
+				<include condition="Skin.HasSetting(Widget$PARAM[widget_position]_Content_InProgress)" content="Widget_InProgress">
+					<param name="widget_position" value="$PARAM[widget_position]"/>
 					<param name="id" value="$PARAM[id]"/>
-					<param name="visible" value="true"/>
-					<param name="onup" value="$PARAM[onup]"/>
-					<param name="ondown" value="$PARAM[ondown]"/>
-					<param name="onback" value="$PARAM[onback]"/>
+				</include>
+				<include condition="Skin.HasSetting(Widget$PARAM[widget_position]_Content_NextUp)" content="Widget_NextUp">
+					<param name="widget_position" value="$PARAM[widget_position]"/>
+					<param name="id" value="$PARAM[id]"/>
+				</include>
+				<include condition="Skin.HasSetting(Widget$PARAM[widget_position]_Content_LatestMovies)" content="Widget_LatestMovies">
+					<param name="widget_position" value="$PARAM[widget_position]"/>
+					<param name="id" value="$PARAM[id]"/>
+				</include>
+				<include condition="Skin.HasSetting(Widget$PARAM[widget_position]_Content_LatestTVShows)" content="Widget_LatestTVShows">
+					<param name="widget_position" value="$PARAM[widget_position]"/>
+					<param name="id" value="$PARAM[id]"/>
 				</include>
 			</control>
 		</definition>
+	</include>
+
+	<include name="Widget_1">
+		<include content="Widget_Item">
+			<param name="widget_position" value="1"/>
+			<param name="id" value="9010"/>
+		</include>
 	</include>
 
 	<include name="Widget_2">
-		<param name="id" default="9020"/>
-		<param name="onup" default="9010"/>
-		<param name="ondown" default="9030"/>
-		<param name="onback" default="9000"/>
-		<definition>
-			<control type="group">
-				<include content="Widget_NextUp">
-					<param name="widget_position" value="2"/>
-					<param name="id" value="$PARAM[id]"/>
-					<param name="visible" value="true"/>
-					<param name="onup" value="$PARAM[onup]"/>
-					<param name="ondown" value="$PARAM[ondown]"/>
-					<param name="onback" value="$PARAM[onback]"/>
-				</include>
-			</control>
-		</definition>
+		<include content="Widget_Item">
+			<param name="widget_position" value="2"/>
+			<param name="id" value="9020"/>
+		</include>
 	</include>
 
 	<include name="Widget_3">
-		<param name="id" default="9030"/>
-		<param name="onup" default="9020"/>
-		<param name="ondown" default="9000"/>
-		<param name="onback" default="9000"/>
-		<definition>
-			<control type="group">
-				<include content="Widget_LatestMovies">
-					<param name="widget_position" value="3"/>
-					<param name="id" value="$PARAM[id]"/>
-					<param name="visible" value="true"/>
-					<param name="onup" value="$PARAM[onup]"/>
-					<param name="ondown" value="$PARAM[ondown]"/>
-					<param name="onback" value="$PARAM[onback]"/>
-				</include>
-			</control>
-		</definition>
+		<include content="Widget_Item">
+			<param name="widget_position" value="3"/>
+			<param name="id" value="9030"/>
+		</include>
 	</include>
 
-	<include name="Widget_3">
-		<param name="id" default="9030"/>
-		<param name="onup" default="9020"/>
-		<param name="ondown" default="9000"/>
-		<param name="onback" default="9000"/>
-		<definition>
-			<control type="group">
-				<include content="Widget_LatestTVShows">
-					<param name="widget_position" value="4"/>
-					<param name="id" value="$PARAM[id]"/>
-					<param name="visible" value="true"/>
-					<param name="onup" value="$PARAM[onup]"/>
-					<param name="ondown" value="$PARAM[ondown]"/>
-					<param name="onback" value="$PARAM[onback]"/>
-				</include>
-			</control>
-		</definition>
+	<include name="Widget_4">
+		<include content="Widget_Item">
+			<param name="widget_position" value="4"/>
+			<param name="id" value="9040"/>
+		</include>
 	</include>
+
+	<include name="Widget_5">
+		<include content="Widget_Item">
+			<param name="widget_position" value="5"/>
+			<param name="id" value="9050"/>
+		</include>
+	</include>
+
+	<include name="Widget_6">
+		<include content="Widget_Item">
+			<param name="widget_position" value="6"/>
+			<param name="id" value="9060"/>
+		</include>
+	</include>
+
+	<include name="Widget_7">
+		<include content="Widget_Item">
+			<param name="widget_position" value="7"/>
+			<param name="id" value="9070"/>
+		</include>
+	</include>
+
+	<include name="Widget_8">
+		<include content="Widget_Item">
+			<param name="widget_position" value="8"/>
+			<param name="id" value="9080"/>
+		</include>
+	</include>
+
+	<include name="Widget_9">
+		<include content="Widget_Item">
+			<param name="widget_position" value="9"/>
+			<param name="id" value="9090"/>
+		</include>
+	</include>
+
 
 
 
