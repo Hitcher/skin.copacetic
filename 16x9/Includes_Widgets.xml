@@ -73,30 +73,49 @@
 			<param name="sortorder" value="$PARAM[sortorder]"/>
 			<param name="content" value="$PARAM[content]"/>
 		</include>
-		<include condition="Skin.HasSetting(Widget$PARAM[widget_position]_View_Strip)" content="StripView_Display">
-			<param name="id" value="$PARAM[id]"/>
-			<param name="artwork_icon" value="Widget$PARAM[widget_position]_Thumbnail"/>
-			<param name="media_view" value="false"/>
-			<param name="widget_view" value="true"/>
-			<param name="widget_position" value="$PARAM[widget_position]"/>
-			<param name="widget_header" value="$PARAM[widget_header]"/>
-		</include>
-		<include condition="Skin.HasSetting(Widget$PARAM[widget_position]_View_Billboard)" content="BillboardView_Display">
-			<param name="id" value="$PARAM[id]"/>
-			<param name="artwork_icon" value="Widget$PARAM[widget_position]_Thumbnail"/>
-			<param name="media_view" value="false"/>
-			<param name="widget_view" value="true"/>
-			<param name="widget_position" value="$PARAM[widget_position]"/>
-			<param name="widget_header" value="$PARAM[widget_header]"/>
-		</include>
-		<include condition="Skin.HasSetting(Widget$PARAM[widget_position]_View_Showcase)" content="ShowcaseView_Display">
-			<param name="id" value="$PARAM[id]"/>
-			<param name="artwork_icon" value="Widget$PARAM[widget_position]_Thumbnail"/>
-			<param name="media_view" value="false"/>
-			<param name="widget_view" value="true"/>
-			<param name="widget_position" value="$PARAM[widget_position]"/>
-			<param name="widget_header" value="$PARAM[widget_header]"/>
-		</include>
+		<control type="group">
+			<visible>Control.HasFocus(90$PARAM[widget_position]0)</visible>
+			<animation effect="slide" start="0" end="0,660" time="0" condition="Control.HasFocus(90$PARAM[widget_position]0)">Conditional</animation>
+			<animation effect="slide" start="0" end="0,-660" time="180" tween="sine" easing="out" reversible="false" condition="Control.HasFocus(90$PARAM[widget_position]0)">Conditional</animation>
+			<include condition="Skin.HasSetting(Widget$PARAM[widget_position]_View_Billboard)" content="BillboardView_Display">
+				<param name="id" value="$PARAM[id]"/>
+				<param name="artwork_icon" value="Widget$PARAM[widget_position]_Thumbnail"/>
+				<param name="media_view" value="false"/>
+				<param name="widget_view" value="true"/>
+				<param name="widget_position" value="$PARAM[widget_position]"/>
+			</include>
+			<include condition="Skin.HasSetting(Widget$PARAM[widget_position]_View_Showcase)" content="ShowcaseView_Display">
+				<param name="id" value="$PARAM[id]"/>
+				<param name="artwork_icon" value="Widget$PARAM[widget_position]_Thumbnail"/>
+				<param name="media_view" value="false"/>
+				<param name="widget_view" value="true"/>
+				<param name="widget_position" value="$PARAM[widget_position]"/>
+			</include>
+			<include condition="Skin.HasSetting(Widget$PARAM[widget_position]_View_Strip)" content="StripView_Display">
+				<param name="id" value="$PARAM[id]"/>
+				<param name="artwork_icon" value="Widget$PARAM[widget_position]_Thumbnail"/>
+				<param name="media_view" value="false"/>
+				<param name="widget_view" value="true"/>
+				<param name="widget_position" value="$PARAM[widget_position]"/>
+			</include>
+		</control>
+		<control type="group">
+			<visible>!Window.IsVisible(shutdownmenu) + Control.HasFocus(90$PARAM[widget_position]0)</visible>
+			<include>Delayed_Content_Fade_Animation</include>
+			<include condition="Skin.HasSetting(Widget$PARAM[widget_position]_View_Billboard)" content="BillboardView_Details">
+				<param name="id" value="$PARAM[id]"/>
+			</include>
+			<include condition="Skin.HasSetting(Widget$PARAM[widget_position]_View_Showcase)" content="ShowcaseView_Details">
+				<param name="id" value="$PARAM[id]"/>
+			</include>
+			<include condition="Skin.HasSetting(Widget$PARAM[widget_position]_View_Strip)" content="StripView_Details">
+				<param name="id" value="$PARAM[id]"/>
+			</include>
+			<include content="Breadcrumb_Label">
+				<param name="title_label" value="$PARAM[widget_header]"/>
+				<param name="info_label" value="$INFO[Container(90$PARAM[widget_position]0).CurrentItem, / ,]$INFO[Container(90$PARAM[widget_position]0).NumItems,/]"/>
+			</include>
+		</control>
 		<control type="label" id="918">
 			<visible>false</visible>
 			<label>$VAR[Widget$PARAM[widget_position]_Thumbnail(-1)Content]</label>
@@ -217,7 +236,7 @@
 		<param name="id"/>
 		<definition>
 			<control type="group">
-				<include condition="Skin.HasSetting(Widget$PARAM[widget_position]_Content_InProgress)" content="Widget_InProgress">
+					<include condition="Skin.HasSetting(Widget$PARAM[widget_position]_Content_InProgress)" content="Widget_InProgress">
 					<param name="widget_position" value="$PARAM[widget_position]"/>
 					<param name="id" value="$PARAM[id]"/>
 				</include>
@@ -390,7 +409,7 @@
 						<aspectratio>scale</aspectratio>
 					</control>
 					<control type="image">
-						<texture colordiffuse="$VAR[Secondary_Color]">views/white_75.png</texture>
+						<texture colordiffuse="$VAR[Secondary_Color]">views/white_100.png</texture>
 						<aspectratio>scale</aspectratio>
 						<visible>!Control.HasFocus($PARAM[listid])</visible>
 					</control>
