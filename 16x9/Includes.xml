@@ -1181,7 +1181,7 @@
     <param name="focusedtexture" default="Cross_Focused_Large"/>
     <definition>
 			<control type="group">
-				<visible>Control.IsEnabled($PARAM[buttonid])</visible>
+				<visible>[!String.IsEmpty(Control.GetLabel($PARAM[buttonid]) | $EXP[Empty_Button_Labels]] + Control.IsEnabled($PARAM[buttonid])</visible>
 				<left>$PARAM[left]</left>
 				<width>$PARAM[width]</width>
 				<height>$PARAM[width]</height>
@@ -1210,17 +1210,19 @@
 	<include name="ButtonText">
     <param name="buttonid" default=""/>
     <param name="unfocusedcolor" default="$VAR[List_Text_Color]"/>
-    <param name="unfocusedfont" default="Default_Button_Unfocused"/>
+    <param name="unfocusedfont" default="Main_Menu_Unfocused"/>
     <param name="focusedcolor" default="$VAR[List_Text_Color]"/>
-    <param name="focusedfont" default="Default_Button_Focused"/>
-		<param name="unfocusedtop" default="0"/>
+    <param name="focusedfont" default="List_Title_Focused"/>
+		<param name="unfocusedheight" default="55"/>
+		<param name="unfocusedtop" default="16"/>
 		<param name="align" default="left"/>
 		<param name="aligny" default="top"/>
     <definition>
 			<control type="label">
 				<top>$PARAM[unfocusedtop]</top>
 				<width>auto</width>
-				<visible>Control.IsVisible($PARAM[buttonid]) + !Control.HasFocus($PARAM[buttonid])</visible>
+				<height>$PARAM[unfocusedheight]</height>
+				<visible>!String.IsEmpty(Control.GetLabel($PARAM[buttonid]) + Control.IsVisible($PARAM[buttonid]) + !Control.HasFocus($PARAM[buttonid])</visible>
 				<label>$INFO[Control.GetLabel($PARAM[buttonid])]</label>
 				<font>$PARAM[unfocusedfont]</font>
 				<textcolor>$PARAM[unfocusedcolor]</textcolor>
@@ -1231,7 +1233,7 @@
 				<top>0</top>
 				<height>100%</height>
 				<width>auto</width>
-				<visible>Control.IsVisible($PARAM[buttonid]) + Control.HasFocus($PARAM[buttonid])</visible>
+				<visible>!String.IsEmpty(Control.GetLabel($PARAM[buttonid]) + Control.IsVisible($PARAM[buttonid]) + Control.HasFocus($PARAM[buttonid])</visible>
 				<label>$INFO[Control.GetLabel($PARAM[buttonid])]</label>
 				<font>$PARAM[focusedfont]</font>
 				<textcolor>$PARAM[focusedcolor]</textcolor>
@@ -1278,13 +1280,14 @@
 		<param name="button4unfocused" default="Check_Unfocused"/>
 		<param name="button4focused" default="Check_Focused_Large"/>
 		<param name="button4rotated" default="true"/>
-		<param name="buttonsvisible" default="[String.IsEqual(Control.GetLabel(11),Yes) | String.IsEqual(Control.GetLabel(11),Ok)]"/>
-		<param name="labelgroupheight" default="60"/>
+		<param name="buttonsvisible" default="String.IsEqual(Control.GetLabel(11),$LOCALIZE[186])"/>
+		<param name="labelgroupheight" default="80"/>
 		<param name="unfocusedcolor" default="$VAR[Overlay_Text_Color]"/>
-		<param name="unfocusedfont" default="Default_Button_Unfocused"/>
+		<param name="unfocusedfont" default="Main_Menu_Unfocused"/>
 		<param name="focusedcolor" default="$VAR[Overlay_Text_Color]"/>
-		<param name="focusedfont" default="Default_Button_Focused"/>
-		<param name="unfocusedtop" default="10"/>
+		<param name="focusedfont" default="List_Title_Focused"/>
+		<param name="unfocusedtop" default="16"/>
+		<param name="unfocusedheight" default="55"/>
 	  <definition>
 			<control type="group">
 				<visible>$PARAM[visible]</visible>
@@ -1380,6 +1383,7 @@
 						<param name="focusedcolor" value="$PARAM[focusedcolor]"/>
 						<param name="focusedfont" value="$PARAM[focusedfont]"/>
 						<param name="unfocusedtop" value="$PARAM[unfocusedtop]"/>
+						<param name="unfocusedheight" value="$PARAM[unfocusedheight]"/>
 						<param name="unfocusedcolor" value="$PARAM[unfocusedcolor]"/>
 						<param name="unfocusedfont" value="$PARAM[unfocusedfont]"/>
 					</include>
@@ -1390,13 +1394,14 @@
 						<label>/</label>
 						<font>$PARAM[unfocusedfont]</font>
 						<textcolor>$PARAM[unfocusedcolor]</textcolor>
-						<visible>Control.IsVisible($PARAM[button2id])</visible>
+						<visible>!String.IsEmpty(Control.GetLabel($PARAM[button1id])) + !String.IsEmpty(Control.GetLabel($PARAM[button2id]))</visible>
 					</control>
 					<include content="ButtonText">
 						<param name="buttonid" value="$PARAM[button2id]"/>
 						<param name="focusedcolor" value="$PARAM[focusedcolor]"/>
 						<param name="focusedfont" value="$PARAM[focusedfont]"/>
 						<param name="unfocusedtop" value="$PARAM[unfocusedtop]"/>
+						<param name="unfocusedheight" value="$PARAM[unfocusedheight]"/>
 						<param name="unfocusedcolor" value="$PARAM[unfocusedcolor]"/>
 						<param name="unfocusedfont" value="$PARAM[unfocusedfont]"/>
 					</include>
@@ -1407,13 +1412,14 @@
 						<label>/</label>
 						<font>$PARAM[unfocusedfont]</font>
 						<textcolor>$PARAM[unfocusedcolor]</textcolor>
-						<visible>Control.IsVisible($PARAM[button3id])</visible>
+						<visible>!String.IsEmpty(Control.GetLabel($PARAM[button2id])) + !String.IsEmpty(Control.GetLabel($PARAM[button3id]))</visible>
 					</control>
 					<include content="ButtonText">
 						<param name="buttonid" value="$PARAM[button3id]"/>
 						<param name="focusedcolor" value="$PARAM[focusedcolor]"/>
 						<param name="focusedfont" value="$PARAM[focusedfont]"/>
 						<param name="unfocusedtop" value="$PARAM[unfocusedtop]"/>
+						<param name="unfocusedheight" value="$PARAM[unfocusedheight]"/>
 						<param name="unfocusedcolor" value="$PARAM[unfocusedcolor]"/>
 						<param name="unfocusedfont" value="$PARAM[unfocusedfont]"/>
 					</include>
@@ -1424,7 +1430,7 @@
 						<label>/</label>
 						<font>$PARAM[unfocusedfont]</font>
 						<textcolor>$PARAM[unfocusedcolor]</textcolor>
-						<visible>Control.IsVisible($PARAM[button4id])</visible>
+						<visible>!String.IsEmpty(Control.GetLabel($PARAM[button3id])) + !String.IsEmpty(Control.GetLabel($PARAM[button4id]))</visible>
 					</control>
 					<include content="ButtonText">
 						<param name="buttonid" value="$PARAM[button4id]"/>
