@@ -28,13 +28,6 @@
 		<value>videodb://movies/titles/</value>
 	</variable>
 
-	<variable name="Sets_Path">
-		<value condition="ListItem.IsCollection">$INFO[ListItem.FolderPath]</value>
-		<value condition="Container.Content(tvshows)">$INFO[ListItem.FolderPath]</value>
-		<value condition="Container.Content(actors)">$INFO[ListItem.FolderPath]</value>
-		<value condition="Container.Content(files)">$INFO[ListItem.FolderPath]</value>
-	</variable>
-
 	<!--ARTWORK-->
 	<variable name="Thumbnail(-3)Content">
 		<!--Standard Views-->
@@ -356,8 +349,10 @@
 		<!-- SETS -->
 		<!-- Listview/Thumbnails: 3 Movies -->
 		<!-- Others: 2005-2012 / 3 Movies -->
-		<value condition="ListItem.IsCollection + !$EXP[ListView_Display_IsThumbnails] + !String.IsEmpty(Container(4500).ListItem(0).Year)">[UPPERCASE]$INFO[Container(4500).ListItem(0).Year]$INFO[Container(4500).ListItem(-1).Year,-]$INFO[Container(4500).NumItems, / , $LOCALIZE[342]][/UPPERCASE]</value>
-		<value condition="ListItem.IsCollection + !String.IsEmpty(Container(4500).NumItems)">[UPPERCASE]$INFO[Container(4500).NumItems,, $LOCALIZE[342]][/UPPERCASE]</value>
+		<value condition="ListItem.IsCollection + Skin.HasSetting(Secondary_List_Enabled) + !$EXP[ListView_Display_IsThumbnails] + !String.IsEmpty(Container(4501).ListItem(0).Year)">[UPPERCASE]$INFO[Container(4501).ListItem(0).Year]$INFO[Container(4501).ListItem(-1).Year,-]$INFO[Container(4501).NumItems, / , $LOCALIZE[342]][/UPPERCASE]</value>
+		<value condition="ListItem.IsCollection + Skin.HasSetting(Secondary_List_Enabled) + !String.IsEmpty(Container(4501).NumItems)">[UPPERCASE]$INFO[Container(4501).NumItems,, $LOCALIZE[342]][/UPPERCASE]</value>
+		<value condition="ListItem.IsCollection + !Skin.HasSetting(Secondary_List_Enabled) + !$EXP[ListView_Display_IsThumbnails] + !String.IsEmpty(Container(4500).ListItem(0).Year)">[UPPERCASE]$INFO[Container(4500).ListItem(0).Year]$INFO[Container(4500).ListItem(-1).Year,-]$INFO[Container(4500).NumItems, / , $LOCALIZE[342]][/UPPERCASE]</value>
+		<value condition="ListItem.IsCollection + !Skin.HasSetting(Secondary_List_Enabled) + !String.IsEmpty(Container(4500).NumItems)">[UPPERCASE]$INFO[Container(4500).NumItems,, $LOCALIZE[342]][/UPPERCASE]</value>
 		<!-- MOVIES -->
 		<!-- ListView/Thumbnails: 2019 -->
 		<!-- Gridview: 2019 / 152 mins -->
@@ -597,16 +592,27 @@
 	</variable>
 
 	<variable name="MPAA_Label">
-		<value condition="[ListItem.IsCollection + String.Contains(Container(4500).ListItem.mpaa,U)] | String.Contains(ListItem.mpaa,U)">flags/rating/bbfc_u.png</value>
-		<value condition="[ListItem.IsCollection + String.Contains(Container(4500).ListItem.mpaa,PG)] | String.Contains(ListItem.mpaa,PG)">flags/rating/bbfc_pg.png</value>
-		<value condition="[ListItem.IsCollection + String.Contains(Container(4500).ListItem.mpaa,12)] | String.Contains(ListItem.mpaa,12)">flags/rating/bbfc_12.png</value>
-		<value condition="[ListItem.IsCollection + String.Contains(Container(4500).ListItem.mpaa,15)] | String.Contains(ListItem.mpaa,15)">flags/rating/bbfc_15.png</value>
-		<value condition="[ListItem.IsCollection + String.Contains(Container(4500).ListItem.mpaa,18)] | String.Contains(ListItem.mpaa,18) | String.Contains(ListItem.mpaa,UK:X)">flags/rating/bbfc_18.png</value>
+		<value condition="ListItem.IsCollection + !Skin.HasSetting(Secondary_List_Enabled) + String.Contains(Container(4500).ListItem.mpaa,U)">flags/rating/bbfc_u.png</value>
+		<value condition="ListItem.IsCollection + !Skin.HasSetting(Secondary_List_Enabled) + String.Contains(Container(4500).ListItem.mpaa,PG)">flags/rating/bbfc_pg.png</value>
+		<value condition="ListItem.IsCollection + !Skin.HasSetting(Secondary_List_Enabled) + String.Contains(Container(4500).ListItem.mpaa,12)">flags/rating/bbfc_12.png</value>
+		<value condition="ListItem.IsCollection + !Skin.HasSetting(Secondary_List_Enabled) + String.Contains(Container(4500).ListItem.mpaa,15)">flags/rating/bbfc_15.png</value>
+		<value condition="ListItem.IsCollection + !Skin.HasSetting(Secondary_List_Enabled) + [String.Contains(Container(4500).ListItem.mpaa,18) | String.Contains(Container(4500).ListItem.mpaa,UK:X)]">flags/rating/bbfc_18.png</value>
+		<value condition="ListItem.IsCollection + Skin.HasSetting(Secondary_List_Enabled) + String.Contains(ListItem.mpaa,U)">flags/rating/bbfc_u.png</value>
+		<value condition="ListItem.IsCollection + Skin.HasSetting(Secondary_List_Enabled) + String.Contains(ListItem.mpaa,PG)">flags/rating/bbfc_pg.png</value>
+		<value condition="ListItem.IsCollection + Skin.HasSetting(Secondary_List_Enabled) + String.Contains(ListItem.mpaa,12)">flags/rating/bbfc_12.png</value>
+		<value condition="ListItem.IsCollection + Skin.HasSetting(Secondary_List_Enabled) + String.Contains(ListItem.mpaa,15)">flags/rating/bbfc_15.png</value>
+		<value condition="ListItem.IsCollection + Skin.HasSetting(Secondary_List_Enabled) + [String.Contains(Container(4501)ListItem.mpaa,18) | String.Contains(Container(4501)ListItem.mpaa,UK:X)]">flags/rating/bbfc_18.png</value>
+		<value condition="String.Contains(ListItem.mpaa,U)">flags/rating/bbfc_u.png</value>
+		<value condition="String.Contains(ListItem.mpaa,PG)">flags/rating/bbfc_pg.png</value>
+		<value condition="String.Contains(ListItem.mpaa,12)">flags/rating/bbfc_12.png</value>
+		<value condition="String.Contains(ListItem.mpaa,15)">flags/rating/bbfc_15.png</value>
+		<value condition="String.Contains(ListItem.mpaa,18) | String.Contains(ListItem.mpaa,UK:X)">flags/rating/bbfc_18.png</value>
 		<value>flags/blank.png</value>
 	</variable>
 
 	<variable name="Studio_Label">
-		<value condition="ListItem.IsCollection + !String.IsEmpty(Container(4500).ListItem.Studio)">$INFO[Container(4500).ListItem.Studio,flags/studios/,.png]</value>
+		<value condition="ListItem.IsCollection + !Skin.HasSetting(Secondary_List_Enabled) + !String.IsEmpty(Container(4500).ListItem.Studio)">$INFO[Container(4500).ListItem.Studio,flags/studios/,.png]</value>
+		<value condition="ListItem.IsCollection + Skin.HasSetting(Secondary_List_Enabled) + !String.IsEmpty(Container(4501).ListItem.Studio)">$INFO[Container(4501).ListItem.Studio,flags/studios/,.png]</value>
 		<value condition="!String.IsEmpty(ListItem.Studio)">$INFO[ListItem.Studio,flags/studios/,.png]</value>
 		<value>flags/blank.png</value>
 	</variable>
@@ -665,7 +671,7 @@
 		<!-- 4K UHD -->
 		<value condition="Control.HasFocus(4501) + [String.StartsWith(Container(4501).ListItem.VideoResolution,4K) | String.Contains(Container(4501).ListItem.FileNameAndPath,2160p)]">$LOCALIZE[32132] $LOCALIZE[32135]</value>
 		<!-- Full HD -->
-		<value condition="Control.HasFocus(4501) + [String.StartsWith(Container(4501).ListItem.VideoResolution,1080) | String.Contains(Container(4501).ListItem.FileNameAndPath,1080p)]">F$LOCALIZE[32136]</value>
+		<value condition="Control.HasFocus(4501) + [String.StartsWith(Container(4501).ListItem.VideoResolution,1080) | String.Contains(Container(4501).ListItem.FileNameAndPath,1080p)]">$LOCALIZE[32136]</value>
 		<!-- HD -->
 		<value condition="Control.HasFocus(4501) + [String.StartsWith(Container(4501).ListItem.VideoResolution,720) | String.Contains(Container(4501).ListItem.FileNameAndPath,720p)]">$LOCALIZE[32137]</value>
 		<!-- SD -->
