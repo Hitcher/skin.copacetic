@@ -2,19 +2,36 @@
 <window>
 	<!-- movieinformation -->
 	<backgroundcolor>$VAR[Secondary_Color]</backgroundcolor>
-	<defaultcontrol always="true">65000</defaultcontrol>
+	<defaultcontrol always="true">9001</defaultcontrol>
 	<include>Delayed_Dialog_Fade_Animation</include>
 
 	<controls>
 
-		<!--HIDDEN-->
+		<!--Delay on Load-->
+		<control type="button" id="9001">
+			<visible allowhiddenfocus="true">false</visible>
+			<onfocus>SetFocus(65002,0,absolute)</onfocus>
+		</control>
+		<control type="group" id="9002">
+			<visible>Control.HasFocus(9001)</visible>
+			<animation effect="slide" end="0,0" time="360" reversible="false">Hidden</animation>
+		</control>
+
+		<!--On Previous Delay-->
+		<control type="group" id="5001">
+			<visible>Container(8010).OnPrevious</visible>
+			<animation effect="slide" end="0,0" time="360" reversible="false">Hidden</animation>
+		</control>
+
+		<!--On Next Delay-->
+		<control type="group" id="5002">
+			<visible>Container(8010).OnNext</visible>
+			<animation effect="slide" end="0,0" time="360" reversible="false">Hidden</animation>
+		</control>
+
+		<!--Hidden buttons-->
 		<control type="group">
 			<visible allowhiddenfocus="true">false</visible>
-			<!--Focus Setter-->
-			<control type="button" id="65000">
-				<animation effect="slide" end="0,0" time="360" reversible="false">Focus</animation>
-				<onfocus>SetFocus(65002)</onfocus>
-			</control>
 			<!--Play/Browse-->
 			<control type="togglebutton" id="8">
 				<label>208</label>
@@ -56,60 +73,124 @@
 			</control>
 		</control>
 
+		<!--Hidden List -->
+		<control type="list" id="65002">
+			<viewtype label="535">list</viewtype>
+			<width>600</width>
+			<onback>65005</onback>
+			<ondown>8010</ondown>
+			<visible allowhiddenfocus="true">false</visible>
+			<orientation>horizontal</orientation>
+			<itemlayout width="100"/>
+			<focusedlayout width="100"/>
+			<content>
+				<item>
+					<onclick>SendClick(8)</onclick>
+					<label>$INFO[Control.GetLabel(8)]</label>
+					<visible>Control.IsVisible(8)</visible>
+				</item>
+				<item>
+					<onclick>SendClick(11)</onclick>
+					<label>$INFO[Control.GetLabel(11)]</label>
+					<visible>Control.IsVisible(11)</visible>
+				</item>
+				<item>
+					<onclick>SetFocus(99)</onclick>
+					<label>$INFO[Control.GetLabel(98)]</label>
+					<visible>Control.IsVisible(98)</visible>
+				</item>
+				<item>
+					<onclick>SendClick(7)</onclick>
+					<label>$INFO[Control.GetLabel(7)]</label>
+					<visible>Control.IsVisible(7)</visible>
+				</item>
+				<item>
+					<onclick>SendClick(6)</onclick>
+					<label>$INFO[Control.GetLabel(6)]</label>
+				</item>
+				<item>
+					<onclick>SendClick(10)</onclick>
+					<label>$INFO[Control.GetLabel(10)]</label>
+				</item>
+			</content>
+		</control>
+
+
 		<!--BACKGROUND-->
 		<control type="group">
-			<visible>Control.HasFocus(65002) | Control.HasFocus(99) | $EXP[TransparentDialog_IsVisible]</visible>
-			<include>Dialog_Fade_Animation</include>
 			<control type="image">
 				<aspectratio>scale</aspectratio>
-				<texture fallback="fallback.png" background="true">$VAR[Dialog_Info_Background]</texture>
+				<texture colordiffuse="$VAR[Dark_Color]">views/white_100.png</texture>
 			</control>
 			<control type="image">
+				<visible>Control.HasFocus(65002)</visible>
+				<include>Dialog_Fade_Animation</include>
 				<aspectratio>scale</aspectratio>
-				<texture colordiffuse="$VAR[Artwork_Mask]" fallback="fallback.png" background="true">views/white_100.png</texture>
+				<texture colordiffuse="$VAR[Info_Artwork_Diffuse]" fallback="fallback.png" background="true">$VAR[Dialog_Info_Background]</texture>
+			</control>
+			<control type="image">
+				<visible>Control.HasFocus(99) | Control.HasFocus(60)</visible>
+				<include>Dialog_Fade_Animation</include>
+				<aspectratio>scale</aspectratio>
+				<texture colordiffuse="$VAR[Info_Plot_Artwork_Diffuse]" fallback="fallback.png" background="true">$VAR[Dialog_Info_Background]</texture>
 			</control>
 		</control>
 
 		<!--PLOT VIEW-->
-		<control type="grouplist">
-			<visible>!$EXP[TransparentDialog_IsVisible] + Control.HasFocus(99)</visible>
-			<include>Content_Fade_Animation</include>
-			<centerleft>50%</centerleft>
-			<centertop>50%</centertop>
-			<width>1440</width>
-			<height>720</height>
-			<orientation>vertical</orientation>
-			<itemgap>60</itemgap>
+		<control type="group">
+			<visible>!Control.IsVisible(9002) + [Control.HasFocus(99) | Control.HasFocus(60)] + Window.IsActive(movieinformation)</visible>
+			<include>Delayed_Content_Fade_Animation</include>
 			<control type="group">
-				<top>0</top>
-				<height>220</height>
-				<control type="grouplist">
-					<orientation>vertical</orientation>
-					<align>right</align>
-					<control type="textbox">
-						<width>100%</width>
-						<height max="220">auto</height>
-						<align>center</align>
-						<font>Billboard_Title</font>
-						<textcolor>$VAR[Primary_Color]</textcolor>
-						<label>$VAR[Title_Label]</label>
-					</control>
+				<visible>!$EXP[TransparentDialog_IsVisible]</visible>
+				<include>Content_Fade_Animation</include>
+				<control type="textbox" id="4">
+					<height>780</height>
+					<width>1440</width>
+					<centerleft>50%</centerleft>
+					<centertop>50%</centertop>
+					<aligny>center</aligny>
+					<align>left</align>
+					<font>Plot</font>
+					<label>$VAR[Plot_Label]</label>
+					<textcolor>$VAR[Primary_Color]</textcolor>
+					<pagecontrol>60</pagecontrol>
+					<autoscroll delay="5000" repeat="7500" time="5000">!Control.HasFocus(60)</autoscroll>
 				</control>
-			</control>
-			<control type="textbox" id="4">
-				<height max="500">auto</height>
-				<aligny>center</aligny>
-				<align>center</align>
-				<font>Plot</font>
-				<textcolor>$VAR[Primary_Color]</textcolor>
+				<control type="scrollbar" id="60">
+					<right>27</right>
+					<bottom>180</bottom>
+					<width>6</width>
+					<height>720</height>
+					<onleft>99</onleft>
+					<onright>99</onright>
+					<onback>65002</onback>
+					<showonepage>false</showonepage>
+					<orientation>vertical</orientation>
+					<texturesliderbackground colordiffuse="$VAR[Progress_Background_Color]">views/white_100.png</texturesliderbackground>
+					<texturesliderbar colordiffuse="$VAR[Progress_Background_Color]">views/white_100.png</texturesliderbar>
+					<texturesliderbarfocus colordiffuse="$VAR[Progress_Focused_Color]">views/white_100.png</texturesliderbarfocus>
+					<textureslidernib></textureslidernib>
+					<textureslidernibfocus></textureslidernibfocus>
+					<include>Scrollbar_Fade_Animation</include>
+				</control>
 			</control>
 		</control>
 
-		<!--CONTENT VIEW-->
+		<!--MAIN CONTENT-->
 		<control type="group">
+			<visible>!Control.IsVisible(9002) + !Control.HasFocus(99) + !Control.HasFocus(60) + Window.IsActive(movieinformation)</visible>
+			<include>Delayed_Content_Fade_Animation</include>
 			<control type="group">
-				<visible>!$EXP[TransparentDialog_IsVisible] + !Control.HasFocus(99)</visible>
+				<visible>!$EXP[TransparentDialog_IsVisible]</visible>
 				<include>Content_Fade_Animation</include>
+
+				<!--Dummy Horizontal List-->
+				<include content="DummyHorizontalList">
+					<param name="dummyid" value="65003"/>
+					<param name="hiddenid" value="65002"/>
+					<param name="top" value="810"/>
+				</include>
+
 				<control type="grouplist">
 					<left>120</left>
 					<top>120</top>
@@ -147,6 +228,7 @@
 					</control>
 					<!-- Star Rating -->
 					<control type="group">
+						<visible>!ListItem.DBType(season) + !ListItem.DBType(artist)</visible>
 						<top>20</top>
 						<centerleft>50%</centerleft>
 						<width>185</width>
@@ -154,23 +236,12 @@
 						<control type="image">
 							<width>100%</width>
 							<aspectratio>keep</aspectratio>
-							<texture colordiffuse="$VAR[Star_Color]">$VAR[StarRating_Label]</texture>
-							<visible>!Listitem.DBType(season)</visible>
+							<texture colordiffuse="$VAR[Accent_Color]">$VAR[StarRating_Label]</texture>
 						</control>
-					</control>
-					<!--Plot-->
-					<control type="textbox">
-						<top>60</top>
-						<width>100%</width>
-						<height max="105">auto</height>
-						<font>Body</font>
-						<textcolor>$VAR[Primary_Color]</textcolor>
-						<label>$INFO[ListItem.Plot]</label>
-						<align>center</align>
-						<autoscroll delay="5000" time="1500" repeat="2000">true</autoscroll>
 					</control>
 					<!--Flags-->
 					<control type="grouplist">
+						<visible>Window.IsActive(movieinformation)</visible>
 						<top>0</top>
 						<width>100%</width>
 						<height>180</height>
@@ -203,102 +274,11 @@
 						</include>
 					</control>
 				</control>
-
-				<!--Scrolling Indicator-->
-				<control type="image">
-					<centerleft>50%</centerleft>
-					<bottom>0</bottom>
-					<width>60</width>
-					<height>60</height>
-					<texture colordiffuse="$VAR[Primary_Color]">views/arrow_focused.png</texture>
-					<aspectratio>keep</aspectratio>
-					<visible>Control.HasFocus(65002)</visible>
-					<animation type="Visible" reversible="false">
-						<effect type="fade" start="0" end="100" time="360" tween="sine" easing="out" delay="180"/>
-						<effect type="slide" start="0,-60" end="0,0" time="720" tween="bounce" easing="out" delay="180"/>
-					</animation>
-				</control>
-
-				<!--Dummy Horizontal List-->
-				<include content="DummyHorizontalList">
-					<param name="dummyid" value="65003"/>
-					<param name="hiddenid" value="65002"/>
-					<param name="height" value="60"/>
-					<param name="top" value="810"/>
-					<param name="itemgap" value="7"/>
-					<param name="focusedheight" value="60"/>
-					<param name="focusedfont" value="Dialog_Menu_Focused"/>
-					<param name="focusedtextcolor" value="$VAR[Primary_Color]"/>
-					<param name="unfocusedtop" value="12"/>
-					<param name="unfocusedheight" value="45"/>
-					<param name="unfocusedfont" value="Dialog_Menu_Unfocused"/>
-					<param name="unfocusedtextcolor" value="$VAR[Primary_Color]"/>
-				</include>
 			</control>
 
-			<!--Hidden List -->
-			<control type="list" id="65002">
-				<viewtype label="535">list</viewtype>
-				<width>600</width>
-				<onback>65005</onback>
-				<ondown>8010</ondown>
-				<visible allowhiddenfocus="true">false</visible>
-				<orientation>horizontal</orientation>
-				<itemlayout width="100"/>
-				<focusedlayout width="100"/>
-				<content>
-					<item>
-						<onclick>SendClick(8)</onclick>
-						<label>$INFO[Control.GetLabel(8)]</label>
-						<visible>Control.IsVisible(8)</visible>
-					</item>
-					<item>
-						<onclick>SendClick(11)</onclick>
-						<label>$INFO[Control.GetLabel(11)]</label>
-						<visible>Control.IsVisible(11)</visible>
-					</item>
-					<item>
-						<onclick>SetFocus(99)</onclick>
-						<label>$INFO[Control.GetLabel(98)]</label>
-						<visible>Control.IsVisible(98)</visible>
-					</item>
-					<item>
-						<onclick>SendClick(7)</onclick>
-						<label>$INFO[Control.GetLabel(7)]</label>
-						<visible>Control.IsVisible(7)</visible>
-					</item>
-					<item>
-						<onclick>SendClick(6)</onclick>
-						<label>$INFO[Control.GetLabel(6)]</label>
-					</item>
-					<item>
-						<onclick>SendClick(10)</onclick>
-						<label>$INFO[Control.GetLabel(10)]</label>
-					</item>
-				</content>
-			</control>
+			<include content="Info_Widget_Seasons"/>
 
 		</control>
 
-
-
-		<!--On Previous Delay-->
-		<control type="group" id="5001">
-			<visible>Container(8010).OnPrevious</visible>
-			<animation effect="slide" end="0,0" time="360" reversible="false">Hidden</animation>
-		</control>
-
-		<!--On Next Delay-->
-		<control type="group" id="5002">
-			<visible>Container(8010).OnNext</visible>
-			<animation effect="slide" end="0,0" time="360" reversible="false">Hidden</animation>
-		</control>
-
-		<include content="Info_Widget_Seasons"/>
-
-		<control type="label">
-			<label>$INFO[Container(8010).ListItem.Label]</label>
-		</control>
-
-	</controls>
-</window>
+		</controls>
+		</window>
