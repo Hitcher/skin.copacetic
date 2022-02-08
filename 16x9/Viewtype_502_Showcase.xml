@@ -70,13 +70,14 @@
 
 
 	<include name="ShowcaseView_Details">
-		<param name="id" default="502"/>
-		<definition>
+		<control type="group">
+			<visible>$EXP[ShowcaseView_IsVisible] + !$EXP[OpaqueDialog_IsVisible]</visible>
+			<include>Viewtype_Fade_Animation</include>
 			<control type="group">
-				<visible>$EXP[ShowcaseView_IsVisible] + !$EXP[OpaqueDialog_IsVisible]</visible>
-				<include>Viewtype_Fade_Animation</include>
+				<visible>!$EXP[ContainerSwitching] + !$EXP[ContentSwitching] + !$EXP[TransparentDialog_IsVisible] + !Control.HasFocus(60)</visible>
+				<include>Delayed_Content_Fade_Animation</include>
 				<control type="group">
-					<visible>!$EXP[ContainerSwitching] + !$EXP[ContentSwitching] + !$EXP[TransparentDialog_IsVisible] + !Control.HasFocus(60)</visible>
+					<visible>!$EXP[Secondary_List_ContainerSwitching] + !$EXP[Secondary_List_ContentSwitching] + ![Control.HasFocus(4501) + Window.IsVisible(1121)]</visible>
 					<include>Delayed_Content_Fade_Animation</include>
 					<control type="group">
 						<visible>!$EXP[ShowcaseView_Details_Off]</visible>
@@ -84,8 +85,6 @@
 						<include content="MediaFlags"/>
 					</control>
 					<control type="group">
-						<visible>!$EXP[Secondary_List_ContainerSwitching] + ![Control.HasFocus(4501) + Window.IsVisible(1121)]</visible>
-						<include>Delayed_Content_Fade_Animation</include>
 						<animation effect="slide" start="0,0" end="-180,0" time="360" tween="sine" easing="out" reversible="true" condition="$EXP[ShowcaseView_Display_IsPosters] + Skin.HasSetting(Music_Player_Enabled) + Player.HasAudio">Conditional</animation>
 						<include content="Common_Details">
 							<param name="viewtype_label" value="Showcase"/>
@@ -96,17 +95,17 @@
 							<param name="plotmaxheight" value="235"/>
 						</include>
 					</control>
-					<control type="group">
-						<visible>!$EXP[Secondary_List_ContainerSwitching] + !$EXP[Secondary_List_ContentSwitching] + [!Window.IsVisible(1121) | Control.HasFocus($PARAM[id])]</visible>
-						<include>Delayed_Content_Fade_Animation</include>
-						<animation effect="slide" start="0,0" end="180,0" time="0" condition="$EXP[ShowcaseView_Display_IsSquare]">Conditional</animation>
-						<include content="ProgressBar">
-							<param name="left" value="180"/>
-						</include>
-					</control>
+				</control>
+				<control type="group">
+					<visible>!$EXP[Secondary_List_ContainerSwitching] + !$EXP[Secondary_List_ContentSwitching] + ![Control.HasFocus(4501) + Window.IsVisible(1121)]</visible>
+					<include>Delayed_Content_Fade_Animation</include>
+					<animation effect="slide" start="0,0" end="180,0" time="0" condition="$EXP[ShowcaseView_Display_IsSquare]">Conditional</animation>
+					<include content="ProgressBar">
+						<param name="left" value="180"/>
+					</include>
 				</control>
 			</control>
-		</definition>
+		</control>
 	</include>
 
 </includes>

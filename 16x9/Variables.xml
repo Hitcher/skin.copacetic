@@ -307,7 +307,7 @@
 	<variable name="VideoPlayer_Info">
 		<value condition="!String.IsEmpty(VideoPlayer.TVShowTitle)">[UPPERCASE]$INFO[VideoPlayer.TVShowTitle][/UPPERCASE]</value>
 		<value condition="!String.IsEmpty(VideoPlayer.Year)">$INFO[VideoPlayer.Year]</value>
-		<value></value>
+		<value condition="!String.IsEmpty(Player.Duration)">[UPPERCASE]$INFO[Player.Duration(mins),, $LOCALIZE[31138]]$INFO[Player.FinishTime, / $LOCALIZE[32000] ][/UPPERCASE]</value>
 	</variable>
 	<variable name="VideoPlayer_Plot">
 		<value condition="!String.IsEmpty(VideoPlayer.PlotOutline)">$INFO[VideoPlayer.PlotOutline]</value>
@@ -330,6 +330,7 @@
 
 	<variable name="Title_Label">
 		<!--WIDGETS-->
+		<value condition="Window.IsActive(home) + String.IsEqual(ListItem.DBType,episode) + $EXP[GridView_Widget_IsVisible] + !String.IsEmpty(ListItem.TVShowTitle)">$INFO[ListItem.TVShowTitle]</value>
 		<value condition="Window.IsActive(home) + String.IsEqual(ListItem.DBType,episode) + !Integer.IsGreater(ListItem.Episode,9) + !String.IsEmpty(ListItem.Episode)">$INFO[ListItem.Season]$INFO[ListItem.Episode,x0,.]$INFO[ListItem.Title, ]</value>
 		<value condition="Window.IsActive(home) + String.IsEqual(ListItem.DBType,episode) + !String.IsEmpty(ListItem.Episode)">$INFO[ListItem.Season]$INFO[ListItem.Episode,x,.]$INFO[ListItem.Title, ]</value>
 		<value condition="Window.IsActive(home) + !String.IsEmpty(ListItem.Title)">$INFO[ListItem.Title]</value>
@@ -361,7 +362,10 @@
 		<!--WIDGETS
 		2016 / 104mins/fullhd
 		2019/ 1 season / 0/6 watched-->
+		<value condition="Window.IsActive(home) + String.IsEqual(ListItem.DBType,episode) + $EXP[GridView_Widget_IsVisible] + !Integer.IsGreater(ListItem.Episode,9) + !String.IsEmpty(ListItem.Episode)">$INFO[ListItem.Season]$INFO[ListItem.Episode,x0,][UPPERCASE]$INFO[ListItem.Duration(mins), / , $LOCALIZE[31138]][/UPPERCASE]</value>
+		<value condition="Window.IsActive(home) + String.IsEqual(ListItem.DBType,episode) + $EXP[GridView_Widget_IsVisible] + !String.IsEmpty(ListItem.Episode)">$INFO[ListItem.Season]$INFO[ListItem.Episode,x,][UPPERCASE]$INFO[ListItem.Duration(mins), / , $LOCALIZE[31138]][/UPPERCASE]</value>
 		<value condition="Window.IsActive(home) + String.IsEqual(ListItem.DBType,episode) + !String.IsEmpty(ListItem.TVShowTitle)">[UPPERCASE]$INFO[ListItem.TVShowTitle]$INFO[ListItem.Duration(mins), / , $LOCALIZE[31138]][/UPPERCASE]</value>
+		<value condition="Window.IsActive(home) + String.IsEqual(ListItem.DBType,tvshow) + $EXP[GridView_Widget_IsVisible] + !String.IsEmpty(ListItem.Year)">[UPPERCASE]$INFO[ListItem.Year]$INFO[ListItem.Property(WatchedEpisodes), / ,/]$INFO[ListItem.Property(TotalEpisodes),, ]$LOCALIZE[32001][/UPPERCASE]</value>
 		<value condition="Window.IsActive(home) + String.IsEqual(ListItem.DBType,tvshow) + !String.IsEmpty(ListItem.Year)">[UPPERCASE]$INFO[ListItem.Year]$INFO[ListItem.Property(TotalSeasons), / , ]$VAR[Seasons_Label]$INFO[ListItem.Property(WatchedEpisodes), / ,/]$INFO[ListItem.Property(TotalEpisodes),, ]$LOCALIZE[32001][/UPPERCASE]</value>
 		<value condition="Window.IsActive(home) + !String.IsEmpty(ListItem.Duration)">[UPPERCASE]$INFO[ListItem.Year]$INFO[ListItem.Duration(mins), / , $LOCALIZE[31138]]$VAR[Resolution_Label, / ][/UPPERCASE]</value>
 		<!--SECONDARY LIST VISIBLE-->
@@ -622,16 +626,21 @@
 	</variable>
 
 	<variable name="MPAA_Label">
-		<value condition="ListItem.IsCollection + !Skin.HasSetting(Secondary_List_Enabled) + String.Contains(Container(4500).ListItem.mpaa,U)">flags/rating/bbfc_u.png</value>
-		<value condition="ListItem.IsCollection + !Skin.HasSetting(Secondary_List_Enabled) + String.Contains(Container(4500).ListItem.mpaa,PG)">flags/rating/bbfc_pg.png</value>
-		<value condition="ListItem.IsCollection + !Skin.HasSetting(Secondary_List_Enabled) + String.Contains(Container(4500).ListItem.mpaa,12)">flags/rating/bbfc_12.png</value>
-		<value condition="ListItem.IsCollection + !Skin.HasSetting(Secondary_List_Enabled) + String.Contains(Container(4500).ListItem.mpaa,15)">flags/rating/bbfc_15.png</value>
-		<value condition="ListItem.IsCollection + !Skin.HasSetting(Secondary_List_Enabled) + [String.Contains(Container(4500).ListItem.mpaa,18) | String.Contains(Container(4500).ListItem.mpaa,UK:X)]">flags/rating/bbfc_18.png</value>
+		<value condition="Control.HasFocus(4501) + String.Contains(Container(4501).ListItem.mpaa,U)">flags/rating/bbfc_u.png</value>
+		<value condition="Control.HasFocus(4501) + String.Contains(Container(4501).ListItem.mpaa,PG)">flags/rating/bbfc_pg.png</value>
+		<value condition="Control.HasFocus(4501) + String.Contains(Container(4501).ListItem.mpaa,12)">flags/rating/bbfc_12.png</value>
+		<value condition="Control.HasFocus(4501) + String.Contains(Container(4501).ListItem.mpaa,15)">flags/rating/bbfc_15.png</value>
+		<value condition="Control.HasFocus(4501) + [String.Contains(Container(4501).ListItem.mpaa,18) | String.Contains(Container(4501).ListItem.mpaa,UK:X)]">flags/rating/bbfc_18.png</value>
 		<value condition="ListItem.IsCollection + Skin.HasSetting(Secondary_List_Enabled) + String.Contains(Container(4501).ListItem.mpaa,U)">flags/rating/bbfc_u.png</value>
 		<value condition="ListItem.IsCollection + Skin.HasSetting(Secondary_List_Enabled) + String.Contains(Container(4501).ListItem.mpaa,PG)">flags/rating/bbfc_pg.png</value>
 		<value condition="ListItem.IsCollection + Skin.HasSetting(Secondary_List_Enabled) + String.Contains(Container(4501).ListItem.mpaa,12)">flags/rating/bbfc_12.png</value>
 		<value condition="ListItem.IsCollection + Skin.HasSetting(Secondary_List_Enabled) + String.Contains(Container(4501).ListItem.mpaa,15)">flags/rating/bbfc_15.png</value>
 		<value condition="ListItem.IsCollection + Skin.HasSetting(Secondary_List_Enabled) + [String.Contains(Container(4501)ListItem.mpaa,18) | String.Contains(Container(4501)ListItem.mpaa,UK:X)]">flags/rating/bbfc_18.png</value>
+		<value condition="ListItem.IsCollection + !Skin.HasSetting(Secondary_List_Enabled) + String.Contains(Container(4500).ListItem.mpaa,U)">flags/rating/bbfc_u.png</value>
+		<value condition="ListItem.IsCollection + !Skin.HasSetting(Secondary_List_Enabled) + String.Contains(Container(4500).ListItem.mpaa,PG)">flags/rating/bbfc_pg.png</value>
+		<value condition="ListItem.IsCollection + !Skin.HasSetting(Secondary_List_Enabled) + String.Contains(Container(4500).ListItem.mpaa,12)">flags/rating/bbfc_12.png</value>
+		<value condition="ListItem.IsCollection + !Skin.HasSetting(Secondary_List_Enabled) + String.Contains(Container(4500).ListItem.mpaa,15)">flags/rating/bbfc_15.png</value>
+		<value condition="ListItem.IsCollection + !Skin.HasSetting(Secondary_List_Enabled) + [String.Contains(Container(4500).ListItem.mpaa,18) | String.Contains(Container(4500).ListItem.mpaa,UK:X)]">flags/rating/bbfc_18.png</value>
 		<value condition="String.Contains(ListItem.mpaa,U)">flags/rating/bbfc_u.png</value>
 		<value condition="String.Contains(ListItem.mpaa,PG)">flags/rating/bbfc_pg.png</value>
 		<value condition="String.Contains(ListItem.mpaa,12)">flags/rating/bbfc_12.png</value>
@@ -641,8 +650,9 @@
 	</variable>
 
 	<variable name="Studio_Label">
-		<value condition="ListItem.IsCollection + !Skin.HasSetting(Secondary_List_Enabled) + !String.IsEmpty(Container(4500).ListItem.Studio)">$INFO[Container(4500).ListItem.Studio,flags/studios/,.png]</value>
+		<value condition="Control.HasFocus(4501) + !String.IsEmpty(Container(4501).ListItem.Studio)">$INFO[Container(4501).ListItem.Studio,flags/studios/,.png]</value>
 		<value condition="ListItem.IsCollection + Skin.HasSetting(Secondary_List_Enabled) + !String.IsEmpty(Container(4501).ListItem.Studio)">$INFO[Container(4501).ListItem.Studio,flags/studios/,.png]</value>
+		<value condition="ListItem.IsCollection + !Skin.HasSetting(Secondary_List_Enabled) + !String.IsEmpty(Container(4500).ListItem.Studio)">$INFO[Container(4500).ListItem.Studio,flags/studios/,.png]</value>
 		<value condition="!String.IsEmpty(ListItem.Studio)">$INFO[ListItem.Studio,flags/studios/,.png]</value>
 		<value>flags/blank.png</value>
 	</variable>

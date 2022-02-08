@@ -94,58 +94,55 @@
 	</include>
 
 	<include name="StripView_Details">
-		<param name="id" default="504"/>
-		<definition>
+		<control type="group">
+			<visible>$EXP[StripView_IsVisible] + !$EXP[OpaqueDialog_IsVisible]</visible>
+			<include>Viewtype_Fade_Animation</include>
 			<control type="group">
-				<visible>$EXP[StripView_IsVisible] + !$EXP[OpaqueDialog_IsVisible]</visible>
-				<include>Viewtype_Fade_Animation</include>
+				<visible>!$EXP[ContainerSwitching] + !$EXP[ContentSwitching] + !$EXP[TransparentDialog_IsVisible] + !Control.HasFocus(60)</visible>
+				<include>Delayed_Content_Fade_Animation</include>
 				<control type="group">
-					<visible>!$EXP[ContainerSwitching] + !$EXP[ContentSwitching] + !$EXP[TransparentDialog_IsVisible] + !Control.HasFocus(60)</visible>
+					<visible>!$EXP[Secondary_List_ContainerSwitching] + !$EXP[Secondary_List_ContentSwitching] + ![Control.HasFocus(4501) + Window.IsVisible(1121)]</visible>
 					<include>Delayed_Content_Fade_Animation</include>
 					<include content="MediaFlags"/>
-					<control type="group">
-						<visible>!$EXP[Secondary_List_ContainerSwitching] + ![Control.HasFocus(4501) + Window.IsVisible(1121)]</visible>
-						<include>Delayed_Content_Fade_Animation</include>
-						<include content="Common_Details">
-							<param name="viewtype_label" value="Strip"/>
-							<param name="left" value="60"/>
-							<param name="width" value="600"/>
-							<param name="titleheight" value="165"/>
-							<param name="infoheight" value="70"/>
-							<param name="plotmaxheight" value="235"/>
-						</include>
+					<include content="Common_Details">
+						<param name="viewtype_label" value="Strip"/>
+						<param name="left" value="60"/>
+						<param name="width" value="600"/>
+						<param name="titleheight" value="165"/>
+						<param name="infoheight" value="70"/>
+						<param name="plotmaxheight" value="235"/>
+					</include>
+				</control>
+				<control type="group">
+					<visible>!$EXP[Secondary_List_ContainerSwitching] + !$EXP[Secondary_List_ContentSwitching] + ![Control.HasFocus(4501) + Window.IsVisible(1121)]</visible>
+					<include>Delayed_Content_Fade_Animation</include>
+					<!--Bottom Label-->
+					<control type="label">
+						<animation effect="slide" end="0,-15" time="0" condition="$EXP[StripView_Display_IsSquare] | [$EXP[StripView_Display_IsFanart] + !$EXP[StripView_Flags_IsOn]]">Conditional</animation>
+						<visible>$EXP[StripView_Details_Title] + !$EXP[StripView_Details_Logo_IsOn]</visible>
+						<left>240</left>
+						<top>964</top>
+						<width>1440</width>
+						<height>52</height>
+						<font>Strip_Title</font>
+						<textcolor>$VAR[Primary_Color]</textcolor>
+						<label>$VAR[Title_Label]</label>
+						<align>center</align>
+						<aligny>center</aligny>
+						<scroll>true</scroll>
+						<scrollsuffix> / </scrollsuffix>
 					</control>
 					<control type="group">
-						<visible>!$EXP[Secondary_List_ContainerSwitching] + !$EXP[Secondary_List_ContentSwitching] + [!Window.IsVisible(1121) | Control.HasFocus($PARAM[id])]</visible>
-						<include>Delayed_Content_Fade_Animation</include>
-						<!--Bottom Label-->
-						<control type="label">
-							<animation effect="slide" end="0,-15" time="0" condition="$EXP[StripView_Display_IsSquare] | [$EXP[StripView_Display_IsFanart] + !$EXP[StripView_Flags_IsOn]]">Conditional</animation>
-							<visible>$EXP[StripView_Details_Title] + !$EXP[StripView_Details_Logo_IsOn]</visible>
-							<left>240</left>
-							<top>964</top>
-							<width>1440</width>
-							<height>52</height>
-							<font>Strip_Title</font>
-							<textcolor>$VAR[Primary_Color]</textcolor>
-							<label>$VAR[Title_Label]</label>
-							<align>center</align>
-							<aligny>center</aligny>
-							<scroll>true</scroll>
-							<scrollsuffix> / </scrollsuffix>
-						</control>
-						<control type="group">
-							<animation effect="slide" end="0,-30" time="0" condition="$EXP[StripView_Display_IsSquare] | $EXP[StripView_Display_IsFanart]">Conditional</animation>
-							<animation effect="slide" end="75,0" time="0" condition="$EXP[StripView_Display_IsSquare] + !$EXP[StripView_Details_Off]">Conditional</animation>
-							<animation effect="slide" end="320,0" time="0" condition="$EXP[StripView_Display_IsFanart] + !$EXP[StripView_Details_Off]">Conditional</animation>
-							<include content="ProgressBar">
-								<param name="top" value="930"/>
-							</include>
-						</control>
+						<animation effect="slide" end="0,-30" time="0" condition="$EXP[StripView_Display_IsSquare] | $EXP[StripView_Display_IsFanart]">Conditional</animation>
+						<animation effect="slide" end="75,0" time="0" condition="$EXP[StripView_Display_IsSquare] + !$EXP[StripView_Details_Off]">Conditional</animation>
+						<animation effect="slide" end="320,0" time="0" condition="$EXP[StripView_Display_IsFanart] + !$EXP[StripView_Details_Off]">Conditional</animation>
+						<include content="ProgressBar">
+							<param name="top" value="930"/>
+						</include>
 					</control>
 				</control>
 			</control>
-		</definition>
+		</control>
 	</include>
 
 
