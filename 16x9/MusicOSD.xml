@@ -1,70 +1,100 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <window>
-	<defaultcontrol always="true">1</defaultcontrol>
+	<!--musicosd-->
+	<defaultcontrol always="true">9000</defaultcontrol>
 	<include>Dialog_Fade_Animation</include>
 	<controls>
 
-		<control type="grouplist">
-			<left>540</left>
-			<right>540</right>
-			<bottom>75</bottom>
-			<height>60</height>
-			<orientation>horizontal</orientation>
-			<itemgap>0</itemgap>
-			<align>center</align>
-			<onup>Close</onup>
-			<ondown>Close</ondown>
-			<!-- Skip Back -->
-			<control type="button" id="3">
-				<width>60</width>
-				<height>60</height>
-				<texturefocus>osd/icon_Previous_focused.png</texturefocus>
-				<texturenofocus>osd/icon_Previous_unfocused.png</texturenofocus>
-				<onclick>PlayerControl(Previous)</onclick>
-			</control>
-			<!-- Rewind -->
-			<control type="button" id="4">
-				<width>60</width>
-				<height>60</height>
-				<texturefocus>osd/icon_Rewind_focused.png</texturefocus>
-				<texturenofocus>osd/icon_Rewind_unfocused.png</texturenofocus>
-				<onclick>PlayerControl(Rewind)</onclick>
-			</control>
-			<!-- Play/Pause -->
-			<control type="togglebutton" id="1">
-				<width>60</width>
-				<height>60</height>
-				<texturefocus>osd/icon_Play_focused.png</texturefocus>
-				<texturenofocus>osd/icon_Play_unfocused.png</texturenofocus>
-				<usealttexture>Player.Paused | Player.Forwarding | Player.Rewinding</usealttexture>
-				<alttexturefocus>osd/icon_Pause_focused.png</alttexturefocus>
-				<alttexturenofocus>osd/icon_Pause_unfocused.png</alttexturenofocus>
-				<onclick>PlayerControl(Play)</onclick>
-			</control>
-			<!--Stop-->
-			<control type="button" id="2">
-				<width>60</width>
-				<height>60</height>
-				<texturefocus>osd/icon_Stop_focused.png</texturefocus>
-				<texturenofocus>osd/icon_Stop_unfocused.png</texturenofocus>
-				<onclick>PlayerControl(Stop)</onclick>
-			</control>
-			<!-- Fast Forward -->
-			<control type="button" id="5">
-				<width>60</width>
-				<height>60</height>
-				<texturefocus>osd/icon_Forward_focused.png</texturefocus>
-				<texturenofocus>osd/icon_Forward_unfocused.png</texturenofocus>
-				<onclick>PlayerControl(Forward)</onclick>
-			</control>
-			<!-- Next -->
-			<control type="button" id="6">
-				<width>60</width>
-				<height>60</height>
-				<texturefocus>osd/icon_Next_focused.png</texturefocus>
-				<texturenofocus>osd/icon_Next_unfocused.png</texturenofocus>
-				<onclick>PlayerControl(Next)</onclick>
-			</control>
+		<control type="panel" id="9000">
+			<width>240</width>
+			<height>180</height>
+			<scrolltime>0</scrolltime>
+			<itemlayout width="60" height="60"/>
+			<focusedlayout width="60" height="60"/>
+			<content>
+				<item>
+					<description>Pause</description>
+					<label>$LOCALIZE[31526]</label>
+					<onclick>PlayerControl(Play)</onclick>
+				</item>
+				<item>
+					<label>$LOCALIZE[31528]</label>
+					<onclick>PlayerControl(Stop)</onclick>
+				</item>
+				<item>
+					<description>Previous</description>
+					<label>$LOCALIZE[210]</label>
+					<onclick>PlayerControl(Previous)</onclick>
+				</item>
+				<item>
+					<description>Next</description>
+					<label>$LOCALIZE[209]</label>
+					<onclick>PlayerControl(Next)</onclick>
+				</item>
+				<item>
+					<description>Rewind</description>
+					<label>Rewind</label>
+					<onclick>PlayerControl(Rewind)</onclick>
+				</item>
+				<item>
+					<description>Forward</description>
+					<label>Forward</label>
+					<onclick>PlayerControl(Forward)</onclick>
+				</item>
+			</content>
+		</control>
+
+		<control type="group">
+			<width>180</width>
+			<height>120</height>
+			<left>1080</left>
+			<centertop>50%</centertop>
+			<!-- Row 1 -->
+			<include content="Music_Player_Button_Template">
+				<param name="visible" value="!Player.Paused"/>
+				<param name="focused" value="String.IsEqual(Control.GetLabel(9000),$LOCALIZE[31526]) + !Player.Paused"/>
+				<param name="icon" value="Pause"/>
+				<param name="left" value="0"/>
+				<param name="top" value="0"/>
+			</include>
+			<include content="Music_Player_Button_Template">
+				<param name="visible" value="Player.Paused"/>
+				<param name="focused" value="String.IsEqual(Control.GetLabel(9000),$LOCALIZE[31526]) + Player.Paused"/>
+				<param name="icon" value="Play"/>
+				<param name="left" value="0"/>
+				<param name="top" value="0"/>
+			</include>
+			<include content="Music_Player_Button_Template">
+				<param name="focused" value="String.IsEqual(Control.GetLabel(9000),$LOCALIZE[31528])"/>
+				<param name="icon" value="Stop"/>
+				<param name="left" value="60"/>
+				<param name="top" value="0"/>
+			</include>
+			<include content="Music_Player_Button_Template">
+				<param name="focused" value="String.IsEqual(Control.GetLabel(9000),$LOCALIZE[210])"/>
+				<param name="icon" value="Rewind"/>
+				<param name="left" value="120"/>
+				<param name="top" value="0"/>
+			</include>
+			<include content="Music_Player_Button_Template">
+				<param name="focused" value="String.IsEqual(Control.GetLabel(9000),$LOCALIZE[209])"/>
+				<param name="icon" value="Forward"/>
+				<param name="left" value="180"/>
+				<param name="top" value="0"/>
+			</include>
+			<!-- Row 2 -->
+			<include content="Music_Player_Button_Template">
+				<param name="focused" value="String.IsEqual(Control.GetLabel(9000),Rewind)"/>
+				<param name="icon" value="Previous"/>
+				<param name="left" value="0"/>
+				<param name="top" value="60"/>
+			</include>
+			<include content="Music_Player_Button_Template">
+				<param name="focused" value="String.IsEqual(Control.GetLabel(9000),Forward)"/>
+				<param name="icon" value="Next"/>
+				<param name="left" value="60"/>
+				<param name="top" value="60"/>
+			</include>
 		</control>
 
 	</controls>

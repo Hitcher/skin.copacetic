@@ -1,149 +1,218 @@
 <includes>
 
+
+	<include name="Player_Progress">
+		<param name="left"/>
+		<param name="right"/>
+		<param name="bottom"/>
+		<param name="height"/>
+		<param name="progress_id"/>
+		<param name="left_label"/>
+		<param name="right_label"/>
+		<definition>
+			<control type="group">
+				<left>$PARAM[left]</left>
+				<right>$PARAM[right]</right>
+				<bottom>$PARAM[bottom]</bottom>
+				<height>$PARAM[height]</height>
+				<!--Cache bar-->
+				<control type="progress" id="$PARAM[progress_id]">
+					<top>-6</top>
+					<height>6</height>
+					<info>Player.ProgressCache</info>
+					<texturebg colordiffuse="$VAR[Progress_Background_Color]">views/white_100.png</texturebg>
+					<lefttexture></lefttexture>
+					<midtexture colordiffuse="$VAR[Progress_Background_Color]">views/white_100.png</midtexture>
+					<righttexture></righttexture>
+					<overlaytexture></overlaytexture>
+				</control>
+				<!--Progress bar-->
+				<control type="progress" id="$PARAM[progress_id]">
+					<top>-6</top>
+					<height>6</height>
+					<info>Player.Progress</info>
+					<texturebg colordiffuse="$VAR[Blank_Color]">views/white_100.png</texturebg>
+					<lefttexture></lefttexture>
+					<midtexture colordiffuse="$VAR[Progress_Focused_Color]">views/white_100.png</midtexture>
+					<righttexture></righttexture>
+					<overlaytexture></overlaytexture>
+				</control>
+				<control type="label">
+					<visible>Player.HasVideo</visible>
+					<left>0</left>
+					<height>100%</height>
+					<width>100%</width>
+					<align>left</align>
+					<aligny>center</aligny>
+					<label>$PARAM[left_label]</label>
+					<font>Body</font>
+					<textcolor>$VAR[Light_Color]</textcolor>
+				</control>
+				<control type="label">
+					<visible>Player.HasVideo</visible>
+					<height>100%</height>
+					<width>100%</width>
+					<align>right</align>
+					<aligny>center</aligny>
+					<label>$PARAM[right_label]</label>
+					<font>Body</font>
+					<textcolor>$VAR[Light_Color]</textcolor>
+				</control>
+				<control type="label">
+					<visible>Player.HasAudio</visible>
+					<height>100%</height>
+					<width>100%</width>
+					<align>center</align>
+					<aligny>center</aligny>
+					<label>$PARAM[left_label]</label>
+					<font>Body</font>
+					<textcolor>$VAR[Progress_Focused_Color]</textcolor>
+				</control>
+			</control>
+		</definition>
+	</include>
+
 <include name="Player_Status_Icons">
 	<param name="icon_type" default="large"/>
 	<param name="large_label" default="false"/>
 	<param name="small_label" default="false"/>
 	<definition>
 		<control type="group">
-			<visible>!$EXP[TransparentDialog_IsVisible]</visible>
-			<include>Delayed_Dialog_Fade_Animation</include>
+			<animation effect="slide" start="0" end="240" time="0" condition="Window.IsVisible(visualisation)">Conditional</animation>
+			<visible>!Window.IsActive(busydialog)</visible>
+			<include>Content_Fade_Animation</include>
 			<control type="group">
-				<visible>!Window.IsActive(busydialog)</visible>
-				<include>Content_Fade_Animation</include>
-				<control type="group">
-					<width>120</width>
-					<height>120</height>
-					<centerleft>50%</centerleft>
+				<width>120</width>
+				<height>120</height>
+				<centerleft>50%</centerleft>
+				<centertop>50%</centertop>
+				<!-- Paused
+				<control type="grouplist">
+					<visible>Player.Paused  + !Window.IsVisible(videoosd)</visible>
+					<include>Delayed_Content_Fade_Animation</include>
 					<centertop>50%</centertop>
-					<!-- Paused
-					<control type="grouplist">
-						<visible>Player.Paused  + !Window.IsVisible(videoosd)</visible>
-						<include>Delayed_Content_Fade_Animation</include>
-						<centertop>50%</centertop>
-						<height>30%</height>
-						<itemgap>6</itemgap>
-						<orientation>horizontal</orientation>
-						<align>center</align>
-						<control type="image">
-							<width>12</width>
-							<texture colordiffuse="$VAR[Light_Color]">views/white_100.png</texture>
-						</control>
-						<control type="image">
-							<width>12</width>
-							<texture colordiffuse="$VAR[Light_Color]">views/white_100.png</texture>
-						</control>
-					</control>-->
-					<!-- Paused -->
+					<height>30%</height>
+					<itemgap>6</itemgap>
+					<orientation>horizontal</orientation>
+					<align>center</align>
 					<control type="image">
-						<visible>Player.Paused + !Window.IsVisible(videoosd)</visible>
-						<include>Delayed_Content_Fade_Animation</include>
+						<width>12</width>
+						<texture colordiffuse="$VAR[Light_Color]">views/white_100.png</texture>
+					</control>
+					<control type="image">
+						<width>12</width>
+						<texture colordiffuse="$VAR[Light_Color]">views/white_100.png</texture>
+					</control>
+				</control>-->
+				<!-- Paused -->
+				<control type="image">
+					<visible>Player.Paused + !Window.IsVisible(videoosd)</visible>
+					<include>Delayed_Content_Fade_Animation</include>
+					<centertop>50%</centertop>
+					<centerleft>50%</centerleft>
+					<texture colordiffuse="$VAR[Light_Color]">osd/icon_Player.Paused_$PARAM[icon_type].png</texture>
+				</control>
+				<!--Playing-->
+				<control type="image">
+					<animation effect="fade" start="100" end="0" delay="900" time="360" condition="Player.Playing" tween="sine" easing="inout">Conditional</animation>
+					<visible>Player.Playing + !Window.IsVisible(videoosd)</visible>
+					<include>Delayed_Play_Icon_Fade_Animation</include>
+					<centertop>50%</centertop>
+					<centerleft>50%</centerleft>
+					<texture colordiffuse="$VAR[Light_Color]">osd/icon_Player.Playing_$PARAM[icon_type].png</texture>
+				</control>
+				<!-- Rewinding -->
+				<control type="group">
+					<visible>Player.Rewinding</visible>
+					<include>Delayed_Content_Fade_Animation</include>
+					<control type="image">
+						<visible>Player.Rewinding2x</visible>
 						<centertop>50%</centertop>
 						<centerleft>50%</centerleft>
-						<texture colordiffuse="$VAR[Light_Color]">osd/icon_Player.Paused_$PARAM[icon_type].png</texture>
+						<texture colordiffuse="$VAR[Light_Color]" flipx="true">osd/icon_Player.Forwarding_2x_$PARAM[icon_type].png</texture>
 					</control>
-					<!--Playing-->
 					<control type="image">
-						<animation effect="fade" start="100" end="0" delay="900" time="360" condition="Player.Playing" tween="sine" easing="inout">Conditional</animation>
-						<visible>Player.Playing + Player.HasVideo + !Window.IsVisible(videoosd)</visible>
-						<include>Delayed_Play_Icon_Fade_Animation</include>
+						<visible>Player.Rewinding4x</visible>
 						<centertop>50%</centertop>
 						<centerleft>50%</centerleft>
-						<texture colordiffuse="$VAR[Light_Color]">osd/icon_Player.Playing_$PARAM[icon_type].png</texture>
+						<texture colordiffuse="$VAR[Light_Color]" flipx="true">osd/icon_Player.Forwarding_4x_$PARAM[icon_type].png</texture>
 					</control>
-					<!-- Rewinding -->
-					<control type="group">
-						<visible>Player.Rewinding</visible>
-						<include>Delayed_Content_Fade_Animation</include>
-						<control type="image">
-							<visible>Player.Rewinding2x</visible>
-							<centertop>50%</centertop>
-							<centerleft>50%</centerleft>
-							<texture colordiffuse="$VAR[Light_Color]" flipx="true">osd/icon_Player.Forwarding_2x_$PARAM[icon_type].png</texture>
-						</control>
-						<control type="image">
-							<visible>Player.Rewinding4x</visible>
-							<centertop>50%</centertop>
-							<centerleft>50%</centerleft>
-							<texture colordiffuse="$VAR[Light_Color]" flipx="true">osd/icon_Player.Forwarding_4x_$PARAM[icon_type].png</texture>
-						</control>
-						<control type="image">
-							<visible>Player.Rewinding8x</visible>
-							<centertop>50%</centertop>
-							<centerleft>50%</centerleft>
-							<texture colordiffuse="$VAR[Light_Color]" flipx="true">osd/icon_Player.Forwarding_8x_$PARAM[icon_type].png</texture>
-						</control>
-						<control type="image">
-							<visible>Player.Rewinding16x</visible>
-							<centertop>50%</centertop>
-							<centerleft>50%</centerleft>
-							<texture colordiffuse="$VAR[Light_Color]" flipx="true">osd/icon_Player.Forwarding_16x_$PARAM[icon_type].png</texture>
-						</control>
-						<control type="image">
-							<visible>Player.Rewinding32x</visible>
-							<centertop>50%</centertop>
-							<centerleft>50%</centerleft>
-							<texture colordiffuse="$VAR[Light_Color]" flipx="true">osd/icon_Player.Forwarding_32x_$PARAM[icon_type].png</texture>
-						</control>
+					<control type="image">
+						<visible>Player.Rewinding8x</visible>
+						<centertop>50%</centertop>
+						<centerleft>50%</centerleft>
+						<texture colordiffuse="$VAR[Light_Color]" flipx="true">osd/icon_Player.Forwarding_8x_$PARAM[icon_type].png</texture>
 					</control>
-					<!-- Forwarding -->
-					<control type="group">
-						<visible>Player.Forwarding</visible>
-						<include>Delayed_Content_Fade_Animation</include>
-						<control type="image">
-							<visible>Player.Forwarding2x</visible>
-							<centertop>50%</centertop>
-							<centerleft>50%</centerleft>
-							<texture colordiffuse="$VAR[Light_Color]">osd/icon_Player.Forwarding_2x_$PARAM[icon_type].png</texture>
-						</control>
-						<control type="image">
-							<visible>Player.Forwarding4x</visible>
-							<centertop>50%</centertop>
-							<centerleft>50%</centerleft>
-							<texture colordiffuse="$VAR[Light_Color]">osd/icon_Player.Forwarding_4x_$PARAM[icon_type].png</texture>
-						</control>
-						<control type="image">
-							<visible>Player.Forwarding8x</visible>
-							<centertop>50%</centertop>
-							<centerleft>50%</centerleft>
-							<texture colordiffuse="$VAR[Light_Color]">osd/icon_Player.Forwarding_8x_$PARAM[icon_type].png</texture>
-						</control>
-						<control type="image">
-							<visible>Player.Forwarding16x</visible>
-							<centertop>50%</centertop>
-							<centerleft>50%</centerleft>
-							<texture colordiffuse="$VAR[Light_Color]">osd/icon_Player.Forwarding_16x_$PARAM[icon_type].png</texture>
-						</control>
-						<control type="image">
-							<visible>Player.Forwarding32x</visible>
-							<centertop>50%</centertop>
-							<centerleft>50%</centerleft>
-							<texture colordiffuse="$VAR[Light_Color]">osd/icon_Player.Forwarding_32x_$PARAM[icon_type].png</texture>
-						</control>
+					<control type="image">
+						<visible>Player.Rewinding16x</visible>
+						<centertop>50%</centertop>
+						<centerleft>50%</centerleft>
+						<texture colordiffuse="$VAR[Light_Color]" flipx="true">osd/icon_Player.Forwarding_16x_$PARAM[icon_type].png</texture>
 					</control>
-					<!-- label -->
-					<control type="label">
-						<visible>$PARAM[large_label] + [Player.Rewinding | Player.Forwarding]</visible>
-						<include>Delayed_Content_Fade_Animation</include>
-						<top>90</top>
-						<width>auto</width>
-						<align>center</align>
-						<aligny>center</aligny>
-						<textcolor>$VAR[Light_Color]</textcolor>
-						<font>Player_Status</font>
-						<label>$VAR[Player_Status]</label>
+					<control type="image">
+						<visible>Player.Rewinding32x</visible>
+						<centertop>50%</centertop>
+						<centerleft>50%</centerleft>
+						<texture colordiffuse="$VAR[Light_Color]" flipx="true">osd/icon_Player.Forwarding_32x_$PARAM[icon_type].png</texture>
 					</control>
-					<control type="label">
-						<visible>$PARAM[small_label] + [Player.Rewinding | Player.Forwarding]</visible>
-						<include>Delayed_Content_Fade_Animation</include>
-						<top>60</top>
-						<width>auto</width>
-						<align>center</align>
-						<aligny>center</aligny>
-						<textcolor>$VAR[Light_Color]</textcolor>
-						<font>Body</font>
-						<label>$VAR[Player_Status]</label>
+				</control>
+				<!-- Forwarding -->
+				<control type="group">
+					<visible>Player.Forwarding</visible>
+					<include>Delayed_Content_Fade_Animation</include>
+					<control type="image">
+						<visible>Player.Forwarding2x</visible>
+						<centertop>50%</centertop>
+						<centerleft>50%</centerleft>
+						<texture colordiffuse="$VAR[Light_Color]">osd/icon_Player.Forwarding_2x_$PARAM[icon_type].png</texture>
 					</control>
+					<control type="image">
+						<visible>Player.Forwarding4x</visible>
+						<centertop>50%</centertop>
+						<centerleft>50%</centerleft>
+						<texture colordiffuse="$VAR[Light_Color]">osd/icon_Player.Forwarding_4x_$PARAM[icon_type].png</texture>
+					</control>
+					<control type="image">
+						<visible>Player.Forwarding8x</visible>
+						<centertop>50%</centertop>
+						<centerleft>50%</centerleft>
+						<texture colordiffuse="$VAR[Light_Color]">osd/icon_Player.Forwarding_8x_$PARAM[icon_type].png</texture>
+					</control>
+					<control type="image">
+						<visible>Player.Forwarding16x</visible>
+						<centertop>50%</centertop>
+						<centerleft>50%</centerleft>
+						<texture colordiffuse="$VAR[Light_Color]">osd/icon_Player.Forwarding_16x_$PARAM[icon_type].png</texture>
+					</control>
+					<control type="image">
+						<visible>Player.Forwarding32x</visible>
+						<centertop>50%</centertop>
+						<centerleft>50%</centerleft>
+						<texture colordiffuse="$VAR[Light_Color]">osd/icon_Player.Forwarding_32x_$PARAM[icon_type].png</texture>
+					</control>
+				</control>
+				<!-- label -->
+				<control type="label">
+					<visible>$PARAM[large_label] + [Player.Rewinding | Player.Forwarding]</visible>
+					<include>Delayed_Content_Fade_Animation</include>
+					<top>90</top>
+					<width>auto</width>
+					<align>center</align>
+					<aligny>center</aligny>
+					<textcolor>$VAR[Light_Color]</textcolor>
+					<font>Player_Status</font>
+					<label>$VAR[Player_Status]</label>
+				</control>
+				<control type="label">
+					<visible>$PARAM[small_label] + [Player.Rewinding | Player.Forwarding]</visible>
+					<include>Delayed_Content_Fade_Animation</include>
+					<top>60</top>
+					<width>auto</width>
+					<align>center</align>
+					<aligny>center</aligny>
+					<textcolor>$VAR[Light_Color]</textcolor>
+					<font>Body</font>
+					<label>$VAR[Player_Status]</label>
 				</control>
 			</control>
 		</control>
