@@ -1,186 +1,206 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <window>
 	<!--musicosd-->
-	<defaultcontrol always="true">9000</defaultcontrol>
+	<defaultcontrol always="true">9001</defaultcontrol>
 	<include>Dialog_Fade_Animation</include>
 	<controls>
 
-		<control type="grouplist" id="9000">
-			<width>300</width>
-			<height>60</height>
-			<left>1050</left>
-			<top>480</top>
-			<orientation>horizontal</orientation>
-			<align>left</align>
-			<itemgap>0</itemgap>
-			<control type="radiobutton" id="1">
-				<description>Play/Pause</description>
-				<width>60</width>
-				<height>60</height>
-				<textureradioonfocus colordiffuse="$VAR[Light_Color]">osd/icon_Pause_focused.png</textureradioonfocus>
-				<textureradioonnofocus colordiffuse="$VAR[Light_Color]">osd/icon_Pause_unfocused.png</textureradioonnofocus>
-				<textureradioofffocus colordiffuse="$VAR[Light_Color]">osd/icon_Play_focused.png</textureradioofffocus>
-				<textureradiooffnofocus colordiffuse="$VAR[Light_Color]">osd/icon_Play_unfocused.png</textureradiooffnofocus>
-				<texturefocus/>
-				<texturenofocus/>
-				<radiowidth>60</radiowidth>
-				<radioheight>60</radioheight>
-				<radioposx>-1</radioposx>
-				<radioposy>0</radioposy>
-				<font/>
-				<label>$LOCALIZE[31526]</label>
-				<selected>!Player.Paused</selected>
-				<onfocus>SetProperty(MusicOSD_Controls,$LOCALIZE[31526],musicosd)</onfocus>
-				<onclick>PlayerControl(Play)</onclick>
-				<ondown>6</ondown>
-				<onup>6</onup>
-			</control>
-			<control type="button" id="2">
-				<description>Stop</description>
-				<width>60</width>
-				<height>60</height>
-				<texturenofocus  colordiffuse="$VAR[Light_Color]">osd/icon_Stop_unfocused.png</texturenofocus>
-				<texturefocus colordiffuse="$VAR[Light_Color]">osd/icon_Stop_focused.png</texturefocus>
-				<font/>
-				<label>$LOCALIZE[31528]</label>
-				<onfocus>SetProperty(MusicOSD_Controls,$LOCALIZE[31528],musicosd)</onfocus>
-				<onclick>PlayerControl(Stop)</onclick>
-				<ondown>7</ondown>
-				<onup>7</onup>
-			</control>
-			<control type="button" id="3">
-				<description>Previous</description>
-				<width>60</width>
-				<height>60</height>
-				<texturenofocus colordiffuse="$VAR[Light_Color]">osd/icon_Rewind_unfocused.png</texturenofocus>
-				<texturefocus colordiffuse="$VAR[Light_Color]">osd/icon_Rewind_focused.png</texturefocus>
-				<font/>
-				<label>$LOCALIZE[210]</label>
-				<onfocus>SetProperty(MusicOSD_Controls,$LOCALIZE[210],musicosd)</onfocus>
-				<onclick>PlayerControl(Previous)</onclick>
-				<ondown>8</ondown>
-				<onup>8</onup>
-			</control>
-			<control type="button" id="4">
-				<description>Next</description>
-				<width>60</width>
-				<height>60</height>
-				<texturenofocus colordiffuse="$VAR[Light_Color]">osd/icon_Forward_unfocused.png</texturenofocus>
-				<texturefocus colordiffuse="$VAR[Light_Color]">osd/icon_Forward_focused.png</texturefocus>
-				<font/>
-				<label>$LOCALIZE[209]</label>
-				<onfocus>SetProperty(MusicOSD_Controls,$LOCALIZE[209],musicosd)</onfocus>
-				<onclick>PlayerControl(Next)</onclick>
-				<ondown>9</ondown>
-				<onup>9</onup>
-			</control>
-			<control type="button" id="5">
-				<description>Playlist</description>
-				<width>60</width>
-				<height>60</height>
-				<texturenofocus colordiffuse="$VAR[Light_Color]">osd/icon_Album_unfocused.png</texturenofocus>
-				<texturefocus colordiffuse="$VAR[Light_Color]">osd/icon_Album_focused.png</texturefocus>
-				<font></font>
-				<label>Playlist</label>
-				<onfocus>SetProperty(MusicOSD_Controls,Playlist,musicosd)</onfocus>
-				<onclick>Dialog.Close(all, true)</onclick>
-				<onclick>ActivateWindow(musicplaylist)</onclick>
-				<ondown>10</ondown>
-				<onup>10</onup>
-			</control>
+		<!--Delay on Load-->
+		<control type="button" id="9001">
+			<visible allowhiddenfocus="true">false</visible>
+			<onfocus>SetFocus(1)</onfocus>
+		</control>
+		<control type="group" id="9002">
+			<visible>Control.HasFocus(9001)</visible>
+			<animation effect="slide" end="0,0" time="360" reversible="false">Hidden</animation>
 		</control>
 
-		<control type="grouplist" id="9001">
-			<width>300</width>
-			<height>60</height>
-			<left>1050</left>
-			<top>540</top>
-			<orientation>horizontal</orientation>
-			<align>left</align>
-			<itemgap>0</itemgap>
-			<control type="button" id="6">
-				<description>Rewind</description>
-				<width>60</width>
+		<control type="group">
+			<visible>!Control.IsVisible(9002)</visible>
+			<include>Delayed_Content_Fade_Animation</include>
+
+			<include content="Breadcrumb_Label">
+				<param name="label_color" value="$VAR[Primary_Color]"/>
+			</include>
+
+			<control type="grouplist" id="9003">
+				<width>300</width>
 				<height>60</height>
-				<texturenofocus colordiffuse="$VAR[Light_Color]">osd/icon_Previous_unfocused.png</texturenofocus>
-				<texturefocus colordiffuse="$VAR[Light_Color]">osd/icon_Previous_focused.png</texturefocus>
-				<font></font>
-				<label>Rewind</label>
-				<onfocus>SetProperty(MusicOSD_Controls,Rewind,musicosd)</onfocus>
-				<onclick>PlayerControl(Rewind)</onclick>
-				<onup>1</onup>
-				<ondown>1</ondown>
-			</control>
-			<control type="button" id="7">
-				<description>Forward</description>
-				<width>60</width>
-				<height>60</height>
-				<texturenofocus colordiffuse="$VAR[Light_Color]">osd/icon_Next_unfocused.png</texturenofocus>
-				<texturefocus colordiffuse="$VAR[Light_Color]">osd/icon_Next_focused.png</texturefocus>
-				<font></font>
-				<label>Forward</label>
-				<onfocus>SetProperty(MusicOSD_Controls,Forward,musicosd)</onfocus>
-				<onclick>PlayerControl(Forward)</onclick>
-				<ondown>2</ondown>
-				<onup>2</onup>
-			</control>
-			<control type="group" id="9002">
-				<description>Repeat</description>
-				<width>60</width>
-				<height>60</height>
-				<control type="button" id="8">
-					<visible allowhiddenfocus="true">false</visible>
-					<onfocus>SetProperty(MusicOSD_Controls,$VAR[Repeat_Button_Label],musicosd)</onfocus>
-					<onclick>PlayerControl(Repeat)</onclick>
-					<onclick>SetProperty(MusicOSD_Controls,$VAR[Repeat_Button_Label],musicosd)</onclick>
+				<left>1050</left>
+				<top>480</top>
+				<orientation>horizontal</orientation>
+				<align>left</align>
+				<itemgap>0</itemgap>
+				<control type="radiobutton" id="1">
+					<description>Play/Pause</description>
+					<width>60</width>
+					<height>60</height>
+					<textureradioonfocus colordiffuse="$VAR[Light_Color]">osd/icon_Pause_focused.png</textureradioonfocus>
+					<textureradioonnofocus colordiffuse="$VAR[Light_Color]">osd/icon_Pause_unfocused.png</textureradioonnofocus>
+					<textureradioofffocus colordiffuse="$VAR[Light_Color]">osd/icon_Play_focused.png</textureradioofffocus>
+					<textureradiooffnofocus colordiffuse="$VAR[Light_Color]">osd/icon_Play_unfocused.png</textureradiooffnofocus>
+					<texturefocus/>
+					<texturenofocus/>
+					<radiowidth>60</radiowidth>
+					<radioheight>60</radioheight>
+					<radioposx>2</radioposx>
+					<radioposy>0</radioposy>
+					<font/>
+					<label>$LOCALIZE[31526]</label>
+					<selected>!Player.Paused</selected>
+					<onfocus>SetProperty(MusicOSD_Controls,$LOCALIZE[31526],musicosd)</onfocus>
+					<onclick>PlayerControl(Play)</onclick>
+					<ondown>6</ondown>
+					<onup>6</onup>
+				</control>
+				<control type="button" id="2">
+					<description>Stop</description>
+					<width>60</width>
+					<height>60</height>
+					<texturenofocus  colordiffuse="$VAR[Light_Color]">osd/icon_Stop_unfocused.png</texturenofocus>
+					<texturefocus colordiffuse="$VAR[Light_Color]">osd/icon_Stop_focused.png</texturefocus>
+					<font/>
+					<label>$LOCALIZE[31528]</label>
+					<onfocus>SetProperty(MusicOSD_Controls,$LOCALIZE[31528],musicosd)</onfocus>
+					<onclick>PlayerControl(Stop)</onclick>
+					<ondown>7</ondown>
+					<onup>7</onup>
+				</control>
+				<control type="button" id="3">
+					<description>Previous</description>
+					<width>60</width>
+					<height>60</height>
+					<texturenofocus colordiffuse="$VAR[Light_Color]">osd/icon_Rewind_unfocused.png</texturenofocus>
+					<texturefocus colordiffuse="$VAR[Light_Color]">osd/icon_Rewind_focused.png</texturefocus>
+					<font/>
+					<label>$LOCALIZE[210]</label>
+					<onfocus>SetProperty(MusicOSD_Controls,$LOCALIZE[210],musicosd)</onfocus>
+					<onclick>PlayerControl(Previous)</onclick>
+					<ondown>8</ondown>
+					<onup>8</onup>
+				</control>
+				<control type="button" id="4">
+					<description>Next</description>
+					<width>60</width>
+					<height>60</height>
+					<texturenofocus colordiffuse="$VAR[Light_Color]">osd/icon_Forward_unfocused.png</texturenofocus>
+					<texturefocus colordiffuse="$VAR[Light_Color]">osd/icon_Forward_focused.png</texturefocus>
+					<font/>
+					<label>$LOCALIZE[209]</label>
+					<onfocus>SetProperty(MusicOSD_Controls,$LOCALIZE[209],musicosd)</onfocus>
+					<onclick>PlayerControl(Next)</onclick>
+					<ondown>9</ondown>
+					<onup>9</onup>
+				</control>
+				<control type="button" id="5">
+					<description>Playlist</description>
+					<width>60</width>
+					<height>60</height>
+					<texturenofocus colordiffuse="$VAR[Light_Color]">osd/icon_Album_unfocused.png</texturenofocus>
+					<texturefocus colordiffuse="$VAR[Light_Color]">osd/icon_Album_focused.png</texturefocus>
 					<font></font>
-					<label>$VAR[Repeat_Button_Label]</label>
-					<ondown>3</ondown>
-					<onup>3</onup>
-					<onleft>7</onleft>
-					<onright>9</onright>
-				</control>
-				<control type="image">
-					<texture colordiffuse="$VAR[Light_Color]">$VAR[Repeat_Button_Texture]</texture>
+					<label>Playlist</label>
+					<onfocus>SetProperty(MusicOSD_Controls,Playlist,musicosd)</onfocus>
+					<onclick>Dialog.Close(all, true)</onclick>
+					<onclick>ActivateWindow(musicplaylist)</onclick>
+					<ondown>10</ondown>
+					<onup>10</onup>
 				</control>
 			</control>
-			<control type="radiobutton" id="9">
-				<description>Random</description>
-				<width>60</width>
+
+			<control type="grouplist" id="9004">
+				<width>300</width>
 				<height>60</height>
-				<textureradioonfocus colordiffuse="$VAR[Light_Color]">osd/icon_Random_focused.png</textureradioonfocus>
-				<textureradioonnofocus colordiffuse="$VAR[Light_Color]">osd/icon_Random_unfocused.png</textureradioonnofocus>
-				<textureradioofffocus colordiffuse="$VAR[Light_Color]">osd/icon_NotRandom_focused.png</textureradioofffocus>
-				<textureradiooffnofocus colordiffuse="$VAR[Light_Color]">osd/icon_NotRandom_unfocused.png</textureradiooffnofocus>
-				<texturefocus/>
-				<texturenofocus/>
-				<radiowidth>60</radiowidth>
-				<radioheight>60</radioheight>
-				<radioposx>-1</radioposx>
-				<radioposy>0</radioposy>
-				<font/>
-				<label>$VAR[Random_Button_Label]</label>
-				<selected>Playlist.IsRandom</selected>
-				<onfocus>SetProperty(MusicOSD_Controls,$VAR[Random_Button_Label],musicosd)</onfocus>
-				<onclick>PlayerControl(Random)</onclick>
-				<onclick>SetProperty(MusicOSD_Controls,$VAR[Random_Button_Label],musicosd)</onclick>
-				<ondown>4</ondown>
-				<onup>4</onup>
+				<left>1050</left>
+				<top>540</top>
+				<orientation>horizontal</orientation>
+				<align>left</align>
+				<itemgap>0</itemgap>
+				<control type="button" id="6">
+					<description>Rewind</description>
+					<width>60</width>
+					<height>60</height>
+					<texturenofocus colordiffuse="$VAR[Light_Color]">osd/icon_Previous_unfocused.png</texturenofocus>
+					<texturefocus colordiffuse="$VAR[Light_Color]">osd/icon_Previous_focused.png</texturefocus>
+					<font></font>
+					<label>Rewind</label>
+					<onfocus>SetProperty(MusicOSD_Controls,Rewind,musicosd)</onfocus>
+					<onclick>PlayerControl(Rewind)</onclick>
+					<onup>1</onup>
+					<ondown>1</ondown>
+				</control>
+				<control type="button" id="7">
+					<description>Forward</description>
+					<width>60</width>
+					<height>60</height>
+					<texturenofocus colordiffuse="$VAR[Light_Color]">osd/icon_Next_unfocused.png</texturenofocus>
+					<texturefocus colordiffuse="$VAR[Light_Color]">osd/icon_Next_focused.png</texturefocus>
+					<font></font>
+					<label>Forward</label>
+					<onfocus>SetProperty(MusicOSD_Controls,Forward,musicosd)</onfocus>
+					<onclick>PlayerControl(Forward)</onclick>
+					<ondown>2</ondown>
+					<onup>2</onup>
+				</control>
+				<control type="group" id="9005">
+					<description>Repeat</description>
+					<width>60</width>
+					<height>60</height>
+					<control type="button" id="8">
+						<visible allowhiddenfocus="true">false</visible>
+						<onfocus>SetProperty(MusicOSD_Controls,$VAR[Repeat_Button_Label],musicosd)</onfocus>
+						<onclick>PlayerControl(Repeat)</onclick>
+						<onclick>SetProperty(MusicOSD_Controls,$VAR[Repeat_Button_Label],musicosd)</onclick>
+						<font></font>
+						<label>$VAR[Repeat_Button_Label]</label>
+						<ondown>3</ondown>
+						<onup>3</onup>
+						<onleft>7</onleft>
+						<onright>9</onright>
+					</control>
+					<control type="image">
+						<texture colordiffuse="$VAR[Light_Color]">$VAR[Repeat_Button_Texture]</texture>
+					</control>
+				</control>
+				<control type="radiobutton" id="9">
+					<description>Random</description>
+					<width>60</width>
+					<height>60</height>
+					<textureradioonfocus colordiffuse="$VAR[Light_Color]">osd/icon_Random_focused.png</textureradioonfocus>
+					<textureradioonnofocus colordiffuse="$VAR[Light_Color]">osd/icon_Random_unfocused.png</textureradioonnofocus>
+					<textureradioofffocus colordiffuse="$VAR[Light_Color]">osd/icon_NotRandom_focused.png</textureradioofffocus>
+					<textureradiooffnofocus colordiffuse="$VAR[Light_Color]">osd/icon_NotRandom_unfocused.png</textureradiooffnofocus>
+					<texturefocus/>
+					<texturenofocus/>
+					<radiowidth>60</radiowidth>
+					<radioheight>60</radioheight>
+					<radioposx>-1</radioposx>
+					<radioposy>0</radioposy>
+					<font/>
+					<label>$VAR[Random_Button_Label]</label>
+					<selected>Playlist.IsRandom</selected>
+					<onfocus>SetProperty(MusicOSD_Controls,$VAR[Random_Button_Label],musicosd)</onfocus>
+					<onclick>PlayerControl(Random)</onclick>
+					<onclick>SetProperty(MusicOSD_Controls,$VAR[Random_Button_Label],musicosd)</onclick>
+					<ondown>4</ondown>
+					<onup>4</onup>
+				</control>
+				<control type="button" id="10">
+					<description>Rating</description>
+					<width>60</width>
+					<height>60</height>
+					<texturenofocus colordiffuse="$VAR[Light_Color]">osd/icon_Bookmarks_unfocused.png</texturenofocus>
+					<texturefocus colordiffuse="$VAR[Light_Color]">osd/icon_Bookmarks_focused.png</texturefocus>
+					<font></font>
+					<label>Rating</label>
+					<onfocus>SetProperty(MusicOSD_Controls,Rating,musicosd)</onfocus>
+					<onclick>Dialog.Close(all, true)</onclick>
+					<onclick>SetRating</onclick>
+					<ondown>5</ondown>
+					<onup>5</onup>
+				</control>
 			</control>
-			<control type="button" id="10">
-				<description>Rating</description>
-				<width>60</width>
-				<height>60</height>
-				<texturenofocus colordiffuse="$VAR[Light_Color]">osd/icon_Bookmarks_unfocused.png</texturenofocus>
-				<texturefocus colordiffuse="$VAR[Light_Color]">osd/icon_Bookmarks_focused.png</texturefocus>
-				<font></font>
-				<label>Rating</label>
-				<onfocus>SetProperty(MusicOSD_Controls,Rating,musicosd)</onfocus>
-				<onclick>Dialog.Close(all, true)</onclick>
-				<onclick>SetRating</onclick>
-				<ondown>5</ondown>
-				<onup>5</onup>
-			</control>
+
 		</control>
 
 	</controls>
