@@ -11,11 +11,11 @@
 				<description>Select sort method (sort by: name, date size, etc...)</description>
 				<visible allowhiddenfocus="true">false</visible>
 			</control>
-			<control type="togglebutton" id="4">
+			<control type="radiobutton" id="4">
 				<description>Select sortmode (ascending or descending)</description>
 				<visible allowhiddenfocus="true">false</visible>
 			</control>
-			<control type="togglebutton" id="5">
+			<control type="radiobutton" id="5">
 				<description>Enable auto update (addonbrowser)</description>
 				<visible allowhiddenfocus="true">false</visible>
 			</control>
@@ -38,7 +38,7 @@
 				<description>Filter the media files to only show items that include the specified string in the name</description>
 				<visible allowhiddenfocus="true">false</visible>
 			</control>
-			<control type="togglebutton" id="20">
+			<control type="radiobutton" id="20">
 				<description>Update library/Shuffle</description>
 				<visible allowhiddenfocus="true">false</visible>
 			</control>
@@ -504,7 +504,7 @@
 
 				<control type="fixedlist" id="3000">
 					<viewtype label="535">list</viewtype>
-					<visible allowhiddenfocus="true">!Window.IsVisible(shutdownmenu)</visible>
+					<visible allowhiddenfocus="true">!Window.IsVisible(shutdownmenu) + !Window.IsVisible(virtualkeyboard)</visible>
 					<include>Content_Fade_Animation</include>
 					<description>Options menu</description>
 					<width>1080</width>
@@ -519,6 +519,8 @@
 					<onright condition="String.IsEmpty(Container(3000).ListItem.Property(ActionRight))">50</onright>
 					<onleft condition="!String.IsEmpty(Container(3000).ListItem.Property(ActionLeft))">$INFO[Container(3000).ListItem.Property(ActionLeft)]</onleft>
 					<onright condition="!String.IsEmpty(Container(3000).ListItem.Property(ActionRight))">$INFO[Container(3000).ListItem.Property(ActionRight)]</onright>
+					<onleft condition="!String.IsEmpty(Container(3000).ListItem.Property(ActionLeft2))">$INFO[Container(3000).ListItem.Property(ActionLeft2)]</onleft>
+					<onright condition="!String.IsEmpty(Container(3000).ListItem.Property(ActionRight2))">$INFO[Container(3000).ListItem.Property(ActionRight2)]</onright>
 					<!--Transition on left or right-->
 					<onleft condition="Container(3000).HasFocus(942)">SetFocus(940)</onleft>
 					<onright condition="Container(3000).HasFocus(942)">SetFocus(940)</onright>
@@ -694,6 +696,74 @@
 							<visible>Window.IsActive(music) + !String.IsEqual(Playlist.Length(music),0)</visible>
 						</item>
 
+						<!-- Playlist -->
+						<!-- Shuffle playlist -->
+						<!-- Off -->
+						<item>
+							<onclick>SetFocus(50)</onclick>
+							<label>‹ $LOCALIZE[591] ›</label>
+							<label2>$LOCALIZE[191] / $LOCALIZE[591]</label2>
+							<property name="ActionLeft">SendClick(20)</property>
+							<property name="ActionRight">SendClick(20)</property>
+							<visible>[Window.IsActive(musicplaylist) | Window.IsActive(videoplaylist)] + Control.IsEnabled(20) + String.Contains(Playlist.Random,$LOCALIZE[591])</visible>
+						</item>
+						<!-- On -->
+						<item>
+							<onclick>SetFocus(50)</onclick>
+							<label>‹ $LOCALIZE[34222] ›</label>
+							<label2>$LOCALIZE[191] / $LOCALIZE[34222]</label2>
+							<property name="ActionLeft">SendClick(20)</property>
+							<property name="ActionRight">SendClick(20)</property>
+							<visible>[Window.IsActive(musicplaylist) | Window.IsActive(videoplaylist)] + Control.IsEnabled(20) + String.Contains(Playlist.Random,$LOCALIZE[34222])</visible>
+						</item>
+						<!-- Repeat playlist -->
+						<!--Off-->
+						<item>
+							<onclick>SetFocus(50)</onclick>
+							<label>‹ $LOCALIZE[591] ›</label>
+							<label2>$LOCALIZE[486] / $LOCALIZE[591]</label2>
+							<property name="ActionLeft">SendClick(26)</property>
+							<property name="ActionLeft2">SendClick(26)</property>
+							<property name="ActionRight">SendClick(26)</property>
+							<visible>[Window.IsActive(musicplaylist) | Window.IsActive(videoplaylist)] + Control.IsEnabled(26) + String.Contains(Playlist.Repeat,$LOCALIZE[591])</visible>
+						</item>
+						<!--One-->
+						<item>
+							<onclick>SetFocus(50)</onclick>
+							<label>‹ $LOCALIZE[592] ›</label>
+							<label2>$LOCALIZE[486] / $LOCALIZE[592]</label2>
+							<property name="ActionLeft">SendClick(26)</property>
+							<property name="ActionLeft2">SendClick(26)</property>
+							<property name="ActionRight">SendClick(26)</property>
+							<visible>[Window.IsActive(musicplaylist) | Window.IsActive(videoplaylist)] + Control.IsEnabled(26) + String.Contains(Playlist.Repeat,$LOCALIZE[592])</visible>
+						</item>
+						<!--All-->
+						<item>
+							<onclick>SetFocus(50)</onclick>
+							<label>‹ $LOCALIZE[593] ›</label>
+							<label2>$LOCALIZE[486] / $LOCALIZE[593]</label2>
+							<property name="ActionLeft">SendClick(26)</property>
+							<property name="ActionLeft2">SendClick(26)</property>
+							<property name="ActionRight">SendClick(26)</property>
+							<visible>[Window.IsActive(musicplaylist) | Window.IsActive(videoplaylist)] + Control.IsEnabled(26) + String.Contains(Playlist.Repeat,$LOCALIZE[593])</visible>
+						</item>
+						<!-- Save playlist -->
+						<item>
+							<onclick>SendClick(21)</onclick>
+							<label>$LOCALIZE[190]</label>
+							<label2>$LOCALIZE[190]</label2>
+							<visible>[Window.IsActive(musicplaylist) | Window.IsActive(videoplaylist)] + Control.IsEnabled(21)</visible>
+						</item>
+						<!-- Clear playlist -->
+						<item>
+							<onclick>SendClick(22)</onclick>
+							<onclick>SetFocus(50)</onclick>
+							<onclick>ReplaceWindow(Videos)</onclick>
+							<label>$LOCALIZE[192]</label>
+							<label2>$LOCALIZE[192]</label2>
+							<visible>[Window.IsActive(musicplaylist) | Window.IsActive(videoplaylist)] + Control.IsEnabled(22)</visible>
+						</item>
+
 						<!-- Update Library -->
 						<item>
 							<description>Update Library</description>
@@ -701,7 +771,7 @@
 							<onclick>UpdateLibrary(video)</onclick>
 							<label>$LOCALIZE[653]</label>
 							<label2>$LOCALIZE[653]</label2>
-							<visible>!Window.IsActive(addonbrowser) + !Library.IsScanningVideo</visible>
+							<visible>!Window.IsActive(musicplaylist) + !Window.IsActive(videoplaylist) + !Window.IsActive(addonbrowser) + !Library.IsScanningVideo</visible>
 						</item>
 						<item>
 							<description>Cancel Update</description>
@@ -709,10 +779,8 @@
 							<onclick>SendClick(20)</onclick>
 							<label>$LOCALIZE[13353]</label>
 							<label2>$LOCALIZE[13353]</label2>
-							<visible>!Window.IsActive(addonbrowser) + Library.IsScanningVideo</visible>
+							<visible>!Window.IsActive(musicplaylist) + !Window.IsActive(videoplaylist) + !Window.IsActive(addonbrowser) + Library.IsScanningVideo</visible>
 						</item>
-
-						<!-- Playlist -->
 
 						<!-- Addon Browser -->
 						<!-- Foreign -->

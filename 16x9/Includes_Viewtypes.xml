@@ -535,6 +535,7 @@
 					<include>$PARAM[switchingtosecondarylistanimation]</include>
 					<include>Focus_Zoom_Animation</include>
 					<texture fallback="$PARAM[fallback]" background="true" diffuse="$PARAM[diffuse]">$VAR[$PARAM[artwork_icon]($PARAM[position])Content]</texture>
+					<!--<texture background="true" colordiffuse="$VAR[Accent_Color]">views/white_100.png</texture>-->
 					<aspectratio align="center" aligny="center">$PARAM[aspectratio]</aspectratio>
 					<fadetime>$PARAM[fadetime]</fadetime>
 				</control>
@@ -979,9 +980,11 @@
 			<param name="displaytype_label"/>
 			<param name="artwork_icon"/>
 			<param name="fallback"/>
-			<param name="item_width"/>
 			<param name="item_top"/>
 			<param name="item_height"/>
+			<param name="item_width"/>
+			<param name="item_width_minus_dropshadow_width"/>
+			<param name="item_width_plus_dropshadow_width"/>
 			<param name="2x_item_width"/>
 			<param name="2x_item_width_plus_focus_width"/>
 			<param name="3x_item_width"/>
@@ -1186,29 +1189,36 @@
 							<!-- Dropshadow for icon -1 to 0 -->
 							<!-- Left Side -->
 							<include content="DropShadow">
-								<param name="left" value="-$PARAM[item_width]"/>
+								<param name="left" value="-$PARAM[item_width_plus_dropshadow_width]"/>
 								<param name="top" value="$PARAM[item_top]"/>
-								<param name="width" value="1"/>
+								<param name="width" value="120"/>
 								<param name="height" value="$PARAM[item_height]"/>
 								<param name="visible" value="!Container($PARAM[target_id]).OnPrevious + !String.IsEmpty(Container.ListItemNoWrap(-1).Label) + $EXP[GridView_IsVisible]"/>
 								<param name="animationtype" value="Visible"/>
 								<param name="animationcondition" value="true"/>
-								<param name="animationeffect" value="zoom"/>
-								<param name="animationend" value="-120,$PARAM[item_top],120,$PARAM[item_height]"/>
-								<param name="animation2effect" value="fade"/>
-								<param name="animation2start" value="0"/>
-								<param name="animation2end" value="100"/>
-								<param name="animation2delay" value="20"/>
-								<param name="animation2time" value="360"/>
+								<param name="animationeffect" value="slide"/>
+								<param name="animationend" value="$PARAM[item_width]"/>
 							</include>
 							<!-- Right Side -->
+							<include content="DropShadow">
+								<param name="left" value="0"/>
+								<param name="width" value="120"/>
+								<param name="top" value="$PARAM[item_top]"/>
+								<param name="height" value="$PARAM[item_height]"/>>
+								<param name="flipx" value="true"/>
+								<param name="visible" value="Container($PARAM[target_id]).OnPrevious + !String.IsEmpty(Container.ListItemNoWrap(1).Label) + $EXP[GridView_IsVisible]"/>
+								<param name="animationtype" value="Hidden"/>
+								<param name="animationcondition" value="true"/>
+								<param name="animationeffect" value="slide"/>
+								<param name="animationend" value="$PARAM[item_width]"/>
+							</include>
 							<include content="DropShadow">
 								<param name="left" value="0"/>
 								<param name="width" value="1"/>
 								<param name="top" value="$PARAM[item_top]"/>
 								<param name="height" value="$PARAM[item_height]"/>>
 								<param name="flipx" value="true"/>
-								<param name="visible" value="Container($PARAM[target_id]).OnPrevious + !String.IsEmpty(Container.ListItemNoWrap(1).Label) + [$EXP[ShowcaseView_Details_Off] | $EXP[GridView_IsVisible]]"/>
+								<param name="visible" value="Container($PARAM[target_id]).OnPrevious + !String.IsEmpty(Container.ListItemNoWrap(1).Label) + $EXP[ShowcaseView_Details_Off]"/>
 								<param name="animationtype" value="Hidden"/>
 								<param name="animationcondition" value="true"/>
 								<param name="animationeffect" value="zoom"/>
@@ -1226,7 +1236,7 @@
 								<param name="top" value="$PARAM[item_top]"/>
 								<param name="height" value="$PARAM[item_height]"/>
 								<param name="flipx" value="true"/>
-								<param name="visible" value="Container($PARAM[target_id]).OnPrevious + !String.IsEmpty(Container.ListItemNoWrap(2).Label) + $EXP[ShowcaseView_Details_Off] + !$EXP[GridView_IsVisible]"/>
+								<param name="visible" value="Container($PARAM[target_id]).OnPrevious + !String.IsEmpty(Container.ListItemNoWrap(2).Label) + $EXP[ShowcaseView_Details_Off]"/>
 								<param name="animationtype" value="Hidden"/>
 								<param name="animationcondition" value="true"/>
 								<param name="animationeffect" value="zoom"/>
@@ -1496,11 +1506,22 @@
 							<!-- Dropshadow for icon 1 to 0 -->
 							<!-- Left Side -->
 							<include content="DropShadow">
+								<param name="left" value="$PARAM[item_width_minus_dropshadow_width]"/>
+								<param name="width" value="120"/>
+								<param name="top" value="$PARAM[item_top]"/>
+								<param name="height" value="$PARAM[item_height]"/>
+								<param name="visible" value="Container($PARAM[target_id]).OnNext + !String.IsEmpty(Container.ListItemNoWrap(1).Label) + $EXP[GridView_IsVisible]"/>
+								<param name="animationtype" value="Hidden"/>
+								<param name="animationcondition" value="true"/>
+								<param name="animationeffect" value="slide"/>
+								<param name="animationend" value="-$PARAM[item_width]"/>
+							</include>
+							<include content="DropShadow">
 								<param name="left" value="$PARAM[item_width]"/>
 								<param name="width" value="1"/>
 								<param name="top" value="$PARAM[item_top]"/>
 								<param name="height" value="$PARAM[item_height]"/>
-								<param name="visible" value="Container($PARAM[target_id]).OnNext + !String.IsEmpty(Container.ListItemNoWrap(1).Label) + [$EXP[ShowcaseView_Details_Off] | $EXP[GridView_IsVisible]]"/>
+								<param name="visible" value="Container($PARAM[target_id]).OnNext + !String.IsEmpty(Container.ListItemNoWrap(1).Label) + $EXP[ShowcaseView_Details_Off]"/>
 								<param name="animationtype" value="Hidden"/>
 								<param name="animationcondition" value="true"/>
 								<param name="animationeffect" value="zoom"/>
@@ -1514,11 +1535,23 @@
 							<!-- Right Side -->
 							<include content="DropShadow">
 								<param name="left" value="$PARAM[2x_item_width]"/>
+								<param name="width" value="120"/>
+								<param name="top" value="$PARAM[item_top]"/>
+								<param name="height" value="$PARAM[item_height]"/>
+								<param name="flipx" value="true"/>
+								<param name="visible" value="Container($PARAM[target_id]).OnNext + !String.IsEmpty(Container.ListItemNoWrap(1).Label) + $EXP[GridView_IsVisible]"/>
+								<param name="animationtype" value="Hidden"/>
+								<param name="animationcondition" value="true"/>
+								<param name="animationeffect" value="slide"/>
+								<param name="animationend" value="-$PARAM[item_width]"/>
+							</include>
+							<include content="DropShadow">
+								<param name="left" value="$PARAM[2x_item_width]"/>
 								<param name="width" value="1"/>
 								<param name="top" value="$PARAM[item_top]"/>
 								<param name="height" value="$PARAM[item_height]"/>
 								<param name="flipx" value="true"/>
-								<param name="visible" value="Container($PARAM[target_id]).OnNext + !String.IsEmpty(Container.ListItemNoWrap(1).Label) + [$EXP[ShowcaseView_Details_Off] | $EXP[GridView_IsVisible]]"/>
+								<param name="visible" value="Container($PARAM[target_id]).OnNext + !String.IsEmpty(Container.ListItemNoWrap(1).Label) + $EXP[ShowcaseView_Details_Off]"/>
 								<param name="animationtype" value="Hidden"/>
 								<param name="animationcondition" value="true"/>
 								<param name="animationeffect" value="zoom"/>
@@ -2247,12 +2280,9 @@
 		<definition>
 			<control type="group">
 				<animation effect="slide" end="12,0" time="0" condition="$EXP[GridView_Display_IsFanart]" reversible="false">Conditional</animation>
-				<visible>$EXP[GridView_Display_Is$PARAM[displaytype_label]]</visible>
 				<left>60</left>
 				<width>100%</width>
 				<height>100%</height>
-				<include>HiddenGridFocusButton</include>
-				<include>HiddenFocusButton</include>
 				<!-- Dropshadow -->
 				<control type="group">
 					<visible>!$EXP[TransparentDialog_IsVisible] + !Control.HasFocus(60) + !Control.HasFocus(91100)</visible>
@@ -2432,7 +2462,7 @@
 				</include>
 				<!-- ProgressBar -->
 				<control type="group">
-					<visible>!$EXP[ContainerSwitching] + !$EXP[ContentSwitching] + !$EXP[TransparentDialog_IsVisible] + !Control.HasFocus(60) + !Control.HasFocus(91100)</visible>
+					<visible>!$EXP[ContentSwitching] + !$EXP[TransparentDialog_IsVisible] + !Control.HasFocus(60) + !Control.HasFocus(91100)</visible>
 					<include>Delayed_Content_Fade_Animation</include>
 					<include content="ProgressBar">
 						<param name="left" value="$PARAM[progress_left]"/>
@@ -2454,6 +2484,8 @@
 				</include>
 			</itemlayout>
 			<focusedlayout width="592" height="333" condition="$EXP[GridView_Display_IsFanart]">
+				<include>HiddenGridFocusButton</include>
+				<include>HiddenFocusButton</include>
 				<include content="GridView_Icon_Focused">
 					<param name="displaytype_label" value="Fanart"/>
 					<param name="artwork_icon" value="$PARAM[artwork_icon]"/>
@@ -2474,6 +2506,8 @@
 				</include>
 			</itemlayout>
 			<focusedlayout width="360" height="540" condition="$EXP[GridView_Display_IsPosters]">
+				<include>HiddenGridFocusButton</include>
+				<include>HiddenFocusButton</include>
 				<include content="GridView_Icon_Focused">
 					<param name="displaytype_label" value="Posters"/>
 					<param name="artwork_icon" value="$PARAM[artwork_icon]"/>
@@ -2495,6 +2529,8 @@
 				</include>
 			</itemlayout>
 			<focusedlayout width="360" height="360" condition="$EXP[GridView_Display_IsSquare]">
+				<include>HiddenGridFocusButton</include>
+				<include>HiddenFocusButton</include>
 				<include content="GridView_Icon_Focused">
 					<param name="displaytype_label" value="Square"/>
 					<param name="artwork_icon" value="$PARAM[artwork_icon]"/>
@@ -2586,6 +2622,8 @@
 		<param name="top"/>
 		<param name="item_top"/>
 		<param name="item_width"/>
+		<param name="item_width_minus_dropshadow_width"/>
+		<param name="item_width_plus_dropshadow_width"/>
 		<param name="item_height"/>
 		<param name="focus_width"/>
 		<param name="focus_height"/>
@@ -2640,9 +2678,11 @@
 					<param name="focus_border_size" value="11"/>
 					<param name="focus_border_color" value="$VAR[Accent_Color]"/>
 					<param name="focus_border_texture" value="views/border_10px.png"/>
-					<param name="item_width" value="$PARAM[item_width]"/>
 					<param name="item_top" value="$PARAM[top]"/>
 					<param name="item_height" value="$PARAM[item_height]"/>
+					<param name="item_width" value="$PARAM[item_width]"/>
+					<param name="item_width_minus_dropshadow_width" value="$PARAM[item_width_minus_dropshadow_width]"/>
+					<param name="item_width_plus_dropshadow_width" value="$PARAM[item_width_plus_dropshadow_width]"/>
 					<param name="2x_item_width" value="$PARAM[2x_item_width]"/>
 					<param name="2x_item_width_plus_focus_width" value="$PARAM[2x_item_width_plus_focus_width]"/>
 					<param name="3x_item_width" value="$PARAM[2x_item_width_plus_focus_width]"/>
@@ -2666,10 +2706,12 @@
 				<param name="displaytype_label" value="Posters"/>
 				<param name="artwork_icon" value="$PARAM[artwork_icon]"/>
 				<param name="top" value="270"/>
-				<param name="item_width" value="360"/>
 				<param name="item_height" value="540"/>
-				<param name="focus_width" value="360"/>
 				<param name="focus_height" value="540"/>
+				<param name="item_width" value="360"/>
+				<param name="focus_width" value="360"/>
+				<param name="item_width_minus_dropshadow_width" value="240"/>
+				<param name="item_width_plus_dropshadow_width" value="480"/>
 				<param name="2x_item_width" value="720"/>
 				<param name="2x_item_width_plus_focus_width" value="1080"/>
 				<param name="3x_item_width_plus_focus_width" value="1440"/>
@@ -2692,10 +2734,12 @@
 				<param name="displaytype_label" value="Fanart"/>
 				<param name="artwork_icon" value="$PARAM[artwork_icon]"/>
 				<param name="top" value="374"/>
-				<param name="item_width" value="592"/>
 				<param name="item_height" value="333"/>
-				<param name="focus_width" value="592"/>
 				<param name="focus_height" value="333"/>
+				<param name="focus_width" value="592"/>
+				<param name="item_width" value="592"/>
+				<param name="item_width_minus_dropshadow_width" value="472"/>
+				<param name="item_width_plus_dropshadow_width" value="712"/>
 				<param name="2x_item_width" value="1184"/>
 				<param name="2x_item_width_plus_focus_width" value="1776"/>
 				<param name="3x_item_width_plus_focus_width" value="2368"/>
@@ -2716,10 +2760,12 @@
 				<param name="displaytype_label" value="Square"/>
 				<param name="artwork_icon" value="$PARAM[artwork_icon]"/>
 				<param name="top" value="360"/>
-				<param name="item_width" value="360"/>
 				<param name="item_height" value="360"/>
-				<param name="focus_width" value="360"/>
 				<param name="focus_height" value="360"/>
+				<param name="item_width" value="360"/>
+				<param name="focus_width" value="360"/>
+				<param name="item_width_minus_dropshadow_width" value="240"/>
+				<param name="item_width_plus_dropshadow_width" value="480"/>
 				<param name="2x_item_width" value="720"/>
 				<param name="2x_item_width_plus_focus_width" value="1080"/>
 				<param name="3x_item_width_plus_focus_width" value="1440"/>
