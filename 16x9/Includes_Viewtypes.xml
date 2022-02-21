@@ -20,15 +20,6 @@
 		</control>
 	</include>
 
-	<include name="HiddenGridFocusButton">
-		<control type="button">
-			<visible allowhiddenfocus="true">false</visible>
-			<onfocus condition="$EXP[GridView_IsVisible]">SetProperty(GridView_Position,$INFO[Container.Position],home)</onfocus>
-			<onfocus condition="$EXP[GridView_IsVisible]">SetProperty(GridView_Row,$INFO[Container.Row],home)</onfocus>
-			<onfocus condition="$EXP[GridView_IsVisible]">SetProperty(GridView_NumItems,$INFO[Container.NumItems],home)</onfocus>
-		</control>
-	</include>
-
 	<include name="Common_List_Layout">
 		<param name="visible" default="true"/>
 		<param name="nowplayingtop" default="-34"/>
@@ -830,7 +821,7 @@
 							<itemgap>0</itemgap>
 							<control type="textbox">
 								<visible>$EXP[ShowcaseView_Display_IsSquare]</visible>
-								<height max="180">auto</height>
+								<height max="260">auto</height>
 								<font>Showcase_Overlay_Title</font>
 								<textcolor>$VAR[Light_Color]</textcolor>
 								<label>$VAR[Title_Label]</label>
@@ -839,7 +830,7 @@
 							</control>
 							<control type="textbox">
 								<visible>$EXP[ShowcaseView_Display_IsPosters]</visible>
-								<height max="156">auto</height>
+								<height max="260">auto</height>
 								<font>Showcase_Title</font>
 								<textcolor>$VAR[Light_Color]</textcolor>
 								<label>$VAR[Title_Label]</label>
@@ -2484,7 +2475,6 @@
 				</include>
 			</itemlayout>
 			<focusedlayout width="592" height="333" condition="$EXP[GridView_Display_IsFanart]">
-				<include>HiddenGridFocusButton</include>
 				<include>HiddenFocusButton</include>
 				<include content="GridView_Icon_Focused">
 					<param name="displaytype_label" value="Fanart"/>
@@ -2506,7 +2496,6 @@
 				</include>
 			</itemlayout>
 			<focusedlayout width="360" height="540" condition="$EXP[GridView_Display_IsPosters]">
-				<include>HiddenGridFocusButton</include>
 				<include>HiddenFocusButton</include>
 				<include content="GridView_Icon_Focused">
 					<param name="displaytype_label" value="Posters"/>
@@ -2529,7 +2518,6 @@
 				</include>
 			</itemlayout>
 			<focusedlayout width="360" height="360" condition="$EXP[GridView_Display_IsSquare]">
-				<include>HiddenGridFocusButton</include>
 				<include>HiddenFocusButton</include>
 				<include content="GridView_Icon_Focused">
 					<param name="displaytype_label" value="Square"/>
@@ -2540,6 +2528,52 @@
 				</include>
 			</focusedlayout>
 		</definition>
+	</include>
+
+	<include name="GridView_Top_Bar">
+		<definition>
+			<param name="poster_visible"/>
+			<param name="fanart_visible"/>
+			<param name="color_diffuse"/>
+			<control type="image">
+				<visible>$PARAM[poster_visible]</visible>
+				<animation effect="slide" end="360,0" time="0" condition="Integer.IsEqual(Container.Position,1)" reversible="false">Conditional</animation>
+				<animation effect="slide" end="720,0" time="0" condition="Integer.IsEqual(Container.Position,2)" reversible="false">Conditional</animation>
+				<animation effect="slide" end="1080,0" time="0" condition="Integer.IsEqual(Container.Position,3)" reversible="false">Conditional</animation>
+				<animation effect="slide" end="1440,0" time="0" condition="Integer.IsEqual(Container.Position,4)" reversible="false">Conditional</animation>
+				<left>50</left>
+				<top>170</top>
+				<width>380</width>
+				<height>10</height>
+				<texture colordiffuse="$PARAM[color_diffuse]">views/white_100.png</texture>
+			</control>
+			<control type="image">
+				<visible>$PARAM[fanart_visible]</visible>
+				<animation effect="slide" end="592,0" time="0" condition="Integer.IsEqual(Container.Position,1)" reversible="false">Conditional</animation>
+				<animation effect="slide" end="1184,0" time="0" condition="Integer.IsEqual(Container.Position,2)" reversible="false">Conditional</animation>
+				<left>62</left>
+				<top>170</top>
+				<width>612</width>
+				<height>10</height>
+				<texture colordiffuse="$PARAM[color_diffuse]">views/white_100.png</texture>
+			</control>
+		</definition>
+	</include>
+
+	<include name="GridView_Slides_CenterScreen">
+		<animation effect="slide" end="592,193" time="0" reversible="false" condition="$EXP[GridView_Display_IsFanart] + Integer.IsEqual(Container.NumItems,1)">Conditional</animation>
+		<animation effect="slide" end="296,193" time="0" reversible="false" condition="$EXP[GridView_Display_IsFanart] + Integer.IsEqual(Container.NumItems,2)">Conditional</animation>
+		<animation effect="slide" end="0,193" time="0" reversible="false" condition="$EXP[GridView_Display_IsFanart] + Integer.IsEqual(Container.NumItems,3)">Conditional</animation>
+		<animation effect="slide" end="720,90" time="0" reversible="false" condition="$EXP[GridView_Display_IsPosters] + Integer.IsEqual(Container.NumItems,1)">Conditional</animation>
+		<animation effect="slide" end="540,90" time="0" reversible="false" condition="$EXP[GridView_Display_IsPosters] + Integer.IsEqual(Container.NumItems,2)">Conditional</animation>
+		<animation effect="slide" end="360,90" time="0" reversible="false" condition="$EXP[GridView_Display_IsPosters] + Integer.IsEqual(Container.NumItems,3)">Conditional</animation>
+		<animation effect="slide" end="180,90" time="0" reversible="false" condition="$EXP[GridView_Display_IsPosters] + Integer.IsEqual(Container.NumItems,4)">Conditional</animation>
+		<animation effect="slide" end="0,90" time="0" reversible="false" condition="$EXP[GridView_Display_IsPosters] + Integer.IsEqual(Container.NumItems,5)">Conditional</animation>
+		<animation effect="slide" end="720,180" time="0" reversible="false" condition="$EXP[GridView_Display_IsSquare] + Integer.IsEqual(Container.NumItems,1)">Conditional</animation>
+		<animation effect="slide" end="540,180" time="0" reversible="false" condition="$EXP[GridView_Display_IsSquare] + Integer.IsEqual(Container.NumItems,2)">Conditional</animation>
+		<animation effect="slide" end="360,180" time="0" reversible="false" condition="$EXP[GridView_Display_IsSquare] + Integer.IsEqual(Container.NumItems,3)">Conditional</animation>
+		<animation effect="slide" end="180,180" time="0" reversible="false" condition="$EXP[GridView_Display_IsSquare] + Integer.IsEqual(Container.NumItems,4)">Conditional</animation>
+		<animation effect="slide" end="0,180" time="0" reversible="false" condition="$EXP[GridView_Display_IsSquare] + Integer.IsEqual(Container.NumItems,5)">Conditional</animation>
 	</include>
 
 	<include name="GridView_Slides_Fanart">

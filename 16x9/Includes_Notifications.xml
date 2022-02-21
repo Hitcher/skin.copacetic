@@ -5,12 +5,12 @@
 		<param name="width" default="100%"/>
 		<param name="top" default="0"/>
 		<param name="height" default="180"/>
-		<param name="label_width" default="1740"/>
+		<param name="label_width" default="600"/>
 		<param name="align" default="right"/>
 		<param name="background_visible" default="!Window.IsVisible(1100)"/>
 		<param name="content_visible" default="!Window.IsVisible(extendedprogressdialog)"/>
 		<param name="label_padding" default="30"/>
-		<param name="label_scroll" default="true"/>
+		<param name="label_scroll" default="false"/>
 		<param name="label_1" default="$INFO[Control.GetLabel(401)]"/>
 		<param name="label_2" default="$INFO[Control.GetLabel(402)]"/>
 		<param name="center_label_visible" default="false"/>
@@ -191,9 +191,9 @@
 		<definition>
 			<control type="group">
 				<visible>$PARAM[visible]</visible>
-				<!--Background_IsFanart Mini player-->
+				<!-- Mini player -->
 				<control type="group">
-					<visible>$EXP[Background_IsFanart] | !Window.IsMedia</visible>
+					<visible>$EXP[Background_IsFanart] | $EXP[ShowcaseView_Display_IsSquare] | !Window.IsMedia</visible>
 					<include>Dialog_Fade_Animation</include>
 					<animation effect="slide" end="30,0" time="0" condition="String.IsEmpty(Window(home).Property(Music_Player_Controls))">Conditional</animation>
 					<include content="$PARAM[type]_Widget">
@@ -201,12 +201,13 @@
 						<param name="background_visible" value="false"/>
 						<param name="content_visible" value="$PARAM[content_visible]"/>
 						<param name="label_padding" value="-30"/>
+						<param name="label_width" value="600"/>
 						<param name="label_1" value="$PARAM[label_1]"/>
 						<param name="label_2" value="$PARAM[label_2]"/>
 						<param name="left_label_visible" value="true"/>
 					</include>
 				</control>
-				<!--LISTVIEW Thumbnails-->
+				<!-- List Thumbnails -->
 				<control type="group">
 					<visible>$EXP[ListView_Display_IsThumbnails]</visible>
 					<include>Dialog_Fade_Animation</include>
@@ -222,62 +223,21 @@
 						<param name="left_label_visible" value="true"/>
 					</include>
 				</control>
-				<!--SHOWCASEVIEW-->
+				<!-- Showcase -->
 				<control type="group">
-					<visible>$EXP[ShowcaseView_IsVisible] + !$EXP[Background_IsFanart]</visible>
+					<visible>$EXP[ShowcaseView_Display_IsPosters]</visible>
 					<include>Dialog_Fade_Animation</include>
-					<control type="group">
-						<visible>$EXP[ShowcaseView_Display_IsSquare]</visible>
-						<control type="group">
-							<visible>![Skin.HasSetting(Music_Player_Enabled) + Player.HasAudio]  | !$EXP[ShowcaseView_Details_Off]</visible>
-							<animation effect="fade" start="0" end="100" time="360" reversible="true">VisibleChange</animation>
-							<include content="$PARAM[type]_Widget">
-								<param name="visible" value="true"/>
-								<param name="align" value="right"/>
-								<param name="height" value="240"/>
-								<param name="label_width" value="600"/>
-								<param name="content_visible" value="$PARAM[content_visible]"/>
-								<param name="label_1" value="$PARAM[label_1]"/>
-								<param name="label_2" value="$PARAM[label_2]"/>
-								<param name="left_label_visible" value="true"/>
-								<param name="label_scroll" value="true"/>
-							</include>
-						</control>
-					</control>
-					<control type="group">
-						<visible>$EXP[ShowcaseView_Display_IsPosters]</visible>
-						<control type="group">
-							<visible>![Skin.HasSetting(Music_Player_Enabled) + Player.HasAudio] </visible>
-							<animation effect="fade" start="0" end="100" time="360" reversible="true">VisibleChange</animation>
-							<include content="$PARAM[type]_Widget">
-								<param name="visible" value="$EXP[ShowcaseView_Display_IsPosters] + ![Skin.HasSetting(Music_Player_Enabled) + Player.HasAudio]"/>
-								<param name="height" value="240"/>
-								<param name="label_width" value="960"/>
-								<param name="content_visible" value="$PARAM[content_visible]"/>
-								<param name="label_1" value="$PARAM[label_1]"/>
-								<param name="label_2" value="$PARAM[label_2]"/>
-								<param name="right_label_visible" value="true"/>
-							</include>
-						</control>
-					</control>
-					<control type="group">
-						<visible>[$EXP[ShowcaseView_Display_IsPosters] | [$EXP[ShowcaseView_Display_IsSquare] + $EXP[ShowcaseView_Details_Off]]]</visible>
-							<control type="group">
-							<visible>Skin.HasSetting(Music_Player_Enabled) + Player.HasAudio</visible>
-							<animation effect="fade" start="0" end="100" time="360" reversible="true">VisibleChange</animation>
-							<include content="$PARAM[type]_Widget">
-								<param name="visible" value="true"/>
-								<param name="height" value="360"/>
-								<param name="align" value="left"/>
-								<param name="content_visible" value="$PARAM[content_visible]"/>
-								<param name="label_1" value="$PARAM[label_1]"/>
-								<param name="label_2" value="$PARAM[label_2]"/>
-								<param name="center_label_visible" value="true"/>
-							</include>
-						</control>
-					</control>
+					<include content="$PARAM[type]_Widget">
+						<param name="visible" value="$EXP[ShowcaseView_Display_IsPosters]"/>
+						<param name="height" value="360"/>
+						<param name="align" value="left"/>
+						<param name="content_visible" value="$PARAM[content_visible]"/>
+						<param name="label_1" value="$PARAM[label_1]"/>
+						<param name="label_2" value="$PARAM[label_2]"/>
+						<param name="center_label_visible" value="true"/>
+					</include>
 				</control>
-				<!--STRIPVIEW-->
+				<!-- Strip -->
 				<control type="group">
 					<visible>$EXP[StripView_IsVisible]</visible>
 					<include>Dialog_Fade_Animation</include>
@@ -323,7 +283,7 @@
 						<param name="left_label_visible" value="true"/>
 					</include>
 				</control>
-				<!--GRIDVIEW-->
+				<!-- Grid -->
 				<control type="group">
 					<visible>$EXP[GridView_IsVisible]</visible>
 					<include>Dialog_Fade_Animation</include>
@@ -332,7 +292,7 @@
 					<include content="$PARAM[type]_Widget">
 						<param name="visible" value="$EXP[GridView_IsVisible]"/>
 						<param name="height" value="180"/>
-						<param name="label_width" value="1600"/>
+						<param name="label_width" value="600"/>
 						<param name="content_visible" value="$PARAM[content_visible]"/>
 						<param name="label_1" value="$PARAM[label_1]"/>
 						<param name="label_2" value="$PARAM[label_2]"/>
