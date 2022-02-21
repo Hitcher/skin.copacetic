@@ -12,7 +12,7 @@
 		<definition>
 			<control type="fixedlist" id="$PARAM[id]">
 				<visible>Integer.IsGreater(Container($PARAM[id]).NumItems,0) | Container($PARAM[id]).IsUpdating</visible>
-				<onfocus>SetProperty(HomeWidget,Active,home)</onfocus>
+				<onfocus>SetProperty(HomeWidget,$PARAM[id],home)</onfocus>
 				<onunfocus condition="!String.IsEmpty(window(home).property(HomeWidget))">ClearProperty(HomeWidget,home)</onunfocus>
 				<viewtype label="widgetlist">list</viewtype>
 				<preloaditems>2</preloaditems>
@@ -139,23 +139,17 @@
 					<include condition="Skin.HasSetting(Widget$PARAM[widget_position]_View_Grid)" content="Breadcrumb_Label">
 						<param name="title_label" value="$VAR[Title_Label]"/>
 						<param name="info_label" value="/ $VAR[Info_Label]"/>
+						<param name="label_color" value="$VAR[Primary_Color]"/>
 					</include>
 				</control>
 			</control>
 			<!-- Breadcrumb -->
 			<control type="group">
 				<visible>Control.HasFocus(90$PARAM[widget_position]0)</visible>
-				<control type="image">
-					<animation effect="zoom" end="0,0,1920,100%" time="0" condition="Skin.HasSetting(Widget$PARAM[widget_position]_View_Billboard)">Conditional</animation>
-					<animation effect="zoom" end="0,0,1080,100%" time="0" condition="Skin.HasSetting(Widget$PARAM[widget_position]_View_Showcase) + Skin.HasSetting(Widget$PARAM[widget_position]_Display_Square)">Conditional</animation>
-					<visible>Skin.HasSetting(Widget$PARAM[widget_position]_View_Billboard) | Skin.HasSetting(Widget$PARAM[widget_position]_View_Showcase)</visible>
-					<height>100%</height>
-					<width>720</width>
-					<texture colordiffuse="$VAR[Dark_Color]" flipy="true">views/gradient_art-overlay.png</texture>
-				</control>
 				<include content="Breadcrumb_Label">
 					<param name="title_label" value="$PARAM[widget_header]"/>
 					<param name="info_label" value="$INFO[Container(90$PARAM[widget_position]0).CurrentItem,/ ,]$INFO[Container(90$PARAM[widget_position]0).NumItems,/]"/>
+					<param name="label_color" value="$VAR[Home_Breadcrumb_Label_Color]"/>
 				</include>
 			</control>
 		</control>

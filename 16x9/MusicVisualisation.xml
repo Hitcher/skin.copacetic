@@ -10,7 +10,7 @@
 			<visible>false</visible>
 		</control>
 
-		<!--Artwork-->
+		<!-- Main artwork -->
 		<include content="ListIcon">
 			<param name="left" value="780"/>
 			<param name="top" value="120"/>
@@ -18,7 +18,19 @@
 			<param name="height" value="840"/>
 			<param name="bordervisible" value="true"/>
 		</include>
+		<control type="image">
+			<visible>Window.IsVisible(musicosd) | Player.Paused | Player.Rewinding | Player.Forwarding</visible>
+			<include>Dialog_Fade_Animation</include>
+			<left>780</left>
+			<top>120</top>
+			<width>840</width>
+			<height>840</height>
+			<texture colordiffuse="$VAR[Artwork_Mask]">views/white_100.png</texture>
+		</control>
+
+		<!-- Next up -->
 		<control type="group">
+			<visible>!Playlist.IsRepeatOne</visible>
 			<left>1620</left>
 			<top>300</top>
 			<width>480</width>
@@ -32,24 +44,9 @@
 				<param name="flipx" value="true"/>
 				<param name="visible" value="MusicPlayer.HasNext + !String.IsEmpty(MusicPlayer.offset(1).Title)"/>
 			</include>
-		</control>
-
-		<!-- Visualisation Diffuse for Player_Status_Icons -->
-		<control type="group">
-			<visible>Window.IsVisible(musicosd) | Player.Paused | Player.Rewinding | Player.Forwarding</visible>
-			<include>Dialog_Fade_Animation</include>
 			<control type="image">
-				<left>780</left>
-				<top>120</top>
-				<width>840</width>
-				<height>840</height>
-				<texture colordiffuse="$VAR[Artwork_Mask]">views/white_100.png</texture>
-			</control>
-			<control type="image">
-				<left>1620</left>
-				<top>300</top>
-				<width>480</width>
-				<height>480</height>
+				<visible>Window.IsVisible(musicosd) | Player.Paused | Player.Rewinding | Player.Forwarding</visible>
+				<include>Dialog_Fade_Animation</include>
 				<texture colordiffuse="$VAR[Artwork_Mask]">views/white_100.png</texture>
 			</control>
 		</control>
@@ -65,31 +62,15 @@
 					<param name="label_color" value="$VAR[Primary_Color]"/>
 				</include>
 			</control>
-			<control type="grouplist">
-				<left>60</left>
-				<width>660</width>
-				<top>240</top>
-				<bottom>240</bottom>
-				<orientation>vertical</orientation>
-				<align>center</align>
-				<itemgap>5</itemgap>
-				<usecontrolcoords>true</usecontrolcoords>
-				<!--Title-->
-				<control type="textbox">
-					<height max="200">auto</height>
-					<font>Showcase_Title</font>
-					<textcolor>$VAR[Primary_Color]</textcolor>
-					<label>$INFO[MusicPlayer.Title]</label>
-				</control>
-				<!--Info-->
-				<control type="textbox">
-					<top>-10</top>
-					<height max="70">auto</height>
-					<font>MusicPlayer_Info</font>
-					<textcolor>$VAR[Primary_Color]</textcolor>
-					<label>$INFO[MusicPlayer.Artist]$INFO[MusicPlayer.Year, / ]$INFO[MusicPlayer.Album, / ]</label>
-				</control>
-			</control>
+			<include content="Common_Details">
+				<param name="viewtype_label" value="Showcase"/>
+				<param name="left" value="60"/>
+				<param name="width" value="660"/>
+				<param name="titleheight" value="280"/>
+				<param name="titlelabel" value="$INFO[MusicPlayer.Title]"/>
+				<param name="infoheight" value="280"/>
+				<param name="infolabel" value="[UPPERCASE]$INFO[MusicPlayer.Artist]$INFO[MusicPlayer.Year, / ]$INFO[MusicPlayer.Album, / ][/UPPERCASE]"/>
+			</include>
 		</control>
 
 	</controls>
