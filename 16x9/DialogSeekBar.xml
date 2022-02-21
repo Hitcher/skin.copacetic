@@ -28,20 +28,24 @@
 			<include>Delayed_Content_Fade_Animation</include>
 
 			<control type="group">
-				<visible>Player.HasVideo + [[Player.Paused + !Skin.HasSetting(Player_Progress_Disabled)] | Player.Seeking | Player.Rewinding | Player.Forwarding | Player.DisplayAfterSeek | Window.IsVisible(videoosd)]</visible>
+				<visible>Player.HasVideo + [Player.Paused | Player.Seeking | Player.Rewinding | Player.Forwarding | Player.DisplayAfterSeek | Window.IsVisible(videoosd)]</visible>
 				<include>Delayed_Content_Fade_Animation</include>
-				<include content="Player_Progress">
-					<param name="left" value="120"/>
-					<param name="right" value="120"/>
-					<param name="bottom" value="0"/>
-					<param name="height" value="90"/>
-					<param name="progress_id" value="1"/>
-					<param name="left_label" value="$INFO[Player.Time]$INFO[Player.Duration, / ]"/>
-					<param name="right_label" value="$LOCALIZE[32000] $INFO[Player.FinishTime]"/>
-				</include>
 				<include content="Player_Status_Icons">
 					<param name="large_label" value="true"/>
 				</include>
+				<control type="group">
+					<visible>![Player.Paused + !Window.IsVisible(videoosd) + Skin.HasSetting(Player_Progress_Disabled)]</visible>
+					<include>Delayed_Content_Fade_Animation</include>
+					<include content="Player_Progress">
+						<param name="left" value="120"/>
+						<param name="right" value="120"/>
+						<param name="bottom" value="0"/>
+						<param name="height" value="90"/>
+						<param name="progress_id" value="1"/>
+						<param name="left_label" value="$INFO[Player.Time]$INFO[Player.Duration, / ]"/>
+						<param name="right_label" value="$LOCALIZE[32000] $INFO[Player.FinishTime]"/>
+					</include>
+				</control>
 			</control>
 
 			<control type="group">
