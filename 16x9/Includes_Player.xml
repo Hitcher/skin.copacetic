@@ -9,6 +9,7 @@
 		<param name="progress_id"/>
 		<param name="left_label"/>
 		<param name="right_label"/>
+		<param name="text_color"/>
 		<definition>
 			<control type="group">
 				<left>$PARAM[left]</left>
@@ -17,7 +18,9 @@
 				<height>$PARAM[height]</height>
 				<!--Cache bar-->
 				<control type="progress" id="$PARAM[progress_id]">
-					<top>-6</top>
+					<centertop>50%</centertop>
+					<left>$PARAM[progress_bar_padding]</left>
+					<right>$PARAM[progress_bar_padding]</right>
 					<height>6</height>
 					<info>Player.ProgressCache</info>
 					<texturebg colordiffuse="$VAR[Progress_Background_Color]">views/white_100.png</texturebg>
@@ -28,7 +31,9 @@
 				</control>
 				<!--Progress bar-->
 				<control type="progress" id="$PARAM[progress_id]">
-					<top>-6</top>
+					<centertop>50%</centertop>
+					<left>$PARAM[progress_bar_padding]</left>
+					<right>$PARAM[progress_bar_padding]</right>
 					<height>6</height>
 					<info>Player.Progress</info>
 					<texturebg colordiffuse="$VAR[Blank_Color]">views/white_100.png</texturebg>
@@ -38,35 +43,21 @@
 					<overlaytexture></overlaytexture>
 				</control>
 				<control type="label">
-					<visible>Player.HasVideo</visible>
-					<left>0</left>
 					<height>100%</height>
 					<width>100%</width>
 					<align>left</align>
 					<aligny>center</aligny>
 					<label>$PARAM[left_label]</label>
-					<font>Body</font>
-					<textcolor>$VAR[Light_Color]</textcolor>
+					<font>Player_Time</font>
+					<textcolor>$PARAM[text_color]</textcolor>
 				</control>
 				<control type="label">
-					<visible>Player.HasVideo</visible>
-					<height>100%</height>
 					<width>100%</width>
 					<align>right</align>
 					<aligny>center</aligny>
 					<label>$PARAM[right_label]</label>
-					<font>Body</font>
-					<textcolor>$VAR[Light_Color]</textcolor>
-				</control>
-				<control type="label">
-					<visible>Player.HasAudio</visible>
-					<height>100%</height>
-					<width>100%</width>
-					<align>center</align>
-					<aligny>center</aligny>
-					<label>$PARAM[left_label]</label>
-					<font>Body</font>
-					<textcolor>$VAR[Progress_Focused_Color]</textcolor>
+					<font>Player_Time</font>
+					<textcolor>$PARAM[text_color]</textcolor>
 				</control>
 			</control>
 		</definition>
@@ -114,9 +105,9 @@
 				</control>
 				<!--Playing-->
 				<control type="image">
-					<animation effect="fade" start="100" end="0" delay="900" time="360" condition="Player.Playing" tween="sine" easing="inout">Conditional</animation>
+					<animation effect="fade" start="0" end="100" time="360" tween="sine" easing="out" reversible="false">Visible</animation>
+					<animation effect="fade" start="100" end="0" delay="720" time="360" condition="Player.Playing + !Window.IsVisible(videoosd)" tween="sine" easing="inout">Conditional</animation>
 					<visible>Player.Playing + !Window.IsVisible(videoosd)</visible>
-					<include>Delayed_Play_Icon_Fade_Animation</include>
 					<centertop>50%</centertop>
 					<centerleft>50%</centerleft>
 					<texture colordiffuse="$VAR[Light_Color]">osd/icon_Player.Playing_$PARAM[icon_type].png</texture>
@@ -242,7 +233,7 @@
 				</item>
 				<item>
 					<description>Pause</description>
-					<label>$LOCALIZE[31526]</label>
+					<label>$VAR[Play_Pause_Label]</label>
 					<onclick>PlayerControl(Play)</onclick>
 				</item>
 				<item>
@@ -256,6 +247,7 @@
 					<onclick>ActivateWindow(music,musicdb://artists/?artist=$INFO[MusicPlayer.Artist],return)</onclick>
 				</item>
 				<item>
+					<description>Stop</description>
 					<label>$LOCALIZE[31528]</label>
 					<onclick>PlayerControl(Stop)</onclick>
 					<onclick condition="Window.IsVisible(home)">SetFocus(9000)</onclick>
@@ -267,6 +259,7 @@
 					<onclick condition="$EXP[GridView_IsVisible]">SetFocus(505)</onclick>
 				</item>
 				<item>
+					<description>Go to music visualisation</description>
 					<label>$LOCALIZE[31529]</label>
 					<onclick>ActivateWindow(visualisation)</onclick>
 				</item>

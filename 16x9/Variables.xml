@@ -11,8 +11,8 @@
 		<value condition="Control.HasFocus(4501)">$INFO[Container(4501).ListItem.Art(clearlogo)]</value>
 		<!--PRIMARY LIST-->
 		<value condition="$EXP[BillboardView_IsVisible] + !String.IsEmpty(ListItem.Art(clearlogo-billboard))">$INFO[ListItem.Art(clearlogo-billboard)]</value>
-		<value condition="Skin.String(Theme,Light) + $EXP[Logo_Aligned] + !String.IsEmpty(ListItem.Art(clearlogo-alt-aligned))">$INFO[ListItem.Art(clearlogo-alt-aligned)]</value>
-		<value condition="Skin.String(Theme,Light) + !String.IsEmpty(ListItem.Art(clearlogo-alt))">$INFO[ListItem.Art(clearlogo-alt)]</value>
+		<value condition="Skin.String(Theme,Light) + !$EXP[BillboardView_IsVisible] + $EXP[Logo_Aligned] + !String.IsEmpty(ListItem.Art(clearlogo-alt-aligned))">$INFO[ListItem.Art(clearlogo-alt-aligned)]</value>
+		<value condition="Skin.String(Theme,Light) + !$EXP[BillboardView_IsVisible] + !String.IsEmpty(ListItem.Art(clearlogo-alt))">$INFO[ListItem.Art(clearlogo-alt)]</value>
 		<value condition="$EXP[Logo_Aligned] + !String.IsEmpty(ListItem.Art(clearlogo-aligned))">$INFO[ListItem.Art(clearlogo-aligned)]</value>
 		<value>$INFO[ListItem.Art(clearlogo)]</value>
 	</variable>
@@ -360,7 +360,7 @@
 
 	<variable name="Info_Label">
 		<!--WIDGETS
-		2016 / 104mins/fullhd
+		2016 / 104mins / fullhd
 		2019/ 1 season / 0/6 watched-->
 		<value condition="Window.IsActive(home) + String.IsEqual(ListItem.DBType,episode) + $EXP[GridView_Widget_IsVisible] + !Integer.IsGreater(ListItem.Episode,9) + !String.IsEmpty(ListItem.Episode)">$INFO[ListItem.Season]$INFO[ListItem.Episode,x0,]</value>
 		<value condition="Window.IsActive(home) + String.IsEqual(ListItem.DBType,episode) + $EXP[GridView_Widget_IsVisible] + !String.IsEmpty(ListItem.Episode)">$INFO[ListItem.Season]$INFO[ListItem.Episode,x,]</value>
@@ -463,6 +463,8 @@
 	</variable>
 
 	<variable name="Breadcrumb_Title_Label">
+		<value condition="VideoPlayer.IsFullscreen + !String.IsEmpty(VideoPlayer.TVShowTitle)">$INFO[VideoPlayer.TVShowTitle]</value>
+		<value condition="VideoPlayer.IsFullscreen">$INFO[VideoPlayer.Title]</value>
 		<value condition="Window.IsActive(musicplaylist)">$INFO[ListItem.Artist]</value>
 		<value condition="[String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,set)] + $EXP[GridView_IsVisible] + $EXP[GridView_Details_Breadcrumb] + !String.IsEmpty(ListItem.Title)">$INFO[ListItem.Title]</value>
 		<value condition="String.IsEqual(ListItem.DBType,tvshow) + $EXP[GridView_IsVisible] + $EXP[GridView_Details_Breadcrumb] + !String.IsEmpty(ListItem.TVShowTitle)">$INFO[ListItem.TVShowTitle]</value>
@@ -476,8 +478,6 @@
 		<value condition="Container.Content(actors) + !String.IsEmpty(ListItem.Appearances)">$INFO[ListItem.Appearances]$VAR[Appearances_Label, ]</value>
 		<value condition="Container.Content(files) + String.IsEmpty(ListItem.Art(Poster))">$INFO[ListItem.FolderName]</value>
 		<value condition="Container.Content(addons)">$INFO[ListItem.Label]</value>
-		<value condition="Window.IsVisible(musicosd)">$INFO[Window(musicosd).Property(MusicOSD_Controls)]</value>
-		<value condition="Window.IsVisible(visualisation)">Now playing...</value>
 		<!-- Smart playlist editor -->
 		<value condition="Window.IsActive(smartplaylisteditor)">$LOCALIZE[10136]</value>
 		<!-- Smart playlist rule -->
@@ -492,6 +492,8 @@
 	</variable>
 
 	<variable name="Breadcrumb_Info_Label">
+		<value condition="VideoPlayer.IsFullscreen + !String.IsEmpty(VideoPlayer.Season) + !Integer.IsGreater(VideoPlayer.Episode,9)">$INFO[VideoPlayer.Season,/ ]$INFO[VideoPlayer.Episode,x0]$VAR[Resolution_Label, / ]$INFO[Player.FinishTime, / $LOCALIZE[32000] ]</value>
+		<value condition="VideoPlayer.IsFullscreen + !String.IsEmpty(VideoPlayer.Year)">$INFO[VideoPlayer.Year,/ ]$VAR[Resolution_Label,/ ]$INFO[Player.FinishTime,/ $LOCALIZE[32000] ]</value>
 		<value condition="Window.IsActive(musicplaylist)">$INFO[ListItem.Year,/ ]$INFO[ListItem.Album,/ ]$INFO[Container.CurrentItem, / $LOCALIZE[554] ]$INFO[Playlist.Length,/]</value>
 		<value condition="String.IsEqual(ListItem.DBType,movie) + $EXP[GridView_IsVisible] + $EXP[GridView_Details_Breadcrumb] + !String.IsEmpty(ListItem.Year)">$INFO[Listitem.Year,/ ]</value>
 		<value condition="String.IsEqual(ListItem.DBType,tvshow) + $EXP[GridView_IsVisible] + $EXP[GridView_Details_Breadcrumb] + !String.IsEmpty(ListItem.Year)">$INFO[Listitem.Year,/ ]$INFO[ListItem.Property(TotalSeasons), / , ]$VAR[Seasons_Label]</value>
@@ -508,7 +510,6 @@
 		<value condition="Container.Content(actors) + !String.IsEmpty(ListItem.Appearances)">$VAR[Appearances_Label_2,/ ]$INFO[Container(4501).ListItem(-1).Title, ]</value>
 		<value condition="Container.Content(files) + String.IsEmpty(ListItem.Art(Poster))">$INFO[ListItem.EndTime,/ $LOCALIZE[32000] ]</value>
 		<value condition="Container.Content(addons)">$INFO[ListItem.AddonType,/ ]$INFO[ListItem.AddonCreator, / ]</value>
-		<value condition="Window.IsVisible(visualisation) + !window.IsVisible(musicosd)">$INFO[MusicPlayer.PlaylistPosition]$INFO[MusicPlayer.PlaylistLength,/]</value>
 		<value condition="Window.IsVisible(selectdialog) + Control.HasFocus(5)">$INFO[Control.GetLabel(5),/ ]</value>
 		<value condition="Window.IsVisible(selectdialog) + Control.HasFocus(7)">$INFO[Control.GetLabel(7),/ ]</value>
 		<value condition="Window.IsVisible(virtualkeyboard) + Control.HasFocus(309)">$INFO[Control.GetLabel(309),/ ]</value>
@@ -631,6 +632,11 @@
 	</variable>
 
 	<variable name="MPAA_Label">
+		<value condition="VideoPlayer.IsFullscreen + String.Contains(VideoPlayer.mpaa,U)">flags/rating/bbfc_u.png</value>
+		<value condition="VideoPlayer.IsFullscreen + String.Contains(VideoPlayer.mpaa,PG)">flags/rating/bbfc_pg.png</value>
+		<value condition="VideoPlayer.IsFullscreen + String.Contains(VideoPlayer.mpaa,12)">flags/rating/bbfc_12.png</value>
+		<value condition="VideoPlayer.IsFullscreen + String.Contains(VideoPlayer.mpaa,15)">flags/rating/bbfc_15.png</value>
+		<value condition="VideoPlayer.IsFullscreen + [String.Contains(VideoPlayer.mpaa,18) | String.Contains(VideoPlayer.mpaa,UK:X)]">flags/rating/bbfc_18.png</value>
 		<value condition="Control.HasFocus(4501) + String.Contains(Container(4501).ListItem.mpaa,U)">flags/rating/bbfc_u.png</value>
 		<value condition="Control.HasFocus(4501) + String.Contains(Container(4501).ListItem.mpaa,PG)">flags/rating/bbfc_pg.png</value>
 		<value condition="Control.HasFocus(4501) + String.Contains(Container(4501).ListItem.mpaa,12)">flags/rating/bbfc_12.png</value>
@@ -651,7 +657,6 @@
 		<value condition="String.Contains(ListItem.mpaa,12)">flags/rating/bbfc_12.png</value>
 		<value condition="String.Contains(ListItem.mpaa,15)">flags/rating/bbfc_15.png</value>
 		<value condition="String.Contains(ListItem.mpaa,18) | String.Contains(ListItem.mpaa,UK:X)">flags/rating/bbfc_18.png</value>
-		<value>flags/blank.png</value>
 	</variable>
 
 	<variable name="Studio_Label">
@@ -659,7 +664,6 @@
 		<value condition="ListItem.IsCollection + Skin.HasSetting(Secondary_List_Enabled) + !String.IsEmpty(Container(4501).ListItem.Studio)">$INFO[Container(4501).ListItem.Studio,flags/studios/,.png]</value>
 		<value condition="ListItem.IsCollection + !Skin.HasSetting(Secondary_List_Enabled) + !String.IsEmpty(Container(4500).ListItem.Studio)">$INFO[Container(4500).ListItem.Studio,flags/studios/,.png]</value>
 		<value condition="!String.IsEmpty(ListItem.Studio)">$INFO[ListItem.Studio,flags/studios/,.png]</value>
-		<value>flags/blank.png</value>
 	</variable>
 
 	<variable name="VideoSource_Label">
@@ -706,6 +710,23 @@
 	</variable>
 
 	<variable name="Resolution_Label">
+		<!--VideoPlayer-->
+		<!-- 8K -->
+		<value condition="VideoPlayer.IsFullscreen + [String.StartsWith(VideoPlayer.VideoResolution,8K) | String.Contains(Player.FileNameAndPath,4320p)]">$LOCALIZE[32131]</value>
+		<!-- 4K Dolby Vision -->
+		<value condition="VideoPlayer.IsFullscreen + [String.StartsWith(VideoPlayer.VideoResolution,4K) | String.Contains(Player.FileNameAndPath,2160p)] + [String.Contains(Player.FilenameAndPath,DV) | String.Contains(Player.FilenameAndPath,Dolby.Vision)]">$LOCALIZE[32132] $LOCALIZE[32133]</value>
+		<!-- 4K HDR -->
+		<value condition="VideoPlayer.IsFullscreen + [String.StartsWith(VideoPlayer.VideoResolution,4K) | String.Contains(Player.FileNameAndPath,2160p)] + String.Contains(Player.FilenameAndPath,HDR)">$LOCALIZE[32132] $LOCALIZE[32134]</value>
+		<!-- 4K UHD -->
+		<value condition="VideoPlayer.IsFullscreen + [String.StartsWith(VideoPlayer.VideoResolution,4K) | String.Contains(Player.FileNameAndPath,2160p)]">$LOCALIZE[32132] $LOCALIZE[32135]</value>
+			<!-- Full HD -->
+		<value condition="VideoPlayer.IsFullscreen + [String.StartsWith(VideoPlayer.VideoResolution,1080) | String.Contains(Player.FileNameAndPath,1080p)]">$LOCALIZE[32136]</value>
+		<!-- HD -->
+		<value condition="VideoPlayer.IsFullscreen + [String.StartsWith(VideoPlayer.VideoResolution,720) | String.Contains(Player.FileNameAndPath,720p)]">$LOCALIZE[32137]</value>
+		<!-- SD -->
+		<value condition="VideoPlayer.IsFullscreen + String.StartsWith(VideoPlayer.VideoResolution,576)">$LOCALIZE[32138]</value>
+		<value condition="VideoPlayer.IsFullscreen + String.StartsWith(VideoPlayer.VideoResolution,540)">$LOCALIZE[32138]</value>
+		<value condition="VideoPlayer.IsFullscreen + String.StartsWith(VideoPlayer.VideoResolution,480)">$LOCALIZE[32138]</value>
 		<!--SECONDARY LIST-->
 		<!-- 8K -->
 		<value condition="Control.HasFocus(4501) + [String.StartsWith(Container(4501).ListItem.VideoResolution,8K) | String.Contains(Container(4501).ListItem.FileNameAndPath,4320p)]">$LOCALIZE[32131]</value>
@@ -774,10 +795,11 @@
 		<value>$INFO[Control.GetLabel(50660),,%]</value>
 	</variable>
 
-	<variable name="Music_Player_Label">
+	<variable name="Play_Pause_Label">
 		<!-- Play -->
-		<value condition="String.IsEqual(Window(home).Property(Music_Player_Controls),Pause) + Player.Paused">$LOCALIZE[208]</value>
-		<value>$INFO[Window(home).Property(Music_Player_Controls)]</value>
+		<value condition="Player.Paused">$LOCALIZE[208]</value>
+		<!-- Pause -->
+		<value>$LOCALIZE[31526]</value>
 	</variable>
 
 	<!-- musicosd -->

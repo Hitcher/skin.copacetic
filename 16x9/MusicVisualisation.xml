@@ -18,15 +18,6 @@
 			<param name="height" value="840"/>
 			<param name="bordervisible" value="true"/>
 		</include>
-		<control type="image">
-			<visible>Window.IsVisible(musicosd) | Player.Paused | Player.Rewinding | Player.Forwarding</visible>
-			<include>Dialog_Fade_Animation</include>
-			<left>780</left>
-			<top>120</top>
-			<width>840</width>
-			<height>840</height>
-			<texture colordiffuse="$VAR[Artwork_Mask]">views/white_100.png</texture>
-		</control>
 
 		<!-- Next up -->
 		<control type="group">
@@ -44,22 +35,41 @@
 				<param name="flipx" value="true"/>
 				<param name="visible" value="MusicPlayer.HasNext + !String.IsEmpty(MusicPlayer.offset(1).Title)"/>
 			</include>
+		</control>
+
+		<!-- Artwork Mask -->
+		<control type="group">
+			<visible>Window.IsVisible(musicosd) | Player.Paused | Player.Rewinding | Player.Forwarding</visible>
+			<include>Dialog_Fade_Animation</include>
 			<control type="image">
-				<visible>Window.IsVisible(musicosd) | Player.Paused | Player.Rewinding | Player.Forwarding</visible>
-				<include>Dialog_Fade_Animation</include>
+				<left>780</left>
+				<top>120</top>
+				<width>840</width>
+				<height>840</height>
+				<texture colordiffuse="$VAR[Artwork_Mask]">views/white_100.png</texture>
+			</control>
+			<control type="image">
+				<visible>!Playlist.IsRepeatOne</visible>
+				<left>1620</left>
+				<top>300</top>
+				<width>480</width>
+				<height>480</height>
 				<texture colordiffuse="$VAR[Artwork_Mask]">views/white_100.png</texture>
 			</control>
 		</control>
 
-		<!--Details-->
+		<!-- Details -->
 		<control type="group">
 			<visible>!Window.IsVisible(1123) + !$EXP[TransparentDialog_IsVisible]</visible>
 			<include>Delayed_Content_Fade_Animation</include>
 			<control type="group">
 				<visible>!Window.IsVisible(musicosd)</visible>
 				<include>Delayed_Content_Fade_Animation</include>
+				<!-- Now playing... 1/11 -->
 				<include content="Breadcrumb_Label">
 					<param name="label_color" value="$VAR[Primary_Color]"/>
+					<param name="title_label" value="$LOCALIZE[31564]"/>
+					<param name="info_label" value="$INFO[MusicPlayer.PlaylistPosition]$INFO[MusicPlayer.PlaylistLength,/]"/>
 				</include>
 			</control>
 			<include content="Common_Details">

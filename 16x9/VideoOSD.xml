@@ -1,138 +1,168 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <window>
 	<!-- videoosd -->
-	<defaultcontrol always="true">1</defaultcontrol>
+	<defaultcontrol always="true">9001</defaultcontrol>
+	<onload condition="!String.IsEmpty(window(musicosd).property(MusicOSD_Controls))">ClearProperty(MusicOSD_Controls,musicosd)</onload>
+	<onunload condition="!String.IsEmpty(window(musicosd).property(MusicOSD_Controls))">ClearProperty(MusicOSD_Controls,musicosd)</onunload>
 	<include>Delayed_Dialog_Fade_Animation</include>
 
 	<controls>
 
-		<control type="label" id="916">
-			<visible>false</visible>
-			<label>$VAR[VideoPlayer_Plot]</label>
+		<!--Delay on Load-->
+		<control type="button" id="9001">
+			<visible allowhiddenfocus="true">false</visible>
+			<onfocus>SetFocus(3)</onfocus>
+		</control>
+		<control type="group" id="9002">
+			<visible>Control.HasFocus(9001)</visible>
+			<animation effect="slide" end="0,0" time="360" reversible="false">Hidden</animation>
 		</control>
 
 		<control type="group">
-			<visible>!$EXP[TransparentDialog_IsVisible]</visible>
+			<visible>!Control.IsVisible(9002)</visible>
 			<include>Delayed_Content_Fade_Animation</include>
 
-			<include content="Clock">
-				<param name="textcolor" value="$VAR[Light_Color]"/>
+			<include content="Breadcrumb_Label">
+				<param name="label_color" value="$VAR[Light_Color]"/>
+				<param name="title_label" value="$INFO[Window(videoosd).Property(VideoOSD_Controls)]"/>
 			</include>
 
-			<!--Info-->
 			<control type="group">
-				<visible>![Player.Forwarding | Player.Rewinding]</visible>
-				<include>Delayed_Content_Fade_Animation</include>
-				<include content="Common_Details">
-					<param name="width" value="1560"/>
-					<param name="titlelabel" value="$VAR[VideoPlayer_Title]"/>
-					<param name="labeltype" value="textbox"/>
-					<param name="titlescroll" value="false"/>
-					<param name="titlecolor" value="$VAR[Light_Color]"/>
-					<param name="infolabel" value="$VAR[VideoPlayer_Info]"/>
-					<param name="infocolor" value="$VAR[Light_Color]"/>
-					<param name="plotlabel" value="$VAR[VideoPlayer_Plot]"/>
-					<param name="plotmaxheight" value="206"/>
-					<param name="plotcolor" value="$VAR[Light_Color]"/>
-				</include>
-			</control>
-
-			<!-- Controls -->
-			<control type="grouplist" id="9001">
-				<left>120</left>
-				<right>120</right>
-				<bottom>15</bottom>
-				<height>60</height>
-				<align>center</align>
-				<itemgap>0</itemgap>
-				<onup>87</onup>
-				<ondown>Close</ondown>
-				<orientation>horizontal</orientation>
+				<centerleft>50%</centerleft>
+				<centertop>50%</centertop>
+				<width>300</width>
+				<height>120</height>
 				<visible>!Window.IsVisible(VideoBookmarks)</visible>
-				<!-- Play/Pause -->
-				<control type="togglebutton" id="1">
-					<width>60</width>
+				<control type="grouplist" id="9003">
+					<top>0</top>
 					<height>60</height>
-					<texturefocus>osd/icon_Play_focused.png</texturefocus>
-					<texturenofocus>osd/icon_Play_unfocused.png</texturenofocus>
-					<usealttexture>![Player.Paused | Player.Forwarding | Player.Rewinding]</usealttexture>
-					<alttexturefocus>osd/icon_Pause_focused.png</alttexturefocus>
-					<alttexturenofocus>osd/icon_Pause_unfocused.png</alttexturenofocus>
-					<onclick>PlayerControl(Play)</onclick>
+					<orientation>horizontal</orientation>
+					<align>left</align>
+					<itemgap>0</itemgap>
+					<control type="button" id="1">
+						<description>Previous</description>
+						<width>60</width>
+						<height>60</height>
+						<texturefocus colordiffuse="$VAR[Light_Color]">osd/icon_Rewind_focused.png</texturefocus>
+						<texturenofocus colordiffuse="$VAR[Light_Color]">osd/icon_Rewind_unfocused.png</texturenofocus>
+						<onfocus>SetProperty(VideoOSD_Controls,$LOCALIZE[210],videoosd)</onfocus>
+						<onclick>PlayerControl(Previous)</onclick>
+						<onup>6</onup>
+						<ondown>6</ondown>
+					</control>
+					<control type="button" id="2">
+						<description>Rewind</description>
+						<width>60</width>
+						<height>60</height>
+						<texturenofocus colordiffuse="$VAR[Light_Color]">osd/icon_Previous_unfocused.png</texturenofocus>
+						<texturefocus colordiffuse="$VAR[Light_Color]">osd/icon_Previous_focused.png</texturefocus>
+						<onfocus>SetProperty(VideoOSD_Controls,$LOCALIZE[31561],videoosd)</onfocus>
+						<onclick>PlayerControl(Rewind)</onclick>
+						<onup>7</onup>
+						<ondown>7</ondown>
+					</control>
+					<control type="togglebutton" id="3">
+						<description>Play/Pause</description>
+						<width>60</width>
+						<height>60</height>
+						<texturefocus colordiffuse="$VAR[Light_Color]">osd/icon_Play_focused.png</texturefocus>
+						<texturenofocus colordiffuse="$VAR[Light_Color]">osd/icon_Play_unfocused.png</texturenofocus>
+						<usealttexture>![Player.Paused | Player.Forwarding | Player.Rewinding]</usealttexture>
+						<alttexturefocus colordiffuse="$VAR[Light_Color]">osd/icon_Pause_focused.png</alttexturefocus>
+						<alttexturenofocus colordiffuse="$VAR[Light_Color]">osd/icon_Pause_unfocused.png</alttexturenofocus>
+						<onfocus>SetProperty(VideoOSD_Controls,$VAR[Play_Pause_Label],videoosd)</onfocus>
+						<onclick>PlayerControl(Play)</onclick>
+						<onclick>SetProperty(VideoOSD_Controls,$VAR[Play_Pause_Label],videoosd)</onclick>
+						<onup>8</onup>
+						<ondown>8</ondown>
+					</control>
+					<control type="button" id="4">
+						<description>Forward</description>
+						<width>60</width>
+						<height>60</height>
+						<texturenofocus colordiffuse="$VAR[Light_Color]">osd/icon_Next_unfocused.png</texturenofocus>
+						<texturefocus colordiffuse="$VAR[Light_Color]">osd/icon_Next_focused.png</texturefocus>
+						<onfocus>SetProperty(VideoOSD_Controls,$LOCALIZE[31562],videoosd)</onfocus>
+						<onclick>PlayerControl(Forward)</onclick>
+						<onup>9</onup>
+						<ondown>9</ondown>
+					</control>
+					<control type="button" id="5">
+						<description>Next</description>
+						<width>60</width>
+						<height>60</height>
+						<texturenofocus colordiffuse="$VAR[Light_Color]">osd/icon_Forward_unfocused.png</texturenofocus>
+						<texturefocus colordiffuse="$VAR[Light_Color]">osd/icon_Forward_focused.png</texturefocus>
+						<onfocus>SetProperty(VideoOSD_Controls,$LOCALIZE[209],videoosd)</onfocus>
+						<onclick>PlayerControl(Next)</onclick>
+						<onup>10</onup>
+						<ondown>10</ondown>
+					</control>
 				</control>
-				<!--Stop-->
-				<control type="button" id="2">
-					<width>60</width>
+				<control type="grouplist" id="9004">
+					<bottom>0</bottom>
 					<height>60</height>
-					<texturefocus>osd/icon_Stop_focused.png</texturefocus>
-					<texturenofocus>osd/icon_Stop_unfocused.png</texturenofocus>
-					<onclick>PlayerControl(Stop)</onclick>
-				</control>
-				<!-- Skip Back -->
-				<control type="button" id="3">
-					<width>60</width>
-					<height>60</height>
-					<texturefocus>osd/icon_Rewind_focused.png</texturefocus>
-					<texturenofocus>osd/icon_Rewind_unfocused.png</texturenofocus>
-					<onclick>PlayerControl(Previous)</onclick>
-				</control>
-				<!-- Rewind -->
-				<control type="button" id="4">
-					<width>60</width>
-					<height>60</height>
-					<texturefocus>osd/icon_Previous_focused.png</texturefocus>
-					<texturenofocus>osd/icon_Previous_unfocused.png</texturenofocus>
-					<onclick>PlayerControl(Rewind)</onclick>
-				</control>
-				<!-- Fast Forward -->
-				<control type="button" id="5">
-					<width>60</width>
-					<height>60</height>
-					<texturefocus>osd/icon_Next_focused.png</texturefocus>
-					<texturenofocus>osd/icon_Next_unfocused.png</texturenofocus>
-					<onclick>PlayerControl(Forward)</onclick>
-				</control>
-				<!-- Next -->
-				<control type="button" id="6">
-					<width>60</width>
-					<height>60</height>
-					<texturefocus>osd/icon_Forward_focused.png</texturefocus>
-					<texturenofocus>osd/icon_Forward_unfocused.png</texturenofocus>
-					<onclick>PlayerControl(Next)</onclick>
-				</control>
-				<!-- Video Settings -->
-				<control type="button" id="11">
-					<width>60</width>
-					<height>60</height>
-					<texturefocus>osd/icon_Settings-Video_focused.png</texturefocus>
-					<texturenofocus>osd/icon_Settings-Video_unfocused.png</texturenofocus>
-					<onclick>ActivateWindow(osdvideosettings)</onclick>
-				</control>
-				<!-- Audio Settings -->
-				<control type="button" id="12">
-					<width>60</width>
-					<height>60</height>
-					<texturefocus>osd/icon_Settings-Sound_focused.png</texturefocus>
-					<texturenofocus>osd/icon_Settings-Sound_unfocused.png</texturenofocus>
-					<onclick>ActivateWindow(osdaudiosettings)</onclick>
-				</control>
-				<!-- Bookmarks -->
-				<control type="button" id="13">
-					<width>60</width>
-					<height>60</height>
-					<texturefocus>osd/icon_Bookmarks_focused.png</texturefocus>
-					<texturenofocus>osd/icon_Bookmarks_unfocused.png</texturenofocus>
-					<onclick>ActivateWindow(videobookmarks)</onclick>
-					<visible>!VideoPlayer.Content(LiveTV)</visible>
-				</control>
-				<!-- Subtitles -->
-				<control type="button" id="14">
-					<width>60</width>
-					<height>60</height>
-					<texturefocus>osd/icon_Subtitles_focused.png</texturefocus>
-					<texturenofocus>osd/icon_Subtitles_unfocused.png</texturenofocus>
-					<onclick>ActivateWindow(OSDSubtitleSettings)</onclick>
-					<visible>!VideoPlayer.Content(LiveTV)</visible>
+					<orientation>horizontal</orientation>
+					<align>left</align>
+					<itemgap>0</itemgap>
+					<control type="button" id="6">
+						<description>Bookmarks</description>
+						<width>60</width>
+						<height>60</height>
+						<texturefocus colordiffuse="$VAR[Light_Color]">osd/icon_Bookmarks_focused.png</texturefocus>
+						<texturenofocus colordiffuse="$VAR[Light_Color]">osd/icon_Bookmarks_unfocused.png</texturenofocus>
+						<onfocus>SetProperty(VideoOSD_Controls,$LOCALIZE[298],videoosd)</onfocus>
+						<onclick>Dialog.Close(all, true)</onclick>
+						<onclick>ActivateWindow(videobookmarks)</onclick>
+						<visible>!VideoPlayer.Content(LiveTV)</visible>
+						<onup>1</onup>
+						<ondown>1</ondown>
+					</control>
+					<control type="button" id="7">
+						<description>Video OSD settings</description>
+						<width>60</width>
+						<height>60</height>
+						<texturefocus colordiffuse="$VAR[Light_Color]">osd/icon_Settings-Video_focused.png</texturefocus>
+						<texturenofocus colordiffuse="$VAR[Light_Color]">osd/icon_Settings-Video_unfocused.png</texturenofocus>
+						<onfocus>SetProperty(VideoOSD_Controls,$LOCALIZE[10123],videoosd)</onfocus>
+						<onclick>ActivateWindow(osdvideosettings)</onclick>
+						<onup>2</onup>
+						<ondown>2</ondown>
+					</control>
+					<control type="button" id="8">
+						<description>Stop</description>
+						<width>60</width>
+						<height>60</height>
+						<texturefocus colordiffuse="$VAR[Light_Color]">osd/icon_Stop_focused.png</texturefocus>
+						<texturenofocus colordiffuse="$VAR[Light_Color]">osd/icon_Stop_unfocused.png</texturenofocus>
+						<onfocus>SetProperty(VideoOSD_Controls,$LOCALIZE[31528],videoosd)</onfocus>
+						<onclick>PlayerControl(Stop)</onclick>
+						<onup>3</onup>
+						<ondown>3</ondown>
+					</control>
+					<control type="button" id="9">
+						<description>Audio OSD settings</description>
+						<width>60</width>
+						<height>60</height>
+						<texturefocus colordiffuse="$VAR[Light_Color]">osd/icon_Settings-Sound_focused.png</texturefocus>
+						<texturenofocus colordiffuse="$VAR[Light_Color]">osd/icon_Settings-Sound_unfocused.png</texturenofocus>
+						<onfocus>SetProperty(VideoOSD_Controls,$LOCALIZE[10124],videoosd)</onfocus>
+						<onclick>ActivateWindow(osdaudiosettings)</onclick>
+						<onup>4</onup>
+						<ondown>4</ondown>
+					</control>
+					<control type="button" id="10">
+						<description>Subtitle OSD settings</description>
+						<width>60</width>
+						<height>60</height>
+						<texturefocus colordiffuse="$VAR[Light_Color]">osd/icon_Subtitles_focused.png</texturefocus>
+						<texturenofocus colordiffuse="$VAR[Light_Color]">osd/icon_Subtitles_unfocused.png</texturenofocus>
+						<onclick>ActivateWindow(OSDSubtitleSettings)</onclick>
+						<onfocus>SetProperty(VideoOSD_Controls,$LOCALIZE[10159],videoosd)</onfocus>
+						<visible>!VideoPlayer.Content(LiveTV)</visible>
+						<onup>5</onup>
+						<ondown>5</ondown>
+					</control>
 				</control>
 			</control>
 
