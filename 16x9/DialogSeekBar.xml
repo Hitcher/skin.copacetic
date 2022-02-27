@@ -16,14 +16,6 @@
 			<visible allowhiddenfocus="true">false</visible>
 		</control>
 
-		<!--Background-->
-		<control type="image">
-			<visible>Player.HasVideo + [Player.Playing | Player.Paused | Window.IsVisible(videoosd) | $EXP[TransparentDialog_IsVisible]]</visible>
-			<animation effect="fade" start="100" end="0" delay="1080" time="360" condition="Player.Playing + !Window.IsVisible(videoosd)" tween="sine" easing="inout">Conditional</animation>
-			<texture colordiffuse="$VAR[Fullscreen_Video_Diffuse]">views/white_100.png</texture>
-			<include>Dialog_Fade_Animation</include>
-		</control>
-
 		<control type="group">
 			<visible>!$EXP[TransparentDialog_IsVisible]</visible>
 			<include>Delayed_Content_Fade_Animation</include>
@@ -31,14 +23,14 @@
 			<control type="group">
 				<visible>Player.HasVideo</visible>
 				<include>Delayed_Dialog_Fade_Animation</include>
-				<include content="Player_Status_Icons">
-					<param name="large_label" value="true"/>
-				</include>
 				<control type="group">
-					<visible>[Player.Paused | Player.Seeking | Player.Rewinding | Player.Forwarding | Player.DisplayAfterSeek] + !Window.IsVisible(videoosd)</visible>
+					<visible>[Player.Paused | Player.Seeking | Player.Rewinding | Player.Forwarding | Player.DisplayAfterSeek] + !Window.IsVisible(videoosd) + !System.IdleTIme(3)</visible>
 					<include>Delayed_Dialog_Fade_Animation</include>
 					<include content="Breadcrumb_Label">
 						<param name="label_color" value="$VAR[Light_Color]"/>
+					</include>
+					<include content="Player_Status_Icons">
+						<param name="large_label" value="true"/>
 					</include>
 					<control type="group">
 						<visible>![Player.Paused + Skin.HasSetting(Player_Progress_Disabled)]</visible>
