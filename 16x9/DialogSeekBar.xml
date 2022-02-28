@@ -24,13 +24,10 @@
 				<visible>Player.HasVideo</visible>
 				<include>Delayed_Dialog_Fade_Animation</include>
 				<control type="group">
-					<visible>[Player.Paused | Player.Seeking | Player.Rewinding | Player.Forwarding | Player.DisplayAfterSeek] + !Window.IsVisible(videoosd) + !System.IdleTIme(3)</visible>
+					<visible>!Window.IsVisible(videoosd) + [[[Player.Paused | Player.Seeking | Player.Rewinding | Player.Forwarding | Player.DisplayAfterSeek] + !System.IdleTime(3)] | [Player.Playing + Integer.IsLess(Player.Time,5)]]</visible>
 					<include>Delayed_Dialog_Fade_Animation</include>
 					<include content="Breadcrumb_Label">
 						<param name="label_color" value="$VAR[Light_Color]"/>
-					</include>
-					<include content="Player_Status_Icons">
-						<param name="large_label" value="true"/>
 					</include>
 					<control type="group">
 						<visible>![Player.Paused + Skin.HasSetting(Player_Progress_Disabled)]</visible>
@@ -46,6 +43,13 @@
 							<param name="text_color" value="$VAR[Light_Color]"/>
 						</include>
 					</control>
+				</control>
+				<control type="group">
+					<visible>!Window.IsVisible(videoosd) + [Player.Paused | Player.Seeking | Player.Rewinding | Player.Forwarding | Player.DisplayAfterSeek]</visible>
+					<include>Delayed_Dialog_Fade_Animation</include>
+					<include content="Player_Status_Icons">
+						<param name="large_label" value="true"/>
+					</include>
 				</control>
 			</control>
 
