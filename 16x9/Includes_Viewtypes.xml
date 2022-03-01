@@ -27,10 +27,10 @@
 		<param name="icontop" default="-3"/>
 		<param name="icontexture" default="Check_Unfocused"/>
 		<param name="iconvisible" default="String.IsEqual(ListItem.Overlay,OverlayWatched.png)"/>
-		<param name="label" default="$VAR[Title_Label]"/>
-		<param name="labelheight" default="55"/>
 		<param name="labelleft" default="120"/>
+		<param name="labelheight" default="55"/>
 		<param name="labelmaxwidth" default="720"/>
+		<param name="label" default="$VAR[Title_Label]"/>
 		<param name="font" default="List_Title_Unfocused"/>
 		<param name="textcolor" default="$VAR[List_Text_Color]"/>
 		<param name="selectedcolor" default="$VAR[List_Text_Color]"/>
@@ -242,22 +242,26 @@
 
 	<include name="Simple_List">
 		<param name="id"/>
-		<param name="label" default="$INFO[ListItem.Label]"/>
-		<param name="labelmaxwidth" default="1020"/>
 		<param name="visible" default="true"/>
+		<param name="animation" default="Blank_Include"/>
 		<param name="orientation" default="vertical"/>
-    <param name="left" default="780"/>
+		<param name="left" default="780"/>
 		<param name="right" default="120"/>
 		<param name="height" default="500"/>
 		<param name="focusposition" default="4"/>
+		<param name="nowplayingvisible" default="false"/>
+		<param name="labelleft" default="0"/>
+		<param name="label" default="$INFO[ListItem.Label]"/>
+		<param name="labelmaxwidth" default="1020"/>
 		<param name="textcolor" default="$VAR[Light_Color]"/>
 		<param name="selectedcolor" default="$VAR[Accent_Color]"/>
-		<param name="include" default="Blank_Include"/>
 		<param name="focusedinclude" default="Blank_Include"/>
+		<param name="include" default="Blank_Include"/>
     <definition>
       <control type="fixedlist" id="$PARAM[id]">
 				<viewtype label="List">list</viewtype>
 				<visible>$PARAM[visible]</visible>
+				<include>$PARAM[animation]</include>
 				<left>$PARAM[left]</left>
 				<right>$PARAM[right]</right>
 				<centertop>50%</centertop>
@@ -271,24 +275,24 @@
 				<scrolltime tween="sine" easing="inout">360</scrolltime>
 				<itemlayout height="55" width="100%">
 					<include content="Common_List_Layout">
-						<param name="labelleft" value="0"/>
+						<param name="nowplayingvisible" value="$PARAM[nowplayingvisible]"/>
+						<param name="iconvisible" value="false"/>
+						<param name="labelleft" value="$PARAM[labelleft]"/>
             <param name="label" value="$PARAM[label]"/>
 						<param name="textcolor" value="$PARAM[textcolor]"/>
 						<param name="selectedcolor" value="$PARAM[selectedcolor]"/>
-						<param name="nowplayingvisible" value="false"/>
-            <param name="iconvisible" value="false"/>
           </include>
 				</itemlayout>
 				<focusedlayout height="60" width="100%" condition="Control.HasFocus($PARAM[id])">
 					<include content="Common_List_Layout">
+						<param name="nowplayingvisible" value="$PARAM[nowplayingvisible]"/>
+						<param name="iconvisible" value="false"/>
+						<param name="labelleft" value="$PARAM[labelleft]"/>
             <param name="label" value="$PARAM[label]"/>
-						<param name="labelleft" value="0"/>
 						<param name="labelmaxwidth" value="$PARAM[labelmaxwidth]"/>
 						<param name="font" value="List_Title_Focused"/>
 						<param name="textcolor" value="$PARAM[textcolor]"/>
 						<param name="selectedcolor" value="$PARAM[selectedcolor]"/>
-						<param name="nowplayingvisible" value="false"/>
-						<param name="iconvisible" value="false"/>
 					</include>
 					<include>$PARAM[focusedinclude]</include>
 				</focusedlayout>
@@ -296,13 +300,13 @@
 					<control type="group">
 						<top>5</top>
 						<include content="Common_List_Layout">
+							<param name="nowplayingvisible" value="$PARAM[nowplayingvisible]"/>
+							<param name="iconvisible" value="false"/>
+							<param name="labelleft" value="$PARAM[labelleft]"/>
 	            <param name="label" value="$PARAM[label]"/>
-							<param name="labelleft" value="0"/>
 							<param name="labelmaxwidth" value="$PARAM[labelmaxwidth]"/>
 							<param name="textcolor" value="$PARAM[textcolor]"/>
 							<param name="selectedcolor" value="$PARAM[selectedcolor]"/>
-							<param name="nowplayingvisible" value="false"/>
-							<param name="iconvisible" value="false"/>
 						</include>
 					</control>
 					<include>$PARAM[focusedinclude]</include>
@@ -888,7 +892,7 @@
 					<include content="ListIcon">
 						<param name="artwork_icon" value="$PARAM[artwork_icon]"/>
 						<param name="position" value="1"/>
-						<param name="visible" value="Container($PARAM[target_id]).OnPrevious + !String.IsEmpty(Container.ListItemNoWrap(1).Label) + Container.Content(files)"/>
+						<param name="visible" value="Container($PARAM[target_id]).OnPrevious + Container.Content(files)"/>
 						<param name="aspectratio" value="$PARAM[aspectratio]"/>
 						<param name="fallback" value="$PARAM[fallback]"/>
 						<param name="animationtype" value="Hidden"/>
@@ -903,7 +907,7 @@
 					<include content="ListIcon">
 						<param name="artwork_icon" value="$PARAM[artwork_icon]"/>
 						<param name="position" value="1"/>
-						<param name="visible" value="$EXP[ContentPrevious] + !String.IsEmpty(Container.ListItemNoWrap(1).Label) + [!Container.Content(files) | $EXP[BillboardView_IsVisible]]"/>
+						<param name="visible" value="$EXP[ContentPrevious] + [!Container.Content(files) | $EXP[BillboardView_IsVisible]]"/>
 						<param name="aspectratio" value="$PARAM[aspectratio]"/>
 						<param name="fallback" value="$PARAM[fallback]"/>
 						<param name="artworkmask" value="$PARAM[artworkmask]"/>
@@ -935,7 +939,7 @@
 				  <include content="ListIcon">
 						<param name="artwork_icon" value="$PARAM[artwork_icon]"/>
 				    <param name="position" value="-1"/>
-				    <param name="visible" value="Container($PARAM[target_id]).OnNext + !String.IsEmpty(Container.ListItemNoWrap(-1).Label) + Container.Content(files) + !$EXP[BillboardView_IsVisible]"/>
+				    <param name="visible" value="Container($PARAM[target_id]).OnNext + Container.Content(files) + !$EXP[BillboardView_IsVisible]"/>
 				    <param name="aspectratio" value="$PARAM[aspectratio]"/>
 				    <param name="fallback" value="$PARAM[fallback]"/>
 				    <param name="animationtype" value="Hidden"/>
@@ -950,7 +954,7 @@
 					<include content="ListIcon">
 						<param name="artwork_icon" value="$PARAM[artwork_icon]"/>
 						<param name="position" value="-1"/>
-						<param name="visible" value="$EXP[ContentNext] + !String.IsEmpty(Container.ListItemNoWrap(-1).Label) + [!Container.Content(files) | $EXP[BillboardView_IsVisible]]"/>
+						<param name="visible" value="$EXP[ContentNext] + [!Container.Content(files) | $EXP[BillboardView_IsVisible]]"/>
 						<param name="aspectratio" value="$PARAM[aspectratio]"/>
 						<param name="fallback" value="$PARAM[fallback]"/>
 						<param name="artworkmask" value="$PARAM[artworkmask]"/>
