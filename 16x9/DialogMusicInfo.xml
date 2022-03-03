@@ -24,8 +24,8 @@
 				<texture colordiffuse="$VAR[Dark_Color]">views/white_100.png</texture>
 			</control>
 			<control type="image">
-				<visible>Container.Content(artists)</visible>
-				<include>Dialog_Fade_Animation</include>
+				<visible>String.IsEqual(ListItem.DBType,artist) + !Control.HasFocus(98) + !Control.HasFocus(50)</visible>
+				<include>Delayed_Content_Fade_Animation</include>
 				<aspectratio>scale</aspectratio>
 				<texture colordiffuse="$VAR[Info_Artwork_Diffuse]" background="true">$VAR[Dialog_Info_Background]</texture>
 			</control>
@@ -46,33 +46,62 @@
 					<param name="info_label_visible" value="false"/>
 				</include>
 
-				<include content="Transparent_Dialog_Panel">
-					<param name="top" value="180"/>
-					<param name="bottom" value="180"/>
-				</include>
+				<control type="group">
+					<visible>![String.IsEqual(ListItem.DBType,artist) + !Control.HasFocus(98) + !Control.HasFocus(50)]</visible>
+					<include>Delayed_Content_Fade_Animation</include>
+					<include content="Transparent_Dialog_Panel">
+						<param name="top" value="180"/>
+						<param name="bottom" value="180"/>
+					</include>
+				</control>
 
 				<control type="image">
+					<visible>!String.IsEqual(ListItem.DBType,artist)</visible>
 					<left>0</left>
 					<centertop>50%</centertop>
 					<width>720</width>
 					<height>720</height>
 					<texture fallback="fallback.png" background="true">$INFO[ListItem.Art(thumb)]</texture>
 				</control>
+				<control type="image">
+					<visible>String.IsEqual(ListItem.DBType,artist) + [Control.HasFocus(98) | Control.HasFocus(50)]</visible>
+					<include>Delayed_Content_Fade_Animation</include>
+					<left>0</left>
+					<centertop>50%</centertop>
+					<width>720</width>
+					<height>720</height>
+					<fadetime>180</fadetime>
+					<texture fallback="fallback.png" background="true">$INFO[Container(50).ListItem.Art(thumb)]</texture>
+				</control>
 
 				<!-- Details -->
-				<include content="Info_Dialog_Header">
-					<param name="visible" value="!Control.HasFocus(99) + !Control.HasFocus(60) + !Control.HasFocus(98) + !Control.HasFocus(4500)"/>
+				<include condition="!String.IsEqual(ListItem.DBType,artist)" content="Info_Dialog_Header">
+					<param name="visible" value="!Control.HasFocus(99) + !Control.HasFocus(60) + !Control.HasFocus(98) + !Control.HasFocus(4500) + !Control.HasFocus(50)"/>
 					<param name="left" value="780"/>
 					<param name="right" value="120"/>
 					<param name="align" value="left"/>
 				</include>
-				<include content="Info_Dialog_Plot">
+				<include condition="String.IsEqual(ListItem.DBType,artist)" content="Info_Dialog_Header">
+					<param name="visible" value="!Control.HasFocus(99) + !Control.HasFocus(60) + !Control.HasFocus(98) + !Control.HasFocus(4500 + !Control.HasFocus(50)"/>
+					<param name="left" value="120"/>
+					<param name="right" value="120"/>
+					<param name="align" value="center"/>
+				</include>
+				<include condition="String.IsEqual(ListItem.DBType,album)" content="Info_Dialog_Plot">
 					<param name="visible" value="Control.HasFocus(99) | Control.HasFocus(60)"/>
 					<param name="left" value="780"/>
 					<param name="right" value="120"/>
 					<param name="align" value="left"/>
+					<param name="font" value="Plot_Panel"/>
 				</include>
-				<include content="Simple_List">
+				<include condition="String.IsEqual(ListItem.DBType,artist)" content="Info_Dialog_Plot">
+					<param name="visible" value="Control.HasFocus(99) | Control.HasFocus(60)"/>
+					<param name="left" value="120"/>
+					<param name="right" value="120"/>
+					<param name="align" value="center"/>
+					<param name="font" value="Plot_Fullscreen"/>
+				</include>
+				<include condition="String.IsEqual(ListItem.DBType,album)" content="Simple_List">
 					<param name="id" value="4500"/>
 					<param name="visible" value="Control.HasFocus(4500) | Control.HasFocus(98)"/>
 					<param name="animation" value="Delayed_Content_Fade_Animation"/>
@@ -83,6 +112,17 @@
 					<param name="labelmaxwidth" value="960"/>
 					<param name="selectedcolor" value="$VAR[Light_Color]"/>
 					<param name="include" value="AlbumInfo_Content_Path"/>
+				</include>
+				<include condition="String.IsEqual(ListItem.DBType,artist)" content="Simple_List">
+					<param name="id" value="50"/>
+					<param name="visible" value="Control.HasFocus(50) | Control.HasFocus(98)"/>
+					<param name="animation" value="Delayed_Content_Fade_Animation"/>
+					<param name="left" value="720"/>
+					<param name="nowplayingvisible" value="true"/>
+					<param name="labelleft" value="120"/>
+					<param name="label" value="$INFO[ListItem.Label]"/>
+					<param name="labelmaxwidth" value="960"/>
+					<param name="selectedcolor" value="$VAR[Light_Color]"/>
 				</include>
 
 				<!-- Button group -->
@@ -149,14 +189,20 @@
 					</control>
 					<control type="button" id="98">
 						<visible>Window.Is(musicinformation)</visible>
-						<include content="Icon_Button">
+						<include condition="String.IsEqual(ListItem.DBType,album)" content="Icon_Button">
 							<param name="description" value="Tracklist"/>
+							<param name="icon" value="Album"/>
+						</include>
+						<include condition="String.IsEqual(ListItem.DBType,artist)" content="Icon_Button">
+							<param name="description" value="Albums"/>
 							<param name="icon" value="Album"/>
 						</include>
 						<onfocus>SetProperty(ResetScroll," ")</onfocus>
 						<onfocus>SetProperty(Focused_Button,Tracklist,musicinformation)</onfocus>
-						<onup>SetFocus(4500)</onup>
-						<onclick>SetFocus(4500)</onclick>
+						<onup condition="String.IsEqual(ListItem.DBType,album)">SetFocus(4500)</onup>
+						<onclick condition="String.IsEqual(ListItem.DBType,album)">SetFocus(4500)</onclick>
+						<onup condition="String.IsEqual(ListItem.DBType,artist)">SetFocus(50)</onup>
+						<onclick condition="String.IsEqual(ListItem.DBType,artist)">SetFocus(50)</onclick>
 					</control>
 					<control type="button" id="10">
 						<include content="Icon_Button">
