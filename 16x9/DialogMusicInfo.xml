@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <window>
 	<!-- musicinformation -->
+	<onload>SetProperty(ResetScroll," ")</onload>
 	<defaultcontrol always="true">9001</defaultcontrol>
 	<backgroundcolor>$VAR[Secondary_Color]</backgroundcolor>
 	<include>Delayed_Dialog_Fade_Animation</include>
@@ -16,17 +17,6 @@
 			<animation effect="slide" end="0,0" time="360" reversible="false">Hidden</animation>
 		</control>
 
-		<!-- Hidden list for song info
-		<control type="list" id="4500">
-			<visible>String.IsEqual(ListItem.DBType,album)</visible>
-			<width>0</width>
-			<height>0</height>
-			<orientation>vertical</orientation>
-			<itemlayout />
-			<focusedlayout />
-			<content>$INFO[ListItem.FolderPath]</content>
-		</control>-->
-
 		<!-- Background -->
 		<control type="group">
 			<control type="image">
@@ -34,22 +24,32 @@
 				<texture colordiffuse="$VAR[Dark_Color]">views/white_100.png</texture>
 			</control>
 			<control type="image">
+				<visible>Container.Content(artists)</visible>
 				<include>Dialog_Fade_Animation</include>
 				<aspectratio>scale</aspectratio>
-				<texture colordiffuse="$VAR[Info_Artwork_Diffuse]" fallback="fallback.png" background="true">$VAR[Dialog_Info_Background]</texture>
+				<texture colordiffuse="$VAR[Info_Artwork_Diffuse]" background="true">$VAR[Dialog_Info_Background]</texture>
 			</control>
-
 		</control>
 
 		<!-- Content -->
 
 		<control type="group">
-			<visible>!Control.IsVisible(9002) + Window.IsActive(musicinformation)</visible>
+			<visible>!Control.IsVisible(9002) + ![Window.Is(songinformation) + Window.IsActive(musicinformation)]</visible>
 			<include>Delayed_Content_Fade_Animation</include>
-
 			<control type="group">
 				<visible>!$EXP[TransparentDialog_IsVisible]</visible>
 				<include>Content_Fade_Animation</include>
+
+				<include content="Breadcrumb_Label">
+					<param name="title_label" value="$INFO[Window(musicinformation).Property(Focused_Button)]"/>
+					<param name="label_color" value="$VAR[Light_Color]"/>
+					<param name="info_label_visible" value="false"/>
+				</include>
+
+				<include content="Transparent_Dialog_Panel">
+					<param name="top" value="180"/>
+					<param name="bottom" value="180"/>
+				</include>
 
 				<control type="image">
 					<left>0</left>
@@ -58,14 +58,10 @@
 					<height>720</height>
 					<texture fallback="fallback.png" background="true">$INFO[ListItem.Art(thumb)]</texture>
 				</control>
-				<include content="Transparent_Dialog_Panel">
-					<param name="left" value="720"/>
-					<param name="right" value="60"/>
-				</include>
 
 				<!-- Details -->
 				<include content="Info_Dialog_Header">
-					<param name="visible" value="!Control.HasFocus(99) + !Control.HasFocus(60) + !Control.HasFocus(98) + !Control.HasFocus(50)"/>
+					<param name="visible" value="!Control.HasFocus(99) + !Control.HasFocus(60) + !Control.HasFocus(98) + !Control.HasFocus(4500)"/>
 					<param name="left" value="780"/>
 					<param name="right" value="120"/>
 					<param name="align" value="left"/>
@@ -77,8 +73,8 @@
 					<param name="align" value="left"/>
 				</include>
 				<include content="Simple_List">
-					<param name="id" value="50"/>
-					<param name="visible" value="Control.HasFocus(50) | Control.HasFocus(98)"/>
+					<param name="id" value="4500"/>
+					<param name="visible" value="Control.HasFocus(4500) | Control.HasFocus(98)"/>
 					<param name="animation" value="Delayed_Content_Fade_Animation"/>
 					<param name="left" value="720"/>
 					<param name="nowplayingvisible" value="true"/>
@@ -86,6 +82,7 @@
 					<param name="label" value="$INFO[ListItem.Label]"/>
 					<param name="labelmaxwidth" value="960"/>
 					<param name="selectedcolor" value="$VAR[Light_Color]"/>
+					<param name="include" value="AlbumInfo_Content_Path"/>
 				</include>
 
 				<!-- Button group -->
@@ -103,6 +100,7 @@
 							<param name="description" value="Play button"/>
 							<param name="icon" value="Play"/>
 						</include>
+						<onfocus>SetProperty(Focused_Button,$LOCALIZE[208],musicinformation)</onfocus>
 						<onclick condition="String.IsEmpty(ListItem.DBID)">PlayMedia($INFO[ListItem.FilenameAndPath])</onclick>
 						<onclick condition="System.AddonIsEnabled(script.playalbum) + String.IsEqual(ListItem.DBType,album)">RunScript(script.playalbum,albumid=$INFO[ListItem.DBID])</onclick>
 						<onclick condition="System.AddonIsEnabled(script.playalbum) + String.IsEqual(ListItem.DBType,song)">RunScript(script.playalbum,songid=$INFO[ListItem.DBID])</onclick>
@@ -115,41 +113,58 @@
 							<param name="description" value="Refresh button"/>
 							<param name="icon" value="Refresh"/>
 						</include>
+						<onfocus>SetProperty(ResetScroll," ")</onfocus>
+						<onfocus>SetProperty(Focused_Button,$INFO[Control.GetLabel(6)],musicinformation)</onfocus>
 					</control>
 					<control type="button" id="99">
-						<visible>!String.IsEmpty(Control.GetLabel(916))</visible>
+						<visible>!String.IsEmpty(Control.GetLabel(916)) + Window.Is(musicinformation)</visible>
 						<include content="Icon_Button">
 							<param name="description" value="Plot/Bio/Summary"/>
 							<param name="icon" value="Plot"/>
 						</include>
-						<onclick>SetFocus(60)</onclick>
-						<onup>SetFocus(60)</onup>
+						<onunfocus>SetProperty(ResetScroll,"")</onunfocus>
+						<onfocus>SetProperty(Focused_Button,Summary,musicinformation)</onfocus>
+						<onclick condition="Container(4).HasNext | Container(4).HasPrevious">SetFocus(60)</onclick>
+						<onup condition="Container(4).HasNext | Container(4).HasPrevious">SetFocus(60)</onup>
 					</control>
 					<control type="button" id="7">
 						<include content="Icon_Button">
 							<param name="description" value="User rating"/>
 							<param name="icon" value="Bookmarks"/>
 						</include>
+						<onfocus>SetProperty(ResetScroll," ")</onfocus>
+						<onfocus>SetProperty(Focused_Button,$INFO[Control.GetLabel(7)],musicinformation)</onfocus>
 					</control>
 					<control type="button" id="12">
-						<include content="Icon_Button">
+						<include condition="Window.IsVisible(musicinformation)" content="Icon_Button">
 							<param name="description" value="Artist info"/>
 							<param name="icon" value="Artist"/>
 						</include>
+						<include condition="Window.IsVisible(songinformation)" content="Icon_Button">
+							<param name="description" value="Album info"/>
+							<param name="icon" value="Album"/>
+						</include>
+						<onfocus>SetProperty(ResetScroll," ")</onfocus>
+						<onfocus>SetProperty(Focused_Button,$INFO[Control.GetLabel(12)],musicinformation)</onfocus>
 					</control>
 					<control type="button" id="98">
+						<visible>Window.Is(musicinformation)</visible>
 						<include content="Icon_Button">
 							<param name="description" value="Tracklist"/>
 							<param name="icon" value="Album"/>
 						</include>
-						<onup>SetFocus(50)</onup>
-						<onclick>SetFocus(50)</onclick>
+						<onfocus>SetProperty(ResetScroll," ")</onfocus>
+						<onfocus>SetProperty(Focused_Button,Tracklist,musicinformation)</onfocus>
+						<onup>SetFocus(4500)</onup>
+						<onclick>SetFocus(4500)</onclick>
 					</control>
 					<control type="button" id="10">
 						<include content="Icon_Button">
 							<param name="description" value="Choose art"/>
 							<param name="icon" value="Menu"/>
 						</include>
+						<onfocus>SetProperty(ResetScroll," ")</onfocus>
+						<onfocus>SetProperty(Focused_Button,$INFO[Control.GetLabel(10)],musicinformation)</onfocus>
 					</control>
 				</control>
 			</control>

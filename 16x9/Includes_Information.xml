@@ -1,5 +1,9 @@
 <includes>
 
+	<include name="AlbumInfo_Content_Path">
+		<content>musicdb://albums/$INFO[ListItem.DBID]/</content>
+	</include>
+
 	<include name="Info_Dialog_Header">
 		<param name="visible"/>
 		<param name="left"/>
@@ -16,6 +20,7 @@
 					<orientation>vertical</orientation>
 					<align>center</align>
 					<usecontrolcoords>true</usecontrolcoords>
+					<itemgap>0</itemgap>
 					<!--Title-->
 					<control type="textbox">
 						<width>100%</width>
@@ -26,10 +31,11 @@
 						<label>$VAR[Title_Label]</label>
 					</control>
 					<!--Details-->
-					<control type="label">
+					<control type="textbox">
+						<visible>$PARAM[single_row_info]</visible>
 						<top>0</top>
 						<width>100%</width>
-						<height>35</height>
+						<height max="70">auto</height>
 						<font>Video_Info_Label</font>
 						<textcolor>$VAR[Light_Color]</textcolor>
 						<label>$VAR[Dialog_Info_Label]</label>
@@ -37,7 +43,7 @@
 					</control>
 					<!-- Star Rating -->
 					<control type="grouplist">
-						<visible>!ListItem.DBType(season) + !ListItem.DBType(artist)</visible>
+						<visible>!ListItem.DBType(season) + !ListItem.DBType(artist) + [!String.IsEmpty(ListItem.Rating) | !String.IsEmpty(ListItem.UserRating)]</visible>
 						<top>15</top>
 						<centerleft>50%</centerleft>
 						<height>30</height>
@@ -71,23 +77,23 @@
 					<visible>!$EXP[TransparentDialog_IsVisible]</visible>
 					<include>Content_Fade_Animation</include>
 					<control type="textbox" id="4">
-						<height>540</height>
+						<height>600</height>
 						<left>$PARAM[left]</left>
 						<right>$PARAM[right]</right>
 						<centertop>50%</centertop>
 						<align>$PARAM[align]</align>
 						<aligny>center</aligny>
 						<font>Plot</font>
-						<label>$VAR[Plot_Label]</label>
+						<label>$VAR[Plot_Label]$INFO[Window(musicinformation).Property(ResetScroll)]</label>
 						<textcolor>$VAR[Light_Color]</textcolor>
 						<pagecontrol>60</pagecontrol>
 						<autoscroll>false</autoscroll>
 					</control>
 					<control type="scrollbar" id="60">
 						<right>27</right>
-						<bottom>240</bottom>
+						<bottom>180</bottom>
 						<width>6</width>
-						<height>600</height>
+						<height>720</height>
 						<onleft>99</onleft>
 						<onright>99</onright>
 						<onback>65000</onback>
