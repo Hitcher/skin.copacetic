@@ -4,59 +4,114 @@
 		<content>musicdb://albums/$INFO[ListItem.DBID]/</content>
 	</include>
 
-	<include name="Info_Dialog_Header">
-		<param name="visible"/>
-		<param name="left"/>
-		<param name="right"/>
-		<param name="align"/>
-			<definition>
-				<control type="grouplist">
-					<visible>$PARAM[visible]</visible>
-					<include>Delayed_Content_Fade_Animation</include>
-					<left>$PARAM[left]</left>
-					<right>$PARAM[right]</right>
+	<include name="FlagLayout">
+		<param name="id" default=""/>
+		<param name="content" default=""/>
+		<param name="colordiffuse" default="$VAR[Primary_Color]"/>
+		<definition>
+			<control type="group">
+				<visible>!String.IsEqual(Control.GetLabel($PARAM[id]),flags/blank.png)</visible>
+				<width>180</width>
+				<height>180</height>
+				<control type="image">
+					<centerleft>50%</centerleft>
 					<centertop>50%</centertop>
-					<height>540</height>
-					<orientation>vertical</orientation>
-					<align>center</align>
-					<usecontrolcoords>true</usecontrolcoords>
-					<itemgap>0</itemgap>
-					<!--Title-->
-					<control type="textbox">
-						<width>100%</width>
-						<height max="280">auto</height>
-						<align>$PARAM[align]</align>
-						<font>Billboard_Title</font>
-						<textcolor>$VAR[Light_Color]</textcolor>
-						<label>$VAR[Title_Label]</label>
-					</control>
-					<!--Details-->
-					<control type="textbox">
-						<visible>$PARAM[single_row_info]</visible>
-						<top>0</top>
-						<width>100%</width>
-						<height max="70">auto</height>
-						<font>Video_Info_Label</font>
-						<textcolor>$VAR[Light_Color]</textcolor>
-						<label>$VAR[Dialog_Info_Label]</label>
-						<align>$PARAM[align]</align>
-					</control>
-					<!-- Star Rating -->
-					<control type="grouplist">
-						<visible>!ListItem.DBType(season) + !ListItem.DBType(artist) + [!String.IsEmpty(ListItem.Rating) | !String.IsEmpty(ListItem.UserRating)]</visible>
-						<top>15</top>
-						<centerleft>50%</centerleft>
-						<height>30</height>
-						<orientation>horizontal</orientation>
-						<align>$PARAM[align]</align>
-						<control type="image">
-							<width>185</width>
-							<aspectratio>keep</aspectratio>
-							<texture colordiffuse="$VAR[Accent_Color]">$VAR[StarRating_Label]</texture>
-						</control>
+					<width>90</width>
+					<height>60</height>
+					<aspectratio>keep</aspectratio>
+					<texture colordiffuse="$PARAM[colordiffuse]">$PARAM[content]</texture>
+				</control>
+		</control>
+	</definition>
+</include>
+
+<include name="Info_Dialog_Header">
+	<param name="visible"/>
+	<param name="left"/>
+	<param name="right"/>
+	<param name="align"/>
+		<definition>
+			<control type="grouplist">
+				<visible>$PARAM[visible]</visible>
+				<include>Delayed_Content_Fade_Animation</include>
+				<left>$PARAM[left]</left>
+				<right>$PARAM[right]</right>
+				<centertop>50%</centertop>
+				<height>720</height>
+				<orientation>vertical</orientation>
+				<align>center</align>
+				<usecontrolcoords>true</usecontrolcoords>
+				<itemgap>0</itemgap>
+				<!--Title-->
+				<control type="textbox">
+					<width>100%</width>
+					<height max="280">auto</height>
+					<align>$PARAM[align]</align>
+					<font>Billboard_Title</font>
+					<textcolor>$VAR[Light_Color]</textcolor>
+					<label>$VAR[Title_Label]</label>
+				</control>
+				<!--Details-->
+				<control type="textbox">
+					<visible>$PARAM[single_row_info]</visible>
+					<top>0</top>
+					<width>100%</width>
+					<height max="70">auto</height>
+					<font>Video_Info_Label</font>
+					<textcolor>$VAR[Light_Color]</textcolor>
+					<label>$VAR[Dialog_Info_Label]</label>
+					<align>$PARAM[align]</align>
+				</control>
+				<!-- Star Rating -->
+				<control type="grouplist">
+					<visible>!ListItem.DBType(season) + !ListItem.DBType(artist) + [!String.IsEmpty(ListItem.Rating) | !String.IsEmpty(ListItem.UserRating)]</visible>
+					<top>15</top>
+					<centerleft>50%</centerleft>
+					<height>30</height>
+					<orientation>horizontal</orientation>
+					<align>$PARAM[align]</align>
+					<control type="image">
+						<width>185</width>
+						<aspectratio>keep</aspectratio>
+						<texture colordiffuse="$VAR[Accent_Color]">$VAR[StarRating_Label]</texture>
 					</control>
 				</control>
-			</definition>
+				<!--Flags-->
+				<control type="grouplist">
+					<visible>Window.IsActive(movieinformation)</visible>
+					<top>0</top>
+					<width>100%</width>
+					<height>180</height>
+					<orientation>horizontal</orientation>
+					<align>center</align>
+					<!--Studio-->
+					<include content="FlagLayout">
+						<param name="id" value="920"/>
+						<param name="content" value="$VAR[Studio_Label]"/>
+					</include>
+					<!--Rating-->
+					<include content="FlagLayout">
+						<param name="id" value="921"/>
+						<param name="content" value="$VAR[MPAA_Label]"/>
+					</include>
+					<!--Video Source-->
+					<include content="FlagLayout">
+						<param name="id" value="922"/>
+						<param name="content" value="$VAR[VideoSource_Label]"/>
+					</include>
+					<!--Video Codec-->
+					<include content="FlagLayout">
+						<param name="id" value="923"/>
+						<param name="content" value="$VAR[VideoCodec_Label]"/>
+					</include>
+					<!--Audio Source-->
+					<include content="FlagLayout">
+						<param name="id" value="924"/>
+						<param name="content" value="$VAR[AudioCodec_Label]"/>
+					</include>
+				</control>
+			</control>
+		</definition>
 	</include>
 
 	<include name="Info_Dialog_Plot">

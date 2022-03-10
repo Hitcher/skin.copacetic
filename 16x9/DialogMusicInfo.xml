@@ -32,9 +32,8 @@
 		</control>
 
 		<!-- Content -->
-
 		<control type="group">
-			<visible>!Control.IsVisible(9002) + ![Window.Is(songinformation) + Window.IsActive(musicinformation)]</visible>
+			<visible>[Window.IsActive(musicinformation) | Window.IsActive(songinformation)] + !Control.IsVisible(9002) + ![Window.Is(songinformation) + Window.IsActive(musicinformation)]</visible>
 			<include>Delayed_Content_Fade_Animation</include>
 			<control type="group">
 				<visible>!$EXP[TransparentDialog_IsVisible]</visible>
@@ -163,7 +162,7 @@
 							<param name="icon" value="Plot"/>
 						</include>
 						<onunfocus>SetProperty(ResetScroll,"")</onunfocus>
-						<onfocus>SetProperty(Focused_Button,Summary,musicinformation)</onfocus>
+						<onfocus>SetProperty(Focused_Button,$VAR[PlotType_Label],musicinformation)</onfocus>
 						<onclick condition="Container(4).HasNext | Container(4).HasPrevious">SetFocus(60)</onclick>
 						<onup condition="Container(4).HasNext | Container(4).HasPrevious">SetFocus(60)</onup>
 					</control>
@@ -189,16 +188,13 @@
 					</control>
 					<control type="button" id="98">
 						<visible>Window.Is(musicinformation)</visible>
-						<include condition="String.IsEqual(ListItem.DBType,album)" content="Icon_Button">
-							<param name="description" value="Tracklist"/>
-							<param name="icon" value="Album"/>
-						</include>
-						<include condition="String.IsEqual(ListItem.DBType,artist)" content="Icon_Button">
-							<param name="description" value="Albums"/>
+						<include content="Icon_Button">
+							<param name="description" value="Tracklist/Discography"/>
 							<param name="icon" value="Album"/>
 						</include>
 						<onfocus>SetProperty(ResetScroll," ")</onfocus>
-						<onfocus>SetProperty(Focused_Button,Tracklist,musicinformation)</onfocus>
+						<onfocus condition="String.IsEqual(ListItem.DBType,album)">SetProperty(Focused_Button,$LOCALIZE[182],musicinformation)</onfocus>
+						<onfocus condition="String.IsEqual(ListItem.DBType,artist)">SetProperty(Focused_Button,$LOCALIZE[21888],musicinformation)</onfocus>
 						<onup condition="String.IsEqual(ListItem.DBType,album)">SetFocus(4500)</onup>
 						<onclick condition="String.IsEqual(ListItem.DBType,album)">SetFocus(4500)</onclick>
 						<onup condition="String.IsEqual(ListItem.DBType,artist)">SetFocus(50)</onup>

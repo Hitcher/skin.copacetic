@@ -440,15 +440,20 @@
 		<!--PRIMARY PATH-->
 		<value condition="!String.IsEmpty(ListItem.Property(Album_Description))">$INFO[ListItem.Property(Album_Description)]</value>
 		<value condition="!String.IsEmpty(ListItem.Property(Artist_Description))">$INFO[ListItem.Property(Artist_Description)]</value>
-		<value condition="!String.IsEmpty(ListItem.PlotOutline)">$INFO[ListItem.PlotOutline]</value>
+		<value condition="!String.IsEmpty(ListItem.PlotOutline)">$INFO[ListItem.Plot]</value>
 		<value condition="!String.IsEmpty(ListItem.Plot)">$INFO[ListItem.Plot]</value>
 		<value></value>
 	</variable>
 
 	<variable name="Breadcrumb_Title_Label">
+		<value condition="Window.IsVisiblesss(smartplaylisteditor)">$LOCALIZE[10136]</value>
+		<value condition="Window.IsVisible(smartplaylistrule)">$LOCALIZE[21421]</value>
+		<value condition="Window.IsVisible(settings)">$LOCALIZE[5]</value>
+		<value condition="Window.IsVisible(skinsettings)">$LOCALIZE[10035]</value>
+		<value condition="Window.IsVisible(filemanager)">$LOCALIZE[7]</value>
+		<value condition="Window.IsVisible(musicplaylist)">$INFO[ListItem.Artist]</value>
 		<value condition="VideoPlayer.IsFullscreen + !String.IsEmpty(VideoPlayer.TVShowTitle)">$INFO[VideoPlayer.TVShowTitle]</value>
 		<value condition="VideoPlayer.IsFullscreen">$INFO[VideoPlayer.Title]</value>
-		<value condition="Window.IsActive(musicplaylist)">$INFO[ListItem.Artist]</value>
 		<value condition="[String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,set)] + $EXP[GridView_IsVisible] + $EXP[GridView_Details_Breadcrumb] + !String.IsEmpty(ListItem.Title)">$INFO[ListItem.Title]</value>
 		<value condition="String.IsEqual(ListItem.DBType,tvshow) + $EXP[GridView_IsVisible] + $EXP[GridView_Details_Breadcrumb] + !String.IsEmpty(ListItem.TVShowTitle)">$INFO[ListItem.TVShowTitle]</value>
 		<value condition="String.IsEqual(ListItem.DBType,season) + $EXP[Breadcrumb_Enabled_View] + !$EXP[ListView_Display_IsThumbnails] + !String.IsEmpty(ListItem.TVShowTitle)">$INFO[ListItem.TVShowTitle]</value>
@@ -461,42 +466,12 @@
 		<value condition="Container.Content(actors) + !String.IsEmpty(ListItem.Appearances)">$INFO[ListItem.Appearances]$VAR[Appearances_Label, ]</value>
 		<value condition="Container.Content(files) + String.IsEmpty(ListItem.Art(Poster))">$INFO[ListItem.FolderName]</value>
 		<value condition="Container.Content(addons)">$INFO[ListItem.Label]</value>
-		<!-- Smart playlist editor -->
-		<value condition="Window.IsActive(smartplaylisteditor)">$LOCALIZE[10136]</value>
-		<!-- Smart playlist rule -->
-		<value condition="Window.IsVisible(smartplaylistrule)">$LOCALIZE[21421]</value>
-		<!-- Settings -->
-		<value condition="Window.IsActive(settings)">$LOCALIZE[5]</value>
-		<!-- Skin settings -->
-		<value condition="Window.IsActive(skinsettings)">$LOCALIZE[10035]</value>
-		<!-- File manager -->
-		<value condition="Window.IsVisible(filemanager)">$LOCALIZE[7]</value>
 		<value></value>
 	</variable>
 
+	SetProperty(Button_Group_Label,$INFO[Control.GetLabel($PARAM[button2id])],home)
+
 	<variable name="Breadcrumb_Info_Label">
-		<value condition="VideoPlayer.IsFullscreen + !String.IsEmpty(VideoPlayer.Season) + !Integer.IsGreater(VideoPlayer.Episode,9)">$INFO[VideoPlayer.Season,/ ]$INFO[VideoPlayer.Episode,x0]$VAR[Resolution_Label, / ]$INFO[Player.FinishTime, / $LOCALIZE[32000] ]</value>
-		<value condition="VideoPlayer.IsFullscreen + !String.IsEmpty(VideoPlayer.Year)">$INFO[VideoPlayer.Year,/ ]$VAR[Resolution_Label, / ]$INFO[Player.FinishTime, / $LOCALIZE[32000] ]</value>
-		<value condition="VideoPlayer.IsFullscreen + !String.IsEmpty(Player.FinishTime)">$VAR[Resolution_Label,/ ]$INFO[Player.FinishTime, / $LOCALIZE[32000] ]</value>
-		<value condition="Window.IsActive(musicplaylist)">$INFO[ListItem.Year,/ ]$INFO[ListItem.Album,/ ]$INFO[Container.CurrentItem, / $LOCALIZE[554] ]$INFO[Playlist.Length,/]</value>
-		<value condition="String.IsEqual(ListItem.DBType,movie) + $EXP[GridView_IsVisible] + $EXP[GridView_Details_Breadcrumb] + !String.IsEmpty(ListItem.Year)">$INFO[Listitem.Year,/ ]</value>
-		<value condition="String.IsEqual(ListItem.DBType,tvshow) + $EXP[GridView_IsVisible] + $EXP[GridView_Details_Breadcrumb] + !String.IsEmpty(ListItem.Year)">$INFO[Listitem.Year,/ ]$INFO[ListItem.Property(TotalSeasons), / , ]$VAR[Seasons_Label]</value>
-		<value condition="String.IsEqual(ListItem.DBType,season) + $EXP[GridView_IsVisible] + $EXP[GridView_Details_Breadcrumb] + !String.IsEmpty(ListItem.Season)">$INFO[ListItem.Season,/ $LOCALIZE[32121] ]$INFO[ListItem.Year, / ]</value>
-		<value condition="String.IsEqual(ListItem.DBType,season) + $EXP[GridView_IsVisible] + $EXP[GridView_Details_Title] + !String.IsEmpty(ListItem.Year)">$INFO[ListItem.Year,/ ]</value>
-		<value condition="String.IsEqual(ListItem.DBType,episode) + $EXP[GridView_IsVisible] + !$EXP[GridView_Details_Info] + !String.IsEmpty(ListItem.Year) + !Integer.IsGreater(ListItem.Episode,9)">$INFO[ListItem.Year,/ ]$INFO[ListItem.Season, / ]$INFO[ListItem.Episode,x0]</value>
-		<value condition="String.IsEqual(ListItem.DBType,episode) + $EXP[GridView_IsVisible] + !$EXP[GridView_Details_Info] + !String.IsEmpty(ListItem.Year)">$INFO[ListItem.Year,/ ]$INFO[ListItem.Season, / ]$INFO[ListItem.Episode,x,]</value>
-		<value condition="String.IsEqual(ListItem.DBType,episode) + $EXP[Breadcrumb_Enabled_View] + !String.IsEmpty(ListItem.Year)">$INFO[ListItem.Year,/ ]</value>
-		<value condition="String.IsEqual(ListItem.DBType,album) + $EXP[GridView_IsVisible] + $EXP[GridView_Details_Breadcrumb] + !String.IsEmpty(ListItem.Album)">$INFO[ListItem.Album,/ ]$INFO[ListItem.Year, / ]</value>
-		<value condition="String.IsEqual(ListItem.DBType,album) + $EXP[GridView_IsVisible] + $EXP[GridView_Details_Breadcrumb] + !String.IsEmpty(ListItem.Year)">$INFO[ListItem.Year,/ ]</value>
-		<value condition="String.IsEqual(ListItem.DBType,album) + $EXP[GridView_IsVisible] + $EXP[GridView_Details_Title] + !String.IsEmpty(ListItem.Year)">$INFO[ListItem.Year,/ ]</value>
-		<value condition="String.IsEqual(ListItem.DBType,song) + $EXP[Breadcrumb_Enabled_View] + !String.IsEmpty(ListItem.Artist)">$INFO[ListItem.Artist,/ ]$INFO[ListItem.Year, / ]</value>
-		<value condition="String.IsEqual(ListItem.DBType,song) + $EXP[Breadcrumb_Enabled_View] + !String.IsEmpty(ListItem.Year)">$INFO[ListItem.Year,/ ]</value>
-		<value condition="Container.Content(actors) + !String.IsEmpty(ListItem.Appearances)">$VAR[Appearances_Label_2,/ ]$INFO[Container(4501).ListItem(-1).Title, ]</value>
-		<value condition="Container.Content(files) + String.IsEmpty(ListItem.Art(Poster))">$INFO[ListItem.EndTime,/ $LOCALIZE[32000] ]</value>
-		<value condition="Container.Content(addons)">$INFO[ListItem.AddonType,/ ]$INFO[ListItem.AddonCreator, / ]</value>
-		<value condition="Window.IsVisible(selectdialog) + Control.HasFocus(5)">$INFO[Control.GetLabel(5),/ ]</value>
-		<value condition="Window.IsVisible(selectdialog) + Control.HasFocus(7)">$INFO[Control.GetLabel(7),/ ]</value>
-		<value condition="Window.IsVisible(virtualkeyboard) + Control.HasFocus(309)">$INFO[Control.GetLabel(309),/ ]</value>
 		<!-- OK -->
 		<value condition="[Window.IsVisible(filebrowser) + Control.HasFocus(413)] | [Window.IsVisible(smartplaylistrule) + Control.HasFocus(18)]">/ $LOCALIZE[186]</value>
 		<!-- Cancel -->
@@ -525,18 +500,40 @@
 		<value condition="Window.IsVisible(virtualkeyboard) + Control.HasFocus(306)">/ $LOCALIZE[116] $LOCALIZE[32129]</value>
 		<!-- Browse -->
 		<value condition="Window.IsVisible(smartplaylistrule) + Control.HasFocus(20)">/ $LOCALIZE[32130]</value>
+
+		<value condition="Window.IsVisible(selectdialog) + Control.HasFocus(5)">hello</value>
+		<value condition="Window.IsVisible(virtualkeyboard) + Control.HasFocus(309)">$INFO[Control.GetLabel(309),/ ]</value>
+		<value condition="Window.IsActive(musicplaylist)">$INFO[ListItem.Year,/ ]$INFO[ListItem.Album,/ ]$INFO[Container.CurrentItem, / $LOCALIZE[554] ]$INFO[Playlist.Length,/]</value>
+		<value condition="VideoPlayer.IsFullscreen + !String.IsEmpty(VideoPlayer.Season) + !Integer.IsGreater(VideoPlayer.Episode,9)">$INFO[VideoPlayer.Season,/ ]$INFO[VideoPlayer.Episode,x0]$VAR[Resolution_Label, / ]$INFO[Player.FinishTime, / $LOCALIZE[32000] ]</value>
+		<value condition="VideoPlayer.IsFullscreen + !String.IsEmpty(VideoPlayer.Year)">$INFO[VideoPlayer.Year,/ ]$VAR[Resolution_Label, / ]$INFO[Player.FinishTime, / $LOCALIZE[32000] ]</value>
+		<value condition="VideoPlayer.IsFullscreen + !String.IsEmpty(Player.FinishTime)">$VAR[Resolution_Label,/ ]$INFO[Player.FinishTime, / $LOCALIZE[32000] ]</value>
+		<value condition="String.IsEqual(ListItem.DBType,movie) + $EXP[GridView_IsVisible] + $EXP[GridView_Details_Breadcrumb] + !String.IsEmpty(ListItem.Year)">$INFO[Listitem.Year,/ ]</value>
+		<value condition="String.IsEqual(ListItem.DBType,tvshow) + $EXP[GridView_IsVisible] + $EXP[GridView_Details_Breadcrumb] + !String.IsEmpty(ListItem.Year)">$INFO[Listitem.Year,/ ]$INFO[ListItem.Property(TotalSeasons), / , ]$VAR[Seasons_Label]</value>
+		<value condition="String.IsEqual(ListItem.DBType,season) + $EXP[GridView_IsVisible] + $EXP[GridView_Details_Breadcrumb] + !String.IsEmpty(ListItem.Season)">$INFO[ListItem.Season,/ $LOCALIZE[32121] ]$INFO[ListItem.Year, / ]</value>
+		<value condition="String.IsEqual(ListItem.DBType,season) + $EXP[GridView_IsVisible] + $EXP[GridView_Details_Title] + !String.IsEmpty(ListItem.Year)">$INFO[ListItem.Year,/ ]</value>
+		<value condition="String.IsEqual(ListItem.DBType,episode) + $EXP[GridView_IsVisible] + !$EXP[GridView_Details_Info] + !String.IsEmpty(ListItem.Year) + !Integer.IsGreater(ListItem.Episode,9)">$INFO[ListItem.Year,/ ]$INFO[ListItem.Season, / ]$INFO[ListItem.Episode,x0]</value>
+		<value condition="String.IsEqual(ListItem.DBType,episode) + $EXP[GridView_IsVisible] + !$EXP[GridView_Details_Info] + !String.IsEmpty(ListItem.Year)">$INFO[ListItem.Year,/ ]$INFO[ListItem.Season, / ]$INFO[ListItem.Episode,x,]</value>
+		<value condition="String.IsEqual(ListItem.DBType,episode) + $EXP[Breadcrumb_Enabled_View] + !String.IsEmpty(ListItem.Year)">$INFO[ListItem.Year,/ ]</value>
+		<value condition="String.IsEqual(ListItem.DBType,album) + $EXP[GridView_IsVisible] + $EXP[GridView_Details_Breadcrumb] + !String.IsEmpty(ListItem.Album)">$INFO[ListItem.Album,/ ]$INFO[ListItem.Year, / ]</value>
+		<value condition="String.IsEqual(ListItem.DBType,album) + $EXP[GridView_IsVisible] + $EXP[GridView_Details_Breadcrumb] + !String.IsEmpty(ListItem.Year)">$INFO[ListItem.Year,/ ]</value>
+		<value condition="String.IsEqual(ListItem.DBType,album) + $EXP[GridView_IsVisible] + $EXP[GridView_Details_Title] + !String.IsEmpty(ListItem.Year)">$INFO[ListItem.Year,/ ]</value>
+		<value condition="String.IsEqual(ListItem.DBType,song) + $EXP[Breadcrumb_Enabled_View] + !String.IsEmpty(ListItem.Artist)">$INFO[ListItem.Artist,/ ]$INFO[ListItem.Year, / ]</value>
+		<value condition="String.IsEqual(ListItem.DBType,song) + $EXP[Breadcrumb_Enabled_View] + !String.IsEmpty(ListItem.Year)">$INFO[ListItem.Year,/ ]</value>
+		<value condition="Container.Content(actors) + !String.IsEmpty(ListItem.Appearances)">$VAR[Appearances_Label_2,/ ]$INFO[Container(4501).ListItem(-1).Title, ]</value>
+		<value condition="Container.Content(files) + String.IsEmpty(ListItem.Art(Poster))">$INFO[ListItem.EndTime,/ $LOCALIZE[32000] ]</value>
+		<value condition="Container.Content(addons)">$INFO[ListItem.AddonType,/ ]$INFO[ListItem.AddonCreator, / ]</value>
 		<value></value>
 	</variable>
 
 	<variable name="Dialog_Info_Label">
-		<!-- Movies -->
-		<!-- 2019 / TODD PHILLIPS / 4KUHD / ENG / 132 MINS / ENDS 12:04 -->
-		<value condition="String.IsEqual(ListItem.DBType,movie) + !String.IsEmpty(ListItem.Year)">[UPPERCASE]$INFO[ListItem.Year]$INFO[ListItem.Director, / ]$VAR[Resolution_Label, / ]$INFO[ListItem.AudioLanguage, / ]$INFO[ListItem.Duration(mins), / , $LOCALIZE[31138]]$INFO[ListItem.EndTime, / $LOCALIZE[32000] ][/UPPERCASE]</value>
-		<value condition="String.IsEqual(ListItem.DBType,movie) + !String.IsEmpty(ListItem.Director)">[UPPERCASE]$INFO[ListItem.Director]$VAR[Resolution_Label, / ]$INFO[ListItem.AudioLanguage, / ]$INFO[ListItem.Duration(mins), / , $LOCALIZE[31138]]$INFO[ListItem.EndTime, / $LOCALIZE[32000] ][/UPPERCASE]</value>
-		<value condition="String.IsEqual(ListItem.DBType,movie) + !String.IsEmpty(ListItem.VideoResolution)">[UPPERCASE]$VAR[Resolution_Label]$INFO[ListItem.AudioLanguage, / ]$INFO[ListItem.Duration(mins), / , $LOCALIZE[31138]]$INFO[ListItem.EndTime, / $LOCALIZE[32000] ][/UPPERCASE]</value>
-		<value condition="String.IsEqual(ListItem.DBType,movie) + !String.IsEmpty(ListItem.AudioLanguage)">$INFO[ListItem.AudioLanguage]$INFO[ListItem.Duration(mins), / , $LOCALIZE[31138]]$INFO[ListItem.EndTime, / $LOCALIZE[32000] ][/UPPERCASE]</value>
-		<value condition="String.IsEqual(ListItem.DBType,movie) + !String.IsE(ListItem.Duration)">[UPPERCASE]$INFO[ListItem.Duration(mins),, $LOCALIZE[31138]]$INFO[ListItem.EndTime, / $LOCALIZE[32000] ][/UPPERCASE]</value>
-		<value condition="String.IsEqual(ListItem.DBType,movie) + !String.IsEmpty(ListItem.EndTime)">[UPPERCASE]$INFO[ListItem.EndTime, $LOCALIZE[32000] ][/UPPERCASE]</value>
+		<!-- Movies
+		2019 / 132 MINS / 4KUHD / ENG / ENDS 12:04
+		TODD PHILLIPS -->
+		<value condition="String.IsEqual(ListItem.DBType,movie) + !String.IsEmpty(ListItem.Year)">[UPPERCASE]$INFO[ListItem.Year]$INFO[ListItem.Duration(mins), / , $LOCALIZE[31138]]$VAR[Resolution_Label, / ]$INFO[ListItem.AudioLanguage, / ]$INFO[ListItem.EndTime, / $LOCALIZE[32000] ][CR]$INFO[ListItem.Director][/UPPERCASE]</value>
+		<value condition="String.IsEqual(ListItem.DBType,movie) + !String.IsEmpty(ListItem.Duration)">[UPPERCASE]$INFO[ListItem.Duration(mins),, $LOCALIZE[31138]]$VAR[Resolution_Label, / ]$INFO[ListItem.AudioLanguage, / ]$INFO[ListItem.EndTime, / $LOCALIZE[32000] ][CR]$INFO[ListItem.Director][/UPPERCASE]</value>
+		<value condition="String.IsEqual(ListItem.DBType,movie) + !String.IsEmpty(ListItem.VideoResolution)">[UPPERCASE]$VAR[Resolution_Label,]$INFO[ListItem.AudioLanguage, / ]$INFO[ListItem.EndTime, / $LOCALIZE[32000] ][CR]$INFO[ListItem.Director][/UPPERCASE]</value>
+		<value condition="String.IsEqual(ListItem.DBType,movie) + !String.IsEmpty(ListItem.AudioLanguage)">[UPPERCASE][ListItem.AudioLanguage]$INFO[ListItem.EndTime, / $LOCALIZE[32000] ]$INFO[ListItem.Director, / ][/UPPERCASE]</value>
+
 		<!-- TV Shows -->
 		<!-- 2017 / 3 SEASONS / 14/14 WATCHED -->
 		<value condition="String.IsEqual(ListItem.DBType,tvshow) + !String.IsEmpty(ListItem.Year) + String.IsEqual(ListItem.Property(TotalSeasons),1)">[UPPERCASE]$INFO[ListItem.Year]$INFO[ListItem.Property(TotalSeasons), / , $LOCALIZE[32121]]$INFO[ListItem.Property(WatchedEpisodes), / ,/]$INFO[ListItem.Property(NumEpisodes),, $LOCALIZE[32001]][/UPPERCASE]</value>
@@ -593,10 +590,19 @@
 	</variable>
 
 	<variable name="Albums_Label">
-		<!-- Albunm -->
+		<!-- Album -->
 		<value condition="Integer.IsEqual(Container(50).NumItems,1)">$LOCALIZE[558]</value>
 		<!-- Albums -->
 		<value>$LOCALIZE[132]</value>
+	</variable>
+
+	<variable name="PlotType_Label">
+		<!-- Bio -->
+		<value condition="String.IsEqual(ListItem.DBType,artist)">$LOCALIZE[21887]</value>
+		<!-- Review -->
+		<value condition="String.IsEqual(ListItem.DBType,album)">$LOCALIZE[183]</value>
+		<!-- Plot -->
+		<value>$LOCALIZE[207]</value>
 	</variable>
 
 	<variable name="TrackNumber_Label">
@@ -652,6 +658,7 @@
 		<value condition="String.Contains(ListItem.mpaa,12)">flags/rating/bbfc_12.png</value>
 		<value condition="String.Contains(ListItem.mpaa,15)">flags/rating/bbfc_15.png</value>
 		<value condition="String.Contains(ListItem.mpaa,18) | String.Contains(ListItem.mpaa,UK:X)">flags/rating/bbfc_18.png</value>
+		<value>flags/blank.png</value>
 	</variable>
 
 	<variable name="Studio_Label">
@@ -659,6 +666,7 @@
 		<value condition="ListItem.IsCollection + Skin.HasSetting(Secondary_List_Enabled) + !String.IsEmpty(Container(4501).ListItem.Studio)">$INFO[Container(4501).ListItem.Studio,flags/studios/,.png]</value>
 		<value condition="ListItem.IsCollection + !Skin.HasSetting(Secondary_List_Enabled) + !String.IsEmpty(Container(4500).ListItem.Studio)">$INFO[Container(4500).ListItem.Studio,flags/studios/,.png]</value>
 		<value condition="!String.IsEmpty(ListItem.Studio)">$INFO[ListItem.Studio,flags/studios/,.png]</value>
+		<value>flags/blank.png</value>
 	</variable>
 
 	<variable name="VideoSource_Label">
@@ -756,6 +764,7 @@
 		<value condition="String.StartsWith(ListItem.VideoResolution,576)">$LOCALIZE[32138]</value>
 		<value condition="String.StartsWith(ListItem.VideoResolution,540)">$LOCALIZE[32138]</value>
 		<value condition="String.StartsWith(ListItem.VideoResolution,480)">$LOCALIZE[32138]</value>
+		<value>flags/blank.png</value>
 	</variable>
 
 	<variable name="StarRating_Label">
