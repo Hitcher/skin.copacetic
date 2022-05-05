@@ -41,14 +41,8 @@
 			<control type="group">
 				<visible>$EXP[StripView_IsVisible] + !$EXP[OpaqueDialog_IsVisible]</visible>
 				<include condition="$PARAM[media_view]" content="Viewtype_Fade_Animation"/>
-
 				<!--ARTWORK-->
 				<control type="group">
-					<animation effect="slide" start="0,0" end="-80,0" time="0" condition="$EXP[StripView_Display_IsPosters]">Conditional</animation>
-					<animation effect="slide" start="0,0" end="-560,0" time="0" condition="$EXP[StripView_Display_IsFanart]">Conditional</animation>
-					<animation effect="slide" start="0,0" end="320,0" time="0" condition="$EXP[StripView_Display_IsFanart] + !$EXP[StripView_Details_Off]">Conditional</animation>
-					<animation effect="slide" start="0,0" end="-435,0" time="0" condition="$EXP[StripView_Display_IsSquare]">Conditional</animation>
-					<animation effect="slide" start="0,0" end="75,0" time="0" condition="$EXP[StripView_Display_IsSquare] + !$EXP[StripView_Details_Off]">Conditional</animation>
 					<include condition="$PARAM[media_view]" content="StripView_Art_Posters">
 						<param name="target_id" value="$PARAM[id]"/>
 						<param name="artwork_icon" value="$PARAM[artwork_icon]"/>
@@ -96,13 +90,13 @@
 
 	<include name="StripView_Details">
 		<control type="group">
-			<visible>$EXP[StripView_IsVisible] + !$EXP[OpaqueDialog_IsVisible]</visible>
+			<visible>$EXP[StripView_IsVisible]</visible>
 			<include>Viewtype_Fade_Animation</include>
 			<control type="group">
 				<visible>!$EXP[ContainerSwitching] + !$EXP[ContentSwitching] + !$EXP[TransparentDialog_IsVisible] + !Control.HasFocus(60)</visible>
 				<include>Delayed_Content_Fade_Animation</include>
 				<control type="group">
-					<visible>!$EXP[Secondary_List_ContainerSwitching] + !$EXP[Secondary_List_ContentSwitching] + ![Control.HasFocus(4501) + Window.IsVisible(1121)]</visible>
+					<visible>!$EXP[InfoWidget_HasFocus] + !$EXP[Secondary_List_ContainerSwitching] + !$EXP[Secondary_List_ContentSwitching] + ![Control.HasFocus(4501) + Window.IsVisible(1121)]</visible>
 					<include>Delayed_Content_Fade_Animation</include>
 					<include content="MediaFlags"/>
 					<include content="Common_Details">
@@ -120,7 +114,7 @@
 					<!--Bottom Label-->
 					<control type="label">
 						<animation effect="slide" end="0,-15" time="0" condition="$EXP[StripView_Display_IsSquare] | [$EXP[StripView_Display_IsFanart] + !$EXP[StripView_Flags_IsOn]]">Conditional</animation>
-						<visible>$EXP[StripView_Details_Title] + !$EXP[StripView_Details_Logo_IsOn]</visible>
+						<visible>[$EXP[StripView_Details_Title] + !$EXP[StripView_Details_Logo_IsOn]] | Control.HasFocus(8020) | Control.HasFocus(8030)</visible>
 						<left>240</left>
 						<top>964</top>
 						<width>1440</width>
@@ -136,7 +130,7 @@
 					<control type="group">
 						<animation effect="slide" end="0,-30" time="0" condition="$EXP[StripView_Display_IsSquare] | $EXP[StripView_Display_IsFanart]">Conditional</animation>
 						<animation effect="slide" end="75,0" time="0" condition="$EXP[StripView_Display_IsSquare] + !$EXP[StripView_Details_Off]">Conditional</animation>
-						<animation effect="slide" end="320,0" time="0" condition="$EXP[StripView_Display_IsFanart] + !$EXP[StripView_Details_Off]">Conditional</animation>
+						<animation effect="slide" end="320,0" time="0" condition="$EXP[StripView_Display_IsFanart] + !$EXP[StripView_Details_Off] + !$EXP[InfoWidget_HasFocus]">Conditional</animation>
 						<include content="ProgressBar">
 							<param name="top" value="930"/>
 						</include>
