@@ -562,6 +562,7 @@
 				<!-- Now Playing Background -->
 				<control type="group">
 					<include>$PARAM[switchingtosecondarylistanimation]</include>
+					<visible>Player.HasMedia</visible>
 					<visible>[[$EXP[ShowcaseView_IsVisible] | $EXP[StripView_IsVisible]] + [ListItem($PARAM[position]).IsPlaying | [Container.Content(tvshows) + String.IsEqual(VideoPlayer.TVShowTitle,ListItem($PARAM[position]).Title)] | [Container.Content(seasons) + String.IsEqual(VideoPlayer.TVShowTitle,ListItem($PARAM[position]).TVShowTitle) + String.IsEqual(VideoPlayer.Season,ListItem($PARAM[position]).Season)] | [Container.Content(artists) + String.IsEqual(MusicPlayer.Artist, ListItem($PARAM[position]).Artist)] | [Container.Content(albums) + String.IsEqual(MusicPlayer.Artist, ListItem($PARAM[position]).Artist) + String.IsEqual(MusicPlayer.Album, ListItem($PARAM[position]).Album)]]] | [$EXP[GridView_IsVisible] + $EXP[StandardViews_NowPlaying]]</visible>
 					<control type="image">
 						<aspectratio>stretch</aspectratio>
@@ -896,7 +897,7 @@
 				<visible>$PARAM[visible]</visible>
 				<!-- PREVIOUS SCROLL -->
 				<control type="group">
-					<visible>$EXP[ContentPrevious] + !$EXP[ContentNext] + !String.IsEqual(Control.GetLabel(919),Control.GetLabel(920))</visible>
+					<visible>$EXP[ContentPrevious] + !$EXP[ContentNext] + !String.IsEqual(Container($PARAM[target_id]).NumItems,1) + !String.IsEqual(Control.GetLabel($PARAM[target_id]21),Control.GetLabel($PARAM[target_id]22))</visible>
 					<!-- Fade Out Icon 0 if aspect ratio not fixed -->
 					<include content="ListIcon">
 						<param name="artwork_icon" value="$PARAM[artwork_icon]"/>
@@ -916,7 +917,7 @@
 					<include content="ListIcon">
 						<param name="artwork_icon" value="$PARAM[artwork_icon]"/>
 						<param name="position" value="1"/>
-						<param name="visible" value="$EXP[ContentPrevious] + [!Container($PARAM[target_id]).Content(files) | $EXP[BillboardView_IsVisible]]"/>
+						<param name="visible" value="$EXP[ContentPrevious] + !String.IsEqual(Container($PARAM[target_id]).NumItems,1) + [!Container($PARAM[target_id]).Content(files) | $EXP[BillboardView_IsVisible]]"/>
 						<param name="aspectratio" value="$PARAM[aspectratio]"/>
 						<param name="fallback" value="$PARAM[fallback]"/>
 						<param name="artworkmask" value="$PARAM[artworkmask]"/>
@@ -943,7 +944,7 @@
 				</control>
 				<!-- NEXT SCROLL -->
 				<control type="group">
-				  <visible>$EXP[ContentNext] + !$EXP[ContentPrevious] + !String.IsEqual(Control.GetLabel(919),Control.GetLabel(918))</visible>
+				  <visible>$EXP[ContentNext] + !$EXP[ContentPrevious] + !String.IsEqual(Container($PARAM[target_id]).NumItems,1) + !String.IsEqual(Control.GetLabel($PARAM[target_id]21),Control.GetLabel($PARAM[target_id]20))</visible>
 					<!-- Fade Out Icon 0 if aspect ratio not fixed -->
 				  <include content="ListIcon">
 						<param name="artwork_icon" value="$PARAM[artwork_icon]"/>
@@ -959,11 +960,11 @@
 				    <param name="showgradient" value="$PARAM[showgradient]"/>
 						<param name="showbreadcrumboverlay" value="$PARAM[show_breadcrumb_overlay]"/>
 				  </include>
-					<!-- Hold in place Icon 0 if aspectratio is fixed -->
+					<!-- Hold in place Icon 0 if aspectratio is fixed-->
 					<include content="ListIcon">
 						<param name="artwork_icon" value="$PARAM[artwork_icon]"/>
 						<param name="position" value="-1"/>
-						<param name="visible" value="$EXP[ContentNext] + [!Container($PARAM[target_id]).Content(files) | $EXP[BillboardView_IsVisible]]"/>
+						<param name="visible" value="[$EXP[ContentNext] + [!Container($PARAM[target_id]).Content(files) | $EXP[BillboardView_IsVisible]]] | String.IsEqual(Container($PARAM[target_id]).NumItems,1)"/>
 						<param name="aspectratio" value="$PARAM[aspectratio]"/>
 						<param name="fallback" value="$PARAM[fallback]"/>
 						<param name="artworkmask" value="$PARAM[artworkmask]"/>
@@ -991,7 +992,7 @@
 				<!-- STATIC or during overlap of ContentPrev and ContentNext -->
 				<include content="ListIcon">
 					<param name="artwork_icon" value="$PARAM[artwork_icon]"/>
-					<param name="visible" value="!$EXP[ContentSwitching] | [$EXP[ContentPrevious] + $EXP[ContentNext]] | [$EXP[ContentPrevious] + String.IsEqual(Control.GetLabel(919),Control.GetLabel(920))] | [$EXP[ContentNext] + String.IsEqual(Control.GetLabel(919),Control.GetLabel(918))]"/>
+					<param name="visible" value="!$EXP[ContentSwitching] | String.IsEqual(Container($PARAM[target_id]).NumItems,1) | [$EXP[ContentPrevious] + $EXP[ContentNext]] | [$EXP[ContentPrevious] + String.IsEqual(Control.GetLabel($PARAM[target_id]21),Control.GetLabel($PARAM[target_id]22))] | [$EXP[ContentNext] + String.IsEqual(Control.GetLabel($PARAM[target_id]21),Control.GetLabel($PARAM[target_id]20))]"/>
 					<param name="switchingtosecondarylistanimation" value="Secondary_List_Scroll_Animation"/>
 					<param name="aspectratio" value="$PARAM[aspectratio]"/>
 					<param name="fallback" value="$PARAM[fallback]"/>
@@ -1037,7 +1038,7 @@
 					<include>Artwork_Fade_Animation</include>
 					<!-- PREVIOUS SCROLL -->
 					<control type="group">
-						<visible>$EXP[ContentPrevious]</visible>
+						<visible>$EXP[ContentPrevious] + !String.IsEqual(Container($PARAM[target_id]).NumItems,1)</visible>
 						<!-- Details On -->
 						<!-- Unfocused Items -->
 						<!-- Move Icon -1 to 0, no player -->
@@ -1366,7 +1367,7 @@
 					</control>
 					<!-- NEXT SCROLL -->
 					<control type="group">
-						<visible>$EXP[ContentNext]</visible>
+						<visible>$EXP[ContentNext] + !String.IsEqual(Container($PARAM[target_id]).NumItems,1)</visible>
 						<!-- Details On -->
 						<!-- Move Icon 0 to -1 -->
 						<include content="ListIcon">
@@ -1720,7 +1721,7 @@
 					<animation effect="slide" start="0,0" end="-960,0" time="0" condition="$EXP[StripView_Display_IsFanart] + !$EXP[InfoWidget_Display_IsStripView_Posters] + !$EXP[InfoWidget_Display_IsStripView_Square]">Conditional</animation>
 					<!-- PREVIOUS SCROLL -->
 					<control type="group">
-						<visible>$EXP[ContentPrevious]</visible>
+						<visible>$EXP[ContentPrevious] + !String.IsEqual(Container($PARAM[target_id]).NumItems,1)</visible>
 						<!-- Move Icon -3 to -2 -->
 						<include content="ListIcon">
 							<param name="artwork_icon" value="$PARAM[artwork_icon]"/>
@@ -1899,7 +1900,7 @@
 					</control>
 					<!-- NEXT SCROLL -->
 					<control type="group">
-						<visible>$EXP[ContentNext]</visible>
+						<visible>$EXP[ContentNext] + !String.IsEqual(Container($PARAM[target_id]).NumItems,1)</visible>
 						<!-- Move Icon -2 to -3 -->
 						<include content="ListIcon">
 							<param name="artwork_icon" value="$PARAM[artwork_icon]"/>
@@ -2078,6 +2079,16 @@
 					</control>
 				</control>
 			</definition>
+		</include>
+
+		<include name="BillboardView_Art_Fanart">
+			<include content="Artwork_Transition_Fade">
+				<param name="target_id" value="$PARAM[id]"/>
+				<param name="artwork_icon" value="$PARAM[artwork_icon]"/>
+				<param name="fallback" default=""/>
+				<param name="show_breadcrumb_overlay" value="true"/>
+				<param name="artworkmask" value="true"/>
+			</include>
 		</include>
 
 		<include name="ShowcaseView_Art">
@@ -2522,7 +2533,7 @@
 					<param name="visible" value="$EXP[GridView_Display_Is$PARAM[displaytype_label]]"/>
 					<param name="showgradient" value="true"/>
 					<param name="aspectratio" value="scale"/>
-					<param name="artworkmask" value="!$EXP[ContentSwitching] + !$EXP[GridView_Details_Off] + !$EXP[GridView_Details_Breadcrumb] + !$EXP[TransparentDialog_IsVisible] + !$EXP[StandardViews_NowPlaying]"/>
+					<param name="artworkmask" value="[!$EXP[ContentSwitching] + !$EXP[GridView_Details_Off] + !$EXP[GridView_Details_Breadcrumb] + !$EXP[TransparentDialog_IsVisible] + !$EXP[StandardViews_NowPlaying]"/>
 					<param name="artworkmaskanimationtype" value="Visible"/>
 					<param name="artworkmaskanimationcondition" value="true"/>
 					<param name="artworkmaskanimationeffect" value="fade"/>

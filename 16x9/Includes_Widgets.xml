@@ -7,13 +7,15 @@
 	</include>
 
 	<include name="Widget_List">
+		<param name="min_items"/>
+		<param name="widget_type"/>
 		<param name="id"/>
 		<param name="use_custom_content"/>
 		<param name="use_custom_click" default="false"/>
 		<param name="click_action"/>
 		<definition>
 			<control type="fixedlist" id="$PARAM[id]">
-				<visible>Integer.IsGreater(Container($PARAM[id]).NumItems,0) | Container($PARAM[id]).IsUpdating</visible>
+				<visible>Integer.IsGreater(Container($PARAM[id]).NumItems,$PARAM[min_items]) | Container($PARAM[id]).IsUpdating</visible>
 				<onfocus>SetProperty(HomeWidget,$PARAM[id],home)</onfocus>
 				<onunfocus condition="!String.IsEmpty(window(home).property(HomeWidget))">ClearProperty(HomeWidget,home)</onunfocus>
 				<viewtype label="widgetlist">list</viewtype>
@@ -21,44 +23,7 @@
 				<orientation>horizontal</orientation>
 				<scrolltime tween="sine" easing="inout">360</scrolltime>
 				<include condition="$PARAM[use_custom_click]">ClickAction_$PARAM[click_action]</include>
-				<onleft>0</onleft>
-				<onright>0</onright>
-				<onup condition="Control.HasFocus(8010)">SetFocus(65000)</onup>
-				<onup condition="Control.HasFocus(8020)">SetFocus(65000)</onup>
-				<onup condition="Control.HasFocus(8030) + Control.IsVisible(8020)">8020</onup>
-				<onup condition="Control.HasFocus(8030) + !Control.IsVisible(8020)">SetFocus(65000)</onup>
-				<onup condition="Control.HasFocus(9010)">9000</onup>
-				<onup condition="Control.HasFocus(9020)">9010</onup>
-				<onup condition="Control.HasFocus(9030)">9020</onup>
-				<onup condition="Control.HasFocus(9040)">9030</onup>
-				<onup condition="Control.HasFocus(9050)">9040</onup>
-				<onup condition="Control.HasFocus(9060)">9050</onup>
-				<onup condition="Control.HasFocus(9070)">9060</onup>
-				<onup condition="Control.HasFocus(9080)">9070</onup>
-				<onup condition="Control.HasFocus(9090)">9080</onup>
-				<ondown condition="Control.HasFocus(8010)">SetFocus(65000)</ondown>
-				<ondown condition="Control.HasFocus(8020) + Control.IsVisible(8030)">8030</ondown>
-				<ondown condition="Control.HasFocus(8020) + !Control.IsVisible(8030)">SetFocus(65000)</ondown>
-				<ondown condition="Control.HasFocus(8030)">SetFocus(65000)</ondown>
-				<ondown condition="Control.HasFocus(9010) + Control.IsVisible(9020)">9020</ondown>
-				<ondown condition="Control.HasFocus(9010) + !Control.IsVisible(9020)">9000</ondown>
-				<ondown condition="Control.HasFocus(9020) + Control.IsVisible(9030)">9030</ondown>
-				<ondown condition="Control.HasFocus(9020) + !Control.IsVisible(9030)">9000</ondown>
-				<ondown condition="Control.HasFocus(9030) + Control.IsVisible(9040)">9040</ondown>
-				<ondown condition="Control.HasFocus(9030) + !Control.IsVisible(9040)">9000</ondown>
-				<ondown condition="Control.HasFocus(9040) + Control.IsVisible(9050)">9050</ondown>
-				<ondown condition="Control.HasFocus(9040) + !Control.IsVisible(9050)">9000</ondown>
-				<ondown condition="Control.HasFocus(9050) + Control.IsVisible(9060)">9060</ondown>
-				<ondown condition="Control.HasFocus(9050) + !Control.IsVisible(9060)">9000</ondown>
-				<ondown condition="Control.HasFocus(9060) + Control.IsVisible(9070)">9070</ondown>
-				<ondown condition="Control.HasFocus(9060) + !Control.IsVisible(9070)">9000</ondown>
-				<ondown condition="Control.HasFocus(9070) + Control.IsVisible(9080)">9080</ondown>
-				<ondown condition="Control.HasFocus(9070) + !Control.IsVisible(9080)">9000</ondown>
-				<ondown condition="Control.HasFocus(9080) + Control.IsVisible(9090)">9090</ondown>
-				<ondown condition="Control.HasFocus(9080) + !Control.IsVisible(9090)">9000</ondown>
-				<ondown condition="Control.HasFocus(9090)">9000</ondown>
-				<onback condition="Window.IsVisible(home)">9000</onback>
-				<onback condition="Window.IsVisible(movieinformation)">65005</onback>
+				<include>$PARAM[widget_type]_Navigation</include>
 				<focusedlayout>
 					<include>HiddenWidgetFocusButton</include>
 				</focusedlayout>
@@ -74,99 +39,104 @@
 	</include>
 
 	<include name="Widget_Template">
+		<param name="use_custom_content" default="true"/>
+		<definition>
 
-		<!--Labels to check if artwork is the same as next/previous-->
-		<control type="label" id="918">
-			<visible>false</visible>
-			<label>$VAR[Widget$PARAM[widget_position]_Thumbnail(-1)Content]</label>
-		</control>
-		<control type="label" id="919">
-			<visible>false</visible>
-			<label>$VAR[Widget$PARAM[widget_position]_Thumbnail(0)Content]</label>
-		</control>
-		<control type="label" id="920">
-			<visible>false</visible>
-			<label>$VAR[Widget$PARAM[widget_position]_Thumbnail(1)Content]</label>
-		</control>
+			<include content="Widget_List">
+				<param name="min_items" value="0"/>
+				<param name="widget_type" value="Widget"/>
+				<param name="id" value="$PARAM[id]"/>
+				<param name="widget_position" value="$PARAM[widget_position]"/>
+				<param name="use_custom_content" value="$PARAM[use_custom_content]"/>
+				<param name="target" value="$PARAM[target]"/>
+				<param name="sortby" value="$PARAM[sortby]"/>
+				<param name="sortorder" value="$PARAM[sortorder]"/>
+				<param name="content" value="$PARAM[content]"/>
+			</include>
 
-		<include content="Widget_List">
-			<param name="id" value="$PARAM[id]"/>
-			<param name="widget_position" value="$PARAM[widget_position]"/>
-			<param name="use_custom_content" value="true"/>
-			<param name="target" value="$PARAM[target]"/>
-			<param name="sortby" value="$PARAM[sortby]"/>
-			<param name="sortorder" value="$PARAM[sortorder]"/>
-			<param name="content" value="$PARAM[content]"/>
-		</include>
+			<!--Labels to check if artwork is the same as next/previous-->
+			<control type="label" id="$PARAM[id]20">
+				<visible>false</visible>
+				<label>$VAR[Widget$PARAM[widget_position]_Thumbnail(-1)Content]</label>
+			</control>
+			<control type="label" id="$PARAM[id]21">
+				<visible>false</visible>
+				<label>$VAR[Widget$PARAM[widget_position]_Thumbnail(0)Content]</label>
+			</control>
+			<control type="label" id="$PARAM[id]22">
+				<visible>false</visible>
+				<label>$VAR[Widget$PARAM[widget_position]_Thumbnail(1)Content]</label>
+			</control>
 
-		<control type="group">
-			<visible>Control.HasFocus(90$PARAM[widget_position]0)</visible>
-			<animation effect="slide" start="0" end="0,660" time="0" condition="Control.HasFocus(90$PARAM[widget_position]0)">Conditional</animation>
-			<animation effect="slide" start="0" end="0,-660" time="180" tween="sine" easing="out" reversible="false" condition="Control.HasFocus(90$PARAM[widget_position]0)">Conditional</animation>
-			<animation effect="fade" start="0" end="100" time="360" tween="sine" easing="out" reversible="false" condition="Control.HasFocus(90$PARAM[widget_position]0)">Conditional</animation>
-			<include condition="Skin.HasSetting(Widget$PARAM[widget_position]_View_Billboard)" content="BillboardView_Display">
-				<param name="id" value="$PARAM[id]"/>
-				<param name="artwork_icon" value="Widget$PARAM[widget_position]_Thumbnail"/>
-				<param name="media_view" value="false"/>
-				<param name="widget_view" value="true"/>
-				<param name="widget_position" value="$PARAM[widget_position]"/>
-			</include>
-			<include condition="Skin.HasSetting(Widget$PARAM[widget_position]_View_Showcase)" content="ShowcaseView_Display">
-				<param name="id" value="$PARAM[id]"/>
-				<param name="artwork_icon" value="Widget$PARAM[widget_position]_Thumbnail"/>
-				<param name="media_view" value="false"/>
-				<param name="widget_view" value="true"/>
-				<param name="widget_position" value="$PARAM[widget_position]"/>
-			</include>
-			<include condition="Skin.HasSetting(Widget$PARAM[widget_position]_View_Strip)" content="StripView_Display">
-				<param name="id" value="$PARAM[id]"/>
-				<param name="artwork_icon" value="Widget$PARAM[widget_position]_Thumbnail"/>
-				<param name="media_view" value="false"/>
-				<param name="widget_view" value="true"/>
-				<param name="widget_position" value="$PARAM[widget_position]"/>
-			</include>
-			<include condition="Skin.HasSetting(Widget$PARAM[widget_position]_View_Grid)" content="GridView_Display">
-				<param name="id" value="$PARAM[id]"/>
-				<param name="artwork_icon" value="Widget$PARAM[widget_position]_Thumbnail"/>
-				<param name="widget_position" value="$PARAM[widget_position]"/>
-				<param name="gridview_details_fade" value="Control.HasFocus(90$PARAM[widget_position]0)"/>
-			</include>
-		</control>
-
-		<control type="group">
-			<visible>!Window.IsVisible(shutdownmenu)</visible>
-			<include>Delayed_Content_Fade_Animation</include>
-			<!-- Details -->
 			<control type="group">
 				<visible>Control.HasFocus(90$PARAM[widget_position]0)</visible>
-				<include>Delayed_Content_Fade_Animation</include>
-				<include condition="Skin.HasSetting(Widget$PARAM[widget_position]_View_Billboard)" content="BillboardView_Details"/>
-				<include condition="Skin.HasSetting(Widget$PARAM[widget_position]_View_Showcase)" content="ShowcaseView_Details">
+				<animation effect="slide" start="0" end="0,660" time="0" condition="Control.HasFocus(90$PARAM[widget_position]0)">Conditional</animation>
+				<animation effect="slide" start="0" end="0,-660" time="180" tween="sine" easing="out" reversible="false" condition="Control.HasFocus(90$PARAM[widget_position]0)">Conditional</animation>
+				<animation effect="fade" start="0" end="100" time="360" tween="sine" easing="out" reversible="false" condition="Control.HasFocus(90$PARAM[widget_position]0)">Conditional</animation>
+				<include condition="Skin.HasSetting(Widget$PARAM[widget_position]_View_Billboard)" content="BillboardView_Display">
+					<param name="id" value="$PARAM[id]"/>
+					<param name="artwork_icon" value="Widget$PARAM[widget_position]_Thumbnail"/>
 					<param name="media_view" value="false"/>
+					<param name="widget_view" value="true"/>
+					<param name="widget_position" value="$PARAM[widget_position]"/>
 				</include>
-				<include condition="Skin.HasSetting(Widget$PARAM[widget_position]_View_Strip)" content="StripView_Details"/>
-				<include condition="Skin.HasSetting(Widget$PARAM[widget_position]_View_Grid)" content="GridView_Details"/>
+				<include condition="Skin.HasSetting(Widget$PARAM[widget_position]_View_Showcase)" content="ShowcaseView_Display">
+					<param name="id" value="$PARAM[id]"/>
+					<param name="artwork_icon" value="Widget$PARAM[widget_position]_Thumbnail"/>
+					<param name="media_view" value="false"/>
+					<param name="widget_view" value="true"/>
+					<param name="widget_position" value="$PARAM[widget_position]"/>
+				</include>
+				<include condition="Skin.HasSetting(Widget$PARAM[widget_position]_View_Strip)" content="StripView_Display">
+					<param name="id" value="$PARAM[id]"/>
+					<param name="artwork_icon" value="Widget$PARAM[widget_position]_Thumbnail"/>
+					<param name="media_view" value="false"/>
+					<param name="widget_view" value="true"/>
+					<param name="widget_position" value="$PARAM[widget_position]"/>
+				</include>
+				<include condition="Skin.HasSetting(Widget$PARAM[widget_position]_View_Grid)" content="GridView_Display">
+					<param name="id" value="$PARAM[id]"/>
+					<param name="artwork_icon" value="Widget$PARAM[widget_position]_Thumbnail"/>
+					<param name="widget_position" value="$PARAM[widget_position]"/>
+					<param name="gridview_details_fade" value="Control.HasFocus(90$PARAM[widget_position]0)"/>
+				</include>
+			</control>
+
+			<control type="group">
+				<visible>!Window.IsVisible(shutdownmenu)</visible>
+				<include>Delayed_Content_Fade_Animation</include>
+				<!-- Details -->
 				<control type="group">
-					<animation effect="slide" start="0" end="0,677" time="0" condition="Skin.HasSetting(Widget$PARAM[widget_position]_Display_Fanart)">Conditional</animation>
-					<animation effect="slide" start="0" end="0,690" time="0" condition="Skin.HasSetting(Widget$PARAM[widget_position]_Display_Square)">Conditional</animation>
-					<animation effect="slide" start="0" end="0,780" time="0" condition="!Skin.HasSetting(Widget$PARAM[widget_position]_Display_Fanart) + !Skin.HasSetting(Widget$PARAM[widget_position]_Display_Square)">Conditional</animation>
-					<include condition="Skin.HasSetting(Widget$PARAM[widget_position]_View_Grid)" content="Breadcrumb_Label">
-						<param name="title_label" value="$VAR[Title_Label]"/>
-						<param name="info_label" value="/ $VAR[Info_Label]"/>
-						<param name="label_color" value="$VAR[Primary_Color]"/>
+					<visible>Control.HasFocus(90$PARAM[widget_position]0)</visible>
+					<include>Delayed_Content_Fade_Animation</include>
+					<include condition="Skin.HasSetting(Widget$PARAM[widget_position]_View_Billboard)" content="BillboardView_Details"/>
+					<include condition="Skin.HasSetting(Widget$PARAM[widget_position]_View_Showcase)" content="ShowcaseView_Details">
+						<param name="media_view" value="false"/>
+					</include>
+					<include condition="Skin.HasSetting(Widget$PARAM[widget_position]_View_Strip)" content="StripView_Details"/>
+					<include condition="Skin.HasSetting(Widget$PARAM[widget_position]_View_Grid)" content="GridView_Details"/>
+					<control type="group">
+						<animation effect="slide" start="0" end="0,677" time="0" condition="Skin.HasSetting(Widget$PARAM[widget_position]_Display_Fanart)">Conditional</animation>
+						<animation effect="slide" start="0" end="0,690" time="0" condition="Skin.HasSetting(Widget$PARAM[widget_position]_Display_Square)">Conditional</animation>
+						<animation effect="slide" start="0" end="0,780" time="0" condition="!Skin.HasSetting(Widget$PARAM[widget_position]_Display_Fanart) + !Skin.HasSetting(Widget$PARAM[widget_position]_Display_Square)">Conditional</animation>
+						<include condition="Skin.HasSetting(Widget$PARAM[widget_position]_View_Grid)" content="Breadcrumb_Label">
+							<param name="title_label" value="$VAR[Title_Label]"/>
+							<param name="info_label" value="/ $VAR[Info_Label]"/>
+							<param name="label_color" value="$VAR[Primary_Color]"/>
+						</include>
+					</control>
+				</control>
+				<!-- Breadcrumb -->
+				<control type="group">
+					<visible>Control.HasFocus(90$PARAM[widget_position]0)</visible>
+					<include content="Breadcrumb_Label">
+						<param name="title_label" value="$PARAM[widget_header]"/>
+						<param name="info_label" value="$INFO[Container(90$PARAM[widget_position]0).CurrentItem,/ ,]$INFO[Container(90$PARAM[widget_position]0).NumItems,/]"/>
+						<param name="label_color" value="$VAR[Home_Breadcrumb_Label_Color]"/>
 					</include>
 				</control>
 			</control>
-			<!-- Breadcrumb -->
-			<control type="group">
-				<visible>Control.HasFocus(90$PARAM[widget_position]0)</visible>
-				<include content="Breadcrumb_Label">
-					<param name="title_label" value="$PARAM[widget_header]"/>
-					<param name="info_label" value="$INFO[Container(90$PARAM[widget_position]0).CurrentItem,/ ,]$INFO[Container(90$PARAM[widget_position]0).NumItems,/]"/>
-					<param name="label_color" value="$VAR[Home_Breadcrumb_Label_Color]"/>
-				</include>
-			</control>
-		</control>
+		</definition>
 
 	</include>
 
@@ -348,60 +318,80 @@
 
 
 	<include name="Info_Widget_Template">
-		<include content="Widget_List">
-			<param name="id" value="$PARAM[id]"/>
-			<param name="use_custom_content" value="true"/>
-			<param name="target" value="$PARAM[target]"/>
-			<param name="sortby" value="$PARAM[sortby]"/>
-			<param name="sortorder" value="$PARAM[sortorder]"/>
-			<param name="content" value="$PARAM[content]"/>
-			<param name="use_custom_click" value="$PARAM[use_custom_click]"/>
-			<param name="click_action" value="$PARAM[click_action]"/>
-		</include>
-		<control type="group">
-			<visible>Control.HasFocus($PARAM[id])</visible>
-			<animation effect="slide" start="0" end="0,660" time="0" condition="Control.HasFocus($PARAM[id])">Conditional</animation>
-			<animation effect="slide" start="0" end="0,-660" time="180" tween="sine" easing="out" reversible="false" condition="Control.HasFocus($PARAM[id])">Conditional</animation>
-			<animation effect="fade" start="0" end="100" time="360" tween="sine" easing="out" reversible="false" condition="Control.HasFocus($PARAM[id])">Conditional</animation>
-			<include content="$PARAM[widget_view]View_Art_$PARAM[widget_display]">
-				<param name="target_id" value="$PARAM[id]"/>
-				<param name="artwork_icon" value="Widget_$PARAM[widget_display]_Thumbnail"/>
-			</include>
-		</control>
-		<control type="group">
-			<visible>!Window.IsVisible(shutdownmenu) + Control.HasFocus($PARAM[id])</visible>
-			<include>Delayed_Content_Fade_Animation</include>
-			<include content="$PARAM[widget_view]View_Details">
+		<param name="use_custom_content" default="true"/>
+		<param name="use_custom_click" default="true"/>
+		<definition>
+			<include content="Widget_List">
+				<param name="min_items" value="1"/>
+				<param name="widget_type" value="Info_Widget"/>
 				<param name="id" value="$PARAM[id]"/>
+				<param name="use_custom_content" value="$PARAM[use_custom_content]"/>
+				<param name="target" value="$PARAM[target]"/>
+				<param name="sortby" value="$PARAM[sortby]"/>
+				<param name="sortorder" value="$PARAM[sortorder]"/>
+				<param name="content" value="$PARAM[content]"/>
+				<param name="use_custom_click" value="$PARAM[use_custom_click]"/>
+				<param name="click_action" value="$PARAM[click_action]"/>
 			</include>
-			<include content="Breadcrumb_Label">
-				<param name="title_label" value="$PARAM[widget_header]"/>
-				<param name="info_label" value="$PARAM[widget_info]"/>
-			</include>
-		</control>
+			<!-- Art -->
+			<control type="group">
+				<visible>Control.HasFocus($PARAM[id])</visible>
+				<animation effect="slide" start="0" end="0,660" time="0" condition="Control.HasFocus($PARAM[id])">Conditional</animation>
+				<animation effect="slide" start="0" end="0,-660" time="180" tween="sine" easing="out" reversible="false" condition="Control.HasFocus($PARAM[id])">Conditional</animation>
+				<animation effect="fade" start="0" end="100" time="360" tween="sine" easing="out" reversible="false" condition="Control.HasFocus($PARAM[id])">Conditional</animation>
+				<include content="$PARAM[widget_view]View_Art_$PARAM[widget_display]">
+					<param name="target_id" value="$PARAM[id]"/>
+					<param name="artwork_icon" value="Widget_$PARAM[widget_display]_Thumbnail"/>
+				</include>
+			</control>
+			<!-- Details -->
+			<control type="group">
+				<visible>!Window.IsVisible(shutdownmenu) + Control.HasFocus($PARAM[id])</visible>
+				<include>Delayed_Content_Fade_Animation</include>
+				<include content="$PARAM[widget_view]View_Details">
+					<param name="id" value="$PARAM[id]"/>
+				</include>
+				<include content="Breadcrumb_Label">
+					<param name="title_label" value="$PARAM[widget_header]"/>
+					<param name="info_label" value="$PARAM[widget_info]"/>
+				</include>
+			</control>
+			<control type="group">
+				<visible>!Window.IsVisible(shutdownmenu) + Control.HasFocus($PARAM[id]) + String.IsEqual(Control.GetLabel($PARAM[id]10),Grid)</visible>
+				<include>Delayed_Content_Fade_Animation</include>
+				<animation effect="slide" start="0" end="0,677" time="0" condition="String.IsEqual(Control.GetLabel($PARAM[id]11),Fanart)">Conditional</animation>
+				<animation effect="slide" start="0" end="0,690" time="0" condition="String.IsEqual(Control.GetLabel($PARAM[id]11),Square)">Conditional</animation>
+				<animation effect="slide" start="0" end="0,780" time="0" condition="String.IsEqual(Control.GetLabel($PARAM[id]11),Posters)">Conditional</animation>
+				<include content="Breadcrumb_Label">
+					<param name="title_label" value="$VAR[Title_Label]"/>
+					<param name="info_label" value="$VAR[Info_Label]"/>
+					<param name="label_color" value="$VAR[Primary_Color]"/>
+				</include>
+			</control>
 
-		<!--Labels to check view and display type-->
-		<control type="label" id="$PARAM[id]1">
-			<visible>false</visible>
-			<label>$PARAM[widget_view]</label>
-		</control>
-		<control type="label" id="$PARAM[id]2">
-			<visible>false</visible>
-			<label>$PARAM[widget_display]</label>
-		</control>
-		<!--Labels to check if artwork is the same as next/previous-->
-		<control type="label" id="918">
-			<visible>false</visible>
-			<label>$VAR[Widget1_Thumbnail(-1)Content]</label>
-		</control>
-		<control type="label" id="919">
-			<visible>false</visible>
-			<label>$VAR[Widget1_Thumbnail(0)Content]</label>
-		</control>
-		<control type="label" id="920">
-			<visible>false</visible>
-			<label>$VAR[Widget1_Thumbnail(1)Content]</label>
-		</control>
+			<!--Labels to check view and display type-->
+			<control type="label" id="$PARAM[id]10">
+				<visible>false</visible>
+				<label>$PARAM[widget_view]</label>
+			</control>
+			<control type="label" id="$PARAM[id]11">
+				<visible>false</visible>
+				<label>$PARAM[widget_display]</label>
+			</control>
+			<!--Labels to check if artwork is the same as next/previous-->
+			<control type="label" id="$PARAM[id]20">
+				<visible>false</visible>
+				<label>$VAR[Widget_$PARAM[widget_display]_Thumbnail(-1)Content]</label>
+			</control>
+			<control type="label" id="$PARAM[id]21">
+				<visible>false</visible>
+				<label>$VAR[Widget_$PARAM[widget_display]_Thumbnail(0)Content]</label>
+			</control>
+			<control type="label" id="$PARAM[id]22">
+				<visible>false</visible>
+				<label>$VAR[Widget_$PARAM[widget_display]_Thumbnail(1)Content]</label>
+			</control>
+		</definition>
 	</include>
 
 	<!--Default Actions-->
@@ -430,7 +420,19 @@
 		<include>DefaultActions</include>
 	</include>
 
-	<!--Widgets-->
+	<!--Info_Widgets-->
+	<include name="Info_Widget_Cast">
+		<include content="Info_Widget_Template">
+			<param name="widget_view" value="Grid"/>
+			<param name="widget_display" value="Posters"/>
+			<param name="id" value="50"/>
+			<param name="use_custom_content" value="false"/>
+			<param name="use_custom_click" value="false"/>
+			<param name="widget_header" value="$LOCALIZE[206]"/>
+			<param name="widget_info" value="$INFO[Container(50).CurrentItem,/ ]$INFO[Container(50).NumItems,/]"/>
+		</include>
+	</include>
+
 	<include name="Info_Widget_Seasons">
 		<include content="Info_Widget_Template">
 			<param name="widget_view" value="Strip"/>
@@ -440,7 +442,6 @@
 			<param name="sortby" value="season"/>
 			<param name="sortorder" value="ascending"/>
 			<param name="content" value="videodb://tvshows/titles/$INFO[ListItem.DBID]/"/>
-			<param name="use_custom_click" value="true"/>
 			<param name="click_action" value="Open_Season_Folder"/>
 			<param name="widget_header" value="$INFO[Container(8010).ListItem.Season,$LOCALIZE[20373] ]"/>
 		</include>
@@ -448,14 +449,13 @@
 
 	<include name="Info_Widget_MovieSet">
 		<include content="Info_Widget_Template">
-			<param name="widget_view" value="Strip"/>
-			<param name="widget_display" value="Posters"/>
+			<param name="widget_view" value="Billboard"/>
+			<param name="widget_display" value="Fanart"/>
 			<param name="id" value="8020"/>
 			<param name="target" value="videos"/>
 			<param name="sortby" value="year"/>
 			<param name="sortorder" value="ascending"/>
 			<param name="content" value="videodb://movies/titles/?setid=$INFO[ListItem.SetID]"/>
-			<param name="use_custom_click" value="true"/>
 			<param name="click_action" value="Open_Movie_Set"/>
 			<param name="widget_header" value="$INFO[ListItem.Set]"/>
 			<param name="widget_info" value="$INFO[Container(8020).CurrentItem,/ ]$INFO[Container(8020).NumItems,/]"/>
@@ -471,7 +471,6 @@
 			<param name="sortby" value="year"/>
 			<param name="sortorder" value="ascending"/>
 			<param name="content" value="videodb://movies/titles/?xsp=%7b%22rules%22%3a%7b%22and%22%3a%5b%7b%22field%22%3a%22director%22%2c%22operator%22%3a%22is%22%2c%22value%22%3a%5b%22$INFO[ListItem.Director]%22%5d%7d%5d%7d%2c%22type%22%3a%22movies%22%7d"/>
-			<param name="use_custom_click" value="true"/>
 			<param name="click_action" value="Open_More_From_Director"/>
 			<param name="widget_header" value="$INFO[ListItem.Director]"/>
 			<param name="widget_info" value="$INFO[Container(8030).CurrentItem,/ ]$INFO[Container(8030).NumItems,/]"/>
