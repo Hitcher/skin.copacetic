@@ -1,10 +1,12 @@
 <includes>
 
 	<include name="Container_Content_Path">
+		<param name="limit" default="20"/>
 		<definition>
-			<content target="$PARAM[target]" sortby="$PARAM[sortby]" sortorder="$PARAM[sortorder]" limit="20">$PARAM[content]</content>
+			<content target="$PARAM[target]" sortby="$PARAM[sortby]" sortorder="$PARAM[sortorder]" limit="$PARAM[limit]">$PARAM[content]</content>
 		</definition>
 	</include>
+
 
 	<include name="Widget_List">
 		<param name="min_items"/>
@@ -33,6 +35,7 @@
 					<param name="sortby" value="$PARAM[sortby]"/>
 					<param name="sortorder" value="$PARAM[sortorder]"/>
 					<param name="content" value="$PARAM[content]"/>
+					<param name="limit" value="$PARAM[limit]"/>
 				</include>
 			</control>
 		</definition>
@@ -331,6 +334,7 @@
 				<param name="sortby" value="$PARAM[sortby]"/>
 				<param name="sortorder" value="$PARAM[sortorder]"/>
 				<param name="content" value="$PARAM[content]"/>
+				<param name="limit" value="$PARAM[limit]"/>
 				<param name="use_custom_click" value="$PARAM[use_custom_click]"/>
 				<param name="click_action" value="$PARAM[click_action]"/>
 			</include>
@@ -395,7 +399,7 @@
 		</definition>
 	</include>
 
-	<!--Default Actions-->
+	<!-- Info Widget Click Actions -->
 	<include name="DefaultActions">
 		<onclick condition="!String.IsEqual(ListItem.Title,window(movieinformation).property(SelectedItem))">SetProperty(Refresh,true,movieinformation)</onclick>
 		<onclick condition="!String.IsEqual(ListItem.Title,window(movieinformation).property(SelectedItem))">SetProperty(Breadcrumb_GoToNext,true,movieinformation)</onclick>
@@ -403,19 +407,6 @@
 		<onclick condition="!String.IsEqual(ListItem.Title,window(movieinformation).property(SelectedItem))">SetFocus(5003)</onclick>
 		<onclick condition="String.IsEqual(ListItem.Title,window(movieinformation).property(SelectedItem))">SetFocus(65000)</onclick>
 	</include>
-
-	<!--Custom Actions-->
-	<include name="ClickAction_Open_Season_Folder">
-		<onclick>Dialog.Close(all)</onclick>
-		<onclick>SetProperty(SentFromInfo,true,movieinformation)</onclick>
-		<onclick>ActivateWindow(videos,$INFO[window(movieinformation).property(TVShowPath)]/$INFO[ListItem.Season]/)</onclick>
-	</include>
-
-	<variable name="CustomContent_ActorCredits">
-		<value condition="System.HasAddon(script.embuary.helper)">plugin://script.embuary.helper/?info=getitemsbyactor&label='$ESCINFO[Container(50).ListItem.Label]'</value>
-		<value condition="container.content(tvshows)">videodb://tvshows/titles/?xsp=%7B%22rules%22%3A%7B%22and%22%3A%5B%7B%22field%22%3A%22actor%22%2C%22operator%22%3A%22is%22%2C%22value%22%3A%5B%22$INFO[Container(50).ListItem.Label]%22%5D%7D%5D%7D%2C%22type%22%3A%22tvshows%22%7D</value>
-		<value>videodb://movies/titles/?xsp=%7B%22rules%22%3A%7B%22and%22%3A%5B%7B%22field%22%3A%22actor%22%2C%22operator%22%3A%22is%22%2C%22value%22%3A%5B%22$INFO[Container(50).ListItem.Label]%22%5D%7D%5D%7D%2C%22type%22%3A%22movies%22%7D</value>
-	</variable>
 
 	<include name="ClickAction_ActorCredits">
 		<onclick condition="!String.IsEqual(ListItem.Title,window(movieinformation).property(SelectedItem) + String.IsEqual(Container(8020).ListItem.DBTYPE,tvshow)">Container.Update(videodb://tvshows/titles/?xsp=%7B%22order%22%3A%7B%22direction%22%3A%22ascending%22%2C%22ignorefolders%22%3A0%2C%22method%22%3A%22sorttitle%22%7D%2C%22rules%22%3A%7B%22and%22%3A%5B%7B%22field%22%3A%22title%22%2C%22operator%22%3A%22is%22%2C%22value%22%3A%5B%22$INFO[ListItem.Title]%22%5D%7D%5D%7D%2C%22type%22%3A%22tvshows%22%7D)</onclick> -->
@@ -433,7 +424,46 @@
 		<include>DefaultActions</include>
 	</include>
 
+	<include name="ClickAction_Play_NextUp">
+		<onclick>RunScript(script.embuary.helper,action=playitem,item='$ESCINFO[ListItem.Filenameandpath]')</onclick>
+	</include>
+
+	<include name="ClickAction_Open_Season_Folder">
+		<onclick>Dialog.Close(all)</onclick>
+		<onclick>SetProperty(SentFromInfo,true,movieinformation)</onclick>
+		<onclick>ActivateWindow(videos,$INFO[window(movieinformation).property(TVShowPath)]/$INFO[ListItem.Season]/)</onclick>
+	</include>
+
 	<!--Info_Widgets-->
+	<include name="Info_Widget_NextUp">
+		<include content="Info_Widget_Template">
+			<param name="widget_view" value="Strip"/>
+			<param name="widget_display" value="Fanart"/>
+			<param name="id" value="8010"/>
+			<param name="target" value="videos"/>
+			<param name="sortby" value="playcount"/>
+			<param name="sortorder" value="ascending"/>
+			<param name="limit" value="3"/>
+			<param name="content" value="videodb://inprogresstvshows/$INFO[ListItem.DBID]/-2/?tvshowid=$INFO[ListItem.DBID]"/>
+			<param name="click_action" value= "Play_NextUp"/>
+			<param name="widget_header" value="$LOCALIZE[31227]"/>
+		</include>
+	</include>
+
+	<include name="Info_Widget_Seasons">
+		<include content="Info_Widget_Template">
+			<param name="widget_view" value="Strip"/>
+			<param name="widget_display" value="Posters"/>
+			<param name="id" value="8020"/>
+			<param name="target" value="videos"/>
+			<param name="sortby" value="season"/>
+			<param name="sortorder" value="ascending"/>
+			<param name="content" value="videodb://tvshows/titles/$INFO[ListItem.DBID]/"/>
+			<param name="click_action" value="Open_Season_Folder"/>
+			<param name="widget_header" value="$INFO[Container(8020).ListItem.Season,$LOCALIZE[20373] ]"/>
+		</include>
+	</include>
+
 	<include name="Info_Widget_Cast">
 		<include content="Info_Widget_Template">
 			<param name="widget_view" value="Grid"/>
@@ -442,7 +472,7 @@
 			<param name="use_custom_content" value="false"/>
 			<param name="use_custom_click" value="false"/>
 			<param name="widget_header" value="$LOCALIZE[206]"/>
-			<param name="widget_info" value="$INFO[Container(50).CurrentItem,/ ]$INFO[Container(50).NumItems,/]"/>
+			<param name="widget_info" value=""/>
 		</include>
 	</include>
 
@@ -450,15 +480,15 @@
 		<include content="Info_Widget_Template">
 			<param name="widget_view" value="Grid"/>
 			<param name="widget_display" value="Fanart"/>
-			<param name="id" value="8010"/>
+			<param name="id" value="8030"/>
 			<param name="min_items" value="0"/>
 			<param name="target" value="videos"/>
 			<param name="sortby" value="year"/>
 			<param name="sortorder" value="descending"/>
 			<param name="content" value="$VAR[CustomContent_ActorCredits]"/>
 			<param name="click_action" value="ActorCredits"/>
-			<param name="widget_header" value="$INFO[Container(50).ListItem.Label]"/>
-			<param name="widget_info" value="$INFO[Container(8010).CurrentItem,/ ]$INFO[Container(8010).NumItems,/]"/>
+			<param name="widget_header" value="$INFO[Container(50).ListItem.Label,More from ]"/>
+			<param name="widget_info" value=""/>
 		</include>
 	</include>
 
@@ -466,14 +496,14 @@
 		<include content="Info_Widget_Template">
 			<param name="widget_view" value="Strip"/>
 			<param name="widget_display" value="Posters"/>
-			<param name="id" value="8020"/>
+			<param name="id" value="8040"/>
 			<param name="target" value="videos"/>
 			<param name="sortby" value="year"/>
 			<param name="sortorder" value="ascending"/>
 			<param name="content" value="videodb://movies/titles/?setid=$INFO[ListItem.SetID]"/>
 			<param name="click_action" value="Open_Movie_Set"/>
 			<param name="widget_header" value="$INFO[ListItem.Set]"/>
-			<param name="widget_info" value="$INFO[Container(8020).CurrentItem,/ ]$INFO[Container(8020).NumItems,/]"/>
+			<param name="widget_info" value="$INFO[Container(8040).CurrentItem,/ ]$INFO[Container(8040).NumItems,/]"/>
 		</include>
 	</include>
 
@@ -481,28 +511,14 @@
 		<include content="Info_Widget_Template">
 			<param name="widget_view" value="Strip"/>
 			<param name="widget_display" value="Fanart"/>
-			<param name="id" value="8030"/>
+			<param name="id" value="8050"/>
 			<param name="target" value="videos"/>
 			<param name="sortby" value="year"/>
 			<param name="sortorder" value="ascending"/>
 			<param name="content" value="videodb://movies/titles/?xsp=%7b%22rules%22%3a%7b%22and%22%3a%5b%7b%22field%22%3a%22director%22%2c%22operator%22%3a%22is%22%2c%22value%22%3a%5b%22$INFO[ListItem.Director]%22%5d%7d%5d%7d%2c%22type%22%3a%22movies%22%7d"/>
 			<param name="click_action" value="Open_More_From_Director"/>
-			<param name="widget_header" value="$INFO[ListItem.Director]"/>
-			<param name="widget_info" value="$INFO[Container(8030).CurrentItem,/ ]$INFO[Container(8030).NumItems,/]"/>
-		</include>
-	</include>
-
-	<include name="Info_Widget_Seasons">
-		<include content="Info_Widget_Template">
-			<param name="widget_view" value="Strip"/>
-			<param name="widget_display" value="Posters"/>
-			<param name="id" value="8040"/>
-			<param name="target" value="videos"/>
-			<param name="sortby" value="season"/>
-			<param name="sortorder" value="ascending"/>
-			<param name="content" value="videodb://tvshows/titles/$INFO[ListItem.DBID]/"/>
-			<param name="click_action" value="Open_Season_Folder"/>
-			<param name="widget_header" value="$INFO[Container(8040).ListItem.Season,$LOCALIZE[20373] ]"/>
+			<param name="widget_header" value="$INFO[ListItem.Director, Directed by]"/>
+			<param name="widget_info" value=""/>
 		</include>
 	</include>
 
