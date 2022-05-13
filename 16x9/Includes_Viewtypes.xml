@@ -15,8 +15,12 @@
 		<control type="button">
 			<visible allowhiddenfocus="true">false</visible>
 			<onfocus>SetProperty(WatchedPercentage,0,home)</onfocus>
-			<onfocus condition="System.HasAddon(script.embuary.helper) + Control.HasFocus(8010) + Integer.IsGreater(Container(8010).ListItem.Property(WatchedEpisodes),0) + !String.IsEqual(Container(8010).ListItem.Overlay,OverlayWatched.png)">RunScript(script.embuary.helper,action=calc,do='"($INFO[Container(8010).ListItem.Property(WatchedEpisodes)] / $INFO[Container(8010).ListItem.Property(TotalEpisodes)]) * 100"',prop=WatchedPercentage)</onfocus>
-			<onfocus condition="System.HasAddon(script.embuary.helper) + !Control.HasFocus(8010) + Integer.IsGreater(ListItem.Property(WatchedEpisodes),0) + !String.IsEqual(ListItem.Overlay,OverlayWatched.png)">RunScript(script.embuary.helper,action=calc,do='"($INFO[ListItem.Property(WatchedEpisodes)] / $INFO[ListItem.Property(TotalEpisodes)]) * 100"',prop=WatchedPercentage)</onfocus>
+			<onfocus condition="System.HasAddon(script.embuary.helper) + Control.HasFocus(8030)">RunScript(script.embuary.helper,action=encode,string='$ESCINFO[Container(8030).ListItem.Title]',prop=EncodedTitle)</onfocus>
+			<onfocus condition="System.HasAddon(script.embuary.helper) + Control.HasFocus(8040)">RunScript(script.embuary.helper,action=encode,string='$ESCINFO[Container(8040).ListItem.Title]',prop=EncodedTitle)</onfocus>
+			<onfocus condition="System.HasAddon(script.embuary.helper) + Control.HasFocus(8050)">RunScript(script.embuary.helper,action=encode,string='$ESCINFO[Container(8050).ListItem.Title]',prop=EncodedDirector)</onfocus>
+			<onfocus condition="System.HasAddon(script.embuary.helper) + Control.HasFocus(8020) + Integer.IsGreater(Container(8020).ListItem.Property(WatchedEpisodes),0) + !String.IsEqual(Container(8020).ListItem.Overlay,OverlayWatched.png)">RunScript(script.embuary.helper,action=calc,do='"($INFO[Container(8020).ListItem.Property(WatchedEpisodes)] / $INFO[Container(8020).ListItem.Property(TotalEpisodes)]) * 100"',prop=WatchedPercentage)</onfocus>
+			<onfocus condition="System.HasAddon(script.embuary.helper) + Control.HasFocus(8030) + Integer.IsGreater(Container(8030).ListItem.Property(WatchedEpisodes),0) + !Integer.IsGreater(Container(8030).ListItem.PlayedCount),0)">RunScript(script.embuary.helper,action=calc,do='"($INFO[Container(8030).ListItem.Property(WatchedEpisodes)] / $INFO[Container(8030).ListItem.Property(TotalEpisodes)]) * 100"',prop=WatchedPercentage)</onfocus>
+			<onfocus condition="System.HasAddon(script.embuary.helper) + !Control.HasFocus(8020) + !Control.HasFocus(8030) + Integer.IsGreater(ListItem.Property(WatchedEpisodes),0) + !String.IsEqual(ListItem.Overlay,OverlayWatched.png)">RunScript(script.embuary.helper,action=calc,do='"($INFO[ListItem.Property(WatchedEpisodes)] / $INFO[ListItem.Property(TotalEpisodes)]) * 100"',prop=WatchedPercentage)</onfocus>
 			<animation effect="slide" end="0,0" time="180" reversible="false">Focus</animation>
 		</control>
 	</include>
@@ -547,7 +551,7 @@
 				<!-- Progress Bar backing overlay -->
 				<control type="image">
 					<visible>$PARAM[showgradient]</visible>
-					<visible>$EXP[Video_Containers] | Window.IsVisible(home) | Window.IsVisible(visualisation)</visible>
+					<visible>$EXP[Video_Containers] | Window.IsVisible(home) | Window.IsVisible(visualisation) | $EXP[InfoWidget_HasFocus]</visible>
 					<animation effect="fade" start="0" end="100" time="360" tween="sine" easing="out" reversible="false" condition="true">Visible</animation>
 					<aspectratio>stretch</aspectratio>
 					<texture colordiffuse="$VAR[Dark_Color]">views/gradient_art-overlay.png</texture>
@@ -3098,102 +3102,172 @@
 		</definition>
 	</include>
 
+
+	<include name="ProgressBar_Template">
+		<control type="group">
+			<visible>$PARAM[visible]</visible>
+			<left>$PARAM[left]</left>
+			<top>$PARAM[top]</top>
+			<width>$PARAM[width]</width>
+			<height>$PARAM[height]</height>
+			<!-- Resumable -->
+			<control type="progress">
+				<width>100%</width>
+				<height>100%</height>
+				<visible>$PARAM[resumable_visible]</visible>
+				<texturebg colordiffuse="$PARAM[background_color]">views/white_100.png</texturebg>
+				<lefttexture></lefttexture>
+				<midtexture colordiffuse="$PARAM[focus_color]">views/white_100.png</midtexture>
+				<righttexture></righttexture>
+				<overlaytexture></overlaytexture>
+				<info>$PARAM[resumable_info]</info>
+			</control>
+			<!-- Watched -->
+			<control type="image">
+				<width>100%</width>
+				<height>100%</height>
+				<visible>$PARAM[watched_visible]</visible>
+				<texture colordiffuse="$PARAM[focus_color]">views/white_100.png</texture>
+			</control>
+			<!-- Calculated -->
+      <control type="group">
+        <visible>$PARAM[calculated_visible]</visible>
+        <!-- Background -->
+        <control type="image">
+					<width>100%</width>
+					<height>100%</height>
+					<texture colordiffuse="$PARAM[background_color]">views/white_100.png</texture>
+				</control>
+        <!-- Focus -->
+        <control type="image">
+          <animation effect="zoom" end="5,100" time="0" condition="Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],0) + Integer.IsLessOrEqual($NUMBER[Window(home).Property(WatchedPercentage)],5)">Conditional</animation>
+          <animation effect="zoom" end="10,100" time="0" condition="Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],5) + Integer.IsLessOrEqual($NUMBER[Window(home).Property(WatchedPercentage)],10)">Conditional</animation>
+          <animation effect="zoom" end="15,100" time="0" condition="Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],10) + Integer.IsLessOrEqual($NUMBER[Window(home).Property(WatchedPercentage)],15)">Conditional</animation>
+          <animation effect="zoom" end="20,100" time="0" condition="Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],15) + Integer.IsLessOrEqual($NUMBER[Window(home).Property(WatchedPercentage)],20)">Conditional</animation>
+          <animation effect="zoom" end="25,100" time="0" condition="Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],20) + Integer.IsLessOrEqual($NUMBER[Window(home).Property(WatchedPercentage)],25)">Conditional</animation>
+          <animation effect="zoom" end="30,100" time="0" condition="Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],25) + Integer.IsLessOrEqual($NUMBER[Window(home).Property(WatchedPercentage)],30)">Conditional</animation>
+          <animation effect="zoom" end="35,100" time="0" condition="Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],30) + Integer.IsLessOrEqual($NUMBER[Window(home).Property(WatchedPercentage)],35)">Conditional</animation>
+          <animation effect="zoom" end="40,100" time="0" condition="Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],35) + Integer.IsLessOrEqual($NUMBER[Window(home).Property(WatchedPercentage)],40)">Conditional</animation>
+          <animation effect="zoom" end="45,100" time="0" condition="Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],40) + Integer.IsLessOrEqual($NUMBER[Window(home).Property(WatchedPercentage)],45)">Conditional</animation>
+          <animation effect="zoom" end="50,100" time="0" condition="Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],45) + Integer.IsLessOrEqual($NUMBER[Window(home).Property(WatchedPercentage)],50)">Conditional</animation>
+          <animation effect="zoom" end="55,100" time="0" condition="Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],50) + Integer.IsLessOrEqual($NUMBER[Window(home).Property(WatchedPercentage)],55)">Conditional</animation>
+          <animation effect="zoom" end="60,100" time="0" condition="Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],55) + Integer.IsLessOrEqual($NUMBER[Window(home).Property(WatchedPercentage)],60)">Conditional</animation>
+          <animation effect="zoom" end="65,100" time="0" condition="Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],60) + Integer.IsLessOrEqual($NUMBER[Window(home).Property(WatchedPercentage)],65)">Conditional</animation>
+          <animation effect="zoom" end="70,100" time="0" condition="Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],65) + Integer.IsLessOrEqual($NUMBER[Window(home).Property(WatchedPercentage)],70)">Conditional</animation>
+          <animation effect="zoom" end="75,100" time="0" condition="Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],70) + Integer.IsLessOrEqual($NUMBER[Window(home).Property(WatchedPercentage)],75)">Conditional</animation>
+          <animation effect="zoom" end="80,100" time="0" condition="Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],75) + Integer.IsLessOrEqual($NUMBER[Window(home).Property(WatchedPercentage)],80)">Conditional</animation>
+          <animation effect="zoom" end="85,100" time="0" condition="Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],80) + Integer.IsLessOrEqual($NUMBER[Window(home).Property(WatchedPercentage)],85)">Conditional</animation>
+          <animation effect="zoom" end="90,100" time="0" condition="Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],85) + Integer.IsLessOrEqual($NUMBER[Window(home).Property(WatchedPercentage)],90)">Conditional</animation>
+          <animation effect="zoom" end="95,100" time="0" condition="Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],90) + Integer.IsLessOrEqual($NUMBER[Window(home).Property(WatchedPercentage)],95)">Conditional</animation>
+          <animation effect="zoom" end="97.5,100" time="0" condition="Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],95) + Integer.IsLess($NUMBER[Window(home).Property(WatchedPercentage)],100)">Conditional</animation>
+					<width>100%</width>
+					<height>100%</height>
+					<texture colordiffuse="$PARAM[focus_color]">views/white_100.png</texture>
+				</control>
+      </control>
+		</control>
+	</include>
+
+
 	<include name="ProgressBar">
-		<param name="visible" default="[$EXP[Video_Containers] | Container.Content(files) | Window.IsActive(movieinformation) | Window.IsActive(home)]"/>
 		<param name="left" default="780"/>
 		<param name="top" default="1047"/>
-    <param name="bottom"/>
 		<param name="width" default="360"/>
 		<param name="height" default="6"/>
-		<param name="backgroundcolor" default="$VAR[Progress_Background_Color]"/>
-		<param name="backgoundtexture" default="views/white_100.png"/>
-		<param name="focuscolor" default="$VAR[Progress_Focused_Color]"/>
-		<param name="focustexture" default="views/white_100.png"/>
+		<param name="background_color" default="$VAR[Progress_Background_Color]"/>
+		<param name="focus_color" default="$VAR[Progress_Focused_Color]"/>
 		<definition>
-			<control type="group">
-				<visible>$PARAM[visible]</visible>
-				<left>$PARAM[left]</left>
-				<top>$PARAM[top]</top>
-				<width>$PARAM[width]</width>
-				<height>$PARAM[height]</height>
-				<!-- Video is resumable -->
-				<control type="progress">
-					<visible>!Control.HasFocus(4501) + !Control.HasFocus(8020) + ListItem.IsResumable</visible>
-					<width>$PARAM[width]</width>
-					<height>$PARAM[height]</height>
-					<texturebg colordiffuse="$PARAM[backgroundcolor]">$PARAM[backgoundtexture]</texturebg>
-					<lefttexture></lefttexture>
-					<midtexture colordiffuse="$PARAM[focuscolor]">$PARAM[focustexture]</midtexture>
-					<righttexture></righttexture>
-					<overlaytexture></overlaytexture>
-					<info>ListItem.PercentPlayed</info>
-				</control>
-				<control type="progress">
-					<visible>Control.HasFocus(4501) + Container(4501).ListItem.IsResumable</visible>
-					<width>$PARAM[width]</width>
-					<height>$PARAM[height]</height>
-					<texturebg colordiffuse="$PARAM[backgroundcolor]">$PARAM[backgoundtexture]</texturebg>
-					<lefttexture></lefttexture>
-					<midtexture colordiffuse="$PARAM[focuscolor]">$PARAM[focustexture]</midtexture>
-					<righttexture></righttexture>
-					<overlaytexture></overlaytexture>
-					<info>Container(4501).ListItem.PercentPlayed</info>
-				</control>
-				<control type="progress">
-					<visible>Control.HasFocus(8020) + Container(8020).ListItem.IsResumable</visible>
-					<width>$PARAM[width]</width>
-					<height>$PARAM[height]</height>
-					<texturebg colordiffuse="$PARAM[backgroundcolor]">$PARAM[backgoundtexture]</texturebg>
-					<lefttexture></lefttexture>
-					<midtexture colordiffuse="$PARAM[focuscolor]">$PARAM[focustexture]</midtexture>
-					<righttexture></righttexture>
-					<overlaytexture></overlaytexture>
-					<info>Container(8020).ListItem.PercentPlayed</info>
-				</control>
-				<!-- Video watched -->
-				<control type="image">
-					<visible>[!Control.HasFocus(4501) + !Control.HasFocus(8010) + !Control.HasFocus(8020) + !ListItem.IsResumable + String.IsEqual(ListItem.Overlay,OverlayWatched.png)] | [Control.HasFocus(4501) + !Container(4501).ListItem.IsResumable + String.IsEqual(Container(4501).ListItem.Overlay,OverlayWatched.png)] | [Control.HasFocus(8010) + !Container(8010).ListItem.IsResumable + String.IsEqual(Container(8010).ListItem.Overlay,OverlayWatched.png)] | [Control.HasFocus(8020) + !Container(8020).ListItem.IsResumable + String.IsEqual(Container(8020).ListItem.Overlay,OverlayWatched.png)]</visible>
-					<width>$PARAM[width]</width>
-					<height>$PARAM[height]</height>
-					<texture colordiffuse="$PARAM[focuscolor]">$PARAM[focustexture]</texture>
-				</control>
-        <!-- Sets, TVshows and Episodes -->
-        <control type="group">
-          <visible>[[!Control.HasFocus(4501) + !Control.HasFocus(8010) + !String.IsEqual(ListItem.Overlay,OverlayWatched.png)] | [Control.HasFocus(4501) + !String.IsEqual(Container(4501).ListItem.Overlay,OverlayWatched.png)] | [Control.HasFocus(8010) + !String.IsEqual(Container(8010).ListItem.Overlay,OverlayWatched.png)]] + Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],0) + [String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,season)]</visible>
-          <!-- Background -->
-          <control type="image">
-  					<width>$PARAM[width]</width>
-  					<height>$PARAM[height]</height>
-  					<texture colordiffuse="$PARAM[backgroundcolor]">$PARAM[backgoundtexture]</texture>
-  				</control>
-          <!-- Focus -->
-          <control type="image">
-            <animation effect="zoom" end="5,100" time="0" condition="Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],0) + Integer.IsLessOrEqual($NUMBER[Window(home).Property(WatchedPercentage)],5)">Conditional</animation>
-            <animation effect="zoom" end="10,100" time="0" condition="Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],5) + Integer.IsLessOrEqual($NUMBER[Window(home).Property(WatchedPercentage)],10)">Conditional</animation>
-            <animation effect="zoom" end="15,100" time="0" condition="Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],10) + Integer.IsLessOrEqual($NUMBER[Window(home).Property(WatchedPercentage)],15)">Conditional</animation>
-            <animation effect="zoom" end="20,100" time="0" condition="Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],15) + Integer.IsLessOrEqual($NUMBER[Window(home).Property(WatchedPercentage)],20)">Conditional</animation>
-            <animation effect="zoom" end="25,100" time="0" condition="Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],20) + Integer.IsLessOrEqual($NUMBER[Window(home).Property(WatchedPercentage)],25)">Conditional</animation>
-            <animation effect="zoom" end="30,100" time="0" condition="Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],25) + Integer.IsLessOrEqual($NUMBER[Window(home).Property(WatchedPercentage)],30)">Conditional</animation>
-            <animation effect="zoom" end="35,100" time="0" condition="Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],30) + Integer.IsLessOrEqual($NUMBER[Window(home).Property(WatchedPercentage)],35)">Conditional</animation>
-            <animation effect="zoom" end="40,100" time="0" condition="Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],35) + Integer.IsLessOrEqual($NUMBER[Window(home).Property(WatchedPercentage)],40)">Conditional</animation>
-            <animation effect="zoom" end="45,100" time="0" condition="Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],40) + Integer.IsLessOrEqual($NUMBER[Window(home).Property(WatchedPercentage)],45)">Conditional</animation>
-            <animation effect="zoom" end="50,100" time="0" condition="Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],45) + Integer.IsLessOrEqual($NUMBER[Window(home).Property(WatchedPercentage)],50)">Conditional</animation>
-            <animation effect="zoom" end="55,100" time="0" condition="Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],50) + Integer.IsLessOrEqual($NUMBER[Window(home).Property(WatchedPercentage)],55)">Conditional</animation>
-            <animation effect="zoom" end="60,100" time="0" condition="Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],55) + Integer.IsLessOrEqual($NUMBER[Window(home).Property(WatchedPercentage)],60)">Conditional</animation>
-            <animation effect="zoom" end="65,100" time="0" condition="Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],60) + Integer.IsLessOrEqual($NUMBER[Window(home).Property(WatchedPercentage)],65)">Conditional</animation>
-            <animation effect="zoom" end="70,100" time="0" condition="Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],65) + Integer.IsLessOrEqual($NUMBER[Window(home).Property(WatchedPercentage)],70)">Conditional</animation>
-            <animation effect="zoom" end="75,100" time="0" condition="Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],70) + Integer.IsLessOrEqual($NUMBER[Window(home).Property(WatchedPercentage)],75)">Conditional</animation>
-            <animation effect="zoom" end="80,100" time="0" condition="Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],75) + Integer.IsLessOrEqual($NUMBER[Window(home).Property(WatchedPercentage)],80)">Conditional</animation>
-            <animation effect="zoom" end="85,100" time="0" condition="Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],80) + Integer.IsLessOrEqual($NUMBER[Window(home).Property(WatchedPercentage)],85)">Conditional</animation>
-            <animation effect="zoom" end="90,100" time="0" condition="Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],85) + Integer.IsLessOrEqual($NUMBER[Window(home).Property(WatchedPercentage)],90)">Conditional</animation>
-            <animation effect="zoom" end="95,100" time="0" condition="Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],90) + Integer.IsLessOrEqual($NUMBER[Window(home).Property(WatchedPercentage)],95)">Conditional</animation>
-            <animation effect="zoom" end="97.5,100" time="0" condition="Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],95) + Integer.IsLess($NUMBER[Window(home).Property(WatchedPercentage)],100)">Conditional</animation>
-  					<width>$PARAM[width]</width>
-  					<height>$PARAM[height]</height>
-  					<texture colordiffuse="$PARAM[focuscolor]">$PARAM[focustexture]</texture>
-  				</control>
-        </control>
-			</control>
+			<include content="ProgressBar_Template">
+				<param name="left" value="$PARAM[left]"/>
+				<param name="top" value="$PARAM[top]"/>
+				<param name="width" value="$PARAM[width]"/>
+				<param name="height" value="$PARAM[height]"/>
+				<param name="background_color" value="$PARAM[background_color]"/>
+				<param name="focus_color" value="$PARAM[focus_color]"/>
+				<param name="visible" value="!Control.HasFocus(4501) + !$EXP[InfoWidget_HasFocus]"/>
+				<param name="resumable_info" value="ListItem.PercentPlayed"/>
+				<param name="resumable_visible" value="ListItem.IsResumable"/>
+				<param name="watched_visible" value="!ListItem.IsResumable + String.IsEqual(ListItem.Overlay,OverlayWatched.png)"/>
+				<param name="calculated_visible" value="[String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,season)] + !String.IsEqual(ListItem.Overlay,OverlayWatched.png) + Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],0)"/>
+			</include>
+			<include content="ProgressBar_Template">
+				<param name="left" value="$PARAM[left]"/>
+				<param name="top" value="$PARAM[top]"/>
+				<param name="width" value="$PARAM[width]"/>
+				<param name="height" value="$PARAM[height]"/>
+				<param name="background_color" value="$PARAM[background_color]"/>
+				<param name="focus_color" value="$PARAM[focus_color]"/>
+				<param name="visible" value="Control.HasFocus(4501)"/>
+				<param name="resumable_info" value="Container(4501).ListItem.PercentPlayed"/>
+				<param name="resumable_visible" value="Container(4501).ListItem.IsResumable"/>
+				<param name="watched_visible" value="!Container(4501).ListItem.IsResumable + String.IsEqual(Container(4501).ListItem.Overlay,OverlayWatched.png)"/>
+				<param name="calculated_visible" value="[String.IsEqual(Container(4501).ListItem.DBType,tvshow) | String.IsEqual(Container(4501).ListItem.DBType,season)] + !String.IsEqual(Container(4501).ListItem.Overlay,OverlayWatched.png) + Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],0)"/>
+			</include>
+			<include content="ProgressBar_Template">
+				<param name="left" value="$PARAM[left]"/>
+				<param name="top" value="$PARAM[top]"/>
+				<param name="width" value="$PARAM[width]"/>
+				<param name="height" value="$PARAM[height]"/>
+				<param name="background_color" value="$PARAM[background_color]"/>
+				<param name="focus_color" value="$PARAM[focus_color]"/>
+				<param name="visible" value="Control.HasFocus(8010)"/>
+				<param name="resumable_info" value="Container(8010).ListItem.PercentPlayed"/>
+				<param name="resumable_visible" value="Container(8010).ListItem.IsResumable"/>
+				<param name="watched_visible" value="!Container(8010).ListItem.IsResumable + String.IsEqual(Container(8010).ListItem.Overlay,OverlayWatched.png)"/>
+				<param name="calculated_visible" value="[String.IsEqual(Container(8010).ListItem.DBType,tvshow) | String.IsEqual(Container(8010).ListItem.DBType,season)] + !String.IsEqual(Container(8010).ListItem.Overlay,OverlayWatched.png) + Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],0)"/>
+			</include>
+			<include content="ProgressBar_Template">
+				<param name="left" value="$PARAM[left]"/>
+				<param name="top" value="$PARAM[top]"/>
+				<param name="width" value="$PARAM[width]"/>
+				<param name="height" value="$PARAM[height]"/>
+				<param name="background_color" value="$PARAM[background_color]"/>
+				<param name="focus_color" value="$PARAM[focus_color]"/>
+				<param name="visible" value="Control.HasFocus(8020)"/>
+				<param name="resumable_info" value="Container(8020).ListItem.PercentPlayed"/>
+				<param name="resumable_visible" value="Container(8020).ListItem.IsResumable"/>
+				<param name="watched_visible" value="!Container(8020).ListItem.IsResumable + String.IsEqual(Container(8020).ListItem.Overlay,OverlayWatched.png)"/>
+				<param name="calculated_visible" value="[String.IsEqual(Container(8020).ListItem.DBType,tvshow) | String.IsEqual(Container(8020).ListItem.DBType,season)] + !String.IsEqual(Container(8020).ListItem.Overlay,OverlayWatched.png) + Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],0)"/>
+			</include>
+			<include content="ProgressBar_Template">
+				<param name="left" value="$PARAM[left]"/>
+				<param name="top" value="$PARAM[top]"/>
+				<param name="width" value="$PARAM[width]"/>
+				<param name="height" value="$PARAM[height]"/>
+				<param name="background_color" value="$PARAM[background_color]"/>
+				<param name="focus_color" value="$PARAM[focus_color]"/>
+				<param name="visible" value="Control.HasFocus(8030)"/>
+				<param name="resumable_info" value="Container(8030).ListItem.PercentPlayed"/>
+				<param name="resumable_visible" value="Container(8030).ListItem.IsResumable"/>
+				<param name="watched_visible" value="Integer.IsGreater(Container(8030).ListItem.PlayCount,0) + !Container(8030).ListItem.IsResumable"/>
+				<param name="calculated_visible" value="[String.IsEqual(Container(8030).ListItem.DBType,tvshow) | String.IsEqual(Container(8030).ListItem.DBType,season)] + !String.IsEqual(Container(8030).ListItem.Overlay,OverlayWatched.png) + Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],0)"/>
+			</include>
+			<include content="ProgressBar_Template">
+				<param name="left" value="$PARAM[left]"/>
+				<param name="top" value="$PARAM[top]"/>
+				<param name="width" value="$PARAM[width]"/>
+				<param name="height" value="$PARAM[height]"/>
+				<param name="background_color" value="$PARAM[background_color]"/>
+				<param name="focus_color" value="$PARAM[focus_color]"/>
+				<param name="visible" value="Control.HasFocus(8040)"/>
+				<param name="resumable_info" value="Container(8040).ListItem.PercentPlayed"/>
+				<param name="resumable_visible" value="Container(8040).ListItem.IsResumable"/>
+				<param name="watched_visible" value="!Container(8040).ListItem.IsResumable + String.IsEqual(Container(8040).ListItem.Overlay,OverlayWatched.png)"/>
+				<param name="calculated_visible" value="[String.IsEqual(Container(8040).ListItem.DBType,tvshow) | String.IsEqual(Container(8040).ListItem.DBType,season)] + !String.IsEqual(Container(8040).ListItem.Overlay,OverlayWatched.png) + Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],0)"/>
+			</include>
+			<include content="ProgressBar_Template">
+				<param name="left" value="$PARAM[left]"/>
+				<param name="top" value="$PARAM[top]"/>
+				<param name="width" value="$PARAM[width]"/>
+				<param name="height" value="$PARAM[height]"/>
+				<param name="background_color" value="$PARAM[background_color]"/>
+				<param name="focus_color" value="$PARAM[focus_color]"/>
+				<param name="visible" value="Control.HasFocus(8050)"/>
+				<param name="resumable_info" value="Container(8050).ListItem.PercentPlayed"/>
+				<param name="resumable_visible" value="Container(8050).ListItem.IsResumable"/>
+				<param name="watched_visible" value="!Container(8050).ListItem.IsResumable + String.IsEqual(Container(8050).ListItem.Overlay,OverlayWatched.png)"/>
+				<param name="calculated_visible" value="[String.IsEqual(Container(8050).ListItem.DBType,tvshow) | String.IsEqual(Container(8050).ListItem.DBType,season)] + !String.IsEqual(Container(8050).ListItem.Overlay,OverlayWatched.png) + Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],0)"/>
+			</include>
 		</definition>
 	</include>
 
