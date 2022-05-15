@@ -2,6 +2,7 @@
 <window>
 	<!-- movieinformation -->
 	<onload>SetProperty(SelectedItem,$INFO[ListItem.DBID],movieinformation)</onload>
+	<onload>SetProperty(Director,$ESCINFO[ListItem.Director],movieinformation)</onload>
 	<onload>SetProperty(ResetScroll," ")</onload>
 
 	<onload condition="!String.IsEqual(window(movieinformation).property(Breadcrumb_GoToNext),true) + !String.IsEqual(window(movieinformation).property(Breadcrumb_GoToPrevious),true)">SetProperty(Breadcrumb_Level,1,movieinformation)</onload>
@@ -168,7 +169,7 @@
 		<control type="group">
 			<include content="CustomViewsBackground"/>
 			<control type="image">
-				<visible>!$EXP[InfoWidget_HasFocus]</visible>
+				<visible>!$EXP[InfoWidget_HasFocus] + !Control.IsVisible(9002) + Window.IsActive(movieinformation)</visible>
 				<include>Dialog_Fade_Animation</include>
 				<aspectratio>scale</aspectratio>
 				<texture colordiffuse="$VAR[Info_Artwork_Diffuse]" background="true">$VAR[Dialog_Info_Background]</texture>
@@ -178,10 +179,10 @@
 		<!-- Content -->
 		<control type="group">
 			<visible>!Control.IsVisible(9002) + Window.IsActive(movieinformation)</visible>
-			<visible>!$EXP[InfoWidget_HasFocus]</visible>
 			<include>Delayed_Content_Fade_Animation</include>
 			<control type="group">
 				<visible>!$EXP[TransparentDialog_IsVisible]</visible>
+				<visible>!$EXP[InfoWidget_HasFocus]</visible>
 				<include>Content_Fade_Animation</include>
 
 				<include content="Breadcrumb_Label">
@@ -315,20 +316,23 @@
 
 				</control>
 			</control>
+
+			<include condition="!String.IsEqual(ListItem.DBType,set)" content="Info_Widget_Cast"/>
+			<include condition="!String.IsEqual(ListItem.DBType,set)" content="Info_Widget_ActorCredits"/>
+			<include condition="String.IsEqual(ListItem.DBType,tvshow) + Integer.IsGreater(ListItem.Property(UnwatchedEpisodes),0) + Integer.IsGreater(ListItem.DBID,0)" content="Info_Widget_NextUp"/>
+			<include condition="String.IsEqual(ListItem.DBType,tvshow)" content="Info_Widget_Seasons"/>
+			<include condition="String.IsEqual(ListItem.DBType,movie) + !String.IsEmpty(ListItem.SetID)" content="Info_Widget_MovieSet"/>
+			<include condition="String.IsEqual(ListItem.DBType,movie)" content="Info_Widget_DirectorCredits"/>
+
+			<control type="group">
+				<visible>$EXP[TransparentDialog_IsVisible] + $EXP[InfoWidget_HasFocus]</visible>
+				<include>Transparent_Dialog_Background</include>
+				<include>Content_Fade_Animation</include>
+			</control>
+
 		</control>
 
-		<include condition="!String.IsEqual(ListItem.DBType,set)" content="Info_Widget_Cast"/>
-		<include condition="!String.IsEqual(ListItem.DBType,set)" content="Info_Widget_ActorCredits"/>
-		<include condition="String.IsEqual(ListItem.DBType,tvshow) + Integer.IsGreater(ListItem.Property(UnwatchedEpisodes),0) + Integer.IsGreater(ListItem.DBID,0)" content="Info_Widget_NextUp"/>
-		<include condition="String.IsEqual(ListItem.DBType,tvshow)" content="Info_Widget_Seasons"/>
-		<include condition="String.IsEqual(ListItem.DBType,movie) + !String.IsEmpty(ListItem.SetID)" content="Info_Widget_MovieSet"/>
-		<include condition="String.IsEqual(ListItem.DBType,movie)" content="Info_Widget_DirectorCredits"/>
 
-		<control type="group">
-			<visible>$EXP[TransparentDialog_IsVisible] + $EXP[InfoWidget_HasFocus]</visible>
-			<include>Transparent_Dialog_Background</include>
-			<include>Content_Fade_Animation</include>
-		</control>
 
 	</controls>
 </window>
