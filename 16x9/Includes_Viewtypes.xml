@@ -16,8 +16,10 @@
 			<visible allowhiddenfocus="true">false</visible>
 			<onfocus>SetProperty(WatchedPercentage,0,home)</onfocus>
 			<onfocus condition="System.HasAddon(script.embuary.helper) + Control.HasFocus(8020) + Integer.IsGreater(Container(8020).ListItem.Property(WatchedEpisodes),0) + !String.IsEqual(Container(8020).ListItem.Overlay,OverlayWatched.png)">RunScript(script.embuary.helper,action=calc,do='"($INFO[Container(8020).ListItem.Property(WatchedEpisodes)] / $INFO[Container(8020).ListItem.Property(TotalEpisodes)]) * 100"',prop=WatchedPercentage)</onfocus>
-			<onfocus condition="System.HasAddon(script.embuary.helper) + Control.HasFocus(8030) + Integer.IsGreater(Container(8030).ListItem.Property(WatchedEpisodes),0) + !Integer.IsGreater(Container(8030).ListItem.PlayedCount),0)">RunScript(script.embuary.helper,action=calc,do='"($INFO[Container(8030).ListItem.Property(WatchedEpisodes)] / $INFO[Container(8030).ListItem.Property(TotalEpisodes)]) * 100"',prop=WatchedPercentage)</onfocus>
-			<onfocus condition="System.HasAddon(script.embuary.helper) + !Control.HasFocus(8020) + !Control.HasFocus(8030) + Integer.IsGreater(ListItem.Property(WatchedEpisodes),0) + !String.IsEqual(ListItem.Overlay,OverlayWatched.png)">RunScript(script.embuary.helper,action=calc,do='"($INFO[ListItem.Property(WatchedEpisodes)] / $INFO[ListItem.Property(TotalEpisodes)]) * 100"',prop=WatchedPercentage)</onfocus>
+			<onfocus condition="System.HasAddon(script.embuary.helper) + Control.HasFocus(8030) + Integer.IsGreater(Container(8030).ListItem.Property(WatchedEpisodes),0)">RunScript(script.embuary.helper,action=calc,do='"($INFO[Container(8030).ListItem.Property(WatchedEpisodes)] / $INFO[Container(8030).ListItem.Property(TotalEpisodes)]) * 100"',prop=WatchedPercentage)</onfocus>
+			<onfocus condition="System.HasAddon(script.embuary.helper) + Control.HasFocus(8060) + Integer.IsGreater(Container(8060).ListItem.Property(WatchedEpisodes),0)">RunScript(script.embuary.helper,action=calc,do='"($INFO[Container(8060).ListItem.Property(WatchedEpisodes)] / $INFO[Container(8060).ListItem.Property(TotalEpisodes)]) * 100"',prop=WatchedPercentage)</onfocus>
+
+			<onfocus condition="System.HasAddon(script.embuary.helper) + !Control.HasFocus(8020) + !Control.HasFocus(8030) + !Control.HasFocus(8060) + Integer.IsGreater(ListItem.Property(WatchedEpisodes),0) + !String.IsEqual(ListItem.Overlay,OverlayWatched.png)">RunScript(script.embuary.helper,action=calc,do='"($INFO[ListItem.Property(WatchedEpisodes)] / $INFO[ListItem.Property(TotalEpisodes)]) * 100"',prop=WatchedPercentage)</onfocus>
 			<animation effect="slide" end="0,0" time="180" reversible="false">Focus</animation>
 		</control>
 	</include>
@@ -3234,8 +3236,8 @@
 				<param name="visible" value="Control.HasFocus(8030)"/>
 				<param name="resumable_info" value="Container(8030).ListItem.PercentPlayed"/>
 				<param name="resumable_visible" value="Container(8030).ListItem.IsResumable"/>
-				<param name="watched_visible" value="Integer.IsGreater(Container(8030).ListItem.PlayCount,0) + !Container(8030).ListItem.IsResumable"/>
-				<param name="calculated_visible" value="[String.IsEqual(Container(8030).ListItem.DBType,tvshow) | String.IsEqual(Container(8030).ListItem.DBType,season)] + !String.IsEqual(Container(8030).ListItem.Overlay,OverlayWatched.png) + Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],0)"/>
+				<param name="watched_visible" value="false"/>
+				<param name="calculated_visible" value="[String.IsEqual(Container(8030).ListItem.DBType,tvshow) | String.IsEqual(Container(8030).ListItem.DBType,season)] + Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],0)"/>
 			</include>
 			<include content="ProgressBar_Template">
 				<param name="left" value="$PARAM[left]"/>
@@ -3262,6 +3264,19 @@
 				<param name="resumable_visible" value="Container(8050).ListItem.IsResumable"/>
 				<param name="watched_visible" value="!Container(8050).ListItem.IsResumable + String.IsEqual(Container(8050).ListItem.Overlay,OverlayWatched.png)"/>
 				<param name="calculated_visible" value="[String.IsEqual(Container(8050).ListItem.DBType,tvshow) | String.IsEqual(Container(8050).ListItem.DBType,season)] + !String.IsEqual(Container(8050).ListItem.Overlay,OverlayWatched.png) + Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],0)"/>
+			</include>
+			<include content="ProgressBar_Template">
+				<param name="left" value="$PARAM[left]"/>
+				<param name="top" value="$PARAM[top]"/>
+				<param name="width" value="$PARAM[width]"/>
+				<param name="height" value="$PARAM[height]"/>
+				<param name="background_color" value="$PARAM[background_color]"/>
+				<param name="focus_color" value="$PARAM[focus_color]"/>
+				<param name="visible" value="Control.HasFocus(8060)"/>
+				<param name="resumable_info" value="Container(8060).ListItem.PercentPlayed"/>
+				<param name="resumable_visible" value="Container(8060).ListItem.IsResumable"/>
+				<param name="watched_visible" value="false"/>
+				<param name="calculated_visible" value="[String.IsEqual(Container(8060).ListItem.DBType,tvshow) | String.IsEqual(Container(8060).ListItem.DBType,season)] + Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],0)"/>
 			</include>
 		</definition>
 	</include>
