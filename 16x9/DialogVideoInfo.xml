@@ -3,6 +3,7 @@
 	<!-- movieinformation -->
 	<onload>SetProperty(SelectedItem,$INFO[ListItem.DBID],movieinformation)</onload>
 	<onload>SetProperty(Director,$ESCINFO[ListItem.Director],movieinformation)</onload>
+	<onload condition="System.HasAddon(script.embuary.helper)">RunScript(script.embuary.helper,action=split,value='$ESCINFO[ListItem.Genre]',separator='" / "',prop=GenreSplit)</onload>
 	<onload>SetProperty(ResetScroll," ")</onload>
 
 	<onload condition="!String.IsEqual(window(movieinformation).property(Breadcrumb_GoToNext),true) + !String.IsEqual(window(movieinformation).property(Breadcrumb_GoToPrevious),true)">SetProperty(Breadcrumb_Level,1,movieinformation)</onload>
@@ -191,6 +192,17 @@
 					<param name="info_label_visible" value="false"/>
 				</include>
 
+				<!--
+				<control type="label" id="$PARAM[title_label_id]">
+					<top>900</top>
+					<height>60</height>
+					<label>$INFO[Window(movieinformation).Property(Focused_Button),‹ ,  ›]</label>
+					<align>center</align>
+					<font>Breadcrumb_Title_Label</font>
+					<textcolor>$VAR[Light_Color]</textcolor>
+				</control>
+				-->
+
 				<include content="Info_Dialog_Header">
 					<param name="visible" value="!Control.HasFocus(99) + !Control.HasFocus(60)"/>
 					<param name="left" value="120"/>
@@ -237,7 +249,7 @@
 						<font></font>
 						<width>60</width>
 						<height>60</height>
-						<!-- <texturefocus colordiffuse="$VAR[Light_Color]">osd/icon_Play_focused.png</texturefocus>
+			 <!-- <texturefocus colordiffuse="$VAR[Light_Color]">osd/icon_Play_focused.png</texturefocus>
 						<texturenofocus colordiffuse="$VAR[Light_Color]">osd/icon_Play_unfocused.png</texturenofocus>
 						<alttexturefocus colordiffuse="$VAR[Light_Color]">osd/icon_Forward_focused.png</alttexturefocus>
 						<alttexturenofocus colordiffuse="$VAR[Light_Color]">osd/icon_Forward_unfocused.png</alttexturenofocus>
@@ -249,10 +261,10 @@
 					<control type="button" id="98">
 						<include>Hidden_Button</include>
 						<visible>String.IsEqual(Listitem.DBType,set)</visible>
-						<!-- <include content="Icon_Button">
+						<include content="Icon_Button">
 							<param name="description" value="Tracklist/Discography"/>
 							<param name="icon" value="Album"/>
-						</include> -->
+						</include>
 						<onfocus>SetProperty(ResetScroll," ")</onfocus>
 						<onfocus>SetProperty(Focused_Button,Setlist,movieinformation)</onfocus>
 						<ondown>SetFocus(50)</ondown>
@@ -261,10 +273,10 @@
 					<control type="button" id="99">
 						<include>Hidden_Button</include>
 						<visible>!String.IsEmpty(Control.GetLabel(916)) + !String.IsEqual(ListItem.DBType,season)</visible>
-						<!-- <include content="Icon_Button">
+						<include content="Icon_Button">
 							<param name="description" value="Plot"/>
 							<param name="icon" value="Plot"/>
-						</include> -->
+						</include>
 						<onunfocus>SetProperty(ResetScroll,"")</onunfocus>
 						<onfocus>SetProperty(Focused_Button,$LOCALIZE[207],movieinformation)</onfocus>
 						<onclick condition="Container(4).HasNext | Container(4).HasPrevious">SetFocus(60)</onclick>
@@ -272,10 +284,10 @@
 					</control>
 					<control type="button" id="11">
 						<include>Hidden_Button</include>
-						<!-- <include content="Icon_Button">
+						<include content="Icon_Button">
 							<param name="description" value="Trailer button"/>
 							<param name="icon" value="Trailer"/>
-						</include> -->
+						</include>
 						<onfocus>SetProperty(ResetScroll," ")</onfocus>
 						<onfocus>SetProperty(Focused_Button,$LOCALIZE[20410],movieinformation)</onfocus>
 						<visible>!String.IsEmpty(ListItem.Trailer)</visible>
@@ -283,10 +295,10 @@
 					</control>
 					<control type="button" id="7">
 						<include>Hidden_Button</include>
-						<!-- <include content="Icon_Button">
+						<include content="Icon_Button">
 							<param name="description" value="User rating"/>
 							<param name="icon" value="Bookmarks"/>
-						</include> -->
+						</include>
 						<visible>!String.IsEqual(ListItem.DBType,set)</visible>
 						<onfocus>SetProperty(ResetScroll," ")</onfocus>
 						<onfocus>SetProperty(Focused_Button,$LOCALIZE[563],movieinformation)</onfocus>
@@ -294,10 +306,10 @@
 					</control>
 					<control type="button" id="6">
 						<include>Hidden_Button</include>
-						<!-- <include content="Icon_Button">
+						<include content="Icon_Button">
 							<param name="description" value="Refresh button"/>
 							<param name="icon" value="Refresh"/>
-						</include> -->
+						</include>
 						<visible>!String.IsEqual(ListItem.DBType,set)</visible>
 						<onfocus>SetProperty(ResetScroll," ")</onfocus>
 						<onfocus>SetProperty(Focused_Button,$LOCALIZE[184],movieinformation)</onfocus>
@@ -305,10 +317,10 @@
 					</control>
 					<control type="button" id="10">
 						<include>Hidden_Button</include>
-						<!-- <include content="Icon_Button">
+						<include content="Icon_Button">
 							<param name="description" value="Choose art"/>
 							<param name="icon" value="Menu"/>
-						</include> -->
+						</include>
 						<onfocus>SetProperty(ResetScroll," ")</onfocus>
 						<onfocus>SetProperty(Focused_Button,$LOCALIZE[13511],movieinformation)</onfocus>
 						<include>MovieInfo_Dialog_Menu_Navigation</include>
@@ -319,11 +331,103 @@
 
 			<include condition="!String.IsEqual(ListItem.DBType,set)" content="Info_Widget_Cast"/>
 			<include condition="!String.IsEqual(ListItem.DBType,set)" content="Info_Widget_ActorCredits"/>
-			<include condition="String.IsEqual(ListItem.DBType,tvshow) + Integer.IsGreater(ListItem.Property(UnwatchedEpisodes),0) + Integer.IsGreater(ListItem.DBID,0)" content="Info_Widget_NextUp"/>
-			<include condition="String.IsEqual(ListItem.DBType,tvshow)" content="Info_Widget_Seasons"/>
+			<include condition="String.IsEqual(ListItem.DBType,tvshow) + Integer.IsGreater(ListItem.Property(UnwatchedEpisodes),0)" content="Info_Widget_NextUp"/>
+			<include condition="String.IsEqual(ListItem.DBType,episode)" content="Info_Widget_Episodes"/>
+			<include condition="String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)" content="Info_Widget_Seasons"/>
 			<include condition="String.IsEqual(ListItem.DBType,movie) + !String.IsEmpty(ListItem.SetID)" content="Info_Widget_MovieSet"/>
 			<include condition="String.IsEqual(ListItem.DBType,movie)" content="Info_Widget_DirectorCredits"/>
 			<include content="Info_Widget_Similar"/>
+
+			<!--Scrollbar-->
+			<control type="group">
+				<visible>!Window.IsVisible(shutdownmenu)</visible>
+				<include>Delayed_Content_Fade_Animation</include>
+				<control type="group">
+					<visible>!Control.HasFocus(8)</visible>
+					<include>Home_Scrollbar_Fade_Animation_Sub</include>
+					<control type="group">
+						<visible>!Control.HasFocus(8010)</visible>
+						<include>Home_Scrollbar_Fade_Animation_Sub</include>
+						<control type="group">
+							<visible>!Control.HasFocus(8020)</visible>
+							<include>Home_Scrollbar_Fade_Animation_Sub</include>
+							<control type="group">
+								<visible>!Control.HasFocus(50)</visible>
+								<include>Home_Scrollbar_Fade_Animation_Sub</include>
+								<control type="group">
+									<visible>!Control.HasFocus(8030)</visible>
+									<include>Home_Scrollbar_Fade_Animation_Sub</include>
+									<control type="group">
+										<visible>!Control.HasFocus(8040)</visible>
+										<include>Home_Scrollbar_Fade_Animation_Sub</include>
+										<control type="group">
+											<visible>!Control.HasFocus(8050)</visible>
+											<include>Home_Scrollbar_Fade_Animation_Sub</include>
+											<control type="group">
+												<visible>!Control.HasFocus(8060)</visible>
+												<include>Home_Scrollbar_Fade_Animation_Sub</include>
+												<control type="group">
+													<visible>!Control.HasFocus(8070)</visible>
+													<include>Home_Scrollbar_Fade_Animation_Sub</include>
+													<control type="group">
+														<visible>!Control.HasFocus(8080)</visible>
+														<include>Home_Scrollbar_Fade_Animation_Sub</include>
+														<control type="group">
+															<visible>!Control.HasFocus(8090)</visible>
+															<include>Home_Scrollbar_Fade_Animation_Sub</include>
+
+															<control type="grouplist">
+																<right>30</right>
+																<width>6</width>
+																<height>100%</height>
+																<align>center</align>
+																<orientation>vertical</orientation>
+																<itemgap>0</itemgap>
+																<include content="DialogVideo_Top_Scrollbar_Nib"/>
+																<include content="Home_Scrollbar_Nib">
+																	<param name="id" value="8010"/>
+																</include>
+																<include content="Home_Scrollbar_Nib">
+																	<param name="id" value="8020"/>
+																</include>
+																<include content="Home_Scrollbar_Nib">
+																	<param name="id" value="50"/>
+																</include>
+																<include content="Home_Scrollbar_Nib">
+																	<param name="id" value="8030"/>
+																</include>
+																<include content="Home_Scrollbar_Nib">
+																	<param name="id" value="8040"/>
+																</include>
+																<include content="Home_Scrollbar_Nib">
+																	<param name="id" value="8050"/>
+																</include>
+																<include content="Home_Scrollbar_Nib">
+																	<param name="id" value="8060"/>
+																</include>
+																<include content="Home_Scrollbar_Nib">
+																	<param name="id" value="8070"/>
+																</include>
+																<include content="Home_Scrollbar_Nib">
+																	<param name="id" value="8080"/>
+																</include>
+																<include content="Home_Scrollbar_Nib">
+																	<param name="id" value="8090"/>
+																</include>
+															</control>
+
+														</control>
+													</control>
+												</control>
+											</control>
+										</control>
+									</control>
+								</control>
+							</control>
+						</control>
+					</control>
+				</control>
+			</control>
 
 			<control type="group">
 				<visible>$EXP[TransparentDialog_IsVisible] + $EXP[InfoWidget_HasFocus]</visible>
@@ -332,8 +436,6 @@
 			</control>
 
 		</control>
-
-
 
 	</controls>
 </window>

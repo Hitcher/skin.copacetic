@@ -380,6 +380,10 @@
 		<value condition="Control.HasFocus(8040)">[UPPERCASE]$INFO[Container(8040).ListItem.Year]$INFO[Container(8040).ListItem.Duration(mins), / , $LOCALIZE[31138]]$VAR[Resolution_Label, / ][/UPPERCASE]</value>
 		<value condition="Control.HasFocus(8050) + $EXP[GridView_IsVisible]">$INFO[Container(8050).ListItem.Year]$INFO[Container(8050).ListItem.Duration(mins), / , $LOCALIZE[31138]]</value>
 		<value condition="Control.HasFocus(8050)">[UPPERCASE]$INFO[Container(8050).ListItem.Year]$INFO[Container(8050).ListItem.Duration(mins), / , $LOCALIZE[31138]]$VAR[Resolution_Label, / ][/UPPERCASE]</value>
+		<value condition="Control.HasFocus(8060) + String.IsEqual(Container(8060).ListItem.DBType,tvshow) + $EXP[GridView_IsVisible]">[UPPERCASE]$INFO[Container(8060).ListItem.Year]$INFO[Container(8060).ListItem.Property(TotalSeasons), / , ]$VAR[Seasons_Label][/UPPERCASE]</value>
+		<value condition="Control.HasFocus(8060) + String.IsEqual(Container(8060).ListItem.DBType,tvshow)">[UPPERCASE]$INFO[Container(8060).ListItem.Year]$INFO[Container(8060).ListItem.Property(TotalSeasons), / , ]$VAR[Seasons_Label]$INFO[Container(8060).ListItem.Property(WatchedEpisodes), / ,/]$INFO[Container(8060).ListItem.Property(TotalEpisodes),, $LOCALIZE[32001]][/UPPERCASE]</value>
+		<value condition="Control.HasFocus(8060) + String.IsEqual(Container(8060).ListItem.DBType,movie) + $EXP[GridView_IsVisible]">$INFO[Container(8060).ListItem.Year]$INFO[Container(8060).ListItem.Duration(mins), / , $LOCALIZE[31138]]</value>
+		<value condition="Control.HasFocus(8060) + String.IsEqual(Container(8060).ListItem.DBType,movie)">[UPPERCASE]$INFO[Container(8060).ListItem.Year]$INFO[Container(8060).ListItem.Duration(mins), / , $LOCALIZE[31138]]$VAR[Resolution_Label, / ][/UPPERCASE]</value>
 
 		<!--2016 / 104mins / fullhd
 		2019/ 1 season / 0/6 watched-->
@@ -571,7 +575,6 @@
 		<value condition="String.IsEqual(ListItem.DBType,movie) + !String.IsEmpty(ListItem.Duration)">[UPPERCASE]$INFO[ListItem.Duration(mins),, $LOCALIZE[31138]]$VAR[Resolution_Label, / ]$INFO[ListItem.AudioLanguage, / ]$INFO[ListItem.EndTime, / $LOCALIZE[32000] ][CR]$INFO[ListItem.Director][/UPPERCASE]</value>
 		<value condition="String.IsEqual(ListItem.DBType,movie) + !String.IsEmpty(ListItem.VideoResolution)">[UPPERCASE]$VAR[Resolution_Label,]$INFO[ListItem.AudioLanguage, / ]$INFO[ListItem.EndTime, / $LOCALIZE[32000] ][CR]$INFO[ListItem.Director][/UPPERCASE]</value>
 		<value condition="String.IsEqual(ListItem.DBType,movie) + !String.IsEmpty(ListItem.AudioLanguage)">[UPPERCASE][ListItem.AudioLanguage]$INFO[ListItem.EndTime, / $LOCALIZE[32000] ]$INFO[ListItem.Director, / ][/UPPERCASE]</value>
-
 		<!-- TV Shows -->
 		<!-- 2017 / 3 SEASONS / 14/14 WATCHED -->
 		<value condition="String.IsEqual(ListItem.DBType,tvshow) + !String.IsEmpty(ListItem.Year) + String.IsEqual(ListItem.Property(TotalSeasons),1)">[UPPERCASE]$INFO[ListItem.Year]$INFO[ListItem.Property(TotalSeasons), / ]$VAR[Seasons_Label, ]$INFO[ListItem.Property(WatchedEpisodes), / ,/]$INFO[ListItem.Property(NumEpisodes),, $LOCALIZE[32001]][/UPPERCASE]</value>
@@ -621,8 +624,10 @@
 	</variable>
 
 	<variable name="Seasons_Label">
-		<value condition="Control.HasFocus(8030) + String.IsEqual(COntainer(8030).ListItem.Property(TotalSeasons),1)">$LOCALIZE[20373]</value>
+		<value condition="Control.HasFocus(8030) + String.IsEqual(Container(8030).ListItem.Property(TotalSeasons),1)">$LOCALIZE[20373]</value>
 		<value condition="Control.HasFocus(8030)">$LOCALIZE[33054]</value>
+		<value condition="Control.HasFocus(8060) + String.IsEqual(Container(8060).ListItem.Property(TotalSeasons),1)">$LOCALIZE[20373]</value>
+		<value condition="Control.HasFocus(8060)">$LOCALIZE[33054]</value>
 		<value condition="String.IsEqual(ListItem.Property(TotalSeasons),1)">$LOCALIZE[20373]</value>
 		<value>$LOCALIZE[33054]</value>
 	</variable>
@@ -768,6 +773,23 @@
 		<value condition="VideoPlayer.IsFullscreen + String.StartsWith(VideoPlayer.VideoResolution,576)">$LOCALIZE[32138]</value>
 		<value condition="VideoPlayer.IsFullscreen + String.StartsWith(VideoPlayer.VideoResolution,540)">$LOCALIZE[32138]</value>
 		<value condition="VideoPlayer.IsFullscreen + String.StartsWith(VideoPlayer.VideoResolution,480)">$LOCALIZE[32138]</value>
+		<!-- 8060 -->
+		<!-- 8K -->
+		<value condition="Control.HasFocus(8060) + [String.StartsWith(Container(8060).ListItem.VideoResolution,8K) | String.Contains(Container(8060).ListItem.FileNameAndPath,4320p)]">$LOCALIZE[32131]</value>
+		<!-- 4K Dolby Vision -->
+		<value condition="Control.HasFocus(8060) + [String.StartsWith(Container(8060).ListItem.VideoResolution,4K) | String.Contains(Container(8060).ListItem.FileNameAndPath,2160p)] + [String.Contains(Container(8060).ListItem.FilenameAndPath,DV) | String.Contains(Container(8060).ListItem.FilenameAndPath,Dolby.Vision)]">$LOCALIZE[32132] $LOCALIZE[32133]</value>
+		<!-- 4K HDR -->
+		<value condition="Control.HasFocus(8060) + [String.StartsWith(Container(8060).ListItem.VideoResolution,4K) | String.Contains(Container(8060).ListItem.FileNameAndPath,2160p)] + String.Contains(Container(8060).ListItem.FilenameAndPath,HDR)">$LOCALIZE[32132] $LOCALIZE[32134]</value>
+		<!-- 4K UHD -->
+		<value condition="Control.HasFocus(8060) + [String.StartsWith(Container(8060).ListItem.VideoResolution,4K) | String.Contains(Container(8060).ListItem.FileNameAndPath,2160p)]">$LOCALIZE[32132] $LOCALIZE[32135]</value>
+		<!-- Full HD -->
+		<value condition="Control.HasFocus(8060) + [String.StartsWith(Container(8060).ListItem.VideoResolution,1080) | String.Contains(Container(8060).ListItem.FileNameAndPath,1080p)]">$LOCALIZE[32136]</value>
+		<!-- HD -->
+		<value condition="Control.HasFocus(8060) + [String.StartsWith(Container(8060).ListItem.VideoResolution,720) | String.Contains(Container(8060).ListItem.FileNameAndPath,720p)]">$LOCALIZE[32137]</value>
+		<!-- SD -->
+		<value condition="Control.HasFocus(8060) + String.StartsWith(Container(8060).ListItem.VideoResolution,576)">$LOCALIZE[32138]</value>
+		<value condition="Control.HasFocus(8060) + String.StartsWith(Container(8060).ListItem.VideoResolution,540)">$LOCALIZE[32138]</value>
+		<value condition="Control.HasFocus(8060) + String.StartsWith(Container(8060).ListItem.VideoResolution,480)">$LOCALIZE[32138]</value>
 		<!-- 8050 -->
 		<!-- 8K -->
 		<value condition="Control.HasFocus(8050) + [String.StartsWith(Container(8050).ListItem.VideoResolution,8K) | String.Contains(Container(8050).ListItem.FileNameAndPath,4320p)]">$LOCALIZE[32131]</value>
@@ -785,7 +807,6 @@
 		<value condition="Control.HasFocus(8050) + String.StartsWith(Container(8050).ListItem.VideoResolution,576)">$LOCALIZE[32138]</value>
 		<value condition="Control.HasFocus(8050) + String.StartsWith(Container(8050).ListItem.VideoResolution,540)">$LOCALIZE[32138]</value>
 		<value condition="Control.HasFocus(8050) + String.StartsWith(Container(8050).ListItem.VideoResolution,480)">$LOCALIZE[32138]</value>
-
 		<!-- 8040 -->
 		<!-- 8K -->
 		<value condition="Control.HasFocus(8040) + [String.StartsWith(Container(8040).ListItem.VideoResolution,8K) | String.Contains(Container(8040).ListItem.FileNameAndPath,4320p)]">$LOCALIZE[32131]</value>

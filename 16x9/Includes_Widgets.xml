@@ -440,7 +440,7 @@
 		<include condition="!Window.IsVisible(home)">DefaultActions</include>
 	</include>
 
-	<include name="ClickAction_Play_NextUp">
+	<include name="ClickAction_Play_Episodes">
 		<onclick condition="Window.IsVisible(home) + String.IsEqual(ListItem.DBID,window(movieinformation).property(SelectedItem))">SendClick(8)</onclick>
 		<onclick condition="!String.IsEqual(ListItem.DBID,window(movieinformation).property(SelectedItem))">RunScript(script.embuary.helper,action=playitem,item='$ESCINFO[ListItem.Filenameandpath]')</onclick>
 	</include>
@@ -461,9 +461,23 @@
 			<param name="sortby" value="playcount"/>
 			<param name="sortorder" value="ascending"/>
 			<param name="limit" value="3"/>
-			<param name="content" value="videodb://inprogresstvshows/$INFO[ListItem.DBID]/-2/?tvshowid=$INFO[ListItem.DBID]"/>
-			<param name="click_action" value= "Play_NextUp"/>
+			<param name="content" value="videodb://inprogresstvshows/$INFO[ListItem.DBID]/-2/?tvshowid=$INFO[ListItem.DBID]/"/>
+			<param name="click_action" value= "Play_Episodes"/>
 			<param name="widget_header" value="$LOCALIZE[31227]"/>
+		</include>
+	</include>
+
+	<include name="Info_Widget_Episodes">
+		<include content="Info_Widget_Template">
+			<param name="widget_view" value="Strip"/>
+			<param name="widget_display" value="Fanart"/>
+			<param name="id" value="8010"/>
+			<param name="target" value="videos"/>
+			<param name="sortby" value="episode"/>
+			<param name="sortorder" value="ascending"/>
+			<param name="content" value="videodb://tvshows/titles/$INFO[ListItem.TVShowDBID]/$INFO[ListItem.Season]/"/>
+			<param name="click_action" value= "Play_Episodes"/>
+			<param name="widget_header" value="$INFO[ListItem.Season,More from Season ]"/>
 		</include>
 	</include>
 
@@ -475,7 +489,7 @@
 			<param name="target" value="videos"/>
 			<param name="sortby" value="year"/>
 			<param name="sortorder" value="ascending"/>
-			<param name="content" value="videodb://tvshows/titles/$INFO[ListItem.DBID]/"/>
+			<param name="content" value="$VAR[CustomContent_Seasons]"/>
 			<param name="click_action" value="Open_Season_Folder"/>
 			<param name="widget_header" value="$INFO[Container(8020).ListItem.Season,$LOCALIZE[20373] ]"/>
 		</include>
@@ -545,7 +559,7 @@
 			<param name="widget_display" value="Square"/>
 			<param name="id" value="8060"/>
 			<param name="target" value="videos"/>
-			<param name="sortby" value="year"/>
+			<param name="sortby" value="random"/>
 			<param name="sortorder" value="ascending"/>
 			<param name="content" value="$VAR[CustomContent_Similar]"/>
 			<param name="click_action" value="Open_Similar"/>
