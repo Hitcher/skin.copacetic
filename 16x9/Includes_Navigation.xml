@@ -199,16 +199,6 @@
 		<ondown condition="Control.HasFocus(9090)">9000</ondown>
 	</include>
 
-	<!-- IDs
-	InfoWidget_Cast... 50
-	InfoWidget_ActorCredits... 8030
-	InfoWidget_NextUp... 8010
-	InfoWidget_Seasons... 8020
-	InfoWidget_MovieSet... 8040
-	InfoWidget_DirectorCredits... 8050
-	InfoWidget_SimiliarMovies... 8060
-	-->
-
 	<include name="MovieInfo_Dialog_Menu_Navigation">
 		<ondown condition="String.IsEqual(ListItem.DBType,movie) + $EXP[InfoWidget_Cast_IsVisible]">50</ondown>
 		<ondown condition="String.IsEqual(ListItem.DBType,movie) + !$EXP[InfoWidget_Cast_IsVisible] + $EXP[InfoWidget_MovieSet_IsVisible]">8040</ondown>
@@ -225,7 +215,8 @@
 
 	<include name="MusicInfo_Dialog_Menu_Navigation">
 		<ondown condition="String.IsEqual(ListItem.DBType,artist) + $EXP[InfoWidget_Songs_IsVisible]">8010</ondown>
-		<ondown condition="String.IsEqual(ListItem.DBType,artist) + !$EXP[InfoWidget_Songs_IsVisible] + !$EXP[InfoWidget_Discography_IsVisible]">8020</ondown>
+		<ondown condition="String.IsEqual(ListItem.DBType,artist) + !$EXP[InfoWidget_Songs_IsVisible] + $EXP[InfoWidget_Discography_IsVisible]">8020</ondown>
+		<ondown condition="String.IsEqual(ListItem.DBType,artist) + !$EXP[InfoWidget_Songs_IsVisible] + !$EXP[InfoWidget_Discography_IsVisible] + $EXP[InfoWidget_SimilarArtists_IsVisible]">8060</ondown>
 		<onup>65000</onup>
 		<onback>65005</onback>
 	</include>
@@ -291,9 +282,15 @@
 		<onup condition="[String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + $EXP[InfoWidget_Episodes_HasFocus]">SetFocus(65000)</onup>
 
 		<ondown condition="String.IsEqual(ListItem.DBType,artist) + $EXP[InfoWidget_Songs_HasFocus] + $EXP[InfoWidget_Discography_IsVisible]">8020</ondown>
-		<ondown condition="String.IsEqual(ListItem.DBType,artist) + $EXP[InfoWidget_Songs_HasFocus] + !$EXP[InfoWidget_Discography_IsVisible]">SetFocus(65000)</ondown>
-		<ondown condition="String.IsEqual(ListItem.DBType,artist) + $EXP[InfoWidget_Discography_HasFocus]">setFocus(65000)</ondown>
+		<ondown condition="String.IsEqual(ListItem.DBType,artist) + $EXP[InfoWidget_Songs_HasFocus] + !$EXP[InfoWidget_Discography_IsVisible] + $EXP[InfoWidget_SimilarArtists_IsVisible]">8060</ondown>
+		<ondown condition="String.IsEqual(ListItem.DBType,artist) + $EXP[InfoWidget_Songs_HasFocus] + !$EXP[InfoWidget_Discography_IsVisible] + !$EXP[InfoWidget_SimilarArtists_IsVisible]">SetFocus(65000)</ondown>
+		<ondown condition="String.IsEqual(ListItem.DBType,artist) + $EXP[InfoWidget_Discography_HasFocus] + $EXP[InfoWidget_SimilarArtists_IsVisible]">8060</ondown>
+		<ondown condition="String.IsEqual(ListItem.DBType,artist) + $EXP[InfoWidget_Discography_HasFocus] + !$EXP[InfoWidget_SimilarArtists_IsVisible]">SetFocus(65000)</ondown>
+		<ondown condition="String.IsEqual(ListItem.DBType,artist) + $EXP[InfoWidget_SimilarArtists_HasFocus]">SetFocus(65000)</ondown>
 
+		<onup condition="String.IsEqual(ListItem.DBType,artist) + $EXP[InfoWidget_SimilarArtists_HasFocus] + $EXP[InfoWidget_Discography_IsVisible]">8020</onup>
+		<onup condition="String.IsEqual(ListItem.DBType,artist) + $EXP[InfoWidget_SimilarArtists_HasFocus] + !$EXP[InfoWidget_Discography_IsVisible] + $EXP[InfoWidget_Songs_IsVisible]">8010</onup>
+		<onup condition="String.IsEqual(ListItem.DBType,artist) + $EXP[InfoWidget_SimilarArtists_HasFocus] + !$EXP[InfoWidget_Discography_IsVisible] + !$EXP[InfoWidget_Songs_IsVisible]">SetFocus(65000)</onup>
 		<onup condition="String.IsEqual(ListItem.DBType,artist) + $EXP[InfoWidget_Discography_HasFocus] + $EXP[InfoWidget_Songs_IsVisible]">8010</onup>
 		<onup condition="String.IsEqual(ListItem.DBType,artist) + $EXP[InfoWidget_Discography_HasFocus] + !$EXP[InfoWidget_Songs_IsVisible]">SetFocus(65000)</onup>
 		<onup condition="String.IsEqual(ListItem.DBType,artist) + $EXP[InfoWidget_Songs_HasFocus]">setFocus(65000)</onup>

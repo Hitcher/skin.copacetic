@@ -199,7 +199,7 @@
 			<param name="target" value="music"/>
 			<param name="sortby" value="dateadded"/>
 			<param name="sortorder" value="descending"/>
-			<param name="content" value="musicdb://recentlyaddedalbums/"/>
+			<param name="content" value="musicdb://recentlyaddedalbums/?reload=$INFO[Window(home).Property(EmbuaryWidgetUpdate)]"/>
 		</include>
 	</include>
 
@@ -211,7 +211,7 @@
 			<param name="target" value="music"/>
 			<param name="sortby" value="lastplayed"/>
 			<param name="sortorder" value="descending"/>
-			<param name="content" value="musicdb://recentlyplayedalbums/"/>
+			<param name="content" value="musicdb://recentlyplayedalbums/?reload=$INFO[Window(home).Property(EmbuaryWidgetUpdate)]"/>
 		</include>
 	</include>
 
@@ -418,6 +418,11 @@
 
 	<include name="ClickAction_Blank"/>
 
+	<include name="ClickAction_Play_All_Songs">
+		<onclick>RunScript(script.embuary.helper,action=playall,id=8010,type=music,method=fromhere)</onclick>
+	</include>
+
+
 	<include name="ClickAction_ActorCredits">
 		<onclick condition="Window.IsVisible(home) + String.IsEqual(ListItem.DBID,window(movieinformation).property(SelectedItem))">SendClick(8)</onclick>
 		<onclick condition="Window.IsVisible(home) + !String.IsEqual(ListItem.DBID,window(movieinformation).property(SelectedItem))">RunScript(script.embuary.helper,action=playitem,item='$ESCINFO[ListItem.Filenameandpath]')</onclick>
@@ -459,6 +464,12 @@
 		<onclick>ActivateWindow(videos,$INFO[window(movieinformation).property(TVShowPath)]/$INFO[ListItem.Season]/,return)</onclick>
 	</include>
 
+	<include name="ClickAction_Open_Album">
+		<onclick>Dialog.Close(all)</onclick>
+		<onclick>SetProperty(SentFromInfo,true,musicinformation)</onclick>
+		<onclick>ActivateWindow(music,musicdb://albums/$INFO[Container(8020).ListItem.DBID]/-2/,return)</onclick>
+	</include>
+
 	<!--Info_Widgets-->
 	<include name="Info_Widget_NextUp">
 		<include content="Info_Widget_Template">
@@ -469,7 +480,7 @@
 			<param name="sortby" value="playcount"/>
 			<param name="sortorder" value="ascending"/>
 			<param name="limit" value="3"/>
-			<param name="content" value="videodb://inprogresstvshows/$INFO[ListItem.DBID]/-2/?tvshowid=$INFO[ListItem.DBID]/"/>
+			<param name="content" value="videodb://inprogresstvshows/$INFO[ListItem.DBID]/-2/?tvshowid=$INFO[ListItem.DBID]/?reload=$INFO[Window(home).Property(EmbuaryWidgetUpdate)]"/>
 			<param name="click_action" value= "Play_Episodes"/>
 			<param name="widget_header" value="$LOCALIZE[31227]"/>
 		</include>
@@ -483,7 +494,7 @@
 			<param name="target" value="videos"/>
 			<param name="sortby" value="episode"/>
 			<param name="sortorder" value="ascending"/>
-			<param name="content" value="videodb://tvshows/titles/$INFO[ListItem.TVShowDBID]/$INFO[ListItem.Season]/"/>
+			<param name="content" value="videodb://tvshows/titles/$INFO[ListItem.TVShowDBID]/$INFO[ListItem.Season]/?reload=$INFO[Window(home).Property(EmbuaryWidgetUpdate)]"/>
 			<param name="click_action" value= "Play_Episodes"/>
 			<param name="widget_header" value="$INFO[ListItem.Season,More from Season ]"/>
 		</include>
@@ -498,9 +509,10 @@
 			<param name="limit" value="10"/>
 			<param name="sortby" value="playcount"/>
 			<param name="sortorder" value="descending"/>
-			<param name="content" value="musicdb://artists/$INFO[ListItem.DBID]/-1/-2/"/>
-			<param name="click_action" value= ""/>
+			<param name="content" value="musicdb://artists/$INFO[ListItem.DBID]/-1/-2/?reload=$INFO[Window(home).Property(EmbuaryWidgetUpdate)]"/>
+			<param name="click_action" value= "Play_All_Songs"/>
 			<param name="widget_header" value="Most Played"/>
+			<param name="widget_info" value="$INFO[Container(8010).CurrentItem,/ ]$INFO[Container(8010).NumItems,/]"/>
 		</include>
 	</include>
 
@@ -520,7 +532,7 @@
 
 	<include name="Info_Widget_Discography">
 		<include content="Info_Widget_Template">
-			<param name="widget_view" value="Grid"/>
+			<param name="widget_view" value="Strip"/>
 			<param name="widget_display" value="Square"/>
 			<param name="id" value="8020"/>
 			<param name="min_items" value="0"/>
@@ -528,9 +540,9 @@
 			<param name="sortby" value="year"/>
 			<param name="sortorder" value="descending"/>
 			<param name="content" value="musicdb://albums/?artistid=$INFO[ListItem.DBID]"/>
-			<param name="click_action" value="Open_Season_Folder"/>
+			<param name="click_action" value="Open_Album"/>
 			<param name="widget_header" value="$LOCALIZE[21888]"/>
-			<param name="widget_info" value=""/>
+			<param name="widget_info" value="$INFO[Container(8020).CurrentItem,/ ]$INFO[Container(8020).NumItems,/]"/>
 		</include>
 	</include>
 
@@ -570,7 +582,7 @@
 			<param name="target" value="videos"/>
 			<param name="sortby" value="year"/>
 			<param name="sortorder" value="ascending"/>
-			<param name="content" value="videodb://movies/titles/?setid=$INFO[ListItem.SetID]"/>
+			<param name="content" value="videodb://movies/titles/?setid=$INFO[ListItem.SetID]&amp;reload=$INFO[Window(home).Property(EmbuaryWidgetUpdate)]"/>
 			<param name="click_action" value="Open_Movie_Set"/>
 			<param name="widget_header" value="$INFO[ListItem.Set]"/>
 			<param name="widget_info" value="$INFO[Container(8040).CurrentItem,/ ]$INFO[Container(8040).NumItems,/]"/>
@@ -585,7 +597,7 @@
 			<param name="target" value="videos"/>
 			<param name="sortby" value="year"/>
 			<param name="sortorder" value="ascending"/>
-			<param name="content" value="videodb://movies/titles/?xsp=%7b%22rules%22%3a%7b%22and%22%3a%5b%7b%22field%22%3a%22director%22%2c%22operator%22%3a%22is%22%2c%22value%22%3a%5b$ESCINFO[ListItem.Director]%5d%7d%5d%7d%2c%22type%22%3a%22movies%22%7d"/>
+			<param name="content" value="videodb://movies/titles/?xsp=%7b%22rules%22%3a%7b%22and%22%3a%5b%7b%22field%22%3a%22director%22%2c%22operator%22%3a%22is%22%2c%22value%22%3a%5b$ESCINFO[ListItem.Director]%5d%7d%5d%7d%2c%22type%22%3a%22movies%22%7d&amp;reload=$INFO[Window(home).Property(EmbuaryWidgetUpdate)]"/>
 			<param name="click_action" value="Open_More_From_Director"/>
 			<param name="widget_header" value="$INFO[ListItem.Director]"/>
 			<param name="widget_info" value="/ More"/>
@@ -594,8 +606,8 @@
 
 	<include name="Info_Widget_Similar">
 		<include content="Info_Widget_Template">
-			<param name="widget_view" value="Showcase"/>
-			<param name="widget_display" value="Square"/>
+			<param name="widget_view" value="Grid"/>
+			<param name="widget_display" value="Posters"/>
 			<param name="id" value="8060"/>
 			<param name="target" value="videos"/>
 			<param name="sortby" value="random"/>
@@ -604,6 +616,21 @@
 			<param name="click_action" value="Open_Similar"/>
 			<param name="widget_header" value="Similar"/>
 			<param name="widget_info" value=""/>
+		</include>
+	</include>
+
+	<include name="Info_Widget_SimilarArtists">
+		<include content="Info_Widget_Template">
+			<param name="widget_view" value="Grid"/>
+			<param name="widget_display" value="Fanart"/>
+			<param name="id" value="8060"/>
+			<param name="target" value="music"/>
+			<param name="sortby" value="random"/>
+			<param name="sortorder" value="ascending"/>
+			<param name="content" value="musicdb://artists/?xsp=%7B%22rules%22%3A%7B%22and%22%3A%5B%7B%22field%22%3A%22genre%22%2C%22operator%22%3A%22is%22%2C%22value%22%3A%5B$ESCINFO[Window(home).Property(GenreSplit.0)]%5D%7D%5D%7D%2C%22type%22%3A%22artists%22%7D&amp;reload=$INFO[Window(home).Property(EmbuaryWidgetUpdate)]"/>
+			<param name="click_action" value="Open_Similar"/>
+			<param name="widget_header" value="$INFO[Window(home).Property(GenreSplit.0)]"/>
+			<param name="widget_info" value="asds$INFO[Container(8060).ListItem.Genre]"/>
 		</include>
 	</include>
 
