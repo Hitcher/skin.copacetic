@@ -17,15 +17,24 @@
 			<animation effect="slide" end="0,0" time="360" reversible="false">Hidden</animation>
 		</control>
 
+		<!--On Previous Delay-->
+		<control type="group" id="5001">
+			<visible>$EXP[InfoWidget_OnPrevious]</visible>
+			<animation effect="slide" end="0,0" time="360" reversible="false">Hidden</animation>
+		</control>
+
+		<!--On Next Delay-->
+		<control type="group" id="5002">
+			<visible>$EXP[InfoWidget_OnNext]</visible>
+			<animation effect="slide" end="0,0" time="360" reversible="false">Hidden</animation>
+		</control>
+
 		<!-- Background -->
 		<control type="group">
+			<include content="CustomViewsBackground"/>
 			<control type="image">
-				<aspectratio>scale</aspectratio>
-				<texture colordiffuse="$VAR[Dark_Color]">views/white_100.png</texture>
-			</control>
-			<control type="image">
-				<visible>String.IsEqual(ListItem.DBType,artist) + !Control.HasFocus(98) + !Control.HasFocus(50)</visible>
-				<include>Delayed_Content_Fade_Animation</include>
+				<visible>String.IsEqual(ListItem.DBType,artist) + !$EXP[InfoWidget_HasFocus] + !Control.IsVisible(9002)</visible>
+				<include>Dialog_Fade_Animation</include>
 				<aspectratio>scale</aspectratio>
 				<texture colordiffuse="$VAR[Info_Artwork_Diffuse]" background="true">$VAR[Dialog_Info_Background]</texture>
 			</control>
@@ -37,6 +46,7 @@
 			<include>Delayed_Content_Fade_Animation</include>
 			<control type="group">
 				<visible>!$EXP[TransparentDialog_IsVisible]</visible>
+				<visible>!$EXP[InfoWidget_HasFocus]</visible>
 				<include>Content_Fade_Animation</include>
 
 				<include content="Breadcrumb_Label">
@@ -81,7 +91,7 @@
 					<param name="align" value="left"/>
 				</include>
 				<include condition="String.IsEqual(ListItem.DBType,artist)" content="Info_Dialog_Header">
-					<param name="visible" value="!Control.HasFocus(99) + !Control.HasFocus(60) + !Control.HasFocus(98) + !Control.HasFocus(4500 + !Control.HasFocus(50)"/>
+					<param name="visible" value="!Control.HasFocus(99) + !Control.HasFocus(60) + !Control.HasFocus(98) + !Control.HasFocus(4500) + !Control.HasFocus(50)"/>
 					<param name="left" value="120"/>
 					<param name="right" value="120"/>
 					<param name="align" value="center"/>
@@ -115,7 +125,7 @@
 					<param name="selectedcolor" value="$VAR[Light_Color]"/>
 					<param name="include" value="AlbumInfo_Content_Path"/>
 				</include>
-				<include condition="String.IsEqual(ListItem.DBType,artist)" content="Simple_List">
+  	<!--<include condition="String.IsEqual(ListItem.DBType,artist)" content="Simple_List">
 					<param name="id" value="50"/>
 					<param name="visible" value="Control.HasFocus(50) | Control.HasFocus(98)"/>
 					<param name="animation" value="Delayed_Content_Fade_Animation"/>
@@ -125,7 +135,7 @@
 					<param name="label" value="$INFO[ListItem.Label]"/>
 					<param name="labelmaxwidth" value="960"/>
 					<param name="selectedcolor" value="$VAR[Light_Color]"/>
-				</include>
+				</include>-->
 
 				<!-- Button group -->
 				<control type="grouplist" id="65000">
@@ -150,6 +160,7 @@
 						<onclick condition="System.AddonIsEnabled(script.playalbum)">Action(close)</onclick>
 						<onclick condition="System.HasAddon(script.playalbum) + !System.AddonIsEnabled(script.playalbum) + !String.IsEmpty(ListItem.DBID)">EnableAddon(script.playalbum)</onclick>
 						<onclick condition="!System.HasAddon(script.playalbum) + !String.IsEmpty(ListItem.DBID)">InstallAddon(script.playalbum)</onclick>
+						<include>MusicInfo_Dialog_Menu_Navigation</include>
 					</control>
 					<control type="button" id="99">
 						<visible>!String.IsEmpty(Control.GetLabel(916)) + Window.Is(musicinformation)</visible>
@@ -177,6 +188,7 @@
 						<onclick condition="String.IsEqual(ListItem.DBType,album)">SetFocus(4500)</onclick>
 						<ondown condition="String.IsEqual(ListItem.DBType,artist)">SetFocus(50)</ondown>
 						<onclick condition="String.IsEqual(ListItem.DBType,artist)">SetFocus(50)</onclick>
+						<include>MusicInfo_Dialog_Menu_Navigation</include>
 					</control>
 					<control type="button" id="7">
 						<include>Hidden_Button</include>
@@ -200,6 +212,7 @@
 						</include> -->
 						<onfocus>SetProperty(ResetScroll," ")</onfocus>
 						<onfocus>SetProperty(Focused_Button,$INFO[Control.GetLabel(12)],musicinformation)</onfocus>
+						<include>MusicInfo_Dialog_Menu_Navigation</include>
 					</control>
 					<control type="button" id="10">
 						<include>Hidden_Button</include>
@@ -209,6 +222,7 @@
 						</include> -->
 						<onfocus>SetProperty(ResetScroll," ")</onfocus>
 						<onfocus>SetProperty(Focused_Button,$INFO[Control.GetLabel(10)],musicinformation)</onfocus>
+						<include>MusicInfo_Dialog_Menu_Navigation</include>
 					</control>
 					<control type="button" id="6">
 						<include>Hidden_Button</include>
@@ -218,9 +232,20 @@
 						</include> -->
 						<onfocus>SetProperty(ResetScroll," ")</onfocus>
 						<onfocus>SetProperty(Focused_Button,$INFO[Control.GetLabel(6)],musicinformation)</onfocus>
+						<include>MusicInfo_Dialog_Menu_Navigation</include>
 					</control>
 				</control>
 			</control>
+
+			<include condition="String.IsEqual(ListItem.DBType,artist)" content="Info_Widget_Discography"/>
+			<include condition="String.IsEqual(ListItem.DBType,artist)" content="Info_Widget_MostPlayed"/>
+
+			<control type="group">
+				<visible>$EXP[TransparentDialog_IsVisible] + $EXP[InfoWidget_HasFocus]</visible>
+				<include>Transparent_Dialog_Background</include>
+				<include>Content_Fade_Animation</include>
+			</control>
+
 		</control>
 
 	</controls>
