@@ -45,7 +45,7 @@
 									<visible>![Window.Next(home) | Window.Next(videos) | Window.Next(music) | Window.Next(programs) | Window.Next(pictures) | Window.Next(visualisation)] + !$EXP[ContainerSwitching] + !$EXP[OpaqueDialog_IsVisible]</visible>
 									<include>Music_Player_Content_Fade_Animation</include>
 									<control type="group">
-										<animation effect="slide" end="-60,0" time="0" condition="!String.IsEmpty(Window(home).Property(Music_Player_Controls)) + [$EXP[Background_IsFanart] | $EXP[ShowcaseView_Display_IsSquare] | !Window.IsMedia]">Conditional</animation>
+										<animation effect="slide" end="-60,0" time="0" condition="!String.IsEmpty(Window(home).Property(Music_Player_Controls)) + ![[$EXP[ListView_Display_IsThumbnails] | [$EXP[ShowcaseView_IsVisible] + !$EXP[Background_IsFanart]] | $EXP[GridView_IsVisible]] + !$EXP[InfoDialog_IsVisible]]">Conditional</animation>
 										<visible>$PARAM[content_visible]</visible>
 										<include>Notification_Label_Fade_Animation</include>
 										<include content="Music_Player_Label_Template">
@@ -193,8 +193,8 @@
 				<visible>$PARAM[visible]</visible>
 				<!-- Mini player -->
 				<control type="group">
-					<visible>$EXP[Background_IsFanart] | $EXP[ShowcaseView_Display_IsSquare] | !Window.IsMedia | $EXP[InfoDialog_IsVisible]</visible>
-					<include>Dialog_Fade_Animation</include>
+					<visible>![[$EXP[ListView_Display_IsThumbnails] | $EXP[ShowcaseView_Display_IsPosters] | $EXP[StripView_IsVisible] | $EXP[GridView_IsVisible]] + !$EXP[InfoDialog_IsVisible]]</visible>
+					<include>Delayed_Dialog_Fade_Animation</include>
 					<animation effect="slide" end="30,0" time="0" condition="String.IsEmpty(Window(home).Property(Music_Player_Controls))">Conditional</animation>
 					<include content="$PARAM[type]_Widget">
 						<param name="align" value="right"/>
@@ -210,7 +210,7 @@
 				<!-- List Thumbnails -->
 				<control type="group">
 					<visible>$EXP[ListView_Display_IsThumbnails] + !$EXP[InfoDialog_IsVisible]</visible>
-					<include>Dialog_Fade_Animation</include>
+					<include>Delayed_Dialog_Fade_Animation</include>
 					<animation effect="slide" end="-60,0" time="0" condition="true">Conditional</animation>
 					<animation effect="slide" end="0,900" time="0" condition="$EXP[Square_Containers]">Conditional</animation>
 					<include content="$PARAM[type]_Widget">
@@ -226,7 +226,7 @@
 				<!-- Showcase -->
 				<control type="group">
 					<visible>$EXP[ShowcaseView_Display_IsPosters] + !$EXP[InfoDialog_IsVisible]</visible>
-					<include>Dialog_Fade_Animation</include>
+					<include>Delayed_Dialog_Fade_Animation</include>
 					<include content="$PARAM[type]_Widget">
 						<param name="visible" value="$EXP[ShowcaseView_Display_IsPosters]"/>
 						<param name="height" value="360"/>
@@ -240,7 +240,7 @@
 				<!-- Strip -->
 				<control type="group">
 					<visible>$EXP[StripView_IsVisible] + !$EXP[InfoDialog_IsVisible]</visible>
-					<include>Dialog_Fade_Animation</include>
+					<include>Delayed_Dialog_Fade_Animation</include>
 					<animation effect="slide" end="-570,0" time="0" condition="$EXP[StripView_Display_IsSquare]">Conditional</animation>
 					<animation effect="slide" end="-75,0" time="0" condition="$EXP[StripView_Display_IsSquare] + $EXP[StripView_Details_Off]">Conditional</animation>
 					<animation effect="slide" end="-80,0" time="0" condition="$EXP[StripView_Display_IsPosters]">Conditional</animation>
@@ -286,7 +286,7 @@
 				<!-- Grid -->
 				<control type="group">
 					<visible>$EXP[GridView_IsVisible] + !$EXP[InfoDialog_IsVisible]</visible>
-					<include>Dialog_Fade_Animation</include>
+					<include>Delayed_Dialog_Fade_Animation</include>
 					<animation effect="slide" end="-60,0" time="0" condition="true" reversible="false">Conditional</animation>
 					<animation effect="slide" end="-12,0" time="0" condition="$EXP[GridView_Display_IsFanart]" reversible="false">Conditional</animation>
 					<include content="$PARAM[type]_Widget">
@@ -316,8 +316,8 @@
 				<visible>$PARAM[visible]</visible>
 				<!-- Generic -->
 				<control type="group">
-					<visible>!$EXP[ListView_Display_IsThumbnails] + ![$EXP[ShowcaseView_IsVisible] + !$EXP[Background_IsFanart]] + !$EXP[GridView_IsVisible]</visible>
-					<include>Dialog_Fade_Animation</include>
+					<visible>![[$EXP[ListView_Display_IsThumbnails] | [$EXP[ShowcaseView_IsVisible] + !$EXP[Background_IsFanart]] | $EXP[GridView_IsVisible]] + !$EXP[InfoDialog_IsVisible]]</visible>
+					<include>Delayed_Dialog_Fade_Animation</include>
 					<animation effect="slide" end="30,0" time="0" condition="true">Conditional</animation>
 					<include content="$PARAM[type]_Widget">
 						<param name="visible" value="!$EXP[ListView_Display_IsThumbnails] + ![$EXP[ShowcaseView_IsVisible] + !$EXP[Background_IsFanart]] + !$EXP[GridView_IsVisible]"/>
@@ -334,7 +334,7 @@
 				<!-- List -->
 				<control type="group">
 					<visible>$EXP[ListView_Display_IsThumbnails] + !$EXP[InfoDialog_IsVisible]</visible>
-					<include>Dialog_Fade_Animation</include>
+					<include>Delayed_Dialog_Fade_Animation</include>
 					<animation effect="slide" end="30,0" time="0" condition="true">Conditional</animation>
 					<include content="$PARAM[type]_Widget">
 						<param name="visible" value="$EXP[ListView_Display_IsThumbnails]"/>
@@ -350,7 +350,7 @@
 				<!-- Showcase -->
 				<control type="group">
 					<visible>$EXP[ShowcaseView_IsVisible] + !$EXP[Background_IsFanart] + !$EXP[InfoDialog_IsVisible]</visible>
-					<include>Dialog_Fade_Animation</include>
+					<include>Delayed_Dialog_Fade_Animation</include>
 					<animation effect="slide" end="30,0" time="0" condition="true">Conditional</animation>
 					<include content="$PARAM[type]_Widget">
 						<param name="visible" value="$EXP[ShowcaseView_Display_IsSquare]"/>
@@ -376,7 +376,7 @@
 				<!-- Grid -->
 				<control type="group">
 					<visible>$EXP[GridView_IsVisible] + !$EXP[InfoDialog_IsVisible]</visible>
-					<include>Dialog_Fade_Animation</include>
+					<include>Delayed_Dialog_Fade_Animation</include>
 					<animation effect="slide" end="30,0" time="0" condition="true">Conditional</animation>
 					<include content="$PARAM[type]_Widget">
 						<param name="visible" value="true"/>

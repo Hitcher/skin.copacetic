@@ -31,6 +31,13 @@
 			<animation effect="slide" end="0,0" time="360" reversible="false">Hidden</animation>
 		</control>
 
+		<!--Music Player-->
+		<control type="group">
+			<visible>!Window.IsVisible(shutdownmenu)</visible>
+			<include>Delayed_Content_Fade_Animation</include>
+			<include condition="Skin.HasSetting(Music_Player_Enabled)" content="Music_Player_Buttons"/>
+		</control>
+
 		<!-- Background -->
 		<control type="group">
 			<include content="CustomViewsBackground"/>
@@ -87,26 +94,26 @@
 
 				<!-- Details -->
 				<include condition="!String.IsEqual(ListItem.DBType,artist)" content="Info_Dialog_Header">
-					<param name="visible" value="!Control.HasFocus(99) + !Control.HasFocus(60) + !Control.HasFocus(98) + !Control.HasFocus(4500) + !Control.HasFocus(50) + !Control.HasFocus(7)"/>
+					<param name="visible" value="String.IsEqual(Window(musicinformation).Property(Focused_Button),$LOCALIZE[208]) + !Control.HasFocus(98) + !Control.HasFocus(4500) + !Control.HasFocus(7)"/>
 					<param name="left" value="780"/>
 					<param name="right" value="120"/>
 					<param name="align" value="left"/>
 				</include>
 				<include condition="String.IsEqual(ListItem.DBType,artist)" content="Info_Dialog_Header">
-					<param name="visible" value="!Control.HasFocus(99) + !Control.HasFocus(60) + !Control.HasFocus(98) + !Control.HasFocus(4500) + !Control.HasFocus(50)"/>
+					<param name="visible" value="String.IsEqual(Window(musicinformation).Property(Focused_Button),$LOCALIZE[208])"/>
 					<param name="left" value="120"/>
 					<param name="right" value="120"/>
 					<param name="align" value="center"/>
 				</include>
 				<include condition="String.IsEqual(ListItem.DBType,album)" content="Info_Dialog_Plot">
-					<param name="visible" value="Control.HasFocus(99) | Control.HasFocus(60)"/>
+					<param name="visible" value="String.IsEqual(Window(musicinformation).Property(Focused_Button),$LOCALIZE[183])"/>
 					<param name="left" value="780"/>
 					<param name="right" value="120"/>
 					<param name="align" value="left"/>
 					<param name="font" value="Plot_Panel"/>
 				</include>
 				<include condition="String.IsEqual(ListItem.DBType,artist)" content="Info_Dialog_Plot">
-					<param name="visible" value="Control.HasFocus(99) | Control.HasFocus(60)"/>
+					<param name="visible" value="String.IsEqual(Window(musicinformation).Property(Focused_Button),$LOCALIZE[21887])"/>
 					<param name="left" value="120"/>
 					<param name="right" value="120"/>
 					<param name="align" value="center"/>
@@ -173,23 +180,20 @@
 						</include> -->
 						<onunfocus>SetProperty(ResetScroll,"")</onunfocus>
 						<onfocus>SetProperty(Focused_Button,$VAR[PlotType_Label],musicinformation)</onfocus>
-						<onclick condition="Container(4).HasNext | Container(4).HasPrevious">SetFocus(60)</onclick>
 						<ondown condition="Container(4).HasNext | Container(4).HasPrevious">SetFocus(60)</ondown>
+						<include condition="![Container(4).HasNext | Container(4).HasPrevious]">MovieInfo_Dialog_Menu_Navigation</include>
 					</control>
 					<control type="button" id="98">
-						<visible>Window.Is(musicinformation)</visible>
+						<visible>String.IsEqual(ListItem.DBType,album)</visible>
 						<include>Hidden_Button</include>
 						<!-- <include content="Icon_Button">
-							<param name="description" value="Tracklist/Discography"/>
+							<param name="description" value="Tracklist"/>
 							<param name="icon" value="Album"/>
 						</include> -->
 						<onfocus>SetProperty(ResetScroll," ")</onfocus>
-						<onfocus condition="String.IsEqual(ListItem.DBType,album)">SetProperty(Focused_Button,$LOCALIZE[182],musicinformation)</onfocus>
-						<onfocus condition="String.IsEqual(ListItem.DBType,artist)">SetProperty(Focused_Button,$LOCALIZE[21888],musicinformation)</onfocus>
-						<ondown condition="String.IsEqual(ListItem.DBType,album)">SetFocus(4500)</ondown>
-						<onclick condition="String.IsEqual(ListItem.DBType,album)">SetFocus(4500)</onclick>
-						<ondown condition="String.IsEqual(ListItem.DBType,artist)">SetFocus(50)</ondown>
-						<onclick condition="String.IsEqual(ListItem.DBType,artist)">SetFocus(50)</onclick>
+						<onfocus>SetProperty(Focused_Button,$LOCALIZE[182],musicinformation)</onfocus>
+						<ondown>SetFocus(4500)</ondown>
+						<onclick>SetFocus(4500)</onclick>
 						<include>MusicInfo_Dialog_Menu_Navigation</include>
 					</control>
 					<control type="button" id="7">

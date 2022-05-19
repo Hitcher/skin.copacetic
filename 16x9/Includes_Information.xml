@@ -150,8 +150,15 @@
 							<bottom>180</bottom>
 							<width>6</width>
 							<height>720</height>
-							<onleft>99</onleft>
-							<onright>99</onright>
+							<onup condition="Skin.HasSetting(Music_Player_Enabled) + Player.HasAudio">SetFocus(91100,1)</onup>
+							<onleft condition="Window.IsVisible(movieinformation)">8</onleft>
+							<onleft condition="!Window.IsVisible(movieinformation)">97</onleft>
+							<onright condition="Window.IsVisible(movieinformation) + !String.IsEmpty(ListItem.Trailer)">11</onright>
+							<onright condition="Window.IsVisible(movieinformation) + String.IsEmpty(ListItem.Trailer) + !String.IsEqual(ListItem.DBType,set)">7</onright>
+							<onright condition="Window.IsVisible(movieinformation) + String.IsEmpty(ListItem.Trailer) + String.IsEqual(ListItem.DBType,set)">6</onright>
+							<onright condition="String.IsEqual(ListItem.DBType,album)">98</onright>
+							<onright condition="String.IsEqual(ListItem.DBType,song)">7</onright>
+							<onright condition="String.IsEqual(ListItem.DBType,artist)">10</onright>
 							<onback>65000</onback>
 							<showonepage>false</showonepage>
 							<orientation>vertical</orientation>
@@ -179,6 +186,70 @@
 				<aspectratio>keep</aspectratio>
 				<texture colordiffuse="$VAR[Accent_Color]">$VAR[StarRating_Label]</texture>
 			</control>
+		</include>
+
+		<include name="Info_Dialog_Artwork">
+			<control type="grouplist">
+				<visible>$PARAM[visible]</visible>
+				<include>Delayed_Content_Fade_Animation</include>
+				<centertop>50%</centertop>
+				<centerleft>50%</centerleft>
+				<height>610</height>
+				<width>1920</width>
+				<orientation>horizontal</orientation>
+				<align>center</align>
+				<usecontrolcoords>true</usecontrolcoords>
+				<itemgap>0</itemgap>
+				<control type="image">
+					<visible>!String.IsEmpty(ListItem.Art(fanart))</visible>
+					<height>610</height>
+					<width>1084</width>
+					<texture background="true">$INFO[ListItem.Art(fanart)]</texture>
+				</control>
+				<control type="group">
+					<visible>!String.IsEmpty(ListItem.Art(poster))</visible>
+					<top>45</top>
+					<height>519</height>
+					<width>346</width>
+					<control type="image">
+						<texture background="true">$INFO[ListItem.Art(poster)]</texture>
+					</control>
+					<include content="DropShadow">
+						<param name="height" value="100%"/>
+						<param name="flipx" value="true"/>
+						<param name="visible" value="!String.IsEmpty(ListItem.Art(fanart))"/>
+					</include>
+				</control>
+				<control type="group">
+					<visible>!String.IsEmpty(ListItem.Art(keyart))</visible>
+					<top>109</top>
+					<height>390</height>
+					<width>260</width>
+					<control type="image">
+						<texture background="true">$INFO[ListItem.Art(keyart)]</texture>
+					</control>
+					<include content="DropShadow">
+						<param name="height" value="100%"/>
+						<param name="flipx" value="true"/>
+						<param name="visible" value="!String.IsEmpty(ListItem.Art(poster))"/>
+					</include>
+				</control>
+				<control type="group">
+					<visible>!String.IsEmpty(ListItem.Art(square))</visible>
+					<top>190</top>
+					<height>230</height>
+					<width>230</width>
+					<control type="image">
+						<texture background="true">$INFO[ListItem.Art(square)]</texture>
+					</control>
+					<include content="DropShadow">
+						<param name="height" value="100%"/>
+						<param name="flipx" value="true"/>
+						<param name="visible" value="!String.IsEmpty(ListItem.Art(keyart))"/>
+					</include>
+				</control>
+			</control>
+
 		</include>
 
 </includes>

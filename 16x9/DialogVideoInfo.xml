@@ -115,6 +115,13 @@
 			<animation effect="slide" end="0,0" time="360" reversible="false">Hidden</animation>
 		</control>
 
+		<!--Music Player-->
+		<control type="group">
+			<visible>!Window.IsVisible(shutdownmenu)</visible>
+			<include>Delayed_Content_Fade_Animation</include>
+			<include condition="Skin.HasSetting(Music_Player_Enabled)" content="Music_Player_Buttons"/>
+		</control>
+
 		<!--Hidden Button to reset lists and breadcrumb path before closing dialog-->
 		<control type="button" id="65005">
 			<visible allowhiddenfocus="true">false</visible>
@@ -170,7 +177,7 @@
 		<control type="group">
 			<include content="CustomViewsBackground"/>
 			<control type="image">
-				<visible>!$EXP[InfoWidget_HasFocus] + !Control.IsVisible(9002)</visible>
+				<visible>!$EXP[InfoWidget_HasFocus] + !Control.IsVisible(9002) + !Control.HasFocus(10)</visible>
 				<include>Dialog_Fade_Animation</include>
 				<aspectratio>scale</aspectratio>
 				<texture colordiffuse="$VAR[Info_Artwork_Diffuse]" background="true">$VAR[Dialog_Info_Background]</texture>
@@ -192,42 +199,24 @@
 					<param name="info_label_visible" value="false"/>
 				</include>
 
-				<!--
-				<control type="label" id="$PARAM[title_label_id]">
-					<top>900</top>
-					<height>60</height>
-					<label>$INFO[Window(movieinformation).Property(Focused_Button),‹ ,  ›]</label>
-					<align>center</align>
-					<font>Breadcrumb_Title_Label</font>
-					<textcolor>$VAR[Light_Color]</textcolor>
-				</control>
-				-->
-
 				<include content="Info_Dialog_Header">
-					<param name="visible" value="!Control.HasFocus(99) + !Control.HasFocus(60)"/>
+					<param name="visible" value="!String.IsEqual(Window(movieinformation).Property(Focused_Button),$LOCALIZE[207]) + !Control.HasFocus(10)"/>
 					<param name="left" value="120"/>
 					<param name="right" value="120"/>
 					<param name="align" value="center"/>
 				</include>
 				<include content="Info_Dialog_Plot">
-					<param name="visible" value="Control.HasFocus(99) | Control.HasFocus(60)"/>
+					<param name="visible" value="String.IsEqual(Window(movieinformation).Property(Focused_Button),$LOCALIZE[207])"/>
 					<param name="left" value="120"/>
 					<param name="right" value="120"/>
 					<param name="align" value="center"/>
 					<param name="font" value="Plot_Fullscreen"/>
 				</include>
 
-				<include condition="String.IsEqual(ListItem.DBType,set)" content="Simple_List">
-					<param name="id" value="50"/>
-					<param name="visible" value="Control.HasFocus(50) | Control.HasFocus(98)"/>
-					<param name="animation" value="Delayed_Content_Fade_Animation"/>
-					<param name="left" value="720"/>
-					<param name="nowplayingvisible" value="true"/>
-					<param name="labelleft" value="120"/>
-					<param name="label" value="$INFO[ListItem.Label]"/>
-					<param name="labelmaxwidth" value="960"/>
-					<param name="selectedcolor" value="$VAR[Light_Color]"/>
+				<include content="Info_Dialog_Artwork">
+					<param name="visible" value="Control.HasFocus(10)"/>
 				</include>
+
 
 				<!-- Button group -->
 				<control type="grouplist" id="65000">
@@ -258,18 +247,6 @@
 						<onfocus condition="[String.IsEqual(Listitem.DBType,tvshow) | String.IsEqual(Listitem.DBType,season)]">SetProperty(Focused_Button,$LOCALIZE[1024],movieinformation)</onfocus>
 						<include>MovieInfo_Dialog_Menu_Navigation</include>
 					</control>
-					<control type="button" id="98">
-						<include>Hidden_Button</include>
-						<visible>String.IsEqual(Listitem.DBType,set)</visible>
-						<include content="Icon_Button">
-							<param name="description" value="Tracklist/Discography"/>
-							<param name="icon" value="Album"/>
-						</include>
-						<onfocus>SetProperty(ResetScroll," ")</onfocus>
-						<onfocus>SetProperty(Focused_Button,Setlist,movieinformation)</onfocus>
-						<ondown>SetFocus(50)</ondown>
-						<onclick>SetFocus(50)</onclick>
-					</control>
 					<control type="button" id="99">
 						<include>Hidden_Button</include>
 						<visible>!String.IsEmpty(Control.GetLabel(916)) + !String.IsEqual(ListItem.DBType,season)</visible>
@@ -279,8 +256,8 @@
 						</include>
 						<onunfocus>SetProperty(ResetScroll,"")</onunfocus>
 						<onfocus>SetProperty(Focused_Button,$LOCALIZE[207],movieinformation)</onfocus>
-						<onclick condition="Container(4).HasNext | Container(4).HasPrevious">SetFocus(60)</onclick>
 						<ondown condition="Container(4).HasNext | Container(4).HasPrevious">SetFocus(60)</ondown>
+						<include condition="![Container(4).HasNext | Container(4).HasPrevious]">MovieInfo_Dialog_Menu_Navigation</include>
 					</control>
 					<control type="button" id="11">
 						<include>Hidden_Button</include>
@@ -341,11 +318,12 @@
 			<include condition="String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)" content="Info_Widget_Seasons"/>
 			<include condition="String.IsEqual(ListItem.DBType,movie) + !String.IsEmpty(ListItem.SetID)" content="Info_Widget_MovieSet"/>
 			<include condition="String.IsEqual(ListItem.DBType,movie)" content="Info_Widget_DirectorCredits"/>
-			<include content="Info_Widget_Similar"/>
+			<include condition="!String.IsEqual(ListItem.DBType,set)" content="Info_Widget_Similar"/>
+			<include condition="String.IsEqual(ListItem.DBType,set)" content="Info_Widget_Set"/>
 
 			<!--Scrollbar-->
 			<control type="group">
-				<visible>!Window.IsVisible(shutdownmenu)</visible>
+				<visible>!Window.IsVisible(shutdownmenu) + !Control.HasFocus(91100)</visible>
 				<include>Delayed_Content_Fade_Animation</include>
 				<control type="group">
 					<visible>!ControlGroup(65000).HasFocus</visible>
