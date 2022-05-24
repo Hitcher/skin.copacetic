@@ -33,36 +33,12 @@
 		</control>
 
 		<control type="group">
-			<visible>!$EXP[TransparentDialog_IsVisible]</visible>
-			<include>Content_Fade_Animation</include>
+			<visible>!$EXP[TransparentDialog_ExcludingContextMenu]</visible>
+			<include>Delayed_Content_Fade_Animation</include>
 
 			<include content="Transparent_Dialog_Panel">
 				<param name="top" value="180"/>
 				<param name="bottom" value="180"/>
-			</include>
-
-			<include content="Breadcrumb_Label"/>
-
-			<include content="Breadcrumb_Label">
-				<param name="title_label_id" value="101"/>
-				<param name="left" value="120"/>
-				<param name="right" value="1020"/>
-				<param name="top" value="195"/>
-				<param name="info_label" value="$INFO[Container(20).NumItems,/ , items]"/>
-				<param name="maxtitlelabelwidth" value="600"/>
-				<param name="maxinfolabelwidth" value="240"/>
-				<param name="haspath" value="true"/>
-			</include>
-
-			<include content="Breadcrumb_Label">
-				<param name="title_label_id" value="102"/>
-				<param name="left" value="1020"/>
-				<param name="right" value="120"/>
-				<param name="top" value="195"/>
-				<param name="info_label" value="$INFO[Container(21).NumItems,/ , items]"/>
-				<param name="maxtitlelabelwidth" value="600"/>
-				<param name="maxinfolabelwidth" value="240"/>
-				<param name="haspath" value="true"/>
 			</include>
 
 			<include content="DialogDivider">
@@ -85,42 +61,82 @@
 				<texture border="2,2,2,2" colordiffuse="$VAR[Light_Color]">dialogs/button_underline_focused_20.png</texture>
 			</control>
 
-			<!--Left Side-->
-			<include content="Simple_List">
-				<param name="id" value="20"/>
-				<param name="left" value="120"/>
-				<param name="right" value="1140"/>
-				<param name="labelmaxwidth" value="600"/>
-			</include>
+			<include content="Breadcrumb_Label"/>
 
-			<include content="List_Info_Label">
-				<param name="visible" value="![Control.IsVisible(5001) | Control.IsVisible(5002)] + Control.HasFocus(20)"/>
-				<param name="visibleanimation" value="Delayed_Content_Fade_Animation"/>
-				<param name="width" value="780"/>
-				<param name="hiddenlabel" value="$INFO[Container(20).ListItem.Label]"/>
-				<param name="hiddenlabelmaxwidth" value="600"/>
-				<param name="infolabel" value="$INFO[Container(20).ListItem.Label2,/ ]"/>
-				<param name="infolabelwidth" value="240"/>
-			</include>
+			<!--Left Side-->
+			<control type="group">
+				<visible>![Window.IsVisible(contextmenu) + String.IsEqual(Window(filemanager).Property(ActiveList),Right)]</visible>
+				<include>Delayed_Content_Fade_Animation</include>
+
+				<include content="Breadcrumb_Label">
+					<param name="title_label_id" value="101"/>
+					<param name="left" value="120"/>
+					<param name="right" value="1020"/>
+					<param name="top" value="195"/>
+					<param name="info_label" value="$INFO[Container(20).NumItems,/ , items]"/>
+					<param name="maxtitlelabelwidth" value="600"/>
+					<param name="maxinfolabelwidth" value="240"/>
+					<param name="haspath" value="true"/>
+				</include>
+
+				<include content="Simple_List">
+					<param name="id" value="20"/>
+					<param name="left" value="120"/>
+					<param name="right" value="1140"/>
+					<param name="labelmaxwidth" value="600"/>
+					<param name="selectedcolor" value="$VAR[Light_Color]"/>
+					<param name="include" value="FileManager_Left_List"/>
+				</include>
+
+				<include content="List_Info_Label">
+					<param name="visible" value="![Control.IsVisible(5001) | Control.IsVisible(5002)] + Control.HasFocus(20)"/>
+					<param name="visibleanimation" value="Delayed_Content_Fade_Animation"/>
+					<param name="width" value="780"/>
+					<param name="hiddenlabel" value="$INFO[Container(20).ListItem.Label]"/>
+					<param name="hiddenlabelmaxwidth" value="600"/>
+					<param name="infolabel" value="$INFO[Container(20).ListItem.Label2,/ ]"/>
+					<param name="infolabelwidth" value="240"/>
+				</include>
+
+			</control>
 
 			<!--Right Side-->
-			<include content="Simple_List">
-				<param name="id" value="21"/>
-				<param name="left" value="1020"/>
-				<param name="right" value="120"/>
-				<param name="labelmaxwidth" value="600"/>
-			</include>
+			<control type="group">
+				<visible>![Window.IsVisible(contextmenu) + String.IsEqual(Window(filemanager).Property(ActiveList),Left)]</visible>
+				<include>Delayed_Content_Fade_Animation</include>
 
-			<include content="List_Info_Label">
-				<param name="visible" value="![Control.IsVisible(5003) | Control.IsVisible(5004)] + Control.HasFocus(21)"/>
-				<param name="visibleanimation" value="Delayed_Content_Fade_Animation"/>
-				<param name="width" value="780"/>
-				<param name="left" value="1020"/>
-				<param name="hiddenlabel" value="$INFO[Container(21).ListItem.Label]"/>
-				<param name="hiddenlabelmaxwidth" value="600"/>
-				<param name="infolabel" value="$INFO[Container(21).ListItem.Label2,/ ]"/>
-				<param name="infolabelwidth" value="240"/>
-			</include>
+				<include content="Breadcrumb_Label">
+					<param name="title_label_id" value="102"/>
+					<param name="left" value="1020"/>
+					<param name="right" value="120"/>
+					<param name="top" value="195"/>
+					<param name="info_label" value="$INFO[Container(21).NumItems,/ , items]"/>
+					<param name="maxtitlelabelwidth" value="600"/>
+					<param name="maxinfolabelwidth" value="240"/>
+					<param name="haspath" value="true"/>
+				</include>
+
+				<include content="Simple_List">
+					<param name="id" value="21"/>
+					<param name="left" value="1020"/>
+					<param name="right" value="120"/>
+					<param name="labelmaxwidth" value="600"/>
+					<param name="selectedcolor" value="$VAR[Light_Color]"/>
+					<param name="include" value="FileManager_Right_List"/>
+				</include>
+
+				<include content="List_Info_Label">
+					<param name="visible" value="![Control.IsVisible(5003) | Control.IsVisible(5004)] + Control.HasFocus(21)"/>
+					<param name="visibleanimation" value="Delayed_Content_Fade_Animation"/>
+					<param name="width" value="780"/>
+					<param name="left" value="1020"/>
+					<param name="hiddenlabel" value="$INFO[Container(21).ListItem.Label]"/>
+					<param name="hiddenlabelmaxwidth" value="600"/>
+					<param name="infolabel" value="$INFO[Container(21).ListItem.Label2,/ ]"/>
+					<param name="infolabelwidth" value="240"/>
+				</include>
+
+			</control>
 
 			<include content="ButtonGroup">
 				<param name="onleft" value="21"/>
@@ -131,5 +147,6 @@
 			</include>
 
 		</control>
+
 	</controls>
 </window>

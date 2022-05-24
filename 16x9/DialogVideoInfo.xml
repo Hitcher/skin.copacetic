@@ -115,6 +115,19 @@
 			<animation effect="slide" end="0,0" time="360" reversible="false">Hidden</animation>
 		</control>
 
+		<!-- Hidden buttons for Ratings bounce -->
+		<control type="button" id="5003">
+			<visible allowhiddenfocus="true">false</visible>
+			<onfocus>IncreaseRating</onfocus>
+			<onfocus>SetFocus(7)</onfocus>
+		</control>
+
+		<control type="button" id="5004">
+			<visible allowhiddenfocus="true">false</visible>
+			<onfocus>DecreaseRating</onfocus>
+			<onfocus>SetFocus(7)</onfocus>
+		</control>
+
 		<!--Music Player-->
 		<control type="group">
 			<visible>!Window.IsVisible(shutdownmenu)</visible>
@@ -204,17 +217,23 @@
 				</include>
 
 				<include content="Info_Dialog_Header">
-					<param name="visible" value="!String.IsEqual(Window(movieinformation).Property(Focused_Button),$LOCALIZE[207]) + !Control.HasFocus(10)"/>
+					<param name="visible" value="!String.IsEqual(Window(movieinformation).Property(Focused_Button),$LOCALIZE[207]) + !Control.HasFocus(10) + !Control.HasFocus(7)"/>
 					<param name="left" value="120"/>
 					<param name="right" value="120"/>
 					<param name="align" value="center"/>
 				</include>
 				<include content="Info_Dialog_Plot">
 					<param name="visible" value="String.IsEqual(Window(movieinformation).Property(Focused_Button),$LOCALIZE[207])"/>
-					<param name="left" value="120"/>
-					<param name="right" value="120"/>
+					<param name="left" value="240"/>
+					<param name="right" value="240"/>
 					<param name="align" value="center"/>
 					<param name="font" value="Plot_Fullscreen"/>
+				</include>
+
+				<include content="Info_Dialog_Stars">
+					<param name="visible" value="Control.HasFocus(7) | Control.HasFocus(5003) | Control.HasFocus(5004)"/>
+					<param name="itemgap" value="30"/>
+					<param name="starheight" value="90"/>
 				</include>
 
 				<include content="Info_Dialog_Artwork">
@@ -284,6 +303,17 @@
 						<visible>!String.IsEqual(ListItem.DBType,set)</visible>
 						<onfocus>SetProperty(ResetScroll," ")</onfocus>
 						<onfocus>SetProperty(Focused_Button,$LOCALIZE[563],movieinformation)</onfocus>
+						<onup>5003</onup>
+						<ondown>5004</ondown>
+					</control>
+					<control type="button" id="10">
+						<include>Hidden_Button</include>
+						<include content="Icon_Button">
+							<param name="description" value="Choose art"/>
+							<param name="icon" value="Menu"/>
+						</include>
+						<onfocus>SetProperty(ResetScroll," ")</onfocus>
+						<onfocus>SetProperty(Focused_Button,$LOCALIZE[13511],movieinformation)</onfocus>
 						<include>MovieInfo_Dialog_Menu_Navigation</include>
 					</control>
 					<control type="button" id="6">
@@ -295,16 +325,6 @@
 						<visible>!String.IsEqual(ListItem.DBType,set)</visible>
 						<onfocus>SetProperty(ResetScroll," ")</onfocus>
 						<onfocus>SetProperty(Focused_Button,$LOCALIZE[184],movieinformation)</onfocus>
-						<include>MovieInfo_Dialog_Menu_Navigation</include>
-					</control>
-					<control type="button" id="10">
-						<include>Hidden_Button</include>
-						<include content="Icon_Button">
-							<param name="description" value="Choose art"/>
-							<param name="icon" value="Menu"/>
-						</include>
-						<onfocus>SetProperty(ResetScroll," ")</onfocus>
-						<onfocus>SetProperty(Focused_Button,$LOCALIZE[13511],movieinformation)</onfocus>
 						<include>MovieInfo_Dialog_Menu_Navigation</include>
 					</control>
 
