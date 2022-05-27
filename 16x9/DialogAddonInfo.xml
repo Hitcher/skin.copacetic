@@ -42,132 +42,122 @@
 
 			<!-- Background -->
 			<control type="group">
-				<visible>ControlGroup(65000).HasFocus</visible>
+				<visible>Window.IsActive(addoninformation) + ControlGroup(65000).HasFocus</visible>
+				<include>Delayed_Content_Fade_Animation</include>
 				<animation effect="slide" start="0" end="0,660" time="0" condition="ControlGroup(65000).HasFocus">Conditional</animation>
 				<animation effect="slide" start="0" end="0,-660" time="180" tween="sine" easing="out" reversible="false" condition="ControlGroup(65000).HasFocus">Conditional</animation>
 				<animation effect="fade" start="0" end="100" time="360" tween="sine" easing="out" reversible="false" condition="ControlGroup(65000).HasFocus">Conditional</animation>
-
-				<include content="CustomViewsBackground"/>
-				<control type="group">
-					<visible>!Control.IsVisible(9002)</visible>
-					<include>Delayed_Content_Fade_Animation</include>
-					<include content="Transparent_Dialog_Panel">
-						<param name="top" value="180"/>
-						<param name="bottom" value="180"/>
-					</include>
-					<control type="image">
-						<left>0</left>
-						<centertop>50%</centertop>
-						<width>720</width>
-						<height>720</height>
-						<texture fallback="fallback.png" background="true">$INFO[ListItem.Art(thumb)]</texture>
-					</control>
+				<include content="Transparent_Dialog_Panel">
+					<param name="top" value="180"/>
+					<param name="bottom" value="180"/>
+				</include>
+				<control type="image">
+					<left>0</left>
+					<centertop>50%</centertop>
+					<width>720</width>
+					<height>720</height>
+					<texture fallback="fallback.png" background="true">$INFO[ListItem.Art(thumb)]</texture>
 				</control>
 			</control>
 
-
 			<!-- Content -->
 			<control type="group">
-				<visible>Window.IsActive(addoninformation)</visible>
+				<visible>Window.IsActive(addoninformation) + ControlGroup(65000).HasFocus + !Control.IsVisible(9002)</visible>
 				<include>Delayed_Content_Fade_Animation</include>
-
 				<control type="group">
-					<visible>!Control.IsVisible(9002) +!$EXP[InfoWidget_HasFocus]</visible>
-					<include>Delayed_Content_Fade_Animation</include>
-					<control type="group">
-						<visible>!$EXP[TransparentDialog_IsVisible]</visible>
-						<include>Content_Fade_Animation</include>
+					<visible>!$EXP[TransparentDialog_IsVisible]</visible>
+					<include>Content_Fade_Animation</include>
 
-						<include content="Breadcrumb_Label">
-							<param name="title_label" value="$INFO[Window(addoninformation).Property(Focused_Button),‹ ,  ›]"/>
-							<param name="label_color" value="$VAR[Breadcrumb_Label_Color]"/>
-							<param name="info_label_visible" value="false"/>
-						</include>
+					<include content="Breadcrumb_Label">
+						<param name="title_label" value="$INFO[Window(addoninformation).Property(Focused_Button),‹ ,  ›]"/>
+						<param name="label_color" value="$VAR[Breadcrumb_Label_Color]"/>
+						<param name="info_label_visible" value="false"/>
+					</include>
 
-						<!-- Details -->
-						<include content="Info_Dialog_Header">
-							<param name="visible" value="true"/>
-							<param name="left" value="780"/>
-							<param name="right" value="120"/>
-							<param name="align" value="left"/>
-						</include>
+					<!-- Details -->
+					<include content="Info_Dialog_Header">
+						<param name="visible" value="true"/>
+						<param name="left" value="780"/>
+						<param name="right" value="120"/>
+						<param name="align" value="left"/>
+					</include>
 
-						<!-- Button group -->
-						<control type="grouplist" id="65000">
-							<centerleft>50%</centerleft>
-							<bottom>60</bottom>
-							<width>420</width>
-							<height>60</height>
-							<orientation>horizontal</orientation>
-							<align>center</align>
-							<itemgap>0</itemgap>
-							<usecontrolcoords>true</usecontrolcoords>
-							<!-- Run -->
-							<control type="button" id="12">
-								<visible>Control.IsEnabled(12)</visible>
-								<include>Hidden_Button</include>
-								<onfocus>SetProperty(Focused_Button,$INFO[Control.GetLabel(12)],addoninformation)</onfocus>
-								<include>AddonInfo_Dialog_Menu_Navigation</include>
-							</control>
-							<!-- Show settings -->
-							<control type="button" id="9">
-								<include>Hidden_Button</include>
-								<visible>Control.IsEnabled(9)</visible>
-								<onfocus>SetProperty(Focused_Button,$LOCALIZE[24020],addoninformation)</onfocus>
-								<include>AddonInfo_Dialog_Menu_Navigation</include>
-							</control>
-							<!-- Update button -->
-							<control type="button" id="8">
-								<include>Hidden_Button</include>
-								<visible>Control.IsEnabled(8)</visible>
-								<onfocus>SetProperty(Focused_Button,$INFO[Control.GetLabel(8)],addoninformation)</onfocus>
-								<include>AddonInfo_Dialog_Menu_Navigation</include>
-							</control>
-							<!-- Install/Uninstall Addon button -->
-							<control type="button" id="6">
-								<include>Hidden_Button</include>
-								<visible>Control.IsEnabled(6)</visible>
-								<onfocus>SetProperty(Focused_Button,$INFO[Control.GetLabel(6)],addoninformation)</onfocus>
-								<onclick>SetProperty(Focused_Button,$INFO[Control.GetLabel(6)],addoninformation)</onclick>
-								<include>AddonInfo_Dialog_Menu_Navigation</include>
-							</control>
-							<!-- Enable/Disable Addon button -->
-							<control type="button" id="7">
-								<include>Hidden_Button</include>
-								<visible>Control.IsEnabled(7)</visible>
-								<onfocus>SetProperty(Focused_Button,$INFO[Control.GetLabel(7)],addoninformation)</onfocus>
-								<onclick>SetProperty(Focused_Button,$INFO[Control.GetLabel(7)],addoninformation)</onclick>
-								<include>AddonInfo_Dialog_Menu_Navigation</include>
-							</control>
-							<!-- Show dependencies -->
-							<control type="button" id="10">
-								<include>Hidden_Button</include>
-								<visible>Control.IsEnabled(10)</visible>
-								<onfocus>SetProperty(Focused_Button,$LOCALIZE[39024],addoninformation)</onfocus>
-								<include>AddonInfo_Dialog_Menu_Navigation</include>
-							</control>
-							<!-- Select version -->
-							<control type="button" id="14">
-								<include>Hidden_Button</include>
-								<visible>Control.IsEnabled(14)</visible>
-								<onfocus>SetProperty(Focused_Button,$LOCALIZE[21338],addoninformation)</onfocus>
-								<include>AddonInfo_Dialog_Menu_Navigation</include>
-							</control>
-							<!-- Auto-update button Button -->
-							<control type="button" id="20">
-								<include>Hidden_Button</include>
-								<label>$VAR[AutoUpdate]</label>
-								<onfocus>SetProperty(Focused_Button,$VAR[AutoUpdate],addoninformation)</onfocus>
-								<onclick>SetFocus(13)</onclick>
-								<onclick>Select</onclick>
-								<onclick>SetFocus(20)</onclick>
-								<onclick condition="String.Contains(Skin.String(AutoUpdate),off)">Skin.SetString(AutoUpdate,on)</onclick>
-								<onclick condition="String.Contains(Skin.String(AutoUpdate),on)">Skin.SetString(AutoUpdate,off)</onclick>
-								<include>AddonInfo_Dialog_Menu_Navigation</include>
-							</control>
+					<!-- Button group -->
+					<control type="grouplist" id="65000">
+						<centerleft>50%</centerleft>
+						<bottom>60</bottom>
+						<width>420</width>
+						<height>60</height>
+						<orientation>horizontal</orientation>
+						<align>center</align>
+						<itemgap>0</itemgap>
+						<usecontrolcoords>true</usecontrolcoords>
+						<!-- Run -->
+						<control type="button" id="12">
+							<visible>Control.IsEnabled(12)</visible>
+							<include>Hidden_Button</include>
+							<onfocus>SetProperty(Focused_Button,$INFO[Control.GetLabel(12)],addoninformation)</onfocus>
+							<include>AddonInfo_Dialog_Menu_Navigation</include>
+						</control>
+						<!-- Show settings -->
+						<control type="button" id="9">
+							<include>Hidden_Button</include>
+							<visible>Control.IsEnabled(9)</visible>
+							<onfocus>SetProperty(Focused_Button,$LOCALIZE[24020],addoninformation)</onfocus>
+							<include>AddonInfo_Dialog_Menu_Navigation</include>
+						</control>
+						<!-- Update button -->
+						<control type="button" id="8">
+							<include>Hidden_Button</include>
+							<visible>Control.IsEnabled(8)</visible>
+							<onfocus>SetProperty(Focused_Button,$INFO[Control.GetLabel(8)],addoninformation)</onfocus>
+							<include>AddonInfo_Dialog_Menu_Navigation</include>
+						</control>
+						<!-- Install/Uninstall Addon button -->
+						<control type="button" id="6">
+							<include>Hidden_Button</include>
+							<visible>Control.IsEnabled(6)</visible>
+							<onfocus>SetProperty(Focused_Button,$INFO[Control.GetLabel(6)],addoninformation)</onfocus>
+							<onclick>SetProperty(Focused_Button,$INFO[Control.GetLabel(6)],addoninformation)</onclick>
+							<include>AddonInfo_Dialog_Menu_Navigation</include>
+						</control>
+						<!-- Enable/Disable Addon button -->
+						<control type="button" id="7">
+							<include>Hidden_Button</include>
+							<visible>Control.IsEnabled(7)</visible>
+							<onfocus>SetProperty(Focused_Button,$INFO[Control.GetLabel(7)],addoninformation)</onfocus>
+							<onclick>SetProperty(Focused_Button,$INFO[Control.GetLabel(7)],addoninformation)</onclick>
+							<include>AddonInfo_Dialog_Menu_Navigation</include>
+						</control>
+						<!-- Show dependencies -->
+						<control type="button" id="10">
+							<include>Hidden_Button</include>
+							<visible>Control.IsEnabled(10)</visible>
+							<onfocus>SetProperty(Focused_Button,$LOCALIZE[39024],addoninformation)</onfocus>
+							<include>AddonInfo_Dialog_Menu_Navigation</include>
+						</control>
+						<!-- Select version -->
+						<control type="button" id="14">
+							<include>Hidden_Button</include>
+							<visible>Control.IsEnabled(14)</visible>
+							<onfocus>SetProperty(Focused_Button,$LOCALIZE[21338],addoninformation)</onfocus>
+							<include>AddonInfo_Dialog_Menu_Navigation</include>
+						</control>
+						<!-- Auto-update button Button -->
+						<control type="button" id="20">
+							<include>Hidden_Button</include>
+							<label>$VAR[AutoUpdate]</label>
+							<onfocus>SetProperty(Focused_Button,$VAR[AutoUpdate],addoninformation)</onfocus>
+							<onclick>SetFocus(13)</onclick>
+							<onclick>Select</onclick>
+							<onclick>SetFocus(20)</onclick>
+							<onclick condition="String.Contains(Skin.String(AutoUpdate),off)">Skin.SetString(AutoUpdate,on)</onclick>
+							<onclick condition="String.Contains(Skin.String(AutoUpdate),on)">Skin.SetString(AutoUpdate,off)</onclick>
+							<include>AddonInfo_Dialog_Menu_Navigation</include>
 						</control>
 					</control>
 				</control>
+
 
 				<include content="Info_Widget_Screenshots"/>
 
