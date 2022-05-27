@@ -61,26 +61,71 @@
 			<onfocus>IncreaseRating</onfocus>
 			<onfocus>SetFocus(7)</onfocus>
 		</control>
-
 		<control type="button" id="5004">
 			<visible allowhiddenfocus="true">false</visible>
 			<onfocus>DecreaseRating</onfocus>
 			<onfocus>SetFocus(7)</onfocus>
 		</control>
 
-		<!-- Background -->
+		<!-- Artwork -->
 		<control type="group">
-			<include content="CustomViewsBackground"/>
+			<visible>[Window.IsActive(musicinformation) | Window.IsActive(songinformation)] + !Control.IsVisible(9002) + ![Window.Is(songinformation) + Window.IsActive(musicinformation)]</visible>
+			<include>Delayed_Content_Fade_Animation</include>
+
+			<!-- Background -->
 			<control type="group">
 				<visible>!$EXP[InfoWidget_HasFocus]</visible>
 				<include>Dialog_Fade_Animation</include>
-				<control type="image">
-					<visible>[String.IsEqual(ListItem.DBType,artist) + !Control.IsVisible(9002) + !Control.HasFocus(10)] | [String.IsEqual(ListItem.DBType,album) + Control.HasFocus(12)]</visible>
-					<include>Content_Fade_Animation</include>
-					<aspectratio>scale</aspectratio>
-					<texture colordiffuse="$VAR[Info_Artwork_Diffuse]" background="true">$VAR[Dialog_Info_Background]</texture>
+				<control type="group">
+					<visible>!Control.IsVisible(9002) + !Control.HasFocus(10)</visible>
+					<include>Delayed_Content_Fade_Animation</include>
+					<control type="group">
+						<visible>[String.IsEqual(ListItem.DBType,artist) + !Control.IsVisible(9002) + !Control.HasFocus(10)] | [String.IsEqual(ListItem.DBType,album) + Control.HasFocus(12)]</visible>
+						<include>Content_Fade_Animation</include>
+						<control type="image">
+							<texture colordiffuse="$VAR[Dark_Color]">views/white_100.png</texture>
+						</control>
+						<control type="image">
+							<aspectratio>scale</aspectratio>
+							<texture colordiffuse="$VAR[Info_Artwork_Diffuse]" background="true">$VAR[Dialog_Info_Background]</texture>
+						</control>
+					</control>
 				</control>
 			</control>
+
+			<control type="group">
+				<visible>!String.IsEqual(ListItem.DBType,artist) + !Control.HasFocus(12) + !Control.HasFocus(10) + !$EXP[InfoWidget_HasFocus]</visible>
+				<include>Delayed_Content_Fade_Animation</include>
+				<include content="Transparent_Dialog_Panel">
+					<param name="left" value="0"/>
+					<param name="top" value="180"/>
+					<param name="bottom" value="180"/>
+				</include>
+				<control type="image">
+					<visible>!Control.HasFocus(10)</visible>
+					<include>Delayed_Content_Fade_Animation</include>
+					<left>0</left>
+					<centertop>50%</centertop>
+					<width>720</width>
+					<height>720</height>
+					<texture fallback="fallback.png" background="true">$INFO[ListItem.Art(thumb)]</texture>
+				</control>
+			</control>
+
+			<control type="image">
+				<visible>String.IsEqual(ListItem.DBType,song) + Control.HasFocus(12)</visible>
+				<include>Delayed_Content_Fade_Animation</include>
+				<centerleft>50%</centerleft>
+				<centertop>50%</centertop>
+				<width>720</width>
+				<height>720</height>
+				<texture fallback="fallback.png" background="true">$INFO[ListItem.Art(thumb)]</texture>
+			</control>
+
+			<include content="Info_Dialog_Artwork">
+				<param name="visible" value="Control.HasFocus(10)"/>
+			</include>
+
 		</control>
 
 		<!-- Content -->
@@ -90,41 +135,13 @@
 			<control type="group">
 				<visible>!$EXP[TransparentDialog_IsVisible]</visible>
 				<visible>!$EXP[InfoWidget_HasFocus]</visible>
-				<include>Content_Fade_Animation</include>
+				<include>Delayed_Content_Fade_Animation</include>
 
 				<include content="Breadcrumb_Label">
 					<param name="title_label" value="$INFO[Window(musicinformation).Property(Focused_Button),‹ ,  ›]"/>
-					<param name="label_color" value="$VAR[Light_Color]"/>
+					<param name="label_color" value="$VAR[Breadcrumb_Label_Color]"/>
 					<param name="info_label_visible" value="false"/>
 				</include>
-
-				<control type="group">
-					<visible>!String.IsEqual(ListItem.DBType,artist) + !Control.HasFocus(12)</visible>
-					<include>Delayed_Content_Fade_Animation</include>
-					<include content="Transparent_Dialog_Panel">
-						<param name="top" value="180"/>
-						<param name="bottom" value="180"/>
-					</include>
-					<control type="image">
-						<visible>!Control.HasFocus(10)</visible>
-						<include>Delayed_Content_Fade_Animation</include>
-						<left>0</left>
-						<centertop>50%</centertop>
-						<width>720</width>
-						<height>720</height>
-						<texture fallback="fallback.png" background="true">$INFO[ListItem.Art(thumb)]</texture>
-					</control>
-				</control>
-
-				<control type="image">
-					<include>Delayed_Content_Fade_Animation</include>
-					<visible>String.IsEqual(ListItem.DBType,song) + Control.HasFocus(12)</visible>
-					<centerleft>50%</centerleft>
-					<centertop>50%</centertop>
-					<width>720</width>
-					<height>720</height>
-					<texture fallback="fallback.png" background="true">$INFO[ListItem.Art(thumb)]</texture>
-				</control>
 
 
 
@@ -172,9 +189,34 @@
 					<param name="itemgap" value="30"/>
 					<param name="starheight" value="60"/>
 				</include>
-				<include content="Info_Dialog_Artwork">
-					<param name="visible" value="Control.HasFocus(10)"/>
-				</include>
+
+				<control type="textbox">
+					<visible>Control.HasFocus(12) + String.IsEqual(ListItem.DBType,album)</visible>
+					<include>Delayed_Content_Fade_Animation</include>
+					<width>1680</width>
+					<centerleft>50%</centerleft>
+					<height max="146">auto</height>
+					<centertop>50%</centertop>
+					<font>Billboard_Title</font>
+					<textcolor>$VAR[Light_Color]</textcolor>
+					<label>$INFO[ListItem.Artist]</label>
+					<align>left</align>
+				</control>
+
+				<control type="label">
+					<visible>Control.HasFocus(12) + String.IsEqual(ListItem.DBType,song)</visible>
+					<width>1440</width>
+					<centerleft>50%</centerleft>
+					<height>52</height>
+					<top>964</top>
+					<font>Strip_Title</font>
+					<textcolor>$VAR[Primary_Color]</textcolor>
+					<label>$INFO[ListItem.Album]</label>
+					<align>center</align>
+					<aligny>center</aligny>
+					<scroll>false</scroll>
+				</control>
+
 
 				<!-- Button group -->
 				<control type="grouplist" id="65000">
@@ -292,7 +334,7 @@
 
 
 			<control type="group">
-				<visible>$EXP[TransparentDialog_IsVisible] + $EXP[InfoWidget_HasFocus]</visible>
+				<visible>$EXP[TransparentDialog_IsVisible] + [$EXP[InfoWidget_HasFocus] | [String.IsEqual(ListItem.DBType,artist) + Control.HasFocus(10)] | [String.IsEqual(ListItem.DBType,album) + !Control.HasFocus(12)] | String.IsEqual(ListItem.DBType,song)]</visible>
 				<include>Transparent_Dialog_Background</include>
 				<include>Content_Fade_Animation</include>
 			</control>
