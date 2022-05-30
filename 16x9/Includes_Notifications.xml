@@ -84,7 +84,7 @@
 								<centertop>50%</centertop>
 								<width>60</width>
 								<height>60</height>
-								<texture colordiffuse="$VAR[Notifation_Widget_Icon_Color]">dialogs/busy.png</texture>
+								<texture colordiffuse="$VAR[Volume_Focus_Color]">dialogs/busy.png</texture>
 								<animation effect="rotate" start="0" end="-360" center="auto" time="1800" loop="true" tween="cubic" easing="out" condition="true">Conditional</animation>
 							</control>
 							<!--Volume Progress Bar-->
@@ -118,7 +118,7 @@
 									<width>60</width>
 									<height>60</height>
 									<include content="Cross_Focused_Large">
-										<param name="color" value="$VAR[Light_Color]"/>
+										<param name="color" value="$VAR[Volume_Focus_Color]"/>
 									</include>
 								</control>
 							</control>
@@ -175,7 +175,7 @@
 				<visible>$PARAM[visible]</visible>
 				<!-- Mini player -->
 				<control type="group">
-					<visible>![$EXP[ListView_Display_IsThumbnails] | [$EXP[ShowcaseView_Display_IsPosters] + !$EXP[ShowcaseView_Details_Off] + $EXP[Music_Player_IsVisible]] | $EXP[StripView_IsVisible] | $EXP[GridView_IsVisible]]</visible>
+					<visible>$EXP[InfoDialog_IsVisible] | ![[$EXP[ListView_Display_IsThumbnails] | [$EXP[ShowcaseView_Display_IsPosters] + !$EXP[ShowcaseView_Details_Off] + $EXP[Music_Player_IsVisible]] | $EXP[StripView_IsVisible] | $EXP[GridView_IsVisible]] + !$EXP[InfoDialog_IsVisible]]</visible>
 					<animation effect="slide" end="30,0" time="0" condition="String.IsEmpty(Window(home).Property(Music_Player_Controls))">Conditional</animation>
 					<include content="$PARAM[type]_Widget">
 						<param name="align" value="right"/>
@@ -189,7 +189,7 @@
 				</control>
 				<!-- List Thumbnails -->
 				<control type="group">
-					<visible>$EXP[ListView_Display_IsThumbnails]</visible>
+					<visible>$EXP[ListView_Display_IsThumbnails] + !$EXP[InfoDialog_IsVisible]</visible>
 					<animation effect="slide" end="-60,0" time="0" condition="true">Conditional</animation>
 					<animation effect="slide" end="0,900" time="0" condition="$EXP[Square_Containers]">Conditional</animation>
 					<include content="$PARAM[type]_Widget">
@@ -205,7 +205,7 @@
 				</control>
 				<!-- Showcase -->
 				<control type="group">
-					<visible>$EXP[ShowcaseView_Display_IsPosters] + !$EXP[ShowcaseView_Details_Off] + $EXP[Music_Player_IsVisible]</visible>
+					<visible>$EXP[ShowcaseView_Display_IsPosters] + !$EXP[ShowcaseView_Details_Off] + $EXP[Music_Player_IsVisible] + !$EXP[InfoDialog_IsVisible]</visible>
 					<include content="$PARAM[type]_Widget">
 						<param name="visible" value="$EXP[ShowcaseView_Display_IsPosters]"/>
 						<param name="height" value="360"/>
@@ -219,7 +219,7 @@
 				</control>
 				<!-- Strip -->
 				<control type="group">
-					<visible>$EXP[StripView_IsVisible]</visible>
+					<visible>$EXP[StripView_IsVisible] + !$EXP[InfoDialog_IsVisible]</visible>
 					<animation effect="slide" end="-570,0" time="0" condition="$EXP[StripView_Display_IsSquare]">Conditional</animation>
 					<animation effect="slide" end="-75,0" time="0" condition="$EXP[StripView_Display_IsSquare] + $EXP[StripView_Details_Off]">Conditional</animation>
 					<animation effect="slide" end="-80,0" time="0" condition="$EXP[StripView_Display_IsPosters]">Conditional</animation>
@@ -268,7 +268,7 @@
 				</control>
 				<!-- Grid -->
 				<control type="group">
-					<visible>$EXP[GridView_IsVisible]</visible>
+					<visible>$EXP[GridView_IsVisible] + !$EXP[InfoDialog_IsVisible]</visible>
 					<animation effect="slide" end="-60,0" time="0" condition="true" reversible="false">Conditional</animation>
 					<animation effect="slide" end="-12,0" time="0" condition="$EXP[GridView_Display_IsFanart]" reversible="false">Conditional</animation>
 					<include content="$PARAM[type]_Widget">
@@ -299,7 +299,7 @@
 				<visible>$PARAM[visible]</visible>
 				<!-- Generic -->
 				<control type="group">
-					<visible>![$EXP[ListView_Display_IsThumbnails] | [$EXP[ShowcaseView_IsVisible] + !$EXP[Background_IsFanart]] | $EXP[GridView_IsVisible]]</visible>
+					<visible>![[$EXP[ListView_Display_IsThumbnails] | [$EXP[ShowcaseView_IsVisible] + !$EXP[Background_IsFanart]] | $EXP[GridView_IsVisible]] + !EXP[InfoDialog_IsVisible]]</visible>
 					<animation effect="slide" end="30,0" time="0" condition="true">Conditional</animation>
 					<include content="$PARAM[type]_Widget">
 						<param name="visible" value="!$EXP[ListView_Display_IsThumbnails] + ![$EXP[ShowcaseView_IsVisible] + !$EXP[Background_IsFanart]] + !$EXP[GridView_IsVisible]"/>
@@ -315,7 +315,7 @@
 				</control>
 				<!-- List -->
 				<control type="group">
-					<visible>$EXP[ListView_Display_IsThumbnails]</visible>
+					<visible>$EXP[ListView_Display_IsThumbnails] + !$EXP[InfoDialog_IsVisible]</visible>
 					<animation effect="slide" end="30,0" time="0" condition="true">Conditional</animation>
 					<include content="$PARAM[type]_Widget">
 						<param name="visible" value="$EXP[ListView_Display_IsThumbnails]"/>
@@ -330,7 +330,7 @@
 				</control>
 				<!-- Showcase -->
 				<control type="group">
-					<visible>$EXP[ShowcaseView_IsVisible] + !$EXP[Background_IsFanart]</visible>
+					<visible>$EXP[ShowcaseView_IsVisible] + !$EXP[Background_IsFanart] + !$EXP[InfoDialog_IsVisible]</visible>
 					<animation effect="slide" end="30,0" time="0" condition="true">Conditional</animation>
 					<include content="$PARAM[type]_Widget">
 						<param name="visible" value="$EXP[ShowcaseView_Display_IsSquare]"/>
@@ -355,7 +355,7 @@
 				</control>
 				<!-- Grid -->
 				<control type="group">
-					<visible>$EXP[GridView_IsVisible]</visible>
+					<visible>$EXP[GridView_IsVisible] + !$EXP[InfoDialog_IsVisible]</visible>
 					<animation effect="slide" end="30,0" time="0" condition="true">Conditional</animation>
 					<include content="$PARAM[type]_Widget">
 						<param name="visible" value="true"/>

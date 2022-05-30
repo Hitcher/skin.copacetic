@@ -289,7 +289,8 @@
 	</variable>
 
 	<variable name="Dialog_Info_Background">
-		<value condition="String.IsEqual(ListItem.DBType,episode)">$INFO[ListItem.Art(thumb)]</value>
+		<value condition="String.IsEqual(ListItem.DBType,episode) + !String.IsEmpty(ListItem.Art(thumb))">$INFO[ListItem.Art(thumb)]</value>
+		<value condition="String.IsEqual(Container.FolderName,ListItem.TVShowTitle) + !String.IsEmpty(Window(home).Property(Season_Fanart))">$INFO[Window(home).Property(Season_Fanart)]</value>
 		<value condition="!String.IsEmpty(ListItem.Art(fanart))">$INFO[ListItem.Art(fanart)]</value>
 		<value condition="!String.IsEmpty(ListItem.Art(thumb))">$INFO[ListItem.Art(thumb)]</value>
 	</variable>
@@ -579,22 +580,19 @@
 		<value condition="String.IsEqual(ListItem.DBType,movie) + !String.IsEmpty(ListItem.AudioLanguage)">[UPPERCASE]INFO[ListItem.AudioLanguage]$INFO[ListItem.Duration(mins), / , $LOCALIZE[31138]][/UPPERCASE]</value>
 		<value condition="String.IsEqual(ListItem.DBType,movie) + !String.IsEmpty(ListItem.Duration)">[UPPERCASE]$INFO[ListItem.Duration(mins),, $LOCALIZE[31138]][/UPPERCASE]</value>
 		<!-- Sets -->
-
 		<value condition="ListItem.IsCollection + $EXP[InfoWidget_Set_IsVisible] + !String.IsEmpty(Container(50).ListItem(0).Year)">[UPPERCASE]$INFO[Container(50).ListItem(0).Year]$INFO[Container(50).ListItem(-1).Year,-]$INFO[Container(50).NumItems, / , $LOCALIZE[342]][/UPPERCASE]</value>
 		<value condition="ListItem.IsCollection + $EXP[InfoWidget_Set_IsVisible] + !String.IsEmpty(Container(50).NumItems)">[UPPERCASE]$INFO[Container(50).NumItems,, $LOCALIZE[342]][/UPPERCASE]</value>
-
-		<!-- TV Shows -->
+		<!-- Seasons -->
+		<!-- 2019 / Season 1 /  0/9 Watched -->
+		<value condition="String.IsEqual(Container.FolderName,ListItem.TVShowTitle) + !String.IsEmpty(Window(home).Property(Season_Details))">[UPPERCASE]$INFO[Window(home).Property(Season_Details)]$INFO[ListItem.Property(WatchedEpisodes), / ,/]$INFO[ListItem.Property(NumEpisodes),, ]$LOCALIZE[32001][/UPPERCASE]</value>
+\		<!-- TV Shows -->
 		<!-- 2017 / 3 SEASONS / 14/14 WATCHED -->
 		<value condition="String.IsEqual(ListItem.DBType,tvshow) + !String.IsEmpty(ListItem.Year) + String.IsEqual(ListItem.Property(TotalSeasons),1)">[UPPERCASE]$INFO[ListItem.Year]$INFO[ListItem.Property(TotalSeasons), / ]$VAR[Seasons_Label, ]$INFO[ListItem.Property(WatchedEpisodes), / ,/]$INFO[ListItem.Property(NumEpisodes),, $LOCALIZE[32001]][/UPPERCASE]</value>
 		<value condition="String.IsEqual(ListItem.DBType,tvshow) + !String.IsEmpty(ListItem.Year)">[UPPERCASE]$INFO[ListItem.Year]$INFO[ListItem.Property(TotalSeasons), / ]$VAR[Seasons_Label, ]$INFO[ListItem.Property(WatchedEpisodes), / ,/]$INFO[ListItem.Property(NumEpisodes),, $LOCALIZE[32001]][/UPPERCASE]</value>
 		<value condition="String.IsEqual(ListItem.DBType,tvshow) + !String.IsEmpty(ListItem.Property(TotalSeasons)) + String.IsEqual(ListItem.Property(TotalSeasons),1)">[UPPERCASE]$INFO[ListItem.Property(TotalSeasons),]$VAR[Seasons_Label, ]$INFO[ListItem.Property(WatchedEpisodes), / ,/]$INFO[ListItem.Property(NumEpisodes),, $LOCALIZE[32001]][/UPPERCASE]</value>
 		<value condition="String.IsEqual(ListItem.DBType,tvshow) + !String.IsEmpty(ListItem.Property(TotalSeasons))">[UPPERCASE]$INFO[ListItem.Property(TotalSeasons),]$VAR[Seasons_Label, ]$INFO[ListItem.Property(WatchedEpisodes), / ,/]$INFO[ListItem.Property(NumEpisodes),, $LOCALIZE[32001]][/UPPERCASE]</value>
 		<value condition="String.IsEqual(ListItem.DBType,tvshow) + !String.IsEmpty(ListItem.Property(WatchedEpisodes))">[UPPERCASE]$INFO[ListItem.Property(WatchedEpisodes),,/]$INFO[ListItem.Property(NumEpisodes),, $LOCALIZE[32001]][/UPPERCASE]</value>
-		<!-- Seasons -->
-		<!-- 2019 / 0/9 Watched -->
-		<value condition="String.IsEqual(ListItem.DBType,season) + !String.IsEmpty(ListItem.Year)">[UPPERCASE]$INFO[ListItem.Year]$INFO[ListItem.Property(WatchedEpisodes), / ,/]$INFO[ListItem.Property(NumEpisodes),, ]$LOCALIZE[32001][/UPPERCASE]</value>
-		<value condition="String.IsEqual(ListItem.DBType,season) + !String.IsEmpty(ListItem.Property(WatchedEpisodes))">[UPPERCASE]$INFO[ListItem.Property(WatchedEpisodes),,/]$INFO[ListItem.Property(NumEpisodes),, ]$LOCALIZE[32001][/UPPERCASE]</value>
-		<!--Episodes -->
+			<!--Episodes -->
 		<!-- 1x01 / WATCHMEN / DAMON LINDELOFF / 1080 / ENG / 42 mins / ENDS 12:04-->
 		<value condition="String.IsEqual(ListItem.DBType,episode) + !String.IsEmpty(ListItem.TVShowTitle) + !Integer.IsGreater(ListItem.Episode,9)">$INFO[ListItem.Season]$INFO[ListItem.Episode,x0][UPPERCASE]$INFO[ListItem.TVShowTitle, / ]$INFO[ListItem.Premiered, / ]$INFO[ListItem.Writer, / ]$VAR[Resolution_Label, / ]$INFO[ListItem.AudioLanguage, / ]$INFO[ListItem.Duration(mins), / , $LOCALIZE[31138]]$INFO[ListItem.EndTime, / $LOCALIZE[32000] ][/UPPERCASE]</value>
 		<value condition="String.IsEqual(ListItem.DBType,episode) + !String.IsEmpty(ListItem.TVShowTitle)">$INFO[ListItem.Season]$INFO[ListItem.Episode,x][UPPERCASE]$INFO[ListItem.TVShowTitle, / ]$INFO[ListItem.Premiered, / ]$INFO[ListItem.Writer, / ]$VAR[Resolution_Label, / ]$INFO[ListItem.AudioLanguage, / ]$INFO[ListItem.Duration(mins), / , $LOCALIZE[31138]]$INFO[ListItem.EndTime, / $LOCALIZE[32000] ][/UPPERCASE]</value>

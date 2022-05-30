@@ -135,7 +135,7 @@
 
 			<onfocus condition="String.IsEqual(window(movieinformation).property(Breadcrumb_Level),1)">ClearProperty(ContainerPath_1,movieinformation)</onfocus>
 			<onfocus condition="String.IsEqual(window(movieinformation).property(Breadcrumb_Level),1)">ClearProperty(Breadcrumb_Level,movieinformation)</onfocus>
-			<onfocus condition="String.IsEqual(window(movieinformation).property(Breadcrumb_Level),1)">Dialog.Close(all)</onfocus>
+			<onfocus condition="String.IsEqual(window(movieinformation).property(Breadcrumb_Level),1)">Dialog.Close(all,true)</onfocus>
 
 			<onfocus condition="String.IsEqual(window(movieinformation).property(Breadcrumb_Level),2)">Container.Update($INFO[window(movieinformation).property(ContainerPath_1)],replace)</onfocus>
 			<onfocus condition="String.IsEqual(window(movieinformation).property(Breadcrumb_Level),2)">ClearProperty(ContainerPath_2,movieinformation)</onfocus>
@@ -175,18 +175,18 @@
 
 			<onfocus condition="!String.IsEqual(window(movieinformation).property(Breadcrumb_Level),1)">SetProperty(Refresh,true,movieinformation)</onfocus>
 			<onfocus condition="!String.IsEqual(window(movieinformation).property(Breadcrumb_Level),1)">SetProperty(Breadcrumb_GoToPrevious,true,movieinformation)</onfocus>
-			<onfocus condition="!String.IsEqual(window(movieinformation).property(Breadcrumb_Level),1)">Dialog.Close(all)</onfocus>
+			<onfocus condition="!String.IsEqual(window(movieinformation).property(Breadcrumb_Level),1)">Dialog.Close(all,true)</onfocus>
 			<onfocus condition="!String.IsEqual(window(movieinformation).property(Breadcrumb_Level),1)">SetFocus(5003)</onfocus>
 
 		</control>
 
 		<!-- Background -->
 		<control type="group">
-			<visible>!$EXP[InfoWidget_HasFocus]</visible>
-			<include>Dialog_Fade_Animation</include>
+			<visible>!Control.IsVisible(9002) + !String.IsEqual(Window(movieinformation).Property(Focused_Button),$LOCALIZE[13511])</visible>
+			<include>Delayed_Content_Fade_Animation</include>
 			<control type="group">
-				<visible>Window.IsActive(movieinformation) + !String.IsEqual(Window(movieinformation).Property(Focused_Button),$LOCALIZE[13511])</visible>
-				<include>Delayed_Content_Fade_Animation</include>
+				<visible>!$EXP[InfoWidget_HasFocus]</visible>
+				<include>Dialog_Fade_Animation</include>
 				<control type="image">
 					<texture colordiffuse="$VAR[Dark_Color]">views/white_100.png</texture>
 				</control>
@@ -200,7 +200,7 @@
 		<!-- Content -->
 		<control type="group">
 			<visible>!Control.IsVisible(9002) + Window.IsActive(movieinformation)</visible>
-			<include>Delayed_Content_Fade_Animation</include>
+			<include>Delayed_Info_Content_Fade_Animation</include>
 			<control type="group">
 				<visible>!$EXP[TransparentDialog_IsVisible]</visible>
 				<visible>!$EXP[InfoWidget_HasFocus]</visible>
@@ -352,12 +352,6 @@
 					<param name="left_label_visible" value="true"/>
 					<param name="background_visible" value="false"/>
 				</include>
-			</control>
-
-			<control type="group">
-				<visible>$EXP[TransparentDialog_IsVisible] + $EXP[InfoWidget_HasFocus]</visible>
-				<include>Transparent_Dialog_Background</include>
-				<include>Content_Fade_Animation</include>
 			</control>
 
 		</control>

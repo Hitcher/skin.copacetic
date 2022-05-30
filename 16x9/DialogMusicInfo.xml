@@ -2,6 +2,8 @@
 <window>
 	<!-- musicinformation -->
 	<onload condition="System.HasAddon(script.embuary.helper)">RunScript(script.embuary.helper,action=split,value='$ESCINFO[ListItem.Genre]',separator='" / "',prop=GenreSplit)</onload>
+	<onload condition="String.IsEqual(ListItem.DBType,artist)">SetProperty(Info_Type,artist,musicinformation)</onload>
+	<onload condition="String.IsEqual(ListItem.DBType,album)">SetProperty(Info_Type,album,musicinformation)</onload>
 	<onload>SetProperty(ArtistDBID,$INFO[ListItem.DBID],musicinformation)</onload>
 	<onload>SetProperty(ResetScroll," ")</onload>
 
@@ -69,7 +71,7 @@
 
 		<!-- Artwork -->
 		<control type="group">
-			<visible>[Window.IsActive(musicinformation) | Window.IsActive(songinformation)] + ![Window.Is(songinformation) + Window.IsActive(musicinformation)]</visible>
+			<visible>[Window.IsActive(musicinformation) | Window.IsActive(songinformation)] + ![Window.Is(songinformation) + Window.IsActive(musicinformation)] + !Control.IsVisible(9002)</visible>
 			<include>Delayed_Content_Fade_Animation</include>
 
 			<!-- Background -->
@@ -129,7 +131,7 @@
 		<!-- Content -->
 		<control type="group">
 			<visible>[Window.IsActive(musicinformation) | Window.IsActive(songinformation)] + !Control.IsVisible(9002) + ![Window.Is(songinformation) + Window.IsActive(musicinformation)]</visible>
-			<include>Delayed_Content_Fade_Animation</include>
+			<include>Delayed_Info_Content_Fade_Animation</include>
 			<control type="group">
 				<visible>!$EXP[TransparentDialog_IsVisible]</visible>
 				<visible>!$EXP[InfoWidget_HasFocus]</visible>

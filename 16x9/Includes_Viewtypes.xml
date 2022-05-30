@@ -11,6 +11,16 @@
 			</control>
 		</include>
 
+		<include name="Season_Details">
+			<control type="button">
+				<visible allowhiddenfocus="true">false</visible>
+				<onfocus condition="Container.Content(seasons)">SetProperty(Season_Fanart,$INFO[ListItem.Art(fanart)],home)</onfocus>
+				<onfocus condition="Container.Content(seasons)">SetProperty(Season_Details,$INFO[ListItem.Year]$INFO[ListItem.Season, / $LOCALIZE[20373] ],home)</onfocus>
+				<onunfocus condition="!String.IsEmpty(Window(home).Property(Season_Fanart))">ClearProperty(Season_Fanart,home)</onunfocus>
+				<onunfocus condition="!String.IsEmpty(Window(home).Property(Season_Details))">ClearProperty(Season_Details,home)</onunfocus>
+			</control>
+		</include>
+
 		<include name="HiddenWidgetFocusButton">
 			<control type="button">
 				<visible allowhiddenfocus="true">false</visible>
@@ -154,6 +164,7 @@
 					</itemlayout>
 					<!-- Background + !Details -->
 					<focusedlayout height="60" width="1680" condition="$EXP[$PARAM[viewtype_label]View_Display_IsBackground] + !$EXP[$PARAM[viewtype_label]View_Details_Info_IsVisible]">
+						<include>Season_Details</include>
 						<include>HiddenFocusButton</include>
 						<control type="group">
 							<visible>$EXP[$PARAM[viewtype_label]View_IsVisible] + !$EXP[OpaqueDialog_IsVisible]</visible>
@@ -178,6 +189,7 @@
 					</focusedlayout>
 					<!-- Background + Details -->
 					<focusedlayout height="60" width="1200" condition="$EXP[$PARAM[viewtype_label]View_Display_IsBackground] + $EXP[$PARAM[viewtype_label]View_Details_Info_IsVisible]">
+						<include>Season_Details</include>
 						<include>HiddenFocusButton</include>
 						<control type="group">
 							<visible>$EXP[$PARAM[viewtype_label]View_IsVisible] + !$EXP[OpaqueDialog_IsVisible]</visible>
@@ -202,6 +214,7 @@
 					</focusedlayout>
 					<!-- Thumbnails + !Details -->
 					<focusedlayout height="60" width="990" condition="[$EXP[$PARAM[viewtype_label]View_Display_IsThumbnails] + !$EXP[$PARAM[viewtype_label]View_Details_Info_IsVisible]]">
+						<include>Season_Details</include>
 						<include>HiddenFocusButton</include>
 						<control type="group">
 							<visible>$EXP[$PARAM[viewtype_label]View_IsVisible] + !$EXP[OpaqueDialog_IsVisible]</visible>
@@ -226,6 +239,7 @@
 					</focusedlayout>
 					<!-- Thumbnails + Details -->
 					<focusedlayout height="60" width="780" condition="$EXP[$PARAM[viewtype_label]View_Display_IsThumbnails] + $EXP[$PARAM[viewtype_label]View_Details_Info_IsVisible]">
+						<include>Season_Details</include>
 						<include>HiddenFocusButton</include>
 						<control type="group">
 							<visible>$EXP[$PARAM[viewtype_label]View_IsVisible] + !$EXP[OpaqueDialog_IsVisible]</visible>
@@ -371,6 +385,7 @@
 					<orientation>$PARAM[orientation]</orientation>
 					<scrolltime tween="sine" easing="inout">360</scrolltime>
 					<focusedlayout>
+						<include>Season_Details</include>
 						<include>HiddenFocusButton</include>
 						<include>HiddenGridFocusButton</include>
 					</focusedlayout>
@@ -529,14 +544,14 @@
 					<top>$PARAM[top]</top>
 					<width>$PARAM[width]</width>
 					<height>$PARAM[height]</height>
-					<visible>Window.IsVisible(visualisation) | !String.IsEmpty(Container.ListItemNoWrap($PARAM[position]).Label)</visible>
+					<visible>Window.IsVisible(visualisation) | Window.IsVisible(addoninformation) | !String.IsEmpty(Container.ListItemNoWrap($PARAM[position]).Label)</visible>
 					<visible>$PARAM[visible]</visible>
 					<animation effect="$PARAM[animationeffect]" end="$PARAM[animationend]" condition="$PARAM[animationcondition]" time="$PARAM[animationtime]" tween="$PARAM[animationtween]" easing="$PARAM[animationeasing]" reversible="$PARAM[animationreversible]">$PARAM[animationtype]</animation>
 					<!-- Artwork -->
 					<control type="image">
 						<include>$PARAM[switchingtosecondarylistanimation]</include>
 						<include>Focus_Zoom_Animation</include>
-						<visible>![$EXP[InfoWidget_ActorCredits_HasFocus] + $EXP[InfoWidget_ActorCredits_IsUpdating]]</visible>
+						<visible>!Container.IsUpdating</visible>
 						<texture fallback="$PARAM[fallback]" background="true" diffuse="$PARAM[diffuse]">$VAR[$PARAM[artwork_icon]($PARAM[position])Content]</texture>
 						<!--<texture background="true" colordiffuse="$VAR[Accent_Color]">views/white_100.png</texture>-->
 						<aspectratio align="center" aligny="center">$PARAM[aspectratio]</aspectratio>
@@ -2632,6 +2647,7 @@
 					</include>
 				</itemlayout>
 				<focusedlayout width="592" height="333" condition="$EXP[GridView_Display_IsFanart]">
+					<include>Season_Details</include>
 					<include>HiddenFocusButton</include>
 					<include>HiddenGridFocusButton</include>
 					<include content="GridView_Icon_Focused">
@@ -2654,6 +2670,7 @@
 					</include>
 				</itemlayout>
 				<focusedlayout width="360" height="540" condition="$EXP[GridView_Display_IsPosters]">
+					<include>Season_Details</include>
 					<include>HiddenFocusButton</include>
 					<include>HiddenGridFocusButton</include>
 					<include content="GridView_Icon_Focused">
@@ -2677,6 +2694,7 @@
 					</include>
 				</itemlayout>
 				<focusedlayout width="360" height="360" condition="$EXP[GridView_Display_IsSquare]">
+					<include>Season_Details</include>
 					<include>HiddenFocusButton</include>
 					<include>HiddenGridFocusButton</include>
 					<include content="GridView_Icon_Focused">
@@ -2776,6 +2794,7 @@
 			<param name="item_height"/>
 			<param name="focus_width"/>
 			<param name="focus_height"/>
+			<param name="show_gradient" default="![Container.Content(artists) | Container.Content(albums) | Container.Content(songs) | [Control.HasFocus(50) + !Container.Content(sets)]]"/>
 			<param name="2x_item_width"/>
 			<param name="2x_item_width_plus_focus_width"/>
 			<param name="3x_item_width_plus_focus_width"/>
@@ -2810,7 +2829,7 @@
 						<param name="focus_border_size" value="11"/>
 						<param name="focus_border_color" value="$VAR[Accent_Color]"/>
 						<param name="focus_border_texture" value="views/border_10px.png"/>
-						<param name="show_gradient" value="![Container.Content(artists) | Container.Content(albums) | Container.Content(songs)]"/>
+						<param name="show_gradient" value="$PARAM[show_gradient]"/>
 						<param name="unfocused_overlay" value="false"/>
 						<param name="artworkmask" value="false"/>
 						<param name="2x_item_width" value="$PARAM[2x_item_width]"/>
@@ -2846,7 +2865,7 @@
 						<param name="4x_item_width" value="$PARAM[3x_item_width_plus_focus_width]"/>
 						<param name="5x_item_width" value="$PARAM[4x_item_width_plus_focus_width]"/>
 						<param name="6x_item_width" value="$PARAM[5x_item_width_plus_focus_width]"/>
-						<param name="showgradient" value="![Container.Content(artists) | Container.Content(albums) | Container.Content(songs)]"/>
+						<param name="showgradient" value="$PARAM[show_gradient]"/>
 						<param name="artworkmask" value="false"/>
 					</include>
 				</control>
