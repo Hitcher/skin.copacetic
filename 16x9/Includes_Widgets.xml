@@ -371,14 +371,14 @@
 				</include>
 			</control>
 			<control type="group">
-				<visible>!Window.IsVisible(shutdownmenu) + Control.HasFocus($PARAM[id])</visible>
+				<visible>!Window.IsVisible(shutdownmenu) + Control.HasFocus($PARAM[id]) + !Container($PARAM[id].IsUpdating)</visible>
 				<include>Delayed_Content_Fade_Animation</include>
 				<include content="$PARAM[widget_view]View_Details">
 					<param name="id" value="$PARAM[id]"/>
 				</include>
 			</control>
 			<control type="group">
-				<visible>!Window.IsVisible(shutdownmenu) + Control.HasFocus($PARAM[id]) + String.IsEqual(Control.GetLabel($PARAM[id]10),Grid)</visible>
+				<visible>!Window.IsVisible(shutdownmenu) + Control.HasFocus($PARAM[id]) + String.IsEqual(Control.GetLabel($PARAM[id]10),Grid) + !Container($PARAM[id].IsUpdating)</visible>
 				<include>Delayed_Content_Fade_Animation</include>
 				<animation effect="slide" start="0" end="0,677" time="0" condition="String.IsEqual(Control.GetLabel($PARAM[id]11),Fanart)">Conditional</animation>
 				<animation effect="slide" start="0" end="0,690" time="0" condition="String.IsEqual(Control.GetLabel($PARAM[id]11),Square)">Conditional</animation>
@@ -388,6 +388,17 @@
 					<param name="info_label" value="$VAR[Info_Label,/ ]"/>
 					<param name="label_color" value="$VAR[Primary_Color]"/>
 				</include>
+			</control>
+			<!-- Busy spinner if container is updating -->
+			<control type="image">
+				<visible>Control.HasFocus($PARAM[id]) + Container($PARAM[id]).IsUpdating</visible>
+				<include>Content_Fade_Animation</include>
+				<centerleft>50%</centerleft>
+				<centertop>50%</centertop>
+				<width>60</width>
+				<height>60</height>
+				<texture colordiffuse="$VAR[Volume_Focus_Color]">dialogs/busy.png</texture>
+				<animation effect="rotate" start="0" end="-360" center="auto" time="1800" loop="true" tween="cubic" easing="out" condition="true">Conditional</animation>
 			</control>
 			<!-- Labels to check view and display type -->
 			<control type="label" id="$PARAM[id]10">
