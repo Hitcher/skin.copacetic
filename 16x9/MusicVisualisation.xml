@@ -12,49 +12,41 @@
 
 		<!-- Main artwork -->
 		<include content="ListIcon">
-			<param name="left" value="780"/>
-			<param name="top" value="120"/>
-			<param name="width" value="840"/>
-			<param name="height" value="840"/>
+			<param name="left" value="600"/>
+			<param name="top" value="180"/>
+			<param name="width" value="720"/>
+			<param name="height" value="720"/>
 			<param name="bordervisible" value="true"/>
 		</include>
-
-		<!-- Next up -->
-		<control type="group">
-			<visible>!Playlist.IsRepeatOne</visible>
-			<left>1620</left>
-			<top>300</top>
-			<width>480</width>
-			<height>480</height>
-			<include content="ListIcon">
-				<param name="position" value="1"/>
-				<param name="visible" value="MusicPlayer.HasNext + !String.IsEmpty(MusicPlayer.offset(1).Title)"/>
-			</include>
-			<include content="DropShadow">
-				<param name="height" value="100%"/>
-				<param name="flipx" value="true"/>
-				<param name="visible" value="MusicPlayer.HasNext + !String.IsEmpty(MusicPlayer.offset(1).Title)"/>
-			</include>
-		</control>
-
 		<!-- Artwork Mask -->
-		<control type="group">
+		<control type="image">
 			<visible>Window.IsVisible(musicosd) | Player.Paused | Player.Rewinding | Player.Forwarding</visible>
 			<include>Dialog_Fade_Animation</include>
-			<control type="image">
-				<left>780</left>
-				<top>120</top>
-				<width>840</width>
-				<height>840</height>
-				<texture colordiffuse="$VAR[Artwork_Mask]">views/white_100.png</texture>
-			</control>
-			<control type="image">
+			<left>600</left>
+			<top>180</top>
+			<width>720</width>
+			<height>720</height>
+			<texture colordiffuse="$VAR[Artwork_Mask]">views/white_100.png</texture>
+		</control>
+		<!-- Up next -->
+		<control type="group">
+			<visible>!Window.IsVisible(musicosd) + !$EXP[TransparentDialog_IsVisible]</visible>
+			<include>Delayed_Content_Fade_Animation</include>
+			<control type="group">
 				<visible>!Playlist.IsRepeatOne</visible>
-				<left>1620</left>
-				<top>300</top>
-				<width>480</width>
-				<height>480</height>
-				<texture colordiffuse="$VAR[Artwork_Mask]">views/white_100.png</texture>
+				<right>60</right>
+				<top>0</top>
+				<width>180</width>
+				<height>180</height>
+				<include content="ListIcon">
+					<param name="position" value="1"/>
+					<param name="visible" value="MusicPlayer.HasNext + !String.IsEmpty(MusicPlayer.offset(1).Title)"/>
+				</include>
+				<control type="image">
+					<visible>Window.IsVisible(volumebar)</visible>
+					<include>Dialog_Fade_Animation</include>
+					<texture colordiffuse="$VAR[Artwork_Mask]">views/white_100.png</texture>
+				</control>
 			</control>
 		</control>
 
@@ -65,22 +57,58 @@
 			<control type="group">
 				<visible>!Window.IsVisible(musicosd)</visible>
 				<include>Delayed_Content_Fade_Animation</include>
-				<!-- Now playing... 1/11 -->
 				<include content="Breadcrumb_Label">
 					<param name="label_color" value="$VAR[Primary_Color]"/>
-					<param name="title_label" value="$LOCALIZE[31564]"/>
-					<param name="info_label" value="$INFO[MusicPlayer.PlaylistPosition]$INFO[MusicPlayer.PlaylistLength,/]"/>
+					<param name="title_label" value="$INFO[MusicPlayer.Artist]"/>
+					<param name="info_label" value="$INFO[MusicPlayer.Year, / ]$INFO[MusicPlayer.Album, / ]"/>
 				</include>
 			</control>
-			<include content="Common_Details">
-				<param name="viewtype_label" value="Showcase"/>
-				<param name="left" value="60"/>
-				<param name="width" value="660"/>
-				<param name="titleheight" value="280"/>
-				<param name="titlelabel" value="$INFO[MusicPlayer.Title]"/>
-				<param name="infoheight" value="280"/>
-				<param name="infolabel" value="[UPPERCASE]$INFO[MusicPlayer.Artist]$INFO[MusicPlayer.Year, / ]$INFO[MusicPlayer.Album, / ][/UPPERCASE]"/>
-			</include>
+			<!-- Bottom label -->
+			<control type="label">
+				<width>1680</width>
+				<centerleft>50%</centerleft>
+				<height>52</height>
+				<bottom>82</bottom>
+				<font>Strip_Title</font>
+				<textcolor>$VAR[Primary_Color]</textcolor>
+				<label>$INFO[MusicPlayer.Title]</label>
+				<align>center</align>
+				<aligny>center</aligny>
+				<scroll>false</scroll>
+			</control>
+			<!-- Next up -->
+			<control type="group">
+				<visible>!Window.IsVisible(musicosd)</visible>
+				<include>Delayed_Content_Fade_Animation</include>
+				<control type="grouplist">
+					<visible>MusicPlayer.HasNext + !String.IsEmpty(MusicPlayer.offset(1).Title)</visible>
+					<visible>!Window.IsVisible(volumebar)</visible>
+					<include>Content_Fade_Animation</include>
+					<top>0</top>
+					<height>180</height>
+					<width>900</width>
+					<right>270</right>
+					<orientation>vertical</orientation>
+					<align>center</align>
+					<itemgap>0</itemgap>
+					<control type="label">
+						<height>40</height>
+						<label>$LOCALIZE[209]</label>
+						<font>MusicPlayer_Title</font>
+						<textcolor>$VAR[Primary_Color]</textcolor>
+						<align>right</align>
+					</control>
+					<control type="label">
+						<height>35</height>
+						<label>$INFO[MusicPlayer.offset(1).Title]</label>
+						<font>MusicPlayer_Info</font>
+						<textcolor>$VAR[Primary_Color]</textcolor>
+						<align>right</align>
+						<scroll>true</scroll>
+						<scrollsuffix> / </scrollsuffix>
+					</control>
+				</control>
+			</control>
 		</control>
 
 	</controls>
