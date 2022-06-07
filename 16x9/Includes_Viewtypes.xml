@@ -542,7 +542,7 @@
 					<top>$PARAM[top]</top>
 					<width>$PARAM[width]</width>
 					<height>$PARAM[height]</height>
-					<visible>Window.IsVisible(visualisation) | Window.IsVisible(addoninformation) | !String.IsEmpty(Container.ListItemNoWrap($PARAM[position]).Label)</visible>
+					<visible>Window.IsVisible(visualisation) | Window.IsVisible(addoninformation) | !String.IsEmpty(Container.ListItemNoWrap($PARAM[position]).Label) | $EXP[ListView_IsVisible] | $EXP[BillboardView_IsVisible]</visible>
 					<visible>$PARAM[visible]</visible>
 					<animation effect="$PARAM[animationeffect]" end="$PARAM[animationend]" condition="$PARAM[animationcondition]" time="$PARAM[animationtime]" tween="$PARAM[animationtween]" easing="$PARAM[animationeasing]" reversible="$PARAM[animationreversible]">$PARAM[animationtype]</animation>
 					<!-- Artwork -->
@@ -554,17 +554,9 @@
 						<aspectratio align="center" aligny="center">$PARAM[aspectratio]</aspectratio>
 						<fadetime>$PARAM[fadetime]</fadetime>
 					</control>
-					<!-- Multiart backing -->
-					<control type="group">
-						<visible>$PARAM[multiart]</visible>
-						<control type="image">
-							<visible>!$EXP[ContentSwitching]</visible>
-							<animation effect="fade" start="0" end="100" time="360" delay="1000" tween="sine" easing="out" reversible="false" condition="!$EXP[ContentSwitching]">Conditional</animation>
-							<texture colordiffuse="ff808080">views/white_100.png</texture>
-						</control>
-					</control>
 					<!-- Multiart -->
 					<control type="multiimage">
+						<visible>Skin.HasSetting(Multiart_Slideshow)</visible>
 						<visible>$PARAM[multiart]</visible>
 						<imagepath>$VAR[Multiart_Path]</imagepath>
 						<fadetime>1080</fadetime>
@@ -928,7 +920,18 @@
 			<definition>
 				<control type="group">
 					<visible>$PARAM[visible]</visible>
-					<!-- PREVIOUS SCROLL -->
+					<!-- STATIC -->
+					<include content="ListIcon">
+						<param name="artwork_icon" value="$PARAM[artwork_icon]"/>
+						<param name="visible" value="!$EXP[ContentSwitching] | String.IsEqual(Container($PARAM[target_id]).NumItems,1)"/>
+						<param name="switchingtosecondarylistanimation" value="Secondary_List_Scroll_Animation"/>
+						<param name="aspectratio" value="$PARAM[aspectratio]"/>
+						<param name="fallback" value="$PARAM[fallback]"/>
+						<param name="artworkmask" value="$PARAM[artworkmask]"/>
+						<param name="showgradient" value="$PARAM[showgradient]"/>
+						<param name="showbreadcrumboverlay" value="$PARAM[show_breadcrumb_overlay]"/>
+					</include>
+					<!-- HOLD / FADE OUT PREVIOUS -->
 					<control type="group">
 						<visible>$EXP[ContentPrevious] + !$EXP[ContentNext] + !String.IsEqual(Container($PARAM[target_id]).NumItems,1) + !String.IsEqual(Control.GetLabel($PARAM[target_id]21),Control.GetLabel($PARAM[target_id]22))</visible>
 						<!-- Fade Out Icon 0 if aspect ratio not fixed -->
@@ -957,25 +960,8 @@
 							<param name="showgradient" value="$PARAM[showgradient]"/>
 							<param name="showbreadcrumboverlay" value="$PARAM[show_breadcrumb_overlay]"/>
 						</include>
-						<!-- Fade in Icon -1 -->
-						<control type="group">
-							<animation effect="zoom" start="-45,0,1965,1080" end="0,0,1920,1080" time="135" reversible="false" condition="$EXP[BillboardView_IsVisible] + !Container($PARAM[target_id]).OnPrevious">Conditional</animation>
-							<include content="ListIcon">
-								<param name="artwork_icon" value="$PARAM[artwork_icon]"/>
-								<param name="visible" value="!Container($PARAM[target_id]).OnPrevious"/>
-								<param name="aspectratio" value="$PARAM[aspectratio]"/>
-								<param name="fallback" value="$PARAM[fallback]"/>
-								<param name="animationtype" value="Visible"/>
-								<param name="animationcondition" value="true"/>
-								<param name="animationeffect" value="fade"/>
-								<param name="animationend" value="100"/>
-								<param name="artworkmask" value="$PARAM[artworkmask]"/>
-								<param name="showgradient" value="$PARAM[showgradient]"/>
-								<param name="showbreadcrumboverlay" value="$PARAM[show_breadcrumb_overlay]"/>
-							</include>
-						</control>
 					</control>
-					<!-- NEXT SCROLL -->
+					<!-- HOLD / FADE OUT NEXT -->
 					<control type="group">
 					  <visible>$EXP[ContentNext] + !$EXP[ContentPrevious] + !String.IsEqual(Container($PARAM[target_id]).NumItems,1) + !String.IsEqual(Control.GetLabel($PARAM[target_id]21),Control.GetLabel($PARAM[target_id]20))</visible>
 						<!-- Fade Out Icon 0 if aspect ratio not fixed -->
@@ -1004,35 +990,67 @@
 							<param name="showgradient" value="$PARAM[showgradient]"/>
 							<param name="showbreadcrumboverlay" value="$PARAM[show_breadcrumb_overlay]"/>
 						</include>
-						<!-- Fade in Icon 1 -->
+					</control>
+					<!-- Multiart -->
+					<control type="group">
+						<visible>Skin.HasSetting(Multiart_Slideshow)</visible>
+						<include>Secondary_List_Scroll_Animation</include>
+						<control type="image">
+							<visible>!String.IsEqual(Control.GetLabel(398041),blank)</visible>
+							<include>Multiart_Backing_Fade_Animation</include>
+							<texture colordiffuse="ff808080">views/white_100.png</texture>
+							<aspectratio>stretch</aspectratio>
+						</control>
 						<control type="group">
-							<animation effect="zoom" start="0,0,1965,1080" end="0,0,1920,1080" time="135" reversible="false" condition="$EXP[BillboardView_IsVisible] + !Container($PARAM[target_id]).OnNext">Conditional</animation>
-						  <include content="ListIcon">
-								<param name="artwork_icon" value="$PARAM[artwork_icon]"/>
-						    <param name="visible" value="!Container($PARAM[target_id]).OnNext"/>
-						    <param name="aspectratio" value="$PARAM[aspectratio]"/>
-						    <param name="fallback" value="$PARAM[fallback]"/>
-						    <param name="animationtype" value="Visible"/>
-						    <param name="animationcondition" value="true"/>
-						    <param name="animationeffect" value="fade"/>
-						    <param name="animationend" value="100"/>
-						    <param name="artworkmask" value="$PARAM[artworkmask]"/>
-						    <param name="showgradient" value="$PARAM[showgradient]"/>
+							<visible>!String.IsEqual(Control.GetLabel(398041),blank)</visible>
+							<include>Delayed_Multiart_Fade_Animation</include>
+							<include content="ListIcon">
+								<param name="multiart" value="true"/>
+								<param name="fallback" value="false"/>s
+								<param name="aspectratio" value="$PARAM[aspectratio]"/>
+								<param name="showgradient" value="$PARAM[showgradient]"/>
 								<param name="showbreadcrumboverlay" value="$PARAM[show_breadcrumb_overlay]"/>
-						  </include>
+								<param name="artworkmask" value="$PARAM[artworkmask]"/>
+							</include>
 						</control>
 					</control>
-					<!-- STATIC or during overlap of ContentPrevious and ContentNext -->
-					<include content="ListIcon">
-						<param name="artwork_icon" value="$PARAM[artwork_icon]"/>
-						<param name="visible" value="!$EXP[ContentSwitching] | String.IsEqual(Container($PARAM[target_id]).NumItems,1) | [$EXP[ContentPrevious] + $EXP[ContentNext]] | [$EXP[ContentPrevious] + String.IsEqual(Control.GetLabel($PARAM[target_id]21),Control.GetLabel($PARAM[target_id]22))] | [$EXP[ContentNext] + String.IsEqual(Control.GetLabel($PARAM[target_id]21),Control.GetLabel($PARAM[target_id]20))]"/>
-						<param name="switchingtosecondarylistanimation" value="Secondary_List_Scroll_Animation"/>
-						<param name="aspectratio" value="$PARAM[aspectratio]"/>
-						<param name="fallback" value="$PARAM[fallback]"/>
-						<param name="artworkmask" value="$PARAM[artworkmask]"/>
-						<param name="showgradient" value="$PARAM[showgradient]"/>
-						<param name="showbreadcrumboverlay" value="$PARAM[show_breadcrumb_overlay]"/>
-					</include>
+					<!-- FADE IN PREVIOUS -->
+					<control type="group">
+						<visible>$EXP[ContentPrevious] + !$EXP[ContentNext] + !String.IsEqual(Container($PARAM[target_id]).NumItems,1) + !String.IsEqual(Control.GetLabel($PARAM[target_id]21),Control.GetLabel($PARAM[target_id]22))</visible>
+						<animation effect="zoom" start="-45,0,1965,1080" end="0,0,1920,1080" time="135" reversible="false" condition="$EXP[BillboardView_IsVisible] + !Container($PARAM[target_id]).OnPrevious">Conditional</animation>
+						<include content="ListIcon">
+							<param name="artwork_icon" value="$PARAM[artwork_icon]"/>
+							<param name="visible" value="!Container($PARAM[target_id]).OnPrevious"/>
+							<param name="aspectratio" value="$PARAM[aspectratio]"/>
+							<param name="fallback" value="$PARAM[fallback]"/>
+							<param name="animationtype" value="Visible"/>
+							<param name="animationcondition" value="true"/>
+							<param name="animationeffect" value="fade"/>
+							<param name="animationend" value="100"/>
+							<param name="artworkmask" value="$PARAM[artworkmask]"/>
+							<param name="showgradient" value="$PARAM[showgradient]"/>
+							<param name="showbreadcrumboverlay" value="$PARAM[show_breadcrumb_overlay]"/>
+						</include>
+					</control>
+					<!-- FADE IN NEXT -->
+					<control type="group">
+						<visible>$EXP[ContentNext] + !$EXP[ContentPrevious] + !String.IsEqual(Container($PARAM[target_id]).NumItems,1) + !String.IsEqual(Control.GetLabel($PARAM[target_id]21),Control.GetLabel($PARAM[target_id]20))</visible>
+						<animation effect="zoom" start="0,0,1965,1080" end="0,0,1920,1080" time="135" reversible="false" condition="$EXP[BillboardView_IsVisible] + !Container($PARAM[target_id]).OnNext">Conditional</animation>
+					  <include content="ListIcon">
+							<param name="artwork_icon" value="$PARAM[artwork_icon]"/>
+					    <param name="visible" value="!Container($PARAM[target_id]).OnNext"/>
+					    <param name="aspectratio" value="$PARAM[aspectratio]"/>
+					    <param name="fallback" value="$PARAM[fallback]"/>
+					    <param name="animationtype" value="Visible"/>
+					    <param name="animationcondition" value="true"/>
+					    <param name="animationeffect" value="fade"/>
+					    <param name="animationend" value="100"/>
+					    <param name="artworkmask" value="$PARAM[artworkmask]"/>
+					    <param name="showgradient" value="$PARAM[showgradient]"/>
+							<param name="showbreadcrumboverlay" value="$PARAM[show_breadcrumb_overlay]"/>
+					  </include>
+					</control>
+
 				</control>
 			</definition>
 		</include>
@@ -2143,11 +2161,10 @@
 					<top>$PARAM[top]</top>
 					<width>$PARAM[focus_width]</width>
 					<height>$PARAM[focus_height]</height>
-					<visible>$EXP[$PARAM[viewtype_label]View_Display_Is$PARAM[displaytype_label]] + !$EXP[ContainerSwitching] + !$EXP[OptionsSwitching]</visible>
 					<include>Secondary_List_Scroll_Animation</include>
+					<visible>!$EXP[InfoDialog_IsVisible]</visible>
+					<include>Delayed_Content_Fade</include>
 					<control type="group">
-						<visible>!$EXP[ContentSwitching] + !String.IsEqual(Control.GetLabel(398041),blank)</visible>
-						<include>Multiart_Fade_Animation</include>
 						<animation effect="slide" end="1920,0" time="360" tween="sine" easing="inout" reversible="false" condition="$EXP[ShowcaseView_IsVisible] + $EXP[ContentPrevious] + !Container.OnPrevious + !$EXP[ShowcaseView_Details_Off]">Conditional</animation>
 						<animation effect="slide" end="$PARAM[item_width],0" time="360" tween="sine" easing="inout" reversible="false" condition="$EXP[ShowcaseView_IsVisible] + $EXP[ContentPrevious] + !Container.OnPrevious + $EXP[ShowcaseView_Details_Off]">Conditional</animation>
 						<animation effect="slide" end="-1920,0" time="360" tween="sine" easing="inout" reversible="false" condition="$EXP[ShowcaseView_IsVisible] + $EXP[ContentNext] + !Container.OnNext + !$EXP[ShowcaseView_Details_Off]">Conditional</animation>
@@ -2155,20 +2172,29 @@
 						<animation effect="zoom" end="$PARAM[focus_width],$PARAM[item_top],$PARAM[item_width],$PARAM[item_height]" time="360" tween="sine" easing="inout" reversible="false" condition="$EXP[StripView_IsVisible] + $EXP[ContentPrevious] + !Container.OnPrevious">Conditional</animation>
 						<animation effect="zoom" end="-$PARAM[item_width],$PARAM[item_top],$PARAM[item_width],$PARAM[item_height]" time="360" tween="sine" easing="inout" reversible="false" condition="$EXP[StripView_IsVisible] + $EXP[ContentNext] + !Container.OnNext + $EXP[StripView_Details_Off]">Conditional</animation>
 						<animation effect="slide" end="-$PARAM[2x_item_width_plus_focus_width],0" time="360" tween="sine" easing="inout" reversible="false" condition="$EXP[StripView_IsVisible] + $EXP[ContentNext] + !Container.OnNext + !$EXP[StripView_Details_Off]">Conditional</animation>
-						<!-- Artwork -->
-						<include content="ListIcon">
-							<param name="multiart" value="true"/>
-							<param name="fallback" value="false"/>
-							<param name="showgradient" value="$PARAM[show_gradient]"/>
-							<param name="showbreadcrumboverlay" value="$PARAM[show_breadcrumb_overlay]"/>
-							<param name="artworkmask" value="$PARAM[artwork_mask]"/>
-							<param name="artworkmaskanimationcondition" value="$PARAM[artwork_mask_animation_condition]"/>
-							<param name="bordervisible" value="$PARAM[focus_border_visible]"/>
-							<param name="borderedge" value="$PARAM[focus_border_edge]"/>
-							<param name="bordersize" value="$PARAM[focus_border_size]"/>
-							<param name="bordercolor" value="$PARAM[focus_border_color]"/>
-							<param name="bordertexture" value="$PARAM[focus_border_texture]"/>
-						</include>
+						<control type="image">
+							<visible>$EXP[$PARAM[viewtype_label]View_Display_Is$PARAM[displaytype_label]] + !$EXP[ContainerSwitching] + !$EXP[OptionsSwitching] + !String.IsEqual(Control.GetLabel(398041),blank)</visible>
+							<include>Multiart_Backing_Fade_Animation</include>
+							<texture colordiffuse="ff808080">views/white_100.png</texture>
+							<aspectratio>stretch</aspectratio>
+						</control>
+						<control type="group">
+							<visible>$EXP[$PARAM[viewtype_label]View_Display_Is$PARAM[displaytype_label]] + !$EXP[ContainerSwitching] + !$EXP[OptionsSwitching] + !$EXP[ContentSwitching] + !String.IsEqual(Control.GetLabel(398041),blank)</visible>
+							<include>Multiart_Fade_Animation</include>
+							<include content="ListIcon">
+								<param name="multiart" value="true"/>
+								<param name="fallback" value="false"/>
+								<param name="showgradient" value="$PARAM[show_gradient]"/>
+								<param name="showbreadcrumboverlay" value="$PARAM[show_breadcrumb_overlay]"/>
+								<param name="artworkmask" value="$PARAM[artwork_mask]"/>
+								<param name="artworkmaskanimationcondition" value="$PARAM[artwork_mask_animation_condition]"/>
+								<param name="bordervisible" value="$PARAM[focus_border_visible]"/>
+								<param name="borderedge" value="$PARAM[focus_border_edge]"/>
+								<param name="bordersize" value="$PARAM[focus_border_size]"/>
+								<param name="bordercolor" value="$PARAM[focus_border_color]"/>
+								<param name="bordertexture" value="$PARAM[focus_border_texture]"/>
+							</include>
+						</control>
 					</control>
 				</control>
 				<control type="group">
@@ -2296,7 +2322,7 @@
 					<param name="2x_item_width" value="$PARAM[2x_item_width]"/>
 					<param name="2x_item_width_plus_focus_width" value="$PARAM[2x_item_width_plus_focus_width]"/>
 				</include>
-				<include content="MultiArt">
+				<include condition="Skin.HasSetting(Multiart_Slideshow)" content="MultiArt">
 					<param name="viewtype_label" value="Showcase"/>
 					<param name="displaytype_label" value="$PARAM[displaytype_label]"/>
 					<param name="left" value="0"/>
@@ -2423,7 +2449,7 @@
 					<param name="2x_item_width_minus_dropshadow_width" value="$PARAM[2x_item_width_minus_dropshadow_width]"/>
 					<param name="4x_item_width_plus_focus_width" value="$PARAM[4x_item_width_plus_focus_width]"/>
 				</include>
-				<include content="MultiArt">
+				<include condition="Skin.HasSetting(Multiart_Slideshow)" content="MultiArt">
 					<param name="viewtype_label" value="Strip"/>
 					<param name="displaytype_label" value="$PARAM[displaytype_label]"/>
 					<param name="left" value="$PARAM[2x_item_width]"/>
@@ -2815,7 +2841,7 @@
 						<param name="displaytype_label" value="Fanart"/>
 						<param name="artwork_icon" value="$PARAM[artwork_icon]"/>
 						<param name="progress_left" value="116"/>
-						<param name="progress_top" value="312"/>
+						<param name="progress_top" value="315"/>
 					</include>
 				</focusedlayout>
 			</definition>
@@ -2839,7 +2865,7 @@
 						<param name="artwork_icon" value="$PARAM[artwork_icon]"/>
 						<param name="progress_width" value="240"/>
 						<param name="progress_left" value="60"/>
-						<param name="progress_top" value="519"/>
+						<param name="progress_top" value="522"/>
 					</include>
 				</focusedlayout>
 			</definition>
@@ -2863,7 +2889,7 @@
 						<param name="artwork_icon" value="$PARAM[artwork_icon]"/>
 						<param name="progress_width" value="240"/>
 						<param name="progress_left" value="60"/>
-						<param name="progress_top" value="339"/>
+						<param name="progress_top" value="342"/>
 					</include>
 				</focusedlayout>
 			</definition>
@@ -3315,6 +3341,7 @@
 				</control>
 				<!-- Calculated -->
 	      <control type="group">
+					<animation effect="slide" start="0,0" end="0,6" time="0" condition="Skin.HasSetting(Unwatched_Indicator) + $EXP[ShowcaseView_IsVisible] + $EXP[ShowcaseView_Details_Off]">Conditional</animation>
 	        <visible>$PARAM[calculated_visible]</visible>
 	        <!-- Background -->
 	        <control type="image">
@@ -3324,7 +3351,9 @@
 					</control>
 	        <!-- Focus -->
 	        <control type="image">
-	          <animation effect="zoom" end="5,100" time="0" condition="Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],0) + Integer.IsLessOrEqual($NUMBER[Window(home).Property(WatchedPercentage)],5)">Conditional</animation>
+						<visible>!Integer.IsEqual($NUMBER[Window(home).Property(WatchedPercentage)],0)</visible>
+						<animation effect="zoom" end="0,100" time="0" condition="Integer.IsEqual($NUMBER[Window(home).Property(WatchedPercentage)],0)">Conditional</animation>
+						<animation effect="zoom" end="5,100" time="0" condition="Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],0) + Integer.IsLessOrEqual($NUMBER[Window(home).Property(WatchedPercentage)],5)">Conditional</animation>
 	          <animation effect="zoom" end="10,100" time="0" condition="Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],5) + Integer.IsLessOrEqual($NUMBER[Window(home).Property(WatchedPercentage)],10)">Conditional</animation>
 	          <animation effect="zoom" end="15,100" time="0" condition="Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],10) + Integer.IsLessOrEqual($NUMBER[Window(home).Property(WatchedPercentage)],15)">Conditional</animation>
 	          <animation effect="zoom" end="20,100" time="0" condition="Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],15) + Integer.IsLessOrEqual($NUMBER[Window(home).Property(WatchedPercentage)],20)">Conditional</animation>
@@ -3349,18 +3378,71 @@
 						<texture colordiffuse="$PARAM[focus_color]">views/white_100.png</texture>
 					</control>
 					<control type="group">
-						<visible>Container.Content(tvshows) | Container.Content(seasons)</visible>
+						<visible>Skin.HasSetting(Unwatched_Indicator)</visible>
+						<visible>![Control.HasFocus(8030) + Integer.IsEqual(Container(8030).ListItem.Property(UnWatchedEpisodes),0)]</visible>
+						<visible>![Control.HasFocus(8060) + Integer.IsEqual(Container(8060).ListItem.Property(UnWatchedEpisodes),0)]</visible>
+						<animation effect="slide" end="165" time="0" condition="![$EXP[GridView_Display_IsPosters] | $EXP[GridView_Display_IsSquare]] + Integer.IsEqual($NUMBER[Window(home).Property(WatchedPercentage)],0)">Conditional</animation>
+						<animation effect="slide" end="174" time="0" condition="![$EXP[GridView_Display_IsPosters] | $EXP[GridView_Display_IsSquare]] + Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],0) + Integer.IsLessOrEqual($NUMBER[Window(home).Property(WatchedPercentage)],5)">Conditional</animation>
+						<animation effect="slide" end="183" time="0" condition="![$EXP[GridView_Display_IsPosters] | $EXP[GridView_Display_IsSquare]] + Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],5) + Integer.IsLessOrEqual($NUMBER[Window(home).Property(WatchedPercentage)],10)">Conditional</animation>
+						<animation effect="slide" end="192" time="0" condition="![$EXP[GridView_Display_IsPosters] | $EXP[GridView_Display_IsSquare]] + Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],10) + Integer.IsLessOrEqual($NUMBER[Window(home).Property(WatchedPercentage)],15)">Conditional</animation>
+						<animation effect="slide" end="201" time="0" condition="![$EXP[GridView_Display_IsPosters] | $EXP[GridView_Display_IsSquare]] + Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],15) + Integer.IsLessOrEqual($NUMBER[Window(home).Property(WatchedPercentage)],20)">Conditional</animation>
+						<animation effect="slide" end="210" time="0" condition="![$EXP[GridView_Display_IsPosters] | $EXP[GridView_Display_IsSquare]] + Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],20) + Integer.IsLessOrEqual($NUMBER[Window(home).Property(WatchedPercentage)],25)">Conditional</animation>
+						<animation effect="slide" end="219" time="0" condition="![$EXP[GridView_Display_IsPosters] | $EXP[GridView_Display_IsSquare]] + Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],25) + Integer.IsLessOrEqual($NUMBER[Window(home).Property(WatchedPercentage)],30)">Conditional</animation>
+						<animation effect="slide" end="228" time="0" condition="![$EXP[GridView_Display_IsPosters] | $EXP[GridView_Display_IsSquare]] + Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],30) + Integer.IsLessOrEqual($NUMBER[Window(home).Property(WatchedPercentage)],35)">Conditional</animation>
+	          <animation effect="slide" end="237" time="0" condition="![$EXP[GridView_Display_IsPosters] | $EXP[GridView_Display_IsSquare]] + Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],35) + Integer.IsLessOrEqual($NUMBER[Window(home).Property(WatchedPercentage)],40)">Conditional</animation>
+	          <animation effect="slide" end="246" time="0" condition="![$EXP[GridView_Display_IsPosters] | $EXP[GridView_Display_IsSquare]] + Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],40) + Integer.IsLessOrEqual($NUMBER[Window(home).Property(WatchedPercentage)],45)">Conditional</animation>
+	          <animation effect="slide" end="255" time="0" condition="![$EXP[GridView_Display_IsPosters] | $EXP[GridView_Display_IsSquare]] + Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],45) + Integer.IsLessOrEqual($NUMBER[Window(home).Property(WatchedPercentage)],50)">Conditional</animation>
+	          <animation effect="slide" end="264" time="0" condition="![$EXP[GridView_Display_IsPosters] | $EXP[GridView_Display_IsSquare]] + Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],50) + Integer.IsLessOrEqual($NUMBER[Window(home).Property(WatchedPercentage)],55)">Conditional</animation>
+	          <animation effect="slide" end="273" time="0" condition="![$EXP[GridView_Display_IsPosters] | $EXP[GridView_Display_IsSquare]] + Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],55) + Integer.IsLessOrEqual($NUMBER[Window(home).Property(WatchedPercentage)],60)">Conditional</animation>
+	          <animation effect="slide" end="282" time="0" condition="![$EXP[GridView_Display_IsPosters] | $EXP[GridView_Display_IsSquare]] + Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],60) + Integer.IsLessOrEqual($NUMBER[Window(home).Property(WatchedPercentage)],65)">Conditional</animation>
+	          <animation effect="slide" end="291" time="0" condition="![$EXP[GridView_Display_IsPosters] | $EXP[GridView_Display_IsSquare]] + Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],65) + Integer.IsLessOrEqual($NUMBER[Window(home).Property(WatchedPercentage)],70)">Conditional</animation>
+	          <animation effect="slide" end="300" time="0" condition="![$EXP[GridView_Display_IsPosters] | $EXP[GridView_Display_IsSquare]] + Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],70) + Integer.IsLessOrEqual($NUMBER[Window(home).Property(WatchedPercentage)],75)">Conditional</animation>
+	          <animation effect="slide" end="309" time="0" condition="![$EXP[GridView_Display_IsPosters] | $EXP[GridView_Display_IsSquare]] + Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],75) + Integer.IsLessOrEqual($NUMBER[Window(home).Property(WatchedPercentage)],80)">Conditional</animation>
+	          <animation effect="slide" end="318" time="0" condition="![$EXP[GridView_Display_IsPosters] | $EXP[GridView_Display_IsSquare]] + Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],80) + Integer.IsLessOrEqual($NUMBER[Window(home).Property(WatchedPercentage)],85)">Conditional</animation>
+	          <animation effect="slide" end="327" time="0" condition="![$EXP[GridView_Display_IsPosters] | $EXP[GridView_Display_IsSquare]] + Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],85) + Integer.IsLessOrEqual($NUMBER[Window(home).Property(WatchedPercentage)],90)">Conditional</animation>
+	          <animation effect="slide" end="336" time="0" condition="![$EXP[GridView_Display_IsPosters] | $EXP[GridView_Display_IsSquare]] + Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],90) + Integer.IsLessOrEqual($NUMBER[Window(home).Property(WatchedPercentage)],95)">Conditional</animation>
+	          <animation effect="slide" end="345" time="0" condition="![$EXP[GridView_Display_IsPosters] | $EXP[GridView_Display_IsSquare]] + Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],95) + Integer.IsLess($NUMBER[Window(home).Property(WatchedPercentage)],100)">Conditional</animation>
+
+						<animation effect="slide" end="105" time="0" condition="[$EXP[GridView_Display_IsPosters] | $EXP[GridView_Display_IsSquare]] + Integer.IsEqual($NUMBER[Window(home).Property(WatchedPercentage)],0)">Conditional</animation>
+						<animation effect="slide" end="111" time="0" condition="[$EXP[GridView_Display_IsPosters] | $EXP[GridView_Display_IsSquare]] + Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],0) + Integer.IsLessOrEqual($NUMBER[Window(home).Property(WatchedPercentage)],5)">Conditional</animation>
+						<animation effect="slide" end="117" time="0" condition="[$EXP[GridView_Display_IsPosters] | $EXP[GridView_Display_IsSquare]] + Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],5) + Integer.IsLessOrEqual($NUMBER[Window(home).Property(WatchedPercentage)],10)">Conditional</animation>
+						<animation effect="slide" end="123" time="0" condition="[$EXP[GridView_Display_IsPosters] | $EXP[GridView_Display_IsSquare]] + Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],10) + Integer.IsLessOrEqual($NUMBER[Window(home).Property(WatchedPercentage)],15)">Conditional</animation>
+						<animation effect="slide" end="129" time="0" condition="[$EXP[GridView_Display_IsPosters] | $EXP[GridView_Display_IsSquare]] + Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],15) + Integer.IsLessOrEqual($NUMBER[Window(home).Property(WatchedPercentage)],20)">Conditional</animation>
+						<animation effect="slide" end="135" time="0" condition="[$EXP[GridView_Display_IsPosters] | $EXP[GridView_Display_IsSquare]] + Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],20) + Integer.IsLessOrEqual($NUMBER[Window(home).Property(WatchedPercentage)],25)">Conditional</animation>
+						<animation effect="slide" end="141" time="0" condition="[$EXP[GridView_Display_IsPosters] | $EXP[GridView_Display_IsSquare]] + Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],25) + Integer.IsLessOrEqual($NUMBER[Window(home).Property(WatchedPercentage)],30)">Conditional</animation>
+						<animation effect="slide" end="147" time="0" condition="[$EXP[GridView_Display_IsPosters] | $EXP[GridView_Display_IsSquare]] + Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],30) + Integer.IsLessOrEqual($NUMBER[Window(home).Property(WatchedPercentage)],35)">Conditional</animation>
+						<animation effect="slide" end="153" time="0" condition="[$EXP[GridView_Display_IsPosters] | $EXP[GridView_Display_IsSquare]] + Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],35) + Integer.IsLessOrEqual($NUMBER[Window(home).Property(WatchedPercentage)],40)">Conditional</animation>
+						<animation effect="slide" end="159" time="0" condition="[$EXP[GridView_Display_IsPosters] | $EXP[GridView_Display_IsSquare]] + Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],40) + Integer.IsLessOrEqual($NUMBER[Window(home).Property(WatchedPercentage)],45)">Conditional</animation>
+						<animation effect="slide" end="165" time="0" condition="[$EXP[GridView_Display_IsPosters] | $EXP[GridView_Display_IsSquare]] + Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],45) + Integer.IsLessOrEqual($NUMBER[Window(home).Property(WatchedPercentage)],50)">Conditional</animation>
+						<animation effect="slide" end="171" time="0" condition="[$EXP[GridView_Display_IsPosters] | $EXP[GridView_Display_IsSquare]] + Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],50) + Integer.IsLessOrEqual($NUMBER[Window(home).Property(WatchedPercentage)],55)">Conditional</animation>
+						<animation effect="slide" end="177" time="0" condition="[$EXP[GridView_Display_IsPosters] | $EXP[GridView_Display_IsSquare]] + Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],55) + Integer.IsLessOrEqual($NUMBER[Window(home).Property(WatchedPercentage)],60)">Conditional</animation>
+						<animation effect="slide" end="183" time="0" condition="[$EXP[GridView_Display_IsPosters] | $EXP[GridView_Display_IsSquare]] + Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],60) + Integer.IsLessOrEqual($NUMBER[Window(home).Property(WatchedPercentage)],65)">Conditional</animation>
+						<animation effect="slide" end="189" time="0" condition="[$EXP[GridView_Display_IsPosters] | $EXP[GridView_Display_IsSquare]] + Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],65) + Integer.IsLessOrEqual($NUMBER[Window(home).Property(WatchedPercentage)],70)">Conditional</animation>
+						<animation effect="slide" end="195" time="0" condition="[$EXP[GridView_Display_IsPosters] | $EXP[GridView_Display_IsSquare]] + Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],70) + Integer.IsLessOrEqual($NUMBER[Window(home).Property(WatchedPercentage)],75)">Conditional</animation>
+						<animation effect="slide" end="201" time="0" condition="[$EXP[GridView_Display_IsPosters] | $EXP[GridView_Display_IsSquare]] + Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],75) + Integer.IsLessOrEqual($NUMBER[Window(home).Property(WatchedPercentage)],80)">Conditional</animation>
+						<animation effect="slide" end="207" time="0" condition="[$EXP[GridView_Display_IsPosters] | $EXP[GridView_Display_IsSquare]] + Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],80) + Integer.IsLessOrEqual($NUMBER[Window(home).Property(WatchedPercentage)],85)">Conditional</animation>
+						<animation effect="slide" end="213" time="0" condition="[$EXP[GridView_Display_IsPosters] | $EXP[GridView_Display_IsSquare]] + Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],85) + Integer.IsLessOrEqual($NUMBER[Window(home).Property(WatchedPercentage)],90)">Conditional</animation>
+						<animation effect="slide" end="219" time="0" condition="[$EXP[GridView_Display_IsPosters] | $EXP[GridView_Display_IsSquare]] + Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],90) + Integer.IsLessOrEqual($NUMBER[Window(home).Property(WatchedPercentage)],95)">Conditional</animation>
+						<animation effect="slide" end="225" time="0" condition="[$EXP[GridView_Display_IsPosters] | $EXP[GridView_Display_IsSquare]] + Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],95) + Integer.IsLess($NUMBER[Window(home).Property(WatchedPercentage)],100)">Conditional</animation>
 						<width>30</width>
 						<height>30</height>
 						<centertop>50%</centertop>
 						<left>0</left>
 						<control type="image">
-							<texture colordiffuse="$VAR[Accent_Color]">views/white_100.png</texture>
+							<texture colordiffuse="$VAR[Unwatched_Indicator_Background_Color]">views/white_100.png</texture>
+						</control>
+						<control type="label">
+							<align>center</align>
+							<aligny>center</aligny>
+							<font>Unwatched_Indicator</font>
+							<textcolor>$VAR[Unwatched_Indicator_Label_Color]</textcolor>
+							<label>$PARAM[unwatched_label]</label>
 						</control>
 					</control>
 	      </control>
 			</control>
 		</include>
+
 
 
 		<include name="ProgressBar">
@@ -3382,7 +3464,8 @@
 					<param name="resumable_info" value="ListItem.PercentPlayed"/>
 					<param name="resumable_visible" value="ListItem.IsResumable"/>
 					<param name="watched_visible" value="!ListItem.IsResumable + String.IsEqual(ListItem.Overlay,OverlayWatched.png) + !$EXP[ListView_IsVisible]"/>
-					<param name="calculated_visible" value="[String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,season)] + !String.IsEqual(ListItem.Overlay,OverlayWatched.png) + Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],0)"/>
+					<param name="calculated_visible" value="[String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,season)] + !String.IsEqual(ListItem.Overlay,OverlayWatched.png) + [Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],0) | Skin.HasSetting(Unwatched_Indicator)]"/>
+					<param name="unwatched_label" value="$INFO[ListItem.Property(UnWatchedEpisodes)]"/>
 				</include>
 				<include content="ProgressBar_Template">
 					<param name="left" value="$PARAM[left]"/>
@@ -3395,7 +3478,8 @@
 					<param name="resumable_info" value="Container(4501).ListItem.PercentPlayed"/>
 					<param name="resumable_visible" value="Container(4501).ListItem.IsResumable"/>
 					<param name="watched_visible" value="!Container(4501).ListItem.IsResumable + String.IsEqual(Container(4501).ListItem.Overlay,OverlayWatched.png)"/>
-					<param name="calculated_visible" value="[String.IsEqual(Container(4501).ListItem.DBType,tvshow) | String.IsEqual(Container(4501).ListItem.DBType,season)] + !String.IsEqual(Container(4501).ListItem.Overlay,OverlayWatched.png) + Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],0)"/>
+					<param name="calculated_visible" value="[String.IsEqual(Container(4501).ListItem.DBType,tvshow) | String.IsEqual(Container(4501).ListItem.DBType,season)] + !String.IsEqual(Container(4501).ListItem.Overlay,OverlayWatched.png) + [Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],0) | Skin.HasSetting(Unwatched_Indicator)]"/>
+					<param name="unwatched_label" value="$INFO[Container(4501).ListItem.Property(UnWatchedEpisodes)]"/>
 				</include>
 				<include content="ProgressBar_Template">
 					<param name="left" value="$PARAM[left]"/>
@@ -3408,7 +3492,8 @@
 					<param name="resumable_info" value="Container(8010).ListItem.PercentPlayed"/>
 					<param name="resumable_visible" value="Container(8010).ListItem.IsResumable"/>
 					<param name="watched_visible" value="!Container(8010).ListItem.IsResumable + String.IsEqual(Container(8010).ListItem.Overlay,OverlayWatched.png)"/>
-					<param name="calculated_visible" value="[String.IsEqual(Container(8010).ListItem.DBType,tvshow) | String.IsEqual(Container(8010).ListItem.DBType,season)] + !String.IsEqual(Container(8010).ListItem.Overlay,OverlayWatched.png) + Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],0)"/>
+					<param name="calculated_visible" value="[String.IsEqual(Container(8010).ListItem.DBType,tvshow) | String.IsEqual(Container(8010).ListItem.DBType,season)] + !String.IsEqual(Container(8010).ListItem.Overlay,OverlayWatched.png) + [Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],0) | Skin.HasSetting(Unwatched_Indicator)]"/>
+					<param name="unwatched_label" value="$INFO[Container(8010).ListItem.Property(UnWatchedEpisodes)]"/>
 				</include>
 				<include content="ProgressBar_Template">
 					<param name="left" value="$PARAM[left]"/>
@@ -3421,7 +3506,8 @@
 					<param name="resumable_info" value="Container(8020).ListItem.PercentPlayed"/>
 					<param name="resumable_visible" value="Container(8020).ListItem.IsResumable"/>
 					<param name="watched_visible" value="!Container(8020).ListItem.IsResumable + String.IsEqual(Container(8020).ListItem.Overlay,OverlayWatched.png)"/>
-					<param name="calculated_visible" value="[String.IsEqual(Container(8020).ListItem.DBType,tvshow) | String.IsEqual(Container(8020).ListItem.DBType,season)] + !String.IsEqual(Container(8020).ListItem.Overlay,OverlayWatched.png) + Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],0)"/>
+					<param name="calculated_visible" value="[String.IsEqual(Container(8020).ListItem.DBType,tvshow) | String.IsEqual(Container(8020).ListItem.DBType,season)] + !String.IsEqual(Container(8020).ListItem.Overlay,OverlayWatched.png) + [Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],0) | Skin.HasSetting(Unwatched_Indicator)]"/>
+					<param name="unwatched_label" value="$INFO[Container(8020).ListItem.Property(UnWatchedEpisodes)]"/>
 				</include>
 				<include content="ProgressBar_Template">
 					<param name="left" value="$PARAM[left]"/>
@@ -3434,7 +3520,8 @@
 					<param name="resumable_info" value="Container(8030).ListItem.PercentPlayed"/>
 					<param name="resumable_visible" value="Container(8030).ListItem.IsResumable"/>
 					<param name="watched_visible" value="String.IsEqual(Container(8030).ListItem.DBType,movie) + Integer.IsGreater(Container(8030).ListItem.PlayCount,0)"/>
-					<param name="calculated_visible" value="[String.IsEqual(Container(8030).ListItem.DBType,tvshow) | String.IsEqual(Container(8030).ListItem.DBType,season)] + Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],0)"/>
+					<param name="calculated_visible" value="[String.IsEqual(Container(8030).ListItem.DBType,tvshow) | String.IsEqual(Container(8030).ListItem.DBType,season)] + [Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],0) | Skin.HasSetting(Unwatched_Indicator)]"/>
+					<param name="unwatched_label" value="$INFO[Container(8030).ListItem.Property(UnWatchedEpisodes)]"/>
 				</include>
 				<include content="ProgressBar_Template">
 					<param name="left" value="$PARAM[left]"/>
@@ -3447,7 +3534,8 @@
 					<param name="resumable_info" value="Container(8040).ListItem.PercentPlayed"/>
 					<param name="resumable_visible" value="Container(8040).ListItem.IsResumable"/>
 					<param name="watched_visible" value="!Container(8040).ListItem.IsResumable + String.IsEqual(Container(8040).ListItem.Overlay,OverlayWatched.png)"/>
-					<param name="calculated_visible" value="[String.IsEqual(Container(8040).ListItem.DBType,tvshow) | String.IsEqual(Container(8040).ListItem.DBType,season)] + !String.IsEqual(Container(8040).ListItem.Overlay,OverlayWatched.png) + Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],0)"/>
+					<param name="calculated_visible" value="[String.IsEqual(Container(8040).ListItem.DBType,tvshow) | String.IsEqual(Container(8040).ListItem.DBType,season)] + !String.IsEqual(Container(8040).ListItem.Overlay,OverlayWatched.png) + [Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],0) | Skin.HasSetting(Unwatched_Indicator)]"/>
+					<param name="unwatched_label" value="$INFO[Container(8040).ListItem.Property(UnWatchedEpisodes)]"/>
 				</include>
 				<include content="ProgressBar_Template">
 					<param name="left" value="$PARAM[left]"/>
@@ -3460,7 +3548,8 @@
 					<param name="resumable_info" value="Container(8050).ListItem.PercentPlayed"/>
 					<param name="resumable_visible" value="Container(8050).ListItem.IsResumable"/>
 					<param name="watched_visible" value="!Container(8050).ListItem.IsResumable + String.IsEqual(Container(8050).ListItem.Overlay,OverlayWatched.png)"/>
-					<param name="calculated_visible" value="[String.IsEqual(Container(8050).ListItem.DBType,tvshow) | String.IsEqual(Container(8050).ListItem.DBType,season)] + !String.IsEqual(Container(8050).ListItem.Overlay,OverlayWatched.png) + Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],0)"/>
+					<param name="calculated_visible" value="[String.IsEqual(Container(8050).ListItem.DBType,tvshow) | String.IsEqual(Container(8050).ListItem.DBType,season)] + !String.IsEqual(Container(8050).ListItem.Overlay,OverlayWatched.png) + [Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],0) | Skin.HasSetting(Unwatched_Indicator)]"/>
+					\<param name="unwatched_label" value="$INFO[Container(8050).ListItem.Property(UnWatchedEpisodes)]"/>
 				</include>
 				<include content="ProgressBar_Template">
 					<param name="left" value="$PARAM[left]"/>
@@ -3473,7 +3562,8 @@
 					<param name="resumable_info" value="Container(8060).ListItem.PercentPlayed"/>
 					<param name="resumable_visible" value="Container(8060).ListItem.IsResumable"/>
 					<param name="watched_visible" value="String.IsEqual(Container(8060).ListItem.DBType,movie) + Integer.IsGreater(Container(8060).ListItem.PlayCount,0)"/>
-					<param name="calculated_visible" value="[String.IsEqual(Container(8060).ListItem.DBType,tvshow) | String.IsEqual(Container(8060).ListItem.DBType,season)] + Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],0)"/>
+					<param name="calculated_visible" value="[String.IsEqual(Container(8060).ListItem.DBType,tvshow) | String.IsEqual(Container(8060).ListItem.DBType,season)] + [Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],0) | Skin.HasSetting(Unwatched_Indicator)]"/>
+					<param name="unwatched_label" value="$INFO[Container(8060).ListItem.Property(UnWatchedEpisodes)]"/>
 				</include>
 			</definition>
 		</include>
