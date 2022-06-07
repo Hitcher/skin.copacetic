@@ -71,7 +71,7 @@
 
 				<!--MASK for SECONDARY LIST-->
 				<control type="group">
-					<visible>$EXP[StripView_IsVisible] + Skin.HasSetting(Secondary_List_Enabled) + $PARAM[media_view]</visible>
+					<visible>[Window.IsVisible(music) | Window.IsVisible(videos)] + $EXP[StripView_IsVisible] + Skin.HasSetting(Secondary_List_Enabled) + $PARAM[media_view]</visible>
 					<control type="image">
 						<visible>$EXP[StripView_Display_IsPosters]</visible>
 						<height>180</height>
@@ -92,30 +92,29 @@
 		<control type="group">
 			<visible>$EXP[StripView_IsVisible]</visible>
 			<include>Viewtype_Fade_Animation</include>
-
 			<control type="group">
 				<visible>!$EXP[ContainerSwitching] + !$EXP[ContentSwitching] + !$EXP[TransparentDialog_IsVisible] + !Control.HasFocus(60)</visible>
 				<include>Delayed_Content_Fade_Animation</include>
 				<control type="group">
-					<visible>!$EXP[InfoWidget_HasFocus] + !$EXP[Secondary_List_ContainerSwitching] + !$EXP[Secondary_List_ContentSwitching] + ![Control.HasFocus(4501) + Window.IsVisible(1121)]</visible>
-					<include>Delayed_Content_Fade_Animation</include>
-					<include content="MediaFlags"/>
-					<include content="Common_Details">
-						<param name="viewtype_label" value="Strip"/>
-						<param name="left" value="60"/>
-						<param name="width" value="600"/>
-						<param name="titleheight" value="336"/>
-						<param name="infoheight" value="70"/>
-						<param name="plotmaxheight" value="235"/>
-					</include>
-				</control>
-				<control type="group">
-					<visible>!$EXP[Secondary_List_ContainerSwitching] + !$EXP[Secondary_List_ContentSwitching] + ![Control.HasFocus(4501) + Window.IsVisible(1121)]</visible>
-					<include>Delayed_Content_Fade_Animation</include>
+					<visible>!$EXP[Secondary_List_ContainerSwitching]</visible>
+					<include>Delayed_Info_Content_Fade_Animation</include>
 					<control type="group">
-						<visible>![Control.HasFocus(4501) + $EXP[Secondary_List_ContentSwitching]]</visible>
+						<visible>!$EXP[Secondary_List_ContentSwitching] + ![Control.HasFocus(4501) + Window.IsVisible(1121)]</visible>
 						<include>Delayed_Content_Fade_Animation</include>
-						<!--Bottom Label-->
+						<!-- Media flags and Common details -->
+						<control type="group">
+							<visible>!$EXP[InfoWidget_HasFocus]</visible>
+							<include content="MediaFlags"/>
+							<include content="Common_Details">
+								<param name="viewtype_label" value="Strip"/>
+								<param name="left" value="60"/>
+								<param name="width" value="600"/>
+								<param name="titleheight" value="336"/>
+								<param name="infoheight" value="70"/>
+								<param name="plotmaxheight" value="235"/>
+							</include>
+						</control>
+						<!-- Bottom Label -->
 						<control type="label">
 							<animation effect="slide" end="0,-15" time="0" condition="$EXP[StripView_Display_IsSquare] | [$EXP[StripView_Display_IsFanart] + !$EXP[StripView_Flags_IsOn]]">Conditional</animation>
 							<visible>[!$EXP[InfoWidget_HasFocus] + $EXP[StripView_Details_Title] + !$EXP[StripView_Details_Logo_IsOn]] | [$EXP[InfoWidget_HasFocus] + !$EXP[InfoWidget_Seasons_HasFocus]]</visible>
@@ -130,6 +129,7 @@
 							<aligny>center</aligny>
 							<scroll>false</scroll>
 						</control>
+						<!-- Progress bar -->
 						<control type="group">
 							<animation effect="slide" end="0,-30" time="0" condition="$EXP[StripView_Display_IsSquare] | $EXP[StripView_Display_IsFanart]">Conditional</animation>
 							<animation effect="slide" end="75,0" time="0" condition="$EXP[StripView_Display_IsSquare] + !$EXP[StripView_Details_Off] + !$EXP[InfoWidget_HasFocus]">Conditional</animation>
