@@ -28,11 +28,11 @@
 
 				<onfocus condition="Control.HasFocus(8030) + String.IsEqual(Container(8030).ListItem.DBType,movie) + !Container(8030).ListItem.IsResumable + Integer.IsEqual(Container(8030).ListItem.PlayCount,0)">SetProperty(WidgetWatchedPercentage,0,home)</onfocus>
 				<onfocus condition="Control.HasFocus(8030) + String.IsEqual(Container(8030).ListItem.DBType,movie) + !Container(8030).ListItem.IsResumable + !Integer.IsEqual(Container(8030).ListItem.PlayCount,0)">SetProperty(WidgetWatchedPercentage,100,home)</onfocus>
-				<onfocus condition="Control.HasFocus(8030) + String.IsEqual(Container(8030).ListItem.DBType,tvshow) + Integer.IsGreater(Container(8030).ListItem.Property(WatchedEpisodes),0) + !String.IsEqual(Container(8030).ListItem.Overlay,OverlayWatched.png) + System.HasAddon(script.embuary.helper)">RunScript(script.embuary.helper,action=calc,do='"($INFO[Container(8030).ListItem.Property(WatchedEpisodes)] / $INFO[Container(8030).ListItem.Property(TotalEpisodes)]) * 100"',prop=WidgetWatchedPercentage)</onfocus>
+				<onfocus condition="Control.HasFocus(8030) + String.IsEqual(Container(8030).ListItem.DBType,tvshow) + !String.IsEqual(Container(8030).ListItem.Overlay,OverlayWatched.png) + System.HasAddon(script.embuary.helper)">RunScript(script.embuary.helper,action=calc,do='"($INFO[Container(8030).ListItem.Property(WatchedEpisodes)] / $INFO[Container(8030).ListItem.Property(TotalEpisodes)]) * 100"',prop=WidgetWatchedPercentage)</onfocus>
 
 				<onfocus condition="Control.HasFocus(8060) + String.IsEqual(Container(8060).ListItem.DBType,movie) + !Container(8060).ListItem.IsResumable + Integer.IsEqual(Container(8060).ListItem.PlayCount,0)">SetProperty(WidgetWatchedPercentage,0,home)</onfocus>
 				<onfocus condition="Control.HasFocus(8060) + String.IsEqual(Container(8060).ListItem.DBType,movie) + !Container(8060).ListItem.IsResumable + !Integer.IsEqual(Container(8060).ListItem.PlayCount,0)">SetProperty(WidgetWatchedPercentage,100,home)</onfocus>
-				<onfocus condition="Control.HasFocus(8060) + String.IsEqual(Container(8060).ListItem.DBType,tvshow) + Integer.IsGreater(Container(8060).ListItem.Property(WatchedEpisodes),0) + !String.IsEqual(Container(8060).ListItem.Overlay,OverlayWatched.png) + System.HasAddon(script.embuary.helper)">RunScript(script.embuary.helper,action=calc,do='"($INFO[Container(8060).ListItem.Property(WatchedEpisodes)] / $INFO[Container(8060).ListItem.Property(TotalEpisodes)]) * 100"',prop=WidgetWatchedPercentage)</onfocus>
+				<onfocus condition="Control.HasFocus(8060) + String.IsEqual(Container(8060).ListItem.DBType,tvshow) + !String.IsEqual(Container(8060).ListItem.Overlay,OverlayWatched.png) + System.HasAddon(script.embuary.helper)">RunScript(script.embuary.helper,action=calc,do='"($INFO[Container(8060).ListItem.Property(WatchedEpisodes)] / $INFO[Container(8060).ListItem.Property(TotalEpisodes)]) * 100"',prop=WidgetWatchedPercentage)</onfocus>
 
 				<onunfocus>ClearProperty(WidgetWatchedPercentage,home)</onunfocus>
 			</control>
@@ -1011,25 +1011,28 @@
 					</control>
 					<!-- Multiart -->
 					<control type="group">
-						<visible>Skin.HasSetting(Multiart_Slideshow) + !Container.Content(addons)</visible>
-						<include>Secondary_List_Scroll_Animation</include>
-						<control type="image">
-							<visible>!$EXP[ContainerSwitching] + !$EXP[OptionsSwitching] + !$EXP[ContentSwitching] + !$EXP[InfoDialog_IsVisible] + !String.IsEqual(Control.GetLabel(398041),blank)</visible>
-							<include>Multiart_Backing_Fade_Animation</include>
-							<texture colordiffuse="ff808080">views/white_100.png</texture>
-							<aspectratio>stretch</aspectratio>
-						</control>
+						<visible>Window.Is(videos) | Window.Is(music)</visible>
 						<control type="group">
-							<visible>!$EXP[ContainerSwitching] + !$EXP[OptionsSwitching] + !$EXP[ContentSwitching] + !$EXP[InfoDialog_IsVisible] + !String.IsEqual(Control.GetLabel(398041),blank)</visible>
-							<include>Delayed_Multiart_Fade_Animation</include>
-							<include content="ListIcon">
-								<param name="multiart" value="true"/>
-								<param name="fallback" value="false"/>s
-								<param name="aspectratio" value="$PARAM[aspectratio]"/>
-								<param name="showgradient" value="$PARAM[showgradient]"/>
-								<param name="showbreadcrumboverlay" value="$PARAM[show_breadcrumb_overlay]"/>
-								<param name="artworkmask" value="$PARAM[artworkmask]"/>
-							</include>
+							<visible>Skin.HasSetting(Multiart_Slideshow) + !Container.Content(addons)</visible>
+							<include>Secondary_List_Scroll_Animation</include>
+							<control type="image">
+								<visible>!$EXP[ContainerSwitching] + !$EXP[OptionsSwitching] + !$EXP[ContentSwitching] + !$EXP[InfoDialog_IsVisible] + !String.IsEqual(Control.GetLabel(398041),blank)</visible>
+								<include>Multiart_Backing_Fade_Animation</include>
+								<texture colordiffuse="ff808080">views/white_100.png</texture>
+								<aspectratio>stretch</aspectratio>
+							</control>
+							<control type="group">
+								<visible>!$EXP[ContainerSwitching] + !$EXP[OptionsSwitching] + !$EXP[ContentSwitching] + !$EXP[InfoDialog_IsVisible] + !String.IsEqual(Control.GetLabel(398041),blank)</visible>
+								<include>Delayed_Multiart_Fade_Animation</include>
+								<include content="ListIcon">
+									<param name="multiart" value="true"/>
+									<param name="fallback" value="false"/>s
+									<param name="aspectratio" value="$PARAM[aspectratio]"/>
+									<param name="showgradient" value="$PARAM[showgradient]"/>
+									<param name="showbreadcrumboverlay" value="$PARAM[show_breadcrumb_overlay]"/>
+									<param name="artworkmask" value="$PARAM[artworkmask]"/>
+								</include>
+							</control>
 						</control>
 					</control>
 					<!-- FADE IN PREVIOUS -->
@@ -2181,6 +2184,7 @@
 			<definition>
 				<control type="group">
 					<animation effect="slide" start="0,0" end="-$PARAM[item_width],0" time="0" condition="$EXP[StripView_Display_IsFanart] + !$EXP[InfoWidget_Display_IsStripView_Posters] + !$EXP[InfoWidget_Display_IsStripView_Square]">Conditional</animation>
+					<visible>Window.Is(videos) | Window.Is(music)</visible>
 					<left>$PARAM[left]</left>
 					<top>$PARAM[top]</top>
 					<width>$PARAM[focus_width]</width>
@@ -3366,8 +3370,8 @@
 					<animation effect="slide" start="0,0" end="0,6" time="0" condition="Skin.HasSetting(Unwatched_Indicator) + $EXP[ShowcaseView_IsVisible] + $EXP[ShowcaseView_Details_Off]">Conditional</animation>
 	        <visible>$PARAM[calculated_visible]</visible>
 					<control type="group">
-						<visible>!String.IsEqual(Window(home).Property(WatchedPercentage),Calculating)</visible>
-						<include>Content_Fade_Animation</include>
+						<visible>!Window.IsVisible(1125)</visible>
+						<include>Delayed_Content_Fade_Animation</include>
 		        <!-- Background -->
 		        <control type="image">
 							<width>100%</width>
@@ -3514,7 +3518,6 @@
 							<animation effect="slide" end="213" time="0" condition="[Control.HasFocus(8020) | Control.HasFocus(8030) | Control.HasFocus(8060)] + [$EXP[GridView_Display_IsPosters] | $EXP[GridView_Display_IsSquare]] + Integer.IsGreater($NUMBER[Window(home).Property(WidgetWatchedPercentage)],85) + Integer.IsLessOrEqual($NUMBER[Window(home).Property(WidgetWatchedPercentage)],90)">Conditional</animation>
 							<animation effect="slide" end="219" time="0" condition="[Control.HasFocus(8020) | Control.HasFocus(8030) | Control.HasFocus(8060)] + [$EXP[GridView_Display_IsPosters] | $EXP[GridView_Display_IsSquare]] + Integer.IsGreater($NUMBER[Window(home).Property(WidgetWatchedPercentage)],90) + Integer.IsLessOrEqual($NUMBER[Window(home).Property(WidgetWatchedPercentage)],95)">Conditional</animation>
 							<animation effect="slide" end="225" time="0" condition="[Control.HasFocus(8020) | Control.HasFocus(8030) | Control.HasFocus(8060)] + [$EXP[GridView_Display_IsPosters] | $EXP[GridView_Display_IsSquare]] + Integer.IsGreater($NUMBER[Window(home).Property(WidgetWatchedPercentage)],95) + Integer.IsLess($NUMBER[Window(home).Property(WidgetWatchedPercentage)],100)">Conditional</animation>
-
 							<width>30</width>
 							<height>30</height>
 							<centertop>50%</centertop>
