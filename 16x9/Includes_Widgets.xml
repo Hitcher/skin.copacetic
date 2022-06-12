@@ -18,7 +18,7 @@
 		<param name="widget_type"/>
 		<param name="id"/>
 		<param name="focus_button" default="HiddenFocusButton"/>
-		<param name="use_custom_content"/>
+		<param name="use_custom_content" default="true"/>
 		<param name="use_custom_click" default="false"/>
 		<param name="click_action" default="Blank"/>
 		<definition>
@@ -55,6 +55,8 @@
 
 	<include name="Widget_Template">
 		<param name="use_custom_content" default="true"/>
+		<param name="use_custom_click" default="false"/>
+		<param name="click_action" default="Blank"/>
 		<definition>
 
 			<include content="Widget_List">
@@ -63,6 +65,8 @@
 				<param name="id" value="$PARAM[id]"/>
 				<param name="widget_position" value="$PARAM[widget_position]"/>
 				<param name="use_custom_content" value="$PARAM[use_custom_content]"/>
+				<param name="use_custom_click" value="$PARAM[use_custom_click]"/>
+				<param name="click_action" value="$PARAM[click_action]"/>
 				<param name="target" value="$PARAM[target]"/>
 				<param name="sortby" value="$PARAM[sortby]"/>
 				<param name="sortorder" value="$PARAM[sortorder]"/>
@@ -207,6 +211,8 @@
 			<param name="sortby" value="dateadded"/>
 			<param name="sortorder" value="descending"/>
 			<param name="content" value="musicdb://recentlyaddedalbums/?reload=$INFO[Window(home).Property(EmbuaryWidgetUpdate)]"/>
+			<param name="use_custom_click" value="true"/>
+			<param name="click_action" value="Home_Open_Album"/>
 		</include>
 	</include>
 
@@ -219,6 +225,8 @@
 			<param name="sortby" value="lastplayed"/>
 			<param name="sortorder" value="descending"/>
 			<param name="content" value="musicdb://recentlyplayedalbums/?reload=$INFO[Window(home).Property(EmbuaryWidgetUpdate)]"/>
+			<param name="use_custom_click" value="true"/>
+			<param name="click_action" value="Home_Open_Album"/>
 		</include>
 	</include>
 
@@ -438,6 +446,10 @@
 	</include>
 
 	<include name="ClickAction_Blank"/>
+
+	<include name="ClickAction_Home_Open_Album">
+		<onclick>ActivateWindow(music,musicdb://albums/$INFO[Container.ListItem.DBID]/-2/?albumid=$INFO[Container.ListItem.DBID],return)</onclick>
+	</include>
 
 	<include name="ClickAction_Play_All_Songs">
 		<onclick>RunScript(script.embuary.helper,action=playall,id=8010,type=music,method=fromhere)</onclick>
