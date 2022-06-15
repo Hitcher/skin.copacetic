@@ -512,8 +512,9 @@
 
 		<include name="ListIcon">
 			<param name="artwork_icon" default="Thumbnail"/>
-			<param name="position" default="0"/>
+			<param name="multiart_icon" default="$VAR[Multiart(0)Content]"/>
 			<param name="multiart" default="false"/>
+			<param name="position" default="0"/>
 			<param name="left" default="0"/>
 			<param name="top" default="0"/>
 			<param name="width" default="100%"/>
@@ -528,10 +529,19 @@
 			<param name="animationtween" default="sine"/>
 			<param name="animationeasing" default="inout"/>
 			<param name="animationreversible" default="false"/>
+			<param name="multiartanimationtype" default="Conditional"/>
+			<param name="multiartanimationeffect" default="fade"/>
+			<param name="multiartanimationend" default="100"/>
+			<param name="multiartanimationcondition" default="false"/>
+			<param name="multiartanimationtime" default="360"/>
+			<param name="multiartanimationtween" default="sine"/>
+			<param name="multiartanimationeasing" default="inout"/>
+			<param name="multiartanimationreversible" default="false"/>
 			<param name="aspectratio" default="scale"/>
 			<param name="fallback" default=""/>
 			<param name="diffuse" default=""/>
 			<param name="fadetime" default="0"/>
+			<param name="multiart_fadetime" default="0"/>
 			<param name="showgradient" default="false"/>
 			<param name="showbreadcrumboverlay" default="false"/>
 			<param name="artworkmask" default="false"/>
@@ -561,20 +571,31 @@
 					<animation effect="$PARAM[animationeffect]" end="$PARAM[animationend]" condition="$PARAM[animationcondition]" time="$PARAM[animationtime]" tween="$PARAM[animationtween]" easing="$PARAM[animationeasing]" reversible="$PARAM[animationreversible]">$PARAM[animationtype]</animation>
 					<!-- Artwork -->
 					<control type="image">
-						<visible>!$PARAM[multiart]</visible>
 						<include>$PARAM[switchingtosecondarylistanimation]</include>
 						<include>Focus_Zoom_Animation</include>
-						<texture fallback="$PARAM[fallback]" background="true" diffuse="$PARAM[diffuse]">$VAR[$PARAM[artwork_icon]($PARAM[position])Content]</texture>
+						<!--<texture fallback="$PARAM[fallback]" background="true" diffuse="$PARAM[diffuse]">$VAR[$PARAM[artwork_icon]($PARAM[position])Content]</texture>-->
+						<texture>views/white_100.png</texture>
 						<aspectratio align="center" aligny="center">$PARAM[aspectratio]</aspectratio>
 						<fadetime>$PARAM[fadetime]</fadetime>
 					</control>
 					<!-- Multiart -->
-					<control type="multiimage">
-						<visible>Skin.HasSetting(Multiart_Slideshow)</visible>
-						<visible>$PARAM[multiart]</visible>
-						<imagepath>$VAR[Multiart_Path]</imagepath>
-						<fadetime>1080</fadetime>
-						<aspectratio align="center" aligny="center">$PARAM[aspectratio]</aspectratio>
+					<control type="group">
+						<visible>$PARAM[multiart] + Skin.HasSetting(Multiart_Slideshow)</visible>
+						<animation effect="$PARAM[multiartanimationeffect]" end="$PARAM[multiartanimationend]" condition="$PARAM[multiartanimationcondition]" time="$PARAM[multiartanimationtime]" tween="$PARAM[multiartanimationtween]" easing="$PARAM[multiartanimationeasing]" reversible="$PARAM[multiartanimationreversible]">$PARAM[multiartanimationtype]</animation>
+						<include>$PARAM[switchingtosecondarylistanimation]</include>
+						<include>Focus_Zoom_Animation</include>
+						<control type="image">
+							<texture background="true" diffuse="$PARAM[diffuse]">$PARAM[multiart_icon]</texture>
+							<aspectratio align="center" aligny="center">$PARAM[aspectratio]</aspectratio>
+							<fadetime>$PARAM[multiart_fadetime]</fadetime>
+						</control>
+						<control type="image">
+							<visible>!$EXP[ContentSwitching]</visible>
+							<include>Multiart_Fade_Animation</include>
+							<texture background="true" diffuse="$PARAM[diffuse]">$PARAM[multiart_icon]</texture>
+							<aspectratio align="center" aligny="center">$PARAM[aspectratio]</aspectratio>
+							<fadetime>1080</fadetime>
+						</control>
 					</control>
 					<!-- Artwork Mask -->
 					<control type="image">
@@ -848,6 +869,7 @@
 								</control>
 								<include content="ListIcon">
 									<param name="artwork_icon" value="$PARAM[artwork_icon]"/>
+									<param name="multiart" value="true"/>
 									<param name="left" value="$PARAM[2x_item_width]"/>
 									<param name="width" value="$PARAM[focus_width]"/>
 									<param name="height" value="$PARAM[focus_height]"/>
@@ -1798,6 +1820,7 @@
 					<include>Artwork_Fade_Animation</include>
 					<top>$PARAM[top]</top>
 					<animation effect="slide" start="0,0" end="-960,0" time="0" condition="$EXP[StripView_Display_IsFanart] + !$EXP[InfoWidget_Display_IsStripView_Posters] + !$EXP[InfoWidget_Display_IsStripView_Square]">Conditional</animation>
+
 					<!-- PREVIOUS SCROLL -->
 					<control type="group">
 						<visible>$EXP[ContentPrevious] + !String.IsEqual(Container($PARAM[target_id]).NumItems,1)</visible>
@@ -1834,6 +1857,11 @@
 						<!-- Move Icon -1 to 0 -->
 						<include content="ListIcon">
 							<param name="artwork_icon" value="$PARAM[artwork_icon]"/>
+							<param name="multiart" value="!Container($PARAM[target_id]).OnPrevious"/>
+							<param name="multiartanimationtype" value="Visible"/>
+							<param name="multiartanimationeffect" value="fade"/>
+							<param name="multiartanimationend" value="100"/>
+							<param name="multiartanimationcondition" value="true"/>
 							<param name="left" value="$PARAM[item_width]"/>
 							<param name="top" value="$PARAM[item_top]"/>
 							<param name="width" value="$PARAM[item_width]"/>
@@ -1845,9 +1873,14 @@
 							<param name="animationeffect" value="zoom"/>
 							<param name="animationend" value="$PARAM[2x_item_width],0,$PARAM[focus_width],$PARAM[focus_height]"/>
 						</include>
-						<!-- Alternative Animation if Details On -->
+						<!-- Move Icon -1 to 0 (Alternative Animation if Details On) -->
 						<include content="ListIcon">
 							<param name="artwork_icon" value="$PARAM[artwork_icon]"/>
+							<param name="multiart" value="!Container($PARAM[target_id]).OnPrevious"/>
+							<param name="multiartanimationtype" value="Visible"/>
+							<param name="multiartanimationeffect" value="fade"/>
+							<param name="multiartanimationend" value="100"/>
+							<param name="multiartanimationcondition" value="true"/>
 							<param name="left" value="-$PARAM[focus_width]"/>
 							<param name="top" value="0"/>
 							<param name="width" value="$PARAM[focus_width]"/>
@@ -1904,6 +1937,130 @@
 							<param name="animationeffect" value="slide"/>
 							<param name="animationend" value="$PARAM[item_width],0"/>
 						</include>
+					</control>
+
+					<!-- NEXT SCROLL -->
+					<control type="group">
+						<visible>$EXP[ContentNext] + !String.IsEqual(Container($PARAM[target_id]).NumItems,1)</visible>
+						<!-- Move Icon -2 to -3 -->
+						<include content="ListIcon">
+							<param name="artwork_icon" value="$PARAM[artwork_icon]"/>
+							<param name="position" value="-3"/>
+							<param name="left" value="0"/>
+							<param name="top" value="$PARAM[item_top]"/>
+							<param name="width" value="$PARAM[item_width]"/>
+							<param name="height" value="$PARAM[item_height]"/>
+							<param name="fallback" value="$PARAM[fallback]"/>
+							<param name="visible" value="Container($PARAM[target_id]).OnNext + [[!$EXP[$PARAM[viewtype_label]View_Display_IsFanart] + $EXP[$PARAM[viewtype_label]View_Details_Off]] | $EXP[InfoWidget_Display_Is$PARAM[viewtype_label]View_Posters] | $EXP[InfoWidget_Display_Is$PARAM[viewtype_label]View_Square]]"/>
+							<param name="animationtype" value="Hidden"/>
+							<param name="animationcondition" value="true"/>
+							<param name="animationeffect" value="slide"/>
+							<param name="animationend" value="-$PARAM[item_width],0"/>
+						</include>
+						<!-- Move Icon -1 to -2 -->
+						<include content="ListIcon">
+							<param name="artwork_icon" value="$PARAM[artwork_icon]"/>
+							<param name="position" value="-2"/>
+							<param name="left" value="$PARAM[item_width]"/>
+							<param name="top" value="$PARAM[item_top]"/>
+							<param name="width" value="$PARAM[item_width]"/>
+							<param name="height" value="$PARAM[item_height]"/>
+							<param name="fallback" value="$PARAM[fallback]"/>
+							<param name="visible" value="Container($PARAM[target_id]).OnNext + [$EXP[$PARAM[viewtype_label]View_Details_Off] | $EXP[InfoWidget_Display_Is$PARAM[viewtype_label]View]]"/>
+							<param name="animationtype" value="Hidden"/>
+							<param name="animationcondition" value="true"/>
+							<param name="animationeffect" value="slide"/>
+							<param name="animationend" value="-$PARAM[item_width],0"/>
+						</include>
+						<!-- Move Icon 0 to -1 -->
+						<include content="ListIcon">
+							<param name="artwork_icon" value="$PARAM[artwork_icon]"/>
+							<param name="position" value="-1"/>
+							<param name="left" value="$PARAM[2x_item_width]"/>
+							<param name="top" value="0"/>
+							<param name="width" value="$PARAM[focus_width]"/>
+							<param name="height" value="$PARAM[focus_height]"/>
+							<param name="fallback" value="$PARAM[fallback]"/>
+							<param name="visible" value="Container($PARAM[target_id]).OnNext + [$EXP[$PARAM[viewtype_label]View_Details_Off] | $EXP[InfoWidget_Display_Is$PARAM[viewtype_label]View]]"/>
+							<param name="animationtype" value="Hidden"/>
+							<param name="animationcondition" value="true"/>
+							<param name="animationeffect" value="zoom"/>
+							<param name="animationend" value="$PARAM[item_width],$PARAM[item_top],$PARAM[item_width],$PARAM[item_height]"/>
+						</include>
+						<!-- Alternative Animation if Details On -->
+						<include content="ListIcon">
+							<param name="artwork_icon" value="$PARAM[artwork_icon]"/>
+							<param name="multiart" value="Container($PARAM[target_id]).OnNext"/>
+							<param name="multiartanimationtype" value="Hidden"/>
+							<param name="multiartanimationeffect" value="fade"/>
+							<param name="multiartanimationend" value="0"/>
+							<param name="multiartanimationcondition" value="true"/>
+							<param name="position" value="-1"/>
+							<param name="left" value="$PARAM[2x_item_width]"/>
+							<param name="top" value="0"/>
+							<param name="width" value="$PARAM[focus_width]"/>
+							<param name="height" value="$PARAM[focus_height]"/>
+							<param name="fallback" value="$PARAM[fallback]"/>
+							<param name="visible" value="Container($PARAM[target_id]).OnNext + !$EXP[$PARAM[viewtype_label]View_Details_Off] + !$EXP[InfoWidget_Display_Is$PARAM[viewtype_label]View]"/>
+							<param name="animationtype" value="Hidden"/>
+							<param name="animationcondition" value="true"/>
+							<param name="animationeffect" value="slide"/>
+							<param name="animationend" value="-$PARAM[2x_item_width_plus_focus_width],0"/>
+						</include>
+						<!-- Move Icon 1 to 0 -->
+						<include content="ListIcon">
+							<param name="artwork_icon" value="$PARAM[artwork_icon]"/>
+							<param name="multiart" value="!Container($PARAM[target_id]).OnNext"/>
+							<param name="multiartanimationtype" value="Visible"/>
+							<param name="multiartanimationeffect" value="fade"/>
+							<param name="multiartanimationend" value="100"/>
+							<param name="multiartanimationcondition" value="true"/>
+							<param name="left" value="$PARAM[2x_item_width_plus_focus_width]"/>
+							<param name="top" value="$PARAM[item_top]"/>
+							<param name="width" value="$PARAM[item_width]"/>
+							<param name="height" value="$PARAM[item_height]"/>
+							<param name="fallback" value="$PARAM[fallback]"/>
+							<param name="visible" value="Container($PARAM[target_id]).OnNext"/>
+							<param name="animationtype" value="Hidden"/>
+							<param name="animationcondition" value="true"/>
+							<param name="animationeffect" value="zoom"/>
+							<param name="animationend" value="$PARAM[2x_item_width],0,$PARAM[focus_width],$PARAM[focus_height]"/>
+						</include>
+						<!-- Move Icon 2 to 1 -->
+						<include content="ListIcon">
+							<param name="artwork_icon" value="$PARAM[artwork_icon]"/>
+							<param name="position" value="1"/>
+							<param name="left" value="$PARAM[3x_item_width_plus_focus_width]"/>
+							<param name="top" value="$PARAM[item_top]"/>
+							<param name="width" value="$PARAM[item_width]"/>
+							<param name="height" value="$PARAM[item_height]"/>
+							<param name="fallback" value="$PARAM[fallback]"/>
+							<param name="visible" value="Container($PARAM[target_id]).OnNext"/>
+							<param name="animationtype" value="Hidden"/>
+							<param name="animationcondition" value="true"/>
+							<param name="animationeffect" value="slide"/>
+							<param name="animationend" value="-$PARAM[item_width],0"/>
+						</include>
+						<!-- Move Icon 3 to 2 -->
+						<include content="ListIcon">
+							<param name="artwork_icon" value="$PARAM[artwork_icon]"/>
+							<param name="position" value="2"/>
+							<param name="left" value="$PARAM[4x_item_width_plus_focus_width]"/>
+							<param name="top" value="$PARAM[item_top]"/>
+							<param name="width" value="$PARAM[item_width]"/>
+							<param name="height" value="$PARAM[item_height]"/>
+							<param name="fallback" value="$PARAM[fallback]"/>
+							<param name="visible" value="Container($PARAM[target_id]).OnNext + [!$EXP[$PARAM[viewtype_label]View_Display_IsFanart] | $EXP[InfoWidget_Display_Is$PARAM[viewtype_label]View_Posters] | $EXP[InfoWidget_Display_Is$PARAM[viewtype_label]View_Square]]"/>
+							<param name="animationtype" value="Hidden"/>
+							<param name="animationcondition" value="true"/>
+							<param name="animationeffect" value="slide"/>
+							<param name="animationend" value="-$PARAM[item_width],0"/>
+						</include>
+					</control>
+
+					<!-- PREVIOUS SHADOW -->
+					<control type="group">
+						<visible>$EXP[ContentPrevious] + !String.IsEqual(Container($PARAM[target_id]).NumItems,1)</visible>
 						<!-- Dropshadow for icon 0 to 1 -->
 						<!-- Left Side -->
 						<include content="DropShadow">
@@ -1977,113 +2134,10 @@
 							<param name="animation2time" value="170"/>
 						</include>
 					</control>
-					<!-- NEXT SCROLL -->
+
+					<!-- NEXT SHADOW -->
 					<control type="group">
 						<visible>$EXP[ContentNext] + !String.IsEqual(Container($PARAM[target_id]).NumItems,1)</visible>
-						<!-- Move Icon -2 to -3 -->
-						<include content="ListIcon">
-							<param name="artwork_icon" value="$PARAM[artwork_icon]"/>
-							<param name="position" value="-3"/>
-							<param name="left" value="0"/>
-							<param name="top" value="$PARAM[item_top]"/>
-							<param name="width" value="$PARAM[item_width]"/>
-							<param name="height" value="$PARAM[item_height]"/>
-							<param name="fallback" value="$PARAM[fallback]"/>
-							<param name="visible" value="Container($PARAM[target_id]).OnNext + [[!$EXP[$PARAM[viewtype_label]View_Display_IsFanart] + $EXP[$PARAM[viewtype_label]View_Details_Off]] | $EXP[InfoWidget_Display_Is$PARAM[viewtype_label]View_Posters] | $EXP[InfoWidget_Display_Is$PARAM[viewtype_label]View_Square]]"/>
-							<param name="animationtype" value="Hidden"/>
-							<param name="animationcondition" value="true"/>
-							<param name="animationeffect" value="slide"/>
-							<param name="animationend" value="-$PARAM[item_width],0"/>
-						</include>
-						<!-- Move Icon -1 to -2 -->
-						<include content="ListIcon">
-							<param name="artwork_icon" value="$PARAM[artwork_icon]"/>
-							<param name="position" value="-2"/>
-							<param name="left" value="$PARAM[item_width]"/>
-							<param name="top" value="$PARAM[item_top]"/>
-							<param name="width" value="$PARAM[item_width]"/>
-							<param name="height" value="$PARAM[item_height]"/>
-							<param name="fallback" value="$PARAM[fallback]"/>
-							<param name="visible" value="Container($PARAM[target_id]).OnNext + [$EXP[$PARAM[viewtype_label]View_Details_Off] | $EXP[InfoWidget_Display_Is$PARAM[viewtype_label]View]]"/>
-							<param name="animationtype" value="Hidden"/>
-							<param name="animationcondition" value="true"/>
-							<param name="animationeffect" value="slide"/>
-							<param name="animationend" value="-$PARAM[item_width],0"/>
-						</include>
-						<!-- Move Icon 0 to -1 -->
-						<include content="ListIcon">
-							<param name="artwork_icon" value="$PARAM[artwork_icon]"/>
-							<param name="position" value="-1"/>
-							<param name="left" value="$PARAM[2x_item_width]"/>
-							<param name="top" value="0"/>
-							<param name="width" value="$PARAM[focus_width]"/>
-							<param name="height" value="$PARAM[focus_height]"/>
-							<param name="fallback" value="$PARAM[fallback]"/>
-							<param name="visible" value="Container($PARAM[target_id]).OnNext + [$EXP[$PARAM[viewtype_label]View_Details_Off] | $EXP[InfoWidget_Display_Is$PARAM[viewtype_label]View]]"/>
-							<param name="animationtype" value="Hidden"/>
-							<param name="animationcondition" value="true"/>
-							<param name="animationeffect" value="zoom"/>
-							<param name="animationend" value="$PARAM[item_width],$PARAM[item_top],$PARAM[item_width],$PARAM[item_height]"/>
-						</include>
-						<!-- Alternative Animation if Details On -->
-						<include content="ListIcon">
-							<param name="artwork_icon" value="$PARAM[artwork_icon]"/>
-							<param name="position" value="-1"/>
-							<param name="left" value="$PARAM[2x_item_width]"/>
-							<param name="top" value="0"/>
-							<param name="width" value="$PARAM[focus_width]"/>
-							<param name="height" value="$PARAM[focus_height]"/>
-							<param name="fallback" value="$PARAM[fallback]"/>
-							<param name="visible" value="Container($PARAM[target_id]).OnNext + !$EXP[$PARAM[viewtype_label]View_Details_Off] + !$EXP[InfoWidget_Display_Is$PARAM[viewtype_label]View]"/>
-							<param name="animationtype" value="Hidden"/>
-							<param name="animationcondition" value="true"/>
-							<param name="animationeffect" value="slide"/>
-							<param name="animationend" value="-$PARAM[2x_item_width_plus_focus_width],0"/>
-						</include>
-						<!-- Move Icon 1 to 0 -->
-						<include content="ListIcon">
-							<param name="artwork_icon" value="$PARAM[artwork_icon]"/>
-							<param name="left" value="$PARAM[2x_item_width_plus_focus_width]"/>
-							<param name="top" value="$PARAM[item_top]"/>
-							<param name="width" value="$PARAM[item_width]"/>
-							<param name="height" value="$PARAM[item_height]"/>
-							<param name="fallback" value="$PARAM[fallback]"/>
-							<param name="visible" value="Container($PARAM[target_id]).OnNext"/>
-							<param name="animationtype" value="Hidden"/>
-							<param name="animationcondition" value="true"/>
-							<param name="animationeffect" value="zoom"/>
-							<param name="animationend" value="$PARAM[2x_item_width],0,$PARAM[focus_width],$PARAM[focus_height]"/>
-						</include>
-						<!-- Move Icon 2 to 1 -->
-						<include content="ListIcon">
-							<param name="artwork_icon" value="$PARAM[artwork_icon]"/>
-							<param name="position" value="1"/>
-							<param name="left" value="$PARAM[3x_item_width_plus_focus_width]"/>
-							<param name="top" value="$PARAM[item_top]"/>
-							<param name="width" value="$PARAM[item_width]"/>
-							<param name="height" value="$PARAM[item_height]"/>
-							<param name="fallback" value="$PARAM[fallback]"/>
-							<param name="visible" value="Container($PARAM[target_id]).OnNext"/>
-							<param name="animationtype" value="Hidden"/>
-							<param name="animationcondition" value="true"/>
-							<param name="animationeffect" value="slide"/>
-							<param name="animationend" value="-$PARAM[item_width],0"/>
-						</include>
-						<!-- Move Icon 3 to 2 -->
-						<include content="ListIcon">
-							<param name="artwork_icon" value="$PARAM[artwork_icon]"/>
-							<param name="position" value="2"/>
-							<param name="left" value="$PARAM[4x_item_width_plus_focus_width]"/>
-							<param name="top" value="$PARAM[item_top]"/>
-							<param name="width" value="$PARAM[item_width]"/>
-							<param name="height" value="$PARAM[item_height]"/>
-							<param name="fallback" value="$PARAM[fallback]"/>
-							<param name="visible" value="Container($PARAM[target_id]).OnNext + [!$EXP[$PARAM[viewtype_label]View_Display_IsFanart] | $EXP[InfoWidget_Display_Is$PARAM[viewtype_label]View_Posters] | $EXP[InfoWidget_Display_Is$PARAM[viewtype_label]View_Square]]"/>
-							<param name="animationtype" value="Hidden"/>
-							<param name="animationcondition" value="true"/>
-							<param name="animationeffect" value="slide"/>
-							<param name="animationend" value="-$PARAM[item_width],0"/>
-						</include>
 						<!-- Dropshadow for icon 0 to -1 -->
 						<!-- Left Side -->
 						<include content="DropShadow">
@@ -2156,6 +2210,7 @@
 							<param name="animation2time" value="360"/>
 						</include>
 					</control>
+
 				</control>
 			</definition>
 		</include>
@@ -2428,6 +2483,24 @@
 			<param name="3x_item_width_plus_focus_width"/>
 			<param name="4x_item_width_plus_focus_width"/>
 			<definition>
+				<include content="Artwork_Transition_Slide_and_Zoom">
+					<param name="target_id" value="$PARAM[target_id]"/>
+					<param name="viewtype_label" value="Strip"/>
+					<param name="displaytype_label" value="$PARAM[displaytype_label]"/>
+					<param name="artwork_icon" value="$PARAM[artwork_icon]"/>
+					<param name="fallback" value="$PARAM[fallback]"/>
+					<param name="top" value="$PARAM[top]"/>
+					<param name="item_top" value="$PARAM[item_top]"/>
+					<param name="item_width" value="$PARAM[item_width]"/>
+					<param name="item_height" value="$PARAM[item_height]"/>
+					<param name="focus_width" value="$PARAM[focus_width]"/>
+					<param name="focus_height" value="$PARAM[focus_height]"/>
+					<param name="2x_item_width" value="$PARAM[2x_item_width]"/>
+					<param name="2x_item_width_plus_focus_width" value="$PARAM[2x_item_width_plus_focus_width]"/>
+					<param name="3x_item_width_plus_focus_width" value="$PARAM[3x_item_width_plus_focus_width]"/>
+					<param name="2x_item_width_minus_dropshadow_width" value="$PARAM[2x_item_width_minus_dropshadow_width]"/>
+					<param name="4x_item_width_plus_focus_width" value="$PARAM[4x_item_width_plus_focus_width]"/>
+				</include>
 				<include content="Artwork_Static">
 					<param name="target_id" value="$PARAM[target_id]"/>
 					<param name="viewtype_label" value="Strip"/>
@@ -2456,44 +2529,6 @@
 					<param name="2x_item_width_plus_focus_width" value="$PARAM[2x_item_width_plus_focus_width]"/>
 					<param name="3x_item_width_plus_focus_width" value="$PARAM[3x_item_width_plus_focus_width]"/>
 					<param name="2x_item_width_minus_dropshadow_width" value="$PARAM[2x_item_width_minus_dropshadow_width]"/>
-				</include>
-				<include content="Artwork_Transition_Slide_and_Zoom">
-					<param name="target_id" value="$PARAM[target_id]"/>
-					<param name="viewtype_label" value="Strip"/>
-					<param name="displaytype_label" value="$PARAM[displaytype_label]"/>
-					<param name="artwork_icon" value="$PARAM[artwork_icon]"/>
-					<param name="fallback" value="$PARAM[fallback]"/>
-					<param name="top" value="$PARAM[top]"/>
-					<param name="item_top" value="$PARAM[item_top]"/>
-					<param name="item_width" value="$PARAM[item_width]"/>
-					<param name="item_height" value="$PARAM[item_height]"/>
-					<param name="focus_width" value="$PARAM[focus_width]"/>
-					<param name="focus_height" value="$PARAM[focus_height]"/>
-					<param name="2x_item_width" value="$PARAM[2x_item_width]"/>
-					<param name="2x_item_width_plus_focus_width" value="$PARAM[2x_item_width_plus_focus_width]"/>
-					<param name="3x_item_width_plus_focus_width" value="$PARAM[3x_item_width_plus_focus_width]"/>
-					<param name="2x_item_width_minus_dropshadow_width" value="$PARAM[2x_item_width_minus_dropshadow_width]"/>
-					<param name="4x_item_width_plus_focus_width" value="$PARAM[4x_item_width_plus_focus_width]"/>
-				</include>
-				<include condition="Skin.HasSetting(Multiart_Slideshow)" content="MultiArt">
-					<param name="viewtype_label" value="Strip"/>
-					<param name="displaytype_label" value="$PARAM[displaytype_label]"/>
-					<param name="left" value="$PARAM[2x_item_width]"/>
-					<param name="top" value="$PARAM[top]"/>
-					<param name="item_top" value="$PARAM[item_top]"/>
-					<param name="item_width" value="$PARAM[item_width]"/>
-					<param name="item_height" value="$PARAM[item_height]"/>
-					<param name="focus_width" value="$PARAM[focus_width]"/>
-					<param name="focus_height" value="$PARAM[focus_height]"/>
-					<param name="focus_border_visible" value="true"/>
-					<param name="focus_border_edge" value="0"/>
-					<param name="focus_border_size" value="2"/>
-					<param name="focus_border_color" value="$VAR[Primary_Color]"/>
-					<param name="focus_border_texture" value="views/border_1px_10.png"/>
-					<param name="2x_item_width" value="$PARAM[2x_item_width]"/>
-					<param name="2x_item_width_plus_focus_width" value="$PARAM[2x_item_width_plus_focus_width]"/>
-					<param name="show_gradient" value="false"/>
-					<param name="artwork_mask" value="false"/>
 				</include>
 			</definition>
 		</include>
