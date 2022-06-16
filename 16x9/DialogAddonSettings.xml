@@ -1,75 +1,138 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <window>
 	<!-- addonsettings -->
-	<defaultcontrol always="true">9</defaultcontrol>
+	<defaultcontrol always="true">9001</defaultcontrol>
+	<backgroundcolor>$VAR[Secondary_Color]</backgroundcolor>
+	<include>Delayed_Dialog_Fade_Animation</include>
 	<controls>
-		<!-- Background -->
-		<include>DialogBackgroundImage</include>
-		<!-- Main group -->
-		<control type="group" id="1000">
-			<include content="DialogHeading">
-				<param name="DialogHeaderId" value="2" />
-				<param name="DialogHeaderLabel" value="-" />
+
+		<!-- Delay on Load -->
+		<control type="button" id="9001">
+			<visible allowhiddenfocus="true">false</visible>
+			<onfocus>SetFocus(3)</onfocus>
+		</control>
+		<control type="group" id="9002">
+			<visible>Control.HasFocus(9001)</visible>
+			<animation effect="slide" end="0,0" time="360" reversible="false">Hidden</animation>
+		</control>
+
+		<include>DialogFanartSlideshow</include>
+
+		<control type="group">
+			<visible>Window.IsActive(addonsettings) + !$EXP[TransparentDialog_IsVisible] + !Control.IsVisible(9002)</visible>
+			<include>Content_Fade_Animation</include>
+
+			<include content="Transparent_Dialog_Panel">
+				<param name="top" value="180"/>
+				<param name="bottom" value="180"/>
 			</include>
-			<!-- Left grouplist -->
+
+			<!-- Heading label -->
+			<include content="Breadcrumb_Label">
+				<param name="title_label_id" value="2"/>
+				<param name="info_label_visible" value="false"/>
+			</include>
+
+			<include content="DialogDivider">
+				<param name="left" value="599"/>
+				<param name="height" value="630"/>
+			</include>
+
+			<!-- Main list -->
 			<control type="grouplist" id="3">
-				<width>370</width>
-				<height>775</height>
+				<left>120</left>
+				<width>480</width>
+				<centertop>50%</centertop>
+				<height>630</height>
 				<onright>5</onright>
 				<onleft>noop</onleft>
 				<ondown>9000</ondown>
 				<onup>noop</onup>
-				<itemgap>25</itemgap>
-				<scrolltime>0</scrolltime>
+				<itemgap>0</itemgap>
+				<orientation>vertical</orientation>
+				<align>top</align>
+				<scrolltime tween="sine" easing="inout">360</scrolltime>
 			</control>
-			<!-- Default button -->
-			<control type="button" id="10"/>
-			<!-- Right grouplist -->
+
+			<!-- Dummy underline for main list when unfocused -->
+			<control type="image">
+				<animation effect="slide" end="0,90" time="0" reversible="false" condition="Container(3).Position(1)">Conditional</animation>
+				<animation effect="slide" end="0,180" time="0" reversible="false" condition="Container(3).Position(2)">Conditional</animation>
+				<animation effect="slide" end="0,270" time="0" reversible="false" condition="Container(3).Position(3)">Conditional</animation>
+				<animation effect="slide" end="0,360" time="0" reversible="false" condition="Container(3).Position(4)">Conditional</animation>
+				<animation effect="slide" end="0,450" time="0" reversible="false" condition="Container(3).Position(5)">Conditional</animation>
+				<animation effect="slide" end="0,540" time="0" reversible="false" condition="Container(3).Position(6)">Conditional</animation>
+				<left>120</left>
+				<width>480</width>
+				<height>1</height>
+				<top>314</top>
+				<aspectratio>scale</aspectratio>
+				<texture colordiffuse="$VAR[Unfocused_Color]">views/white_100.png</texture>
+			</control>
+
+			<!-- Sub list -->
 			<control type="grouplist" id="5">
-				<left>430</left>
-				<width>1390</width>
-				<height>775</height>
+				<width>1200</width>
+				<left>600</left>
+				<centertop>50%</centertop>
+				<height>630</height>
 				<onleft>3</onleft>
-				<onright>noop</onright>
+				<onright>9000</onright>
 				<onup>noop</onup>
 				<ondown>9000</ondown>
-				<itemgap>25</itemgap>
-				<scrolltime>0</scrolltime>
+				<itemgap>0</itemgap>
+				<orientation>vertical</orientation>
+				<align>top</align>
+				<scrolltime tween="sine" easing="inout">360</scrolltime>
+				<pagecontrol>60</pagecontrol>
 			</control>
+
+			<!-- Sub list scrollbar -->
+			<include content="Grouplist_Scrollbar">
+				<param name="visible" value="ControlGroup(5).HasFocus"/>
+			</include>
+
 			<!-- Default button -->
 			<control type="button" id="7"/>
 			<!-- Default radiobutton -->
 			<control type="radiobutton" id="8"/>
 			<!-- Default spincontrolex -->
 			<control type="spincontrolex" id="9"/>
-			<!-- Default edit -->
-			<control type="edit" id="12" />
-			<!-- Default label -->
-			<control type="label" id="14">
-				<textcolor>$VAR[SelectedColor]</textcolor>
-			</control>
-			<!-- Default seperator -->
+			<!-- Default togglebutton -->
+			<control type="togglebutton" id="10"/>
+			<!-- Default divider -->
 			<control type="image" id="11">
-				<height>-25</height>
-				<texture></texture>
+				<height>1</height>
+				<texture colordiffuse="$VAR[Blank_Color]">views/white_100.png</texture>
 			</control>
+			<!-- Default edit -->
+			<control type="edit" id="12"/>
 			<!-- Default slider -->
 			<control type="sliderex" id="13"/>
+			<!-- Default label -->
+			<control type="label" id="14">
+				<height>90</height>
+				<textoffsetx>20</textoffsetx>
+				<font>Default_Settings_Header</font>
+				<textcolor>$VAR[Unfocused_Color]</textcolor>
+			</control>
+
+			<include content="ButtonGroup">
+				<param name="onup" value="5"/>
+				<param name="onleft" value="5"/>
+				<param name="button1id" value="30"/>
+				<param name="button1unfocused" value="Refresh_Unfocused"/>
+				<param name="button1focused" value="Refresh_Focused_Large"/>
+				<param name="button2id" value="29"/>
+				<param name="button2unfocused" value="Cross_Unfocused"/>
+				<param name="button2focused" value="Cross_Focused_Large"/>
+				<param name="button3id" value="28"/>
+				<param name="button3unfocused" value="Check_Unfocused"/>
+				<param name="button3focused" value="Check_Focused_Large"/>
+				<param name="buttonsvisible" value="true"/>
+			</include>
+
 		</control>
-		<include content="DialogButtons">
-			<param name="Button4Visible" value="false" />
-			<!-- Defaults Button -->
-			<param name="Button3ID" value="30" />
-			<param name="Button3Label" value="$LOCALIZE[409]" />
-			<param name="Button3Visible" value="true" />
-			<!-- Cancel Button -->
-			<param name="Button2ID" value="29" />
-			<param name="Button2Label" value="X" />
-			<param name="Button2Visible" value="true" />
-			<!-- OK Button -->
-			<param name="Button1ID" value="28" />
-			<param name="Button1Label" value="$LOCALIZE[186]" />
-			<param name="Button1Visible" value="true" />
-		</include>
+
 	</controls>
 </window>
