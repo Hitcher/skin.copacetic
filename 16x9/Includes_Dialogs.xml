@@ -217,25 +217,36 @@
 		<param name="position" default=""/>
 		<param name="width" default="120"/>
 		<definition>
-			<control type="label">
+			<control type="group">
+				<height>$PARAM[width]</height>
 				<width>$PARAM[width]</width>
-				<height>120</height>
-				<visible>Control.HasFocus($PARAM[id])</visible>
-				<label>$INFO[Container($PARAM[id]).ListItemNoWrap($PARAM[position]).Label]</label>
-				<font>Keyboard_Button_$PARAM[position]</font>
-				<textcolor>$VAR[Light_Color]</textcolor>
-				<align>center</align>
-				<aligny>center</aligny>
-			</control>
-			<control type="label">
-				<width>$PARAM[width]</width>
-				<height>120</height>
-				<visible>!Control.HasFocus($PARAM[id])</visible>
-				<label>$INFO[Container($PARAM[id]).ListItemNoWrap($PARAM[position]).Label]</label>
-				<font>Keyboard_Button_5</font>
-				<textcolor>$VAR[Light_Grey_Color]</textcolor>
-				<align>center</align>
-				<aligny>center</aligny>
+				<control type="group">
+					<visible>Control.HasFocus($PARAM[id])</visible>
+					<control type="image">
+						<animation effect="slide" end="0,5" time="0" reversible="false" condition="true">Conditional</animation>
+						<visible>Container($PARAM[id]).Position($PARAM[position])</visible>
+						<left>15</left>
+						<right>15</right>
+						<bottom>0</bottom>
+						<height>10</height>
+						<texture colordiffuse="$VAR[Accent_Color]">views/white_100.png</texture>
+					</control>
+					<control type="label">
+						<align>center</align>
+						<aligny>center</aligny>
+						<label>$INFO[Container($PARAM[id]).ListItemNoWrap($PARAM[position]).Label]</label>
+						<font>Keyboard_Button_$PARAM[position]</font>
+						<textcolor>$VAR[Light_Color]</textcolor>
+					</control>
+				</control>
+				<control type="label">
+					<visible>!Control.HasFocus($PARAM[id])</visible>
+					<align>center</align>
+					<aligny>center</aligny>
+					<label>$INFO[Container($PARAM[id]).ListItemNoWrap($PARAM[position]).Label]</label>
+					<font>Keyboard_Button_5</font>
+					<textcolor>$VAR[Unfocused_Color]</textcolor>
+				</control>
 			</control>
 		</definition>
 	</include>
@@ -243,26 +254,34 @@
 	<include name="Numeric_Label_Button">
 		<param name="id" default="1000"/>
 		<param name="position" default=""/>
+		<param name="width" default="120"/>
 		<definition>
-			<control type="label">
-				<width>120</width>
-				<height>120</height>
-				<visible>Control.HasFocus($PARAM[id]) + Container($PARAM[id]).Position($PARAM[position])</visible>
-				<label>$INFO[Container($PARAM[id]).ListItemPosition($PARAM[position]).Label]</label>
-				<font>Keyboard_Button_0</font>
-				<textcolor>$VAR[Light_Color]</textcolor>
-				<align>center</align>
-				<aligny>center</aligny>
-			</control>
-			<control type="label">
-				<width>120</width>
-				<height>120</height>
-				<visible>![Control.HasFocus($PARAM[id] + Container($PARAM[id]).Position($PARAM[position])]</visible>
-				<label>$INFO[Container($PARAM[id]).ListItemPosition($PARAM[position]).Label]</label>
-				<font>Keyboard_Button_5</font>
-				<textcolor>$VAR[Light_Grey_Color]</textcolor>
-				<align>center</align>
-				<aligny>center</aligny>
+			<control type="group">
+				<height>$PARAM[width]</height>
+				<width>$PARAM[width]</width>
+				<control type="group">
+					<visible>Control.HasFocus($PARAM[id]) + Container($PARAM[id]).Position($PARAM[position])</visible>
+					<control type="label">
+						<align>center</align>
+						<aligny>center</aligny>
+						<label>$INFO[Container($PARAM[id]).ListItemPosition($PARAM[position]).Label]</label>
+						<font>Keyboard_Button_0</font>
+						<textcolor>$VAR[Light_Color]</textcolor>
+					</control>
+					<control type="image">
+						<left>15</left>
+						<right>15</right>
+						<bottom>0</bottom>
+						<height>10</height>
+						<texture colordiffuse="$VAR[Accent_Color]">views/white_100.png</texture>
+					</control>
+				</control>
+				<control type="label">
+					<visible>![Control.HasFocus($PARAM[id] + Container($PARAM[id]).Position($PARAM[position])]</visible>
+					<label>$INFO[Container($PARAM[id]).ListItemPosition($PARAM[position]).Label]</label>
+					<font>Keyboard_Button_5</font>
+					<textcolor>$VAR[Unfocused_Color]</textcolor>
+				</control>
 			</control>
 		</definition>
 	</include>
@@ -304,6 +323,11 @@
 				<align>center</align>
 				<visible>$PARAM[visible]</visible>
 				<scrolltime tween="sine" easing="inout">360</scrolltime>
+				<include content="Keyboard_Label_Button">
+					<param name="id" value="$PARAM[id]"/>
+					<param name="position" value="-6"/>
+					<param name="width" value="$PARAM[buttonwidth]"/>
+				</include>
 				<include content="Keyboard_Label_Button">
 					<param name="id" value="$PARAM[id]"/>
 					<param name="position" value="-5"/>
@@ -357,6 +381,11 @@
 				<include content="Keyboard_Label_Button">
 					<param name="id" value="$PARAM[id]"/>
 					<param name="position" value="5"/>
+					<param name="width" value="$PARAM[buttonwidth]"/>
+				</include>
+				<include content="Keyboard_Label_Button">
+					<param name="id" value="$PARAM[id]"/>
+					<param name="position" value="6"/>
 					<param name="width" value="$PARAM[buttonwidth]"/>
 				</include>
 			</control>
