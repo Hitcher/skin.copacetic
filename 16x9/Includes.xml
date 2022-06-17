@@ -18,7 +18,6 @@
 	<include file="Includes_StripView_Menu_Options.xml"/>
 	<include file="Includes_Viewtypes.xml"/>
 	<include file="Includes_Widgets.xml"/>
-	<include file="Parameters.xml"/>
 	<include file="script-skinshortcuts-includes.xml"/>
 	<include file="Viewtype_50_List.xml"/>
 	<include file="Viewtype_501_Billboard.xml"/>
@@ -92,7 +91,7 @@
 		<param name="position"/>
 		<param name="focusedtop" default="0"/>
 		<param name="focusedheight" default="80"/>
-		<param name="focusedfont" default="List_Title_Focused"/>
+		<param name="focusedfont" default="Main_Menu_Focused"/>
 		<param name="focusedtextcolor" default="$VAR[List_Text_Color]"/>
 		<param name="unfocusedtop" default="16"/>
 		<param name="unfocusedheight" default="55"/>
@@ -213,7 +212,7 @@
 		<param name="itemgap" default="0"/>
 		<param name="focusedtop" default="0"/>
 		<param name="focusedheight" default="0"/>
-		<param name="focusedfont" default="List_Title_Focused"/>
+		<param name="focusedfont" default="Main_Menu_Focused"/>
 		<param name="focusedtextcolor" default="$VAR[Primary_Color]"/>
 		<param name="unfocusedtop" default="16"/>
 		<param name="unfocusedheight" default="55"/>
@@ -1403,7 +1402,8 @@
 		<texturefocus></texturefocus>
 	</include>
 
-	<include name="Hidden_Image">
+	<include name="Hidden_Control">
+		<top>-100</top>
 		<left>-100</left>
 		<width>10</width>
 		<height>10</height>
@@ -1488,20 +1488,25 @@
 		<param name="visible" default="true"/>
 	  <param name="right" default="0"/>
 	  <param name="bottom" default="0"/>
-		<param name="onleft" default="0"/>
-		<param name="onright" default="0"/>
+		<param name="onleft" default="noop"/>
+		<param name="onright" default="noop"/>
 		<param name="onup" default="noop"/>
 		<param name="ondown" default="noop"/>
 	  <param name="buttonwidth" default="120"/>
 		<param name="align" default="right"/>
-	  <param name="button1id" default=""/>
+		<param name="buttonsvisible" default="String.IsEqual(Control.GetLabel(11),$LOCALIZE[186])"/>
+
+		<param name="button1visible" default="false"/>
+	  <param name="button1id" default="38501"/>
 		<param name="button1onclick" default=""/>
 		<param name="button1label" default=""/>
 		<param name="button1left" default="0"/>
 		<param name="button1unfocused" default="Cross_Unfocused"/>
 		<param name="button1focused" default="Cross_Focused_Large"/>
 		<param name="button1rotated" default="true"/>
-		<param name="button2id" default=""/>
+
+		<param name="button2visible" default="false"/>
+		<param name="button2id" default="38502"/>
 		<param name="button2onclick" default=""/>
 		<param name="button2onclick2" default=""/>
 		<param name="button2label" default=""/>
@@ -1509,28 +1514,33 @@
 		<param name="button2unfocused" default="Check_Unfocused"/>
 		<param name="button2focused" default="Check_Focused_Large"/>
 		<param name="button2rotated" default="true"/>
-		<param name="button3id" default=""/>
+
+		<param name="button3visible" default="false"/>
+		<param name="button3id" default="38503"/>
 		<param name="button3onclick" default=""/>
+		<param name="button3onclick2" default=""/>
 		<param name="button3label" default=""/>
 		<param name="button3left" default="0"/>
 		<param name="button3unfocused" default="Cross_Unfocused"/>
 		<param name="button3focused" default="Cross_Focused_Large"/>
 		<param name="button3rotated" default="true"/>
-		<param name="button4id" default=""/>
+
+		<param name="button4visible" default="false"/>
+		<param name="button4id" default="38504"/>
 		<param name="button4onclick" default=""/>
 		<param name="button4label" default=""/>
 		<param name="button4left" default="0"/>
 		<param name="button4unfocused" default="Check_Unfocused"/>
 		<param name="button4focused" default="Check_Focused_Large"/>
 		<param name="button4rotated" default="true"/>
-		<param name="buttonsvisible" default="String.IsEqual(Control.GetLabel(11),$LOCALIZE[186])"/>
+
 		<param name="labelgroupheight" default="80"/>
-		<param name="unfocusedcolor" default="$VAR[Overlay_Text_Color]"/>
-		<param name="unfocusedfont" default="Main_Menu_Unfocused"/>
-		<param name="focusedcolor" default="$VAR[Overlay_Text_Color]"/>
 		<param name="focusedfont" default="List_Title_Focused"/>
 		<param name="unfocusedtop" default="16"/>
 		<param name="unfocusedheight" default="55"/>
+		<param name="unfocusedcolor" default="$VAR[Overlay_Text_Color]"/>
+		<param name="unfocusedfont" default="Main_Menu_Unfocused"/>
+		<param name="focusedcolor" default="$VAR[Overlay_Text_Color]"/>
 	  <definition>
 			<control type="group">
 				<visible>$PARAM[visible]</visible>
@@ -1542,12 +1552,14 @@
 		      <orientation>horizontal</orientation>
 					<itemgap>0</itemgap>
 		      <control type="button" id="$PARAM[button1id]">
+						<visible>$PARAM[button1visible]</visible>
 						<onclick>$PARAM[button1onclick]</onclick>
 						<label>$PARAM[button1label]</label>
 						<include>Hidden_Button</include>
 						<onfocus>SetProperty(Button_Group_Label,$INFO[Control.GetLabel($PARAM[button1id])],home)</onfocus>
 					</control>
 		      <control type="button" id="$PARAM[button2id]">
+						<visible>$PARAM[button2visible]</visible>
 						<onclick>$PARAM[button2onclick]</onclick>
 						<onclick>$PARAM[button2onclick2]</onclick>
 						<label>$PARAM[button2label]</label>
@@ -1555,12 +1567,15 @@
 						<onfocus>SetProperty(Button_Group_Label,$INFO[Control.GetLabel($PARAM[button2id])],home)</onfocus>
 					</control>
 					<control type="button" id="$PARAM[button3id]">
+						<visible>$PARAM[button3visible]</visible>
 						<onclick>$PARAM[button3onclick]</onclick>
+						<onclick>$PARAM[button3onclick2]</onclick>
 						<label>$PARAM[button3label]</label>
 						<include>Hidden_Button</include>
 						<onfocus>SetProperty(Button_Group_Label,$INFO[Control.GetLabel($PARAM[button3id])],home)</onfocus>
 					</control>
 					<control type="button" id="$PARAM[button4id]">
+						<visible>$PARAM[button4visible]</visible>
 						<onclick>$PARAM[button4onclick]</onclick>
 						<label>$PARAM[button4label]</label>
 						<include>Hidden_Button</include>
@@ -1569,7 +1584,7 @@
 		    </control>
 		    <control type="grouplist">
 					<visible>$PARAM[buttonsvisible]</visible>
-		      <right>$PARAM[right]</right>
+					<right>$PARAM[right]</right>
 		      <bottom>0</bottom>
 					<width>100%</width>
 		      <height>$PARAM[buttonwidth]</height>
@@ -1752,60 +1767,6 @@
 		</definition>
 	</include>
 
-<!-- OLD -->
-
-<include name="DialogButtons">
-	<control type="grouplist" id="9000">
-		<visible allowhiddenfocus="true">false</visible>
-		<right>384</right>
-		<top>495</top>
-		<width>1536</width>
-		<height>50</height>
-		<itemgap>50</itemgap>
-		<onleft>1000</onleft>
-		<onright>noop</onright>
-		<onup>1000</onup>
-		<ondown>noop</ondown>
-		<align>right</align>
-		<orientation>horizontal</orientation>
-		<control type="button" id="$PARAM[Button4ID]">
-			<width>auto</width>
-			<aspectratio>scale</aspectratio>
-			<align>center</align>
-			<label>$PARAM[Button4Label]</label>
-			<texturenofocus></texturenofocus>
-			<visible>$PARAM[Button4Visible]</visible>
-		</control>
-		<control type="button" id="$PARAM[Button3ID]">
-			<width>auto</width>
-			<aspectratio>scale</aspectratio>
-			<align>center</align>
-			<label>$PARAM[Button3Label]</label>
-			<texturenofocus></texturenofocus>
-			<visible>$PARAM[Button3Visible]</visible>
-		</control>
-		<control type="button" id="$PARAM[Button2ID]">
-			<width>auto</width>
-			<aspectratio>scale</aspectratio>
-			<align>center</align>
-			<label>$PARAM[Button2Label]</label>
-			<texturenofocus></texturenofocus>
-			<visible>$PARAM[Button2Visible]</visible>
-		</control>
-		<control type="button" id="$PARAM[Button1ID]">
-			<width>auto</width>
-			<aspectratio>scale</aspectratio>
-			<align>center</align>
-			<textoffsetx></textoffsetx>
-			<label>$PARAM[Button1Label]</label>
-			<texturenofocus></texturenofocus>
-			<visible>$PARAM[Button1Visible]</visible>
-		</control>
-	</control>
-</include>
-
-
-
 	<include name="Opacity">
 		<!-- Opacity -->
 		<animation effect="fade" start="100" end="80" condition="String.IsEmpty(Skin.String(Opacity))">Conditional</animation>
@@ -1911,95 +1872,5 @@
 		<animation effect="fade" start="100" end="99" condition="String.IsEqual(Skin.String(Opacity),$NUMBER[99])">Conditional</animation>
 		<animation effect="fade" start="100" end="100" condition="String.IsEqual(Skin.String(Opacity),$NUMBER[100])">Conditional</animation>
 	</include>
-	<!-- Dialog Button -->
-	<include name="DialogButton">
-		<width>auto</width>
-		<height>75</height>
-		<font>Light36</font>
-		<aligny>top</aligny>
-		<textoffsetx>30</textoffsetx>
-		<textoffsety>9</textoffsety>
-		<textcolor>$VAR[TextColor]</textcolor>
-		<texture></texture>
-		<texturefocus colordiffuse="$VAR[BackgroundColor]">common/white.png</texturefocus>
-		<texturenofocus></texturenofocus>
-	</include>
-	<!-- Conq -->
-	<!-- Shutdown buttons -->
-	<include name="ShutdownButtons">
-		<width>600</width>
-		<height>45</height>
-		<font>Font48</font>
-		<textcolor>$VAR[TextColor]</textcolor>
-		<focusedcolor>$VAR[TextColor]</focusedcolor>
-	</include>
-	<!-- Options buttons -->
-	<include name="OptionButtons">
-		<width>480</width>
-		<height>54</height>
-		<font>Font48</font>
-		<textcolor>$VAR[TextColor]</textcolor>
-		<focusedcolor>$VAR[TextColor]</focusedcolor>
-	</include>
-	<!-- OSD Play buttons -->
-	<include name="OSDPlayStopButtons">
-		<control type="togglebutton" id="1">
-			<width>60</width>
-			<height>60</height>
-			<texturefocus>old_osd/OSDPauseFO.png</texturefocus>
-			<texturenofocus>old_osd/OSDPauseNF.png</texturenofocus>
-			<usealttexture>Player.Paused | Player.Forwarding | Player.Rewinding</usealttexture>
-			<alttexturefocus>old_osd/OSDPlayFO.png</alttexturefocus>
-			<alttexturenofocus>old_osd/OSDPlayNF.png</alttexturenofocus>
-			<onclick>PlayerControl(Play)</onclick>
-		</control>
-		<control type="button" id="2">
-			<width>60</width>
-			<height>60</height>
-			<texturefocus>old_osd/OSDStopFO.png</texturefocus>
-			<texturenofocus>old_osd/OSDStopNF.png</texturenofocus>
-			<onclick>PlayerControl(Stop)</onclick>
-		</control>
-	</include>
-	<!-- OSD Stop buttons -->
-	<include name="OSDStopButton">
-		<control type="button" id="1">
-			<width>60</width>
-			<height>60</height>
-			<texturefocus>old_osd/OSDStopFO.png</texturefocus>
-			<texturenofocus>old_osd/OSDStopNF.png</texturenofocus>
-			<onclick>PlayerControl(Stop)</onclick>
-		</control>
-	</include>
-	<!-- Item count -->
-	<include name="ItemCount">
-		<control type="grouplist">
-			<right>120</right>
-			<bottom>110</bottom>
-			<width>800</width>
-			<height>44</height>
-			<itemgap>6</itemgap>
-			<align>right</align>
-			<orientation>horizontal</orientation>
-			<usecontrolcoords>true</usecontrolcoords>
-			<visible>Integer.IsGreater(Container.NumItems,0)</visible>
-			<control type="label">
-				<top>3</top>
-				<width>auto</width>
-				<height>44</height>
-				<align>right</align>
-				<label>$INFO[Container.NumItems]</label>
-				<font>Font25</font>
-				<textcolor>$VAR[UnFocusedColor]</textcolor>
-			</control>
-			<control type="label">
-				<width>auto</width>
-				<height>44</height>
-				<align>right</align>
-				<label>$VAR[ContentType]</label>
-				<font>Font33</font>
-				<textcolor>$VAR[UnFocusedColor]</textcolor>
-			</control>
-		</control>
-	</include>
+
 </includes>

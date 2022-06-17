@@ -2,106 +2,97 @@
 <window>
 	<!-- skinsettings -->
 	<onunload>RunScript(script.skinshortcuts,type=buildxml&amp;mainmenuID=9000)</onunload>
-	<defaultcontrol always="true">9</defaultcontrol>
+	<defaultcontrol always="true">9001</defaultcontrol>
 	<backgroundcolor>$VAR[Secondary_Color]</backgroundcolor>
 	<include>Delayed_Dialog_Fade_Animation</include>
 	<controls>
+
+		<!-- Delay on Load -->
+		<control type="button" id="9001">
+			<visible allowhiddenfocus="true">false</visible>
+			<onfocus>SetFocus(9)</onfocus>
+		</control>
+		<control type="group" id="9002">
+			<visible>Control.HasFocus(9001)</visible>
+			<animation effect="slide" end="0,0" time="360" reversible="false">Hidden</animation>
+		</control>
+
 		<include>DialogFanartSlideshow</include>
+
 		<control type="group">
-			<visible>!$EXP[TransparentDialog_IsVisible]</visible>
+			<visible>Window.IsActive(skinsettings) + !$EXP[TransparentDialog_IsVisible] + !Control.IsVisible(9002)</visible>
 			<include>Content_Fade_Animation</include>
 
+			<!-- Heading label -->
 			<include content="Breadcrumb_Label">
 				<param name="visible" value="true"/>
 			</include>
 
-			<include content="Transparent_Dialog_Panel"/>
+			<include content="Transparent_Dialog_Panel">
+				<param name="top" value="180"/>
+				<param name="bottom" value="180"/>
+			</include>
 
 			<!-- Hidden Left List -->
 			<control type="grouplist" id="9">
-				<left>-10</left>
-				<width>1</width>
-				<height>1</height>
-				<onright>2</onright>
-				<onleft>noop</onleft>
-				<onup>noop</onup>
-				<ondown>9001</ondown>
-				<orientation>vertical</orientation>
-				<control type="button" id="10"/>
-				<control type="button" id="11">
-					<visible>Skin.HasSetting(Widgets_Enabled)</visible>
-				</control>
-				<control type="button" id="12"/>
-				<control type="button" id="13"/>
-			</control>
-
-			<!-- Dummy Left List -->
-			<control type="grouplist">
 				<left>120</left>
 				<width>480</width>
-				<height>540</height>
 				<centertop>50%</centertop>
+				<height>630</height>
+				<onright>2</onright>
+				<onleft>415</onleft>
 				<itemgap>0</itemgap>
 				<orientation>vertical</orientation>
-				<control type="button">
-					<description>Home - unselected</description>
-					<visible>!ControlGroup(9).HasFocus(10)</visible>
+				<control type="button" id="10">
 					<label>$LOCALIZE[31211]</label>
+					<texturefocus border="2,2,2,2" colordiffuse="$VAR[Unfocused_Color]">dialogs/button_underline_focused.png</texturefocus>
 				</control>
-				<control type="button">
-					<description>Home - selected</description>
-					<visible>ControlGroup(9).HasFocus(10)</visible>
-					<label>$LOCALIZE[31211]</label>
-					<textcolor>$VAR[Light_Color]</textcolor>
-					<texturenofocus border="2,2,2,2" colordiffuse="$VAR[Light_Color]">dialogs/button_underline_focused_20.png</texturenofocus>
-				</control>
-				<control type="button">
-					<description>Widgets - unselected</description>
-					<visible>!ControlGroup(9).HasFocus(11) + Skin.HasSetting(Widgets_Enabled)</visible>
+				<control type="button" id="11">
+					<visible>Skin.HasSetting(Widgets_Enabled)</visible>
 					<label>$LOCALIZE[31219]</label>
+					<texturefocus border="2,2,2,2" colordiffuse="$VAR[Unfocused_Color]">dialogs/button_underline_focused.png</texturefocus>
 				</control>
-				<control type="button">
-					<description>Widgets - selected</description>
-					<visible>ControlGroup(9).HasFocus(11) + Skin.HasSetting(Widgets_Enabled)</visible>
-					<label>$LOCALIZE[31219]</label>
-					<textcolor>$VAR[Light_Color]</textcolor>
-					<texturenofocus border="2,2,2,2" colordiffuse="$VAR[Light_Color]">dialogs/button_underline_focused_20.png</texturenofocus>
-				</control>
-				<control type="button">
-					<description>General - unselected</description>
-					<visible>!ControlGroup(9).HasFocus(12)</visible>
+				<control type="button" id="12">
 					<label>$LOCALIZE[128]</label>
+					<texturefocus border="2,2,2,2" colordiffuse="$VAR[Unfocused_Color]">dialogs/button_underline_focused.png</texturefocus>
 				</control>
-				<control type="button">
-					<description>General - selected</description>
-					<visible>ControlGroup(9).HasFocus(12)</visible>
-					<label>$LOCALIZE[128]</label>
-					<textcolor>$VAR[Light_Color]</textcolor>
-					<texturenofocus border="2,2,2,2" colordiffuse="$VAR[Light_Color]">dialogs/button_underline_focused_20.png</texturenofocus>
-				</control>
-				<control type="button">
-					<description>Look and feel - unselected</description>
-					<visible>!ControlGroup(9).HasFocus(13)</visible>
+				<control type="button" id="13">
 					<label>$LOCALIZE[24997]</label>
+					<texturefocus border="2,2,2,2" colordiffuse="$VAR[Unfocused_Color]">dialogs/button_underline_focused.png</texturefocus>
 				</control>
-				<control type="button">
-					<description>Look and feel - selected</description>
-					<visible>ControlGroup(9).HasFocus(13)</visible>
-					<label>$LOCALIZE[24997]</label>
-					<textcolor>$VAR[Light_Color]</textcolor>
-					<texturenofocus border="2,2,2,2" colordiffuse="$VAR[Light_Color]">dialogs/button_underline_focused_20.png</texturenofocus>
-				</control>
+			</control>
+
+			<!-- Dummy underline for main list when unfocused -->
+			<control type="image">
+				<animation effect="slide" end="0,90" time="0" reversible="false" condition="Container(9).Position(1)">Conditional</animation>
+				<animation effect="slide" end="0,180" time="0" reversible="false" condition="Container(9).Position(2)">Conditional</animation>
+				<animation effect="slide" end="0,270" time="0" reversible="false" condition="Container(9).Position(3)">Conditional</animation>
+				<animation effect="slide" end="0,360" time="0" reversible="false" condition="Container(9).Position(4)">Conditional</animation>
+				<animation effect="slide" end="0,450" time="0" reversible="false" condition="Container(9).Position(5)">Conditional</animation>
+				<animation effect="slide" end="0,540" time="0" reversible="false" condition="Container(9).Position(6)">Conditional</animation>
+				<left>120</left>
+				<width>480</width>
+				<height>1</height>
+				<top>314</top>
+				<aspectratio>scale</aspectratio>
+				<texture colordiffuse="$VAR[Unfocused_Color]">views/white_100.png</texture>
 			</control>
 
 			<include content="DialogDivider">
-				<param name="left" value="600"/>
+				<param name="left" value="599"/>
+				<param name="height" value="630"/>
+			</include>
+
+			<!-- Sub list scrollbar -->
+			<include content="Grouplist_Scrollbar">
+				<param name="visible" value="ControlGroup(2).HasFocus"/>
 			</include>
 
 			<!-- Right grouplist -->
 			<control type="grouplist" id="2">
 				<width>1200</width>
 				<left>600</left>
-				<height>540</height>
+				<height>630</height>
 				<centertop>50%</centertop>
 				<itemgap>0</itemgap>
 				<onleft>9</onleft>
@@ -110,6 +101,7 @@
 				<orientation>vertical</orientation>
 				<align>top</align>
 				<scrolltime tween="sine" easing="inout">360</scrolltime>
+				<pagecontrol>60</pagecontrol>
 
 				<!-- Home -->
 				<!-- Menu -->
@@ -303,11 +295,13 @@
 			<include content="ButtonGroup">
 				<param name="onleft" value="2"/>
 				<param name="onup" value="2"/>
+				<param name="onright" value="9"/>
+				<param name="buttonsvisible" value="true"/>
+				<param name="button1visible" value="true"/>
 				<param name="button1id" value="415"/>
 				<param name="button1unfocused" value="Cross_Unfocused"/>
 				<param name="button1focused" value="Cross_Focused_Large"/>
 				<param name="button1onclick" value="Close"/>
-				<param name="buttonsvisible" value="true"/>
 			</include>
 
 		</control>

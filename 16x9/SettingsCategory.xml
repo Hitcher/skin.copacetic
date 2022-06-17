@@ -21,19 +21,24 @@
 				<centertop>50%</centertop>
 				<itemgap>0</itemgap>
 				<onright>5</onright>
-				<onleft>20</onleft>
+				<onleft>301</onleft>
 				<orientation>vertical</orientation>
 				<align>top</align>
 				<scrolltime tween="sine" easing="inout">360</scrolltime>
 			</control>
 
 			<control type="button" id="10">
-				<onclick>SetFocus(5)</onclick>
-				<textoffsetx>10</textoffsetx>
+				<focusedcolor>$VAR[Settings_Grouplist_Label_Color]</focusedcolor>
 			</control>
 
 			<include content="DialogDivider">
-				<param name="left" value="600"/>
+				<param name="left" value="599"/>
+			</include>
+
+			<!-- Sub list scrollbar -->
+			<include content="Grouplist_Scrollbar">
+				<param name="visible" value="ControlGroup(5).HasFocus"/>
+				<param name="height" value="540"/>
 			</include>
 
 			<!-- Sub list -->
@@ -45,7 +50,8 @@
 				<itemgap>0</itemgap>
 				<onleft>3</onleft>
 				<onback>3</onback>
-				<onright>9000</onright>
+				<onright>20</onright>
+				<pagecontrol>60</pagecontrol>
 				<orientation>vertical</orientation>
 				<align>top</align>
 				<scrolltime tween="sine" easing="inout">360</scrolltime>
@@ -68,52 +74,48 @@
 			<control type="spincontrolex" id="9"/>
 			<control type="sliderex" id="13"/>
 
-			<!-- Settings Level Panel -->
-			<control type="group">
-				<animation effect="slide" end="-360" time="180" tween="sine" easing="inout" reversible="true" condition="!Control.HasFocus(20)">Conditional</animation>
-				<height>120</height>
-				<top>60</top>
-				<width>480</width>
-				<control type="image">
-					<centertop>50%</centertop>
-					<height>120</height>
-					<texture colordiffuse="$VAR[Dark_Grey_Color]">views/white_100.png</texture>
-				</control>
-				<control type="button" id="20">
-					<left>30</left>
-					<width>100%</width>
-					<height>60</height>
-					<centertop>50%</centertop>
-					<onclick>SettingsLevelChange</onclick>
-					<onright>3</onright>
-					<onup>3</onup>
-					<font>List_Title_Focused</font>
-					<textoffsetx>0</textoffsetx>
-					<textcolor>$VAR[Light_Color]</textcolor>
-					<focusedcolor>$VAR[Light_Color]</focusedcolor>
-					<texturefocus></texturefocus>
-				</control>
-			</control>
-
 			<control type="textbox" id="6">
-				<visible>!Integer.IsEqual(Container(5).CurrentItem,-1) | Control.HasFocus(30)</visible>
-				<include>Content_Fade_Animation</include>
-				<left>120</left>
-				<bottom>70</bottom>
-				<right>180</right>
-				<height>102</height>
+				<visible>!ControlGroup(9000).HasFocus</visible>
+				<include>Delayed_Content_Fade_Animation</include>
+				<left>180</left>
+				<right>300</right>
+				<bottom>0</bottom>
+				<height>240</height>
 				<font>Description</font>
 				<align>left</align>
+				<aligny>center</aligny>
 			</control>
+
+			<control type="textbox">
+				<visible>ControlGroup(9000).HasFocus</visible>
+				<include>Delayed_Content_Fade_Animation</include>
+				<left>180</left>
+				<right>300</right>
+				<bottom>0</bottom>
+				<height>240</height>
+				<label>$LOCALIZE[13271] [B]$INFO[Control.GetLabel(20)][/B]</label>
+				<font>Description</font>
+				<align>left</align>
+				<aligny>center</aligny>
+			</control>
+
+
 
 			<include content="ButtonGroup">
 				<param name="onleft" value="5"/>
 				<param name="onup" value="5"/>
-				<param name="button1id" value="301"/>
-				<param name="button1unfocused" value="Cross_Unfocused"/>
-				<param name="button1focused" value="Cross_Focused_Large"/>
-				<param name="button1onclick" value="Close"/>
+				<param name="onright" value="3"/>
 				<param name="buttonsvisible" value="true"/>
+				<param name="button1visible" value="true"/>
+				<param name="button1id" value="20"/>
+				<param name="button1unfocused" value="Layout_Unfocused"/>
+				<param name="button1focused" value="Layout_Focused_Large"/>
+				<param name="button1onclick" value="SettingsLevelChange"/>
+				<param name="button2visible" value="true"/>
+				<param name="button2id" value="301"/>
+				<param name="button2unfocused" value="Cross_Unfocused"/>
+				<param name="button2focused" value="Cross_Focused_Large"/>
+				<param name="button2onclick" value="Close"/>
 			</include>
 
 		</control>

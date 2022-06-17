@@ -21,7 +21,7 @@
 			<!-- Hidden controls -->
 			<control type="button" id="304">
 				<include>Hidden_Button</include>
-				<onleft>211</onleft>
+				<onleft>10</onleft>
 				<onright>303</onright>
 				<onup>Control.Move(211,-1)</onup>
 				<ondown>Control.Move(211,1)</ondown>
@@ -29,7 +29,7 @@
 			<control type="button" id="303">
 				<include>Hidden_Button</include>
 				<onleft>304</onleft>
-				<onright>9000</onright>
+				<onright>9001</onright>
 				<onup>Control.Move(211,-1)</onup>
 				<ondown>Control.Move(211,1)</ondown>
 			</control>
@@ -43,8 +43,10 @@
 				<itemgap>0</itemgap>
 				<orientation>vertical</orientation>
 				<onright>304</onright>
+				<onleft>10</onleft>
 				<onup>noop</onup>
 				<ondown>noop</ondown>
+				<pagecontrol>60</pagecontrol>
 				<itemlayout width="600" height="90">
 					<control type="label">
 						<textoffsetx>60</textoffsetx>
@@ -54,11 +56,11 @@
 				<focusedlayout width="600" height="90">
 					<control type="label">
 						<textoffsetx>60</textoffsetx>
-						<textcolor>$VAR[Light_Color]</textcolor>
+						<textcolor>$VAR[Settings_Grouplist_Label_Color]</textcolor>
 						<label>$INFO[ListItem.Label]</label>
 					</control>
 					<control type="image">
-							<texture border="2,2,2,2" colordiffuse="$VAR[Light_Color]">dialogs/button_underline_focused_20.png</texture>
+							<texture border="2,2,2,2" colordiffuse="$VAR[Unfocused_Color]">dialogs/button_underline_focused.png</texture>
 					</control>
 					<control type="group">
 						<centertop>50%</centertop>
@@ -88,19 +90,27 @@
 				</focusedlayout>
 			</control>
 
+
 			<include content="DialogDivider">
-				<param name="left" value="720"/>
+				<param name="left" value="719"/>
+			</include>
+
+			<!-- Sub list scrollbar -->
+			<include content="Grouplist_Scrollbar">
+				<param name="visible" value="Control.HasFocus(211) | Control.HasFocus(303) | Control.HasFocus(304)"/>
+				<param name="left" value="714"/>
+				<param name="height" value="540"/>
 			</include>
 
 			<!-- Right grouplist -->
-			<control type="grouplist" id="9000">
+			<control type="grouplist" id="9001">
 				<right>120</right>
 				<left>720</left>
 				<height>540</height>
 				<centertop>50%</centertop>
 				<itemgap>0</itemgap>
 				<onleft>303</onleft>
-				<onright>10</onright>
+				<onright>301</onright>
 				<onup>9001</onup>
 				<ondown>9001</ondown>
 				<itemgap>0</itemgap>
@@ -125,50 +135,33 @@
 				</control>
 			</control>
 
-			<!-- Button grouplist -->
-			<control type="grouplist" id="9001">
-				<right>120</right>
-				<left>720</left>
-				<height>90</height>
-				<bottom>270</bottom>
-				<itemgap>0</itemgap>
-				<onup>302</onup>
-				<onleft>303</onleft>
-				<onright>10</onright>
-				<itemgap>0</itemgap>
-				<align>left</align>
-				<usecontrolcoords>true</usecontrolcoords>
-				<orientation>horizontal</orientation>
-				<!-- Add item -->
-				<control type="button" id="301">
-					<width>auto</width>
-					<label>$ADDON[script.skinshortcuts 32000]</label>
-				</control>
-				<!-- Reset -->
-				<control type="button" id="308">
-					<textoffsetx>30</textoffsetx>
-					<width>auto</width>
-					<label>$ADDON[script.skinshortcuts 32028]</label>
-				</control>
-				<!-- Reset all -->
-				<control type="button" id="999">
-					<textoffsetx>30</textoffsetx>
-					<width>auto</width>
-					<onclick>RunScript(script.skinshortcuts,type=resetall)</onclick>
-					<label>$ADDON[script.skinshortcuts 32037]</label>
-				</control>
-			</control>
-
 			<include content="ButtonGroup">
-				<param name="id" value="9002"/>
 				<param name="onleft" value="9001"/>
 				<param name="onright" value="304"/>
-				<param name="onup" value="9001"/>
-				<param name="ondown" value="9000"/>
-				<param name="button2id" value="10"/>
-				<param name="button2onclick" value="RunScript(script.skinshortcuts,type=buildxml&amp;mainmenuID=9000&amp;group=mainmenu)"/>
-				<param name="button2onclick2" value="Close"/>
+				<param name="onup" value="302"/>
+				<param name="ondown" value="401"/>
 				<param name="buttonsvisible" value="true"/>
+				<!-- Add -->
+				<param name="button1id" value="301"/>
+				<param name="button1rotated" value="false"/>
+				<!-- Restore -->
+				<param name="button2visible" value="true"/>
+				<param name="button2id" value="308"/>
+				<param name="button2unfocused" value="Shift_Unfocused"/>
+				<param name="button2focused" value="Shift_Focused_Large"/>
+				<!-- Reset -->
+				<param name="button3visible" value="true"/>
+				<param name="button3id" value="999"/>
+				<param name="button3onclick" value="RunScript(script.skinshortcuts,type=resetall)"/>
+				<param name="button3unfocused" value="Refresh_Unfocused"/>
+				<param name="button3focused" value="Refresh_Focused_Large"/>
+				<!-- Save and Close -->
+				<param name="button4visible" value="true"/>
+				<param name="button4id" value="10"/>
+				<param name="button4onclick" value="RunScript(script.skinshortcuts,type=buildxml&amp;mainmenuID=9000&amp;group=mainmenu)"/>
+				<param name="button4onclick2" value="Close"/>
+				<param name="button4unfocused" value="Check_Unfocused"/>
+				<param name="button4focused" value="Check_Focused_Large"/>
 			</include>
 
 		</control>
