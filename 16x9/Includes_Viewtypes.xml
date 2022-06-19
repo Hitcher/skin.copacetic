@@ -511,6 +511,7 @@
 		</include>
 
 		<include name="ListIcon">
+			<param name="visible" default="true"/>
 			<param name="artwork_icon" default="Thumbnail"/>
 			<param name="multiart_icon" default="Multiart"/>
 			<param name="multiart" default="false"/>
@@ -519,7 +520,6 @@
 			<param name="top" default="0"/>
 			<param name="width" default="100%"/>
 			<param name="height" default="100%"/>
-			<param name="visible" default="true"/>
 			<param name="switchingtosecondarylistanimation" default="Blank_Include"/>
 			<param name="animationtype" default="Conditional"/>
 			<param name="animationeffect" default="fade"/>
@@ -540,6 +540,7 @@
 			<param name="aspectratio" default="scale"/>
 			<param name="fallback" default=""/>
 			<param name="diffuse" default=""/>
+			<param name="colordiffuse" default=""/>
 			<param name="fadetime" default="0"/>
 			<param name="multiart_fadetime" default="360"/>
 			<param name="showgradient" default="false"/>
@@ -562,22 +563,22 @@
 			<param name="bordertexture" default="views/border_1px_10.png"/>
 			<definition>
 				<control type="group">
+					<visible>Window.IsVisible(visualisation) | Window.IsVisible(addoninformation) | !String.IsEmpty(Container.ListItemNoWrap($PARAM[position]).Label) | $EXP[ListView_IsVisible] | $EXP[BillboardView_IsVisible]</visible>
+					<visible>$PARAM[visible]</visible>
+					<animation effect="$PARAM[animationeffect]" end="$PARAM[animationend]" condition="$PARAM[animationcondition]" time="$PARAM[animationtime]" tween="$PARAM[animationtween]" easing="$PARAM[animationeasing]" reversible="$PARAM[animationreversible]">$PARAM[animationtype]</animation>
 					<left>$PARAM[left]</left>
 					<top>$PARAM[top]</top>
 					<width>$PARAM[width]</width>
 					<height>$PARAM[height]</height>
-					<visible>Window.IsVisible(visualisation) | Window.IsVisible(addoninformation) | !String.IsEmpty(Container.ListItemNoWrap($PARAM[position]).Label) | $EXP[ListView_IsVisible] | $EXP[BillboardView_IsVisible]</visible>
-					<visible>$PARAM[visible]</visible>
-					<animation effect="$PARAM[animationeffect]" end="$PARAM[animationend]" condition="$PARAM[animationcondition]" time="$PARAM[animationtime]" tween="$PARAM[animationtween]" easing="$PARAM[animationeasing]" reversible="$PARAM[animationreversible]">$PARAM[animationtype]</animation>
 					<!-- Artwork -->
 					<control type="image">
 						<include>$PARAM[switchingtosecondarylistanimation]</include>
 						<include>Focus_Zoom_Animation</include>
-						<texture fallback="$PARAM[fallback]" background="true" diffuse="$PARAM[diffuse]">$VAR[$PARAM[artwork_icon]($PARAM[position])Content]</texture>
+						<texture fallback="$PARAM[fallback]" background="true" colordiffuse="$PARAM[colordiffuse]" diffuse="$PARAM[diffuse]">$VAR[$PARAM[artwork_icon]($PARAM[position])Content]</texture>
 						<aspectratio align="center" aligny="center">$PARAM[aspectratio]</aspectratio>
 						<fadetime>$PARAM[fadetime]</fadetime>
 					</control>
-					<!-- Multiart -->
+					<!-- Multiart
 					<control type="group">
 						<visible>$PARAM[multiart] + Skin.HasSetting(Multiart_Slideshow) + [!String.IsEqual(Control.GetLabel(38000),blank) | $EXP[ListView_IsVisible] | $EXP[BillboardView_IsVisible]]</visible>
 						<animation effect="$PARAM[multiartanimationeffect]" end="$PARAM[multiartanimationend]" condition="$PARAM[multiartanimationcondition]" time="$PARAM[multiartanimationtime]" tween="$PARAM[multiartanimationtween]" easing="$PARAM[multiartanimationeasing]" reversible="$PARAM[multiartanimationreversible]">$PARAM[multiartanimationtype]</animation>
@@ -595,29 +596,29 @@
 							<aspectratio align="center" aligny="center">$PARAM[aspectratio]</aspectratio>
 							<fadetime>$PARAM[multiart_fadetime]</fadetime>
 						</control>
-					</control>
-					<!-- Artwork Mask -->
+					</control>-->
+					<!-- Artwork Mask
 					<control type="image">
 						<include>$PARAM[switchingtosecondarylistanimation]</include>
 						<visible>$PARAM[artworkmask]</visible>
 						<animation effect="$PARAM[artworkmaskanimationeffect]" start="$PARAM[artworkmaskanimationstart]" end="$PARAM[artworkmaskanimationend]" delay="$PARAM[artworkmaskanimationdelay]" condition="$PARAM[artworkmaskanimationcondition]" time="360" tween="$PARAM[artworkmaskanimationtween]" easing="$PARAM[artworkmaskanimationeasing]" reversible="false">$PARAM[artworkmaskanimationtype]</animation>
 						<texture colordiffuse="$PARAM[artworkmaskdiffuse]">$PARAM[artworkmasktexture]</texture>
-					</control>
+					</control>-->
 					<!-- Progress Bar backing overlay -->
 					<control type="image">
 						<visible>$PARAM[showgradient]</visible>
 						<visible>$EXP[Video_Containers] | Window.IsVisible(home) | Window.IsVisible(visualisation) | $EXP[InfoWidget_HasFocus]</visible>
 						<visible>!String.IsEmpty(Container.ListItemNoWrap($PARAM[position]).Label)</visible>
 						<aspectratio>stretch</aspectratio>
-						<texture colordiffuse="$VAR[Dark_Color]">views/gradient_art-overlay.png</texture>
+						<texture colordiffuse="$VAR[Dark_Color]">views/progress_backing_layer.png</texture>
 					</control>
-					<!-- Breadcrumb overlay -->
+					<!-- Breadcrumb overlay
 					<control type="image">
 						<visible>$PARAM[showbreadcrumboverlay]</visible>
 						<animation effect="fade" start="0" end="100" time="360" tween="sine" easing="out" reversible="false" condition="true">Visible</animation>
 						<aspectratio>stretch</aspectratio>
-						<texture colordiffuse="$VAR[Dark_Color]" flipy="true">views/gradient_art-overlay.png</texture>
-					</control>
+						<texture colordiffuse="$VAR[Dark_Color]" flipy="true">views/progress_backing_layer.png</texture>
+					</control>-->
 					<!-- Now Playing Background -->
 					<control type="group">
 						<include>$PARAM[switchingtosecondarylistanimation]</include>
@@ -661,7 +662,7 @@
 	    <param name="flipx" default="false"/>
 	    <param name="flipy" default="false"/>
 	    <param name="texture" default="views/dropshadow_left_120.png"/>
-	    <param name="colordiffuse" default="$VAR[Artwork_Dropshadow]"/>
+	    <param name="colordiffuse" default="$VAR[Dropshadow_Diffuse]"/>
 	    <param name="visible" default="true"/>
 	    <param name="animationtype" default="Visible"/>
 	    <param name="animationcondition" default="false"/>
@@ -2554,17 +2555,24 @@
 						<include>Artwork_Fade_Animation</include>
 						<control type="group">
 							<animation effect="slide" end="12,0" time="0" condition="$EXP[GridView_Display_IsFanart]" reversible="false">Conditional</animation>
+							<!-- If watched -->
 							<include content="ListIcon">
-								<param name="artwork_icon" value="$PARAM[artwork_icon]"/>
-								<param name="fallback" value="$PARAM[fallback]"/>
+								<param name="visible" value="$EXP[GridView_Display_Is$PARAM[displaytype_label]] + String.IsEqual(ListItem.Overlay,OverlayWatched.png)"/>
 								<param name="left" value="10"/>
 								<param name="width" value="100%"/>
 								<param name="height" value="100%"/>
-								<param name="visible" value="$EXP[GridView_Display_Is$PARAM[displaytype_label]]"/>
-								<param name="showgradient" value="false"/>
-								<param name="aspectratio" value="scale"/>
-								<param name="artworkmask" value="String.IsEqual(ListItem.Overlay,OverlayWatched.png)"/>
-								<param name="artworkmaskdiffuse" value="$VAR[Unwatched_Artwork_Mask]"/>
+								<param name="artwork_icon" value="$PARAM[artwork_icon]"/>
+								<param name="fallback" value="$PARAM[fallback]"/>
+								<param name="colordiffuse" value="$VAR[GridView_Artwork_Watched_Color_Diffuse]"/>
+							</include>
+							<!-- If unwatched -->
+							<include content="ListIcon">
+								<param name="visible" value="$EXP[GridView_Display_Is$PARAM[displaytype_label]] + !String.IsEqual(ListItem.Overlay,OverlayWatched.png)"/>
+								<param name="left" value="10"/>
+								<param name="width" value="100%"/>
+								<param name="height" value="100%"/>
+								<param name="artwork_icon" value="$PARAM[artwork_icon]"/>
+								<param name="fallback" value="$PARAM[fallback]"/>
 							</include>
 						</control>
 					</control>
@@ -2608,7 +2616,7 @@
 									<param name="top" value="0"/>
 									<param name="width" value="120"/>
 									<param name="height" value="100%"/>
-									<param name="colordiffuse" value="$VAR[Artwork_Watched_Dropshadow]"/>
+									<param name="colordiffuse" value="$VAR[Watched_Dropshadow_Diffuse]"/>
 									<param name="visible" value="$EXP[Grid_Shadow_Left_Visible] + $EXP[Grid_Shadow_Left_Watched]"/>
 								</include>
 								<!-- Top Left Corner -->
@@ -2626,7 +2634,7 @@
 									<param name="width" value="120"/>
 									<param name="height" value="120"/>
 									<param name="texture" value="views/dropshadow_topleftcorner_120.png"/>
-									<param name="colordiffuse" value="$VAR[Artwork_Watched_Dropshadow]"/>
+									<param name="colordiffuse" value="$VAR[Watched_Dropshadow_Diffuse]"/>
 									<param name="visible" value="$EXP[Grid_Shadow_Top-Left_Visible] + $EXP[Grid_Shadow_Top-Left_Watched]"/>
 								</include>
 								<!-- Top Side -->
@@ -2644,7 +2652,7 @@
 									<param name="width" value="100%"/>
 									<param name="height" value="120"/>
 									<param name="texture" value="views/dropshadow_top_120.png"/>
-									<param name="colordiffuse" value="$VAR[Artwork_Watched_Dropshadow]"/>
+									<param name="colordiffuse" value="$VAR[Watched_Dropshadow_Diffuse]"/>
 									<param name="visible" value="$EXP[Grid_Shadow_Top_Visible] + $EXP[Grid_Shadow_Top_Watched]"/>
 								</include>
 								<!-- Top Right Corner -->
@@ -2664,7 +2672,7 @@
 									<param name="height" value="120"/>
 									<param name="flipx" value="true"/>
 									<param name="texture" value="views/dropshadow_topleftcorner_120.png"/>
-									<param name="colordiffuse" value="$VAR[Artwork_Watched_Dropshadow]"/>
+									<param name="colordiffuse" value="$VAR[Watched_Dropshadow_Diffuse]"/>
 									<param name="visible" value="$EXP[Grid_Shadow_Top-Right_Visible] + $EXP[Grid_Shadow_Top-Right_Watched]"/>
 								</include> -->
 								<!-- Rigt Side -->
@@ -2682,7 +2690,7 @@
 									<param name="width" value="120"/>
 									<param name="height" value="100%"/>
 									<param name="flipx" value="true"/>
-									<param name="colordiffuse" value="$VAR[Artwork_Watched_Dropshadow]"/>
+									<param name="colordiffuse" value="$VAR[Watched_Dropshadow_Diffuse]"/>
 									<param name="visible" value="$EXP[Grid_Shadow_Right_Visible] + $EXP[Grid_Shadow_Right_Watched]"/>
 								</include>
 								<!-- Bottom Right Corner -->
@@ -2704,7 +2712,7 @@
 									<param name="flipx" value="true"/>
 									<param name="flipy" value="true"/>
 									<param name="texture" value="views/dropshadow_topleftcorner_120.png"/>
-									<param name="colordiffuse" value="$VAR[Artwork_Watched_Dropshadow]"/>
+									<param name="colordiffuse" value="$VAR[Watched_Dropshadow_Diffuse]"/>
 									<param name="visible" value="$EXP[Grid_Shadow_Bottom-Right_Visible] + $EXP[Grid_Shadow_Bottom-Right_Watched]"/>
 								</include>
 								<!-- Bottom Side -->
@@ -2724,7 +2732,7 @@
 									<param name="height" value="120"/>
 									<param name="flipy" value="true"/>
 									<param name="texture" value="views/dropshadow_top_120.png"/>
-									<param name="colordiffuse" value="$VAR[Artwork_Watched_Dropshadow]"/>
+									<param name="colordiffuse" value="$VAR[Watched_Dropshadow_Diffuse]"/>
 									<param name="visible" value="$EXP[Grid_Shadow_Bottom_Visible] + $EXP[Grid_Shadow_Bottom_Watched]"/>
 								</include>
 								<!-- Bottom Left Corner -->
@@ -2744,7 +2752,7 @@
 									<param name="height" value="120"/>
 									<param name="flipy" value="true"/>
 									<param name="texture" value="views/dropshadow_topleftcorner_120.png"/>
-									<param name="colordiffuse" value="$VAR[Artwork_Watched_Dropshadow]"/>
+									<param name="colordiffuse" value="$VAR[Watched_Dropshadow_Diffuse]"/>
 									<param name="visible" value="$EXP[Grid_Shadow_Bottom-Left_Visible] + $EXP[Grid_Shadow_Bottom-Left_Watched]"/>
 								</include>
 							</control>
@@ -2754,17 +2762,10 @@
 								<param name="width" value="100%"/>
 								<param name="height" value="100%"/>
 								<param name="visible" value="$EXP[GridView_Display_Is$PARAM[displaytype_label]]"/>
-								<param name="showgradient" value="![Container.Content(artists) | Container.Content(albums) | Container.Content(songs)]"/>
-								<param name="aspectratio" value="scale"/>
-								<param name="artworkmask" value="!$EXP[ContentSwitching] + !$EXP[GridView_Details_Off] + !$EXP[GridView_Details_Breadcrumb] + !$EXP[TransparentDialog_IsVisible] + !$EXP[ListItem(0)_NowPlaying]"/>
-								<param name="artworkmaskanimationtype" value="Visible"/>
-								<param name="artworkmaskanimationcondition" value="true"/>
-								<param name="artworkmaskanimationeffect" value="fade"/>
-								<param name="artworkmaskanimationstart" value="0"/>
-								<param name="artworkmaskanimationend" value="100"/>
-								<param name="artworkmaskanimationdelay" value="540"/>
+								<param name="colordiffuse" value="$VAR[GridView_Focused_Diffuse]"/>
+								<param name="showgradient" value="[$EXP[GridView_Details_Off] | $EXP[GridView_Details_Breadcrumb]] + ![Container.Content(artists) | Container.Content(albums) | Container.Content(songs)]"/>
 							</include>
-							<!-- border -->
+							<!-- Border -->
 							<control type="group">
 								<visible>!$EXP[TransparentDialog_IsVisible] + !Control.HasFocus(60) + !Control.HasFocus(91100)</visible>
 								<include>Content_Fade_Animation</include>
