@@ -11,7 +11,10 @@
 		<value condition="String.Contains(Container(9000).ListItem.Property(path),recentlyaddedmovies)">library://video/movies/recentlyaddedmovies.xml</value>
 		<value condition="String.Contains(Container(9000).ListItem.Property(path),kids)">special://skin/extras/playlists/kids_movies.xsp</value>
 		<value condition="String.Contains(Container(9000).ListItem.Property(path),4k)">special://skin/extras/playlists/4k_movies.xsp</value>
-		<value>videodb://movies/titles/</value>
+		<value condition="Library.HasContent(Movies)">videodb://movies/titles/</value>
+		<value condition="Library.HasContent(TVShows)">videodb://tvshows/titles/</value>
+		<value condition="Library.HasContent(Music)">musicdb://artists/?albumartistsonly=true</value>
+		<value>skin://resources/fanart.jpg</value>
 	</variable>
 
 	<variable name="Logo_Path">
@@ -31,6 +34,44 @@
 
 
 	<!-- ARTWORK -->
+	<variable name="Multiart_Type">
+	  <value condition="[String.IsEqual(ListItem.DBType,episode) | String.IsEqual(ListItem.DBType,album) | String.IsEqual(ListItem.DBType,song)] + !String.IsEmpty(ListItem.Art(thumb1))">thumb</value>
+		<value condition="$EXP[ListView_Display_IsThumbnails] + String.IsEqual(ListItem.DBType,artist) + !String.IsEmpty(ListItem.Art(thumb1))">thumb</value>
+	  <value condition="$EXP[ListView_Display_IsThumbnails] + String.IsEqual(ListItem.DBType,artist) + !String.IsEmpty(ListItem.Art(fanart1))">fanart</value>
+	  <value condition="$EXP[ListView_Display_IsThumbnails] + $EXP[Prefer_Keyart] + !String.IsEmpty(ListItem.Art(keyart1))">keyart</value>
+	  <value condition="$EXP[ListView_Display_IsThumbnails] + !String.IsEmpty(ListItem.Art(poster1))">poster</value>
+	  <value condition="$EXP[ListView_Display_IsThumbnails] + !String.IsEmpty(ListItem.Art(fanart1))">fanart</value>
+	  <value condition="[$EXP[ListView_Display_IsBackground] | $EXP[BillboardView_IsVisible]] + !String.IsEmpty(ListItem.Art(fanart1))">fanart</value>
+	  <value condition="$EXP[ShowcaseView_Display_IsPosters] + $EXP[ShowcaseView_Details_Overlay_IsVisible] + !String.IsEmpty(ListItem.Art(keyart1))">keyart</value>
+	  <value condition="$EXP[ShowcaseView_Display_IsPosters] + $EXP[ShowcaseView_Details_Logo_IsOn] + !String.IsEmpty(ListItem.Art(clearlogo)) + !String.IsEmpty(ListItem.Art(keyart1))">keyart</value>
+	  <value condition="$EXP[ShowcaseView_Display_IsPosters] + $EXP[Prefer_Keyart] + !String.IsEmpty(ListItem.Art(keyart1))">keyart</value>
+	  <value condition="$EXP[ShowcaseView_Display_IsPosters] + !String.IsEmpty(ListItem.Art(poster1))">poster</value>
+	  <value condition="$EXP[ShowcaseView_Display_IsPosters] + !String.IsEmpty(ListItem.Art(thumb1))">thumb</value>
+	  <value condition="$EXP[ShowcaseView_Display_IsPosters] + !String.IsEmpty(ListItem.Art(fanart1))">fanart</value>
+	  <value condition="$EXP[ShowcaseView_Display_IsSquare] + String.IsEqual(ListItem.DBType,artist) + !String.IsEmpty(ListItem.Art(thumb1))">thumb</value>
+	  <value condition="$EXP[ShowcaseView_Display_IsSquare] + !String.IsEmpty(ListItem.Art(square1))">square</value>
+	  <value condition="$EXP[ShowcaseView_Display_IsSquare] + !String.IsEmpty(ListItem.Art(fanart1))">fanart</value>
+	  <value condition="$EXP[ShowcaseView_Display_IsSquare] + !String.IsEmpty(ListItem.Art(keyart1))">keyart</value>
+	  <value condition="$EXP[StripView_Display_IsPosters] + $EXP[Prefer_Keyart] + !String.IsEmpty(ListItem.Art(keyart1))">keyart</value>
+	  <value condition="$EXP[StripView_Display_IsPosters] + !String.IsEmpty(ListItem.Art(poster1))">poster</value>
+	  <value condition="$EXP[StripView_Display_IsPosters] + !String.IsEmpty(ListItem.Art(thumb1))">thumb</value>
+	  <value condition="$EXP[StripView_Display_IsPosters] + !String.IsEmpty(ListItem.Art(fanart1))">fanart</value>
+	  <value condition="$EXP[StripView_Display_IsFanart] + !String.IsEmpty(ListItem.Art(fanart1))">fanart</value>
+	  <value condition="$EXP[StripView_Display_IsSquare] + String.IsEqual(ListItem.DBType,artist) + !String.IsEmpty(ListItem.Art(thumb1)">thumb</value>
+	  <value condition="$EXP[StripView_Display_IsSquare] + !String.IsEmpty(ListItem.Art(square1))">square</value>
+	  <value condition="$EXP[StripView_Display_IsSquare] + !String.IsEmpty(ListItem.Art(fanart1))">fanart</value>
+	  <value condition="$EXP[GridView_Display_IsPosters] + $EXP[Prefer_Keyart] + !String.IsEmpty(ListItem.Art(keyart1))">keyart</value>
+	  <value condition="$EXP[GridView_Display_IsPosters] + $EXP[GridView_Details_On] + !String.IsEmpty(ListItem.Art(keyart1))">keyart</value>
+	  <value condition="$EXP[GridView_Display_IsPosters] + !String.IsEmpty(ListItem.Art(poster1))">poster</value>
+	  <value condition="$EXP[GridView_Display_IsPosters] + !String.IsEmpty(ListItem.Art(thumb1))">thumb</value>
+	  <value condition="$EXP[GridView_Display_IsPosters] + !String.IsEmpty(ListItem.Art(fanart1))">fanart</value>
+	  <value condition="$EXP[GridView_Display_IsFanart] + !String.IsEmpty(ListItem.Art(fanart1))">fanart</value>
+	  <value condition="$EXP[GridView_Display_IsSquare] + String.IsEqual(ListItem.DBType,artist) + !String.IsEmpty(ListItem.Art(thumb1))">thumb</value>
+	  <value condition="$EXP[GridView_Display_IsSquare] + !String.IsEmpty(ListItem.Art(square1))">square</value>
+	  <value condition="$EXP[GridView_Display_IsSquare] + !String.IsEmpty(ListItem.Art(fanart1))">fanart</value>
+	  <value>blank</value>
+	</variable>
+
 	<variable name="Multiart(-3)Content">
 		<value></value>
 	</variable>
@@ -38,156 +79,97 @@
 		<value></value>
 	</variable>
 	<variable name="Multiart(-1)Content">
-		<value condition="String.Contains(Control.GetLabel(38000),thumb9)">$INFO[ListItem(-1).Art(thumb9)]</value>
-		<value condition="String.Contains(Control.GetLabel(38000),thumb8)">$INFO[ListItem(-1).Art(thumb8)]</value>
-		<value condition="String.Contains(Control.GetLabel(38000),thumb7)">$INFO[ListItem(-1).Art(thumb7)]</value>
-		<value condition="String.Contains(Control.GetLabel(38000),thumb6)">$INFO[ListItem(-1).Art(thumb6)]</value>
-		<value condition="String.Contains(Control.GetLabel(38000),thumb5)">$INFO[ListItem(-1).Art(thumb5)]</value>
-		<value condition="String.Contains(Control.GetLabel(38000),thumb4)">$INFO[ListItem(-1).Art(thumb4)]</value>
-		<value condition="String.Contains(Control.GetLabel(38000),thumb3)">$INFO[ListItem(-1).Art(thumb3)]</value>
-		<value condition="String.Contains(Control.GetLabel(38000),thumb2)">$INFO[ListItem(-1).Art(thumb2)]</value>
-		<value condition="String.Contains(Control.GetLabel(38000),thumb1)">$INFO[ListItem(-1).Art(thumb1)]</value>
-		<value condition="String.Contains(Control.GetLabel(38000),thumb)">$INFO[ListItem(-1).Art(thumb)]</value>
-		<value condition="String.Contains(Control.GetLabel(38000),keyart9)">$INFO[ListItem(-1).Art(keyart9)]</value>
-		<value condition="String.Contains(Control.GetLabel(38000),keyart8)">$INFO[ListItem(-1).Art(keyart8)]</value>
-		<value condition="String.Contains(Control.GetLabel(38000),keyart7)">$INFO[ListItem(-1).Art(keyart7)]</value>
-		<value condition="String.Contains(Control.GetLabel(38000),keyart6)">$INFO[ListItem(-1).Art(keyart6)]</value>
-		<value condition="String.Contains(Control.GetLabel(38000),keyart5)">$INFO[ListItem(-1).Art(keyart5)]</value>
-		<value condition="String.Contains(Control.GetLabel(38000),keyart4)">$INFO[ListItem(-1).Art(keyart4)]</value>
-		<value condition="String.Contains(Control.GetLabel(38000),keyart3)">$INFO[ListItem(-1).Art(keyart3)]</value>
-		<value condition="String.Contains(Control.GetLabel(38000),keyart2)">$INFO[ListItem(-1).Art(keyart2)]</value>
-		<value condition="String.Contains(Control.GetLabel(38000),keyart1)">$INFO[ListItem(-1).Art(keyart1)]</value>
-		<value condition="String.Contains(Control.GetLabel(38000),keyart)">$INFO[ListItem(-1).Art(keyart)]</value>
-		<value condition="String.Contains(Control.GetLabel(38000),poster9)">$INFO[ListItem(-1).Art(poster9)]</value>
-		<value condition="String.Contains(Control.GetLabel(38000),poster8)">$INFO[ListItem(-1).Art(poster8)]</value>
-		<value condition="String.Contains(Control.GetLabel(38000),poster7)">$INFO[ListItem(-1).Art(poster7)]</value>
-		<value condition="String.Contains(Control.GetLabel(38000),poster6)">$INFO[ListItem(-1).Art(poster6)]</value>
-		<value condition="String.Contains(Control.GetLabel(38000),poster5)">$INFO[ListItem(-1).Art(poster5)]</value>
-		<value condition="String.Contains(Control.GetLabel(38000),poster4)">$INFO[ListItem(-1).Art(poster4)]</value>
-		<value condition="String.Contains(Control.GetLabel(38000),poster3)">$INFO[ListItem(-1).Art(poster3)]</value>
-		<value condition="String.Contains(Control.GetLabel(38000),poster2)">$INFO[ListItem(-1).Art(poster2)]</value>
-		<value condition="String.Contains(Control.GetLabel(38000),poster1)">$INFO[ListItem(-1).Art(poster1)]</value>
-		<value condition="String.Contains(Control.GetLabel(38000),poster)">$INFO[ListItem(-1).Art(poster)]</value>
-		<value condition="String.Contains(Control.GetLabel(38000),fanart9)">$INFO[ListItem(-1).Art(fanart9)]</value>
-		<value condition="String.Contains(Control.GetLabel(38000),fanart8)">$INFO[ListItem(-1).Art(fanart8)]</value>
-		<value condition="String.Contains(Control.GetLabel(38000),fanart7)">$INFO[ListItem(-1).Art(fanart7)]</value>
-		<value condition="String.Contains(Control.GetLabel(38000),fanart6)">$INFO[ListItem(-1).Art(fanart6)]</value>
-		<value condition="String.Contains(Control.GetLabel(38000),fanart5)">$INFO[ListItem(-1).Art(fanart5)]</value>
-		<value condition="String.Contains(Control.GetLabel(38000),fanart4)">$INFO[ListItem(-1).Art(fanart4)]</value>
-		<value condition="String.Contains(Control.GetLabel(38000),fanart3)">$INFO[ListItem(-1).Art(fanart3)]</value>
-		<value condition="String.Contains(Control.GetLabel(38000),fanart2)">$INFO[ListItem(-1).Art(fanart2)]</value>
-		<value condition="String.Contains(Control.GetLabel(38000),fanart1)">$INFO[ListItem(-1).Art(fanart1)]</value>
-		<value condition="String.Contains(Control.GetLabel(38000),fanart)">$INFO[ListItem(-1).Art(fanart)]</value>
-		<value condition="String.Contains(Control.GetLabel(38000),square9)">$INFO[ListItem(-1).Art(square9)]</value>
-		<value condition="String.Contains(Control.GetLabel(38000),square8)">$INFO[ListItem(-1).Art(square8)]</value>
-		<value condition="String.Contains(Control.GetLabel(38000),square7)">$INFO[ListItem(-1).Art(square7)]</value>
-		<value condition="String.Contains(Control.GetLabel(38000),square6)">$INFO[ListItem(-1).Art(square6)]</value>
-		<value condition="String.Contains(Control.GetLabel(38000),square5)">$INFO[ListItem(-1).Art(square5)]</value>
-		<value condition="String.Contains(Control.GetLabel(38000),square4)">$INFO[ListItem(-1).Art(square4)]</value>
-		<value condition="String.Contains(Control.GetLabel(38000),square3)">$INFO[ListItem(-1).Art(square3)]</value>
-		<value condition="String.Contains(Control.GetLabel(38000),square2)">$INFO[ListItem(-1).Art(square2)]</value>
-		<value condition="String.Contains(Control.GetLabel(38000),square1)">$INFO[ListItem(-1).Art(square1)]</value>
-		<value condition="String.Contains(Control.GetLabel(38000),square)">$INFO[ListItem(-1).Art(square)]</value>
+		<value condition="[String.IsEqual(ListItem(-1).DBType,episode) | String.IsEqual(ListItem(-1).DBType,album) | String.IsEqual(ListItem(-1).DBType,song)] + !String.IsEmpty(ListItem(-1).Art(thumb1))">$INFO[Control.GetLabel(38001)]</value>
+	  <value condition="$EXP[ListView_Display_IsThumbnails] + String.IsEqual(ListItem(-1).DBType,artist) + !String.IsEmpty(ListItem(-1).Art(thumb1))">$INFO[Control.GetLabel(38001)]</value>
+	  <value condition="$EXP[ListView_Display_IsThumbnails] + String.IsEqual(ListItem(-1).DBType,artist) + !String.IsEmpty(ListItem(-1).Art(fanart1))">$INFO[Control.GetLabel(38001)]</value>
+	  <value condition="$EXP[ListView_Display_IsThumbnails] + $EXP[Prefer_Keyart] + !String.IsEmpty(ListItem(-1).Art(keyart1))">$INFO[Control.GetLabel(38001)]</value>
+	  <value condition="$EXP[ListView_Display_IsThumbnails] + !String.IsEmpty(ListItem(-1).Art(poster1))">$INFO[Control.GetLabel(38001)]</value>
+	  <value condition="$EXP[ListView_Display_IsThumbnails] + !String.IsEmpty(ListItem(-1).Art(fanart1))">$INFO[Control.GetLabel(38001)]</value>
+	  <value condition="[$EXP[ListView_Display_IsBackground] | $EXP[BillboardView_IsVisible]] + !String.IsEmpty(ListItem(-1).Art(fanart1))">$INFO[Control.GetLabel(38001)]</value>
+	  <value condition="$EXP[ShowcaseView_Display_IsPosters] + $EXP[ShowcaseView_Details_Overlay_IsVisible] + !String.IsEmpty(ListItem(-1).Art(keyart1))">$INFO[Control.GetLabel(38001)]</value>
+	  <value condition="$EXP[ShowcaseView_Display_IsPosters] + $EXP[ShowcaseView_Details_Logo_IsOn] + !String.IsEmpty(ListItem(-1).Art(clearlogo)) + !String.IsEmpty(ListItem(-1).Art(keyart1))">$INFO[Control.GetLabel(38001)]</value>
+	  <value condition="$EXP[ShowcaseView_Display_IsPosters] + $EXP[Prefer_Keyart] + !String.IsEmpty(ListItem(-1).Art(keyart1))">$INFO[Control.GetLabel(38001)]</value>
+	  <value condition="$EXP[ShowcaseView_Display_IsPosters] + !String.IsEmpty(ListItem(-1).Art(poster1))">$INFO[Control.GetLabel(38001)]</value>
+	  <value condition="$EXP[ShowcaseView_Display_IsPosters] + !String.IsEmpty(ListItem(-1).Art(thumb1))">$INFO[Control.GetLabel(38001)]</value>
+	  <value condition="$EXP[ShowcaseView_Display_IsPosters] + !String.IsEmpty(ListItem(-1).Art(fanart1))">$INFO[Control.GetLabel(38001)]</value>
+	  <value condition="$EXP[ShowcaseView_Display_IsSquare] + String.IsEqual(ListItem(-1).DBType,artist) + !String.IsEmpty(ListItem(-1).Art(thumb1))">$INFO[Control.GetLabel(38001)]</value>
+	  <value condition="$EXP[ShowcaseView_Display_IsSquare] + !String.IsEmpty(ListItem(-1).Art(square1))">$INFO[Control.GetLabel(38001)]</value>
+	  <value condition="$EXP[ShowcaseView_Display_IsSquare] + !String.IsEmpty(ListItem(-1).Art(fanart1))">$INFO[Control.GetLabel(38001)]</value>
+	  <value condition="$EXP[ShowcaseView_Display_IsSquare] + !String.IsEmpty(ListItem(-1).Art(keyart1))">$INFO[Control.GetLabel(38001)]</value>
+	  <value condition="$EXP[StripView_Display_IsPosters] + $EXP[Prefer_Keyart] + !String.IsEmpty(ListItem(-1).Art(keyart1))">$INFO[Control.GetLabel(38001)]</value>
+	  <value condition="$EXP[StripView_Display_IsPosters] + !String.IsEmpty(ListItem(-1).Art(poster1))">$INFO[Control.GetLabel(38001)]</value>
+	  <value condition="$EXP[StripView_Display_IsPosters] + !String.IsEmpty(ListItem(-1).Art(thumb1))">$INFO[Control.GetLabel(38001)]</value>
+	  <value condition="$EXP[StripView_Display_IsPosters] + !String.IsEmpty(ListItem(-1).Art(fanart1))">$INFO[Control.GetLabel(38001)]</value>
+	  <value condition="$EXP[StripView_Display_IsFanart] + !String.IsEmpty(ListItem(-1).Art(fanart1))">$INFO[Control.GetLabel(38001)]</value>
+	  <value condition="$EXP[StripView_Display_IsSquare] + String.IsEqual(ListItem(-1).DBType,artist) + !String.IsEmpty(ListItem(-1).Art(thumb1)">$INFO[Control.GetLabel(38001)]</value>
+	  <value condition="$EXP[StripView_Display_IsSquare] + !String.IsEmpty(ListItem(-1).Art(square1))">$INFO[Control.GetLabel(38001)]</value>
+	  <value condition="$EXP[StripView_Display_IsSquare] + !String.IsEmpty(ListItem(-1).Art(fanart1))">$INFO[Control.GetLabel(38001)]</value>
 	</variable>
 
 	<variable name="Multiart(0)Content">
-		<value condition="[String.IsEqual(ListItem.DBType,episode) | String.IsEqual(ListItem.DBType,album) | String.IsEqual(ListItem.DBType,song)] + !String.IsEmpty(ListItem.Art(thumb1))">$INFO[Control.GetLabel(38001)]</value>
-		<value condition="$EXP[ListView_Display_IsThumbnails] + String.IsEqual(ListItem.DBType,artist) + !String.IsEmpty(ListItem.Art(thumb1))">$INFO[Control.GetLabel(38001)]</value>
-		<value condition="$EXP[ListView_Display_IsThumbnails] + String.IsEqual(ListItem.DBType,artist) + !String.IsEmpty(ListItem.Art(fanart1))">$INFO[Control.GetLabel(38301)]</value>
-		<value condition="$EXP[ListView_Display_IsThumbnails] + $EXP[Prefer_Keyart] + !String.IsEmpty(ListItem.Art(keyart1))">$INFO[Control.GetLabel(38101)]</value>
-		<value condition="$EXP[ListView_Display_IsThumbnails] + !String.IsEmpty(ListItem.Art(poster1))">$INFO[Control.GetLabel(38201)]</value>
-		<value condition="$EXP[ListView_Display_IsThumbnails] + !String.IsEmpty(ListItem.Art(fanart1))">$INFO[Control.GetLabel(38301)]</value>
-		<value condition="$EXP[ListView_Display_IsThumbnails] + !String.IsEmpty(ListItem.Art(tvshow.poster1))">$INFO[Control.GetLabel(38601)]</value>
-		<value condition="[$EXP[ListView_Display_IsBackground] | $EXP[BillboardView_IsVisible]] + !String.IsEmpty(ListItem.Art(fanart1))">$INFO[Control.GetLabel(38301)]</value>
-		<value condition="[$EXP[ListView_Display_IsBackground] | $EXP[BillboardView_IsVisible]] + String.IsEqual(ListItem.DBType,season) + !String.IsEmpty(ListItem.Art(tvshow.fanart1))">$INFO[Control.GetLabel(38701)]</value>
-		<value condition="$EXP[ShowcaseView_Display_IsPosters] + $EXP[ShowcaseView_Details_Overlay_IsVisible] + !String.IsEmpty(ListItem.Art(keyart1))">$INFO[Control.GetLabel(38101)]</value>
-		<value condition="$EXP[ShowcaseView_Display_IsPosters] + $EXP[ShowcaseView_Details_Logo_IsOn] + !String.IsEmpty(ListItem.Art(clearlogo)) + !String.IsEmpty(ListItem.Art(keyart1))">$INFO[Control.GetLabel(38101)]</value>
-		<value condition="$EXP[ShowcaseView_Display_IsPosters] + $EXP[Prefer_Keyart] + !String.IsEmpty(ListItem.Art(keyart1))">$INFO[Control.GetLabel(38101)]</value>
-		<value condition="$EXP[ShowcaseView_Display_IsPosters] + !String.IsEmpty(ListItem.Art(poster1))">$INFO[Control.GetLabel(38201)]</value>
-		<value condition="$EXP[ShowcaseView_Display_IsPosters] + !String.IsEmpty(ListItem.Art(thumb1))">$INFO[Control.GetLabel(38001)]</value>
-		<value condition="$EXP[ShowcaseView_Display_IsPosters] + !String.IsEmpty(ListItem.Art(fanart1))">$INFO[Control.GetLabel(38301)]</value>
-		<value condition="$EXP[ShowcaseView_Display_IsPosters] + !String.IsEmpty(ListItem.Art(tvshow.poster1))">$INFO[Control.GetLabel(38601)]</value>
-		<value condition="$EXP[ShowcaseView_Display_IsSquare] + String.IsEqual(ListItem.DBType,artist) + !String.IsEmpty(ListItem.Art(thumb1))">$INFO[Control.GetLabel(38001)]</value>
-		<value condition="$EXP[ShowcaseView_Display_IsSquare] + !String.IsEmpty(ListItem.Art(square1))">$INFO[Control.GetLabel(38401)]</value>
-		<value condition="$EXP[ShowcaseView_Display_IsSquare] + !String.IsEmpty(ListItem.Art(fanart1))">$INFO[Control.GetLabel(38301)]</value>
-		<value condition="$EXP[ShowcaseView_Display_IsSquare] + !String.IsEmpty(ListItem.Art(keyart1))">$INFO[Control.GetLabel(38101)]</value>
-		<value condition="$EXP[ShowcaseView_Display_IsSquare] + !String.IsEmpty(ListItem.Art(tvshow.fanart1))">$INFO[Control.GetLabel(38701)]</value>
-		<value condition="$EXP[StripView_Display_IsPosters] + !String.IsEmpty(ListItem.Art(keyart1))">$INFO[Control.GetLabel(38101)]</value>
-		<value condition="$EXP[StripView_Display_IsPosters] + $EXP[Prefer_Keyart] + !String.IsEmpty(ListItem.Art(keyart1))">$INFO[Control.GetLabel(38101)]</value>
-		<value condition="$EXP[StripView_Display_IsPosters] + !String.IsEmpty(ListItem.Art(poster1))">$INFO[Control.GetLabel(38201)]</value>
-		<value condition="$EXP[StripView_Display_IsPosters] + !String.IsEmpty(ListItem.Art(thumb1))">$INFO[Control.GetLabel(38001)]</value>
-		<value condition="$EXP[StripView_Display_IsPosters] + !String.IsEmpty(ListItem.Art(fanart1))">$INFO[Control.GetLabel(38301)]</value>
-		<value condition="$EXP[StripView_Display_IsPosters] + !String.IsEmpty(ListItem.Art(tvshow.poster1))">$INFO[Control.GetLabel(38601)]</value>
-		<value condition="$EXP[StripView_Display_IsFanart] + !String.IsEmpty(ListItem.Art(fanart1))">$INFO[Control.GetLabel(38301)]</value>
-		<value condition="$EXP[StripView_Display_IsFanart] + !String.IsEmpty(ListItem.Art(tvshow.fanart1))">$INFO[Control.GetLabel(38701)]</value>
-		<value condition="$EXP[StripView_Display_IsSquare] + String.IsEqual(ListItem.DBType,artist) + !String.IsEmpty(ListItem.Art(thumb1))">$INFO[Control.GetLabel(38001)]</value>
-		<value condition="$EXP[StripView_Display_IsSquare] + !String.IsEmpty(ListItem.Art(square1))">$INFO[Control.GetLabel(38401)]</value>
-		<value condition="$EXP[StripView_Display_IsSquare] + !String.IsEmpty(ListItem.Art(fanart1))">$INFO[Control.GetLabel(38301)]</value>
-		<value condition="$EXP[GridView_Display_IsPosters] + $EXP[Prefer_Keyart] + !String.IsEmpty(ListItem.Art(keyart1))">$INFO[Control.GetLabel(38101)]</value>
-		<value condition="$EXP[GridView_Display_IsPosters] + $EXP[GridView_Details_On] + !String.IsEmpty(ListItem.Art(keyart1))">$INFO[Control.GetLabel(38101)]</value>
-		<value condition="$EXP[GridView_Display_IsPosters] + !String.IsEmpty(ListItem.Art(poster1))">$INFO[Control.GetLabel(38201)]</value>
-		<value condition="$EXP[GridView_Display_IsPosters] + !String.IsEmpty(ListItem.Art(thumb1))">$INFO[Control.GetLabel(38001)]</value>
-		<value condition="$EXP[GridView_Display_IsPosters] + !String.IsEmpty(ListItem.Art(fanart1))">$INFO[Control.GetLabel(38301)]</value>
-		<value condition="$EXP[GridView_Display_IsPosters] + !String.IsEmpty(ListItem.Art(tvshow.poster1))">$INFO[Control.GetLabel(38601)]</value>
-		<value condition="$EXP[GridView_Display_IsFanart] + !String.IsEmpty(ListItem.Art(fanart1))">$INFO[Control.GetLabel(38301)]</value>
-		<value condition="$EXP[GridView_Display_IsFanart] + !String.IsEmpty(ListItem.Art(tvshow.fanart1))">$INFO[Control.GetLabel(38701)]</value>
-		<value condition="$EXP[GridView_Display_IsSquare] + String.IsEqual(ListItem.DBType,artist) + !String.IsEmpty(ListItem.Art(thumb1))">$INFO[Control.GetLabel(38001)]</value>
-		<value condition="$EXP[GridView_Display_IsSquare] + !String.IsEmpty(ListItem.Art(square1))">$INFO[Control.GetLabel(38401)]</value>
-		<value condition="$EXP[GridView_Display_IsSquare] + !String.IsEmpty(ListItem.Art(fanart1))">$INFO[Control.GetLabel(38301)]</value>
-		<value>blank</value>
+	  <value condition="[String.IsEqual(ListItem.DBType,episode) | String.IsEqual(ListItem.DBType,album) | String.IsEqual(ListItem.DBType,song)] + !String.IsEmpty(ListItem.Art(thumb1))">$INFO[Control.GetLabel(38001)]</value>
+	  <value condition="$EXP[ListView_Display_IsThumbnails] + String.IsEqual(ListItem.DBType,artist) + !String.IsEmpty(ListItem.Art(thumb1))">$INFO[Control.GetLabel(38001)]</value>
+	  <value condition="$EXP[ListView_Display_IsThumbnails] + String.IsEqual(ListItem.DBType,artist) + !String.IsEmpty(ListItem.Art(fanart1))">$INFO[Control.GetLabel(38001)]</value>
+	  <value condition="$EXP[ListView_Display_IsThumbnails] + $EXP[Prefer_Keyart] + !String.IsEmpty(ListItem.Art(keyart1))">$INFO[Control.GetLabel(38001)]</value>
+	  <value condition="$EXP[ListView_Display_IsThumbnails] + !String.IsEmpty(ListItem.Art(poster1))">$INFO[Control.GetLabel(38001)]</value>
+	  <value condition="$EXP[ListView_Display_IsThumbnails] + !String.IsEmpty(ListItem.Art(fanart1))">$INFO[Control.GetLabel(38001)]</value>
+	  <value condition="[$EXP[ListView_Display_IsBackground] | $EXP[BillboardView_IsVisible]] + !String.IsEmpty(ListItem.Art(fanart1))">$INFO[Control.GetLabel(38001)]</value>
+	  <value condition="$EXP[ShowcaseView_Display_IsPosters] + $EXP[ShowcaseView_Details_Overlay_IsVisible] + !String.IsEmpty(ListItem.Art(keyart1))">$INFO[Control.GetLabel(38001)]</value>
+	  <value condition="$EXP[ShowcaseView_Display_IsPosters] + $EXP[ShowcaseView_Details_Logo_IsOn] + !String.IsEmpty(ListItem.Art(clearlogo)) + !String.IsEmpty(ListItem.Art(keyart1))">$INFO[Control.GetLabel(38001)]</value>
+	  <value condition="$EXP[ShowcaseView_Display_IsPosters] + $EXP[Prefer_Keyart] + !String.IsEmpty(ListItem.Art(keyart1))">$INFO[Control.GetLabel(38001)]</value>
+	  <value condition="$EXP[ShowcaseView_Display_IsPosters] + !String.IsEmpty(ListItem.Art(poster1))">$INFO[Control.GetLabel(38001)]</value>
+	  <value condition="$EXP[ShowcaseView_Display_IsPosters] + !String.IsEmpty(ListItem.Art(thumb1))">$INFO[Control.GetLabel(38001)]</value>
+	  <value condition="$EXP[ShowcaseView_Display_IsPosters] + !String.IsEmpty(ListItem.Art(fanart1))">$INFO[Control.GetLabel(38001)]</value>
+	  <value condition="$EXP[ShowcaseView_Display_IsSquare] + String.IsEqual(ListItem.DBType,artist) + !String.IsEmpty(ListItem.Art(thumb1))">$INFO[Control.GetLabel(38001)]</value>
+	  <value condition="$EXP[ShowcaseView_Display_IsSquare] + !String.IsEmpty(ListItem.Art(square1))">$INFO[Control.GetLabel(38001)]</value>
+	  <value condition="$EXP[ShowcaseView_Display_IsSquare] + !String.IsEmpty(ListItem.Art(fanart1))">$INFO[Control.GetLabel(38001)]</value>
+	  <value condition="$EXP[ShowcaseView_Display_IsSquare] + !String.IsEmpty(ListItem.Art(keyart1))">$INFO[Control.GetLabel(38001)]</value>
+	  <value condition="$EXP[StripView_Display_IsPosters] + $EXP[Prefer_Keyart] + !String.IsEmpty(ListItem.Art(keyart1))">$INFO[Control.GetLabel(38001)]</value>
+	  <value condition="$EXP[StripView_Display_IsPosters] + !String.IsEmpty(ListItem.Art(poster1))">$INFO[Control.GetLabel(38001)]</value>
+	  <value condition="$EXP[StripView_Display_IsPosters] + !String.IsEmpty(ListItem.Art(thumb1))">$INFO[Control.GetLabel(38001)]</value>
+	  <value condition="$EXP[StripView_Display_IsPosters] + !String.IsEmpty(ListItem.Art(fanart1))">$INFO[Control.GetLabel(38001)]</value>
+	  <value condition="$EXP[StripView_Display_IsFanart] + !String.IsEmpty(ListItem.Art(fanart1))">$INFO[Control.GetLabel(38001)]</value>
+	  <value condition="$EXP[StripView_Display_IsSquare] + String.IsEqual(ListItem.DBType,artist) + !String.IsEmpty(ListItem.Art(thumb1)">$INFO[Control.GetLabel(38001)]</value>
+	  <value condition="$EXP[StripView_Display_IsSquare] + !String.IsEmpty(ListItem.Art(square1))">$INFO[Control.GetLabel(38001)]</value>
+	  <value condition="$EXP[StripView_Display_IsSquare] + !String.IsEmpty(ListItem.Art(fanart1))">$INFO[Control.GetLabel(38001)]</value>
+	  <value condition="$EXP[GridView_Display_IsPosters] + $EXP[Prefer_Keyart] + !String.IsEmpty(ListItem.Art(keyart1))">$INFO[Control.GetLabel(38001)]</value>
+	  <value condition="$EXP[GridView_Display_IsPosters] + $EXP[GridView_Details_On] + !String.IsEmpty(ListItem.Art(keyart1))">$INFO[Control.GetLabel(38001)]</value>
+	  <value condition="$EXP[GridView_Display_IsPosters] + !String.IsEmpty(ListItem.Art(poster1))">$INFO[Control.GetLabel(38001)]</value>
+	  <value condition="$EXP[GridView_Display_IsPosters] + !String.IsEmpty(ListItem.Art(thumb1))">$INFO[Control.GetLabel(38001)]</value>
+	  <value condition="$EXP[GridView_Display_IsPosters] + !String.IsEmpty(ListItem.Art(fanart1))">$INFO[Control.GetLabel(38001)]</value>
+	  <value condition="$EXP[GridView_Display_IsFanart] + !String.IsEmpty(ListItem.Art(fanart1))">$INFO[Control.GetLabel(38001)]</value>
+	  <value condition="$EXP[GridView_Display_IsSquare] + String.IsEqual(ListItem.DBType,artist) + !String.IsEmpty(ListItem.Art(thumb1))">$INFO[Control.GetLabel(38001)]</value>
+	  <value condition="$EXP[GridView_Display_IsSquare] + !String.IsEmpty(ListItem.Art(square1))">$INFO[Control.GetLabel(38001)]</value>
+	  <value condition="$EXP[GridView_Display_IsSquare] + !String.IsEmpty(ListItem.Art(fanart1))">$INFO[Control.GetLabel(38001)]</value>
+	  <value>blank</value>
 	</variable>
 
 	<variable name="Multiart(1)Content">
-		<value condition="String.Contains(Control.GetLabel(38000),thumb9)">$INFO[ListItem(1).Art(thumb9)]</value>
-		<value condition="String.Contains(Control.GetLabel(38000),thumb8)">$INFO[ListItem(1).Art(thumb8)]</value>
-		<value condition="String.Contains(Control.GetLabel(38000),thumb7)">$INFO[ListItem(1).Art(thumb7)]</value>
-		<value condition="String.Contains(Control.GetLabel(38000),thumb6)">$INFO[ListItem(1).Art(thumb6)]</value>
-		<value condition="String.Contains(Control.GetLabel(38000),thumb5)">$INFO[ListItem(1).Art(thumb5)]</value>
-		<value condition="String.Contains(Control.GetLabel(38000),thumb4)">$INFO[ListItem(1).Art(thumb4)]</value>
-		<value condition="String.Contains(Control.GetLabel(38000),thumb3)">$INFO[ListItem(1).Art(thumb3)]</value>
-		<value condition="String.Contains(Control.GetLabel(38000),thumb2)">$INFO[ListItem(1).Art(thumb2)]</value>
-		<value condition="String.Contains(Control.GetLabel(38000),thumb1)">$INFO[ListItem(1).Art(thumb1)]</value>
-		<value condition="String.Contains(Control.GetLabel(38000),thumb)">$INFO[ListItem(1).Art(thumb)]</value>
-		<value condition="String.Contains(Control.GetLabel(38000),keyart9)">$INFO[ListItem(1).Art(keyart9)]</value>
-		<value condition="String.Contains(Control.GetLabel(38000),keyart8)">$INFO[ListItem(1).Art(keyart8)]</value>
-		<value condition="String.Contains(Control.GetLabel(38000),keyart7)">$INFO[ListItem(1).Art(keyart7)]</value>
-		<value condition="String.Contains(Control.GetLabel(38000),keyart6)">$INFO[ListItem(1).Art(keyart6)]</value>
-		<value condition="String.Contains(Control.GetLabel(38000),keyart5)">$INFO[ListItem(1).Art(keyart5)]</value>
-		<value condition="String.Contains(Control.GetLabel(38000),keyart4)">$INFO[ListItem(1).Art(keyart4)]</value>
-		<value condition="String.Contains(Control.GetLabel(38000),keyart3)">$INFO[ListItem(1).Art(keyart3)]</value>
-		<value condition="String.Contains(Control.GetLabel(38000),keyart2)">$INFO[ListItem(1).Art(keyart2)]</value>
-		<value condition="String.Contains(Control.GetLabel(38000),keyart1)">$INFO[ListItem(1).Art(keyart1)]</value>
-		<value condition="String.Contains(Control.GetLabel(38000),keyart)">$INFO[ListItem(1).Art(keyart)]</value>
-		<value condition="String.Contains(Control.GetLabel(38000),poster9)">$INFO[ListItem(1).Art(poster9)]</value>
-		<value condition="String.Contains(Control.GetLabel(38000),poster8)">$INFO[ListItem(1).Art(poster8)]</value>
-		<value condition="String.Contains(Control.GetLabel(38000),poster7)">$INFO[ListItem(1).Art(poster7)]</value>
-		<value condition="String.Contains(Control.GetLabel(38000),poster6)">$INFO[ListItem(1).Art(poster6)]</value>
-		<value condition="String.Contains(Control.GetLabel(38000),poster5)">$INFO[ListItem(1).Art(poster5)]</value>
-		<value condition="String.Contains(Control.GetLabel(38000),poster4)">$INFO[ListItem(1).Art(poster4)]</value>
-		<value condition="String.Contains(Control.GetLabel(38000),poster3)">$INFO[ListItem(1).Art(poster3)]</value>
-		<value condition="String.Contains(Control.GetLabel(38000),poster2)">$INFO[ListItem(1).Art(poster2)]</value>
-		<value condition="String.Contains(Control.GetLabel(38000),poster1)">$INFO[ListItem(1).Art(poster1)]</value>
-		<value condition="String.Contains(Control.GetLabel(38000),poster)">$INFO[ListItem(1).Art(poster)]</value>
-		<value condition="String.Contains(Control.GetLabel(38000),fanart9)">$INFO[ListItem(1).Art(fanart9)]</value>
-		<value condition="String.Contains(Control.GetLabel(38000),fanart8)">$INFO[ListItem(1).Art(fanart8)]</value>
-		<value condition="String.Contains(Control.GetLabel(38000),fanart7)">$INFO[ListItem(1).Art(fanart7)]</value>
-		<value condition="String.Contains(Control.GetLabel(38000),fanart6)">$INFO[ListItem(1).Art(fanart6)]</value>
-		<value condition="String.Contains(Control.GetLabel(38000),fanart5)">$INFO[ListItem(1).Art(fanart5)]</value>
-		<value condition="String.Contains(Control.GetLabel(38000),fanart4)">$INFO[ListItem(1).Art(fanart4)]</value>
-		<value condition="String.Contains(Control.GetLabel(38000),fanart3)">$INFO[ListItem(1).Art(fanart3)]</value>
-		<value condition="String.Contains(Control.GetLabel(38000),fanart2)">$INFO[ListItem(1).Art(fanart2)]</value>
-		<value condition="String.Contains(Control.GetLabel(38000),fanart1)">$INFO[ListItem(1).Art(fanart1)]</value>
-		<value condition="String.Contains(Control.GetLabel(38000),fanart)">$INFO[ListItem(1).Art(fanart)]</value>
-		<value condition="String.Contains(Control.GetLabel(38000),square9)">$INFO[ListItem(1).Art(square9)]</value>
-		<value condition="String.Contains(Control.GetLabel(38000),square8)">$INFO[ListItem(1).Art(square8)]</value>
-		<value condition="String.Contains(Control.GetLabel(38000),square7)">$INFO[ListItem(1).Art(square7)]</value>
-		<value condition="String.Contains(Control.GetLabel(38000),square6)">$INFO[ListItem(1).Art(square6)]</value>
-		<value condition="String.Contains(Control.GetLabel(38000),square5)">$INFO[ListItem(1).Art(square5)]</value>
-		<value condition="String.Contains(Control.GetLabel(38000),square4)">$INFO[ListItem(1).Art(square4)]</value>
-		<value condition="String.Contains(Control.GetLabel(38000),square3)">$INFO[ListItem(1).Art(square3)]</value>
-		<value condition="String.Contains(Control.GetLabel(38000),square2)">$INFO[ListItem(1).Art(square2)]</value>
-		<value condition="String.Contains(Control.GetLabel(38000),square1)">$INFO[ListItem(1).Art(square1)]</value>
-		<value condition="String.Contains(Control.GetLabel(38000),square)">$INFO[ListItem(1).Art(square)]</value>
+		<value condition="[String.IsEqual(ListItem(1).DBType,episode) | String.IsEqual(ListItem(1).DBType,album) | String.IsEqual(ListItem(1).DBType,song)] + !String.IsEmpty(ListItem(1).Art(thumb1))">$INFO[Control.GetLabel(38001)]</value>
+		<value condition="$EXP[ListView_Display_IsThumbnails] + String.IsEqual(ListItem(1).DBType,artist) + !String.IsEmpty(ListItem(1).Art(thumb1))">$INFO[Control.GetLabel(38001)]</value>
+		<value condition="$EXP[ListView_Display_IsThumbnails] + String.IsEqual(ListItem(1).DBType,artist) + !String.IsEmpty(ListItem(1).Art(fanart1))">$INFO[Control.GetLabel(38001)]</value>
+		<value condition="$EXP[ListView_Display_IsThumbnails] + $EXP[Prefer_Keyart] + !String.IsEmpty(ListItem(1).Art(keyart1))">$INFO[Control.GetLabel(38001)]</value>
+		<value condition="$EXP[ListView_Display_IsThumbnails] + !String.IsEmpty(ListItem(1).Art(poster1))">$INFO[Control.GetLabel(38001)]</value>
+		<value condition="$EXP[ListView_Display_IsThumbnails] + !String.IsEmpty(ListItem(1).Art(fanart1))">$INFO[Control.GetLabel(38001)]</value>
+		<value condition="[$EXP[ListView_Display_IsBackground] | $EXP[BillboardView_IsVisible]] + !String.IsEmpty(ListItem(1).Art(fanart1))">$INFO[Control.GetLabel(38001)]</value>
+		<value condition="$EXP[ShowcaseView_Display_IsPosters] + $EXP[ShowcaseView_Details_Overlay_IsVisible] + !String.IsEmpty(ListItem(1).Art(keyart1))">$INFO[Control.GetLabel(38001)]</value>
+		<value condition="$EXP[ShowcaseView_Display_IsPosters] + $EXP[ShowcaseView_Details_Logo_IsOn] + !String.IsEmpty(ListItem(1).Art(clearlogo)) + !String.IsEmpty(ListItem(1).Art(keyart1))">$INFO[Control.GetLabel(38001)]</value>
+		<value condition="$EXP[ShowcaseView_Display_IsPosters] + $EXP[Prefer_Keyart] + !String.IsEmpty(ListItem(1).Art(keyart1))">$INFO[Control.GetLabel(38001)]</value>
+		<value condition="$EXP[ShowcaseView_Display_IsPosters] + !String.IsEmpty(ListItem(1).Art(poster1))">$INFO[Control.GetLabel(38001)]</value>
+		<value condition="$EXP[ShowcaseView_Display_IsPosters] + !String.IsEmpty(ListItem(1).Art(thumb1))">$INFO[Control.GetLabel(38001)]</value>
+		<value condition="$EXP[ShowcaseView_Display_IsPosters] + !String.IsEmpty(ListItem(1).Art(fanart1))">$INFO[Control.GetLabel(38001)]</value>
+		<value condition="$EXP[ShowcaseView_Display_IsSquare] + String.IsEqual(ListItem(1).DBType,artist) + !String.IsEmpty(ListItem(1).Art(thumb1))">$INFO[Control.GetLabel(38001)]</value>
+		<value condition="$EXP[ShowcaseView_Display_IsSquare] + !String.IsEmpty(ListItem(1).Art(square1))">$INFO[Control.GetLabel(38001)]</value>
+		<value condition="$EXP[ShowcaseView_Display_IsSquare] + !String.IsEmpty(ListItem(1).Art(fanart1))">$INFO[Control.GetLabel(38001)]</value>
+		<value condition="$EXP[ShowcaseView_Display_IsSquare] + !String.IsEmpty(ListItem(1).Art(keyart1))">$INFO[Control.GetLabel(38001)]</value>
+		<value condition="$EXP[StripView_Display_IsPosters] + $EXP[Prefer_Keyart] + !String.IsEmpty(ListItem(1).Art(keyart1))">$INFO[Control.GetLabel(38001)]</value>
+		<value condition="$EXP[StripView_Display_IsPosters] + !String.IsEmpty(ListItem(1).Art(poster1))">$INFO[Control.GetLabel(38001)]</value>
+		<value condition="$EXP[StripView_Display_IsPosters] + !String.IsEmpty(ListItem(1).Art(thumb1))">$INFO[Control.GetLabel(38001)]</value>
+		<value condition="$EXP[StripView_Display_IsPosters] + !String.IsEmpty(ListItem(1).Art(fanart1))">$INFO[Control.GetLabel(38001)]</value>
+		<value condition="$EXP[StripView_Display_IsFanart] + !String.IsEmpty(ListItem(1).Art(fanart1))">$INFO[Control.GetLabel(38001)]</value>
+		<value condition="$EXP[StripView_Display_IsSquare] + String.IsEqual(ListItem(1).DBType,artist) + !String.IsEmpty(ListItem(1).Art(thumb1)">$INFO[Control.GetLabel(38001)]</value>
+		<value condition="$EXP[StripView_Display_IsSquare] + !String.IsEmpty(ListItem(1).Art(square1))">$INFO[Control.GetLabel(38001)]</value>
+		<value condition="$EXP[StripView_Display_IsSquare] + !String.IsEmpty(ListItem(1).Art(fanart1))">$INFO[Control.GetLabel(38001)]</value>
 	</variable>
 
 	<variable name="Multiart(2)Content">
@@ -557,7 +539,6 @@
 		<value condition="Control.HasFocus(8010) + $EXP[GridView_IsVisible]">$INFO[Container(8010).ListItem.Year]$INFO[Container(8010).ListItem.Duration(mins), / , $LOCALIZE[31138]]</value>
 		<value condition="Control.HasFocus(8010)">[UPPERCASE]$INFO[Container(8010).ListItem.Year]$INFO[Container(8010).ListItem.Duration(mins), / , $LOCALIZE[31138]]$VAR[Resolution_Label, / ][/UPPERCASE]</value>
 		<value condition="Control.HasFocus(8020) + String.IsEqual(Container(8020).ListItem.DBType,album)">$INFO[Container(8020).ListItem.Year]</value>
-
 		<value condition="Skin.HasSetting(Unwatched_Info) + Control.HasFocus(8020) + !String.IsEmpty(Container(8020).ListItem.Year) + $EXP[GridView_IsVisible]">$INFO[Container(8020).ListItem.Year]$INFO[Container(8020).ListItem.Property(UnWatchedEpisodes), / ,/]$INFO[Continer(8020).ListItem.Property(NumEpisodes),, ]$LOCALIZE[16101]</value>
 		<value condition="Skin.HasSetting(Unwatched_Info) + Control.HasFocus(8020) + !String.IsEmpty(Container(8020).ListItem.Year)">[UPPERCASE]$INFO[Container(8020).ListItem.Year]$INFO[Container(8020).ListItem.Property(UnWatchedEpisodes), / ,/]$INFO[Continer(8020).ListItem.Property(NumEpisodes),, ]$LOCALIZE[16101][/UPPERCASE]</value>
 		<value condition="Skin.HasSetting(Unwatched_Info) + Control.HasFocus(8020) + !String.IsEmpty(Container(8020).ListItem.Property(UnWatchedEpisodes)) + $EXP[GridView_IsVisible]">$INFO[Container(8020).ListItem.Property(UnWatchedEpisodes),,/]$INFO[Continer(8020).ListItem.Property(NumEpisodes),, ]$LOCALIZE[16101]</value>
@@ -945,6 +926,9 @@
 	</variable>
 
 	<variable name="VideoCodec_Label">
+		<value condition="String.IsEqual(ListItem.HDRType,dolbyvision)">flags/video/dolbyvision.png</value>
+		<value condition="String.IsEqual(ListItem.HDRType,hdr10)">flags/video/hdr.png</value>
+		<value condition="String.IsEqual(ListItem.HDRType,hlg)">flags/video/hdr.png</value>
 		<value condition="[String.Contains(ListItem.FilenameAndPath,dolby.vision) | String.Contains(ListItem.FilenameAndPath,.DoVi.) | String.Contains(ListItem.FilenameAndPath,.DV.)] + String.Contains(ListItem.FilenameAndPath,atmos)">flags/video/dolbyvisionatmos.png</value>
 		<value condition="String.Contains(ListItem.FilenameAndPath,dolby.vision) | String.Contains(ListItem.FilenameAndPath,.DV.)">flags/video/dolbyvision.png</value>
 		<value condition="String.Contains(ListItem.FilenameAndPath,hdr)">flags/video/hdr.png</value>
@@ -974,8 +958,11 @@
 		<!-- 8K -->
 		<value condition="VideoPlayer.IsFullscreen + [String.StartsWith(VideoPlayer.VideoResolution,8K) | String.Contains(Player.FileNameAndPath,4320p)]">$LOCALIZE[32131]</value>
 		<!-- 4K Dolby Vision -->
+		<value condition="VideoPlayer.IsfullScreen + [String.StartsWith(VideoPlayer.VideoResolution,4K) | String.Contains(Player.FileNameAndPath,2160p)] + String.Contains(VideoPlayer.HDRType,dolbyvision)">$LOCALIZE[32132] $LOCALIZE[32133]</value>
 		<value condition="VideoPlayer.IsFullscreen + [String.StartsWith(VideoPlayer.VideoResolution,4K) | String.Contains(Player.FileNameAndPath,2160p)] + [String.Contains(Player.FilenameAndPath,DV) | String.Contains(Player.FilenameAndPath,Dolby.Vision)]">$LOCALIZE[32132] $LOCALIZE[32133]</value>
 		<!-- 4K HDR -->
+		<value condition="VideoPlayer.IsFullscreen + [String.StartsWith(VideoPlayer.VideoResolution,4K) | String.Contains(Player.FileNameAndPath,2160p)] + String.Contains(VideoPlayer.HDRType,hdr10)">$LOCALIZE[32132] $LOCALIZE[32134]</value>
+		<value condition="VideoPlayer.IsFullscreen + [String.StartsWith(VideoPlayer.VideoResolution,4K) | String.Contains(Player.FileNameAndPath,2160p)] + String.Contains(VideoPlayer.HDRType,hlg)">$LOCALIZE[32132] $LOCALIZE[32139]</value>
 		<value condition="VideoPlayer.IsFullscreen + [String.StartsWith(VideoPlayer.VideoResolution,4K) | String.Contains(Player.FileNameAndPath,2160p)] + String.Contains(Player.FilenameAndPath,HDR)">$LOCALIZE[32132] $LOCALIZE[32134]</value>
 		<!-- 4K UHD -->
 		<value condition="VideoPlayer.IsFullscreen + [String.StartsWith(VideoPlayer.VideoResolution,4K) | String.Contains(Player.FileNameAndPath,2160p)]">$LOCALIZE[32132] $LOCALIZE[32135]</value>
@@ -991,8 +978,11 @@
 		<!-- 8K -->
 		<value condition="Control.HasFocus(8060) + [String.StartsWith(Container(8060).ListItem.VideoResolution,8K) | String.Contains(Container(8060).ListItem.FileNameAndPath,4320p)]">$LOCALIZE[32131]</value>
 		<!-- 4K Dolby Vision -->
+		<value condition="Control.HasFocus(8060) + [String.StartsWith(Container(8060).ListItem.VideoResolution,4K) | String.Contains(Container(8060).ListItem.FileNameAndPath,2160p)] + String.Contains(Container(8060).ListItem.HDRType,dolbyvision)">$LOCALIZE[32132] $LOCALIZE[32133]</value>
 		<value condition="Control.HasFocus(8060) + [String.StartsWith(Container(8060).ListItem.VideoResolution,4K) | String.Contains(Container(8060).ListItem.FileNameAndPath,2160p)] + [String.Contains(Container(8060).ListItem.FilenameAndPath,DV) | String.Contains(Container(8060).ListItem.FilenameAndPath,Dolby.Vision)]">$LOCALIZE[32132] $LOCALIZE[32133]</value>
 		<!-- 4K HDR -->
+		<value condition="Control.HasFocus(8060) + [String.StartsWith(Container(8060).ListItem.VideoResolution,4K) | String.Contains(Container(8060).ListItem.FileNameAndPath,2160p)] + String.Contains(Container(8060).ListItem.HDRType,hdr10)">$LOCALIZE[32132] $LOCALIZE[32134]</value>
+		<value condition="Control.HasFocus(8060) + [String.StartsWith(Container(8060).ListItem.VideoResolution,4K) | String.Contains(Container(8060).ListItem.FileNameAndPath,2160p)] + String.Contains(Container(8060).ListItem.HDRType,hlg)">$LOCALIZE[32132] $LOCALIZE[32139]</value>
 		<value condition="Control.HasFocus(8060) + [String.StartsWith(Container(8060).ListItem.VideoResolution,4K) | String.Contains(Container(8060).ListItem.FileNameAndPath,2160p)] + String.Contains(Container(8060).ListItem.FilenameAndPath,HDR)">$LOCALIZE[32132] $LOCALIZE[32134]</value>
 		<!-- 4K UHD -->
 		<value condition="Control.HasFocus(8060) + [String.StartsWith(Container(8060).ListItem.VideoResolution,4K) | String.Contains(Container(8060).ListItem.FileNameAndPath,2160p)]">$LOCALIZE[32132] $LOCALIZE[32135]</value>
@@ -1008,8 +998,11 @@
 		<!-- 8K -->
 		<value condition="Control.HasFocus(8050) + [String.StartsWith(Container(8050).ListItem.VideoResolution,8K) | String.Contains(Container(8050).ListItem.FileNameAndPath,4320p)]">$LOCALIZE[32131]</value>
 		<!-- 4K Dolby Vision -->
+		<value condition="Control.HasFocus(8050) + [String.StartsWith(Container(8050).ListItem.VideoResolution,4K) | String.Contains(Container(8050).ListItem.FileNameAndPath,2160p)] + String.Contains(Container(8050).ListItem.HDRType,dolbyvision)">$LOCALIZE[32132] $LOCALIZE[32133]</value>
 		<value condition="Control.HasFocus(8050) + [String.StartsWith(Container(8050).ListItem.VideoResolution,4K) | String.Contains(Container(8050).ListItem.FileNameAndPath,2160p)] + [String.Contains(Container(8050).ListItem.FilenameAndPath,DV) | String.Contains(Container(8050).ListItem.FilenameAndPath,Dolby.Vision)]">$LOCALIZE[32132] $LOCALIZE[32133]</value>
 		<!-- 4K HDR -->
+		<value condition="Control.HasFocus(8050) + [String.StartsWith(Container(8050).ListItem.VideoResolution,4K) | String.Contains(Container(8050).ListItem.FileNameAndPath,2160p)] + String.Contains(Container(8050).ListItem.HDRType,hdr10)">$LOCALIZE[32132] $LOCALIZE[32134]</value>
+		<value condition="Control.HasFocus(8050) + [String.StartsWith(Container(8050).ListItem.VideoResolution,4K) | String.Contains(Container(8050).ListItem.FileNameAndPath,2160p)] + String.Contains(Container(8050).ListItem.HDRType,hlg)">$LOCALIZE[32132] $LOCALIZE[32139]</value>
 		<value condition="Control.HasFocus(8050) + [String.StartsWith(Container(8050).ListItem.VideoResolution,4K) | String.Contains(Container(8050).ListItem.FileNameAndPath,2160p)] + String.Contains(Container(8050).ListItem.FilenameAndPath,HDR)">$LOCALIZE[32132] $LOCALIZE[32134]</value>
 		<!-- 4K UHD -->
 		<value condition="Control.HasFocus(8050) + [String.StartsWith(Container(8050).ListItem.VideoResolution,4K) | String.Contains(Container(8050).ListItem.FileNameAndPath,2160p)]">$LOCALIZE[32132] $LOCALIZE[32135]</value>
@@ -1025,8 +1018,11 @@
 		<!-- 8K -->
 		<value condition="Control.HasFocus(8010) + [String.StartsWith(Container(8010).ListItem.VideoResolution,8K) | String.Contains(Container(8010).ListItem.FileNameAndPath,4320p)]">$LOCALIZE[32131]</value>
 		<!-- 4K Dolby Vision -->
+		<value condition="Control.HasFocus(8010) + [String.StartsWith(Container(8010).ListItem.VideoResolution,4K) | String.Contains(Container(8010).ListItem.FileNameAndPath,2160p)] + String.Contains(Container(8010).ListItem.HDRType,dolbyvision)">$LOCALIZE[32132] $LOCALIZE[32133]</value>
 		<value condition="Control.HasFocus(8010) + [String.StartsWith(Container(8010).ListItem.VideoResolution,4K) | String.Contains(Container(8010).ListItem.FileNameAndPath,2160p)] + [String.Contains(Container(8010).ListItem.FilenameAndPath,DV) | String.Contains(Container(8010).ListItem.FilenameAndPath,Dolby.Vision)]">$LOCALIZE[32132] $LOCALIZE[32133]</value>
 		<!-- 4K HDR -->
+		<value condition="Control.HasFocus(8010) + [String.StartsWith(Container(8010).ListItem.VideoResolution,4K) | String.Contains(Container(8010).ListItem.FileNameAndPath,2160p)] + String.Contains(Container(8010).ListItem.HDRType,hdr10)">$LOCALIZE[32132] $LOCALIZE[32134]</value>
+		<value condition="Control.HasFocus(8010) + [String.StartsWith(Container(8010).ListItem.VideoResolution,4K) | String.Contains(Container(8010).ListItem.FileNameAndPath,2160p)] + String.Contains(Container(8010).ListItem.HDRType,hlg)">$LOCALIZE[32132] $LOCALIZE[32139]</value>
 		<value condition="Control.HasFocus(8010) + [String.StartsWith(Container(8010).ListItem.VideoResolution,4K) | String.Contains(Container(8010).ListItem.FileNameAndPath,2160p)] + String.Contains(Container(8010).ListItem.FilenameAndPath,HDR)">$LOCALIZE[32132] $LOCALIZE[32134]</value>
 		<!-- 4K UHD -->
 		<value condition="Control.HasFocus(8010) + [String.StartsWith(Container(8010).ListItem.VideoResolution,4K) | String.Contains(Container(8010).ListItem.FileNameAndPath,2160p)]">$LOCALIZE[32132] $LOCALIZE[32135]</value>
@@ -1042,8 +1038,11 @@
 		<!-- 8K -->
 		<value condition="Control.HasFocus(4501) + [String.StartsWith(Container(4501).ListItem.VideoResolution,8K) | String.Contains(Container(4501).ListItem.FileNameAndPath,4320p)]">$LOCALIZE[32131]</value>
 		<!-- 4K Dolby Vision -->
+		<value condition="Control.HasFocus(4501) + [String.StartsWith(Container(4501).ListItem.VideoResolution,4K) | String.Contains(Container(4501).ListItem.FileNameAndPath,2160p)] + String.Contains(Container(4501).ListItem.HDRType,dolbyvision)">$LOCALIZE[32132] $LOCALIZE[32133]</value>
 		<value condition="Control.HasFocus(4501) + [String.StartsWith(Container(4501).ListItem.VideoResolution,4K) | String.Contains(Container(4501).ListItem.FileNameAndPath,2160p)] + [String.Contains(Container(4501).ListItem.FilenameAndPath,DV) | String.Contains(Container(4501).ListItem.FilenameAndPath,Dolby.Vision)]">$LOCALIZE[32132] $LOCALIZE[32133]</value>
 		<!-- 4K HDR -->
+		<value condition="Control.HasFocus(4501) + [String.StartsWith(Container(4501).ListItem.VideoResolution,4K) | String.Contains(Container(4501).ListItem.FileNameAndPath,2160p)] + String.Contains(Container(4501).ListItem.HDRType,hdr10)">$LOCALIZE[32132] $LOCALIZE[32134]</value>
+		<value condition="Control.HasFocus(4501) + [String.StartsWith(Container(4501).ListItem.VideoResolution,4K) | String.Contains(Container(4501).ListItem.FileNameAndPath,2160p)] + String.Contains(Container(4501).ListItem.HDRType,hlg)">$LOCALIZE[32132] $LOCALIZE[32139]</value>
 		<value condition="Control.HasFocus(4501) + [String.StartsWith(Container(4501).ListItem.VideoResolution,4K) | String.Contains(Container(4501).ListItem.FileNameAndPath,2160p)] + String.Contains(Container(4501).ListItem.FilenameAndPath,HDR)">$LOCALIZE[32132] $LOCALIZE[32134]</value>
 		<!-- 4K UHD -->
 		<value condition="Control.HasFocus(4501) + [String.StartsWith(Container(4501).ListItem.VideoResolution,4K) | String.Contains(Container(4501).ListItem.FileNameAndPath,2160p)]">$LOCALIZE[32132] $LOCALIZE[32135]</value>
@@ -1059,12 +1058,15 @@
 		<!-- 8K -->
 		<value condition="[String.StartsWith(ListItem.VideoResolution,8K) | String.Contains(ListItem.FileNameAndPath,4320p)]">$LOCALIZE[32131]</value>
 		<!-- 4K Dolby Vision -->
-		<value condition="[String.StartsWith(ListItem.VideoResolution,4K) | String.Contains(ListItem.FileNameAndPath,2160p)] + [String.Contains(ListItem.FilenameAndPath,DV) | String.Contains(ListItem.FilenameAndPath,Dolby.Vision)]">$LOCALIZE[32132] $LOCALIZE[32133]</value>
+		<value condition="String.StartsWith(ListItem.VideoResolution,4K) | String.Contains(ListItem.FileNameAndPath,2160p)] + String.Contains(ListItem.HDRType,dolbyvision)">$LOCALIZE[32132] $LOCALIZE[32133]</value>
+		<value condition="String.StartsWith(ListItem.VideoResolution,4K) | String.Contains(ListItem.FileNameAndPath,2160p)] + [String.Contains(ListItem.FilenameAndPath,DV) | String.Contains(ListItem.FilenameAndPath,Dolby.Vision)]">$LOCALIZE[32132] $LOCALIZE[32133]</value>
 		<!-- 4K HDR -->
-		<value condition="[String.StartsWith(ListItem.VideoResolution,4K) | String.Contains(ListItem.FileNameAndPath,2160p)] + String.Contains(ListItem.FilenameAndPath,HDR)">$LOCALIZE[32132] $LOCALIZE[32134]</value>
+		<value condition="String.StartsWith(ListItem.VideoResolution,4K) | String.Contains(ListItem.FileNameAndPath,2160p)] + String.Contains(ListItem.HDRType,hdr10)">$LOCALIZE[32132] $LOCALIZE[32134]</value>
+		<value condition="String.StartsWith(ListItem.VideoResolution,4K) | String.Contains(ListItem.FileNameAndPath,2160p)] + String.Contains(ListItem.HDRType,hlg)">$LOCALIZE[32132] $LOCALIZE[32139]</value>
+		<value condition="String.StartsWith(ListItem.VideoResolution,4K) | String.Contains(ListItem.FileNameAndPath,2160p)] + String.Contains(ListItem.FilenameAndPath,HDR)">$LOCALIZE[32132] $LOCALIZE[32134]</value>
 		<!-- 4K UHD -->
 		<value condition="[String.StartsWith(ListItem.VideoResolution,4K) | String.Contains(ListItem.FileNameAndPath,2160p)]">$LOCALIZE[32132] $LOCALIZE[32135]</value>
-			<!-- Full HD -->
+		<!-- Full HD -->
 		<value condition="[String.StartsWith(ListItem.VideoResolution,1080) | String.Contains(ListItem.FileNameAndPath,1080p)]">$LOCALIZE[32136]</value>
 		<!-- HD -->
 		<value condition="[String.StartsWith(ListItem.VideoResolution,720) | String.Contains(ListItem.FileNameAndPath,720p)]">$LOCALIZE[32137]</value>

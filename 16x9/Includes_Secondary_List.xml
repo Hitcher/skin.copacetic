@@ -86,21 +86,26 @@
 		</definition>
 	</include>
 
+
+	<include name="Secondary_List_Icon">
+		<control type="group">
+			<visible>![$EXP[StripView_IsVisible] + [Control.HasFocus(3000) | $EXP[TransparentDialog_IsVisible]]]</visible>
+			<control type="image">
+				<animation effect="fadediffuse" end="ff808080" time="0" condition="$EXP[ListView_Display_IsBackground] | $EXP[BillboardView_IsVisible] | [$EXP[ShowcaseView_IsVisible] + $EXP[ShowcaseView_Details_Overlay_IsVisible] + !$EXP[Secondary_List_NowPlaying]]">Conditional</animation>
+				<animation effect="fadediffuse" end="ff555555" time="0" condition="$EXP[Secondary_List_NowPlaying] + [$EXP[ShowcaseView_IsVisible] | $EXP[StripView_IsVisible]]">Conditional</animation>
+				<texture background="true">$VAR[Thumbnail(0)Content]</texture>
+				<aspectratio>scale</aspectratio>
+			</control>
+			<include>Secondary_List_Now_Playing</include>
+		</control>
+	</include>
+
 	<include name="Secondary_List_Layout">
 		<param name="width" default="1080"/>
 		<param name="height" default="720"/>
 		<definition>
 			<itemlayout width="$PARAM[width]" height="$PARAM[height]">
-				<control type="image">
-					<texture background="true">$VAR[Thumbnail(0)Content]</texture>
-					<aspectratio>scale</aspectratio>
-				</control>
-				<!-- Artwork Mask -->
-				<control type="image">
-					<visible>$EXP[ListView_Display_IsBackground] | $EXP[BillboardView_IsVisible] | [$EXP[ShowcaseView_IsVisible] + $EXP[ShowcaseView_Details_Overlay_IsVisible] + !$EXP[Secondary_List_NowPlaying]]</visible>
-					<texture colordiffuse="$VAR[Artwork_Mask]">views/white_100.png</texture>
-				</control>
-				<include>Secondary_List_Now_Playing</include>
+				<include>Secondary_List_Icon</include>
 			</itemlayout>
 			<focusedlayout width="$PARAM[width]" height="$PARAM[height]">
 				<control type="group">
@@ -109,16 +114,7 @@
 						<visible>![Control.HasFocus(50) | Control.HasFocus(501) | Control.HasFocus(502) | Control.HasFocus(504)]</visible>
 						<include>HiddenFocusButton</include>
 						<include>Hidden_Secondary_List_Focus_Button</include>
-						<control type="image">
-							<texture background="true">$VAR[Thumbnail(0)Content]</texture>
-							<aspectratio>scale</aspectratio>
-						</control>
-						<!-- Artwork Mask -->
-						<control type="image">
-							<visible>$EXP[ListView_Display_IsBackground] | $EXP[BillboardView_IsVisible] | $EXP[ShowcaseView_IsVisible] + $EXP[ShowcaseView_Details_Overlay_IsVisible] + !$EXP[Secondary_List_NowPlaying]</visible>
-							<texture colordiffuse="$VAR[Artwork_Mask]">views/white_100.png</texture>
-						</control>
-						<include>Secondary_List_Now_Playing</include>
+						<include>Secondary_List_Icon</include>
 					</control>
 				</control>
 			</focusedlayout>
@@ -128,10 +124,6 @@
 	<include name="Secondary_List_Now_Playing">
 		<control type="group">
 			<visible>$EXP[Secondary_List_NowPlaying] + [$EXP[ShowcaseView_IsVisible] | $EXP[StripView_IsVisible]]</visible>
-			<control type="image">
-				<aspectratio>stretch</aspectratio>
-				<texture colordiffuse="$VAR[Now_Playing_Mask]">views/white_100.png</texture>
-			</control>
 			<include content="Now_Playing_Visualization_Fill">
 				<param name="width" value="120"/>
 				<param name="barwidth" value="24"/>
