@@ -757,23 +757,25 @@
 					<control type="group">
 						<visible>$PARAM[stripview_mask]</visible>
 						<visible>$EXP[StripView_IsVisible]</visible>
-						<visible>[Control.HasFocus(4501) + Window.IsVisible(1121)] | $EXP[Secondary_List_ContainerSwitching]</visible>
-						<animation effect="slide" start="0" end="0" time="360">Hidden</animation>
-						<width>$PARAM[width]</width>
-						<control type="image">
-							<top>-$PARAM[stripview_mask_top]</top>
-							<height>$PARAM[stripview_mask_top]</height>
-							<texture colordiffuse="$VAR[Secondary_Color]">views/white_100.png</texture>
-						</control>
 						<control type="group">
-							<top>$PARAM[height]</top>
-							<height>$PARAM[stripview_mask_bottom]</height>
+							<visible>[Control.HasFocus(4501) + Window.IsVisible(1121)] | $EXP[Secondary_List_ContainerSwitching]</visible>
+							<animation effect="slide" start="0" end="0" time="360">Hidden</animation>
+							<width>$PARAM[width]</width>
 							<control type="image">
+								<top>-$PARAM[stripview_mask_top]</top>
+								<height>$PARAM[stripview_mask_top]</height>
 								<texture colordiffuse="$VAR[Secondary_Color]">views/white_100.png</texture>
 							</control>
-							<control type="image">
-								<visible>Skin.String(Theme,Light)</visible>
-								<texture colordiffuse="$VAR[Light_Grey_Color]">views/gradient_light-background_$PARAM[stripview_mask_bottom].png</texture>
+							<control type="group">
+								<top>$PARAM[height]</top>
+								<height>$PARAM[stripview_mask_bottom]</height>
+								<control type="image">
+									<texture colordiffuse="$VAR[Secondary_Color]">views/white_100.png</texture>
+								</control>
+								<control type="image">
+									<visible>Skin.String(Theme,Light)</visible>
+									<texture colordiffuse="$VAR[Light_Grey_Color]">views/gradient_light-background_$PARAM[stripview_mask_bottom].png</texture>
+								</control>
 							</control>
 						</control>
 					</control>
@@ -1254,7 +1256,7 @@
 							<param name="animationcondition" value="true"/>
 							<param name="animationeffect" value="slide"/>
 							<param name="animationend" value="$PARAM[item_width],0"/>
-							<param name="showcaseview_diffuse_fadein" value="!Container($PARAM[target_id]).OnPrevious"/>
+							<param name="showcaseview_diffuse_fadein" value="$EXP[ShowcaseView_IsVisible] + !Container($PARAM[target_id]).OnPrevious"/>
 							<param name="multiart" value="Container($PARAM[target_id]).OnPrevious + String.IsEqual(Window(home).Property(Multiart_Fadeout),true)"/>
 							<param name="multiartanimationtype" value="Hidden"/>
 							<param name="multiartanimationeffect" value="fade"/>
@@ -2861,7 +2863,7 @@
 			<param name="item_height"/>
 			<param name="focus_width"/>
 			<param name="focus_height"/>
-			<param name="show_gradient" default="![Container.Content(artists) | Container.Content(albums) | Container.Content(songs) | [Control.HasFocus(50) + !Container.Content(sets)]]"/>
+			<param name="progress_overlay" default="![Container.Content(artists) | Container.Content(albums) | Container.Content(songs) | [Control.HasFocus(50) + !Container.Content(sets)]]"/>
 			<param name="2x_item_width"/>
 			<param name="2x_item_width_plus_focus_width"/>
 			<param name="3x_item_width_plus_focus_width"/>
@@ -2892,12 +2894,12 @@
 						<param name="4x_item_width" value="$PARAM[3x_item_width_plus_focus_width]"/>
 						<param name="5x_item_width" value="$PARAM[4x_item_width_plus_focus_width]"/>
 						<param name="6x_item_width" value="$PARAM[5x_item_width_plus_focus_width]"/>
+						<param name="progress_overlay" value="$PARAM[progress_overlay]"/>
 						<param name="focus_border_visible" value="true"/>
 						<param name="focus_border_edge" value="-10"/>
 						<param name="focus_border_size" value="11"/>
 						<param name="focus_border_color" value="$VAR[Accent_Color]"/>
 						<param name="focus_border_texture" value="views/border_10px.png"/>
-						<param name="artworkmask" value="false"/>
 					</include>
 					<include content="Artwork_Static">
 						<param name="target_id" value="$PARAM[target_id]"/>
@@ -2924,12 +2926,12 @@
 						<param name="5x_item_width_plus_focus_width" value="$PARAM[5x_item_width_plus_focus_width]"/>
 						<param name="6x_item_width_plus_focus_width" value="$PARAM[6x_item_width_plus_focus_width]"/>
 						<param name="2x_item_width_minus_dropshadow_width" value="$PARAM[2x_item_width_minus_dropshadow_width]"/>
+						<param name="progress_overlay" value="$PARAM[progress_overlay]"/>
 						<param name="focus_border_visible" value="true"/>
 						<param name="focus_border_edge" value="-10"/>
 						<param name="focus_border_size" value="11"/>
 						<param name="focus_border_color" value="$VAR[Accent_Color]"/>
 						<param name="focus_border_texture" value="views/border_10px.png"/>
-						<param name="gridview_details_fade" value="$PARAM[gridview_details_fade]"/>
 					</include>
 				</control>
 			</definition>
@@ -3338,6 +3340,22 @@
 					<param name="height" value="$PARAM[height]"/>
 					<param name="background_color" value="$PARAM[background_color]"/>
 					<param name="focus_color" value="$PARAM[focus_color]"/>
+					<param name="visible" value="Control.HasFocus(4501)"/>
+					<param name="resumable_info" value="Container(4501).ListItem.PercentPlayed"/>
+					<param name="resumable_visible" value="Container(4501).ListItem.IsResumable"/>
+					<param name="watched_visible" value="!Container(4501).ListItem.IsResumable + String.IsEqual(Container(4501).ListItem.Overlay,OverlayWatched.png)"/>
+					<param name="calculated_visible" value="[String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,season)] + !String.IsEqual(Container(4501).ListItem.Overlay,OverlayWatched.png)"/>
+					<param name="calculation" value="Container(4501).ListItem.Property(WatchedEpisodePercent)"/>
+					<param name="unwatched_indicator" value="!Integer.IsEqual(Container(4501).ListItem.Property(UnWatchedEpisodes),0)"/>
+					<param name="unwatched_label" value="$INFO[Container(4501).ListItem.Property(UnWatchedEpisodes)]"/>
+				</include>
+				<include content="ProgressBar_Template">
+					<param name="left" value="$PARAM[left]"/>
+					<param name="top" value="$PARAM[top]"/>
+					<param name="width" value="$PARAM[width]"/>
+					<param name="height" value="$PARAM[height]"/>
+					<param name="background_color" value="$PARAM[background_color]"/>
+					<param name="focus_color" value="$PARAM[focus_color]"/>
 					<param name="visible" value="Control.HasFocus(8010)"/>
 					<param name="resumable_info" value="Container(8010).ListItem.PercentPlayed"/>
 					<param name="resumable_visible" value="Container(8010).ListItem.IsResumable"/>
@@ -3374,7 +3392,7 @@
 					<param name="resumable_info" value="0"/>
 					<param name="resumable_visible" value="false"/>
 					<param name="watched_visible" value="String.IsEqual(Container(8020).ListItem.Overlay,OverlayWatched.png)"/>
-					<param name="calculated_visible" value="String.IsEqual(Container(8020).ListItem.DBType,season) + !String.IsEqual(Container(8020).ListItem.Overlay,OverlayWatched.png) + Integer.IsGreater($NUMBER[Window(home).Property(WatchedPercentage)],0)"/>
+					<param name="calculated_visible" value="String.IsEqual(Container(8020).ListItem.DBType,season) + !String.IsEqual(Container(8020).ListItem.Overlay,OverlayWatched.png)"/>
 					<param name="calculation" value="Container(8020).ListItem.Property(WatchedEpisodePercent)"/>
 					<param name="unwatched_indicator" value="!Integer.IsEqual(Container(8020).ListItem.Property(UnWatchedEpisodes),0)"/>
 					<param name="unwatched_label" value="$INFO[Container(8020).ListItem.Property(UnWatchedEpisodes)]"/>
@@ -3390,10 +3408,10 @@
 					<param name="resumable_info" value="Container(8030).ListItem.PercentPlayed"/>
 					<param name="resumable_visible" value="Container(8030).ListItem.IsResumable"/>
 					<param name="watched_visible" value="Integer.IsGreater(Container(8030).ListItem.PlayCount,0)"/>
-					<param name="calculated_visible" value="false"/>
-					<param name="calculation" value="0"/>
-					<param name="unwatched_indicator" value="false"/>
-					<param name="unwatched_label" value=""/>
+					<param name="calculated_visible" value="String.IsEqual(Container(8030).ListItem.DBType,tvshow)"/>
+					<param name="calculation" value="Container(8030).ListItem.Property(WatchedEpisodePercent)"/>
+					<param name="unwatched_indicator" value="!Integer.IsEqual(Container(8030).ListItem.Property(UnWatchedEpisodes),0)"/>
+					<param name="unwatched_label" value="$INFO[Container(8030).ListItem.Property(UnWatchedEpisodes)]"/>
 				</include>
 				<include content="ProgressBar_Template">
 					<param name="left" value="$PARAM[left]"/>
@@ -3406,10 +3424,10 @@
 					<param name="resumable_info" value="Container(8060).ListItem.PercentPlayed"/>
 					<param name="resumable_visible" value="Container(8060).ListItem.IsResumable"/>
 					<param name="watched_visible" value="Integer.IsGreater(Container(8060).ListItem.PlayCount,0)"/>
-					<param name="calculated_visible" value="false"/>
-					<param name="calculation" value="0"/>
-					<param name="unwatched_indicator" value="false"/>
-					<param name="unwatched_label" value=""/>
+					<param name="calculated_visible" value="String.IsEqual(Container(8060).ListItem.DBType,tvshow)"/>
+					<param name="calculation" value="Container(8060).ListItem.Property(WatchedEpisodePercent)"/>
+					<param name="unwatched_indicator" value="!Integer.IsEqual(Container(8060).ListItem.Property(UnWatchedEpisodes),0)"/>
+					<param name="unwatched_label" value="$INFO[Container(8060).ListItem.Property(UnWatchedEpisodes)]"/>
 				</include>
 			</definition>
 		</include>
