@@ -2812,7 +2812,7 @@
 			<param name="top" default="180"/>
 			<param name="width"/>
 			<param name="height"/>
-			<param name="edge" default="15"/>
+			<param name="edge" default="0"/>
 			<param name="title_max_height" default="300"/>
 			<param name="title_font" default="Grid_Title"/>
 			<param name="info_font" default="Grid_Info"/>
@@ -3075,11 +3075,23 @@
 							<!-- Title -->
 							<control type="textbox">
 								<visible>[!$EXP[$PARAM[viewtype_label]View_Details_Logo_IsVisible] + ![Control.HasFocus(4501) + !String.IsEmpty(Container(4501).ListItem.Art(clearlogo))]] | $EXP[InfoWidget_HasFocus]</visible>
+								<visible>![$EXP[ShowcaseView_IsVisible] + !$EXP[ShowcaseView_Details_Info_IsVisible] + !$EXP[ShowcaseView_Details_Plot_IsVisible]]</visible>
 								<height max="$PARAM[titleheight]">auto</height>
 								<font>$PARAM[viewtype_label]_Title</font>
 								<textcolor>$PARAM[titlecolor]</textcolor>
 								<label>$PARAM[titlelabel]</label>
 								<align>$PARAM[titlealign]</align>
+								<scroll>$PARAM[titlescroll]</scroll>
+								<scrollsuffix> / </scrollsuffix>
+							</control>
+							<control type="textbox">
+								<visible>[!$EXP[$PARAM[viewtype_label]View_Details_Logo_IsVisible] + ![Control.HasFocus(4501) + !String.IsEmpty(Container(4501).ListItem.Art(clearlogo))]] | $EXP[InfoWidget_HasFocus]</visible>
+								<visible>$EXP[ShowcaseView_IsVisible] + !$EXP[ShowcaseView_Details_Info_IsVisible] + !$EXP[ShowcaseView_Details_Plot_IsVisible]</visible>
+								<height max="$PARAM[titleheight]">auto</height>
+								<font>$PARAM[viewtype_label]_Title</font>
+								<textcolor>$PARAM[titlecolor]</textcolor>
+								<label>$PARAM[titlelabel]</label>
+								<align>center</align>
 								<scroll>$PARAM[titlescroll]</scroll>
 								<scrollsuffix> / </scrollsuffix>
 							</control>
@@ -3294,7 +3306,7 @@
 						<centertop>50%</centertop>
 						<left>0</left>
 						<control type="image">
-							<texture colordiffuse="$VAR[Unwatched_Indicator_Background_Color]">views/white_100.png</texture>
+							<texture colordiffuse="$PARAM[unwatched_indicator_background]">views/white_100.png</texture>
 						</control>
 						<control type="label">
 							<align>center</align>
@@ -3317,6 +3329,7 @@
 			<param name="height" default="6"/>
 			<param name="background_color" default="$VAR[Progress_Background_Color]"/>
 			<param name="focus_color" default="$VAR[Progress_Focused_Color]"/>
+			<param name="unwatched_indicator_background" default="$VAR[Unwatched_Indicator_Background_Color]"/>
 			<definition>
 				<include content="ProgressBar_Template">
 					<param name="left" value="$PARAM[left]"/>
@@ -3332,6 +3345,7 @@
 					<param name="calculated_visible" value="[String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,season)] + !String.IsEqual(ListItem.Overlay,OverlayWatched.png)"/>
 					<param name="calculation" value="ListItem.Property(WatchedEpisodePercent)"/>
 					<param name="unwatched_indicator" value="!Integer.IsEqual(ListItem.Property(UnWatchedEpisodes),0)"/>
+					<param name="unwatched_indicator_background" value="$PARAM[unwatched_indicator_background]"/>
 					<param name="unwatched_label" value="$INFO[ListItem.Property(UnWatchedEpisodes)]"/>
 				</include>
 				<include content="ProgressBar_Template">
@@ -3348,6 +3362,7 @@
 					<param name="calculated_visible" value="[String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,season)] + !String.IsEqual(Container(4501).ListItem.Overlay,OverlayWatched.png)"/>
 					<param name="calculation" value="Container(4501).ListItem.Property(WatchedEpisodePercent)"/>
 					<param name="unwatched_indicator" value="!Integer.IsEqual(Container(4501).ListItem.Property(UnWatchedEpisodes),0)"/>
+					<param name="unwatched_indicator_background" value="$PARAM[unwatched_indicator_background]"/>
 					<param name="unwatched_label" value="$INFO[Container(4501).ListItem.Property(UnWatchedEpisodes)]"/>
 				</include>
 				<include content="ProgressBar_Template">
@@ -3364,6 +3379,7 @@
 					<param name="calculated_visible" value="false"/>
 					<param name="calculation" value="0"/>
 					<param name="unwatched_indicator" value="false"/>
+					<param name="unwatched_indicator_background" value="$PARAM[unwatched_indicator_background]"/>
 					<param name="unwatched_label" value=""/>
 				</include>
 				<include content="ProgressBar_Template">
@@ -3380,6 +3396,7 @@
 					<param name="calculated_visible" value="String.IsEqual(Container(8020).ListItem.DBType,season)"/>
 					<param name="calculation" value="Container(8020).ListItem.Property(WatchedEpisodePercent)"/>
 					<param name="unwatched_indicator" value="!Integer.IsEqual(Container(8020).ListItem.Property(UnWatchedEpisodes),0)"/>
+					<param name="unwatched_indicator_background" value="$PARAM[unwatched_indicator_background]"/>
 					<param name="unwatched_label" value="$INFO[Container(8020).ListItem.Property(UnWatchedEpisodes)]"/>
 				</include>
 				<include content="ProgressBar_Template">
@@ -3396,6 +3413,7 @@
 					<param name="calculated_visible" value="String.IsEqual(Container(8020).ListItem.DBType,season) + !String.IsEqual(Container(8020).ListItem.Overlay,OverlayWatched.png)"/>
 					<param name="calculation" value="Container(8020).ListItem.Property(WatchedEpisodePercent)"/>
 					<param name="unwatched_indicator" value="!Integer.IsEqual(Container(8020).ListItem.Property(UnWatchedEpisodes),0)"/>
+					<param name="unwatched_indicator_background" value="$PARAM[unwatched_indicator_background]"/>
 					<param name="unwatched_label" value="$INFO[Container(8020).ListItem.Property(UnWatchedEpisodes)]"/>
 				</include>
 				<include content="ProgressBar_Template">
@@ -3412,6 +3430,7 @@
 					<param name="calculated_visible" value="String.IsEqual(Container(8030).ListItem.DBType,tvshow)"/>
 					<param name="calculation" value="Container(8030).ListItem.Property(WatchedEpisodePercent)"/>
 					<param name="unwatched_indicator" value="!Integer.IsEqual(Container(8030).ListItem.Property(UnWatchedEpisodes),0)"/>
+					<param name="unwatched_indicator_background" value="$PARAM[unwatched_indicator_background]"/>
 					<param name="unwatched_label" value="$INFO[Container(8030).ListItem.Property(UnWatchedEpisodes)]"/>
 				</include>
 				<include content="ProgressBar_Template">
@@ -3428,6 +3447,7 @@
 					<param name="calculated_visible" value="String.IsEqual(Container(8060).ListItem.DBType,tvshow)"/>
 					<param name="calculation" value="Container(8060).ListItem.Property(WatchedEpisodePercent)"/>
 					<param name="unwatched_indicator" value="!Integer.IsEqual(Container(8060).ListItem.Property(UnWatchedEpisodes),0)"/>
+					<param name="unwatched_indicator_background" value="$PARAM[unwatched_indicator_background]"/>
 					<param name="unwatched_label" value="$INFO[Container(8060).ListItem.Property(UnWatchedEpisodes)]"/>
 				</include>
 			</definition>
