@@ -1,20 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <window>
 	<backgroundcolor>$VAR[Secondary_Color]</backgroundcolor>
+	<defaultcontrol always="true">9001</defaultcontrol>
 	<include>Delayed_Dialog_Fade_Animation</include>
 	<onload condition="Window.Previous(skinsettings)">Right</onload>
 	<controls>
 
+		<!-- Delay content on load -->
+		<control type="button" id="9001">
+			<visible allowhiddenfocus="true">false</visible>
+			<animation effect="slide" end="0,0" time="1080" reversible="false">Focus</animation>
+			<onfocus>SetFocus(3)</onfocus>
+		</control>
+
 		<include>DialogFanartSlideshow</include>
 
+		<!-- Content -->
 		<control type="group">
-			<visible>!$EXP[TransparentDialog_IsVisible]</visible>
+			<visible>!$EXP[TransparentDialog_IsVisible] + !Control.HasFocus(9001)</visible>
 			<include>Content_Fade_Animation</include>
 
 			<include content="Transparent_Dialog_Panel"/>
 
 			<!-- Main list -->
 			<control type="grouplist" id="3">
+				<visible allowhiddenfocus="true">true</visible>
 				<left>120</left>
 				<width>480</width>
 				<height>540</height>
