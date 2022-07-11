@@ -12,6 +12,7 @@
 	<defaultcontrol always="true">7000</defaultcontrol>
 	<include>Delayed_Dialog_Fade_Animation</include>
 	<controls>
+
 		<control type="group">
 			<visible>![Window.IsVisible(shutdownmenu) | Window.IsVisible(numericinput)]</visible>
 			<include>Delayed_Content_Fade_Animation</include>
@@ -199,36 +200,16 @@
 				<param name="title_label_id" value="311"/>
 			</include>
 
-			<control type="edit" id="312">
-				<width>1200</width>
-				<centerleft>50%</centerleft>
-				<top>390</top>
-				<font>List_Title_Unfocused</font>
-				<textcolor>$VAR[Dark_Color]</textcolor>
-				<focusedcolor>$VAR[Dark_Color]</focusedcolor>
-				<texturenofocus colordiffuse="$VAR[Light_Color]">views/white_100.png</texturenofocus>
-				<texturefocus colordiffuse="$VAR[Light_Color]">views/white_100.png</texturefocus>
-				<onup>301</onup>
-				<ondown>2000</ondown>
-			</control>
-			<control type="image">
-				<visible>Control.HasFocus(7000) | Control.HasFocus(312)</visible>
-				<width>1200</width>
-				<centerleft>50%</centerleft>
-				<top>480</top>
-				<height>6</height>
-				<texture colordiffuse="$VAR[Accent_Color]">views/white_100.png</texture>
-			</control>
-
 			<!-- Layout -->
 			<control type="group">
 				<visible>!Control.HasFocus(7000)</visible>
 				<include>Content_Fade_Animation</include>
 				<control type="grouplist">
 					<top>495</top>
-					<height>480</height>
+					<height>450</height>
 					<orientation>vertical</orientation>
-					<align>center</align>
+					<align>top</align>
+					<itemgap>0</itemgap>
 					<scrolltime tween="sine" easing="inout">360</scrolltime>
 					<include content="Keyboard_Row_Layout">
 						<param name="id" value="2000"/>
@@ -247,8 +228,81 @@
 					</include>
 				</control>
 
+				<!-- Autocomplete -->
+				<control type="group">
+					<visible>Integer.IsGreater(Container(9005).NumItems,0)</visible>
+					<include>Content_Fade_Animation</include>
+					<include content="Transparent_Dialog_Panel">
+						<param name="top" value="180"/>
+						<param name="bottom" value="645"/>
+					</include>
+				</control>
+
+				<control type="panel" id="9005">
+					<animation effect="fade" start="0" end="100" time="360" delay="360" tween="sine" easing="out" condition="Integer.IsGreater(Container(9005).NumItems,0) | Container(9005).IsUpdating">Conditional</animation>
+					<visible allowhiddenfocus="true">!Control.IsVisible(313)</visible>
+					<centerleft>50%</centerleft>
+					<width>1740</width>
+					<top>195</top>
+					<height>180</height>
+					<scrolltime tween="sine" easing="inout">360</scrolltime>
+					<orientation>vertical</orientation>
+					<onup>301</onup>
+					<ondown>312</ondown>
+					<itemlayout width="540" height="90">
+						<control type="label">
+							<textoffsetx>60</textoffsetx>
+							<label>$INFO[ListItem.Label]</label>
+							<font>Keyboard_Button_5</font>
+							<textcolor>$VAR[Unfocused_Color]</textcolor>
+							<aligny>center</aligny>
+							<align>center</align>
+						</control>
+					</itemlayout>
+					<focusedlayout width="540" height="90">
+						<control type="label">
+							<textoffsetx>60</textoffsetx>
+							<label>$INFO[ListItem.Label]</label>
+							<font>Keyboard_Button_5</font>
+							<textcolor>$VAR[Light_Color]</textcolor>
+							<aligny>center</aligny>
+							<align>center</align>
+						</control>
+						<control type="image">
+							<width>100%</width>
+							<bottom>0</bottom>
+							<height>1</height>
+							<texture colordiffuse="$VAR[Unfocused_Color]">views/white_100.png</texture>
+						</control>
+					</focusedlayout>
+					<content>$VAR[AutoComplete_Path]</content>
+				</control>
+
+				<!-- Top bar -->
+				<control type="edit" id="312">
+					<width>1200</width>
+					<centerleft>50%</centerleft>
+					<top>390</top>
+					<font>List_Title_Unfocused</font>
+					<textcolor>$VAR[Dark_Color]</textcolor>
+					<focusedcolor>$VAR[Dark_Color]</focusedcolor>
+					<texturenofocus colordiffuse="$VAR[Light_Color]">views/white_100.png</texturenofocus>
+					<texturefocus colordiffuse="$VAR[Light_Color]">views/white_100.png</texturefocus>
+					<onup>9005</onup>
+					<ondown>2000</ondown>
+				</control>
+				<control type="image">
+					<visible>Control.HasFocus(7000) | Control.HasFocus(312)</visible>
+					<width>1200</width>
+					<centerleft>50%</centerleft>
+					<top>480</top>
+					<height>6</height>
+					<texture colordiffuse="$VAR[Accent_Color]">views/white_100.png</texture>
+				</control>
+
+
 				<include content="ButtonGroup">
-					<param name="ondown" value="312"/>
+					<param name="ondown" value="9005"/>
 					<param name="onup" value="2004"/>
 					<param name="onleft" value="2004"/>
 					<param name="onright" value="2004"/>
@@ -259,7 +313,7 @@
 					<param name="button2id" value="300"/>
 				</include>
 			</control>
-
+			
 		</control>
 	</controls>
 </window>
