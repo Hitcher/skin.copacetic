@@ -1,60 +1,78 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <window>
 	<!-- sliderdialog -->
-	<defaultcontrol always="true">11</defaultcontrol>
+
+	<defaultcontrol always="true">9001</defaultcontrol>
 	<include>Delayed_Dialog_Fade_Animation</include>
 	<controls>
+
+		<!-- Delay content on Load -->
+		<include content="Delay_Content_Load">
+			<param name="id" value="9001"/>
+			<param name="time" value="360"/>
+			<param name="target_id" value="SetFocus(11)"/>
+		</include>
+
+		<!-- Hidden labels passed to Info below -->
+		<control type="label" id="10">
+			<visible>false</visible>
+		</control>
+		<control type="label" id="12">
+			<visible>false</visible>
+		</control>
+
 		<control type="group">
-			<visible>!Window.IsVisible(shutdownmenu)</visible>
+			<visible>!Window.IsVisible(shutdownmenu) + !Control.HasFocus(9001)</visible>
 			<include>Delayed_Content_Fade_Animation</include>
 
-			<!-- Hidden labels passed to Info below -->
-			<control type="label" id="10">
-				<font></font>
-			</control>
-			<control type="label" id="12">
-				<font></font>
-			</control>
+			<include content="Transparent_Dialog_Panel">
+				<param name="left" value="600"/>
+				<param name="right" value="600"/>
+				<param name="top" value="0"/>
+				<param name="bottom" value="900"/>
+				<param name="colordiffuse" value="$VAR[Dark_Grey_Color]"/>
+			</include>
 
-			<control type="group">
+			<control type="label">
 				<centerleft>50%</centerleft>
-				<top>15</top>
-				<width>800</width>
-				<height>180</height>
-				<include>DialogZoomAnimation</include>
+				<width>720</width>
+				<top>30</top>
+				<height>33</height>
+				<align>center</align>
+				<font>MusicPlayer_Info</font>
+				<textcolor>$VAR[Light_Color]</textcolor>
+				<label>$INFO[Control.GetLabel(12)]</label>
+			</control>
 
-				<!-- Background image -->
+			<control type="grouplist">
+				<width>720</width>
+				<centerleft>50%</centerleft>
+				<height>60</height>
+				<top>60</top>
+				<orientation>horizontal</orientation>
+				<align>center</align>
+				<itemgap>0</itemgap>
+				<usecontrolcoords>true</usecontrolcoords>
 				<control type="image">
-					<left>0</left>
-					<top>0</top>
-					<width>800</width>
-					<height>180</height>
-					<texture border="20">dialogs/DialogBackground.png</texture>
+					<animation effect="rotate" center="30,30" end="90" time="0" condition="true" reversible="false">Conditional</animation>
+					<width>60</width>
+					<height>60</height>
+					<texture colordiffuse="$VAR[Light_Color]">osd/icon_RatingChange_focused.png</texture>
 				</control>
-
-				<!-- Info -->
-				<control type="label">
-					<left>40</left>
-					<top>50</top>
-					<width>720</width>
-					<height>33</height>
-					<align>center</align>
-					<scroll>true</scroll>
-					<font>Font33</font>
-					<textcolor>$VAR[FocusedColor]</textcolor>
-					<label>$INFO[Control.GetLabel(10)] - $INFO[Control.GetLabel(12)]</label>
-				</control>
-
-				<!-- Slider -->
 				<control type="slider" id="11">
-					<centerleft>50%</centerleft>
 					<centertop>50%</centertop>
-					<width>720</width>
-					<height>8</height>
-					<controloffsety>11</controloffsety>
-					<texturesliderbar colordiffuse="$VAR[Progress_Focused_Color]">views/white_100.png</texturesliderbar>
-					<textureslidernib colordiffuse="$VAR[Accent_Color]">views/Slider_Nib.png</textureslidernib>
-					<textureslidernibfocus colordiffuse="$VAR[Accent_Color]">views/Slider_Nib.png</textureslidernibfocus>
+					<width>600</width>
+					<height>30</height>
+					<texturesliderbar colordiffuse="$VAR[DialogSlider_Bar_Color]">dialogs/dialogslider_background.png</texturesliderbar>
+					<textureslidernib/>
+					<textureslidernibfocus colordiffuse="$VAR[Accent_Color]">dialogs/dialogslider_nib_30.png</textureslidernibfocus>
+					<orientation>horizontal</orientation>
+				</control>
+				<control type="image">
+					<animation effect="rotate" center="30,30" end="270" time="0" condition="true" reversible="false">Conditional</animation>
+					<width>60</width>
+					<height>60</height>
+					<texture colordiffuse="$VAR[Light_Color]">osd/icon_RatingChange_focused.png</texture>
 				</control>
 			</control>
 
