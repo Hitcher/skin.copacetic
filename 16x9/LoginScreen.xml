@@ -1,110 +1,113 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <window>
 	<!-- loginscreen -->
-	<backgroundcolor>$VAR[BackgroundColor]</backgroundcolor>
-	<defaultcontrol always="true">52</defaultcontrol>
+	<backgroundcolor>$VAR[Secondary_Color]</backgroundcolor>
+	<defaultcontrol always="true">9001</defaultcontrol>
+	<include>Delayed_Dialog_Fade_Animation</include>
 
 	<controls>
 
+		<!-- Delay content on Load -->
+		<include content="Delay_Content_Load">
+			<param name="id" value="9001"/>
+			<param name="time" value="720"/>
+			<param name="target_id" value="SetFocus(52)"/>
+		</include>
 
-			<!-- Clock -->
-			<include>Clock</include>
+		<!-- List -->
+		<include content="Custom_List">
+			<param name="type" value="fixedlist"/>
+			<param name="visible" value="true"/>
+			<param name="id" value="52"/>
+			<param name="viewtype_label" value="LoginScreen"/>
+			<param name="viewtype" value="wrap"/>
+			<param name="orientation" value="horizontal"/>
+		</include>
 
-		<!-- Main group -->
-		<control type="group">
-			<include>Dialog_Fade_Animation</include>
-
-			<!-- Conq logo -->
-			<include condition="!Skin.HasSetting(HideConqLogo)">ConqLogo</include>
-
-			<!-- Image -->
-			<control type="image">
-				<left>120</left>
-				<top>225</top>
-				<width>405</width>
-				<height>666</height>
-				<texture>$INFO[ListItem.Icon]</texture>
-				<aspectratio aligny="center">keep</aspectratio>
-				<bordertexture border="1,1,1,69">views/DropShadow.png</bordertexture>
-				<bordersize>0,0,0,66</bordersize>
-				<visible>!String.Contains(ListItem.Icon,unknown-user)</visible>
-			</control>
-			<control type="image">
-				<left>120</left>
-				<top>225</top>
-				<width>405</width>
-				<height>600</height>
-				<texture colordiffuse="00ffffff">$INFO[ListItem.Icon]</texture>
-				<aspectratio aligny="center">keep</aspectratio>
-				<bordertexture border="21,21,21,150">views/OverlayEffect.png</bordertexture>
-				<visible>!String.Contains(ListItem.Icon,unknown-user) + Skin.HasSetting(Overlays)</visible>
-			</control>
-			<control type="image">
-				<left>120</left>
-				<top>225</top>
-				<width>405</width>
-				<height>600</height>
-				<texture>DefaultActor.png</texture>
-				<colordiffuse>$VAR[UnFocusedColor]</colordiffuse>
-				<aspectratio aligny="center">keep</aspectratio>
-				<visible>String.Contains(ListItem.Icon,unknown-user)</visible>
-			</control>
-
-			<!-- View -->
-			<control type="fixedlist" id="52">
-				<left>750</left>
-				<centertop>50%</centertop>
-				<width>1050</width>
-				<height>720</height>
-				<onup>52</onup>
-				<ondown>52</ondown>
-				<onleft>ActivateWindow(shutdownmenu)</onleft>
-				<onright>ActivateWindow(shutdownmenu)</onright>
-				<focusposition>3</focusposition>
-				<orientation>vertical</orientation>
-				<viewtype label="535">list</viewtype>
-				<scrolltime tween="sine" easing="out">240</scrolltime>
-
-				<itemlayout height="90" width="1050">
-					<control type="label">
-						<left>32</left>
-						<top>0</top>
-						<width>1018</width>
-						<height>90</height>
-						<font>Font36</font>
-						<label>$INFO[ListItem.Label]</label>
-						<textcolor>$VAR[UnFocusedColor]</textcolor>
-					</control>
-				</itemlayout>
-
-				<focusedlayout width="1242" height="156">
-					<control type="label">
-						<left>32</left>
-						<top>43</top>
-						<width>1018</width>
-						<height>48</height>
-						<font>Font48</font>
-						<label>$INFO[ListItem.Label]</label>
-						<textcolor>$VAR[FocusedColor]</textcolor>
-						<shadowcolor>Artwork_Dropshadow_Color</shadowcolor>
-						<animation effect="fade" start="100" end="50" time="200" tween="cubic" easing="out" reversible="true" condition="!Control.HasFocus(52)">Conditional</animation>
-					</control>
-					<control type="label">
-						<left>32</left>
-						<top>100</top>
-						<width>1018</width>
-						<height>27</height>
-						<font>Font27</font>
-						<label>$INFO[ListItem.Label2]</label>
-						<textcolor>$VAR[UnFocusedColor]</textcolor>
-						<shadowcolor>Artwork_Dropshadow_Color</shadowcolor>
-						<animation effect="fade" start="100" end="50" time="200" tween="cubic" easing="out" reversible="true" condition="!Control.HasFocus(52)">Conditional</animation>
-					</control>
-				</focusedlayout>
-
-			</control>
-
+		<!-- On Previous Delay -->
+		<control type="group" id="5001">
+			<visible>Container(52).OnPrevious</visible>
+			<animation effect="slide" end="0,0" time="360" reversible="false">Hidden</animation>
 		</control>
+
+		<!-- On Next Delay -->
+		<control type="group" id="5002">
+			<visible>Container(52).OnNext</visible>
+			<animation effect="slide" end="0,0" time="360" reversible="false">Hidden</animation>
+		</control>
+
+		<control type="group">
+			<visible>!Control.HasFocus(9001)</visible>
+			<include>Delayed_Content_Fade_Animation</include>
+
+			<include content="Transparent_Dialog_Panel">
+				<param name="top" value="240"/>
+				<param name="bottom" value="120"/>
+			</include>
+
+			<include  content="StripView_Art_LoginScreen">
+				<param name="target_id" value="52"/>
+				<param name="artwork_icon" value="Thumbnail"/>
+			</include>
+
+			<control type="grouplist">
+				<visible>!$EXP[ContentSwitching] + !$EXP[TransparentDialog_IsVisible]</visible>
+				<include>Delayed_Content_Fade_Animation</include>
+				<centerleft>50%</centerleft>
+				<width>720</width>
+				<top>834</top>
+				<height>72</height>
+				<orientation>vertical</orientation>
+				<align>top</align>
+				<itemgap>10</itemgap>
+				<control type="label">
+					<height>32</height>
+					<label>$INFO[ListItem.Label]</label>
+					<textcolor>$VAR[Light_Color]</textcolor>
+					<font>Grid_Title</font>
+					<align>center</align>
+				</control>
+				<control type="label">
+					<height>30</height>
+					<label>$INFO[ListItem.Label2]</label>
+					<textcolor>$VAR[Unfocused_Color]</textcolor>
+					<font>LoginScreen_Info</font>
+					<align>center</align>
+				</control>
+			</control>
+
+			<control type="group">
+				<visible>!$EXP[TransparentDialog_IsVisible]</visible>
+				<include>Delayed_Content_Fade_Animation</include>
+
+				<control type="label">
+					<label>$VAR[LoginScreen_Welcome_Label]</label>
+					<top>96</top>
+					<height>48</height>
+					<centerleft>50%</centerleft>
+					<width>1200</width>
+					<align>center</align>
+					<font>Breadcrumb_Title_Label</font>
+					<textcolor>$VAR[Primary_Color]</textcolor>
+				</control>
+
+				<control type="group">
+					<animation effect="slide" end="-900" time="0" condition="true">Conditional</animation>
+					<include content="ButtonGroup">
+						<param name="onup" value="52"/>
+						<param name="buttonsvisible" value="true"/>
+						<param name="button1visible" value="true"/>
+						<param name="button1unfocused" value="Power_Unfocused"/>
+						<param name="button1focused" value="Power_Focused_Large"/>
+						<param name="button1onclick" value="ActivateWindow(shutdownmenu)"/>
+						<param name="unfocusedcolor" value="$VAR[Primary_Color]"/>
+						<param name="focusedcolor" value="$VAR[Primary_Color]"/>
+					</include>
+				</control>
+
+			</control>
+		</control>
+
 
 	</controls>
 
