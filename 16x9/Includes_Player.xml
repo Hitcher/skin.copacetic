@@ -390,6 +390,8 @@
 		<param name="text_color" default="$VAR[Notification_Widget_Label_Color]"/>
 		<definition>
 			<control type="grouplist">
+				<visible>String.IsEmpty(Window(home).Property(Music_Player_Controls))</visible>
+				<include>Delayed_Content_Fade_Animation</include>
 				<animation effect="slide" start="0,0" end="0,-30"  condition="$EXP[StripView_Display_IsPosters] + [$EXP[Music_Player_IsVisible] | Window.IsVisible(volumebar)] + !$EXP[InfoWidget_HasFocus] + !Window.IsVisible(home)">Conditional</animation>
 				<left>$PARAM[padding]</left>
 				<right>$PARAM[padding]</right>
@@ -397,8 +399,6 @@
 				<align>$PARAM[group_align]</align>
 				<itemgap>0</itemgap>
 				<control type="label">
-					<visible>String.IsEmpty(Window(home).Property(Music_Player_Controls))</visible>
-					<include>Content_Fade_Animation</include>
 					<height>40</height>
 					<label>$PARAM[label_1]</label>
 					<font>MusicPlayer_Title</font>
@@ -408,8 +408,6 @@
 					<scrollsuffix> / </scrollsuffix>
 				</control>
 				<control type="label">
-					<visible>String.IsEmpty(Window(home).Property(Music_Player_Controls))</visible>
-					<include>Content_Fade_Animation</include>
 					<height>35</height>
 					<label>$PARAM[label_2]</label>
 					<font>MusicPlayer_Info</font>
@@ -418,16 +416,19 @@
 					<scroll>$PARAM[info_label_scroll]</scroll>
 					<scrollsuffix> / </scrollsuffix>
 				</control>
-				<control type="label">
-					<visible>!String.IsEmpty(Window(home).Property(Music_Player_Controls))</visible>
-					<animation effect="slide" end="60" time="0" condition="!String.IsEmpty(Window(home).Property(Music_Player_Controls)) + Window.IsVisible(home) + Window.IsVisible(volumebar)" reversible="false">Conditional</animation>
-					<include>Content_Fade_Animation</include>
-					<height>40</height>
-					<label>$VAR[Music_Player_Label]</label>
-					<font>MusicPlayer_Title</font>
-					<textcolor>$PARAM[text_color]</textcolor>
-					<align>$PARAM[label_align]</align>
-				</control>
+			</control>
+			<control type="label">
+				<visible>!String.IsEmpty(Window(home).Property(Music_Player_Controls))</visible>
+				<include>Delayed_Content_Fade_Animation</include>
+				<animation effect="slide" end="60" time="0" condition="!String.IsEmpty(Window(home).Property(Music_Player_Controls)) + Window.IsVisible(home) + Window.IsVisible(volumebar)" reversible="false">Conditional</animation>
+				<left>$PARAM[padding]</left>
+				<right>$PARAM[padding]</right>
+				<height>40</height>
+				<centertop>50%</centertop>
+				<label>$VAR[Music_Player_Label]</label>
+				<font>MusicPlayer_Title</font>
+				<textcolor>$PARAM[text_color]</textcolor>
+				<align>$PARAM[label_align]</align>
 			</control>
 		</definition>
 	</include>

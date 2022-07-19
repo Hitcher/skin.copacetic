@@ -1,96 +1,88 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <window>
 	<!-- videobookmarks -->
-	<defaultcontrol always="true">2</defaultcontrol>
+	<defaultcontrol always="true">9001</defaultcontrol>
 	<include>Delayed_Dialog_Fade_Animation</include>
 	<controls>
+
+		<!-- Delay content on Load -->
+		<control type="button" id="9001">
+			<visible allowhiddenfocus="true">false</visible>
+			<onfocus condition="Integer.IsGreater(Container(11).CurrentItem,1)">Control.Move(11,$INFO[Container(11).CurrentItem,-])</onfocus>
+			<onfocus condition="Integer.IsGreater(Container(11).CurrentItem,1)">Control.Move(11,1)</onfocus>
+			<animation effect="slide" end="0,0" time="360" reversible="false">Focus</animation>
+			<onfocus condition="Integer.IsGreater(Container(11).NumItems,0)">SetFocus(11)</onfocus>
+			<onfocus condition="Integer.IsEqual(Container(11).NumItems,0)">SetFocus(2)</onfocus>
+		</control>
+
+		<!-- On Previous Delay -->
+		<control type="group" id="5001">
+			<visible>Container(11).OnPrevious</visible>
+			<animation effect="slide" end="0,0" time="360" reversible="false">Hidden</animation>
+		</control>
+
+		<!-- On Next Delay -->
+		<control type="group" id="5002">
+			<visible>Container(11).OnNext</visible>
+			<animation effect="slide" end="0,0" time="360" reversible="false">Hidden</animation>
+		</control>
+
+		<include content="Custom_List">
+			<param name="type" value="fixedlist"/>
+			<param name="visible" value="true"/>
+			<param name="id" value="11"/>
+			<param name="viewtype_label" value="VideoBookmarks"/>
+			<param name="viewtype" value="wrap"/>
+			<param name="orientation" value="horizontal"/>
+		</include>
+
+		<include content="Transparent_Dialog_Panel">
+			<param name="left" value="0"/>
+			<param name="right" value="0"/>
+			<param name="top" value="540"/>
+			<param name="bottom" value="0"/>
+		</include>
+
 		<control type="group">
 			<visible>![Window.IsVisible(shutdownmenu) | Window.IsVisible(sliderdialog) | Window.IsVisible(selectdialog) | Window.IsVisible(filebrowser) | Window.IsVisible(subtitlesearch) | Window.IsVisible(virtualkeyboard)]</visible>
 			<include>Delayed_Content_Fade_Animation</include>
 
-
-			<control type="list" id="11">
-				<left>150</left>
-				<top>610</top>
-				<width>1620</width>
-				<height>290</height>
-				<onleft>noop</onleft>
-				<onright>noop</onright>
-				<ondown>9000</ondown>
-				<onup>noop</onup>
-				<orientation>horizontal</orientation>
-				<viewtype label="535">list</viewtype>
-				<scrolltime tween="sine" easing="out">240</scrolltime>
-
-				<itemlayout height="290" width="324">
-					<control type="image">
-						<width>324</width>
-						<height>242</height>
-						<texture border="1">old_osd/OSDBack.png</texture>
-					</control>
-					<control type="image">
-						<left>6</left>
-						<top>6</top>
-						<width>312</width>
-						<height>176</height>
-						<aspectratio aligny="top">keep</aspectratio>
-						<texture background="true">$INFO[ListItem.Icon]</texture>
-					</control>
-					<control type="label">
-						<left>10</left>
-						<top>190</top>
-						<width>304</width>
-						<height>44</height>
-						<textcolor>$VAR[UnFocusedColor]</textcolor>
-						<label>$INFO[ListItem.Label] / $INFO[ListItem.Label2]</label>
-					</control>
-				</itemlayout>
-
-				<focusedlayout height="290" width="324">
-					<control type="image">
-						<width>324</width>
-						<height>242</height>
-						<texture border="1">old_osd/OSDBack.png</texture>
-					</control>
-					<control type="image">
-						<width>324</width>
-						<height>242</height>
-						<texture border="1">old_osd/OSDBack.png</texture>
-					</control>
-					<control type="image">
-						<left>6</left>
-						<top>6</top>
-						<width>312</width>
-						<height>176</height>
-						<aspectratio aligny="top">keep</aspectratio>
-						<texture background="true">$INFO[ListItem.Icon]</texture>
-					</control>
-					<control type="label">
-						<left>10</left>
-						<top>190</top>
-						<width>304</width>
-						<height>44</height>
-						<textcolor>$VAR[FocusedColor]</textcolor>
-						<label>$INFO[ListItem.Label] / $INFO[ListItem.Label2]</label>
-					</control>
-				</focusedlayout>
-
+			<control type="group">
+				<visible>!Control.HasFocus(9001) + Integer.IsGreater(Container(11).NumItems,0)</visible>
+				<include>Delayed_Content_Fade_Animation</include>
+				<animation effect="slide" start="0" end="0,234" time="0" condition="true">Conditional</animation>
+				<include  content="GridView_Art_Fanart">
+					<param name="target_id" value="11"/>
+					<param name="artwork_icon" value="Thumbnail"/>
+				</include>
+				<control type="group">
+					<animation effect="slide" start="0" end="0,677" time="0" condition="true">Conditional</animation>
+					<include content="Breadcrumb_Label">
+						<param name="title_label" value="$INFO[Container(11).ListItem.Label]"/>
+						<param name="info_label" value="$INFO[Container(11).ListItem.Label2,/ ]"/>
+						<param name="label_color" value="$VAR[Light_Color]"/>
+					</include>
+				</control>
 			</control>
 
-			<include content="ButtonGroup">
-				<param name="onup" value="11"/>
-				<param name="buttonsvisible" value="false"/>
-				<param name="button1visible" value="true"/>
-				<param name="button1id" value="2"/>
-				<param name="button1label" value="$LOCALIZE[31530]"/>
-				<param name="button2visible" value="true"/>
-				<param name="button2id" value="3"/>
-				<param name="button2label" value="$LOCALIZE[31531]"/>
-				<param name="button3visible" value="true"/>
-				<param name="button3id" value="4"/>
-				<param name="button3label" value="$LOCALIZE[31532]"/>
-
-			</include>
+			<control type="group">
+				<visible>!Control.HasFocus(9001)</visible>
+				<include>Delayed_Content_Fade_Animation</include>
+				<include content="ButtonGroup">
+					<param name="onup" value="11"/>
+					<param name="onleft" value="11"/>
+					<param name="buttonsvisible" value="false"/>
+					<param name="button1visible" value="true"/>
+					<param name="button1id" value="2"/>
+					<param name="button1label" value="$LOCALIZE[31530]"/>
+					<param name="button2visible" value="true"/>
+					<param name="button2id" value="3"/>
+					<param name="button2label" value="$LOCALIZE[31531]"/>
+					<param name="button3visible" value="true"/>
+					<param name="button3id" value="4"/>
+					<param name="button3label" value="$LOCALIZE[31532]"/>
+				</include>
+			</control>
 
 		</control>
 
