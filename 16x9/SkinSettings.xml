@@ -3,24 +3,18 @@
 	<!-- skinsettings -->
 	<backgroundcolor>$VAR[Secondary_Color]</backgroundcolor>
 	<include>SettingsCategory_Fade_Animation</include>
-	<defaultcontrol always="true">9001</defaultcontrol>
+	<include content="Object_Include" condition="!String.IsEqual(Window(home).Property(SettingsCategory_Switcher),true)">
+		<defaultcontrol always="true">9001</defaultcontrol>
+	</include>
+	<include content="Object_Include" condition="String.IsEqual(Window(home).Property(SettingsCategory_Switcher),true)">
+		<defaultcontrol always="true">300000</defaultcontrol>
+	</include>
 	<onunload>RunScript(script.skinshortcuts,type=buildxml&amp;mainmenuID=9000)</onunload>
 	<onunload condition="!ControlGroup(9).HasFocus(10)">SetFocus(10)</onunload>
 	<controls>
 
-		<!-- Hidden Focus setter -->
-		<control type="button" id="9001">
-			<visible allowhiddenfocus="true">false</visible>
-			<onfocus condition="!String.IsEqual(Window(home).Property(SettingsCategory_Switcher),true)">SetFocus(9002)</onfocus>
-			<onfocus condition="String.IsEqual(Window(home).Property(SettingsCategory_Switcher),true)">SetFocus(300000)</onfocus>
-			<onright>SetFocus(300000)</onright>
-			<onleft>SetFocus(300000)</onleft>
-			<ontop>SetFocus(300000)</ontop>
-			<onbottom>SetFocus(300000)</onbottom>
-		</control>
-
 		<include content="Delay_Content_Load">
-			<param name="id" value="9002"/>
+			<param name="id" value="9001"/>
 			<param name="time" value="720"/>
 			<param name="target_id" value="SetFocus(300000)"/>
 		</include>
@@ -33,15 +27,17 @@
 			<visible>!$EXP[TransparentDialog_IsVisible]</visible>
 			<include>Delayed_Content_Fade_Animation</include>
 
-			<include content="Transparent_Dialog_Panel">
-				<param name="left" value="180"/>
-				<param name="top" value="180"/>
-				<param name="bottom" value="180"/>
-			</include>
+			<control type="group">
+				<visible>!Control.HasFocus(9001)</visible>
+				<include>Delayed_Content_Fade_Animation</include>
+				<include content="Settings_Furniture"/>
+			</control>
+
+
 
 			<control type="group">
-				<visible>!Control.HasFocus(9002)</visible>
-				<include>Delayed_Content_Fade_Animation</include>
+				<visible>!Control.HasFocus(9001)</visible>
+				<include>Long_Delayed_Content_Fade_Animation</include>
 
 				<include content="SettingsCategory_Layout">
 					<param name="mainlist" value="9"/>
@@ -93,11 +89,6 @@
 						<texture colordiffuse="$VAR[Unfocused_Color]">views/white_100.png</texture>
 					</control>
 				</control>
-
-				<include content="DialogDivider">
-					<param name="left" value="599"/>
-					<param name="height" value="630"/>
-				</include>
 
 				<!-- Sub list scrollbar -->
 				<include content="Settings_Scrollbar">
