@@ -8,19 +8,6 @@
 		<!-- Hidden Focus setter -->
 		<control type="button" id="9001">
 			<visible allowhiddenfocus="true">false</visible>
-			<onfocus condition="!String.IsEqual(Window(home).Property(SettingsCategory_Switcher),true)">SetFocus(9002)</onfocus>
-			<onfocus condition="String.IsEqual(Window(home).Property(SettingsCategory_Switcher),true)">SetFocus(9003)</onfocus>
-		</control>
-
-		<include content="Delay_Content_Load">
-			<param name="id" value="9002"/>
-			<param name="time" value="1080"/>
-			<param name="target_id" value="SetFocus(9003)"/>
-		</include>
-
-		<!-- Hidden Focus setter -->
-		<control type="button" id="9003">
-			<visible allowhiddenfocus="true">false</visible>
 			<onfocus condition="Window.Is(interfacesettings)">SetFocus(300001)</onfocus>
 			<onfocus condition="Window.Is(mediasettings)">SetFocus(300002)</onfocus>
 			<onfocus condition="Window.Is(playersettings)">SetFocus(300003)</onfocus>
@@ -35,175 +22,172 @@
 		<!-- Content -->
 		<control type="group">
 			<visible>!$EXP[TransparentDialog_IsVisible]</visible>
-			<include>Content_Fade_Animation</include>
+			<include>Delayed_Content_Fade_Animation</include>
+
+			<include content="Transparent_Dialog_Panel">
+				<param name="left" value="180"/>
+				<param name="top" value="180"/>
+				<param name="bottom" value="180"/>
+			</include>
+
+			<include content="SettingsCategory_Layout">
+				<param name="mainlist" value="3"/>
+				<param name="sublist" value="5"/>
+				<param name="buttonvisible" value="true"/>
+			</include>
+
+			<!-- Main list -->
 			<control type="group">
-				<visible>!Control.HasFocus(9002)</visible>
-				<include>Delayed_Content_Fade_Animation</include>
-
-				<include content="Transparent_Dialog_Panel">
-					<param name="top" value="180"/>
-					<param name="bottom" value="180"/>
-				</include>
-
-				<include content="SettingsCategory_Layout">
-					<param name="mainlist" value="3"/>
-					<param name="sublist" value="5"/>
-					<param name="buttonvisible" value="true"/>
-				</include>
-
-				<!-- Main list -->
-				<control type="group">
-					<left>210</left>
-					<width>390</width>
-					<control type="grouplist" id="3">
-						<visible allowhiddenfocus="true">true</visible>
-						<height>630</height>
-						<centertop>50%</centertop>
-						<itemgap>0</itemgap>
-						<onright>5</onright>
-						<onleft>30000</onleft>
-						<orientation>vertical</orientation>
-						<align>top</align>
-						<scrolltime tween="sine" easing="inout">360</scrolltime>
-					</control>
-					<!-- Dummy underline for main list -->
-					<control type="image">
-						<animation effect="slide" end="0,90" time="0" reversible="false" condition="Container(3).Position(1)">Conditional</animation>
-						<animation effect="slide" end="0,180" time="0" reversible="false" condition="Container(3).Position(2)">Conditional</animation>
-						<animation effect="slide" end="0,270" time="0" reversible="false" condition="Container(3).Position(3)">Conditional</animation>
-						<animation effect="slide" end="0,360" time="0" reversible="false" condition="Container(3).Position(4)">Conditional</animation>
-						<animation effect="slide" end="0,450" time="0" reversible="false" condition="Container(3).Position(5)">Conditional</animation>
-						<animation effect="slide" end="0,540" time="0" reversible="false" condition="Container(3).Position(6)">Conditional</animation>
-						<height>1</height>
-						<top>314</top>
-						<texture colordiffuse="$VAR[Unfocused_Color]">views/white_100.png</texture>
-					</control>
-				</control>
-
-				<control type="button" id="10">
-					<focusedcolor>$VAR[Settings_Grouplist_Label_Color]</focusedcolor>
-					<texturefocus/>
-				</control>
-
-				<!-- Sub list scrollbar -->
-				<include content="Grouplist_Scrollbar">
-					<param name="visible" value="ControlGroup(5).HasFocus"/>
-					<param name="height" value="630"/>
-				</include>
-
-				<!-- Sub list -->
-				<control type="grouplist" id="5">
-					<width>1200</width>
-					<left>600</left>
+				<left>180</left>
+				<width>420</width>
+				<control type="grouplist" id="3">
+					<visible allowhiddenfocus="true">true</visible>
 					<height>630</height>
 					<centertop>50%</centertop>
 					<itemgap>0</itemgap>
-					<onleft>3</onleft>
-					<onback>3</onback>
-					<onright>20</onright>
-					<pagecontrol>60</pagecontrol>
+					<onright>5</onright>
+					<onleft>30000</onleft>
 					<orientation>vertical</orientation>
 					<align>top</align>
 					<scrolltime tween="sine" easing="inout">360</scrolltime>
 				</control>
-
-				<control type="label" id="14">
-					<height>90</height>
-					<textoffsetx>20</textoffsetx>
-					<font>Default_Settings_Header</font>
-					<textcolor>$VAR[Unfocused_Color]</textcolor>
-				</control>
-
-				<control type="image" id="11">
+				<!-- Dummy underline for main list -->
+				<control type="image">
+					<animation effect="slide" end="0,90" time="0" reversible="false" condition="Container(3).Position(1)">Conditional</animation>
+					<animation effect="slide" end="0,180" time="0" reversible="false" condition="Container(3).Position(2)">Conditional</animation>
+					<animation effect="slide" end="0,270" time="0" reversible="false" condition="Container(3).Position(3)">Conditional</animation>
+					<animation effect="slide" end="0,360" time="0" reversible="false" condition="Container(3).Position(4)">Conditional</animation>
+					<animation effect="slide" end="0,450" time="0" reversible="false" condition="Container(3).Position(5)">Conditional</animation>
+					<animation effect="slide" end="0,540" time="0" reversible="false" condition="Container(3).Position(6)">Conditional</animation>
+					<left>60</left>
 					<height>1</height>
-					<texture colordiffuse="$VAR[Blank_Color]">views/white_100.png</texture>
+					<top>314</top>
+					<texture colordiffuse="$VAR[Unfocused_Color]">views/white_100.png</texture>
 				</control>
-
-				<control type="button" id="7"/>
-				<control type="radiobutton" id="8"/>
-				<control type="spincontrolex" id="9"/>
-				<control type="sliderex" id="13"/>
-
-				<control type="textbox" id="6">
-					<visible>!Control.HasFocus(20)</visible>
-					<include>Delayed_Content_Fade_Animation</include>
-					<left>270</left>
-					<right>270</right>
-					<bottom>0</bottom>
-					<height>180</height>
-					<font>Description</font>
-					<align>left</align>
-					<aligny>center</aligny>
-				</control>
-
-				<control type="textbox">
-					<visible>Control.HasFocus(20)</visible>
-					<include>Delayed_Content_Fade_Animation</include>
-					<left>120</left>
-					<right>150</right>
-					<bottom>0</bottom>
-					<height>180</height>
-					<label>$INFO[Control.GetLabel(20)]</label>
-					<font>List_Info</font>
-					<align>right</align>
-					<aligny>center</aligny>
-				</control>
-
-				<!-- Settings level button -->
-				<control type="group">
-					<right>30</right>
-					<bottom>30</bottom>
-					<width>120</width>
-					<height>120</height>
-					<control type="button" id="20">
-						<visible allowhiddenfocus="true">false</visible>
-						<onclick>settingslevelchange</onclick>
-						<onleft>5</onleft>
-						<onright>30000</onright>
-					</control>
-					<!-- unfocused -->
-					<control type="group">
-						<visible>!Control.HasFocus(20)</visible>
-						<control type="image">
-							<visible>String.IsEqual(Control.GetLabel(20),$LOCALIZE[10036])</visible>
-							<texture colordiffuse="$VAR[Light_Color]">settings/settings_level1_unfocused.png</texture>
-						</control>
-						<control type="image">
-							<visible>String.IsEqual(Control.GetLabel(20),$LOCALIZE[10037])</visible>
-							<texture colordiffuse="$VAR[Light_Color]">settings/settings_level2_unfocused.png</texture>
-						</control>
-						<control type="image">
-							<visible>String.IsEqual(Control.GetLabel(20),$LOCALIZE[10038])</visible>
-							<texture colordiffuse="$VAR[Light_Color]">settings/settings_level3_unfocused.png</texture>
-						</control>
-						<control type="image">
-							<visible>String.IsEqual(Control.GetLabel(20),$LOCALIZE[10039])</visible>
-							<texture colordiffuse="$VAR[Light_Color]">settings/settings_level4_unfocused.png</texture>
-						</control>
-					</control>
-					<!-- focused -->
-					<control type="group">
-						<visible>Control.HasFocus(20)</visible>
-						<control type="image">
-							<visible>String.IsEqual(Control.GetLabel(20),$LOCALIZE[10036])</visible>
-							<texture colordiffuse="$VAR[Light_Color]">settings/settings_level1_focused.png</texture>
-						</control>
-						<control type="image">
-							<visible>String.IsEqual(Control.GetLabel(20),$LOCALIZE[10037])</visible>
-							<texture colordiffuse="$VAR[Light_Color]">settings/settings_level2_focused.png</texture>
-						</control>
-						<control type="image">
-							<visible>String.IsEqual(Control.GetLabel(20),$LOCALIZE[10038])</visible>
-							<texture colordiffuse="$VAR[Light_Color]">settings/settings_level3_focused.png</texture>
-						</control>
-						<control type="image">
-							<visible>String.IsEqual(Control.GetLabel(20),$LOCALIZE[10039])</visible>
-							<texture colordiffuse="$VAR[Light_Color]">settings/settings_level4_focused.png</texture>
-						</control>
-					</control>
-				</control>
-
 			</control>
+
+			<control type="button" id="10">
+				<focusedcolor>$VAR[Settings_Grouplist_Label_Color]</focusedcolor>
+				<texturefocus/>
+			</control>
+
+			<!-- Sub list scrollbar -->
+			<include content="Settings_Scrollbar">
+				<param name="visible" value="ControlGroup(5).HasFocus"/>
+				<param name="height" value="630"/>
+			</include>
+
+			<!-- Sub list -->
+			<control type="grouplist" id="5">
+				<width>1260</width>
+				<left>600</left>
+				<height>632</height>
+				<centertop>50%</centertop>
+				<itemgap>0</itemgap>
+				<onleft>3</onleft>
+				<onback>3</onback>
+				<onright>20</onright>
+				<pagecontrol>60</pagecontrol>
+				<orientation>vertical</orientation>
+				<align>top</align>
+				<scrolltime tween="sine" easing="inout">360</scrolltime>
+			</control>
+
+			<control type="label" id="14">
+				<height>90</height>
+				<textoffsetx>30</textoffsetx>
+				<font>Default_Settings_Header</font>
+				<textcolor>$VAR[Unfocused_Color]</textcolor>
+			</control>
+
+			<control type="image" id="11">
+				<height>1</height>
+				<texture colordiffuse="$VAR[Blank_Color]">views/white_100.png</texture>
+			</control>
+
+			<control type="button" id="7"/>
+			<control type="radiobutton" id="8"/>
+			<control type="spincontrolex" id="9"/>
+			<control type="sliderex" id="13"/>
+
+			<control type="textbox" id="6">
+				<visible>!Control.HasFocus(20)</visible>
+				<include>Delayed_Content_Fade_Animation</include>
+				<left>270</left>
+				<right>270</right>
+				<bottom>40</bottom>
+				<height>100</height>
+				<font>Description</font>
+				<align>left</align>
+				<aligny>center</aligny>
+			</control>
+
+			<control type="textbox">
+				<visible>Control.HasFocus(20)</visible>
+				<left>120</left>
+				<right>150</right>
+				<bottom>30</bottom>
+				<height>120</height>
+				<label>$INFO[Control.GetLabel(20)]</label>
+				<font>List_Info</font>
+				<align>right</align>
+				<aligny>center</aligny>
+			</control>
+
+			<!-- Settings level button -->
+			<control type="group">
+				<right>30</right>
+				<bottom>30</bottom>
+				<width>120</width>
+				<height>120</height>
+				<control type="button" id="20">
+					<visible allowhiddenfocus="true">false</visible>
+					<onclick>settingslevelchange</onclick>
+					<onleft>5</onleft>
+					<onright>30000</onright>
+				</control>
+				<!-- unfocused -->
+				<control type="group">
+					<visible>!Control.HasFocus(20)</visible>
+					<control type="image">
+						<visible>String.IsEqual(Control.GetLabel(20),$LOCALIZE[10036])</visible>
+						<texture colordiffuse="$VAR[Light_Color]">settings/settings_level1_unfocused.png</texture>
+					</control>
+					<control type="image">
+						<visible>String.IsEqual(Control.GetLabel(20),$LOCALIZE[10037])</visible>
+						<texture colordiffuse="$VAR[Light_Color]">settings/settings_level2_unfocused.png</texture>
+					</control>
+					<control type="image">
+						<visible>String.IsEqual(Control.GetLabel(20),$LOCALIZE[10038])</visible>
+						<texture colordiffuse="$VAR[Light_Color]">settings/settings_level3_unfocused.png</texture>
+					</control>
+					<control type="image">
+						<visible>String.IsEqual(Control.GetLabel(20),$LOCALIZE[10039])</visible>
+						<texture colordiffuse="$VAR[Light_Color]">settings/settings_level4_unfocused.png</texture>
+					</control>
+				</control>
+				<!-- focused -->
+				<control type="group">
+					<visible>Control.HasFocus(20)</visible>
+					<control type="image">
+						<visible>String.IsEqual(Control.GetLabel(20),$LOCALIZE[10036])</visible>
+						<texture colordiffuse="$VAR[Light_Color]">settings/settings_level1_focused.png</texture>
+					</control>
+					<control type="image">
+						<visible>String.IsEqual(Control.GetLabel(20),$LOCALIZE[10037])</visible>
+						<texture colordiffuse="$VAR[Light_Color]">settings/settings_level2_focused.png</texture>
+					</control>
+					<control type="image">
+						<visible>String.IsEqual(Control.GetLabel(20),$LOCALIZE[10038])</visible>
+						<texture colordiffuse="$VAR[Light_Color]">settings/settings_level3_focused.png</texture>
+					</control>
+					<control type="image">
+						<visible>String.IsEqual(Control.GetLabel(20),$LOCALIZE[10039])</visible>
+						<texture colordiffuse="$VAR[Light_Color]">settings/settings_level4_focused.png</texture>
+					</control>
+				</control>
+			</control>
+
 		</control>
 
 	</controls>

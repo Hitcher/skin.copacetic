@@ -1,153 +1,190 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <window>
 	<!-- filemanager -->
-	<defaultcontrol always="true">20</defaultcontrol>
 	<backgroundcolor>$VAR[Secondary_Color]</backgroundcolor>
-	<include>Delayed_Dialog_Fade_Animation</include>
+	<include>SettingsCategory_Fade_Animation</include>
+	<defaultcontrol always="true">3000011</defaultcontrol>
 	<controls>
 
-		<include>DialogFanartSlideshow</include>
-
-		<!-- OnPrevious delay -->
-		<control type="group" id="5001">
-			<visible>Container(20).OnPrevious + Integer.IsGreater(Container(20).NumItems,1)</visible>
-			<animation effect="slide" end="0,0" time="360" reversible="false">Hidden</animation>
+		<!-- Hidden controls -->
+		<control type="label" id="101">
+			<visible>false</visible>
+		</control>
+		<control type="label" id="102">
+			<visible>false</visible>
 		</control>
 
-		<!-- OnNext delay -->
-		<control type="group" id="5002">
-			<visible>Container(20).OnNext + Integer.IsGreater(Container(20).NumItems,1)</visible>
-			<animation effect="slide" end="0,0" time="360" reversible="false">Hidden</animation>
-		</control>
+		<include condition="System.HasAddon(script.embuary.helper)" content="Settings_Fanart_Slideshow"/>
 
-		<!-- OnPrevious delay -->
-		<control type="group" id="5003">
-			<visible>Container(21).OnPrevious + Integer.IsGreater(Container(21).NumItems,1)</visible>
-			<animation effect="slide" end="0,0" time="360" reversible="false">Hidden</animation>
-		</control>
-
-		<!-- OnNext delay -->
-		<control type="group" id="5004">
-			<visible>Container(21).OnNext + Integer.IsGreater(Container(21).NumItems,1)</visible>
-			<animation effect="slide" end="0,0" time="360" reversible="false">Hidden</animation>
-		</control>
-
+		<!-- Content -->
 		<control type="group">
 			<visible>!$EXP[TransparentDialog_ExcludingContextMenu]</visible>
 			<include>Delayed_Content_Fade_Animation</include>
 
 			<include content="Transparent_Dialog_Panel">
+				<param name="left" value="180"/>
 				<param name="top" value="180"/>
 				<param name="bottom" value="180"/>
 			</include>
 
-			<include content="DialogDivider">
-				<param name="left" value="960"/>
-			</include>
-			<control type="image">
-				<visible>Control.HasFocus(20)</visible>
-				<left>120</left>
-				<right>960</right>
-				<top>240</top>
-				<height>30</height>
-				<texture border="2,2,2,2" colordiffuse="$VAR[Unfocused_Color]">dialogs/button_underline_focused.png</texture>
-			</control>
-			<control type="image">
-				<visible>Control.HasFocus(21)</visible>
-				<left>960</left>
-				<right>120</right>
-				<top>240</top>
-				<height>30</height>
-				<texture border="2,2,2,2" colordiffuse="$VAR[Unfocused_Color]">dialogs/button_underline_focused.png</texture>
-			</control>
-
-			<include content="Breadcrumb_Label"/>
-
-			<!-- Left Side -->
-			<control type="group">
-				<visible>![Window.IsVisible(contextmenu) + String.IsEqual(Window(filemanager).Property(ActiveList),Right)]</visible>
-				<include>Delayed_Content_Fade_Animation</include>
-
-				<include content="Breadcrumb_Label">
-					<param name="title_label_id" value="101"/>
-					<param name="left" value="120"/>
-					<param name="right" value="1020"/>
-					<param name="top" value="195"/>
-					<param name="info_label" value="$INFO[Container(20).NumItems,/ , items]"/>
-					<param name="maxtitlelabelwidth" value="600"/>
-					<param name="maxinfolabelwidth" value="240"/>
-					<param name="haspath" value="true"/>
-				</include>
-
-				<include content="Simple_List">
-					<param name="id" value="20"/>
-					<param name="left" value="120"/>
-					<param name="right" value="1140"/>
-					<param name="labelmaxwidth" value="600"/>
-					<param name="selectedcolor" value="$VAR[Light_Color]"/>
-					<param name="include" value="FileManager_Left_List"/>
-				</include>
-
-				<include content="List_Info_Label">
-					<param name="visible" value="![Control.IsVisible(5001) | Control.IsVisible(5002)] + Control.HasFocus(20)"/>
-					<param name="visibleanimation" value="Delayed_Content_Fade_Animation"/>
-					<param name="width" value="780"/>
-					<param name="hiddenlabel" value="$INFO[Container(20).ListItem.Label]"/>
-					<param name="hiddenlabelmaxwidth" value="600"/>
-					<param name="infolabel" value="$INFO[Container(20).ListItem.Label2,/ ]"/>
-					<param name="infolabelwidth" value="240"/>
-				</include>
-
-			</control>
-
-			<!-- Right Side -->
-			<control type="group">
-				<visible>![Window.IsVisible(contextmenu) + String.IsEqual(Window(filemanager).Property(ActiveList),Left)]</visible>
-				<include>Delayed_Content_Fade_Animation</include>
-
-				<include content="Breadcrumb_Label">
-					<param name="title_label_id" value="102"/>
-					<param name="left" value="1020"/>
-					<param name="right" value="120"/>
-					<param name="top" value="195"/>
-					<param name="info_label" value="$INFO[Container(21).NumItems,/ , items]"/>
-					<param name="maxtitlelabelwidth" value="600"/>
-					<param name="maxinfolabelwidth" value="240"/>
-					<param name="haspath" value="true"/>
-				</include>
-
-				<include content="Simple_List">
-					<param name="id" value="21"/>
-					<param name="left" value="1020"/>
-					<param name="right" value="120"/>
-					<param name="labelmaxwidth" value="600"/>
-					<param name="selectedcolor" value="$VAR[Light_Color]"/>
-					<param name="include" value="FileManager_Right_List"/>
-				</include>
-
-				<include content="List_Info_Label">
-					<param name="visible" value="![Control.IsVisible(5003) | Control.IsVisible(5004)] + Control.HasFocus(21)"/>
-					<param name="visibleanimation" value="Delayed_Content_Fade_Animation"/>
-					<param name="width" value="780"/>
-					<param name="left" value="1020"/>
-					<param name="hiddenlabel" value="$INFO[Container(21).ListItem.Label]"/>
-					<param name="hiddenlabelmaxwidth" value="600"/>
-					<param name="infolabel" value="$INFO[Container(21).ListItem.Label2,/ ]"/>
-					<param name="infolabelwidth" value="240"/>
-				</include>
-
-			</control>
-
-			<include content="ButtonGroup">
-				<param name="onleft" value="21"/>
-				<param name="onup" value="21"/>
-				<param name="onright" value="20"/>
-				<param name="buttonsvisible" value="true"/>
-				<param name="button1visible" value="true"/>
-				<param name="button1id" value="301"/>
-				<param name="button1onclick" value="Close"/>
+			<include content="SettingsCategory_Layout">
+				<param name="mainlist" value="20"/>
+				<param name="sublist" value="21"/>
 			</include>
 
+			<control type="group">
+				<visible>!Control.HasFocus(3000010)</visible>
+				<include>Delayed_Content_Fade_Animation</include>
+
+				<include content="DialogDivider">
+					<param name="left" value="1020"/>
+					<param name="height" value="630"/>
+				</include>
+
+				<include content="Breadcrumb_Label"/>
+
+				<!-- Left Side -->
+				<control type="label">
+					<left>240</left>
+					<width>720</width>
+					<top>120</top>
+					<height>60</height>
+					<label>$INFO[Control.GetLabel(101)]$INFO[Container(20).NumItems,... , $LOCALIZE[31001]]</label>
+					<haspath>true</haspath>
+					<textcolor>$VAR[Light_Color]</textcolor>
+				</control>
+
+				<control type="group">
+					<visible>![Window.IsVisible(contextmenu) + String.IsEqual(Window(filemanager).Property(ActiveList),Right)]</visible>
+					<include>Delayed_Content_Fade_Animation</include>
+
+					<include content="Settings_Scrollbar">
+						<param name="id" value="60"/>
+						<param name="visible" value="Control.HasFocus(20)"/>
+						<param name="left" value="1015"/>
+					</include>
+
+					<control type="list" id="20">
+						<left>180</left>
+						<width>840</width>
+						<height>630</height>
+						<centertop>50%</centertop>
+						<itemgap>0</itemgap>
+						<onleft>3000011</onleft>
+						<onright>21</onright>
+						<orientation>vertical</orientation>
+						<align>top</align>
+						<pagecontrol>60</pagecontrol>
+						<scrolltime tween="sine" easing="inout">360</scrolltime>
+						<itemlayout height="90" width="840">
+							<control type="label">
+								<textoffsetx>60</textoffsetx>
+								<label>$INFO[ListItem.Label]</label>
+								<textcolor>$VAR[Unfocused_Color]</textcolor>
+							</control>
+							<control type="label">
+								<textoffsetx>60</textoffsetx>
+								<align>right</align>
+								<label>$INFO[ListItem.Label2]</label>
+								<textcolor>$VAR[Unfocused_Color]</textcolor>
+							</control>
+						</itemlayout>
+						<focusedlayout height="90" width="840">
+							<control type="label">
+								<textoffsetx>60</textoffsetx>
+								<label>$INFO[ListItem.Label]</label>
+								<textcolor>$VAR[FileManager_Left_List_Label_Color]</textcolor>
+							</control>
+							<control type="label">
+								<textoffsetx>60</textoffsetx>
+								<align>right</align>
+								<label>$INFO[ListItem.Label2]</label>
+								<textcolor>$VAR[FileManager_Left_List_Label_Color]</textcolor>
+							</control>
+							<control type="image">
+								<visible>Control.HasFocus(20)</visible>
+								<left>60</left>
+								<right>0</right>
+								<height>1</height>
+								<bottom>0</bottom>
+								<texture colordiffuse="$VAR[Unfocused_Color]">views/white_100.png</texture>
+							</control>
+						</focusedlayout>
+					</control>
+				</control>
+
+				<!-- Right Side -->
+				<control type="label">
+					<left>1080</left>
+					<width>720</width>
+					<top>120</top>
+					<height>60</height>
+					<label>$INFO[Control.GetLabel(102)]$INFO[Container(21).NumItems,... , $LOCALIZE[31001]]</label>
+					<haspath>true</haspath>
+					<textcolor>$VAR[Light_Color]</textcolor>
+				</control>
+
+				<control type="group">
+					<visible>![Window.IsVisible(contextmenu) + String.IsEqual(Window(filemanager).Property(ActiveList),Left)]</visible>
+					<include>Delayed_Content_Fade_Animation</include>
+
+					<include content="Settings_Scrollbar">
+						<param name="id" value="61"/>
+						<param name="visible" value="Control.HasFocus(21)"/>
+						<param name="left" value="1020"/>
+					</include>
+
+					<control type="list" id="21">
+						<left>1020</left>
+						<width>840</width>
+						<height>630</height>
+						<centertop>50%</centertop>
+						<itemgap>0</itemgap>
+						<onleft>20</onleft>
+						<onright>3000011</onright>
+						<orientation>vertical</orientation>
+						<align>top</align>
+						<pagecontrol>61</pagecontrol>
+						<scrolltime tween="sine" easing="inout">360</scrolltime>
+						<itemlayout height="90" width="840">
+							<control type="label">
+								<textoffsetx>60</textoffsetx>
+								<label>$INFO[ListItem.Label]</label>
+								<textcolor>$VAR[Unfocused_Color]</textcolor>
+							</control>
+							<control type="label">
+								<textoffsetx>60</textoffsetx>
+								<align>right</align>
+								<label>$INFO[ListItem.Label2]</label>
+								<textcolor>$VAR[Unfocused_Color]</textcolor>
+							</control>
+						</itemlayout>
+						<focusedlayout height="90" width="840">
+							<control type="label">
+								<textoffsetx>60</textoffsetx>
+								<label>$INFO[ListItem.Label]</label>
+								<textcolor>$VAR[FileManager_Right_List_Label_Color]</textcolor>
+							</control>
+							<control type="label">
+								<textoffsetx>60</textoffsetx>
+								<align>right</align>
+								<label>$INFO[ListItem.Label2]</label>
+								<textcolor>$VAR[FileManager_Right_List_Label_Color]</textcolor>
+							</control>
+							<control type="image">
+								<visible>Control.HasFocus(21)</visible>
+								<left>0</left>
+								<right>60</right>
+								<height>1</height>
+								<bottom>0</bottom>
+								<texture colordiffuse="$VAR[Unfocused_Color]">views/white_100.png</texture>
+							</control>
+						</focusedlayout>
+					</control>
+
+				</control>
+
+			</control>
 		</control>
 
 	</controls>

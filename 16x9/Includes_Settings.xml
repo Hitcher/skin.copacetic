@@ -1,7 +1,14 @@
 <includes>
 
+	<!-- Filemanager -->
+	<include name="FileManager_Left_List">
+		<onfocus>SetProperty(ActiveList,Left,filemanager)</onfocus>
+	</include>
+	<include name="FileManager_Right_List">
+		<onfocus>SetProperty(ActiveList,Right,filemanager)</onfocus>
+	</include>
 
-	<!-- SettingsCategory.xml, profiles -->
+	<!-- SettingsCategory.xml, profiles, skinsettings, filemanager -->
 	<include name="SettingsCategory_Layout">
 		<param name="categoryid" default="30000"/>
 		<param name="mainlist"/>
@@ -9,17 +16,38 @@
 		<param name="buttonvisible" default="false"/>
 		<definition>
 
+			<include content="Transparent_Dialog_Panel">
+				<param name="top" value="0"/>
+				<param name="bottom" value="0"/>
+				<param name="left" value="0"/>
+				<param name="right" value="1800"/>
+				<param name="colordiffuse" value="$VAR[Dark_Grey_Color]"/>
+			</include>
+
+			<control type="label">
+				<visible>Control.HasFocus(3000010)</visible>
+				<include>Delayed_Content_Fade_Animation</include>
+				<align>center</align>
+				<left>240</left>
+				<right>120</right>
+				<height>60</height>
+				<centertop>50%</centertop>
+				<textcolor>$VAR[Light_Color]</textcolor>
+				<font>Breadcrumb_Title_Label</font>
+				<label>$LOCALIZE[31104]</label>
+			</control>
+
 			<control type="group">
-				<left>120</left>
+				<left>15</left>
 				<width>90</width>
 				<control type="grouplist" id="$PARAM[categoryid]">
 					<centertop>50%</centertop>
-					<height>630</height>
+					<height>1080</height>
 					<orientation>vertical</orientation>
 					<onleft condition="!$PARAM[buttonvisible]">$PARAM[sublist]</onleft>
 					<onleft condition="$PARAM[buttonvisible]">20</onleft>
 					<onright>$PARAM[mainlist]</onright>
-					<align>left</align>
+					<align>center</align>
 					<itemgap>0</itemgap>
 					<scrolltime>0</scrolltime>
 					<control type="button" id="$PARAM[categoryid]0">
@@ -81,19 +109,31 @@
 					<control type="button" id="$PARAM[categoryid]8">
 						<onfocus>SetProperty(SettingsCategory_Switcher,true,home)</onfocus>
 						<onfocus condition="!Window.Is(profiles)">ReplaceWindowAndFocus(profiles,$PARAM[categoryid]8)</onfocus>
-						<onup>ReplaceWindowAndFocus(pvrsettings,$PARAM[categoryid]7)</onup>
-						<ondown>ReplaceWindowAndFocus(systeminfo,$PARAM[categoryid]9)</ondown>
 						<include content="Settings_Button">
 							<param name="icon" value="Profiles"/>
 						</include>
 					</control>
 					<control type="button" id="$PARAM[categoryid]9">
 						<onfocus>SetProperty(SettingsCategory_Switcher,true,home)</onfocus>
-						<onfocus condition="!Window.Is(systeminfo)">ReplaceWindowAndFocus(systeminfo,3009)</onfocus>
-						<onup>ReplaceWindowAndFocus(profiles,$PARAM[categoryid]8)</onup>
-						<ondown>ReplaceWindowAndFocus(interfacesettings,$PARAM[categoryid]1)</ondown>
+						<onfocus condition="!Window.Is(systeminfo)">ReplaceWindowAndFocus(systeminfo,$PARAM[categoryid]9)</onfocus>
 						<include content="Settings_Button">
 							<param name="icon" value="SystemInfo"/>
+						</include>
+					</control>
+					<control type="button" id="$PARAM[categoryid]10">
+						<onclick>ClearProperty(SettingsCategory_Switcher,home)</onclick>
+						<onclick>ReplaceWindow(addonbrowser)</onclick>
+						<onright>noop</onright>
+						<onleft>noop</onleft>
+						<include content="Settings_Button">
+							<param name="icon" value="Addons"/>
+						</include>
+					</control>
+					<control type="button" id="$PARAM[categoryid]11">
+						<onfocus>SetProperty(SettingsCategory_Switcher,true,home)</onfocus>
+						<onfocus condition="!Window.Is(filemanager)">ReplaceWindowAndFocus(filemanager,$PARAM[categoryid]11)</onfocus>
+						<include content="Settings_Button">
+							<param name="icon" value="Filemanager"/>
 						</include>
 					</control>
 				</control>
@@ -106,22 +146,36 @@
 					<animation effect="slide" end="0,360" time="0" reversible="false" condition="Container($PARAM[categoryid]).Position(4)">Conditional</animation>
 					<animation effect="slide" end="0,450" time="0" reversible="false" condition="Container($PARAM[categoryid]).Position(5)">Conditional</animation>
 					<animation effect="slide" end="0,540" time="0" reversible="false" condition="Container($PARAM[categoryid]).Position(6)">Conditional</animation>
+					<animation effect="slide" end="0,630" time="0" reversible="false" condition="Container($PARAM[categoryid]).Position(7)">Conditional</animation>
+					<animation effect="slide" end="0,720" time="0" reversible="false" condition="Container($PARAM[categoryid]).Position(8)">Conditional</animation>
+					<animation effect="slide" end="0,810" time="0" reversible="false" condition="Container($PARAM[categoryid]).Position(9)">Conditional</animation>
+					<animation effect="slide" end="0,900" time="0" reversible="false" condition="Container($PARAM[categoryid]).Position(10)">Conditional</animation>
+					<animation effect="slide" end="0,980" time="0" reversible="false" condition="Container($PARAM[categoryid]).Position(11)">Conditional</animation>
+					<left>15</left>
+					<right>15</right>
 					<height>1</height>
-					<top>314</top>
+					<top>90</top>
 					<texture colordiffuse="$VAR[Unfocused_Color]">views/white_100.png</texture>
 				</control>
 
 			</control>
 
-			<include content="DialogDivider">
-				<param name="left" value="209"/>
-				<param name="height" value="630"/>
-			</include>
+			<control type="group">
+				<visible>!Control.HasFocus(3000010)</visible>
+				<include>Delayed_Content_Fade_Animation</include>
 
-			<include content="DialogDivider">
-				<param name="left" value="599"/>
-				<param name="height" value="630"/>
-			</include>
+				<include content="Breadcrumb_Label">
+					<param name="left" value="270"/>
+					<param name="label_color" value="$VAR[Light_Color]"/>
+					<param name="info_label_visible" visible="false"/>
+				</include>
+
+				<include content="DialogDivider">
+					<param name="visible" value="!Window.Is(filemanager)"/>
+					<param name="left" value="599"/>
+					<param name="height" value="630"/>
+				</include>
+			</control>
 
 		</definition>
 	</include>
@@ -326,15 +380,6 @@
 			<param name="widget_position" value="$PARAM[widget_position]"/>
 			<param name="next_widget_position" value="$PARAM[next_widget_position]"/>
 		</include>
-	</include>
-
-
-	<!-- Filemanager -->
-	<include name="FileManager_Left_List">
-		<onfocus>SetProperty(ActiveList,Left,filemanager)</onfocus>
-	</include>
-	<include name="FileManager_Right_List">
-		<onfocus>SetProperty(ActiveList,Right,filemanager)</onfocus>
 	</include>
 
 </includes>
