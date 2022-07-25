@@ -2,10 +2,9 @@
 <includes>
 
 	<include name="GridView_Container">
-
 		<control type="group">
-			<visible>Control.IsVisible(505)</visible>
-			<include>Viewtype_Fade_Animation</include>
+			<visible>Control.IsVisible(505) + !$EXP[OptionsSwitching]</visible>
+			<include>Content_Fade_Animation</include>
 			<animation effect="slide" end="592,193" time="0" reversible="false" condition="$EXP[GridView_Display_IsFanart] + Integer.IsEqual(Container.NumItems,1)">Conditional</animation>
 			<animation effect="slide" end="296,193" time="0" reversible="false" condition="$EXP[GridView_Display_IsFanart] + Integer.IsEqual(Container.NumItems,2)">Conditional</animation>
 			<animation effect="slide" end="0,193" time="0" reversible="false" condition="$EXP[GridView_Display_IsFanart] + Integer.IsEqual(Container.NumItems,3)">Conditional</animation>
@@ -22,7 +21,7 @@
 			<!-- List -->
 			<control type="panel" id="505">
 				<viewtype label="Grid">icon</viewtype>
-				<visible>$EXP[View_Containers]</visible>
+				<visible>!Container.Content() + !Container.Content(files) + !Container.Content(songs)</visible>
 				<left>50</left>
 				<top>180</top>
 				<width>1920</width>
@@ -41,61 +40,45 @@
 					<param name="artwork_icon" value="Thumbnail"/>
 				</include>
 			</control>
-
+			<!-- Details -->
 			<control type="group">
-				<visible>!$EXP[OpaqueDialog_IsVisible] + !$EXP[InfoDialog_IsVisible]</visible>
-				<include>Viewtype_Fade_Animation</include>
-				<control type="group">
-					<visible>!$EXP[OptionsSwitching]</visible>
-					<include>Artwork_Fade_Animation</include>
-
-					<!-- Details -->
-					<control type="group">
-						<visible>!$EXP[ContainerSwitching] + !$EXP[ContentSwitching] + !$EXP[TransparentDialog_IsVisible] + !Control.HasFocus(60) + !Control.HasFocus(91100)</visible>
-						<include>Delayed_Content_Fade_Animation</include>
-						<include content="GridView_Overlay">
-							<param name="displaytype_label" value="Fanart"/>
-							<param name="left" value="72"/>
-							<param name="width" value="592"/>
-							<param name="height" value="333"/>
-						</include>
-						<include content="GridView_Overlay">
-							<param name="displaytype_label" value="Posters"/>
-							<param name="left" value="60"/>
-							<param name="width" value="360"/>
-							<param name="height" value="540"/>
-						</include>
-						<include content="GridView_Overlay">
-							<param name="displaytype_label" value="Square"/>
-							<param name="left" value="60"/>
-							<param name="width" value="360"/>
-							<param name="height" value="360"/>
-						</include>
-					</control>
-
+				<visible>!$EXP[ContainerSwitching] + !$EXP[TransparentDialog_IsVisible] + !Control.HasFocus(60) + !$EXP[InfoDialog_IsVisible] + !Control.HasFocus(91100)</visible>
+				<include>Delayed_Content_Fade_Animation</include>
+				<control type="label" id="505001">
+					<include>Hidden_Control</include>
+					<label>$VAR[Info_Label]</label>
 				</control>
+				<control type="group">
+					<visible>!$EXP[ContentSwitching]</visible>
+					<include>Delayed_Content_Fade_Animation</include>
+					<include content="GridView_Overlay">
+						<param name="displaytype_label" value="Fanart"/>
+						<param name="left" value="72"/>
+						<param name="width" value="592"/>
+						<param name="height" value="333"/>
+					</include>
+					<include content="GridView_Overlay">
+						<param name="displaytype_label" value="Posters"/>
+						<param name="left" value="60"/>
+						<param name="width" value="360"/>
+						<param name="height" value="540"/>
+					</include>
+					<include content="GridView_Overlay">
+						<param name="displaytype_label" value="Square"/>
+						<param name="left" value="60"/>
+						<param name="width" value="360"/>
+						<param name="height" value="360"/>
+					</include>
+				</control>
+				<include content="Breadcrumb_Label">
+					<param name="visible" value="!$EXP[GridView_Details_Off]"/>
+					<param name="label_color" value="$VAR[Primary_Color]"/>
+				</include>
 			</control>
-
-
-		</control>
-
-		<!-- Breadcrumb -->
-		<control type="group">
-			<visible>$EXP[GridView_IsVisible] + !$EXP[ContainerSwitching] + !$EXP[TransparentDialog_IsVisible] + !Control.HasFocus(60) + !$EXP[InfoDialog_IsVisible]</visible>
-			<include>Delayed_Content_Fade_Animation</include>
-			<include content="Breadcrumb_Label">
-				<param name="visible" value="!$EXP[GridView_Details_Off]"/>
-				<param name="label_color" value="$VAR[Primary_Color]"/>
-			</include>
-		</control>
-
-		<!-- Scrollbar -->
-		<control type="group">
-			<visible>$EXP[GridView_IsVisible]</visible>
-			<include>Viewtype_Fade_Animation</include>
+			<!-- Scrollbar -->
 			<control type="group">
 				<visible>!Window.Is(home) + !$EXP[InfoDialog_IsVisible] + !$EXP[TransparentDialog_IsVisible]</visible>
-				<include>Content_Fade_Animation</include>
+				<include>Delayed_Content_Fade_Animation</include>
 				<include content="Scrollbars">
 					<param name="right" value="27"/>
 					<param name="bottom" value="180"/>
@@ -109,7 +92,6 @@
 				</include>
 			</control>
 		</control>
-
 	</include>
 
 

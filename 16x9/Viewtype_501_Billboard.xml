@@ -4,7 +4,7 @@
 		<control type="group">
 			<visible>$EXP[BillboardView_IsVisible]</visible>
 			<include content="Custom_List">
-				<param name="visible" value="$EXP[View_Containers] + !Container.Content(albums)"/>
+				<param name="visible" value="!Container.Content() + !Container.Content(files) + !Container.Content(albums) + !Container.Content(songs)"/>
 				<param name="type" value="list"/>
 				<param name="id" value="501"/>
 				<param name="viewtype_label" value="Billboard"/>
@@ -21,12 +21,9 @@
 		<param name="widget_view" default="false"/>
 		<param name="widget_position"/>
 		<definition>
-
 			<control type="group">
-				<visible>$EXP[BillboardView_IsVisible]</visible>
-				<include condition="$PARAM[media_view]" content="Viewtype_Fade_Animation"/>
-
-				<!-- Artwork -->
+				<visible>$EXP[BillboardView_IsVisible] + !$EXP[OptionsSwitching]</visible>
+				<include condition="$PARAM[media_view]" content="Content_Fade_Animation"/>
 				<control type="group">
 					<include condition="$PARAM[media_view]" content="Artwork_Transition_Fade">
 						<param name="target_id" value="$PARAM[id]"/>
@@ -47,55 +44,48 @@
 	<include name="BillboardView_Details">
 		<control type="group">
 			<visible>$EXP[BillboardView_IsVisible]</visible>
-			<include>Viewtype_Fade_Animation</include>
 			<control type="group">
-				<visible>!$EXP[ContainerSwitching] + !$EXP[TransparentDialog_IsVisible] + !Control.HasFocus(60)</visible>
+				<visible>!$EXP[ContainerSwitching] + !$EXP[ContentSwitching] + !$EXP[TransparentDialog_IsVisible] + !Control.HasFocus(60)</visible>
+				<visible>![Control.HasFocus(4501) + Window.IsVisible(1121)] + !$EXP[Secondary_List_ContainerSwitching] + !$EXP[Secondary_List_ContentSwitching]</visible>
 				<include>Delayed_Content_Fade_Animation</include>
+				<!-- Media flags -->
 				<control type="group">
-					<visible>!$EXP[Secondary_List_ContainerSwitching]</visible>
-					<include>Long_Delayed_Content_Fade_Animation</include>
+					<visible>!$EXP[InfoDialog_IsVisible] + !$EXP[BillboardView_Details_Off]</visible>
+					<include>Delayed_Content_Fade_Animation</include>
+					<include content="MediaFlags"/>
+				</control>
+				<!-- Common details, progress bar and nowplaying -->
+				<include content="Common_Details"/>
+				<include content="ProgressBar"/>
+				<control type="group">
 					<control type="group">
-						<visible>!$EXP[Secondary_List_ContentSwitching] + ![Control.HasFocus(4501) + Window.IsVisible(1121)]</visible>
-						<include>Delayed_Content_Fade_Animation</include>
-						<!-- Media flags -->
-						<control type="group">
-							<visible>!$EXP[InfoWidget_HasFocus]</visible>
-							<include content="MediaFlags"/>
-						</control>
-						<!-- Common details, progress bar and nowplaying -->
-						<include content="Common_Details"/>
-						<include content="ProgressBar"/>
-						<control type="group">
-							<control type="group">
-								<width>120</width>
-								<height>120</height>
-								<centertop>50%</centertop>
-								<animation effect="slide" end="0,-16" time="0" condition="$EXP[BillboardView_Details_Info_IsVisible]">Conditional</animation>
-								<include content="Now_Playing_Visualization_Fill">
-									<param name="visible" value="$EXP[ListItem(0)_NowPlaying] + $EXP[BillboardView_Details_NowPlaying_Left_IsVisible]"/>
-									<param name="bottom" value="10"/>
-								</include>
-							</control>
-							<control type="group">
-								<width>180</width>
-								<height>180</height>
-								<left>1740</left>
-								<top>900</top>
-								<animation effect="slide" end="-180,0" time="0" condition="[$EXP[BillboardView_Flags_Studio] + !String.IsEqual(Control.GetLabel(914),flags/blank.png)] | [$EXP[BillboardView_Flags_Rating] + !String.IsEqual(Control.GetLabel(915),flags/blank.png)]">Conditional</animation>
-								<animation effect="slide" end="-180,0" time="0" condition="$EXP[BillboardView_Flags_All] + [[!String.IsEqual(Control.GetLabel(914),flags/blank.png) + String.IsEqual(Control.GetLabel(915),flags/blank.png)] | [String.IsEqual(Control.GetLabel(914),flags/blank.png) + !String.IsEqual(Control.GetLabel(915),flags/blank.png)]]">Conditional</animation>
-								<animation effect="slide" end="-360,0" time="0" condition="$EXP[BillboardView_Flags_All] + !String.IsEqual(Control.GetLabel(914),flags/blank.png) + !String.IsEqual(Control.GetLabel(915),flags/blank.png)">Conditional</animation>
-								<include content="Now_Playing_Visualization_Fill">
-									<param name="visible" value="$EXP[ListItem(0)_NowPlaying] + !$EXP[BillboardView_Details_NowPlaying_Left_IsVisible]"/>
-								</include>
-							</control>
-						</control>
+						<width>120</width>
+						<height>120</height>
+						<centertop>50%</centertop>
+						<animation effect="slide" end="0,-16" time="0" condition="$EXP[BillboardView_Details_Info_IsVisible]">Conditional</animation>
+						<include content="Now_Playing_Visualization_Fill">
+							<param name="visible" value="$EXP[ListItem(0)_NowPlaying] + $EXP[BillboardView_Details_NowPlaying_Left_IsVisible]"/>
+							<param name="bottom" value="10"/>
+						</include>
+					</control>
+					<control type="group">
+						<width>180</width>
+						<height>180</height>
+						<left>1740</left>
+						<top>900</top>
+						<animation effect="slide" end="-180,0" time="0" condition="[$EXP[BillboardView_Flags_Studio] + !String.IsEqual(Control.GetLabel(914),flags/blank.png)] | [$EXP[BillboardView_Flags_Rating] + !String.IsEqual(Control.GetLabel(915),flags/blank.png)]">Conditional</animation>
+						<animation effect="slide" end="-180,0" time="0" condition="$EXP[BillboardView_Flags_All] + [[!String.IsEqual(Control.GetLabel(914),flags/blank.png) + String.IsEqual(Control.GetLabel(915),flags/blank.png)] | [String.IsEqual(Control.GetLabel(914),flags/blank.png) + !String.IsEqual(Control.GetLabel(915),flags/blank.png)]]">Conditional</animation>
+						<animation effect="slide" end="-360,0" time="0" condition="$EXP[BillboardView_Flags_All] + !String.IsEqual(Control.GetLabel(914),flags/blank.png) + !String.IsEqual(Control.GetLabel(915),flags/blank.png)">Conditional</animation>
+						<include content="Now_Playing_Visualization_Fill">
+							<param name="visible" value="$EXP[ListItem(0)_NowPlaying] + !$EXP[BillboardView_Details_NowPlaying_Left_IsVisible]"/>
+						</include>
 					</control>
 				</control>
 			</control>
 			<!-- Scrollbar -->
 			<control type="group">
 				<visible>!Window.Is(home) + !$EXP[InfoDialog_IsVisible] + !$EXP[TransparentDialog_IsVisible]</visible>
-				<include>Content_Fade_Animation</include>
+				<include>Delayed_Content_Fade_Animation</include>
 				<include content="Scrollbars">
 					<param name="right" value="420"/>
 					<param name="bottom" value="27"/>

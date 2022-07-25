@@ -322,13 +322,13 @@
 				<left>-100</left>
 				<width>10</width>
 				<height>10</height>
-				<texture fallback="flags/blank.png">$VAR[Studio_Label]</texture>
+				<texture fallback="flags/blank.png">$VAR[Studio_Flag]</texture>
 			</control>
 			<control type="image" id="915">
 				<left>-100</left>
 				<width>10</width>
 				<height>10</height>
-				<texture fallback="flags/blank.png">$VAR[MPAA_Label]</texture>
+				<texture fallback="flags/blank.png">$VAR[MPAA_Flag]</texture>
 			</control>
 
 			<!-- Hidden Label empty checkers -->
@@ -608,6 +608,36 @@
 
 		</control>
 	</include>
+
+
+	<include name="MyViews_Images">
+
+		<control type="group">
+			<!-- To fix audiostutter on navigation during video playback -->
+			<control type="videowindow">
+				<include>Hidden_Control</include>
+			</control>
+
+			<!-- Light view gradient -->
+			<control type="image">
+				<visible>Skin.String(Theme,Light)</visible>
+				<width>100%</width>
+				<bottom>0</bottom>
+				<height>50%</height>
+				<texture colordiffuse="$VAR[Light_Grey_Color]">views/gradient_light-background.png</texture>
+			</control>
+
+			<control type="group">
+				<visible>!$EXP[InfoDialog_IsVisible]</visible>
+				<include>Viewtype_Fade_Animation</include>
+				<include>ListView_Display</include>
+				<include>ListView_Container</include>
+				<include condition="Skin.HasSetting(Music_Player_Enabled)" content="Shared_Dialog_Layouts"/>
+			</control>
+
+		</control>
+	</include>
+
 
 	<include name="Scrollbars">
 		<param name="right"/>
@@ -955,7 +985,7 @@
 							<onclick>UpdateLibrary(video)</onclick>
 							<label>$LOCALIZE[653]</label>
 							<label2>$LOCALIZE[653]</label2>
-							<visible>!Window.IsActive(addonbrowser) + !Library.IsScanningVideo + !Library.IsScanningMusic</visible>
+							<visible>!Window.IsVisible(addonbrowser) + !Window.IsVisible(pictures) + !Library.IsScanningVideo + !Library.IsScanningMusic</visible>
 						</item>
 						<item>
 							<description>Cancel Update</description>
@@ -963,7 +993,7 @@
 							<onclick>SendClick(20)</onclick>
 							<label>$LOCALIZE[13353]</label>
 							<label2>$LOCALIZE[13353]</label2>
-							<visible>!Window.IsActive(addonbrowser) + [Library.IsScanningVideo | Library.IsScanningMusic]</visible>
+							<visible>!Window.IsVisible(addonbrowser) + !Window.IsVisible(pictures) + [Library.IsScanningVideo | Library.IsScanningMusic]</visible>
 						</item>
 
 						<!-- Addon Browser -->

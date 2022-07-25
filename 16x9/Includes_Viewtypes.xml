@@ -163,7 +163,6 @@
 				<onfocus condition="!Window.IsVisible(1126) + String.IsEqual(Control.GetLabel(38000),tvshow.square) + !String.IsEmpty(ListItem.Art(tvshow.square13))">SetProperty(Multiart_13,$ESCINFO[Container.ListItem.Art(tvshow.square13)],home)</onfocus>
 				<onfocus condition="!Window.IsVisible(1126) + String.IsEqual(Control.GetLabel(38000),tvshow.square) + !String.IsEmpty(ListItem.Art(tvshow.square14))">SetProperty(Multiart_14,$ESCINFO[Container.ListItem.Art(tvshow.square14)],home)</onfocus>
 				<onfocus condition="!Window.IsVisible(1126) + String.IsEqual(Control.GetLabel(38000),tvshow.square) + !String.IsEmpty(ListItem.Art(tvshow.square15))">SetProperty(Multiart_15,$ESCINFO[Container.ListItem.Art(tvshow.square15)],home)</onfocus>
-
 			</control>
 		</include>
 
@@ -187,6 +186,34 @@
 				<onfocus condition="!Window.IsVisible(1126)">ClearProperty(Multiart_14,home)</onfocus>
 				<onfocus condition="!Window.IsVisible(1126)">ClearProperty(Multiart_15,home)</onfocus>
 			</control>
+		</include>
+
+		<include name="Custom_List">
+			<param name="type" default="fixedlist"/>
+			<param name="id"/>
+			<param name="viewtype_label"/>
+			<param name="viewtype"/>
+			<param name="visible"/>
+			<param name="orientation"/>
+			<definition>
+				<control type="$PARAM[type]" id="$PARAM[id]">
+					<width>1920</width>
+					<viewtype label="$PARAM[viewtype_label]">$PARAM[viewtype]</viewtype>
+					<visible>$PARAM[visible]</visible>
+					<focusposition>0</focusposition>
+					<include>$PARAM[viewtype_label]_Navigation</include>
+					<pagecontrol>60</pagecontrol>
+					<preloaditems>2</preloaditems>
+					<orientation>$PARAM[orientation]</orientation>
+					<scrolltime tween="sine" easing="inout">360</scrolltime>
+					<focusedlayout>
+						<include>HiddenFocusButton</include>
+						<include condition="Skin.HasSetting(Multiart_Slideshow)" content="Multiart_Resetter"/>
+						<include condition="Skin.HasSetting(Multiart_Slideshow)" content="Multiart_Setter"/>
+					</focusedlayout>
+					<itemlayout/>
+				</control>
+			</definition>
 		</include>
 
 		<include name="Common_List_Layout">
@@ -261,158 +288,79 @@
 			</definition>
 		</include>
 
+		<include name="Common_List_Unfocused">
+			<include content="Common_List_Layout">
+				<param name="icontexture" value="Check_Unfocused"/>
+				<param name="iconvisible" value="String.IsEqual(ListItem.Overlay,OverlayWatched.png)"/>
+				<param name="tracknumbercolor" value="$VAR[List_Text_Color]"/>
+				<param name="label" value="$VAR[Unfocused_Title_Label]"/>
+				<param name="textcolor" value="$VAR[List_Text_Color]"/>
+			</include>
+		</include>
 
-		<include name="Common_List">
-			<param name="id" default="50"/>
-			<param name="visible" default="true"/>
-			<param name="orientation" default="vertical"/>
-	    <param name="left" default="0"/>
-			<param name="height" default="610"/>
-			<param name="focusposition" default="5"/>
-	    <param name="label" default="$VAR[Title_Label]"/>
-	    <param name="unfocusedicontexture" default="Check_Unfocused"/>
-	    <param name="unfocusediconvisible" default="String.IsEqual(ListItem.Overlay,OverlayWatched.png)"/>
-	    <param name="focusedicontexture" default="Check_Focused"/>
-	    <param name="focusediconvisible" default="String.IsEqual(ListItem.Overlay,OverlayWatched.png)"/>
-	    <param name="textcolor" default="$VAR[List_Text_Color]"/>
-	    <definition>
-				<control type="fixedlist" id="$PARAM[id]">
-					<viewtype label="List">list</viewtype>
-					<visible allowhiddenfocus="true">$PARAM[visible]</visible>
-					<left>$PARAM[left]</left>
-					<width>100%</width>
-					<centertop>50%</centertop>
-					<height>$PARAM[height]</height>
-					<focusposition>$PARAM[focusposition]</focusposition>
-					<include>List_Navigation</include>
-					<preloaditems>2</preloaditems>
-					<pagecontrol>60</pagecontrol>
-					<orientation>$PARAM[orientation]</orientation>
-					<scrolltime tween="sine" easing="inout">360</scrolltime>
-					<itemlayout height="55" width="720">
-						<control type="group">
-							<visible>$EXP[ListView_IsVisible] + !$EXP[OpaqueDialog_IsVisible]</visible>
-							<include>Viewtype_Fade_Animation</include>
-							<control type="group">
-								<visible>!$EXP[ContainerSwitching] + !$EXP[TransparentDialog_IsVisible] + !Control.HasFocus(4501) + !$EXP[Secondary_List_ContainerSwitching] + !$EXP[InfoDialog_IsVisible]</visible>
-								<include>Delayed_Content_Fade_Animation</include>
-								<include content="Common_List_Layout">
-			            <param name="label" value="$VAR[Unfocused_Title_Label]"/>
-			            <param name="textcolor" value="$PARAM[textcolor]"/>
-			            <param name="icontexture" value="$PARAM[unfocusedicontexture]"/>
-									<param name="tracknumbercolor" value="$PARAM[textcolor]"/>
-			            <param name="iconvisible" value="$PARAM[unfocusediconvisible]"/>
-			          </include>
-							</control>
-						</control>
-					</itemlayout>
-					<!-- Background + !Details -->
-					<focusedlayout height="60" width="1680" condition="$EXP[ListView_Display_IsBackground] + !$EXP[ListView_Details_Info_IsVisible]">
-						<include>HiddenFocusButton</include>
-						<include condition="Skin.HasSetting(Multiart_Slideshow)" content="Multiart_Resetter"/>
-						<include condition="Skin.HasSetting(Multiart_Slideshow)" content="Multiart_Setter"/>
-						<control type="group">
-							<visible>$EXP[ListView_IsVisible] + !$EXP[OpaqueDialog_IsVisible]</visible>
-							<include>Viewtype_Fade_Animation</include>
-							<control type="group">
-								<visible>!$EXP[ContainerSwitching] + !$EXP[TransparentDialog_IsVisible] + !Control.HasFocus(4501) + !$EXP[Secondary_List_ContainerSwitching] + !$EXP[InfoDialog_IsVisible]</visible>
-								<include>Delayed_Content_Fade_Animation</include>
-								<include content="Common_List_Layout">
-									<param name="nowplayingtop" value="-30"/>
-									<param name="icontop" value="0"/>
-									<param name="icontexture" value="$PARAM[focusedicontexture]"/>
-									<param name="iconvisible" value="$PARAM[focusediconvisible]"/>
-									<param name="labelheight" value="60"/>
-									<param name="label" value="$PARAM[label]"/>
-									<param name="labelmaxwidth" value="1680"/>
-									<param name="font" value="List_Title_Focused"/>
-									<param name="tracknumbercolor" value="$PARAM[textcolor]"/>
-									<param name="textcolor" value="$PARAM[textcolor]"/>
-								</include>
-							</control>
-						</control>
-					</focusedlayout>
-					<!-- Background + Details -->
-					<focusedlayout height="60" width="1200" condition="$EXP[ListView_Display_IsBackground] + $EXP[ListView_Details_Info_IsVisible]">
-						<include>HiddenFocusButton</include>
-						<include condition="Skin.HasSetting(Multiart_Slideshow)" content="Multiart_Resetter"/>
-						<include condition="Skin.HasSetting(Multiart_Slideshow)" content="Multiart_Setter"/>
-						<control type="group">
-							<visible>$EXP[ListView_IsVisible] + !$EXP[OpaqueDialog_IsVisible]</visible>
-							<include>Viewtype_Fade_Animation</include>
-							<control type="group">
-								<visible>!$EXP[ContainerSwitching] + !$EXP[TransparentDialog_IsVisible] + !Control.HasFocus(4501) + !$EXP[Secondary_List_ContainerSwitching] + !$EXP[InfoDialog_IsVisible]</visible>
-								<include>Delayed_Content_Fade_Animation</include>
-								<include content="Common_List_Layout">
-									<param name="nowplayingtop" value="-30"/>
-									<param name="icontop" value="0"/>
-									<param name="icontexture" value="$PARAM[focusedicontexture]"/>
-									<param name="iconvisible" value="$PARAM[focusediconvisible]"/>
-									<param name="labelheight" value="60"/>
-									<param name="label" value="$PARAM[label]"/>
-									<param name="labelmaxwidth" value="1200"/>
-									<param name="font" value="List_Title_Focused"/>
-									<param name="tracknumbercolor" value="$PARAM[textcolor]"/>
-									<param name="textcolor" value="$PARAM[textcolor]"/>
-								</include>
-							</control>
-						</control>
-					</focusedlayout>
-					<!-- Thumbnails + !Details -->
-					<focusedlayout height="60" width="990" condition="[$EXP[ListView_Display_IsThumbnails] + !$EXP[ListView_Details_Info_IsVisible]]">
-						<include>HiddenFocusButton</include>
-						<include condition="Skin.HasSetting(Multiart_Slideshow)" content="Multiart_Resetter"/>
-						<include condition="Skin.HasSetting(Multiart_Slideshow)" content="Multiart_Setter"/>
-						<control type="group">
-							<visible>$EXP[ListView_IsVisible] + !$EXP[OpaqueDialog_IsVisible]</visible>
-							<include>Viewtype_Fade_Animation</include>
-							<control type="group">
-								<visible>!$EXP[ContainerSwitching] + !$EXP[TransparentDialog_IsVisible] + !Control.HasFocus(4501) + !$EXP[Secondary_List_ContainerSwitching] + !$EXP[InfoDialog_IsVisible]</visible>
-								<include>Delayed_Content_Fade_Animation</include>
-								<include content="Common_List_Layout">
-									<param name="nowplayingtop" value="-30"/>
-									<param name="icontop" value="0"/>
-									<param name="icontexture" value="$PARAM[focusedicontexture]"/>
-									<param name="iconvisible" value="$PARAM[focusediconvisible]"/>
-			            <param name="label" value="$PARAM[label]"/>
-									<param name="labelheight" value="60"/>
-									<param name="labelmaxwidth" value="990"/>
-									<param name="font" value="List_Title_Focused"/>
-									<param name="tracknumbercolor" value="$PARAM[textcolor]"/>
-			            <param name="textcolor" value="$PARAM[textcolor]"/>
-								</include>
-							</control>
-						</control>
-					</focusedlayout>
-					<!-- Thumbnails + Details -->
-					<focusedlayout height="60" width="780" condition="$EXP[ListView_Display_IsThumbnails] + $EXP[ListView_Details_Info_IsVisible]">
-						<include>HiddenFocusButton</include>
-						<include condition="Skin.HasSetting(Multiart_Slideshow)" content="Multiart_Resetter"/>
-						<include condition="Skin.HasSetting(Multiart_Slideshow)" content="Multiart_Setter"/>
-						<control type="group">
-							<visible>$EXP[ListView_IsVisible] + !$EXP[OpaqueDialog_IsVisible]</visible>
-							<include>Viewtype_Fade_Animation</include>
-							<control type="group">
-								<visible>!$EXP[ContainerSwitching] + !$EXP[TransparentDialog_IsVisible] + !Control.HasFocus(4501) + !$EXP[Secondary_List_ContainerSwitching] + !$EXP[InfoDialog_IsVisible]</visible>
-								<include>Delayed_Content_Fade_Animation</include>
-								<include content="Common_List_Layout">
-									<param name="nowplayingtop" value="-30"/>
-									<param name="icontop" value="0"/>
-									<param name="icontexture" value="$PARAM[focusedicontexture]"/>
-									<param name="iconvisible" value="$PARAM[focusediconvisible]"/>
-			            <param name="label" value="$PARAM[label]"/>
-									<param name="labelheight" value="60"/>
-									<param name="labelmaxwidth" value="780"/>
-									<param name="font" value="List_Title_Focused"/>
-									<param name="tracknumbercolor" value="$PARAM[textcolor]"/>
-			            <param name="textcolor" value="$PARAM[textcolor]"/>
-								</include>
-							</control>
-						</control>
-					</focusedlayout>
+		<include name="Common_List_Focused">
+			<param name="labelmaxwidth"/>
+			<definition>
+				<control type="group">
+					<include>HiddenFocusButton</include>
+					<include condition="Skin.HasSetting(Multiart_Slideshow)" content="Multiart_Resetter"/>
+					<include condition="Skin.HasSetting(Multiart_Slideshow)" content="Multiart_Setter"/>
+					<include content="Common_List_Layout">
+						<param name="nowplayingtop" value="-30"/>
+						<param name="icontop" value="0"/>
+						<param name="icontexture" value="Check_Focused"/>
+						<param name="iconvisible" value="String.IsEqual(ListItem.Overlay,OverlayWatched.png)"/>
+						<param name="tracknumbercolor" value="$PARAM[textcolor]"/>
+						<param name="label" value="$VAR[Title_Label]"/>
+						<param name="labelheight" value="60"/>
+						<param name="labelmaxwidth" value="$PARAM[labelmaxwidth]"/>
+						<param name="font" value="List_Title_Focused"/>
+						<param name="textcolor" value="$VAR[List_Text_Color]"/>
+					</include>
 				</control>
-	    </definition>
-	  </include>
+			</definition>
+		</include>
+
+		<include name="Common_List_Info_Label">
+			<param name="visible" default="$EXP[$PARAM[viewtype_label]View_Display_IsBackground] + $EXP[$PARAM[viewtype_label]View_Details_Info_IsVisible]"/>
+			<param name="width" default="1680"/>
+			<param name="left" default="120"/>
+			<param name="hiddenlabel" default="$VAR[Title_Label]"/>
+			<param name="hiddenlabelmaxwidth" default="1200"/>
+			<param name="infolabel" default="$VAR[Info_Label,/ ]"/>
+			<param name="infolabelwidth" default="180"/>
+			<definition>
+				<control type="grouplist">
+					<visible>$PARAM[visible]</visible>
+					<left>$PARAM[left]</left>
+					<top>510</top>
+					<width>$PARAM[width]</width>
+					<height>60</height>
+					<itemgap>12</itemgap>
+					<orientation>horizontal</orientation>
+					<usecontrolcoords>true</usecontrolcoords>
+					<!-- Title Gap -->
+					<control type="label">
+						<width max="$PARAM[hiddenlabelmaxwidth]">auto</width>
+						<height>60</height>
+						<aligny>center</aligny>
+						<font>List_Title_Focused</font>
+						<textcolor>$VAR[Common_List_Info_Label_Color]</textcolor>
+						<label>$PARAM[hiddenlabel]</label>
+					</control>
+					<!-- Abbreviated Details -->
+					<control type="label">
+						<width max="$PARAM[infolabelwidth]">auto</width>
+						<top>20</top>
+						<height>35</height>
+						<font>List_Info</font>
+						<textcolor>$VAR[Light_Color]</textcolor>
+						<label>$PARAM[infolabel]</label>
+						<aligny>center</aligny>
+					</control>
+				</control>
+			</definition>
+		</include>
 
 		<include name="Simple_List">
 			<param name="id"/>
@@ -498,93 +446,6 @@
 	    </definition>
 	  </include>
 
-		<include name="Smart_Playlist_X">
-			<control type="group">
-				<visible>[Control.HasFocus(10) | Control.HasFocus(14)] + !String.IsEqual(Container(10).ListItem.Label,New rule...)</visible>
-				<left>870</left>
-				<width>60</width>
-				<height>60</height>
-				<top>0</top>
-				<include content="ButtonLayout">
-					<param name="buttonid" value="14"/>
-					<param name="width" value="60"/>
-					<param name="unfocusedcolor" value="$VAR[Light_Color]"/>
-					<param name="focusedcolor" value="$VAR[Light_Color]"/>
-				</include>
-			</control>
-		</include>
-
-		<include name="Custom_List">
-			<param name="type" default="fixedlist"/>
-			<param name="id"/>
-			<param name="viewtype_label"/>
-			<param name="viewtype"/>
-			<param name="visible"/>
-			<param name="orientation"/>
-			<definition>
-				<control type="$PARAM[type]" id="$PARAM[id]">
-					<width>1920</width>
-					<viewtype label="$PARAM[viewtype_label]">$PARAM[viewtype]</viewtype>
-					<visible>$PARAM[visible]</visible>
-					<focusposition>0</focusposition>
-					<include>$PARAM[viewtype_label]_Navigation</include>
-					<pagecontrol>60</pagecontrol>
-					<preloaditems>2</preloaditems>
-					<orientation>$PARAM[orientation]</orientation>
-					<scrolltime tween="sine" easing="inout">360</scrolltime>
-					<focusedlayout>
-						<include>HiddenFocusButton</include>
-						<include condition="Skin.HasSetting(Multiart_Slideshow)" content="Multiart_Resetter"/>
-						<include condition="Skin.HasSetting(Multiart_Slideshow)" content="Multiart_Setter"/>
-					</focusedlayout>
-					<itemlayout/>
-				</control>
-			</definition>
-		</include>
-
-		<include name="List_Info_Label">
-			<param name="visible" default="$EXP[$PARAM[viewtype_label]View_Display_IsBackground] + $EXP[$PARAM[viewtype_label]View_Details_Info_IsVisible]"/>
-			<param name="visibleanimation" default="Blank_Include"/>
-			<param name="width" default="1680"/>
-			<param name="left" default="120"/>
-			<param name="hiddenlabel" default="$VAR[Title_Label]"/>
-			<param name="hiddenlabelmaxwidth" default="1200"/>
-			<param name="infolabel" default="$VAR[Info_Label,/ ]"/>
-			<param name="infolabelwidth" default="180"/>
-			<definition>
-				<control type="grouplist">
-					<visible>$PARAM[visible]</visible>
-					<include>$PARAM[visibleanimation]</include>
-					<left>$PARAM[left]</left>
-					<top>510</top>
-					<width>$PARAM[width]</width>
-					<height>60</height>
-					<itemgap>12</itemgap>
-					<orientation>horizontal</orientation>
-					<usecontrolcoords>true</usecontrolcoords>
-					<!-- Title Gap -->
-					<control type="label">
-						<width max="$PARAM[hiddenlabelmaxwidth]">auto</width>
-						<height>60</height>
-						<aligny>center</aligny>
-						<font>List_Title_Focused</font>
-						<textcolor>$VAR[Blank_Color]</textcolor>
-						<label>$PARAM[hiddenlabel]</label>
-					</control>
-					<!-- Abbreviated Details -->
-					<control type="label">
-						<width>$PARAM[infolabelwidth]</width>
-						<top>20</top>
-						<height>35</height>
-						<font>List_Info</font>
-						<textcolor>$VAR[Light_Color]</textcolor>
-						<label>$PARAM[infolabel]</label>
-						<aligny>center</aligny>
-					</control>
-				</control>
-			</definition>
-		</include>
-
 		<include name="SimpleListIcon">
 			<param name="left" default="0"/>
 			<param name="top" default="0"/>
@@ -593,7 +454,7 @@
 			<param name="visible" default="true"/>
 			<param name="align" default="center"/>
 			<param name="aspectratio" default="scale"/>
-			<param name="fallback" default=""/>
+			<param name="fallback" default="flags/blank.png"/>
 			<param name="texture" default="$INFO[ListItem.Art(thumb)]"/>
 			<param name="fadetime" default="0"/>
 			<param name="bordervisible" default="false"/>
@@ -673,7 +534,7 @@
 			<definition>
 				<control type="group">
 					<visible>$PARAM[visible]</visible>
-					<visible>Window.IsVisible(visualisation) | Window.IsVisible(addoninformation) | Window.IsVisible(videobookmarks) | Window.IsVisible(loginscreen) | !String.IsEmpty(Container.ListItemNoWrap($PARAM[position]).Label) | $EXP[ListView_IsVisible] | $EXP[BillboardView_IsVisible]</visible>
+					<visible>Window.IsVisible(visualisation) | Window.IsVisible(loginscreen) | Window.IsVisible(videobookmarks) | !String.IsEmpty(Container.ListItemNoWrap($PARAM[position]).Art(thumb)) | !String.IsEmpty(Container.ListItemNoWrap($PARAM[position]).Label) | $EXP[ListView_IsVisible] | $EXP[BillboardView_IsVisible]</visible>
 					<animation effect="$PARAM[animationeffect]" end="$PARAM[animationend]" condition="$PARAM[animationcondition]" time="$PARAM[animationtime]" tween="$PARAM[animationtween]" easing="$PARAM[animationeasing]" reversible="$PARAM[animationreversible]">$PARAM[animationtype]</animation>
 					<left>$PARAM[left]</left>
 					<top>$PARAM[top]</top>
@@ -726,7 +587,7 @@
 					<!-- Progress overlay -->
 					<control type="image">
 						<visible>$PARAM[progress_overlay]</visible>
-						<visible>$EXP[Video_Containers] | Window.IsVisible(home) | Window.IsVisible(visualisation) | $EXP[InfoWidget_HasFocus]</visible>
+						<visible>Window.IsVisible(videos)| Window.IsVisible(home) | Window.IsVisible(visualisation) | $EXP[InfoWidget_HasFocus]</visible>
 						<visible>!String.IsEmpty(Container.ListItemNoWrap($PARAM[position]).Label)</visible>
 						<bottom>0</bottom>
 						<height>50%</height>
@@ -2552,13 +2413,11 @@
 						<include>Artwork_Fade_Animation</include>
 						<control type="group">
 							<animation effect="slide" end="12,0" time="0" condition="$EXP[GridView_Display_IsFanart]" reversible="false">Conditional</animation>
-							<include content="ListIcon">
-								<param name="visible" value="$EXP[GridView_Display_Is$PARAM[displaytype_label]]"/>
+							<include content="SimpleListIcon">
 								<param name="left" value="10"/>
-								<param name="width" value="100%"/>
-								<param name="height" value="100%"/>
-								<param name="artwork_icon" value="$PARAM[artwork_icon]"/>
+								<param name="visible" value="$EXP[GridView_Display_Is$PARAM[displaytype_label]]"/>
 								<param name="fallback" value="$PARAM[fallback]"/>
+								<param name="texture" value="$VAR[$PARAM[artwork_icon](0)Content]"/>
 							</include>
 						</control>
 					</control>
@@ -2836,7 +2695,7 @@
 			<param name="top" default="180"/>
 			<param name="width"/>
 			<param name="height"/>
-			<param name="edge" default="0"/>
+			<param name="edge" default="15"/>
 			<param name="title_max_height" default="300"/>
 			<param name="title_font" default="Grid_Title"/>
 			<param name="info_font" default="Grid_Info"/>
@@ -2855,7 +2714,7 @@
 						<orientation>vertical</orientation>
 						<align>center</align>
 						<itemgap>0</itemgap>
-						<control type="textbox" id="2010">
+						<control type="textbox">
 							<height max="$PARAM[title_max_height]">auto</height>
 							<font>$PARAM[title_font]</font>
 							<textcolor>$VAR[Light_Color]</textcolor>
@@ -2864,10 +2723,11 @@
 						</control>
 						<control type="label">
 							<visible>$EXP[GridView_Details_Info] | $EXP[GridView_Widget_IsVisible]</visible>
+							<visible>!String.IsEmpty(Control.GetLabel(505001))</visible>
 							<height>35</height>
 							<font>$PARAM[info_font]</font>
 							<textcolor>$VAR[Light_Color]</textcolor>
-							<label>$VAR[Info_Label]</label>
+							<label>$INFO[Control.GetLabel(505001)]</label>
 							<align>center</align>
 						</control>
 					</control>
@@ -3493,7 +3353,7 @@
 							<width>90</width>
 							<height>60</height>
 							<aspectratio>keep</aspectratio>
-							<texture colordiffuse="$VAR[View_Furniture_Color]" fallback="flags/blank.png">$VAR[Studio_Label]</texture>
+							<texture colordiffuse="$VAR[View_Furniture_Color]" fallback="flags/blank.png">$VAR[Studio_Flag]</texture>
 							<animation effect="slide" start="0,0" end="180,0" time="0" condition="$EXP[ListView_Flags_Studio_Shift] | $EXP[BillboardView_Flags_Studio_Shift] | $EXP[ShowcaseView_Flags_Studio_Shift] | $EXP[StripView_Flags_Studio_Shift]">Conditional</animation>
 							<animation effect="slide" start="0,0" end="-1560,0" time="0" condition="$EXP[StripView_IsVisible] + $EXP[StripView_Details_Title] + !$EXP[StripView_Details_Logo_IsOn] + !$EXP[StripView_Flags_Studio_Shift]">Conditional</animation>
 						</control>
@@ -3505,7 +3365,7 @@
 							<width>90</width>
 							<height>60</height>
 							<aspectratio>keep</aspectratio>
-							<texture colordiffuse="$VAR[View_Furniture_Color]" fallback="flags/blank.png">$VAR[MPAA_Label]</texture>
+							<texture colordiffuse="$VAR[View_Furniture_Color]" fallback="flags/blank.png">$VAR[MPAA_Flag]</texture>
 						</control>
 					</control>
 				</control>

@@ -48,13 +48,13 @@
 	<include name="Settings_Scrollbar">
 		<param name="id" default="60"/>
 		<param name="visible" default="false"/>
-		<param name="left" default="594"/>
+		<param name="left" default="596"/>
 		<param name="height" default="630"/>
 		<definition>
 			<control type="scrollbar" id="$PARAM[id]">
 				<visible>$PARAM[visible]</visible>
 				<left>$PARAM[left]</left>
-				<width>6</width>
+				<width>4</width>
 				<centertop>50%</centertop>
 				<height>$PARAM[height]</height>
 				<showonepage>false</showonepage>
@@ -98,7 +98,7 @@
 		</definition>
 	</include>
 
-	<include name="ContextMenuLabelTemplate">
+	<include name="Default_ContextMenu_Label">
 		<control type="label">
 			<include>ContextMenuLabelUnfocused</include>
 			<label>$INFO[Control.GetLabel($PARAM[id])]</label>
@@ -109,6 +109,42 @@
 			<label>$INFO[Control.GetLabel($PARAM[id])]</label>
 			<visible>Control.IsVisible($PARAM[id]) + Control.HasFocus($PARAM[id])</visible>
 		</control>
+	</include>
+
+	<include name="Settings_ContextMenu_Label">
+		<control type="group">
+			<height>90</height>
+			<width>100%</width>
+			<control type="label">
+				<visible>Control.IsVisible($PARAM[id]) + !Control.HasFocus($PARAM[id])</visible>
+				<font>Default_Settings_List</font>
+				<textoffsetx>60</textoffsetx>
+				<textcolor>$VAR[Unfocused_Color]</textcolor>
+				<label>$INFO[Control.GetLabel($PARAM[id])]</label>
+			</control>
+			<control type="group">
+				<visible>Control.IsVisible($PARAM[id]) + Control.HasFocus($PARAM[id])</visible>
+				<control type="label">
+					<font>Default_Settings_List</font>
+					<textoffsetx>60</textoffsetx>
+					<textcolor>$VAR[Light_Color]</textcolor>
+					<label>$INFO[Control.GetLabel($PARAM[id])]</label>
+				</control>
+				<control type="image">
+					<left>60</left>
+					<right>0</right>
+					<height>1</height>
+					<bottom>0</bottom>
+					<texture colordiffuse="$VAR[Unfocused_Color]">views/white_100.png</texture>
+				</control>
+			</control>
+		</control>
+	</include>
+
+
+	<include name="ContextMenuLabelTemplate">
+		<include condition="!Window.IsVisible(filemanager)" content="Default_ContextMenu_Label"/>
+		<include condition="Window.IsVisible(filemanager)" content="Settings_ContextMenu_Label"/>
 	</include>
 
 	<!-- virtualkeyboard -->
@@ -645,6 +681,22 @@
 		</definition>
 	</include>
 
+	<!-- smartplaylist -->
+	<include name="Smart_Playlist_X">
+		<control type="group">
+			<visible>[Control.HasFocus(10) | Control.HasFocus(14)] + !String.IsEqual(Container(10).ListItem.Label,New rule...)</visible>
+			<left>870</left>
+			<width>60</width>
+			<height>60</height>
+			<top>0</top>
+			<include content="ButtonLayout">
+				<param name="buttonid" value="14"/>
+				<param name="width" value="60"/>
+				<param name="unfocusedcolor" value="$VAR[Light_Color]"/>
+				<param name="focusedcolor" value="$VAR[Light_Color]"/>
+			</include>
+		</control>
+	</include>
 
 	<!-- smartplaylistrule -->
 	<include name="SmartPlaylistRule_List_Layout">

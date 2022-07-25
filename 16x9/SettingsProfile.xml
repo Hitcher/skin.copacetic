@@ -20,29 +20,53 @@
 				<param name="sublist" value="2"/>
 			</include>
 
-			<!-- Main list -->
-			<control type="group">
+			<!-- Artwork -->
+			<control type="image">
+				<visible>ControlGroup(500).HasFocus(100) + System.IsLoggedOn</visible>
+				<left>210</left>
+				<top>450</top>
+				<width>360</width>
+				<height>360</height>
+				<texture fallback="fallback.png">$INFO[System.ProfileThumb]</texture>
+				<aspectratio>scale</aspectratio>
+			</control>
+			<control type="image">
+				<visible>ControlGroup(500).HasFocus(101) | !System.IsLoggedOn</visible>
+				<left>210</left>
+				<top>450</top>
+				<width>360</width>
+				<height>360</height>
+				<texture fallback="fallback.png">$INFO[Container(2).ListItem.Art(thumb)]</texture>
+				<aspectratio>scale</aspectratio>
+			</control>
+			<control type="image">
 				<left>180</left>
 				<width>420</width>
+				<height>1</height>
+				<top>855</top>
+				<texture colordiffuse="$VAR[Unfocused_Color]">views/white_100.png</texture>
+			</control>
+
+			<!-- Main list -->
+			<control type="group">
+				<left>120</left>
+				<width>480</width>
 				<control type="grouplist" id="500">
 					<height>630</height>
 					<centertop>50%</centertop>
 					<itemgap>0</itemgap>
 					<onleft>300008</onleft>
-					<onright>2</onright>
 					<orientation>vertical</orientation>
-					<defaultcontrol always="true">4</defaultcontrol>
-					<!-- Enable login screen -->
-					<control type="radiobutton" id="4">
-						<label>20096</label>
-						<textwidth>330</textwidth>
-						<radioposx>330</radioposx>
+					<defaultcontrol always="true">100</defaultcontrol>
+					<!-- General -->
+					<control type="button" id="100">
+						<onright>501</onright>
+						<label>$LOCALIZE[128]</label>
 						<texturefocus/>
 					</control>
-					<!-- Auto login -->
-					<control type="button" id="5">
-						<label>33084</label>
-						<enable>!System.HasLoginScreen</enable>
+					<control type="button" id="101">
+						<onright>2</onright>
+						<label>$LOCALIZE[13200]</label>
 						<texturefocus/>
 					</control>
 				</control>
@@ -56,23 +80,39 @@
 				</control>
 			</control>
 
-			<!-- Artwork -->
-			<control type="image">
-				<left>255</left>
-				<top>450</top>
-				<width>300</width>
-				<height>300</height>
-				<texture fallback="DefaultUser.png">$INFO[Container(2).ListItem.Art(thumb)]</texture>
-				<aspectratio>scale</aspectratio>
+			<!-- General -->
+			<control type="grouplist" id="501">
+				<visible>!ControlGroup(500).HasFocus(101)</visible>
+				<left>600</left>
+				<width>1260</width>
+				<height>630</height>
+				<centertop>50%</centertop>
+				<itemgap>0</itemgap>
+				<onleft>500</onleft>
+				<onright>300008</onright>
+				<orientation>vertical</orientation>
+				<defaultcontrol always="true">4</defaultcontrol>
+				<!-- Enable login screen -->
+				<control type="radiobutton" id="4">
+					<label>20096</label>
+				</control>
+				<!-- Auto login -->
+				<control type="button" id="5">
+					<label>33084</label>
+					<label2>$INFO[System.ProfileAutoLogin]</label2>
+					<enable>!System.HasLoginScreen</enable>
+				</control>
 			</control>
 
+			<!-- Profiles -->
 			<control type="list" id="2">
+				<visible>ControlGroup(500).HasFocus(101)</visible>
 				<width>1260</width>
 				<left>600</left>
 				<height>630</height>
 				<centertop>50%</centertop>
 				<itemgap>0</itemgap>
-				<onleft>500</onleft>
+				<onleft>101</onleft>
 				<onright>300008</onright>
 				<orientation>vertical</orientation>
 				<align>top</align>
@@ -81,6 +121,12 @@
 					<control type="label">
 						<textoffsetx>60</textoffsetx>
 						<label>$INFO[ListItem.Label]</label>
+						<textcolor>$VAR[Unfocused_Color]</textcolor>
+					</control>
+					<control type="label">
+						<textoffsetx>60</textoffsetx>
+						<align>right</align>
+						<label>$INFO[ListItem.Label2]</label>
 						<textcolor>$VAR[Unfocused_Color]</textcolor>
 					</control>
 				</itemlayout>

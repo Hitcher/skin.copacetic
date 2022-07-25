@@ -19,19 +19,12 @@
 		<control type="group">
 			<visible>!$EXP[TransparentDialog_IsVisible]</visible>
 			<include>Delayed_Content_Fade_Animation</include>
-
 			<control type="group">
 				<visible>Player.HasVideo</visible>
+				<!-- progress -->
 				<control type="group">
-					<visible>[[Player.Paused | Player.Seeking | Player.Rewinding | Player.Forwarding | Player.HasPerformedSeek(3) | Window.IsVisible(videoosd)] + !System.IdleTime(3)] | [Player.Playing + Integer.IsLess(Player.Time,5)]</visible>
+					<visible>Player.Seeking | Player.Rewinding | Player.Forwarding | Player.HasPerformedSeek(3) | [[Window.IsVisible(videoosd) | Player.Paused] + !System.IdleTime(3)] | [Player.Playing + Integer.IsLess(Player.Time,5)] | Window.IsVisible(fullscreeninfo)</visible>
 					<include>Delayed_Dialog_Fade_Animation</include>
-					<control type="group">
-						<visible>!Window.IsVisible(videoosd)</visible>
-						<include>Delayed_Dialog_Fade_Animation</include>
-						<include content="Breadcrumb_Label">
-							<param name="label_color" value="$VAR[Light_Color]"/>
-						</include>
-					</control>
 					<control type="group">
 						<visible>![Player.Paused + Skin.HasSetting(Player_Progress_Disabled)]</visible>
 						<include content="Player_Progress">
@@ -47,12 +40,29 @@
 						</include>
 					</control>
 				</control>
+				<!-- Breadcrumnb -->
 				<control type="group">
-					<visible>!Window.IsVisible(videoosd) + [Player.Paused | Player.Seeking | Player.Rewinding | Player.Forwarding | Player.HasPerformedSeek(3)]</visible>
-					<include>Delayed_Dialog_Fade_Animation</include>
-					<include content="Player_Status_Icons">
-						<param name="large_label" value="true"/>
-					</include>
+					<visible>!Window.IsVisible(videoosd) + !Window.IsVisible(fullscreeninfo)</visible>
+					<include>Content_Fade_Animation</include>
+					<control type="group">
+						<visible>Player.Seeking | Player.Rewinding | Player.Forwarding | Player.HasPerformedSeek(3) | [Player.Paused + !System.IdleTime(3)] | [Player.Playing + Integer.IsLess(Player.Time,5)]</visible>
+						<include>Delayed_Dialog_Fade_Animation</include>
+						<include content="Breadcrumb_Label">
+							<param name="label_color" value="$VAR[Light_Color]"/>
+						</include>
+					</control>
+				</control>
+				<!-- Player status icons -->
+				<control type="group">
+					<visible>!Window.IsVisible(fullscreeninfo)</visible>
+					<include>Content_Fade_Animation</include>
+					<control type="group">
+						<visible>Player.Seeking | Player.Rewinding | Player.Forwarding | Player.HasPerformedSeek(3) | Player.Paused</visible>
+						<include>Delayed_Dialog_Fade_Animation</include>
+						<include content="Player_Status_Icons">
+							<param name="large_label" value="true"/>
+						</include>
+					</control>
 				</control>
 			</control>
 
