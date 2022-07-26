@@ -1,7 +1,160 @@
 <includes>
 
+	<!-- Generic -->
+	<include name="Settings_Left_List_Template">
+		<param name="windowname"/>
+		<param name="id"/>
+		<param name="scrollbarid"/>
+		<param name="left" default="60"/>
+		<param name="dividerleft" default="780"/>
+		<param name="width" default="720"/>
+		<param name="height" default="630"/>
+		<param name="onleft" default="0"/>
+		<param name="onright" default="0"/>
+		<param name="focusbordervisible" default="true"/>
+		<param name="label" default="$INFO[ListItem.Label]"/>
+		<param name="label2" default="$INFO[ListItem.Label2]"/>
+		<definition>
+			<control type="list" id="$PARAM[id]">
+				<left>$PARAM[left]</left>
+				<width>$PARAM[width]</width>
+				<height>$PARAM[height]</height>
+				<centertop>50%</centertop>
+				<onfocus>SetProperty(ActiveList,Left,$PARAM[windowname])</onfocus>
+				<onleft>$PARAM[onleft]</onleft>
+				<onright condition="[Container($PARAM[id]).HasPrevious | Container($PARAM[id]).HasNext]">$PARAM[scrollbarid]</onright>
+				<onright condition="![Container($PARAM[id]).HasPrevious | Container($PARAM[id]).HasNext]">$PARAM[onright]</onright>
+				<onup>$PARAM[id]</onup>
+				<ondown>$PARAM[id]</ondown>
+				<orientation>vertical</orientation>
+				<align>top</align>
+				<pagecontrol>$PARAM[scrollbarid]</pagecontrol>
+				<scrolltime tween="sine" easing="inout">360</scrolltime>
+				<itemlayout height="90" width="$PARAM[width]">
+					<control type="label">
+						<textoffsetx>60</textoffsetx>
+						<label>$PARAM[label]</label>
+						<textcolor>$VAR[Unfocused_Color]</textcolor>
+					</control>
+					<control type="label">
+						<textoffsetx>60</textoffsetx>
+						<align>right</align>
+						<label>$PARAM[label2]</label>
+						<textcolor>$VAR[Unfocused_Color]</textcolor>
+					</control>
+				</itemlayout>
+				<focusedlayout height="90" width="$PARAM[width]">
+					<control type="label">
+						<textoffsetx>60</textoffsetx>
+						<label>$PARAM[label]</label>
+						<textcolor>$VAR[Left_Grouplist_Focus_Color]</textcolor>
+					</control>
+					<control type="label">
+						<textoffsetx>60</textoffsetx>
+						<align>right</align>
+						<label>$PARAM[label2]</label>
+						<textcolor>$VAR[Left_Grouplist_Focus_Color]</textcolor>
+					</control>
+					<control type="image">
+						<visible>$PARAM[focusbordervisible]</visible>
+						<left>60</left>
+						<right>0</right>
+						<height>1</height>
+						<bottom>0</bottom>
+						<texture colordiffuse="$VAR[Unfocused_Color]">views/white_100.png</texture>
+					</control>
+				</focusedlayout>
+			</control>
+			<include content="Dialog_Divider_With_Scrollbar">
+				<param name="scrollbarvisible" value="Control.HasFocus($PARAM[id]) | Control.HasFocus($PARAM[scrollbarid])"/>
+				<param name="id" value="$PARAM[scrollbarid]"/>
+				<param name="height" value="$PARAM[height]"/>
+				<param name="left" value="$PARAM[dividerleft]"/>
+				<param name="scrollbarleft" value="1"/>
+				<param name="onleft" value="$PARAM[id]"/>
+				<param name="onright" value="$PARAM[onright]"/>
+			</include>
+		</definition>
+	</include>
+
+	<include name="Settings_Right_List_Template">
+		<param name="windowname"/>
+		<param name="id"/>
+		<param name="scrollbarid"/>
+		<param name="right" default="60"/>
+		<param name="dividerleft" default="1140"/>
+		<param name="width" default="720"/>
+		<param name="height" default="630"/>
+		<param name="onleft" default="0"/>
+		<param name="onright" default="0"/>
+		<param name="focusbordervisible" default="true"/>
+		<param name="label" default="$INFO[ListItem.Label]"/>
+		<param name="label2" default="$INFO[ListItem.Label2]"/>
+		<definition>
+			<control type="list" id="$PARAM[id]">
+				<right>$PARAM[right]</right>
+				<width>$PARAM[width]</width>
+				<height>$PARAM[height]</height>
+				<centertop>50%</centertop>
+				<onfocus>SetProperty(ActiveList,Right,$PARAM[windowname])</onfocus>
+				<onright>$PARAM[onright]</onright>
+				<onleft condition="[Container($PARAM[id]).HasPrevious | Container($PARAM[id]).HasNext]">$PARAM[scrollbarid]</onleft>
+				<onleft condition="![Container($PARAM[id]).HasPrevious | Container($PARAM[id]).HasNext]">$PARAM[onleft]</onleft>
+				<onup>$PARAM[id]</onup>
+				<ondown>$PARAM[id]</ondown>
+				<orientation>vertical</orientation>
+				<align>top</align>
+				<pagecontrol>$PARAM[scrollbarid]</pagecontrol>
+				<scrolltime tween="sine" easing="inout">360</scrolltime>
+				<itemlayout height="90" width="$PARAM[width]">
+					<control type="label">
+						<textoffsetx>60</textoffsetx>
+						<label>$PARAM[label]</label>
+						<textcolor>$VAR[Unfocused_Color]</textcolor>
+					</control>
+					<control type="label">
+						<textoffsetx>60</textoffsetx>
+						<align>right</align>
+						<label>$PARAM[label2]</label>
+						<textcolor>$VAR[Unfocused_Color]</textcolor>
+					</control>
+				</itemlayout>
+				<focusedlayout height="90" width="$PARAM[width]">
+					<control type="label">
+						<textoffsetx>60</textoffsetx>
+						<label>$PARAM[label]</label>
+						<textcolor>$VAR[Right_Grouplist_Focus_Color]</textcolor>
+					</control>
+					<control type="label">
+						<textoffsetx>60</textoffsetx>
+						<align>right</align>
+						<label>$PARAM[label2]</label>
+						<textcolor>$VAR[Right_Grouplist_Focus_Color]</textcolor>
+					</control>
+					<control type="image">
+						<visible>$PARAM[focusbordervisible]</visible>
+						<right>60</right>
+						<left>0</left>
+						<height>1</height>
+						<bottom>0</bottom>
+						<texture colordiffuse="$VAR[Unfocused_Color]">views/white_100.png</texture>
+					</control>
+				</focusedlayout>
+			</control>
+			<include content="Dialog_Divider_With_Scrollbar">
+				<param name="scrollbarvisible" value="Control.HasFocus($PARAM[id]) | Control.HasFocus($PARAM[scrollbarid])"/>
+				<param name="id" value="$PARAM[scrollbarid]"/>
+				<param name="height" value="$PARAM[height]"/>
+				<param name="left" value="$PARAM[dividerleft]"/>
+				<param name="scrollbarleft" value="-4"/>
+				<param name="onleft" value="$PARAM[onleft]"/>
+				<param name="onright" value="$PARAM[id]"/>
+			</include>
+		</definition>
+	</include>
+
 	<!-- SettingsCategory.xml, profiles, skinsettings, filemanager -->
-	<include name="Settings_Button">
+	<include name="SettingsCategory_Button">
 		<description>$PARAM[description]</description>
 		<width>60</width>
 		<height>60</height>
@@ -48,70 +201,70 @@
 					<control type="button" id="$PARAM[categoryid]0">
 						<onfocus>SetProperty(SettingsCategory_Switcher,true,home)</onfocus>
 						<onfocus condition="!Window.Is(skinsettings)">ReplaceWindowAndFocus(skinsettings,$PARAM[categoryid]0)</onfocus>
-						<include content="Settings_Button">
+						<include content="SettingsCategory_Button">
 							<param name="icon" value="Copacetic"/>
 						</include>
 					</control>
 					<control type="button" id="$PARAM[categoryid]1">
 						<onfocus>SetProperty(SettingsCategory_Switcher,true,home)</onfocus>
 						<onfocus condition="!Window.Is(interfacesettings)">ReplaceWindowAndFocus(interfacesettings,$PARAM[categoryid]1)</onfocus>
-						<include content="Settings_Button">
+						<include content="SettingsCategory_Button">
 							<param name="icon" value="Interface"/>
 						</include>
 					</control>
 					<control type="button" id="$PARAM[categoryid]2">
 						<onfocus>SetProperty(SettingsCategory_Switcher,true,home)</onfocus>
 						<onfocus condition="!Window.Is(mediasettings)">ReplaceWindowAndFocus(mediasettings,$PARAM[categoryid]2)</onfocus>
-						<include content="Settings_Button">
+						<include content="SettingsCategory_Button">
 							<param name="icon" value="Media"/>
 						</include>
 					</control>
 					<control type="button" id="$PARAM[categoryid]3">
 						<onfocus>SetProperty(SettingsCategory_Switcher,true,home)</onfocus>
 						<onfocus condition="!Window.Is(playersettings)">ReplaceWindowAndFocus(playersettings,$PARAM[categoryid]3)</onfocus>
-						<include content="Settings_Button">
+						<include content="SettingsCategory_Button">
 							<param name="icon" value="Player"/>
 						</include>
 					</control>
 					<control type="button" id="$PARAM[categoryid]4">
 						<onfocus>SetProperty(SettingsCategory_Switcher,true,home)</onfocus>
 						<onfocus condition="!Window.Is(systemsettings)">ReplaceWindowAndFocus(systemsettings,$PARAM[categoryid]4)</onfocus>
-						<include content="Settings_Button">
+						<include content="SettingsCategory_Button">
 							<param name="icon" value="System"/>
 						</include>
 					</control>
 					<control type="button" id="$PARAM[categoryid]5">
 						<onfocus>SetProperty(SettingsCategory_Switcher,true,home)</onfocus>
 						<onfocus condition="!Window.Is(servicesettings)">ReplaceWindowAndFocus(servicesettings,$PARAM[categoryid]5)</onfocus>
-						<include content="Settings_Button">
+						<include content="SettingsCategory_Button">
 							<param name="icon" value="Service"/>
 						</include>
 					</control>
 					<control type="button" id="$PARAM[categoryid]6">
 						<onfocus>SetProperty(SettingsCategory_Switcher,true,home)</onfocus>
 						<onfocus condition="!Window.Is(gamesettings)">ReplaceWindowAndFocus(gamesettings,$PARAM[categoryid]6)</onfocus>
-						<include content="Settings_Button">
+						<include content="SettingsCategory_Button">
 							<param name="icon" value="Game"/>
 						</include>
 					</control>
 					<control type="button" id="$PARAM[categoryid]7">
 						<onfocus>SetProperty(SettingsCategory_Switcher,true,home)</onfocus>
 						<onfocus condition="!Window.Is(pvrsettings)">ReplaceWindowAndFocus(pvrsettings,$PARAM[categoryid]7)</onfocus>
-						<include content="Settings_Button">
+						<include content="SettingsCategory_Button">
 							<param name="icon" value="PVR"/>
 						</include>
 					</control>
 					<control type="button" id="$PARAM[categoryid]8">
 						<onfocus>SetProperty(SettingsCategory_Switcher,true,home)</onfocus>
 						<onfocus condition="!Window.Is(profiles)">ReplaceWindowAndFocus(profiles,$PARAM[categoryid]8)</onfocus>
-						<include content="Settings_Button">
+						<include content="SettingsCategory_Button">
 							<param name="icon" value="Profiles"/>
 						</include>
 					</control>
 					<control type="button" id="$PARAM[categoryid]9">
 						<onfocus>SetProperty(SettingsCategory_Switcher,true,home)</onfocus>
 						<onfocus condition="!Window.Is(systeminfo)">ReplaceWindowAndFocus(systeminfo,$PARAM[categoryid]9)</onfocus>
-						<include content="Settings_Button">
+						<include content="SettingsCategory_Button">
 							<param name="icon" value="SystemInfo"/>
 						</include>
 					</control>
@@ -120,14 +273,14 @@
 						<onclick>ReplaceWindow(addonbrowser)</onclick>
 						<onright>noop</onright>
 						<onleft>noop</onleft>
-						<include content="Settings_Button">
+						<include content="SettingsCategory_Button">
 							<param name="icon" value="Addons"/>
 						</include>
 					</control>
 					<control type="button" id="$PARAM[categoryid]11">
 						<onfocus>SetProperty(SettingsCategory_Switcher,true,home)</onfocus>
 						<onfocus condition="!Window.Is(filemanager)">ReplaceWindowAndFocus(filemanager,$PARAM[categoryid]11)</onfocus>
-						<include content="Settings_Button">
+						<include content="SettingsCategory_Button">
 							<param name="icon" value="Filemanager"/>
 						</include>
 					</control>
@@ -184,6 +337,7 @@
 		</control>
 
 	</include>
+
 
 	<!-- SkinSettings -->
 	<include name="skinnsettings_Default_Button">
