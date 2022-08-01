@@ -153,16 +153,6 @@
 		</definition>
 	</include>
 
-	<!-- SettingsCategory.xml, profiles, skinsettings, filemanager -->
-	<include name="SettingsCategory_Button">
-		<description>$PARAM[description]</description>
-		<width>60</width>
-		<height>60</height>
-		<font></font>
-		<texturefocus colordiffuse="$VAR[Light_Color]">settings/$PARAM[icon]_focused.png</texturefocus>
-		<texturenofocus colordiffuse="$VAR[Light_Color]">settings/$PARAM[icon]_unfocused.png</texturenofocus>
-	</include>
-
 
 	<include name="SettingsCategory_Layout">
 		<param name="categoryid" default="30000"/>
@@ -171,6 +161,16 @@
 		<param name="iconborder" default="false"/>
 		<definition>
 
+			<control type="group">
+				<include content="Breadcrumb_Label">
+					<param name="left" value="90"/>
+					<param name="visible" value="!Window.IsVisible(textviewer)"/>
+					<param name="label_color" value="$VAR[Light_Color]"/>
+					<param name="info_label_visible" value="false"/>
+				</include>
+			</control>
+
+			<!-- Addon screen -->
 			<control type="label">
 				<visible>Control.HasFocus(3000010)</visible>
 				<include>Delayed_Content_Fade_Animation</include>
@@ -184,144 +184,109 @@
 				<label>$LOCALIZE[31104]</label>
 			</control>
 
+			<!-- Arrows when focused -->
 			<control type="group">
+				<animation effect="zoom" center="auto" start="112" end="100" time="135" tween="back" easing="in" condition="ControlGroup($PARAM[categoryid]).HasFocus">Conditional</animation>
+				<visible>ControlGroup($PARAM[categoryid]).HasFocus</visible>
 				<left>30</left>
 				<width>60</width>
-				<control type="grouplist" id="$PARAM[categoryid]">
-					<visible allowhiddenfocus="true">true</visible>
-					<centertop>50%</centertop>
-					<height>1080</height>
-					<orientation>vertical</orientation>
-					<onleft condition="!$PARAM[buttonvisible]">$PARAM[sublist]</onleft>
-					<onleft condition="$PARAM[buttonvisible]">20</onleft>
-					<onright>$PARAM[mainlist]</onright>
-					<align>center</align>
-					<itemgap>15</itemgap>
-					<scrolltime>0</scrolltime>
-					<control type="button" id="$PARAM[categoryid]0">
-						<onfocus>SetProperty(SettingsCategory_Switcher,true,home)</onfocus>
-						<onfocus condition="!Window.Is(skinsettings)">ReplaceWindowAndFocus(skinsettings,$PARAM[categoryid]0)</onfocus>
-						<include content="SettingsCategory_Button">
-							<param name="icon" value="Copacetic"/>
-						</include>
-					</control>
-					<control type="button" id="$PARAM[categoryid]1">
-						<onfocus>SetProperty(SettingsCategory_Switcher,true,home)</onfocus>
-						<onfocus condition="!Window.Is(interfacesettings)">ReplaceWindowAndFocus(interfacesettings,$PARAM[categoryid]1)</onfocus>
-						<include content="SettingsCategory_Button">
-							<param name="icon" value="Interface"/>
-						</include>
-					</control>
-					<control type="button" id="$PARAM[categoryid]2">
-						<onfocus>SetProperty(SettingsCategory_Switcher,true,home)</onfocus>
-						<onfocus condition="!Window.Is(mediasettings)">ReplaceWindowAndFocus(mediasettings,$PARAM[categoryid]2)</onfocus>
-						<include content="SettingsCategory_Button">
-							<param name="icon" value="Media"/>
-						</include>
-					</control>
-					<control type="button" id="$PARAM[categoryid]3">
-						<onfocus>SetProperty(SettingsCategory_Switcher,true,home)</onfocus>
-						<onfocus condition="!Window.Is(playersettings)">ReplaceWindowAndFocus(playersettings,$PARAM[categoryid]3)</onfocus>
-						<include content="SettingsCategory_Button">
-							<param name="icon" value="Player"/>
-						</include>
-					</control>
-					<control type="button" id="$PARAM[categoryid]4">
-						<onfocus>SetProperty(SettingsCategory_Switcher,true,home)</onfocus>
-						<onfocus condition="!Window.Is(systemsettings)">ReplaceWindowAndFocus(systemsettings,$PARAM[categoryid]4)</onfocus>
-						<include content="SettingsCategory_Button">
-							<param name="icon" value="System"/>
-						</include>
-					</control>
-					<control type="button" id="$PARAM[categoryid]5">
-						<onfocus>SetProperty(SettingsCategory_Switcher,true,home)</onfocus>
-						<onfocus condition="!Window.Is(servicesettings)">ReplaceWindowAndFocus(servicesettings,$PARAM[categoryid]5)</onfocus>
-						<include content="SettingsCategory_Button">
-							<param name="icon" value="Service"/>
-						</include>
-					</control>
-					<control type="button" id="$PARAM[categoryid]6">
-						<onfocus>SetProperty(SettingsCategory_Switcher,true,home)</onfocus>
-						<onfocus condition="!Window.Is(gamesettings)">ReplaceWindowAndFocus(gamesettings,$PARAM[categoryid]6)</onfocus>
-						<include content="SettingsCategory_Button">
-							<param name="icon" value="Game"/>
-						</include>
-					</control>
-					<control type="button" id="$PARAM[categoryid]7">
-						<onfocus>SetProperty(SettingsCategory_Switcher,true,home)</onfocus>
-						<onfocus condition="!Window.Is(pvrsettings)">ReplaceWindowAndFocus(pvrsettings,$PARAM[categoryid]7)</onfocus>
-						<include content="SettingsCategory_Button">
-							<param name="icon" value="PVR"/>
-						</include>
-					</control>
-					<control type="button" id="$PARAM[categoryid]8">
-						<onfocus>SetProperty(SettingsCategory_Switcher,true,home)</onfocus>
-						<onfocus condition="!Window.Is(profiles)">ReplaceWindowAndFocus(profiles,$PARAM[categoryid]8)</onfocus>
-						<include content="SettingsCategory_Button">
-							<param name="icon" value="Profiles"/>
-						</include>
-					</control>
-					<control type="button" id="$PARAM[categoryid]9">
-						<onfocus>SetProperty(SettingsCategory_Switcher,true,home)</onfocus>
-						<onfocus condition="!Window.Is(systeminfo)">ReplaceWindowAndFocus(systeminfo,$PARAM[categoryid]9)</onfocus>
-						<include content="SettingsCategory_Button">
-							<param name="icon" value="SystemInfo"/>
-						</include>
-					</control>
-					<control type="button" id="$PARAM[categoryid]10">
-						<onclick>ClearProperty(SettingsCategory_Switcher,home)</onclick>
-						<onclick>ReplaceWindow(addonbrowser)</onclick>
-						<onright>noop</onright>
-						<onleft>noop</onleft>
-						<include content="SettingsCategory_Button">
-							<param name="icon" value="Addons"/>
-						</include>
-					</control>
-					<control type="button" id="$PARAM[categoryid]11">
-						<onfocus>SetProperty(SettingsCategory_Switcher,true,home)</onfocus>
-						<onfocus condition="!Window.Is(filemanager)">ReplaceWindowAndFocus(filemanager,$PARAM[categoryid]11)</onfocus>
-						<include content="SettingsCategory_Button">
-							<param name="icon" value="Filemanager"/>
-						</include>
-					</control>
-				</control>
-
-				<!-- Dummy underline for category switcher -->
+				<top>30</top>
+				<height>120</height>
 				<control type="image">
-					<animation effect="slide" end="0,82" time="0" reversible="false" condition="true">Conditional</animation>
-					<animation effect="slide" end="0,75" time="0" reversible="false" condition="ControlGroup(30000).HasFocus(300000)">Conditional</animation>
-					<animation effect="slide" end="0,150" time="0" reversible="false" condition="ControlGroup(30000).HasFocus(300001)">Conditional</animation>
-					<animation effect="slide" end="0,225" time="0" reversible="false" condition="ControlGroup(30000).HasFocus(300002)">Conditional</animation>
-					<animation effect="slide" end="0,300" time="0" reversible="false" condition="ControlGroup(30000).HasFocus(300003)">Conditional</animation>
-					<animation effect="slide" end="0,375" time="0" reversible="false" condition="ControlGroup(30000).HasFocus(300004)">Conditional</animation>
-					<animation effect="slide" end="0,450" time="0" reversible="false" condition="ControlGroup(30000).HasFocus(300005)">Conditional</animation>
-					<animation effect="slide" end="0,525" time="0" reversible="false" condition="ControlGroup(30000).HasFocus(300006)">Conditional</animation>
-					<animation effect="slide" end="0,600" time="0" reversible="false" condition="ControlGroup(30000).HasFocus(300007)">Conditional</animation>
-					<animation effect="slide" end="0,675" time="0" reversible="false" condition="ControlGroup(30000).HasFocus(300008)">Conditional</animation>
-					<animation effect="slide" end="0,750" time="0" reversible="false" condition="ControlGroup(30000).HasFocus(300009)">Conditional</animation>
-					<animation effect="slide" end="0,825" time="0" reversible="false" condition="ControlGroup(30000).HasFocus(3000010)">Conditional</animation>
-					<animation effect="slide" end="0,900" time="0" reversible="false" condition="ControlGroup(30000).HasFocus(3000011)">Conditional</animation>
-					<left>15</left>
-					<right>15</right>
-					<height>3</height>
-					<texture colordiffuse="$VAR[Accent_Color]">views/white_100.png</texture>
+					<top>0</top>
+					<width>30</width>
+					<height>30</height>
+					<texture colordiffuse="$VAR[Light_Color]">settings/category_switcher.png</texture>
+				</control>
+				<control type="image">
+					<animation effect="rotate" center="auto" end="180" time="0" condition="true" reversible="false">Conditional</animation>
+					<bottom>0</bottom>
+					<width>30</width>
+					<height>30</height>
+					<texture colordiffuse="$VAR[Light_Color]">settings/category_switcher.png</texture>
+					<aspectratio>keep</aspectratio>
 				</control>
 			</control>
 
-			<include content="Breadcrumb_Label">
-				<param name="visible" value="!Window.IsVisible(textviewer)"/>
-				<param name="left" value="180"/>
-				<param name="label_color" value="$VAR[Light_Color]"/>
-				<param name="info_label_visible" value="false"/>
-			</include>
+			<!-- Icon -->
+			<control type="image">
+				<top>60</top>
+				<left>15</left>
+				<width>60</width>
+				<height>60</height>
+				<texture colordiffuse="$VAR[Light_Color]">$VAR[SettingsCategory_Icon]</texture>
+			</control>
 
+			<control type="grouplist" id="$PARAM[categoryid]">
+				<visible allowhiddenfocus="true">false</visible>
+				<top>60</top>
+				<left>15</left>
+				<width>60</width>
+				<height>60</height>
+				<orientation>vertical</orientation>
+				<onleft condition="!$PARAM[buttonvisible]">$PARAM[sublist]</onleft>
+				<onleft condition="$PARAM[buttonvisible]">20</onleft>
+				<onright>$PARAM[mainlist]</onright>
+				<align>center</align>
+				<itemgap>0</itemgap>
+				<scrolltime>0</scrolltime>
+				<control type="button" id="$PARAM[categoryid]0">
+					<onfocus>SetProperty(SettingsCategory_Switcher,true,home)</onfocus>
+					<onfocus condition="!Window.Is(skinsettings)">ReplaceWindowAndFocus(skinsettings,$PARAM[categoryid]0)</onfocus>
+				</control>
+				<control type="button" id="$PARAM[categoryid]1">
+					<onfocus>SetProperty(SettingsCategory_Switcher,true,home)</onfocus>
+					<onfocus condition="!Window.Is(interfacesettings)">ReplaceWindowAndFocus(interfacesettings,$PARAM[categoryid]1)</onfocus>
+				</control>
+				<control type="button" id="$PARAM[categoryid]2">
+					<onfocus>SetProperty(SettingsCategory_Switcher,true,home)</onfocus>
+					<onfocus condition="!Window.Is(mediasettings)">ReplaceWindowAndFocus(mediasettings,$PARAM[categoryid]2)</onfocus>
+				</control>
+				<control type="button" id="$PARAM[categoryid]3">
+					<onfocus>SetProperty(SettingsCategory_Switcher,true,home)</onfocus>
+					<onfocus condition="!Window.Is(playersettings)">ReplaceWindowAndFocus(playersettings,$PARAM[categoryid]3)</onfocus>
+				</control>
+				<control type="button" id="$PARAM[categoryid]4">
+					<onfocus>SetProperty(SettingsCategory_Switcher,true,home)</onfocus>
+					<onfocus condition="!Window.Is(systemsettings)">ReplaceWindowAndFocus(systemsettings,$PARAM[categoryid]4)</onfocus>
+				</control>
+				<control type="button" id="$PARAM[categoryid]5">
+					<onfocus>SetProperty(SettingsCategory_Switcher,true,home)</onfocus>
+					<onfocus condition="!Window.Is(servicesettings)">ReplaceWindowAndFocus(servicesettings,$PARAM[categoryid]5)</onfocus>
+				</control>
+				<control type="button" id="$PARAM[categoryid]6">
+					<onfocus>SetProperty(SettingsCategory_Switcher,true,home)</onfocus>
+					<onfocus condition="!Window.Is(gamesettings)">ReplaceWindowAndFocus(gamesettings,$PARAM[categoryid]6)</onfocus>
+				</control>
+				<control type="button" id="$PARAM[categoryid]7">
+					<onfocus>SetProperty(SettingsCategory_Switcher,true,home)</onfocus>
+					<onfocus condition="!Window.Is(pvrsettings)">ReplaceWindowAndFocus(pvrsettings,$PARAM[categoryid]7)</onfocus>
+				</control>
+				<control type="button" id="$PARAM[categoryid]8">
+					<onfocus>SetProperty(SettingsCategory_Switcher,true,home)</onfocus>
+					<onfocus condition="!Window.Is(profiles)">ReplaceWindowAndFocus(profiles,$PARAM[categoryid]8)</onfocus>
+				</control>
+				<control type="button" id="$PARAM[categoryid]9">
+					<onfocus>SetProperty(SettingsCategory_Switcher,true,home)</onfocus>
+					<onfocus condition="!Window.Is(systeminfo)">ReplaceWindowAndFocus(systeminfo,$PARAM[categoryid]9)</onfocus>
+				</control>
+				<control type="button" id="$PARAM[categoryid]10">
+					<onclick>ClearProperty(SettingsCategory_Switcher,home)</onclick>
+					<onclick>ReplaceWindow(addonbrowser)</onclick>
+					<onright>noop</onright>
+					<onleft>noop</onleft>
+				</control>
+				<control type="button" id="$PARAM[categoryid]11">
+					<onfocus>SetProperty(SettingsCategory_Switcher,true,home)</onfocus>
+					<onfocus condition="!Window.Is(filemanager)">ReplaceWindowAndFocus(filemanager,$PARAM[categoryid]11)</onfocus>
+				</control>
+			</control>
 		</definition>
 	</include>
 
 	<include name="Settings_Furniture">
 
 		<include content="Transparent_Dialog_Panel">
-			<param name="left" value="120"/>
 			<param name="top" value="180"/>
 			<param name="bottom" value="180"/>
 		</include>
@@ -331,7 +296,7 @@
 			<include>Delayed_Content_Fade_Animation</include>
 			<include content="DialogDivider">
 				<param name="visible" value="!Window.Is(filemanager)"/>
-				<param name="left" value="599"/>
+				<param name="left" value="569"/>
 				<param name="height" value="630"/>
 			</include>
 		</control>
