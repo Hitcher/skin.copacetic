@@ -10,11 +10,14 @@
 
 				<!-- Hidden grouplist / Settings grouplist -->
 				<control type="group">
-					<animation effect="slide" start="0,0" end="870,0"  condition="String.IsEqual(Window(filemanager).Property(ActiveList),Left)">Conditional</animation>
+					<animation effect="slide" start="0,0" end="870,0"  condition="Window.IsVisible(filemanager) + String.IsEqual(Window(filemanager).Property(ActiveList),Left)">Conditional</animation>
+					<animation effect="slide" start="0,0" end="-30,0"  condition="Window.IsVisible(musicplaylisteditor)">Conditional</animation>
+					<animation effect="slide" start="0,0" end="1070,0"  condition="Window.IsVisible(musicplaylisteditor) + String.IsEqual(Window(musicplaylisteditor).Property(ActiveList),Left)">Conditional</animation>
+
 					<left>90</left>
 					<width>870</width>
 					<control type="grouplist" id="996">
-						<visible allowhiddenfocus="true">Window.IsVisible(filemanager)</visible>
+						<visible allowhiddenfocus="true">Window.IsVisible(filemanager) | Window.IsVisible(musicplaylisteditor)</visible>
 						<height>630</height>
 						<centertop>50%</centertop>
 						<onup>0</onup>
@@ -29,8 +32,9 @@
 					</control>
 					<!-- Dummy underline for main list -->
 					<control type="image">
-						<visible>Window.IsVisible(filemanager)</visible>
-						<animation effect="slide" start="0,0" end="-60,0"  condition="String.IsEqual(Window(filemanager).Property(ActiveList),Left)">Conditional</animation>
+						<animation effect="zoom" end="60,0,660,1"  condition="Window.IsVisible(musicplaylisteditor)">Conditional</animation>
+						<visible>Window.IsVisible(filemanager) | Window.IsVisible(musicplaylisteditor)</visible>
+						<animation effect="slide" start="0,0" end="-60,0"  condition="[Window.IsVisible(filemanager) + String.IsEqual(Window(filemanager).Property(ActiveList),Left)] | [Window.IsVisible(musicplaylisteditor) + String.IsEqual(Window(musicplaylisteditor).Property(ActiveList),Left)]">Conditional</animation>
 						<animation effect="slide" end="0,90" time="0" reversible="false" condition="Container(996).Position(1)">Conditional</animation>
 						<animation effect="slide" end="0,180" time="0" reversible="false" condition="Container(996).Position(2)">Conditional</animation>
 						<animation effect="slide" end="0,270" time="0" reversible="false" condition="Container(996).Position(3)">Conditional</animation>
@@ -43,11 +47,13 @@
 						<texture colordiffuse="$VAR[Unfocused_Color]">views/white_100.png</texture>
 					</control>
 				</control>
+				<!-- divider -->
+
 				<!-- scrollbar -->
 				<control type="group">
-					<animation effect="slide" start="0,0" end="-5,0"  condition="String.IsEqual(Window(filemanager).Property(ActiveList),Left)">Conditional</animation>
+					<animation effect="slide" start="0,0" end="-5,0"  condition="[Window.IsVisible(filemanager) + String.IsEqual(Window(filemanager).Property(ActiveList),Left)] | [Window.IsVisible(musicplaylisteditor) + String.IsEqual(Window(musicplaylisteditor).Property(ActiveList),Left)]">Conditional</animation>
 					<include content="Dialog_Divider_With_Scrollbar">
-						<param name="scrollbarvisible" value="Window.IsVisible(filemanager)"/>
+						<param name="scrollbarvisible" value="Window.IsVisible(filemanager) | Window.IsVisible(musicplaylisteditor)"/>
 						<param name="dividervisible" value="false"/>
 						<param name="id" value="60"/>
 						<param name="height" value="630"/>
@@ -63,7 +69,7 @@
 
 				<!-- Default contextmenu -->
 				<control type="grouplist">
-					<visible>!Window.IsVisible(filemanager)</visible>
+					<visible>!Window.IsVisible(filemanager) + !Window.IsVisible(musicplaylisteditor)</visible>
 					<animation effect="slide" start="0,0" end="-180,0"  condition="Window.IsVisible(favourites)">Conditional</animation>
 					<left>960</left>
 					<top>60</top>

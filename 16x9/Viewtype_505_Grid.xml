@@ -2,8 +2,23 @@
 <includes>
 
 	<include name="GridView_Container">
+
 		<control type="group">
 			<visible>Control.IsVisible(505) + !$EXP[OptionsSwitching]</visible>
+			<include>Content_Fade_Animation</include>
+			<control type="group">
+				<visible>!$EXP[ContainerSwitching] + !$EXP[TransparentDialog_IsVisible] + !Control.HasFocus(60) + !$EXP[InfoDialog_IsVisible] + !Control.HasFocus(91100)</visible>
+				<include>Delayed_Content_Fade_Animation</include>
+				<include content="Breadcrumb_Label">
+					<param name="bar" value="$EXP[GridView_Details_Breadcrumb] | [!$EXP[GridView_Details_Off] + !Container.Content(movies) + !Container.Content(sets) + !Container.Content(tvshows) + !Container.Content(artists)]"/>
+					<param name="visible" value="!$EXP[GridView_Details_Off]"/>
+					<param name="label_color" value="$VAR[Primary_Color]"/>
+				</include>
+			</control>
+		</control>
+
+		<control type="group">
+			<visible>Control.IsVisible(505) + !$EXP[OptionsSwitching] + !$EXP[ContainerSwitching]</visible>
 			<include>Content_Fade_Animation</include>
 			<animation effect="slide" end="592,193" time="0" reversible="false" condition="$EXP[GridView_Display_IsFanart] + Integer.IsEqual(Container.NumItems,1)">Conditional</animation>
 			<animation effect="slide" end="296,193" time="0" reversible="false" condition="$EXP[GridView_Display_IsFanart] + Integer.IsEqual(Container.NumItems,2)">Conditional</animation>
@@ -70,10 +85,6 @@
 						<param name="height" value="360"/>
 					</include>
 				</control>
-				<include content="Breadcrumb_Label">
-					<param name="visible" value="!$EXP[GridView_Details_Off]"/>
-					<param name="label_color" value="$VAR[Primary_Color]"/>
-				</include>
 			</control>
 			<!-- Scrollbar -->
 			<control type="group">

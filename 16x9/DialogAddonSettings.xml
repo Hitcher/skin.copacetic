@@ -9,16 +9,15 @@
 		<!-- Delay content on Load -->
 		<include content="Delay_Content_Load">
 			<param name="id" value="9001"/>
-			<param name="time" value="360"/>
+			<param name="time" value="720"/>
 			<param name="target_id" value="SetFocus(3)"/>
 		</include>
-
 
 		<include>DialogFanartSlideshow</include>
 
 		<control type="group">
-			<visible>Window.IsActive(addonsettings) + !$EXP[TransparentDialog_IsVisible] + !Control.HasFocus(9001)</visible>
-			<include>Content_Fade_Animation</include>
+			<visible>!$EXP[TransparentDialog_IsVisible] + !Control.HasFocus(9001)</visible>
+			<include>Delayed_Content_Fade_Animation</include>
 
 			<include content="Transparent_Dialog_Panel">
 				<param name="top" value="180"/>
@@ -31,58 +30,53 @@
 				<param name="info_label_visible" value="false"/>
 			</include>
 
-			<include content="DialogDivider">
-				<param name="left" value="599"/>
-				<param name="height" value="630"/>
-			</include>
-
-			<!-- Sub list scrollbar -->
-			<include content="Settings_Scrollbar">
-				<param name="visible" value="ControlGroup(5).HasFocus"/>
+			<include content="Dialog_Divider_With_Scrollbar">
+				<param name="scrollbarvisible" value="ControlGroup(5).HasFocus"/>
+				<param name="left" value="569"/>
+				<param name="scrollbarleft" value="-4"/>
 			</include>
 
 			<!-- Main list -->
-			<control type="grouplist" id="3">
-				<left>120</left>
+			<control type="group">
+				<left>90</left>
 				<width>480</width>
-				<centertop>50%</centertop>
-				<height>630</height>
-				<onright>5</onright>
-				<onleft>noop</onleft>
-				<ondown>9000</ondown>
-				<onup>noop</onup>
-				<itemgap>0</itemgap>
-				<orientation>vertical</orientation>
-				<align>top</align>
-				<scrolltime tween="sine" easing="inout">360</scrolltime>
-			</control>
-
-			<!-- Dummy underline for main list when unfocused -->
-			<control type="image">
-				<animation effect="slide" end="0,90" time="0" reversible="false" condition="Container(3).Position(1)">Conditional</animation>
-				<animation effect="slide" end="0,180" time="0" reversible="false" condition="Container(3).Position(2)">Conditional</animation>
-				<animation effect="slide" end="0,270" time="0" reversible="false" condition="Container(3).Position(3)">Conditional</animation>
-				<animation effect="slide" end="0,360" time="0" reversible="false" condition="Container(3).Position(4)">Conditional</animation>
-				<animation effect="slide" end="0,450" time="0" reversible="false" condition="Container(3).Position(5)">Conditional</animation>
-				<animation effect="slide" end="0,540" time="0" reversible="false" condition="Container(3).Position(6)">Conditional</animation>
-				<left>120</left>
-				<width>480</width>
-				<height>1</height>
-				<top>314</top>
-				<aspectratio>scale</aspectratio>
-				<texture colordiffuse="$VAR[Unfocused_Color]">views/white_100.png</texture>
+				<control type="grouplist" id="3">
+					<centertop>50%</centertop>
+					<height>630</height>
+					<onright>5</onright>
+					<onleft>28</onleft>
+					<ondown>3</ondown>
+					<onup>3</onup>
+					<itemgap>0</itemgap>
+					<orientation>vertical</orientation>
+					<align>top</align>
+					<scrolltime tween="sine" easing="inout">360</scrolltime>
+				</control>
+				<!-- Dummy underline for main list when unfocused -->
+				<control type="image">
+					<animation effect="slide" end="0,90" time="0" reversible="false" condition="Container(3).Position(1)">Conditional</animation>
+					<animation effect="slide" end="0,180" time="0" reversible="false" condition="Container(3).Position(2)">Conditional</animation>
+					<animation effect="slide" end="0,270" time="0" reversible="false" condition="Container(3).Position(3)">Conditional</animation>
+					<animation effect="slide" end="0,360" time="0" reversible="false" condition="Container(3).Position(4)">Conditional</animation>
+					<animation effect="slide" end="0,450" time="0" reversible="false" condition="Container(3).Position(5)">Conditional</animation>
+					<animation effect="slide" end="0,540" time="0" reversible="false" condition="Container(3).Position(6)">Conditional</animation>
+					<left>60</left>
+					<height>1</height>
+					<top>314</top>
+					<texture colordiffuse="$VAR[Unfocused_Color]">views/white_100.png</texture>
+				</control>
 			</control>
 
 			<!-- Sub list -->
 			<control type="grouplist" id="5">
-				<width>1200</width>
-				<left>600</left>
+				<width>1260</width>
+				<left>570</left>
 				<centertop>50%</centertop>
 				<height>630</height>
 				<onleft>3</onleft>
-				<onright>9000</onright>
-				<onup>noop</onup>
-				<ondown>9000</ondown>
+				<onright>30</onright>
+				<onup>5</onup>
+				<ondown>5</ondown>
 				<itemgap>0</itemgap>
 				<orientation>vertical</orientation>
 				<align>top</align>
@@ -97,7 +91,10 @@
 			<!-- Default spincontrolex -->
 			<control type="spincontrolex" id="9"/>
 			<!-- Default togglebutton -->
-			<control type="togglebutton" id="10"/>
+			<control type="togglebutton" id="10">
+				<focusedcolor>$VAR[Settings_Grouplist_Label_Color]</focusedcolor>
+				<texturefocus/>
+			</control>
 			<!-- Default divider -->
 			<control type="image" id="11">
 				<height>1</height>
@@ -110,14 +107,14 @@
 			<!-- Default label -->
 			<control type="label" id="14">
 				<height>90</height>
-				<textoffsetx>20</textoffsetx>
+				<textoffsetx>30</textoffsetx>
 				<font>Default_Settings_Header</font>
 				<textcolor>$VAR[Unfocused_Color]</textcolor>
 			</control>
 
 			<include content="ButtonGroup">
-				<param name="onup" value="5"/>
 				<param name="onleft" value="5"/>
+				<param name="onright" value="3"/>
 				<param name="icons" value="true"/>
 				<param name="button1" value="true"/>
 				<param name="button1id" value="30"/>

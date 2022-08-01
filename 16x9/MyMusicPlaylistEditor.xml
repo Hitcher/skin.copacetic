@@ -2,9 +2,16 @@
 <window>
 	<!-- musicplaylisteditor -->
 	<include>My_Window_Fade_Animation</include>
-	<defaultcontrol always="true">50</defaultcontrol>
+	<defaultcontrol always="true">9001</defaultcontrol>
 	<views>50</views>
 	<controls>
+
+		<!-- Delay content on Load -->
+		<include content="Delay_Content_Load">
+			<param name="id" value="9001"/>
+			<param name="time" value="720"/>
+			<param name="target_id" value="SetFocus(50,1,absolute)"/>
+		</include>
 
 		<!-- Hidden focus setter -->
 		<control type="button" id="50100">
@@ -12,7 +19,6 @@
 			<onfocus condition="Integer.IsGreater(Container(100).NumItems,0)">SetFocus(100)</onfocus>
 			<onfocus condition="!Integer.IsGreater(Container(100).NumItems,0)">SetFocus(6)</onfocus>
 		</control>
-
 		<control type="button" id="9000100">
 			<visible allowhiddenfocus="true">false</visible>
 			<onfocus condition="Integer.IsGreater(Container(100).NumItems,0)">SetFocus(100)</onfocus>
@@ -26,7 +32,7 @@
 		</control>
 
 		<control type="group">
-			<visible>!$EXP[TransparentDialog_IsVisible]</visible>
+			<visible>!$EXP[TransparentDialog_ExcludingContextMenu]</visible>
 			<include>Delayed_Content_Fade_Animation</include>
 
 			<include content="Transparent_Dialog_Panel">
@@ -34,50 +40,101 @@
 				<param name="bottom" value="180"/>
 			</include>
 
-			<include content="Settings_Left_List_Template">
-				<param name="windowname" value="musicplaylisteditor"/>
-				<param name="id" value="50"/>
-				<param name="scrollbarid" value="60"/>
-				<param name="onleft" value="8"/>
-				<param name="onright" value="50100"/>
-				<param name="label" value="$INFO[ListItem.Label]"/>
-				<param name="label2" value="$INFO[ListItem.Label2]"/>
-			</include>
-			<control type="image">
-				<fadetime>180</fadetime>
-				<centerleft>50%</centerleft>
-				<centertop>50%</centertop>
-				<width>300</width>
-				<height>300</height>
-				<texture>$VAR[MusicPlaylistEditor_Icon]</texture>
-				<aspectratio>scale</aspectratio>
+			<!-- Content -->
+			<control type="group">
+				<visible>!Control.HasFocus(9001)</visible>
+
+				<include content="DialogDivider">
+					<param name="left" value="780"/>
+					<param name="height" value="630"/>
+				</include>
+
+				<include content="DialogDivider">
+					<param name="left" value="1140"/>
+					<param name="height" value="630"/>
+				</include>
+
+				<!-- Left Side -->
+				<control type="label" id="12">
+					<left>120</left>
+					<width>600</width>
+					<bottom>60</bottom>
+					<height>60</height>
+					<textcolor>$VAR[Light_Color]</textcolor>
+					<aligny>center</aligny>
+					<align>left</align>
+					<font>Description</font>
+				</control>
+
+				<control type="group">
+					<visible>![Window.IsVisible(contextmenu) + String.IsEqual(Window(musicplaylisteditor).Property(ActiveList),Right)]</visible>
+					<include>Delayed_Content_Fade_Animation</include>
+					<include content="Settings_Left_List_Template">
+						<param name="windowname" value="musicplaylisteditor"/>
+						<param name="id" value="50"/>
+						<param name="scrollbarid" value="60"/>
+						<param name="dividervisible" value="false"/>
+						<param name="onleft" value="8"/>
+						<param name="onright" value="50100"/>
+						<param name="label" value="$VAR[MusicPlaylistEditor_LeftLabel]"/>
+						<param name="label2" value="$VAR[MusicPlaylistEditor_LeftLabel2]"/>
+					</include>
+				</control>
+
+				<control type="image">
+					<fadetime>180</fadetime>
+					<centerleft>50%</centerleft>
+					<centertop>50%</centertop>
+					<width>300</width>
+					<height>300</height>
+					<texture>$VAR[MusicPlaylistEditor_Icon]</texture>
+					<aspectratio>scale</aspectratio>
+				</control>
+
+				<!-- Right Side -->
+				<control type="label" id="101">
+					<right>120</right>
+					<width>600</width>
+					<bottom>60</bottom>
+					<height>60</height>
+					<textcolor>$VAR[Light_Color]</textcolor>
+					<aligny>center</aligny>
+					<align>right</align>
+					<font>Description</font>
+				</control>
+
+				<control type="group">
+					<visible>![Window.IsVisible(contextmenu) + String.IsEqual(Window(musicplaylisteditor).Property(ActiveList),Left)]</visible>
+					<include>Delayed_Content_Fade_Animation</include>
+					<include content="Settings_Right_List_Template">
+						<param name="windowname" value="musicplaylisteditor"/>
+						<param name="id" value="100"/>
+						<param name="dividervisible" value="false"/>
+						<param name="scrollbarid" value="61"/>
+						<param name="onleft" value="50"/>
+						<param name="onright" value="6"/>
+						<param name="focusbordervisible" value="Control.HasFocus(100)"/>
+						<param name="label" value="$INFO[ListItem.CurrentItem,,.]$INFO[ListItem.Title, ]$INFO[ListItem.Artist, - ]"/>
+						<param name="label2" value="$INFO[ListItem.Label2]"/>
+					</include>
+				</control>
+
+				<include content="ButtonGroup">
+					<param name="right" value="780"/>
+					<param name="onleft" value="9000100"/>
+					<param name="onright" value="50"/>
+					<param name="icons" value="true"/>
+					<param name="button1" value="true"/>
+					<param name="button1id" value="6"/>
+					<param name="button1texture" value="Browse"/>
+					<param name="button2" value="true"/>
+					<param name="button2id" value="7"/>
+					<param name="button3" value="true"/>
+					<param name="button3id" value="8"/>
+					<param name="button3texture" value="Refresh"/>
+				</include>
 			</control>
-			<include content="Settings_Right_List_Template">
-				<param name="windowname" value="musicplaylisteditor"/>
-				<param name="id" value="100"/>
-				<param name="scrollbarid" value="61"/>
-				<param name="onleft" value="50"/>
-				<param name="onright" value="6"/>
-				<param name="focusbordervisible" value="Control.HasFocus(100)"/>
-				<param name="label" value="$INFO[ListItem.Label]"/>
-				<param name="label2" value="$INFO[ListItem.Label2]"/>
-			</include>
-			<include content="ButtonGroup">
-				<param name="right" value="780"/>
-				<param name="onleft" value="9000100"/>
-				<param name="onright" value="50"/>
-				<param name="icons" value="true"/>
-				<param name="button1" value="true"/>
-				<param name="button1id" value="6"/>
-				<param name="button1texture" value="Browse"/>
-				<param name="button2" value="true"/>
-				<param name="button2id" value="7"/>
-				<param name="button3" value="true"/>
-				<param name="button3id" value="8"/>
-				<param name="button3texture" value="Refresh"/>
-			</include>
 		</control>
 
 	</controls>
-
 </window>
