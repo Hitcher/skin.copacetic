@@ -50,102 +50,105 @@
 	</include>
 
 	<include name="ShowcaseView_Details">
-		<control type="group">
-			<visible>$EXP[ShowcaseView_IsVisible]</visible>
+		<param name="media_view" default="true"/>
+		<definition>
 			<control type="group">
-				<visible>!$EXP[ContainerSwitching] + !$EXP[ContentSwitching] + !$EXP[TransparentDialog_IsVisible] + !Control.HasFocus(60)</visible>
-				<visible>![Control.HasFocus(4501) + Window.IsVisible(1121)] + !$EXP[Secondary_List_ContainerSwitching] + !$EXP[Secondary_List_ContentSwitching]</visible>
-				<include>Delayed_Content_Fade_Animation</include>
-				<!-- Media flags -->
+				<visible>$EXP[ShowcaseView_IsVisible]</visible>
 				<control type="group">
-					<visible>!$EXP[InfoDialog_IsVisible] + !$EXP[ShowcaseView_Details_Off]</visible>
+					<visible>!$EXP[ContainerSwitching] + !$EXP[ContentSwitching] + !$EXP[TransparentDialog_IsVisible] + !Control.HasFocus(60)</visible>
+					<visible>![Control.HasFocus(4501) + Window.IsVisible(1121)] + !$EXP[Secondary_List_ContainerSwitching] + !$EXP[Secondary_List_ContentSwitching]</visible>
 					<include>Delayed_Content_Fade_Animation</include>
-					<include content="MediaFlags"/>
+					<!-- Media flags -->
+					<control type="group">
+						<visible>!$EXP[InfoDialog_IsVisible] + !$EXP[ShowcaseView_Details_Off]</visible>
+						<include>Delayed_Content_Fade_Animation</include>
+						<include content="MediaFlags"/>
+					</control>
+					<!-- Common details, progress bar -->
+					<control type="group">
+						<animation effect="slide" start="0,0" end="360,0" time="0" reversible="true" condition="$PARAM[media_view] + Skin.HasSetting(Music_Player_Enabled) + Player.HasAudio + $EXP[ShowcaseView_Display_IsPosters] + !$EXP[ShowcaseView_Details_Off]">Conditional</animation>
+						<animation effect="slide" start="0,0" end="180,0" time="0" condition="$EXP[ShowcaseView_Display_IsSquare]">Conditional</animation>
+						<include content="ProgressBar">
+							<param name="left" value="180"/>
+						</include>
+					</control>
+					<control type="group">
+						<animation effect="slide" start="0,0" end="180,0" time="0" reversible="true" condition="$PARAM[media_view] + Skin.HasSetting(Music_Player_Enabled) + Player.HasAudio + $EXP[ShowcaseView_Display_IsPosters] + !$EXP[ShowcaseView_Details_Off]">Conditional</animation>
+						<include content="Common_Details">
+							<param name="viewtype_label" value="Showcase"/>
+							<param name="left" value="960"/>
+							<param name="width" value="720"/>
+							<param name="titleheight" value="280"/>
+							<param name="infoheight" value="70"/>
+							<param name="plotmaxheight" value="235"/>
+						</include>
+					</control>
 				</control>
-				<!-- Common details, progress bar -->
+				<!-- Scrollbars-->
 				<control type="group">
-					<animation effect="slide" start="0,0" end="360,0" time="0" reversible="true" condition="$PARAM[media_view] + Skin.HasSetting(Music_Player_Enabled) + Player.HasAudio + $EXP[ShowcaseView_Display_IsPosters] + !$EXP[ShowcaseView_Details_Off]">Conditional</animation>
-					<animation effect="slide" start="0,0" end="180,0" time="0" condition="$EXP[ShowcaseView_Display_IsSquare]">Conditional</animation>
-					<include content="ProgressBar">
-						<param name="left" value="180"/>
-					</include>
-				</control>
-				<control type="group">
-					<animation effect="slide" start="0,0" end="180,0" time="0" reversible="true" condition="$PARAM[media_view] + Skin.HasSetting(Music_Player_Enabled) + Player.HasAudio + $EXP[ShowcaseView_Display_IsPosters] + !$EXP[ShowcaseView_Details_Off]">Conditional</animation>
-					<include content="Common_Details">
-						<param name="viewtype_label" value="Showcase"/>
-						<param name="left" value="960"/>
-						<param name="width" value="720"/>
-						<param name="titleheight" value="280"/>
-						<param name="infoheight" value="70"/>
-						<param name="plotmaxheight" value="235"/>
-					</include>
+					<visible>!Window.Is(home) + !$EXP[InfoDialog_IsVisible] + !$EXP[TransparentDialog_IsVisible]</visible>
+					<include>Delayed_Content_Fade_Animation</include>
+					<control type="group">
+						<visible>$EXP[ShowcaseView_IsVisible] + $EXP[ShowcaseView_Details_Off]</visible>
+						<include content="Scrollbars">
+							<param name="right" value="420"/>
+							<param name="bottom" value="27"/>
+							<param name="width" value="1080"/>
+							<param name="height" value="6"/>
+							<param name="onleft" value="60"/>
+							<param name="onright" value="60"/>
+							<param name="onup" value="62"/>
+							<param name="ondown" value="SetFocus(3000,0)"/>
+							<param name="orientation" value="horizontal"/>
+						</include>
+					</control>
+					<control type="group">
+						<visible>$EXP[ShowcaseView_Display_IsSquare] + !$EXP[ShowcaseView_Details_Off]</visible>
+						<include content="Scrollbars">
+							<param name="right" value="120"/>
+							<param name="bottom" value="27"/>
+							<param name="width" value="600"/>
+							<param name="height" value="6"/>
+							<param name="onleft" value="60"/>
+							<param name="onright" value="60"/>
+							<param name="onup" value="62"/>
+							<param name="ondown" value="SetFocus(3000,0)"/>
+							<param name="orientation" value="horizontal"/>
+						</include>
+					</control>
+					<!-- Horizontal: Showcase Posters + Details + !Left Player -->
+					<control type="group">
+						<visible>$EXP[ShowcaseView_Display_IsPosters] + !$EXP[ShowcaseView_Details_Off] + ![Skin.HasSetting(Music_Player_Enabled) + Player.HasAudio]</visible>
+						<include content="Scrollbars">
+							<param name="right" value="180"/>
+							<param name="bottom" value="27"/>
+							<param name="width" value="840"/>
+							<param name="height" value="6"/>
+							<param name="onleft" value="60"/>
+							<param name="onright" value="60"/>
+							<param name="onup" value="62"/>
+							<param name="ondown" value="SetFocus(3000,0)"/>
+							<param name="orientation" value="horizontal"/>
+						</include>
+					</control>
+					<!-- Horizontal: Showcase Posters + Details + Left Player -->
+					<control type="group">
+						<visible>$EXP[ShowcaseView_Display_IsPosters] + !$EXP[ShowcaseView_Details_Off] + Skin.HasSetting(Music_Player_Enabled) + Player.HasAudio</visible>
+						<include content="Scrollbars">
+							<param name="right" value="180"/>
+							<param name="bottom" value="27"/>
+							<param name="width" value="480"/>
+							<param name="height" value="6"/>
+							<param name="onleft" value="60"/>
+							<param name="onright" value="60"/>
+							<param name="onup" value="62"/>
+							<param name="ondown" value="SetFocus(3000,0)"/>
+							<param name="orientation" value="horizontal"/>
+						</include>
+					</control>
 				</control>
 			</control>
-			<!-- Scrollbars-->
-			<control type="group">
-				<visible>!Window.Is(home) + !$EXP[InfoDialog_IsVisible] + !$EXP[TransparentDialog_IsVisible]</visible>
-				<include>Delayed_Content_Fade_Animation</include>
-				<control type="group">
-					<visible>$EXP[ShowcaseView_IsVisible] + $EXP[ShowcaseView_Details_Off]</visible>
-					<include content="Scrollbars">
-						<param name="right" value="420"/>
-						<param name="bottom" value="27"/>
-						<param name="width" value="1080"/>
-						<param name="height" value="6"/>
-						<param name="onleft" value="60"/>
-						<param name="onright" value="60"/>
-						<param name="onup" value="62"/>
-						<param name="ondown" value="SetFocus(3000,0)"/>
-						<param name="orientation" value="horizontal"/>
-					</include>
-				</control>
-				<control type="group">
-					<visible>$EXP[ShowcaseView_Display_IsSquare] + !$EXP[ShowcaseView_Details_Off]</visible>
-					<include content="Scrollbars">
-						<param name="right" value="120"/>
-						<param name="bottom" value="27"/>
-						<param name="width" value="600"/>
-						<param name="height" value="6"/>
-						<param name="onleft" value="60"/>
-						<param name="onright" value="60"/>
-						<param name="onup" value="62"/>
-						<param name="ondown" value="SetFocus(3000,0)"/>
-						<param name="orientation" value="horizontal"/>
-					</include>
-				</control>
-				<!-- Horizontal: Showcase Posters + Details + !Left Player -->
-				<control type="group">
-					<visible>$EXP[ShowcaseView_Display_IsPosters] + !$EXP[ShowcaseView_Details_Off] + ![Skin.HasSetting(Music_Player_Enabled) + Player.HasAudio]</visible>
-					<include content="Scrollbars">
-						<param name="right" value="180"/>
-						<param name="bottom" value="27"/>
-						<param name="width" value="840"/>
-						<param name="height" value="6"/>
-						<param name="onleft" value="60"/>
-						<param name="onright" value="60"/>
-						<param name="onup" value="62"/>
-						<param name="ondown" value="SetFocus(3000,0)"/>
-						<param name="orientation" value="horizontal"/>
-					</include>
-				</control>
-				<!-- Horizontal: Showcase Posters + Details + Left Player -->
-				<control type="group">
-					<visible>$EXP[ShowcaseView_Display_IsPosters] + !$EXP[ShowcaseView_Details_Off] + Skin.HasSetting(Music_Player_Enabled) + Player.HasAudio</visible>
-					<include content="Scrollbars">
-						<param name="right" value="180"/>
-						<param name="bottom" value="27"/>
-						<param name="width" value="480"/>
-						<param name="height" value="6"/>
-						<param name="onleft" value="60"/>
-						<param name="onright" value="60"/>
-						<param name="onup" value="62"/>
-						<param name="ondown" value="SetFocus(3000,0)"/>
-						<param name="orientation" value="horizontal"/>
-					</include>
-				</control>
-			</control>
-		</control>
+		</definition>
 	</include>
 
 </includes>

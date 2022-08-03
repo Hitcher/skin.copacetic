@@ -15,6 +15,7 @@
 
 	<include name="Widget_List">
 		<param name="min_items"/>
+		<param name="bypass_min_items" default="false"/>
 		<param name="widget_type"/>
 		<param name="id"/>
 		<param name="focus_button" default="HiddenFocusButton"/>
@@ -23,7 +24,7 @@
 		<param name="click_action" default="Blank"/>
 		<definition>
 			<control type="fixedlist" id="$PARAM[id]">
-				<visible>Integer.IsGreater(Container($PARAM[id]).NumItems,$PARAM[min_items]) | Container($PARAM[id]).IsUpdating</visible>
+				<visible>Integer.IsGreater(Container($PARAM[id]).NumItems,$PARAM[min_items]) | Container($PARAM[id]).IsUpdating | $PARAM[bypass_min_items]</visible>
 				<onfocus>SetProperty(HomeWidget,$PARAM[id],home)</onfocus>
 				<onunfocus condition="!String.IsEmpty(window(home).property(HomeWidget))">ClearProperty(HomeWidget,home)</onunfocus>
 				<onfocus>SetProperty(Focused_Button,False,movieinformation)</onfocus>
@@ -362,10 +363,12 @@
 		<param name="use_custom_content" default="true"/>
 		<param name="use_custom_click" default="true"/>
 		<param name="min_items" default="1"/>
+		<param name="bypass_min_items" default="false"/>
 		<param name="id" default="8000"/>
 		<definition>
 			<include content="Widget_List">
 				<param name="min_items" value="$PARAM[min_items]"/>
+				<param name="bypass_min_items" value="$PARAM[bypass_min_items]"/>
 				<param name="widget_type" value="Info_Widget"/>
 				<param name="id" value="$PARAM[id]"/>
 				<param name="focus_button" value="HiddenFocusButton"/>
@@ -671,6 +674,7 @@
 			<param name="widget_display" value="Fanart"/>
 			<param name="id" value="8030"/>
 			<param name="min_items" value="0"/>
+			<param name="bypass_min_items" value="true"/>
 			<param name="target" value="videos"/>
 			<param name="sortby" value="year"/>
 			<param name="sortorder" value="descending"/>
