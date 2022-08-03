@@ -38,7 +38,69 @@
 		<value condition="System.AddonIsEnabled(plugin.program.autocompletion) + !System.HasHiddenInput">plugin://plugin.program.autocompletion?info=autocomplete&amp;&amp;id=$INFO[Control.GetLabel(312).index(1)]&amp;&amp;limit=9</value>
 	</variable>
 
-	<!-- ARTWORK -->
+
+	<!-- ICONS -->
+	<!-- Audio codec flag: Used for fullscreeninfo and movieinformation -->
+	<variable name="AudioCodec_Flag">
+		<value condition="VideoPlayer.IsFullscreen + !String.IsEmpty(VideoPlayer.AudioCodec)">$INFO[VideoPlayer.AudioCodec,flags/audio/,.png]</value>
+		<value condition="VideoPlayer.IsFullscreen + String.Contains(Player.FilenameAndPath,.DTS-HD.MA)">flags/audio/dtshd_ma.png</value>
+		<value condition="VideoPlayer.IsFullscreen + String.Contains(Player.FilenameAndPath,.EAC3)">flags/audio/eac3.png</value>
+		<value condition="VideoPlayer.IsFullscreen + String.Contains(Player.FilenameAndPath,.DD) | String.Contains(Player.FilenameAndPath,.AC3)">flags/audio/ac3.png</value>
+		<value condition="!String.IsEmpty(ListItem.AudioCodec)">$INFO[ListItem.AudioCodec,flags/audio/,.png]</value>
+		<value condition="String.Contains(ListItem.FilenameAndPath,.DTS-HD.MA)">flags/audio/dtshd_ma.png</value>
+		<value condition="String.Contains(ListItem.FilenameAndPath,.EAC3)">flags/audio/eac3.png</value>
+		<value condition="String.Contains(ListItem.FilenameAndPath,.DD) | String.Contains(ListItem.FilenameAndPath,.AC3)">flags/audio/ac3.png</value>
+		<value>flags/blank.png</value>
+	</variable>
+	<!-- MPAA flag: Used for fullscreeninfo, secondary lists (4501), primary lists and movieinformation -->
+	<variable name="MPAA_Flag">
+		<value condition="VideoPlayer.IsFullscreen + String.Contains(VideoPlayer.mpaa,U)">flags/rating/bbfc_u.png</value>
+		<value condition="VideoPlayer.IsFullscreen + String.Contains(VideoPlayer.mpaa,PG)">flags/rating/bbfc_pg.png</value>
+		<value condition="VideoPlayer.IsFullscreen + String.Contains(VideoPlayer.mpaa,12)">flags/rating/bbfc_12.png</value>
+		<value condition="VideoPlayer.IsFullscreen + String.Contains(VideoPlayer.mpaa,15)">flags/rating/bbfc_15.png</value>
+		<value condition="VideoPlayer.IsFullscreen + [String.Contains(VideoPlayer.mpaa,18) | String.Contains(VideoPlayer.mpaa,UK:X)]">flags/rating/bbfc_18.png</value>
+		<value condition="Control.HasFocus(4501) + String.Contains(Container(4501).ListItem.mpaa,U)">flags/rating/bbfc_u.png</value>
+		<value condition="Control.HasFocus(4501) + String.Contains(Container(4501).ListItem.mpaa,PG)">flags/rating/bbfc_pg.png</value>
+		<value condition="Control.HasFocus(4501) + String.Contains(Container(4501).ListItem.mpaa,12)">flags/rating/bbfc_12.png</value>
+		<value condition="Control.HasFocus(4501) + String.Contains(Container(4501).ListItem.mpaa,15)">flags/rating/bbfc_15.png</value>
+		<value condition="Control.HasFocus(4501) + [String.Contains(Container(4501).ListItem.mpaa,18) | String.Contains(Container(4501).ListItem.mpaa,UK:X)]">flags/rating/bbfc_18.png</value>
+		<value condition="ListItem.IsCollection + Skin.HasSetting(Secondary_List_Enabled) + String.Contains(Container(4501).ListItem.mpaa,U)">flags/rating/bbfc_u.png</value>
+		<value condition="ListItem.IsCollection + Skin.HasSetting(Secondary_List_Enabled) + String.Contains(Container(4501).ListItem.mpaa,PG)">flags/rating/bbfc_pg.png</value>
+		<value condition="ListItem.IsCollection + Skin.HasSetting(Secondary_List_Enabled) + String.Contains(Container(4501).ListItem.mpaa,12)">flags/rating/bbfc_12.png</value>
+		<value condition="ListItem.IsCollection + Skin.HasSetting(Secondary_List_Enabled) + String.Contains(Container(4501).ListItem.mpaa,15)">flags/rating/bbfc_15.png</value>
+		<value condition="ListItem.IsCollection + Skin.HasSetting(Secondary_List_Enabled) + [String.Contains(Container(4501).ListItem.mpaa,18) | String.Contains(Container(4501).ListItem.mpaa,UK:X)]">flags/rating/bbfc_18.png</value>
+		<value condition="ListItem.IsCollection + !Skin.HasSetting(Secondary_List_Enabled) + String.Contains(Container(4500).ListItem.mpaa,U)">flags/rating/bbfc_u.png</value>
+		<value condition="ListItem.IsCollection + !Skin.HasSetting(Secondary_List_Enabled) + String.Contains(Container(4500).ListItem.mpaa,PG)">flags/rating/bbfc_pg.png</value>
+		<value condition="ListItem.IsCollection + !Skin.HasSetting(Secondary_List_Enabled) + String.Contains(Container(4500).ListItem.mpaa,12)">flags/rating/bbfc_12.png</value>
+		<value condition="ListItem.IsCollection + !Skin.HasSetting(Secondary_List_Enabled) + String.Contains(Container(4500).ListItem.mpaa,15)">flags/rating/bbfc_15.png</value>
+		<value condition="ListItem.IsCollection + !Skin.HasSetting(Secondary_List_Enabled) + [String.Contains(Container(4500).ListItem.mpaa,18) | String.Contains(Container(4500).ListItem.mpaa,UK:X)]">flags/rating/bbfc_18.png</value>
+		<value condition="String.Contains(ListItem.mpaa,U)">flags/rating/bbfc_u.png</value>
+		<value condition="String.Contains(ListItem.mpaa,PG)">flags/rating/bbfc_pg.png</value>
+		<value condition="String.Contains(ListItem.mpaa,12)">flags/rating/bbfc_12.png</value>
+		<value condition="String.Contains(ListItem.mpaa,15)">flags/rating/bbfc_15.png</value>
+		<value condition="String.Contains(ListItem.mpaa,18) | String.Contains(ListItem.mpaa,UK:X)">flags/rating/bbfc_18.png</value>
+		<value>flags/blank.png</value>
+	</variable>
+	<!-- MusicPlaylistEditor thumbnail -->
+	<variable name="MusicPlaylistEditor_Icon">
+		<value condition="String.IsEqual(Window(musicplaylisteditor).Property(ActiveList),Right)">$INFO[Container(100).ListItem.Art(thumb)]</value>
+		<value>$INFO[Container(50).ListItem.Art(thumb)]</value>
+	</variable>
+	<!-- Profiles settings screen icon -->
+	<variable name="Profiles_Icon">
+		<value condition="ControlGroup(500).HasFocus(101) | !System.IsLoggedOn">$INFO[Container(2).ListItem.Art(thumb)]</value>
+		<value>$INFO[System.ProfileThumb]</value>
+	</variable>
+	<!-- Repeat button icon -->
+	<variable name="Repeat_Button_Icon">
+		<value condition="Control.HasFocus(8) + Playlist.IsRepeatOne">osd/icon_RepeatOne_focused.png</value>
+		<value condition="Playlist.IsRepeatOne">osd/icon_RepeatOne_unfocused.png</value>
+		<value condition="Control.HasFocus(8) + Playlist.IsRepeat">osd/icon_Repeat_focused.png</value>
+		<value condition="Playlist.IsRepeat">osd/icon_Repeat_unfocused.png</value>
+		<value condition="Control.HasFocus(8)">osd/icon_RepeatOff_focused.png</value>
+		<value>osd/icon_RepeatOff_unfocused.png</value>
+	</variable>
+	<!-- Settings category icons -->
 	<variable name="SettingsCategory_Icon">
 		<value condition="ControlGroup(30000).HasFocus(300000)">settings/Copacetic_focused.png</value>
 		<value condition="ControlGroup(30000).HasFocus(300001)">settings/Interface_focused.png</value>
@@ -53,12 +115,80 @@
 		<value condition="ControlGroup(30000).HasFocus(3000010)">settings/Addons_focused.png</value>
 		<value condition="ControlGroup(30000).HasFocus(3000011)">settings/FileManager_focused.png</value>
 	</variable>
-
-	<variable name="Profiles_Icon">
-		<value condition="ControlGroup(500).HasFocus(101) | !System.IsLoggedOn">$INFO[Container(2).ListItem.Art(thumb)]</value>
-		<value>$INFO[System.ProfileThumb]</value>
+	<!-- Studio flag: Used for fullscreeninfo, secondary lists (4501), primary lists and movieinformation -->
+	<variable name="Studio_Flag">
+		<value condition="VideoPlayer.IsFullscreen + !String.IsEmpty(VideoPlayer.Studio)">$INFO[VideoPlayer.Studio,flags/studios/,.png]</value>
+		<value condition="Control.HasFocus(4501) + !String.IsEmpty(Container(4501).ListItem.Studio)">$INFO[Container(4501).ListItem.Studio,flags/studios/,.png]</value>
+		<value condition="ListItem.IsCollection + Skin.HasSetting(Secondary_List_Enabled) + !String.IsEmpty(Container(4501).ListItem.Studio)">$INFO[Container(4501).ListItem.Studio,flags/studios/,.png]</value>
+		<value condition="ListItem.IsCollection + !Skin.HasSetting(Secondary_List_Enabled) + !String.IsEmpty(Container(4500).ListItem.Studio)">$INFO[Container(4500).ListItem.Studio,flags/studios/,.png]</value>
+		<value condition="!String.IsEmpty(ListItem.Studio)">$INFO[ListItem.Studio,flags/studios/,.png]</value>
+		<value>flags/blank.png</value>
+	</variable>
+	<!-- Video codec flag: Used for fullscreeninfo and movieinformation -->
+	<variable name="VideoCodec_Flag">
+		<value condition="VideoPlayer.IsFullscreen + String.IsEqual(VideoPlayer.HDRType,dolbyvision)">flags/video/dolbyvision.png</value>
+		<value condition="VideoPlayer.IsFullscreen + String.IsEqual(VideoPlayer.HDRType,hdr10)">flags/video/hdr.png</value>
+		<value condition="VideoPlayer.IsFullscreen + String.IsEqual(VideoPlayer.HDRType,hlg)">flags/video/hdr.png</value>
+		<value condition="VideoPlayer.IsFullscreen + [[String.Contains(Player.FilenameAndPath,dolby.vision) | String.Contains(Player.FilenameAndPath,.DoVi.) | String.Contains(Player.FilenameAndPath,.DV.)] + String.Contains(Player.FilenameAndPath,atmos)]">flags/video/dolbyvisionatmos.png</value>
+		<value condition="VideoPlayer.IsFullscreen + [String.Contains(Player.FilenameAndPath,dolby.vision) | String.Contains(Player.FilenameAndPath,.DV.)]">flags/video/dolbyvision.png</value>
+		<value condition="VideoPlayer.IsFullscreen + String.Contains(Player.FilenameAndPath,hdr)">flags/video/hdr.png</value>
+		<value condition="VideoPlayer.IsFullscreen + !String.IsEmpty(VideoPlayer.VideoCodec)">$INFO[VideoPlayer.VideoCodec,flags/video/,.png]</value>
+		<value condition="VideoPlayer.IsFullscreen + [String.Contains(Player.FilenameAndPath,hevc) | String.Contains(Player.FilenameAndPath,x265)]">flags/video/hevc.png</value>
+		<value condition="VideoPlayer.IsFullscreen + [String.Contains(Player.FilenameAndPath,h264) | String.Contains(Player.FilenameAndPath,x264)]">flags/video/h264.png</value>
+		<value condition="String.IsEqual(ListItem.HDRType,dolbyvision)">flags/video/dolbyvision.png</value>
+		<value condition="String.IsEqual(ListItem.HDRType,hdr10)">flags/video/hdr.png</value>
+		<value condition="String.IsEqual(ListItem.HDRType,hlg)">flags/video/hdr.png</value>
+		<value condition="[String.Contains(ListItem.FilenameAndPath,dolby.vision) | String.Contains(ListItem.FilenameAndPath,.DoVi.) | String.Contains(ListItem.FilenameAndPath,.DV.)] + String.Contains(ListItem.FilenameAndPath,atmos)">flags/video/dolbyvisionatmos.png</value>
+		<value condition="String.Contains(ListItem.FilenameAndPath,dolby.vision) | String.Contains(ListItem.FilenameAndPath,.DV.)">flags/video/dolbyvision.png</value>
+		<value condition="String.Contains(ListItem.FilenameAndPath,hdr)">flags/video/hdr.png</value>
+		<value condition="!String.IsEmpty(ListItem.VideoCodec)">$INFO[ListItem.VideoCodec,flags/video/,.png]</value>
+		<value condition="String.Contains(ListItem.FilenameAndPath,hevc) | String.Contains(ListItem.FilenameAndPath,x265)">flags/video/hevc.png</value>
+		<value condition="String.Contains(ListItem.FilenameAndPath,h264) | String.Contains(ListItem.FilenameAndPath,x264)">flags/video/h264.png</value>
+		<value>flags/blank.png</value>
+	</variable>
+	<!-- Video source flag: Used for fullscreeninfo and movieinformation -->
+	<variable name="VideoSource_Flag">
+		<value condition="VideoPlayer.IsFullscreen + [String.Contains(Player.FilenameAndPath,bluray) | String.Contains(Player.FilenameAndPath,blu-ray) | String.Contains(Player.FilenameAndPath,brrip) | String.Contains(Player.FilenameAndPath,bdrip) | String.Contains(Player.FilenameAndPath,.m2ts,Right) | String.Contains(Player.FilenameAndPath,.bdmv,Right) | String.Contains(Player.FilenameAndPath,bd25) | String.Contains(Player.FilenameAndPath,bd50)] + [String.Contains(Plyer.FilenameAndPath,uhd) | String.Contains(Player.FilenameAndPath,2160p)]">flags/source/uhd-bluray.png</value>
+		<value condition="VideoPlayer.IsFullscreen + [String.Contains(Player.FilenameAndPath,bluray) | String.Contains(Player.FilenameAndPath,blu-ray) | String.Contains(Player.FilenameAndPath,brrip) | String.Contains(Player.FilenameAndPath,bdrip) | String.Contains(Player.FilenameAndPath,.m2ts,Right) | String.Contains(Player.FilenameAndPath,.bdmv,Right) | String.Contains(Player.FilenameAndPath,bd25) | String.Contains(Player.FilenameAndPath,bd50)] + String.Contains(Player.FilenameAndPath,3d)">flags/source/bluray3d.png</value>
+		<value condition="VideoPlayer.IsFullscreen + [String.Contains(Player.FilenameAndPath,bluray) | String.Contains(Player.FilenameAndPath,blu-ray) | String.Contains(Player.FilenameAndPath,brrip) | String.Contains(Player.FilenameAndPath,bdrip) | String.Contains(Player.FilenameAndPath,.m2ts,Right) | String.Contains(Player.FilenameAndPath,.bdmv,Right) | String.Contains(Player.FilenameAndPath,bd25) | String.Contains(Player.FilenameAndPath,bd50)] + String.Contains(Player.FilenameAndPath,imax)">flags/source/imax.png</value>
+		<value condition="VideoPlayer.IsFullscreen + [String.Contains(Player.FilenameAndPath,bluray) | String.Contains(Player.FilenameAndPath,blu-ray) | String.Contains(Player.FilenameAndPath,brrip) | String.Contains(Player.FilenameAndPath,bdrip) | String.Contains(Player.FilenameAndPath,.m2ts,Right) | String.Contains(Player.FilenameAndPath,.bdmv,Right) | String.Contains(Player.FilenameAndPath,bd25) | String.Contains(Player.FilenameAndPath,bd50)]">flags/source/bluray.png</value>
+		<value condition="VideoPlayer.IsFullscreen + [String.Contains(Player.FilenameAndPath,.NF.) | String.Contains(Player.FilenameAndPath,Netflix) | String.IsEqual(VideoPlayer.Studio,Netflix)]">flags/source/netflix.png</value>
+		<value condition="VideoPlayer.IsFullscreen + [String.Contains(Player.FilenameAndPath,DSNP) | String.Contains(Player.FilenameAndPath,Disney) | String.Contains(VideoPlayer.Studio,Disney)]">flags/source/disney+.png</value>
+		<value condition="VideoPlayer.IsFullscreen + [String.Contains(Player.FilenameAndPath,AMZN) | String.Contains(Player.FilenameAndPath,Amazon) | String.IsEqual(VideoPlayer.Studio,Amazon)]">flags/source/amazon.png</value>
+		<value condition="VideoPlayer.IsFullscreen + [String.Contains(Player.FilenameAndPath,HMAX) | String.Contains(Player.FilenameAndPath,HBO) | String.IsEqual(VideoPlayer.Studio,HBO Max)]">flags/source/hbomax.png</value>
+		<value condition="VideoPlayer.IsFullscreen + [String.Contains(Player.FilenameAndPath,HULU) | String.IsEqual(VideoPlayer.Studio,Hulu)]">flags/source/hulu.png</value>
+		<value condition="VideoPlayer.IsFullscreen + [String.Contains(Player.FilenameAndPath,ATVP) | String.Contains(VideoPlayer.Studio,Apple)] ">flags/source/apple.png</value>
+		<value condition="VideoPlayer.IsFullscreen + String.Contains(Player.FilenameAndPath,web) + [String.Contains(Player.FilenameAndPath,dl) | String.Contains(Player.FilenameAndPath,rip)]">flags/source/webtv.png</value>
+		<value condition="VideoPlayer.IsFullscreen + [String.Contains(Player.FilenameAndPath,hddvd) | String.Contains(Player.FilenameAndPath,hd-dvd) | String.Contains(Player.FilenameAndPath,.evo,Right)]">flags/source/hddvd.png</value>
+		<value condition="VideoPlayer.IsFullscreen + [String.Contains(Player.FilenameAndPath,.ifo,Right) | String.Contains(Player.FilenameAndPath,.iso,Right) | String.Contains(Player.FilenameAndPath,dvd)]">flags/source/dvd.png</value>
+		<value condition="VideoPlayer.IsFullscreen + String.Contains(Player.FilenameAndPath,hd) + String.Contains(Player.FilenameAndPath,tv)">flags/source/hdtv.png</value>
+		<value condition="VideoPlayer.IsFullscreen + [[String.Contains(Player.FilenameAndPath,sd) + String.Contains(Player.FilenameAndPath,tv)] | [String.Contains(Player.FilenameAndPath,pd) + String.Contains(Player.FilenameAndPath,tv)] | String.Contains(Player.FilenameAndPath,dsr)]]">flags/source/sdtv.png</value>
+		<value condition="String.Contains(Player.FilenameAndPath,vhs)">flags/source/vhs.png</value>
+		<value condition="String.Contains(Player.FilenameAndPath,dvhs)">flags/source/dvhs.png</value>
+		<value condition="String.Contains(Player.FilenameAndPath,dtheater)">flags/source/dtheater.png</value>
+		<value condition="[String.Contains(ListItem.FilenameAndPath,bluray) | String.Contains(ListItem.FilenameAndPath,blu-ray) | String.Contains(ListItem.FilenameAndPath,brrip) | String.Contains(ListItem.FilenameAndPath,bdrip) | String.Contains(ListItem.FilenameAndPath,.m2ts,Right) | String.Contains(ListItem.FilenameAndPath,.bdmv,Right) | String.Contains(ListItem.FilenameAndPath,bd25) | String.Contains(ListItem.FilenameAndPath,bd50)] + [String.Contains(ListItem.FilenameAndPath,uhd) | String.Contains(ListItem.FilenameAndPath,2160p)]">flags/source/uhd-bluray.png</value>
+		<value condition="[String.Contains(ListItem.FilenameAndPath,bluray) | String.Contains(ListItem.FilenameAndPath,blu-ray) | String.Contains(ListItem.FilenameAndPath,brrip) | String.Contains(ListItem.FilenameAndPath,bdrip) | String.Contains(ListItem.FilenameAndPath,.m2ts,Right) | String.Contains(ListItem.FilenameAndPath,.bdmv,Right) | String.Contains(ListItem.FilenameAndPath,bd25) | String.Contains(ListItem.FilenameAndPath,bd50)] + String.Contains(ListItem.FilenameAndPath,3d)">flags/source/bluray3d.png</value>
+		<value condition="[String.Contains(ListItem.FilenameAndPath,bluray) | String.Contains(ListItem.FilenameAndPath,blu-ray) | String.Contains(ListItem.FilenameAndPath,brrip) | String.Contains(ListItem.FilenameAndPath,bdrip) | String.Contains(ListItem.FilenameAndPath,.m2ts,Right) | String.Contains(ListItem.FilenameAndPath,.bdmv,Right) | String.Contains(ListItem.FilenameAndPath,bd25) | String.Contains(ListItem.FilenameAndPath,bd50)] + String.Contains(ListItem.FilenameAndPath,imax)">flags/source/imax.png</value>
+		<value condition="[String.Contains(ListItem.FilenameAndPath,bluray) | String.Contains(ListItem.FilenameAndPath,blu-ray) | String.Contains(ListItem.FilenameAndPath,brrip) | String.Contains(ListItem.FilenameAndPath,bdrip) | String.Contains(ListItem.FilenameAndPath,.m2ts,Right) | String.Contains(ListItem.FilenameAndPath,.bdmv,Right) | String.Contains(ListItem.FilenameAndPath,bd25) | String.Contains(ListItem.FilenameAndPath,bd50)]">flags/source/bluray.png</value>
+		<value condition="[String.Contains(ListItem.FilenameAndPath,.NF.) | String.Contains(ListItem.FilenameAndPath,Netflix) | String.IsEqual(ListItem.Studio,Netflix)]">flags/source/netflix.png</value>
+		<value condition="[String.Contains(ListItem.FilenameAndPath,DSNP) | String.Contains(ListItem.FilenameAndPath,Disney) | String.Contains(ListItem.Studio,Disney)]">flags/source/disney+.png</value>
+		<value condition="[String.Contains(ListItem.FilenameAndPath,AMZN) | String.Contains(ListItem.FilenameAndPath,Amazon) | String.IsEqual(ListItem.Studio,Amazon)]">flags/source/amazon.png</value>
+		<value condition="[String.Contains(ListItem.FilenameAndPath,HMAX) | String.Contains(ListItem.FilenameAndPath,HBO) | String.IsEqual(ListItem.Studio,HBO Max)]">flags/source/hbomax.png</value>
+		<value condition="[String.Contains(ListItem.FilenameAndPath,HULU) | String.IsEqual(ListItem.Studio,Hulu)]">flags/source/hulu.png</value>
+		<value condition="[String.Contains(ListItem.FilenameAndPath,ATVP) | String.Contains(ListItem.Studio,Apple)] ">flags/source/apple.png</value>
+		<value condition="String.Contains(ListItem.FilenameAndPath,web) + [String.Contains(ListItem.FilenameAndPath,dl) | String.Contains(ListItem.FilenameAndPath,rip)]">flags/source/webtv.png</value>
+		<value condition="String.Contains(ListItem.FilenameAndPath,hddvd) | String.Contains(ListItem.FilenameAndPath,hd-dvd) | String.Contains(ListItem.FilenameAndPath,.evo,Right)">flags/source/hddvd.png</value>
+		<value condition="String.Contains(ListItem.FilenameAndPath,.ifo,Right) | String.Contains(ListItem.FilenameAndPath,.iso,Right) | String.Contains(ListItem.FilenameAndPath,dvd)">flags/source/dvd.png</value>
+		<value condition="String.Contains(ListItem.FilenameAndPath,hd) + String.Contains(ListItem.FilenameAndPath,tv)">flags/source/hdtv.png</value>
+		<value condition="[String.Contains(ListItem.FilenameAndPath,sd) + String.Contains(ListItem.FilenameAndPath,tv)] | [String.Contains(ListItem.FilenameAndPath,pd) + String.Contains(ListItem.FilenameAndPath,tv)] | String.Contains(ListItem.FilenameAndPath,dsr)">flags/source/sdtv.png</value>
+		<value condition="String.Contains(ListItem.FilenameAndPath,vhs)">flags/source/vhs.png</value>
+		<value condition="String.Contains(ListItem.FilenameAndPath,dvhs)">flags/source/dvhs.png</value>
+		<value condition="String.Contains(ListItem.FilenameAndPath,dtheater)">flags/source/dtheater.png</value>
+		<value>flags/blank.png</value>
 	</variable>
 
+
+	<!-- ARTWORK -->
 	<variable name="Dialog_Info_Background">
 		<value condition="String.IsEqual(ListItem.DBType,episode) + !String.IsEmpty(ListItem.Art(thumb))">$INFO[ListItem.Art(thumb)]</value>
 		<value condition="String.IsEqual(Container.FolderName,ListItem.TVShowTitle) + !String.IsEmpty(Window(home).Property(Season_Fanart))">$INFO[Window(home).Property(Season_Fanart)]</value>
@@ -67,12 +197,12 @@
 	</variable>
 
 	<variable name="MusicPlaylistEditor_Background">
-		<value condition="[Control.HasFocus(100) | Control.HasFocus(61)] + String.IsEqual(Container(100).ListItem.DBType,album) + !String.IsEmpty(Container(100).ListItem.Art(fanart))">$INFO[Container(100).ListItem.Art(fanart)]</value>
-		<value condition="[Control.HasFocus(100) | Control.HasFocus(61)] + String.IsEqual(Container(100).ListItem.DBType,song) + !String.IsEmpty(Container(100).ListItem.Art(album.fanart))">$INFO[Container(100).ListItem.Art(album.fanart)]</value>
-		<value condition="[Control.HasFocus(100) | Control.HasFocus(61)] + [String.IsEqual(Container(100).ListItem.DBType,album) | String.IsEqual(Container(100).ListItem.DBType,song)] + !String.IsEmpty(Container(100).ListItem.Art(artist.fanart))">$INFO[Container(100).ListItem.Art(artist.fanart)]</value>
-		<value condition="[Control.HasFocus(100) | Control.HasFocus(61)] + [String.IsEqual(Container(100).ListItem.DBType,album) | String.IsEqual(Container(100).ListItem.DBType,song)] + !String.IsEmpty(Container(100).ListItem.Art(artist.thumb))">$INFO[Container(100).ListItem.Art(artist.thumb)]</value>
-		<value condition="[Control.HasFocus(100) | Control.HasFocus(61)] + !String.IsEmpty(Container(100).ListItem.Art(fanart))">$INFO[Container(100).ListItem.Art(fanart)]</value>
-		<value condition="[Control.HasFocus(100) | Control.HasFocus(61)] + !String.IsEmpty(Container(100).ListItem.Art(thumb))">$INFO[Container(100).ListItem.Art(thumb)]</value>
+		<value condition="String.IsEqual(Window(musicplaylisteditor).Property(ActiveList),Right) + String.IsEqual(Container(100).ListItem.DBType,album) + !String.IsEmpty(Container(100).ListItem.Art(fanart))">$INFO[Container(100).ListItem.Art(fanart)]</value>
+		<value condition="String.IsEqual(Window(musicplaylisteditor).Property(ActiveList),Right) + String.IsEqual(Container(100).ListItem.DBType,song) + !String.IsEmpty(Container(100).ListItem.Art(album.fanart))">$INFO[Container(100).ListItem.Art(album.fanart)]</value>
+		<value condition="String.IsEqual(Window(musicplaylisteditor).Property(ActiveList),Right) + [String.IsEqual(Container(100).ListItem.DBType,album) | String.IsEqual(Container(100).ListItem.DBType,song)] + !String.IsEmpty(Container(100).ListItem.Art(artist.fanart))">$INFO[Container(100).ListItem.Art(artist.fanart)]</value>
+		<value condition="String.IsEqual(Window(musicplaylisteditor).Property(ActiveList),Right) + [String.IsEqual(Container(100).ListItem.DBType,album) | String.IsEqual(Container(100).ListItem.DBType,song)] + !String.IsEmpty(Container(100).ListItem.Art(artist.thumb))">$INFO[Container(100).ListItem.Art(artist.thumb)]</value>
+		<value condition="String.IsEqual(Window(musicplaylisteditor).Property(ActiveList),Right) + !String.IsEmpty(Container(100).ListItem.Art(fanart))">$INFO[Container(100).ListItem.Art(fanart)]</value>
+		<value condition="String.IsEqual(Window(musicplaylisteditor).Property(ActiveList),Right) + !String.IsEmpty(Container(100).ListItem.Art(thumb))">$INFO[Container(100).ListItem.Art(thumb)]</value>
 		<value condition="String.IsEqual(Container(50).ListItem.DBType,album) + !String.IsEmpty(Container(50).ListItem.Art(fanart))">$INFO[Container(50).ListItem.Art(fanart)]</value>
 		<value condition="String.IsEqual(Container(50).ListItem.DBType,song) + !String.IsEmpty(Container(50).ListItem.Art(album.fanart))">$INFO[Container(50).ListItem.Art(album.fanart)]</value>
 		<value condition="[String.IsEqual(Container(50).ListItem.DBType,album) | String.IsEqual(Container(50).ListItem.DBType,song)] + !String.IsEmpty(Container(50).ListItem.Art(artist.fanart))">$INFO[Container(50).ListItem.Art(artist.fanart)]</value>
@@ -81,10 +211,7 @@
 		<value condition="!String.IsEmpty(ListItem.Art(thumb))">$INFO[ListItem.Art(thumb)]</value>
 	</variable>
 
-	<variable name="MusicPlaylistEditor_Icon">
-		<value condition="Control.HasFocus(100) | Control.HasFocus(61)">$INFO[Container(100).ListItem.Art(thumb)]</value>
-		<value>$INFO[Container(50).ListItem.Art(thumb)]</value>
-	</variable>
+
 
 	<variable name="Thumbnail(-3)Content">
 		<!-- Special Windows -->
@@ -245,7 +372,7 @@
 		<value condition="Control.IsVisible(450) + !String.IsEmpty(ListItem.Art(poster))">$INFO[ListItem.Art(poster)]</value>
 		<value condition="Control.IsVisible(450) + !String.IsEmpty(ListItem.Art(fanart))">$INFO[ListItem.Art(fanart)]</value>
 		<value condition="Control.IsVisible(450) + !String.IsEmpty(ListItem.Art(thumb))">$INFO[ListItem.Art(thumb)]</value>
-		<!-- MusicVisualisation -->
+		<!-- Visualisation -->
 		<value condition="Window.IsVisible(visualisation) + !String.IsEmpty(Player.Art(album.thumb))">$INFO[Player.Art(album.thumb)]</value>
 		<!-- Fallback -->
 		<value condition="!String.IsEmpty(ListItem.Art(thumb))">$INFO[ListItem.Art(thumb)]</value>
@@ -301,7 +428,7 @@
 		<value condition="!String.IsEmpty(Container.ListItemNoWrap(1).Label) + $EXP[StripView_Display_IsSquare] + !String.IsEmpty(ListItem(1).Art(square))">$INFO[ListItem(1).Art(square)]</value>
 		<value condition="!String.IsEmpty(Container.ListItemNoWrap(1).Label) + $EXP[StripView_Display_IsSquare] + !String.IsEmpty(ListItem(1).Art(fanart))">$INFO[ListItem(1).Art(fanart)]</value>
 		<value condition="!String.IsEmpty(Container.ListItemNoWrap(1).Label) + !String.IsEmpty(ListItem(1).Art(thumb))">$INFO[ListItem(1).Art(thumb)]</value>
-		<!-- MusicVisualisation -->
+		<!-- Visualisation -->
 		<value condition="Window.IsVisible(visualisation) + !String.IsEmpty(MusicPlayer.offset(1).Cover)">$INFO[MusicPlayer.offset(1).Cover]</value>
 	</variable>
 
@@ -642,10 +769,8 @@
 	</variable>
 
 	<!-- LABELS -->
-	<variable name="Home_Background_Override_Label">
-		<value condition="Skin.String(Home_Background_Override)">$INFO[Skin.String(Home_Background_Override)]</value>
-		<value>$LOCALIZE[31259]</value>
-	</variable>
+
+
 
 	<variable name="Theme_Label">
 		<value condition="Skin.String(Theme,Light)">$LOCALIZE[31210]</value>
@@ -665,18 +790,7 @@
 		<value>$LOCALIZE[31201]</value>
 	</variable>
 
-	<variable name="Player_Status">
-		<value condition="Player.Forwarding2x">x2</value>
-		<value condition="Player.Forwarding4x">x4</value>
-		<value condition="Player.Forwarding8x">x8</value>
-		<value condition="Player.Forwarding16x">x16</value>
-		<value condition="Player.Forwarding32x">x32</value>
-		<value condition="Player.Rewinding2x">x2</value>
-		<value condition="Player.Rewinding4x">x4</value>
-		<value condition="Player.Rewinding8x">x8</value>
-		<value condition="Player.Rewinding16x">x16</value>
-		<value condition="Player.Rewinding32x">x32</value>
-	</variable>
+
 
 	<variable name="Title_Label">
 		<!-- Fullscreeninfo -->
@@ -858,22 +972,7 @@
 		<value></value>
 	</variable>
 
-	<variable name="Plot_Label">
-		<!-- fullscreeninfo -->
-		<value condition="Window.Is(fullscreeninfo) + !String.IsEmpty(VideoPlayer.PlotOutline)">$INFO[VideoPlayer.PlotOutline]</value>
-		<value condition="Window.Is(fullscreeninfo) + !String.IsEmpty(VideoPlayer.Plot)">$INFO[VideoPlayer.Plot]</value>
-		<!-- SECONDARY PATH -->
-		<value condition="Control.HasFocus(4501) + !String.IsEmpty(Container(4501).ListItem.Property(Album_Description))">$INFO[Container(4501).ListItem.Property(Album_Description)]</value>
-		<value condition="Control.HasFocus(4501) + !String.IsEmpty(Container(4501).ListItem.Property(Artist_Description))">$INFO[Container(4501).ListItem.Property(Artist_Description)]</value>
-		<value condition="Control.HasFocus(4501) + !String.IsEmpty(Container(4501).ListItem.PlotOutline)">$INFO[Container(4501).ListItem.PlotOutline]</value>
-		<value condition="Control.HasFocus(4501) + !String.IsEmpty(Container(4501).ListItem.Plot)">$INFO[Container(4501).ListItem.Plot]</value>
-		<!-- PRIMARY PATH -->
-		<value condition="!String.IsEmpty(ListItem.Property(Album_Description))">$INFO[ListItem.Property(Album_Description)]</value>
-		<value condition="!String.IsEmpty(ListItem.Property(Artist_Description))">$INFO[ListItem.Property(Artist_Description)]</value>
-		<value condition="!String.IsEmpty(ListItem.PlotOutline)">$INFO[ListItem.Plot]</value>
-		<value condition="!String.IsEmpty(ListItem.Plot)">$INFO[ListItem.Plot]</value>
-		<value></value>
-	</variable>
+
 
 	<variable name="Breadcrumb_Title_Label">
 		<value condition="ControlGroup(30000).HasFocus(300000)">$LOCALIZE[31200]</value>
@@ -1003,10 +1102,157 @@
 		<value condition="Container.Content(actors) + !String.IsEmpty(ListItem.Appearances)">[UPPERCASE]$INFO[ListItem.Appearances]$VAR[Appearances_Label, ]$INFO[Container(4501).ListItem(-1).Title, ][/UPPERCASE]</value>
 		<!-- File views: 23 mins / Ends 13:32 -->
 		<value condition="Container.Content(files) + !String.IsEmpty(ListItem.Duration)">[UPPERCASE]$INFO[ListItem.Duration(mins),, $LOCALIZE[31138]]$INFO[ListItem.EndTime, $LOCALIZE[31115] $LOCALIZE[32000] ][/UPPERCASE]</value>
-		<!-- Empty -->
 		<value></value>
 	</variable>
 
+
+
+	<!-- Script-UpNext info label for breadcrumbs: Game of Thrones / 2x02 / The Night Lands -->
+	<variable name="Script-UpNext_Info_Label">
+		<value condition="!Integer.IsGreater(Window.Property(Episode),9)">$INFO[Window.Property(tvshowtitle)]$INFO[Window.Property(season), $LOCALIZE[31116] ]$INFO[Window.Property(episode),x0]$INFO[Window.Property(title), $LOCALIZE[31116] ]</value>
+		<value condition="!Integer.IsGreater(Window.Property(Episode),9)">$INFO[Window.Property(tvshowtitle)]$INFO[Window.Property(season), $LOCALIZE[31116] ]$INFO[Window.Property(episode),x]$INFO[Window.Property(title), $LOCALIZE[31116] ]</value>
+	</variable>
+	<variable name="AutoUpdate">
+		<value condition="String.Contains(Skin.String(AutoUpdate),off)">$LOCALIZE[31153]</value>
+		<value>$LOCALIZE[31154]</value>
+	</variable>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	<!-- Media labels -->
+	<!-- Albums label: Album / Albums -->
+	<variable name="Albums_Label">
+		<value condition="Integer.IsEqual(Container(50).NumItems,1)">$LOCALIZE[558]</value>
+		<value>$LOCALIZE[132]</value>
+	</variable>
+	<!-- Appearances label: Credit / Credits  -->
+	<variable name="Appearances_Label">
+		<value condition="!String.IsEmpty(ListItem.Appearances) + String.IsEqual(ListItem.Appearances,1)">$LOCALIZE[32125]</value>
+		<value>$LOCALIZE[470]</value>
+	</variable>
+	<!-- Appearances Label2: for/including -->
+	<variable name="Appearances_Label_2">
+		<value condition="!String.IsEmpty(ListItem.Appearances) + String.IsEqual(ListItem.Appearances,1)">$LOCALIZE[32126]</value>
+		<value>$LOCALIZE[32127]</value>
+	</variable>
+	<!-- Audio codec label: Used for videoplayer and primary list -->
+	<variable name="AudioCodec_Label">
+		<value condition="VideoPlayer.IsFullscreen + !String.IsEmpty(VideoPlayer.AudioCodec)">[UPPERCASE]$INFO[VideoPlayer.AudioCodec][/UPPERCASE]</value>
+		<value condition="VideoPlayer.IsFullscreen + String.Contains(Player.FilenameAndPath,.DTS-HD.MA)">DTS-HD.MA</value>
+		<value condition="VideoPlayer.IsFullscreen + String.Contains(Player.FilenameAndPath,.EAC3)">EAC3</value>
+		<value condition="VideoPlayer.IsFullscreen + [String.Contains(Player.FilenameAndPath,.DD) | String.Contains(Player.FilenameAndPath,.AC3)]">AC3</value>
+		<value condition="!String.IsEmpty(ListItem.AudioCodec)">[UPPERCASE]$INFO[ListItem.AudioCodec][/UPPERCASE]</value>
+		<value condition="String.Contains(ListItem.FilenameAndPath,.DTS-HD.MA)">DTS-HD.MA</value>
+		<value condition="String.Contains(ListItem.FilenameAndPath,.EAC3)">EAC3</value>
+		<value condition="String.Contains(ListItem.FilenameAndPath,.DD) | String.Contains(ListItem.FilenameAndPath,.AC3)">AC3</value>
+	</variable>
+	<!-- Plot label for fullscreen info, secondary list, primary list and infodialogs -->
+	<variable name="Plot_Label">
+		<value condition="Window.Is(fullscreeninfo) + !String.IsEmpty(VideoPlayer.PlotOutline)">$INFO[VideoPlayer.PlotOutline]</value>
+		<value condition="Window.Is(fullscreeninfo) + !String.IsEmpty(VideoPlayer.Plot)">$INFO[VideoPlayer.Plot]</value>
+		<value condition="Control.HasFocus(4501) + !String.IsEmpty(Container(4501).ListItem.Property(Album_Description))">$INFO[Container(4501).ListItem.Property(Album_Description)]</value>
+		<value condition="Control.HasFocus(4501) + !String.IsEmpty(Container(4501).ListItem.Property(Artist_Description))">$INFO[Container(4501).ListItem.Property(Artist_Description)]</value>
+		<value condition="Control.HasFocus(4501) + !String.IsEmpty(Container(4501).ListItem.PlotOutline)">$INFO[Container(4501).ListItem.PlotOutline]</value>
+		<value condition="Control.HasFocus(4501) + !String.IsEmpty(Container(4501).ListItem.Plot)">$INFO[Container(4501).ListItem.Plot]</value>
+		<value condition="!String.IsEmpty(ListItem.Property(Album_Description))">$INFO[ListItem.Property(Album_Description)]</value>
+		<value condition="!String.IsEmpty(ListItem.Property(Artist_Description))">$INFO[ListItem.Property(Artist_Description)]</value>
+		<value condition="!String.IsEmpty(ListItem.PlotOutline)">$INFO[ListItem.Plot]</value>
+		<value condition="!String.IsEmpty(ListItem.Plot)">$INFO[ListItem.Plot]</value>
+		<value></value>
+	</variable>
+	<!-- Plot type: Bio, Review, Plot -->
+	<variable name="PlotType_Label">
+		<value condition="String.IsEqual(ListItem.DBType,artist)">$LOCALIZE[21887]</value>
+		<value condition="String.IsEqual(ListItem.DBType,album)">$LOCALIZE[183]</value>
+		<value>$LOCALIZE[207]</value>
+	</variable>
+	<!-- Resolution label: Used for videoplayer, widgets (8060,8050,8010),secondary list (4501) and primary list -->
+	<variable name="Resolution_Label">
+		<value condition="VideoPlayer.IsFullscreen + [String.StartsWith(VideoPlayer.VideoResolution,8K) | String.Contains(Player.FileNameAndPath,4320p)]">$LOCALIZE[32131]</value>
+		<value condition="VideoPlayer.IsfullScreen + [String.StartsWith(VideoPlayer.VideoResolution,4K) | String.Contains(Player.FileNameAndPath,2160p)] + String.Contains(VideoPlayer.HDRType,dolbyvision)">$LOCALIZE[32132] $LOCALIZE[32133]</value>
+		<value condition="VideoPlayer.IsFullscreen + [String.StartsWith(VideoPlayer.VideoResolution,4K) | String.Contains(Player.FileNameAndPath,2160p)] + [String.Contains(Player.FilenameAndPath,DV) | String.Contains(Player.FilenameAndPath,Dolby.Vision)]">$LOCALIZE[32132] $LOCALIZE[32133]</value>
+		<value condition="VideoPlayer.IsFullscreen + [String.StartsWith(VideoPlayer.VideoResolution,4K) | String.Contains(Player.FileNameAndPath,2160p)] + String.Contains(VideoPlayer.HDRType,hdr10)">$LOCALIZE[32132] $LOCALIZE[32134]</value>
+		<value condition="VideoPlayer.IsFullscreen + [String.StartsWith(VideoPlayer.VideoResolution,4K) | String.Contains(Player.FileNameAndPath,2160p)] + String.Contains(VideoPlayer.HDRType,hlg)">$LOCALIZE[32132] $LOCALIZE[32139]</value>
+		<value condition="VideoPlayer.IsFullscreen + [String.StartsWith(VideoPlayer.VideoResolution,4K) | String.Contains(Player.FileNameAndPath,2160p)] + String.Contains(Player.FilenameAndPath,HDR)">$LOCALIZE[32132] $LOCALIZE[32134]</value>
+		<value condition="VideoPlayer.IsFullscreen + [String.StartsWith(VideoPlayer.VideoResolution,4K) | String.Contains(Player.FileNameAndPath,2160p)]">$LOCALIZE[32132] $LOCALIZE[32135]</value>
+		<value condition="VideoPlayer.IsFullscreen + [String.StartsWith(VideoPlayer.VideoResolution,1080) | String.Contains(Player.FileNameAndPath,1080p)]">$LOCALIZE[32136]</value>
+		<value condition="VideoPlayer.IsFullscreen + [String.StartsWith(VideoPlayer.VideoResolution,720) | String.Contains(Player.FileNameAndPath,720p)]">$LOCALIZE[32137]</value>
+		<value condition="VideoPlayer.IsFullscreen + String.StartsWith(VideoPlayer.VideoResolution,576)">$LOCALIZE[32138]</value>
+		<value condition="VideoPlayer.IsFullscreen + String.StartsWith(VideoPlayer.VideoResolution,540)">$LOCALIZE[32138]</value>
+		<value condition="VideoPlayer.IsFullscreen + String.StartsWith(VideoPlayer.VideoResolution,480)">$LOCALIZE[32138]</value>
+		<value condition="Control.HasFocus(8060) + [String.StartsWith(Container(8060).ListItem.VideoResolution,8K) | String.Contains(Container(8060).ListItem.FileNameAndPath,4320p)]">$LOCALIZE[32131]</value>
+		<value condition="Control.HasFocus(8060) + [String.StartsWith(Container(8060).ListItem.VideoResolution,4K) | String.Contains(Container(8060).ListItem.FileNameAndPath,2160p)] + String.Contains(Container(8060).ListItem.HDRType,dolbyvision)">$LOCALIZE[32132] $LOCALIZE[32133]</value>
+		<value condition="Control.HasFocus(8060) + [String.StartsWith(Container(8060).ListItem.VideoResolution,4K) | String.Contains(Container(8060).ListItem.FileNameAndPath,2160p)] + [String.Contains(Container(8060).ListItem.FilenameAndPath,DV) | String.Contains(Container(8060).ListItem.FilenameAndPath,Dolby.Vision)]">$LOCALIZE[32132] $LOCALIZE[32133]</value>
+		<value condition="Control.HasFocus(8060) + [String.StartsWith(Container(8060).ListItem.VideoResolution,4K) | String.Contains(Container(8060).ListItem.FileNameAndPath,2160p)] + String.Contains(Container(8060).ListItem.HDRType,hdr10)">$LOCALIZE[32132] $LOCALIZE[32134]</value>
+		<value condition="Control.HasFocus(8060) + [String.StartsWith(Container(8060).ListItem.VideoResolution,4K) | String.Contains(Container(8060).ListItem.FileNameAndPath,2160p)] + String.Contains(Container(8060).ListItem.HDRType,hlg)">$LOCALIZE[32132] $LOCALIZE[32139]</value>
+		<value condition="Control.HasFocus(8060) + [String.StartsWith(Container(8060).ListItem.VideoResolution,4K) | String.Contains(Container(8060).ListItem.FileNameAndPath,2160p)] + String.Contains(Container(8060).ListItem.FilenameAndPath,HDR)">$LOCALIZE[32132] $LOCALIZE[32134]</value>
+		<value condition="Control.HasFocus(8060) + [String.StartsWith(Container(8060).ListItem.VideoResolution,4K) | String.Contains(Container(8060).ListItem.FileNameAndPath,2160p)]">$LOCALIZE[32132] $LOCALIZE[32135]</value>
+		<value condition="Control.HasFocus(8060) + [String.StartsWith(Container(8060).ListItem.VideoResolution,1080) | String.Contains(Container(8060).ListItem.FileNameAndPath,1080p)]">$LOCALIZE[32136]</value>
+		<value condition="Control.HasFocus(8060) + [String.StartsWith(Container(8060).ListItem.VideoResolution,720) | String.Contains(Container(8060).ListItem.FileNameAndPath,720p)]">$LOCALIZE[32137]</value>
+		<value condition="Control.HasFocus(8060) + String.StartsWith(Container(8060).ListItem.VideoResolution,576)">$LOCALIZE[32138]</value>
+		<value condition="Control.HasFocus(8060) + String.StartsWith(Container(8060).ListItem.VideoResolution,540)">$LOCALIZE[32138]</value>
+		<value condition="Control.HasFocus(8060) + String.StartsWith(Container(8060).ListItem.VideoResolution,480)">$LOCALIZE[32138]</value>
+		<value condition="Control.HasFocus(8050) + [String.StartsWith(Container(8050).ListItem.VideoResolution,8K) | String.Contains(Container(8050).ListItem.FileNameAndPath,4320p)]">$LOCALIZE[32131]</value>
+		<value condition="Control.HasFocus(8050) + [String.StartsWith(Container(8050).ListItem.VideoResolution,4K) | String.Contains(Container(8050).ListItem.FileNameAndPath,2160p)] + String.Contains(Container(8050).ListItem.HDRType,dolbyvision)">$LOCALIZE[32132] $LOCALIZE[32133]</value>
+		<value condition="Control.HasFocus(8050) + [String.StartsWith(Container(8050).ListItem.VideoResolution,4K) | String.Contains(Container(8050).ListItem.FileNameAndPath,2160p)] + [String.Contains(Container(8050).ListItem.FilenameAndPath,DV) | String.Contains(Container(8050).ListItem.FilenameAndPath,Dolby.Vision)]">$LOCALIZE[32132] $LOCALIZE[32133]</value>
+		<value condition="Control.HasFocus(8050) + [String.StartsWith(Container(8050).ListItem.VideoResolution,4K) | String.Contains(Container(8050).ListItem.FileNameAndPath,2160p)] + String.Contains(Container(8050).ListItem.HDRType,hdr10)">$LOCALIZE[32132] $LOCALIZE[32134]</value>
+		<value condition="Control.HasFocus(8050) + [String.StartsWith(Container(8050).ListItem.VideoResolution,4K) | String.Contains(Container(8050).ListItem.FileNameAndPath,2160p)] + String.Contains(Container(8050).ListItem.HDRType,hlg)">$LOCALIZE[32132] $LOCALIZE[32139]</value>
+		<value condition="Control.HasFocus(8050) + [String.StartsWith(Container(8050).ListItem.VideoResolution,4K) | String.Contains(Container(8050).ListItem.FileNameAndPath,2160p)] + String.Contains(Container(8050).ListItem.FilenameAndPath,HDR)">$LOCALIZE[32132] $LOCALIZE[32134]</value>
+		<value condition="Control.HasFocus(8050) + [String.StartsWith(Container(8050).ListItem.VideoResolution,4K) | String.Contains(Container(8050).ListItem.FileNameAndPath,2160p)]">$LOCALIZE[32132] $LOCALIZE[32135]</value>
+		<value condition="Control.HasFocus(8050) + [String.StartsWith(Container(8050).ListItem.VideoResolution,1080) | String.Contains(Container(8050).ListItem.FileNameAndPath,1080p)]">$LOCALIZE[32136]</value>
+		<value condition="Control.HasFocus(8050) + [String.StartsWith(Container(8050).ListItem.VideoResolution,720) | String.Contains(Container(8050).ListItem.FileNameAndPath,720p)]">$LOCALIZE[32137]</value>
+		<value condition="Control.HasFocus(8050) + String.StartsWith(Container(8050).ListItem.VideoResolution,576)">$LOCALIZE[32138]</value>
+		<value condition="Control.HasFocus(8050) + String.StartsWith(Container(8050).ListItem.VideoResolution,540)">$LOCALIZE[32138]</value>
+		<value condition="Control.HasFocus(8050) + String.StartsWith(Container(8050).ListItem.VideoResolution,480)">$LOCALIZE[32138]</value>
+		<value condition="Control.HasFocus(8010) + [String.StartsWith(Container(8010).ListItem.VideoResolution,8K) | String.Contains(Container(8010).ListItem.FileNameAndPath,4320p)]">$LOCALIZE[32131]</value>
+		<value condition="Control.HasFocus(8010) + [String.StartsWith(Container(8010).ListItem.VideoResolution,4K) | String.Contains(Container(8010).ListItem.FileNameAndPath,2160p)] + String.Contains(Container(8010).ListItem.HDRType,dolbyvision)">$LOCALIZE[32132] $LOCALIZE[32133]</value>
+		<value condition="Control.HasFocus(8010) + [String.StartsWith(Container(8010).ListItem.VideoResolution,4K) | String.Contains(Container(8010).ListItem.FileNameAndPath,2160p)] + [String.Contains(Container(8010).ListItem.FilenameAndPath,DV) | String.Contains(Container(8010).ListItem.FilenameAndPath,Dolby.Vision)]">$LOCALIZE[32132] $LOCALIZE[32133]</value>
+		<value condition="Control.HasFocus(8010) + [String.StartsWith(Container(8010).ListItem.VideoResolution,4K) | String.Contains(Container(8010).ListItem.FileNameAndPath,2160p)] + String.Contains(Container(8010).ListItem.HDRType,hdr10)">$LOCALIZE[32132] $LOCALIZE[32134]</value>
+		<value condition="Control.HasFocus(8010) + [String.StartsWith(Container(8010).ListItem.VideoResolution,4K) | String.Contains(Container(8010).ListItem.FileNameAndPath,2160p)] + String.Contains(Container(8010).ListItem.HDRType,hlg)">$LOCALIZE[32132] $LOCALIZE[32139]</value>
+		<value condition="Control.HasFocus(8010) + [String.StartsWith(Container(8010).ListItem.VideoResolution,4K) | String.Contains(Container(8010).ListItem.FileNameAndPath,2160p)] + String.Contains(Container(8010).ListItem.FilenameAndPath,HDR)">$LOCALIZE[32132] $LOCALIZE[32134]</value>
+		<value condition="Control.HasFocus(8010) + [String.StartsWith(Container(8010).ListItem.VideoResolution,4K) | String.Contains(Container(8010).ListItem.FileNameAndPath,2160p)]">$LOCALIZE[32132] $LOCALIZE[32135]</value>
+		<value condition="Control.HasFocus(8010) + [String.StartsWith(Container(8010).ListItem.VideoResolution,1080) | String.Contains(Container(8010).ListItem.FileNameAndPath,1080p)]">$LOCALIZE[32136]</value>
+		<value condition="Control.HasFocus(8010) + [String.StartsWith(Container(8010).ListItem.VideoResolution,720) | String.Contains(Container(8010).ListItem.FileNameAndPath,720p)]">$LOCALIZE[32137]</value>
+		<value condition="Control.HasFocus(8010) + String.StartsWith(Container(8010).ListItem.VideoResolution,576)">$LOCALIZE[32138]</value>
+		<value condition="Control.HasFocus(8010) + String.StartsWith(Container(8010).ListItem.VideoResolution,540)">$LOCALIZE[32138]</value>
+		<value condition="Control.HasFocus(8010) + String.StartsWith(Container(8010).ListItem.VideoResolution,480)">$LOCALIZE[32138]</value>
+		<value condition="Control.HasFocus(4501) + [String.StartsWith(Container(4501).ListItem.VideoResolution,8K) | String.Contains(Container(4501).ListItem.FileNameAndPath,4320p)]">$LOCALIZE[32131]</value>
+		<value condition="Control.HasFocus(4501) + [String.StartsWith(Container(4501).ListItem.VideoResolution,4K) | String.Contains(Container(4501).ListItem.FileNameAndPath,2160p)] + String.Contains(Container(4501).ListItem.HDRType,dolbyvision)">$LOCALIZE[32132] $LOCALIZE[32133]</value>
+		<value condition="Control.HasFocus(4501) + [String.StartsWith(Container(4501).ListItem.VideoResolution,4K) | String.Contains(Container(4501).ListItem.FileNameAndPath,2160p)] + [String.Contains(Container(4501).ListItem.FilenameAndPath,DV) | String.Contains(Container(4501).ListItem.FilenameAndPath,Dolby.Vision)]">$LOCALIZE[32132] $LOCALIZE[32133]</value>
+		<value condition="Control.HasFocus(4501) + [String.StartsWith(Container(4501).ListItem.VideoResolution,4K) | String.Contains(Container(4501).ListItem.FileNameAndPath,2160p)] + String.Contains(Container(4501).ListItem.HDRType,hdr10)">$LOCALIZE[32132] $LOCALIZE[32134]</value>
+		<value condition="Control.HasFocus(4501) + [String.StartsWith(Container(4501).ListItem.VideoResolution,4K) | String.Contains(Container(4501).ListItem.FileNameAndPath,2160p)] + String.Contains(Container(4501).ListItem.HDRType,hlg)">$LOCALIZE[32132] $LOCALIZE[32139]</value>
+		<value condition="Control.HasFocus(4501) + [String.StartsWith(Container(4501).ListItem.VideoResolution,4K) | String.Contains(Container(4501).ListItem.FileNameAndPath,2160p)] + String.Contains(Container(4501).ListItem.FilenameAndPath,HDR)">$LOCALIZE[32132] $LOCALIZE[32134]</value>
+		<value condition="Control.HasFocus(4501) + [String.StartsWith(Container(4501).ListItem.VideoResolution,4K) | String.Contains(Container(4501).ListItem.FileNameAndPath,2160p)]">$LOCALIZE[32132] $LOCALIZE[32135]</value>
+		<value condition="Control.HasFocus(4501) + [String.StartsWith(Container(4501).ListItem.VideoResolution,1080) | String.Contains(Container(4501).ListItem.FileNameAndPath,1080p)]">$LOCALIZE[32136]</value>
+		<value condition="Control.HasFocus(4501) + [String.StartsWith(Container(4501).ListItem.VideoResolution,720) | String.Contains(Container(4501).ListItem.FileNameAndPath,720p)]">$LOCALIZE[32137]</value>
+		<value condition="Control.HasFocus(4501) + String.StartsWith(Container(4501).ListItem.VideoResolution,576)">$LOCALIZE[32138]</value>
+		<value condition="Control.HasFocus(4501) + String.StartsWith(Container(4501).ListItem.VideoResolution,540)">$LOCALIZE[32138]</value>
+		<value condition="Control.HasFocus(4501) + String.StartsWith(Container(4501).ListItem.VideoResolution,480)">$LOCALIZE[32138]</value>
+		<value condition="[String.StartsWith(ListItem.VideoResolution,8K) | String.Contains(ListItem.FileNameAndPath,4320p)]">$LOCALIZE[32131]</value>
+		<value condition="[String.StartsWith(ListItem.VideoResolution,4K) | String.Contains(ListItem.FileNameAndPath,2160p)] + String.Contains(ListItem.HDRType,dolbyvision)">$LOCALIZE[32132] $LOCALIZE[32133]</value>
+		<value condition="[String.StartsWith(ListItem.VideoResolution,4K) | String.Contains(ListItem.FileNameAndPath,2160p)] + [String.Contains(ListItem.FilenameAndPath,DV) | String.Contains(ListItem.FilenameAndPath,Dolby.Vision)]">$LOCALIZE[32132] $LOCALIZE[32133]</value>
+		<value condition="[String.StartsWith(ListItem.VideoResolution,4K) | String.Contains(ListItem.FileNameAndPath,2160p)] + String.Contains(ListItem.HDRType,hdr10)">$LOCALIZE[32132] $LOCALIZE[32134]</value>
+		<value condition="[String.StartsWith(ListItem.VideoResolution,4K) | String.Contains(ListItem.FileNameAndPath,2160p)] + String.Contains(ListItem.HDRType,hlg)">$LOCALIZE[32132] $LOCALIZE[32139]</value>
+		<value condition="[String.StartsWith(ListItem.VideoResolution,4K) | String.Contains(ListItem.FileNameAndPath,2160p)] + String.Contains(ListItem.FilenameAndPath,HDR)">$LOCALIZE[32132] $LOCALIZE[32134]</value>
+		<value condition="[String.StartsWith(ListItem.VideoResolution,4K) | String.Contains(ListItem.FileNameAndPath,2160p)]">$LOCALIZE[32132] $LOCALIZE[32135]</value>
+		<value condition="[String.StartsWith(ListItem.VideoResolution,1080) | String.Contains(ListItem.FileNameAndPath,1080p)]">$LOCALIZE[32136]</value>
+		<value condition="[String.StartsWith(ListItem.VideoResolution,720) | String.Contains(ListItem.FileNameAndPath,720p)]">$LOCALIZE[32137]</value>
+		<value condition="String.StartsWith(ListItem.VideoResolution,576)">$LOCALIZE[32138]</value>
+		<value condition="String.StartsWith(ListItem.VideoResolution,540)">$LOCALIZE[32138]</value>
+		<value condition="String.StartsWith(ListItem.VideoResolution,480)">$LOCALIZE[32138]</value>
+	</variable>
+	<!-- Seasons label: Season / Seasons -->
 	<variable name="Seasons_Label">
 		<value condition="Control.HasFocus(8030) + String.IsEqual(Container(8030).ListItem.Property(TotalSeasons),1)">$LOCALIZE[20373]</value>
 		<value condition="Control.HasFocus(8030)">$LOCALIZE[33054]</value>
@@ -1015,319 +1261,7 @@
 		<value condition="String.IsEqual(ListItem.Property(TotalSeasons),1)">$LOCALIZE[20373]</value>
 		<value>$LOCALIZE[33054]</value>
 	</variable>
-
-	<variable name="Albums_Label">
-		<!-- Album -->
-		<value condition="Integer.IsEqual(Container(50).NumItems,1)">$LOCALIZE[558]</value>
-		<!-- Albums -->
-		<value>$LOCALIZE[132]</value>
-	</variable>
-
-	<variable name="PlotType_Label">
-		<!-- Bio -->
-		<value condition="String.IsEqual(ListItem.DBType,artist)">$LOCALIZE[21887]</value>
-		<!-- Review -->
-		<value condition="String.IsEqual(ListItem.DBType,album)">$LOCALIZE[183]</value>
-		<!-- Plot -->
-		<value>$LOCALIZE[207]</value>
-	</variable>
-
-	<variable name="TrackNumber_Label">
-		<value condition="String.IsEqual(ListItem.TrackNumber,01)">1</value>
-		<value condition="String.IsEqual(ListItem.TrackNumber,02)">2</value>
-		<value condition="String.IsEqual(ListItem.TrackNumber,03)">3</value>
-		<value condition="String.IsEqual(ListItem.TrackNumber,04)">4</value>
-		<value condition="String.IsEqual(ListItem.TrackNumber,05)">5</value>
-		<value condition="String.IsEqual(ListItem.TrackNumber,06)">6</value>
-		<value condition="String.IsEqual(ListItem.TrackNumber,07)">7</value>
-		<value condition="String.IsEqual(ListItem.TrackNumber,08)">8</value>
-		<value condition="String.IsEqual(ListItem.TrackNumber,09)">9</value>
-		<value>$INFO[ListItem.TrackNumber]</value>
-	</variable>
-
-	<variable name="OSD_Label">
-		<!-- Seek bar -->
-		<value condition="Control.HasFocus(87)">$LOCALIZE[10115]</value>
-		<!-- OSD controls -->
-		<value condition="Window.IsVisible(videoosd)">$INFO[Window(videoosd).Property(VideoOSD_Controls)]</value>
-		<value condition="Window.IsVisible(musicosd)">$INFO[Window(musicosd).Property(MusicOSD_Controls)]</value>
-	</variable>
-
-
-
-	<variable name="Appearances_Label">
-		<!-- Credit -->
-		<value condition="!String.IsEmpty(ListItem.Appearances) + String.IsEqual(ListItem.Appearances,1)">$LOCALIZE[32125]</value>
-		<!-- Credits -->
-		<value>$LOCALIZE[470]</value>
-	</variable>
-
-	<variable name="Appearances_Label_2">
-		<!-- for -->
-		<value condition="!String.IsEmpty(ListItem.Appearances) + String.IsEqual(ListItem.Appearances,1)">$LOCALIZE[32126]</value>
-		<!-- including -->
-		<value>$LOCALIZE[32127]</value>
-	</variable>
-
-	<variable name="MPAA_Flag">
-		<!-- videoplayer -->
-		<value condition="VideoPlayer.IsFullscreen + String.Contains(VideoPlayer.mpaa,U)">flags/rating/bbfc_u.png</value>
-		<value condition="VideoPlayer.IsFullscreen + String.Contains(VideoPlayer.mpaa,PG)">flags/rating/bbfc_pg.png</value>
-		<value condition="VideoPlayer.IsFullscreen + String.Contains(VideoPlayer.mpaa,12)">flags/rating/bbfc_12.png</value>
-		<value condition="VideoPlayer.IsFullscreen + String.Contains(VideoPlayer.mpaa,15)">flags/rating/bbfc_15.png</value>
-		<value condition="VideoPlayer.IsFullscreen + [String.Contains(VideoPlayer.mpaa,18) | String.Contains(VideoPlayer.mpaa,UK:X)]">flags/rating/bbfc_18.png</value>
-		<!-- Secondary List -->
-		<value condition="Control.HasFocus(4501) + String.Contains(Container(4501).ListItem.mpaa,U)">flags/rating/bbfc_u.png</value>
-		<value condition="Control.HasFocus(4501) + String.Contains(Container(4501).ListItem.mpaa,PG)">flags/rating/bbfc_pg.png</value>
-		<value condition="Control.HasFocus(4501) + String.Contains(Container(4501).ListItem.mpaa,12)">flags/rating/bbfc_12.png</value>
-		<value condition="Control.HasFocus(4501) + String.Contains(Container(4501).ListItem.mpaa,15)">flags/rating/bbfc_15.png</value>
-		<!-- Sets -->
-		<value condition="Control.HasFocus(4501) + [String.Contains(Container(4501).ListItem.mpaa,18) | String.Contains(Container(4501).ListItem.mpaa,UK:X)]">flags/rating/bbfc_18.png</value>
-		<value condition="ListItem.IsCollection + Skin.HasSetting(Secondary_List_Enabled) + String.Contains(Container(4501).ListItem.mpaa,U)">flags/rating/bbfc_u.png</value>
-		<value condition="ListItem.IsCollection + Skin.HasSetting(Secondary_List_Enabled) + String.Contains(Container(4501).ListItem.mpaa,PG)">flags/rating/bbfc_pg.png</value>
-		<value condition="ListItem.IsCollection + Skin.HasSetting(Secondary_List_Enabled) + String.Contains(Container(4501).ListItem.mpaa,12)">flags/rating/bbfc_12.png</value>
-		<value condition="ListItem.IsCollection + Skin.HasSetting(Secondary_List_Enabled) + String.Contains(Container(4501).ListItem.mpaa,15)">flags/rating/bbfc_15.png</value>
-		<value condition="ListItem.IsCollection + Skin.HasSetting(Secondary_List_Enabled) + [String.Contains(Container(4501).ListItem.mpaa,18) | String.Contains(Container(4501).ListItem.mpaa,UK:X)]">flags/rating/bbfc_18.png</value>
-		<value condition="ListItem.IsCollection + !Skin.HasSetting(Secondary_List_Enabled) + String.Contains(Container(4500).ListItem.mpaa,U)">flags/rating/bbfc_u.png</value>
-		<value condition="ListItem.IsCollection + !Skin.HasSetting(Secondary_List_Enabled) + String.Contains(Container(4500).ListItem.mpaa,PG)">flags/rating/bbfc_pg.png</value>
-		<value condition="ListItem.IsCollection + !Skin.HasSetting(Secondary_List_Enabled) + String.Contains(Container(4500).ListItem.mpaa,12)">flags/rating/bbfc_12.png</value>
-		<value condition="ListItem.IsCollection + !Skin.HasSetting(Secondary_List_Enabled) + String.Contains(Container(4500).ListItem.mpaa,15)">flags/rating/bbfc_15.png</value>
-		<value condition="ListItem.IsCollection + !Skin.HasSetting(Secondary_List_Enabled) + [String.Contains(Container(4500).ListItem.mpaa,18) | String.Contains(Container(4500).ListItem.mpaa,UK:X)]">flags/rating/bbfc_18.png</value>
-		<!-- Standard -->
-		<value condition="String.Contains(ListItem.mpaa,U)">flags/rating/bbfc_u.png</value>
-		<value condition="String.Contains(ListItem.mpaa,PG)">flags/rating/bbfc_pg.png</value>
-		<value condition="String.Contains(ListItem.mpaa,12)">flags/rating/bbfc_12.png</value>
-		<value condition="String.Contains(ListItem.mpaa,15)">flags/rating/bbfc_15.png</value>
-		<value condition="String.Contains(ListItem.mpaa,18) | String.Contains(ListItem.mpaa,UK:X)">flags/rating/bbfc_18.png</value>
-		<value>flags/blank.png</value>
-	</variable>
-
-	<variable name="Studio_Flag">
-		<value condition="VideoPlayer.IsFullscreen + !String.IsEmpty(VideoPlayer.Studio)">$INFO[VideoPlayer.Studio,flags/studios/,.png]</value>
-		<value condition="Control.HasFocus(4501) + !String.IsEmpty(Container(4501).ListItem.Studio)">$INFO[Container(4501).ListItem.Studio,flags/studios/,.png]</value>
-		<value condition="ListItem.IsCollection + Skin.HasSetting(Secondary_List_Enabled) + !String.IsEmpty(Container(4501).ListItem.Studio)">$INFO[Container(4501).ListItem.Studio,flags/studios/,.png]</value>
-		<value condition="ListItem.IsCollection + !Skin.HasSetting(Secondary_List_Enabled) + !String.IsEmpty(Container(4500).ListItem.Studio)">$INFO[Container(4500).ListItem.Studio,flags/studios/,.png]</value>
-		<value condition="!String.IsEmpty(ListItem.Studio)">$INFO[ListItem.Studio,flags/studios/,.png]</value>
-		<value>flags/blank.png</value>
-	</variable>
-
-	<variable name="VideoSource_Flag">
-		<!-- fullscreeninfo -->
-		<value condition="VideoPlayer.IsFullscreen + [String.Contains(Player.FilenameAndPath,bluray) | String.Contains(Player.FilenameAndPath,blu-ray) | String.Contains(Player.FilenameAndPath,brrip) | String.Contains(Player.FilenameAndPath,bdrip) | String.Contains(Player.FilenameAndPath,.m2ts,Right) | String.Contains(Player.FilenameAndPath,.bdmv,Right) | String.Contains(Player.FilenameAndPath,bd25) | String.Contains(Player.FilenameAndPath,bd50)] + [String.Contains(Plyer.FilenameAndPath,uhd) | String.Contains(Player.FilenameAndPath,2160p)]">flags/source/uhd-bluray.png</value>
-		<value condition="VideoPlayer.IsFullscreen + [String.Contains(Player.FilenameAndPath,bluray) | String.Contains(Player.FilenameAndPath,blu-ray) | String.Contains(Player.FilenameAndPath,brrip) | String.Contains(Player.FilenameAndPath,bdrip) | String.Contains(Player.FilenameAndPath,.m2ts,Right) | String.Contains(Player.FilenameAndPath,.bdmv,Right) | String.Contains(Player.FilenameAndPath,bd25) | String.Contains(Player.FilenameAndPath,bd50)] + String.Contains(Player.FilenameAndPath,3d)">flags/source/bluray3d.png</value>
-		<value condition="VideoPlayer.IsFullscreen + [String.Contains(Player.FilenameAndPath,bluray) | String.Contains(Player.FilenameAndPath,blu-ray) | String.Contains(Player.FilenameAndPath,brrip) | String.Contains(Player.FilenameAndPath,bdrip) | String.Contains(Player.FilenameAndPath,.m2ts,Right) | String.Contains(Player.FilenameAndPath,.bdmv,Right) | String.Contains(Player.FilenameAndPath,bd25) | String.Contains(Player.FilenameAndPath,bd50)] + String.Contains(Player.FilenameAndPath,imax)">flags/source/imax.png</value>
-		<value condition="VideoPlayer.IsFullscreen + [String.Contains(Player.FilenameAndPath,bluray) | String.Contains(Player.FilenameAndPath,blu-ray) | String.Contains(Player.FilenameAndPath,brrip) | String.Contains(Player.FilenameAndPath,bdrip) | String.Contains(Player.FilenameAndPath,.m2ts,Right) | String.Contains(Player.FilenameAndPath,.bdmv,Right) | String.Contains(Player.FilenameAndPath,bd25) | String.Contains(Player.FilenameAndPath,bd50)]">flags/source/bluray.png</value>
-		<value condition="VideoPlayer.IsFullscreen + [String.Contains(Player.FilenameAndPath,.NF.) | String.Contains(Player.FilenameAndPath,Netflix) | String.IsEqual(VideoPlayer.Studio,Netflix)]">flags/source/netflix.png</value>
-		<value condition="VideoPlayer.IsFullscreen + [String.Contains(Player.FilenameAndPath,DSNP) | String.Contains(Player.FilenameAndPath,Disney) | String.Contains(VideoPlayer.Studio,Disney)]">flags/source/disney+.png</value>
-		<value condition="VideoPlayer.IsFullscreen + [String.Contains(Player.FilenameAndPath,AMZN) | String.Contains(Player.FilenameAndPath,Amazon) | String.IsEqual(VideoPlayer.Studio,Amazon)]">flags/source/amazon.png</value>
-		<value condition="VideoPlayer.IsFullscreen + [String.Contains(Player.FilenameAndPath,HMAX) | String.Contains(Player.FilenameAndPath,HBO) | String.IsEqual(VideoPlayer.Studio,HBO Max)]">flags/source/hbomax.png</value>
-		<value condition="VideoPlayer.IsFullscreen + [String.Contains(Player.FilenameAndPath,HULU) | String.IsEqual(VideoPlayer.Studio,Hulu)]">flags/source/hulu.png</value>
-		<value condition="VideoPlayer.IsFullscreen + [String.Contains(Player.FilenameAndPath,ATVP) | String.Contains(VideoPlayer.Studio,Apple)] ">flags/source/apple.png</value>
-		<value condition="VideoPlayer.IsFullscreen + String.Contains(Player.FilenameAndPath,web) + [String.Contains(Player.FilenameAndPath,dl) | String.Contains(Player.FilenameAndPath,rip)]">flags/source/webtv.png</value>
-		<value condition="VideoPlayer.IsFullscreen + [String.Contains(Player.FilenameAndPath,hddvd) | String.Contains(Player.FilenameAndPath,hd-dvd) | String.Contains(Player.FilenameAndPath,.evo,Right)]">flags/source/hddvd.png</value>
-		<value condition="VideoPlayer.IsFullscreen + [String.Contains(Player.FilenameAndPath,.ifo,Right) | String.Contains(Player.FilenameAndPath,.iso,Right) | String.Contains(Player.FilenameAndPath,dvd)]">flags/source/dvd.png</value>
-		<value condition="VideoPlayer.IsFullscreen + String.Contains(Player.FilenameAndPath,hd) + String.Contains(Player.FilenameAndPath,tv)">flags/source/hdtv.png</value>
-		<value condition="VideoPlayer.IsFullscreen + [[String.Contains(Player.FilenameAndPath,sd) + String.Contains(Player.FilenameAndPath,tv)] | [String.Contains(Player.FilenameAndPath,pd) + String.Contains(Player.FilenameAndPath,tv)] | String.Contains(Player.FilenameAndPath,dsr)]]">flags/source/sdtv.png</value>
-		<value condition="String.Contains(Player.FilenameAndPath,vhs)">flags/source/vhs.png</value>
-		<value condition="String.Contains(Player.FilenameAndPath,dvhs)">flags/source/dvhs.png</value>
-		<value condition="String.Contains(Player.FilenameAndPath,dtheater)">flags/source/dtheater.png</value>
-		<!-- DISC -->
-		<value condition="[String.Contains(ListItem.FilenameAndPath,bluray) | String.Contains(ListItem.FilenameAndPath,blu-ray) | String.Contains(ListItem.FilenameAndPath,brrip) | String.Contains(ListItem.FilenameAndPath,bdrip) | String.Contains(ListItem.FilenameAndPath,.m2ts,Right) | String.Contains(ListItem.FilenameAndPath,.bdmv,Right) | String.Contains(ListItem.FilenameAndPath,bd25) | String.Contains(ListItem.FilenameAndPath,bd50)] + [String.Contains(ListItem.FilenameAndPath,uhd) | String.Contains(ListItem.FilenameAndPath,2160p)]">flags/source/uhd-bluray.png</value>
-		<value condition="[String.Contains(ListItem.FilenameAndPath,bluray) | String.Contains(ListItem.FilenameAndPath,blu-ray) | String.Contains(ListItem.FilenameAndPath,brrip) | String.Contains(ListItem.FilenameAndPath,bdrip) | String.Contains(ListItem.FilenameAndPath,.m2ts,Right) | String.Contains(ListItem.FilenameAndPath,.bdmv,Right) | String.Contains(ListItem.FilenameAndPath,bd25) | String.Contains(ListItem.FilenameAndPath,bd50)] + String.Contains(ListItem.FilenameAndPath,3d)">flags/source/bluray3d.png</value>
-		<value condition="[String.Contains(ListItem.FilenameAndPath,bluray) | String.Contains(ListItem.FilenameAndPath,blu-ray) | String.Contains(ListItem.FilenameAndPath,brrip) | String.Contains(ListItem.FilenameAndPath,bdrip) | String.Contains(ListItem.FilenameAndPath,.m2ts,Right) | String.Contains(ListItem.FilenameAndPath,.bdmv,Right) | String.Contains(ListItem.FilenameAndPath,bd25) | String.Contains(ListItem.FilenameAndPath,bd50)] + String.Contains(ListItem.FilenameAndPath,imax)">flags/source/imax.png</value>
-		<value condition="[String.Contains(ListItem.FilenameAndPath,bluray) | String.Contains(ListItem.FilenameAndPath,blu-ray) | String.Contains(ListItem.FilenameAndPath,brrip) | String.Contains(ListItem.FilenameAndPath,bdrip) | String.Contains(ListItem.FilenameAndPath,.m2ts,Right) | String.Contains(ListItem.FilenameAndPath,.bdmv,Right) | String.Contains(ListItem.FilenameAndPath,bd25) | String.Contains(ListItem.FilenameAndPath,bd50)]">flags/source/bluray.png</value>
-		<!-- WEB -->
-		<value condition="[String.Contains(ListItem.FilenameAndPath,.NF.) | String.Contains(ListItem.FilenameAndPath,Netflix) | String.IsEqual(ListItem.Studio,Netflix)]">flags/source/netflix.png</value>
-		<value condition="[String.Contains(ListItem.FilenameAndPath,DSNP) | String.Contains(ListItem.FilenameAndPath,Disney) | String.Contains(ListItem.Studio,Disney)]">flags/source/disney+.png</value>
-		<value condition="[String.Contains(ListItem.FilenameAndPath,AMZN) | String.Contains(ListItem.FilenameAndPath,Amazon) | String.IsEqual(ListItem.Studio,Amazon)]">flags/source/amazon.png</value>
-		<value condition="[String.Contains(ListItem.FilenameAndPath,HMAX) | String.Contains(ListItem.FilenameAndPath,HBO) | String.IsEqual(ListItem.Studio,HBO Max)]">flags/source/hbomax.png</value>
-		<value condition="[String.Contains(ListItem.FilenameAndPath,HULU) | String.IsEqual(ListItem.Studio,Hulu)]">flags/source/hulu.png</value>
-		<value condition="[String.Contains(ListItem.FilenameAndPath,ATVP) | String.Contains(ListItem.Studio,Apple)] ">flags/source/apple.png</value>
-		<value condition="String.Contains(ListItem.FilenameAndPath,web) + [String.Contains(ListItem.FilenameAndPath,dl) | String.Contains(ListItem.FilenameAndPath,rip)]">flags/source/webtv.png</value>
-		<!-- Legacy formats -->
-		<value condition="String.Contains(ListItem.FilenameAndPath,hddvd) | String.Contains(ListItem.FilenameAndPath,hd-dvd) | String.Contains(ListItem.FilenameAndPath,.evo,Right)">flags/source/hddvd.png</value>
-		<value condition="String.Contains(ListItem.FilenameAndPath,.ifo,Right) | String.Contains(ListItem.FilenameAndPath,.iso,Right) | String.Contains(ListItem.FilenameAndPath,dvd)">flags/source/dvd.png</value>
-		<value condition="String.Contains(ListItem.FilenameAndPath,hd) + String.Contains(ListItem.FilenameAndPath,tv)">flags/source/hdtv.png</value>
-		<value condition="[String.Contains(ListItem.FilenameAndPath,sd) + String.Contains(ListItem.FilenameAndPath,tv)] | [String.Contains(ListItem.FilenameAndPath,pd) + String.Contains(ListItem.FilenameAndPath,tv)] | String.Contains(ListItem.FilenameAndPath,dsr)">flags/source/sdtv.png</value>
-		<value condition="String.Contains(ListItem.FilenameAndPath,vhs)">flags/source/vhs.png</value>
-		<value condition="String.Contains(ListItem.FilenameAndPath,dvhs)">flags/source/dvhs.png</value>
-		<value condition="String.Contains(ListItem.FilenameAndPath,dtheater)">flags/source/dtheater.png</value>
-		<value>flags/blank.png</value>
-	</variable>
-
-	<variable name="VideoCodec_Flag">
-		<!-- fullscreeninfo -->
-		<value condition="VideoPlayer.IsFullscreen + String.IsEqual(VideoPlayer.HDRType,dolbyvision)">flags/video/dolbyvision.png</value>
-		<value condition="VideoPlayer.IsFullscreen + String.IsEqual(VideoPlayer.HDRType,hdr10)">flags/video/hdr.png</value>
-		<value condition="VideoPlayer.IsFullscreen + String.IsEqual(VideoPlayer.HDRType,hlg)">flags/video/hdr.png</value>
-		<value condition="VideoPlayer.IsFullscreen + [[String.Contains(Player.FilenameAndPath,dolby.vision) | String.Contains(Player.FilenameAndPath,.DoVi.) | String.Contains(Player.FilenameAndPath,.DV.)] + String.Contains(Player.FilenameAndPath,atmos)]">flags/video/dolbyvisionatmos.png</value>
-		<value condition="VideoPlayer.IsFullscreen + [String.Contains(Player.FilenameAndPath,dolby.vision) | String.Contains(Player.FilenameAndPath,.DV.)]">flags/video/dolbyvision.png</value>
-		<value condition="VideoPlayer.IsFullscreen + String.Contains(Player.FilenameAndPath,hdr)">flags/video/hdr.png</value>
-		<value condition="VideoPlayer.IsFullscreen + !String.IsEmpty(VideoPlayer.VideoCodec)">$INFO[VideoPlayer.VideoCodec,flags/video/,.png]</value>
-		<value condition="VideoPlayer.IsFullscreen + [String.Contains(Player.FilenameAndPath,hevc) | String.Contains(Player.FilenameAndPath,x265)]">flags/video/hevc.png</value>
-		<value condition="VideoPlayer.IsFullscreen + [String.Contains(Player.FilenameAndPath,h264) | String.Contains(Player.FilenameAndPath,x264)]">flags/video/h264.png</value>
-		<!-- standard -->
-		<value condition="String.IsEqual(ListItem.HDRType,dolbyvision)">flags/video/dolbyvision.png</value>
-		<value condition="String.IsEqual(ListItem.HDRType,hdr10)">flags/video/hdr.png</value>
-		<value condition="String.IsEqual(ListItem.HDRType,hlg)">flags/video/hdr.png</value>
-		<value condition="[String.Contains(ListItem.FilenameAndPath,dolby.vision) | String.Contains(ListItem.FilenameAndPath,.DoVi.) | String.Contains(ListItem.FilenameAndPath,.DV.)] + String.Contains(ListItem.FilenameAndPath,atmos)">flags/video/dolbyvisionatmos.png</value>
-		<value condition="String.Contains(ListItem.FilenameAndPath,dolby.vision) | String.Contains(ListItem.FilenameAndPath,.DV.)">flags/video/dolbyvision.png</value>
-		<value condition="String.Contains(ListItem.FilenameAndPath,hdr)">flags/video/hdr.png</value>
-		<value condition="!String.IsEmpty(ListItem.VideoCodec)">$INFO[ListItem.VideoCodec,flags/video/,.png]</value>
-		<value condition="String.Contains(ListItem.FilenameAndPath,hevc) | String.Contains(ListItem.FilenameAndPath,x265)">flags/video/hevc.png</value>
-		<value condition="String.Contains(ListItem.FilenameAndPath,h264) | String.Contains(ListItem.FilenameAndPath,x264)">flags/video/h264.png</value>
-		<value>flags/blank.png</value>
-	</variable>
-
-	<variable name="AudioCodec_Flag">
-		<!-- fullscreeninfo -->
-		<value condition="VideoPlayer.IsFullscreen + !String.IsEmpty(VideoPlayer.AudioCodec)">$INFO[VideoPlayer.AudioCodec,flags/audio/,.png]</value>
-		<value condition="VideoPlayer.IsFullscreen + String.Contains(Player.FilenameAndPath,.DTS-HD.MA)">flags/audio/dtshd_ma.png</value>
-		<value condition="VideoPlayer.IsFullscreen + String.Contains(Player.FilenameAndPath,.EAC3)">flags/audio/eac3.png</value>
-		<value condition="VideoPlayer.IsFullscreen + String.Contains(Player.FilenameAndPath,.DD) | String.Contains(Player.FilenameAndPath,.AC3)">flags/audio/ac3.png</value>
-		<!-- standard -->
-		<value condition="!String.IsEmpty(ListItem.AudioCodec)">$INFO[ListItem.AudioCodec,flags/audio/,.png]</value>
-		<value condition="String.Contains(ListItem.FilenameAndPath,.DTS-HD.MA)">flags/audio/dtshd_ma.png</value>
-		<value condition="String.Contains(ListItem.FilenameAndPath,.EAC3)">flags/audio/eac3.png</value>
-		<value condition="String.Contains(ListItem.FilenameAndPath,.DD) | String.Contains(ListItem.FilenameAndPath,.AC3)">flags/audio/ac3.png</value>
-		<value>flags/blank.png</value>
-	</variable>
-
-	<variable name="AudioCodec_Label">
-			<value condition="VideoPlayer.IsFullscreen + !String.IsEmpty(VideoPlayer.AudioCodec)">[UPPERCASE]$INFO[VideoPlayer.AudioCodec][/UPPERCASE]</value>
-			<value condition="VideoPlayer.IsFullscreen + String.Contains(Player.FilenameAndPath,.DTS-HD.MA)">DTS-HD.MA</value>
-			<value condition="VideoPlayer.IsFullscreen + String.Contains(Player.FilenameAndPath,.EAC3)">EAC3</value>
-			<value condition="VideoPlayer.IsFullscreen + [String.Contains(Player.FilenameAndPath,.DD) | String.Contains(Player.FilenameAndPath,.AC3)]">AC3</value>
-			<value condition="!String.IsEmpty(ListItem.AudioCodec)">[UPPERCASE]$INFO[ListItem.AudioCodec][/UPPERCASE]</value>
-			<value condition="String.Contains(ListItem.FilenameAndPath,.DTS-HD.MA)">DTS-HD.MA</value>
-			<value condition="String.Contains(ListItem.FilenameAndPath,.EAC3)">EAC3</value>
-			<value condition="String.Contains(ListItem.FilenameAndPath,.DD) | String.Contains(ListItem.FilenameAndPath,.AC3)">AC3</value>
-		</variable>
-
-
-	<variable name="Resolution_Label">
-		<!-- VideoPlayer -->``
-		<!-- 8K -->
-		<value condition="VideoPlayer.IsFullscreen + [String.StartsWith(VideoPlayer.VideoResolution,8K) | String.Contains(Player.FileNameAndPath,4320p)]">$LOCALIZE[32131]</value>
-		<!-- 4K Dolby Vision -->
-		<value condition="VideoPlayer.IsfullScreen + [String.StartsWith(VideoPlayer.VideoResolution,4K) | String.Contains(Player.FileNameAndPath,2160p)] + String.Contains(VideoPlayer.HDRType,dolbyvision)">$LOCALIZE[32132] $LOCALIZE[32133]</value>
-		<value condition="VideoPlayer.IsFullscreen + [String.StartsWith(VideoPlayer.VideoResolution,4K) | String.Contains(Player.FileNameAndPath,2160p)] + [String.Contains(Player.FilenameAndPath,DV) | String.Contains(Player.FilenameAndPath,Dolby.Vision)]">$LOCALIZE[32132] $LOCALIZE[32133]</value>
-		<!-- 4K HDR -->
-		<value condition="VideoPlayer.IsFullscreen + [String.StartsWith(VideoPlayer.VideoResolution,4K) | String.Contains(Player.FileNameAndPath,2160p)] + String.Contains(VideoPlayer.HDRType,hdr10)">$LOCALIZE[32132] $LOCALIZE[32134]</value>
-		<value condition="VideoPlayer.IsFullscreen + [String.StartsWith(VideoPlayer.VideoResolution,4K) | String.Contains(Player.FileNameAndPath,2160p)] + String.Contains(VideoPlayer.HDRType,hlg)">$LOCALIZE[32132] $LOCALIZE[32139]</value>
-		<value condition="VideoPlayer.IsFullscreen + [String.StartsWith(VideoPlayer.VideoResolution,4K) | String.Contains(Player.FileNameAndPath,2160p)] + String.Contains(Player.FilenameAndPath,HDR)">$LOCALIZE[32132] $LOCALIZE[32134]</value>
-		<!-- 4K Ultra HD -->
-		<value condition="VideoPlayer.IsFullscreen + [String.StartsWith(VideoPlayer.VideoResolution,4K) | String.Contains(Player.FileNameAndPath,2160p)]">$LOCALIZE[32132] $LOCALIZE[32135]</value>
-			<!-- Full HD -->
-		<value condition="VideoPlayer.IsFullscreen + [String.StartsWith(VideoPlayer.VideoResolution,1080) | String.Contains(Player.FileNameAndPath,1080p)]">$LOCALIZE[32136]</value>
-		<!-- HD -->
-		<value condition="VideoPlayer.IsFullscreen + [String.StartsWith(VideoPlayer.VideoResolution,720) | String.Contains(Player.FileNameAndPath,720p)]">$LOCALIZE[32137]</value>
-		<!-- SD -->
-		<value condition="VideoPlayer.IsFullscreen + String.StartsWith(VideoPlayer.VideoResolution,576)">$LOCALIZE[32138]</value>
-		<value condition="VideoPlayer.IsFullscreen + String.StartsWith(VideoPlayer.VideoResolution,540)">$LOCALIZE[32138]</value>
-		<value condition="VideoPlayer.IsFullscreen + String.StartsWith(VideoPlayer.VideoResolution,480)">$LOCALIZE[32138]</value>
-		<!-- 8060 -->
-		<!-- 8K -->
-		<value condition="Control.HasFocus(8060) + [String.StartsWith(Container(8060).ListItem.VideoResolution,8K) | String.Contains(Container(8060).ListItem.FileNameAndPath,4320p)]">$LOCALIZE[32131]</value>
-		<!-- 4K Dolby Vision -->
-		<value condition="Control.HasFocus(8060) + [String.StartsWith(Container(8060).ListItem.VideoResolution,4K) | String.Contains(Container(8060).ListItem.FileNameAndPath,2160p)] + String.Contains(Container(8060).ListItem.HDRType,dolbyvision)">$LOCALIZE[32132] $LOCALIZE[32133]</value>
-		<value condition="Control.HasFocus(8060) + [String.StartsWith(Container(8060).ListItem.VideoResolution,4K) | String.Contains(Container(8060).ListItem.FileNameAndPath,2160p)] + [String.Contains(Container(8060).ListItem.FilenameAndPath,DV) | String.Contains(Container(8060).ListItem.FilenameAndPath,Dolby.Vision)]">$LOCALIZE[32132] $LOCALIZE[32133]</value>
-		<!-- 4K HDR -->
-		<value condition="Control.HasFocus(8060) + [String.StartsWith(Container(8060).ListItem.VideoResolution,4K) | String.Contains(Container(8060).ListItem.FileNameAndPath,2160p)] + String.Contains(Container(8060).ListItem.HDRType,hdr10)">$LOCALIZE[32132] $LOCALIZE[32134]</value>
-		<value condition="Control.HasFocus(8060) + [String.StartsWith(Container(8060).ListItem.VideoResolution,4K) | String.Contains(Container(8060).ListItem.FileNameAndPath,2160p)] + String.Contains(Container(8060).ListItem.HDRType,hlg)">$LOCALIZE[32132] $LOCALIZE[32139]</value>
-		<value condition="Control.HasFocus(8060) + [String.StartsWith(Container(8060).ListItem.VideoResolution,4K) | String.Contains(Container(8060).ListItem.FileNameAndPath,2160p)] + String.Contains(Container(8060).ListItem.FilenameAndPath,HDR)">$LOCALIZE[32132] $LOCALIZE[32134]</value>
-		<!-- 4K UHD -->
-		<value condition="Control.HasFocus(8060) + [String.StartsWith(Container(8060).ListItem.VideoResolution,4K) | String.Contains(Container(8060).ListItem.FileNameAndPath,2160p)]">$LOCALIZE[32132] $LOCALIZE[32135]</value>
-		<!-- Full HD -->
-		<value condition="Control.HasFocus(8060) + [String.StartsWith(Container(8060).ListItem.VideoResolution,1080) | String.Contains(Container(8060).ListItem.FileNameAndPath,1080p)]">$LOCALIZE[32136]</value>
-		<!-- HD -->
-		<value condition="Control.HasFocus(8060) + [String.StartsWith(Container(8060).ListItem.VideoResolution,720) | String.Contains(Container(8060).ListItem.FileNameAndPath,720p)]">$LOCALIZE[32137]</value>
-		<!-- SD -->
-		<value condition="Control.HasFocus(8060) + String.StartsWith(Container(8060).ListItem.VideoResolution,576)">$LOCALIZE[32138]</value>
-		<value condition="Control.HasFocus(8060) + String.StartsWith(Container(8060).ListItem.VideoResolution,540)">$LOCALIZE[32138]</value>
-		<value condition="Control.HasFocus(8060) + String.StartsWith(Container(8060).ListItem.VideoResolution,480)">$LOCALIZE[32138]</value>
-		<!-- 8050 -->
-		<!-- 8K -->
-		<value condition="Control.HasFocus(8050) + [String.StartsWith(Container(8050).ListItem.VideoResolution,8K) | String.Contains(Container(8050).ListItem.FileNameAndPath,4320p)]">$LOCALIZE[32131]</value>
-		<!-- 4K Dolby Vision -->
-		<value condition="Control.HasFocus(8050) + [String.StartsWith(Container(8050).ListItem.VideoResolution,4K) | String.Contains(Container(8050).ListItem.FileNameAndPath,2160p)] + String.Contains(Container(8050).ListItem.HDRType,dolbyvision)">$LOCALIZE[32132] $LOCALIZE[32133]</value>
-		<value condition="Control.HasFocus(8050) + [String.StartsWith(Container(8050).ListItem.VideoResolution,4K) | String.Contains(Container(8050).ListItem.FileNameAndPath,2160p)] + [String.Contains(Container(8050).ListItem.FilenameAndPath,DV) | String.Contains(Container(8050).ListItem.FilenameAndPath,Dolby.Vision)]">$LOCALIZE[32132] $LOCALIZE[32133]</value>
-		<!-- 4K HDR -->
-		<value condition="Control.HasFocus(8050) + [String.StartsWith(Container(8050).ListItem.VideoResolution,4K) | String.Contains(Container(8050).ListItem.FileNameAndPath,2160p)] + String.Contains(Container(8050).ListItem.HDRType,hdr10)">$LOCALIZE[32132] $LOCALIZE[32134]</value>
-		<value condition="Control.HasFocus(8050) + [String.StartsWith(Container(8050).ListItem.VideoResolution,4K) | String.Contains(Container(8050).ListItem.FileNameAndPath,2160p)] + String.Contains(Container(8050).ListItem.HDRType,hlg)">$LOCALIZE[32132] $LOCALIZE[32139]</value>
-		<value condition="Control.HasFocus(8050) + [String.StartsWith(Container(8050).ListItem.VideoResolution,4K) | String.Contains(Container(8050).ListItem.FileNameAndPath,2160p)] + String.Contains(Container(8050).ListItem.FilenameAndPath,HDR)">$LOCALIZE[32132] $LOCALIZE[32134]</value>
-		<!-- 4K UHD -->
-		<value condition="Control.HasFocus(8050) + [String.StartsWith(Container(8050).ListItem.VideoResolution,4K) | String.Contains(Container(8050).ListItem.FileNameAndPath,2160p)]">$LOCALIZE[32132] $LOCALIZE[32135]</value>
-		<!-- Full HD -->
-		<value condition="Control.HasFocus(8050) + [String.StartsWith(Container(8050).ListItem.VideoResolution,1080) | String.Contains(Container(8050).ListItem.FileNameAndPath,1080p)]">$LOCALIZE[32136]</value>
-		<!-- HD -->
-		<value condition="Control.HasFocus(8050) + [String.StartsWith(Container(8050).ListItem.VideoResolution,720) | String.Contains(Container(8050).ListItem.FileNameAndPath,720p)]">$LOCALIZE[32137]</value>
-		<!-- SD -->
-		<value condition="Control.HasFocus(8050) + String.StartsWith(Container(8050).ListItem.VideoResolution,576)">$LOCALIZE[32138]</value>
-		<value condition="Control.HasFocus(8050) + String.StartsWith(Container(8050).ListItem.VideoResolution,540)">$LOCALIZE[32138]</value>
-		<value condition="Control.HasFocus(8050) + String.StartsWith(Container(8050).ListItem.VideoResolution,480)">$LOCALIZE[32138]</value>
-		<!-- 8040 -->
-		<!-- 8K -->
-		<value condition="Control.HasFocus(8010) + [String.StartsWith(Container(8010).ListItem.VideoResolution,8K) | String.Contains(Container(8010).ListItem.FileNameAndPath,4320p)]">$LOCALIZE[32131]</value>
-		<!-- 4K Dolby Vision -->
-		<value condition="Control.HasFocus(8010) + [String.StartsWith(Container(8010).ListItem.VideoResolution,4K) | String.Contains(Container(8010).ListItem.FileNameAndPath,2160p)] + String.Contains(Container(8010).ListItem.HDRType,dolbyvision)">$LOCALIZE[32132] $LOCALIZE[32133]</value>
-		<value condition="Control.HasFocus(8010) + [String.StartsWith(Container(8010).ListItem.VideoResolution,4K) | String.Contains(Container(8010).ListItem.FileNameAndPath,2160p)] + [String.Contains(Container(8010).ListItem.FilenameAndPath,DV) | String.Contains(Container(8010).ListItem.FilenameAndPath,Dolby.Vision)]">$LOCALIZE[32132] $LOCALIZE[32133]</value>
-		<!-- 4K HDR -->
-		<value condition="Control.HasFocus(8010) + [String.StartsWith(Container(8010).ListItem.VideoResolution,4K) | String.Contains(Container(8010).ListItem.FileNameAndPath,2160p)] + String.Contains(Container(8010).ListItem.HDRType,hdr10)">$LOCALIZE[32132] $LOCALIZE[32134]</value>
-		<value condition="Control.HasFocus(8010) + [String.StartsWith(Container(8010).ListItem.VideoResolution,4K) | String.Contains(Container(8010).ListItem.FileNameAndPath,2160p)] + String.Contains(Container(8010).ListItem.HDRType,hlg)">$LOCALIZE[32132] $LOCALIZE[32139]</value>
-		<value condition="Control.HasFocus(8010) + [String.StartsWith(Container(8010).ListItem.VideoResolution,4K) | String.Contains(Container(8010).ListItem.FileNameAndPath,2160p)] + String.Contains(Container(8010).ListItem.FilenameAndPath,HDR)">$LOCALIZE[32132] $LOCALIZE[32134]</value>
-		<!-- 4K UHD -->
-		<value condition="Control.HasFocus(8010) + [String.StartsWith(Container(8010).ListItem.VideoResolution,4K) | String.Contains(Container(8010).ListItem.FileNameAndPath,2160p)]">$LOCALIZE[32132] $LOCALIZE[32135]</value>
-		<!-- Full HD -->
-		<value condition="Control.HasFocus(8010) + [String.StartsWith(Container(8010).ListItem.VideoResolution,1080) | String.Contains(Container(8010).ListItem.FileNameAndPath,1080p)]">$LOCALIZE[32136]</value>
-		<!-- HD -->
-		<value condition="Control.HasFocus(8010) + [String.StartsWith(Container(8010).ListItem.VideoResolution,720) | String.Contains(Container(8010).ListItem.FileNameAndPath,720p)]">$LOCALIZE[32137]</value>
-		<!-- SD -->
-		<value condition="Control.HasFocus(8010) + String.StartsWith(Container(8010).ListItem.VideoResolution,576)">$LOCALIZE[32138]</value>
-		<value condition="Control.HasFocus(8010) + String.StartsWith(Container(8010).ListItem.VideoResolution,540)">$LOCALIZE[32138]</value>
-		<value condition="Control.HasFocus(8010) + String.StartsWith(Container(8010).ListItem.VideoResolution,480)">$LOCALIZE[32138]</value>
-		<!-- SECONDARY LIST -->
-		<!-- 8K -->
-		<value condition="Control.HasFocus(4501) + [String.StartsWith(Container(4501).ListItem.VideoResolution,8K) | String.Contains(Container(4501).ListItem.FileNameAndPath,4320p)]">$LOCALIZE[32131]</value>
-		<!-- 4K Dolby Vision -->
-		<value condition="Control.HasFocus(4501) + [String.StartsWith(Container(4501).ListItem.VideoResolution,4K) | String.Contains(Container(4501).ListItem.FileNameAndPath,2160p)] + String.Contains(Container(4501).ListItem.HDRType,dolbyvision)">$LOCALIZE[32132] $LOCALIZE[32133]</value>
-		<value condition="Control.HasFocus(4501) + [String.StartsWith(Container(4501).ListItem.VideoResolution,4K) | String.Contains(Container(4501).ListItem.FileNameAndPath,2160p)] + [String.Contains(Container(4501).ListItem.FilenameAndPath,DV) | String.Contains(Container(4501).ListItem.FilenameAndPath,Dolby.Vision)]">$LOCALIZE[32132] $LOCALIZE[32133]</value>
-		<!-- 4K HDR -->
-		<value condition="Control.HasFocus(4501) + [String.StartsWith(Container(4501).ListItem.VideoResolution,4K) | String.Contains(Container(4501).ListItem.FileNameAndPath,2160p)] + String.Contains(Container(4501).ListItem.HDRType,hdr10)">$LOCALIZE[32132] $LOCALIZE[32134]</value>
-		<value condition="Control.HasFocus(4501) + [String.StartsWith(Container(4501).ListItem.VideoResolution,4K) | String.Contains(Container(4501).ListItem.FileNameAndPath,2160p)] + String.Contains(Container(4501).ListItem.HDRType,hlg)">$LOCALIZE[32132] $LOCALIZE[32139]</value>
-		<value condition="Control.HasFocus(4501) + [String.StartsWith(Container(4501).ListItem.VideoResolution,4K) | String.Contains(Container(4501).ListItem.FileNameAndPath,2160p)] + String.Contains(Container(4501).ListItem.FilenameAndPath,HDR)">$LOCALIZE[32132] $LOCALIZE[32134]</value>
-		<!-- 4K UHD -->
-		<value condition="Control.HasFocus(4501) + [String.StartsWith(Container(4501).ListItem.VideoResolution,4K) | String.Contains(Container(4501).ListItem.FileNameAndPath,2160p)]">$LOCALIZE[32132] $LOCALIZE[32135]</value>
-		<!-- Full HD -->
-		<value condition="Control.HasFocus(4501) + [String.StartsWith(Container(4501).ListItem.VideoResolution,1080) | String.Contains(Container(4501).ListItem.FileNameAndPath,1080p)]">$LOCALIZE[32136]</value>
-		<!-- HD -->
-		<value condition="Control.HasFocus(4501) + [String.StartsWith(Container(4501).ListItem.VideoResolution,720) | String.Contains(Container(4501).ListItem.FileNameAndPath,720p)]">$LOCALIZE[32137]</value>
-		<!-- SD -->
-		<value condition="Control.HasFocus(4501) + String.StartsWith(Container(4501).ListItem.VideoResolution,576)">$LOCALIZE[32138]</value>
-		<value condition="Control.HasFocus(4501) + String.StartsWith(Container(4501).ListItem.VideoResolution,540)">$LOCALIZE[32138]</value>
-		<value condition="Control.HasFocus(4501) + String.StartsWith(Container(4501).ListItem.VideoResolution,480)">$LOCALIZE[32138]</value>
-		<!-- PRIMARY LIST -->
-		<!-- 8K -->
-		<value condition="[String.StartsWith(ListItem.VideoResolution,8K) | String.Contains(ListItem.FileNameAndPath,4320p)]">$LOCALIZE[32131]</value>
-		<!-- 4K Dolby Vision -->
-		<value condition="[String.StartsWith(ListItem.VideoResolution,4K) | String.Contains(ListItem.FileNameAndPath,2160p)] + String.Contains(ListItem.HDRType,dolbyvision)">$LOCALIZE[32132] $LOCALIZE[32133]</value>
-		<value condition="[String.StartsWith(ListItem.VideoResolution,4K) | String.Contains(ListItem.FileNameAndPath,2160p)] + [String.Contains(ListItem.FilenameAndPath,DV) | String.Contains(ListItem.FilenameAndPath,Dolby.Vision)]">$LOCALIZE[32132] $LOCALIZE[32133]</value>
-		<!-- 4K HDR -->
-		<value condition="[String.StartsWith(ListItem.VideoResolution,4K) | String.Contains(ListItem.FileNameAndPath,2160p)] + String.Contains(ListItem.HDRType,hdr10)">$LOCALIZE[32132] $LOCALIZE[32134]</value>
-		<value condition="[String.StartsWith(ListItem.VideoResolution,4K) | String.Contains(ListItem.FileNameAndPath,2160p)] + String.Contains(ListItem.HDRType,hlg)">$LOCALIZE[32132] $LOCALIZE[32139]</value>
-		<value condition="[String.StartsWith(ListItem.VideoResolution,4K) | String.Contains(ListItem.FileNameAndPath,2160p)] + String.Contains(ListItem.FilenameAndPath,HDR)">$LOCALIZE[32132] $LOCALIZE[32134]</value>
-		<!-- 4K UHD -->
-		<value condition="[String.StartsWith(ListItem.VideoResolution,4K) | String.Contains(ListItem.FileNameAndPath,2160p)]">$LOCALIZE[32132] $LOCALIZE[32135]</value>
-		<!-- Full HD -->
-		<value condition="[String.StartsWith(ListItem.VideoResolution,1080) | String.Contains(ListItem.FileNameAndPath,1080p)]">$LOCALIZE[32136]</value>
-		<!-- HD -->
-		<value condition="[String.StartsWith(ListItem.VideoResolution,720) | String.Contains(ListItem.FileNameAndPath,720p)]">$LOCALIZE[32137]</value>
-		<!-- SD -->
-		<value condition="String.StartsWith(ListItem.VideoResolution,576)">$LOCALIZE[32138]</value>
-		<value condition="String.StartsWith(ListItem.VideoResolution,540)">$LOCALIZE[32138]</value>
-		<value condition="String.StartsWith(ListItem.VideoResolution,480)">$LOCALIZE[32138]</value>
-	</variable>
-
+	<!-- Star rating -->
 	<variable name="StarRating_Label">
 		<value condition="!String.IsEmpty(ListItem.UserRating) + Integer.IsGreater(ListItem.UserRating,9.5)">stars/rating_10.png</value>
 		<value condition="!String.IsEmpty(ListItem.UserRating) + Integer.IsGreater(ListItem.UserRating,8.5)">stars/rating_9.png</value>
@@ -1351,72 +1285,8 @@
 		<value condition="String.IsEmpty(ListItem.UserRating) + Integer.IsGreater(ListItem.Rating,0.5)">stars/rating_1.png</value>
 		<value>stars/rating_0.png</value>
 	</variable>
-
-	<variable name="Volumebar_Info_Label">
-		<!-- Passthrough audio in use -->
-		<value condition="Player.Passthrough">$LOCALIZE[29802]</value>
-		<!-- Muted -->
-		<value condition="Player.Muted">$LOCALIZE[31144]</value>
-		<value>$INFO[Control.GetLabel(50660),,%]</value>
-	</variable>
-
-	<variable name="Music_Player_Label">
-	<!-- Play -->
-		<value condition="String.IsEqual(Window(home).Property(Music_Player_Controls),Pause) + Player.Paused">$LOCALIZE[208]</value>
-		<value>$INFO[Window(home).Property(Music_Player_Controls)]</value>
-	</variable>
-
-	<variable name="Play_Pause_Label">
-		<value condition="Player.Paused">$LOCALIZE[208]</value>
-		<value>$LOCALIZE[31526]</value>
-	</variable>
-
-	<variable name="DialogSubtitles_Label">
-		<value condition="ListItem.Property(hearingimp) + ListItem.Property(sync)">$INFO[ListItem.Label,, CC SYNC]$INFO[ListItem.Label2, $LOCALIZE[31115] ]</value>
-		<value condition="ListItem.Property(hearingimp)">$INFO[ListItem.Label,, CC]$INFO[ListItem.Label2, $LOCALIZE[31115] ]</value>
-		<value condition="ListItem.Property(sync)">$INFO[ListItem.Label,, SYNC]$INFO[ListItem.Label2, $LOCALIZE[31115] ]</value>
-		<value>$INFO[ListItem.Label]$INFO[ListItem.Label2, $LOCALIZE[31115] ]</value>
-	</variable>
-
-	<variable name="Script-UpNext_Info_Label">
-		<value condition="!Integer.IsGreater(Window.Property(Episode),9)">$INFO[Window.Property(tvshowtitle)]$INFO[Window.Property(season), $LOCALIZE[31116] ]$INFO[Window.Property(episode),x0]$INFO[Window.Property(title), $LOCALIZE[31116] ]</value>
-		<value condition="!Integer.IsGreater(Window.Property(Episode),9)">$INFO[Window.Property(tvshowtitle)]$INFO[Window.Property(season), $LOCALIZE[31116] ]$INFO[Window.Property(episode),x]$INFO[Window.Property(title), $LOCALIZE[31116] ]</value>
-	</variable>
-
-	<!-- musicosd -->
-	<variable name="Repeat_Button_Texture">
-		<value condition="Control.HasFocus(8) + Playlist.IsRepeatOne">osd/icon_RepeatOne_focused.png</value>
-		<value condition="Playlist.IsRepeatOne">osd/icon_RepeatOne_unfocused.png</value>
-		<value condition="Control.HasFocus(8) + Playlist.IsRepeat">osd/icon_Repeat_focused.png</value>
-		<value condition="Playlist.IsRepeat">osd/icon_Repeat_unfocused.png</value>
-		<value condition="Control.HasFocus(8)">osd/icon_RepeatOff_focused.png</value>
-		<value>osd/icon_RepeatOff_unfocused.png</value>
-	</variable>
-
-	<variable name="Repeat_Button_Label">
-		<value condition="Playlist.IsRepeatOne">$LOCALIZE[486] $LOCALIZE[592]</value>
-		<value condition="Playlist.IsRepeat">$LOCALIZE[486] $LOCALIZE[593]</value>
-		<value>$LOCALIZE[486] $LOCALIZE[591]</value>
-	</variable>
-
-	<variable name="Random_Button_Label">
-		<value condition="Playlist.IsRandom">$LOCALIZE[191] $LOCALIZE[34222]</value>
-		<value>$LOCALIZE[191] $LOCALIZE[591]</value>
-	</variable>
-
-	<variable name="AutoUpdate">
-		<value condition="String.Contains(Skin.String(AutoUpdate),off)">$LOCALIZE[31153]</value>
-		<value>$LOCALIZE[31154]</value>
-	</variable>
-
-	<variable name="LoginScreen_Welcome_Label">
-		<value condition="String.IsEqual(System.Time(xx),pm) + Integer.IsGreaterOrEqual(System.Time(hh),5)">$LOCALIZE[31101] $LOCALIZE[31100]</value>
-		<value condition="String.IsEqual(System.Time(xx),pm)">$LOCALIZE[31102] $LOCALIZE[31100]</value>
-		<value condition="String.IsEqual(System.Time(xx),am)">$LOCALIZE[31103] $LOCALIZE[31100]</value>
-	</variable>
-
-	<!-- musicplaylisteditor -->
-	<variable name="TrackNumber">
+	<!-- Track number -->
+	<variable name="TrackNumber_Label">
 		<value condition="String.IsEqual(ListItem.TrackNumber,01)">1</value>
 		<value condition="String.IsEqual(ListItem.TrackNumber,02)">2</value>
 		<value condition="String.IsEqual(ListItem.TrackNumber,03)">3</value>
@@ -1424,19 +1294,104 @@
 		<value condition="String.IsEqual(ListItem.TrackNumber,05)">5</value>
 		<value condition="String.IsEqual(ListItem.TrackNumber,06)">6</value>
 		<value condition="String.IsEqual(ListItem.TrackNumber,07)">7</value>
-		<value condition="String.IsEqual(ListItem.TrackNumber,08">8</value>
+		<value condition="String.IsEqual(ListItem.TrackNumber,08)">8</value>
 		<value condition="String.IsEqual(ListItem.TrackNumber,09)">9</value>
 		<value>$INFO[ListItem.TrackNumber]</value>
 	</variable>
 
-	<variable name="MusicPlaylistEditor_LeftLabel">
-		<value condition="String.IsEqual(ListItem.DBType,song)">$VAR[TrackNumber,,.]$INFO[ListItem.Title, ]$INFO[ListItem.Artist, - ]</value>
-		<value>$INFO[ListItem.Label]</value>
+
+
+	<!-- OSD / User Control labels -->
+	<!-- Music_Player label: Used for breadcrumbs -->
+	<variable name="Music_Player_Label">
+		<value condition="String.IsEqual(Window(home).Property(Music_Player_Controls),Pause) + Player.Paused">$LOCALIZE[208]</value>
+		<value>$INFO[Window(home).Property(Music_Player_Controls)]</value>
+	</variable>
+	<!-- OSD label: used for breadcrumbs -->
+	<variable name="OSD_Label">
+		<value condition="Control.HasFocus(87)">$LOCALIZE[10115]</value>
+		<value condition="Window.IsVisible(videoosd)">$INFO[Window(videoosd).Property(VideoOSD_Controls)]</value>
+		<value condition="Window.IsVisible(musicosd)">$INFO[Window(musicosd).Property(MusicOSD_Controls)]</value>
+	</variable>
+	<!-- Play/Pause label -->
+	<variable name="Play_Pause_Label">
+		<value condition="Player.Paused">$LOCALIZE[208]</value>
+		<value>$LOCALIZE[31526]</value>
+	</variable>
+	<!-- Player status -->
+	<variable name="Player_Status_Label">
+		<value condition="Player.Forwarding2x">x2</value>
+		<value condition="Player.Forwarding4x">x4</value>
+		<value condition="Player.Forwarding8x">x8</value>
+		<value condition="Player.Forwarding16x">x16</value>
+		<value condition="Player.Forwarding32x">x32</value>
+		<value condition="Player.Rewinding2x">x2</value>
+		<value condition="Player.Rewinding4x">x4</value>
+		<value condition="Player.Rewinding8x">x8</value>
+		<value condition="Player.Rewinding16x">x16</value>
+		<value condition="Player.Rewinding32x">x32</value>
+	</variable>
+	<!-- Random button label: Random on / Random off -->
+	<variable name="Random_Button_Label">
+		<value condition="Playlist.IsRandom">$LOCALIZE[191] $LOCALIZE[34222]</value>
+		<value>$LOCALIZE[191] $LOCALIZE[591]</value>
+	</variable>
+	<!-- Repeat button label: Repeat One / Repeat All / Repeat Off  -->
+	<variable name="Repeat_Button_Label">
+		<value condition="Playlist.IsRepeatOne">$LOCALIZE[486] $LOCALIZE[592]</value>
+		<value condition="Playlist.IsRepeat">$LOCALIZE[486] $LOCALIZE[593]</value>
+		<value>$LOCALIZE[486] $LOCALIZE[591]</value>
+	</variable>
+	<!-- Volumebar label: Passthrough audio in use / Muted / 33%  -->
+	<variable name="Volumebar_Info_Label">
+		<value condition="Player.Passthrough">$LOCALIZE[29802]</value>
+		<value condition="Player.Muted">$LOCALIZE[31144]</value>
+		<value>$INFO[Control.GetLabel(50660),,%]</value>
 	</variable>
 
-	<variable name="MusicPlaylistEditor_LeftLabel2">
+
+
+	<!-- Specific Window / Dialog labels -->
+	<variable name="DialogSubtitles_Label">
+		<value condition="ListItem.Property(hearingimp) + ListItem.Property(sync)">$INFO[ListItem.Label,, CC SYNC]$INFO[ListItem.Label2, $LOCALIZE[31115] ]</value>
+		<value condition="ListItem.Property(hearingimp)">$INFO[ListItem.Label,, CC]$INFO[ListItem.Label2, $LOCALIZE[31115] ]</value>
+		<value condition="ListItem.Property(sync)">$INFO[ListItem.Label,, SYNC]$INFO[ListItem.Label2, $LOCALIZE[31115] ]</value>
+		<value>$INFO[ListItem.Label]$INFO[ListItem.Label2, $LOCALIZE[31115] ]</value>
+	</variable>
+	<!-- Skinsettings home background override: Choose new path... / [shows path] -->
+	<variable name="Home_Background_Override_Label">
+		<value condition="Skin.String(Home_Background_Override)">$INFO[Skin.String(Home_Background_Override)]</value>
+		<value>$LOCALIZE[31259]</value>
+	</variable>
+	<!-- Login screen timely/seasonal welcome messages: e.g. Good morning! Happy Xmas!... Who's watching? -->
+	<variable name="LoginScreen_Welcome_Label">
+		<value condition="String.IsEqual(System.Time(xx),pm) + Integer.IsGreaterOrEqual(System.Time(hh),5)">$LOCALIZE[31101] $LOCALIZE[31100]</value>
+		<value condition="String.IsEqual(System.Time(xx),pm)">$LOCALIZE[31102] $LOCALIZE[31100]</value>
+		<value condition="String.IsEqual(System.Time(xx),am)">$LOCALIZE[31103] $LOCALIZE[31100]</value>
+	</variable>
+	<!-- MusicPlaylistEditor left list label override when listitem is song (Track. Title - Artist) -->
+	<variable name="MusicPlaylistEditor_Override_LeftLabel">
+		<value condition="String.IsEqual(ListItem.DBType,song)">$VAR[TrackNumber_Label,,.]$INFO[ListItem.Title, ]$INFO[ListItem.Artist, - ]</value>
+		<value>$INFO[ListItem.Label]</value>
+	</variable>
+	<!-- MusicPlaylistEditor left list label2 override when listitem is artist (no value) -->
+	<variable name="MusicPlaylistEditor_Override_LeftLabel2">
 		<value condition="String.IsEqual(ListItem.DBType,artist)"></value>
 		<value>$INFO[ListItem.Label2]</value>
 	</variable>
+	<!-- MusicPlaylistEditor directory label: X items / 1 item / No items -->
+	<variable name="MusicPlaylistEditor_Directory_Label">
+		<value condition="Integer.IsGreater(Container(50).NumItems,1)">$INFO[Container(50).NumItems,, $LOCALIZE[31001]]</value>
+		<value condition="Integer.IsGreater(Container(50).NumItems,0)">$INFO[Container(50).NumItems,, $LOCALIZE[31000]]</value>
+		<value>$LOCALIZE[31136]</value>
+	</variable>
+	<!-- MusicPlaylistEditor playlistt label: X songs / 1 song / No songs added -->
+	<variable name="MusicPlaylistEditor_Playlist_Label">
+		<value condition="Integer.IsGreater(Container(100).NumItems,1)">$INFO[Container(100).NumItems,, $LOCALIZE[31137]]</value>
+		<value condition="Integer.IsGreater(Container(100).NumItems,0)">$INFO[Container(100).NumItems,, $LOCALIZE[31138]]</value>
+		<value>$LOCALIZE[31139]</value>
+	</variable>
+
+
 
 </includes>
