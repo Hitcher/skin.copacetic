@@ -75,22 +75,18 @@
 			<control type="group">
 				<visible>!$EXP[InfoWidget_HasFocus]</visible>
 				<include>Dialog_Fade_Animation</include>
-				<control type="group">
-					<visible>!Control.HasFocus(10)</visible>
-					<include>Delayed_Content_Fade_Animation</include>
-					<control type="group">
-						<visible>[String.IsEqual(ListItem.DBType,artist) + !Control.HasFocus(10)] | [String.IsEqual(ListItem.DBType,album) + Control.HasFocus(12)]</visible>
-						<include>Delayed_Dialog_Fade_Animation</include>
-						<control type="image">
-							<!-- 25% alpha -->
-							<animation effect="fadediffuse" end="ff404040" time="0" condition="true">Conditional</animation>
-							<!-- 15% alpha: 60% of 25% -->
-							<animation effect="fadediffuse" end="ff9a9a9a" time="360" tween="sine" easing="inout" reversible="true" condition="String.IsEqual(Window(musicinformation).Property(Focused_Button),$LOCALIZE[183]) | String.IsEqual(Window(musicinformation).Property(Focused_Button),$LOCALIZE[21887])">Conditional</animation>
-							<aspectratio>scale</aspectratio>
-							<texture background="true">$VAR[Dialog_Info_Background]</texture>
-						</control>
+{				<control type="group">
+					<visible>String.IsEqual(ListItem.DBType,artist) | [String.IsEqual(ListItem.DBType,album) + Control.HasFocus(12)]</visible>
+					<include>Delayed_Dialog_Fade_Animation</include>
+					<control type="image">
+						<!-- 25% alpha -->
+						<animation effect="fadediffuse" end="ff404040" time="0" condition="true">Conditional</animation>
+						<!-- 15% alpha: 60% of 25% -->
+						<animation effect="fadediffuse" end="ff9a9a9a" time="360" tween="sine" easing="inout" reversible="true" condition="String.IsEqual(Window(musicinformation).Property(Focused_Button),$LOCALIZE[183]) | String.IsEqual(Window(musicinformation).Property(Focused_Button),$LOCALIZE[21887])">Conditional</animation>
+						<aspectratio>scale</aspectratio>
+						<texture background="true">$VAR[Dialog_Info_Background]</texture>
 					</control>
-				</control>
+				</control>}
 			</control>
 			<!-- Thumbnails -->
 			<control type="group">
@@ -123,9 +119,6 @@
 					<height>720</height>
 					<texture fallback="fallback.png" background="true">$INFO[ListItem.Art(thumb)]</texture>
 				</control>
-				<include content="Info_Dialog_Artwork">
-					<param name="visible" value="Control.HasFocus(10)"/>
-				</include>
 			</control>
 		</control>
 
@@ -133,6 +126,14 @@
 		<control type="group">
 			<visible>[Window.IsActive(musicinformation) | Window.IsActive(songinformation)] + !Control.HasFocus(9001) + ![Window.Is(songinformation) + Window.IsActive(musicinformation)]</visible>
 			<include>Long_Delayed_Content_Fade_Animation</include>
+			<control type="group">
+				<visible>![$EXP[TransparentDialog_IsVisible] + String.IsEqual(ListItem.DBType,artist)]</visible>
+				<visible>!$EXP[InfoWidget_HasFocus]</visible>
+				<include>Delayed_Content_Fade_Animation</include>
+				<include content="Info_Dialog_Artwork">
+					<param name="visible" value="Control.HasFocus(10)"/>
+				</include>
+			</control>
 			<control type="group">
 				<visible>!$EXP[TransparentDialog_IsVisible]</visible>
 				<visible>!$EXP[InfoWidget_HasFocus]</visible>
@@ -144,9 +145,6 @@
 					<param name="label_color" value="$VAR[Breadcrumb_Label_Color]"/>
 					<param name="info_label_visible" value="false"/>
 				</include>
-
-
-
 				<!-- Details -->
 				<include condition="!String.IsEqual(ListItem.DBType,artist)" content="Info_Dialog_Header">
 					<param name="visible" value="String.IsEqual(Window(musicinformation).Property(Focused_Button),$LOCALIZE[208]) | String.IsEqual(Window(movieinformation).Property(Focused_Button),$LOCALIZE[184])"/>
@@ -336,7 +334,7 @@
 
 
 			<control type="group">
-				<visible>$EXP[TransparentDialog_IsVisible] + $EXP[InfoWidget_HasFocus]</visible>
+				<visible>$EXP[TransparentDialog_IsVisible] + [$EXP[InfoWidget_HasFocus] | String.IsEqual(ListItem.DBType,album) | Window.Is(songinformation)]</visible>
 				<include>Transparent_Dialog_Background</include>
 				<include>Content_Fade_Animation</include>
 			</control>

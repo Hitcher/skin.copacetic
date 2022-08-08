@@ -157,19 +157,15 @@
 
 		<!-- Background -->
 		<control type="group">
-			<visible>![String.IsEqual(Window(movieinformation).Property(Focused_Button),$LOCALIZE[13511]) + !Window.IsVisible(selectdialog) + !Window.IsVisible(filebrowser)]</visible>
-			<include>Delayed_Content_Fade_Animation</include>
-			<control type="group">
-				<visible>!$EXP[InfoWidget_HasFocus]</visible>
-				<include>Dialog_Fade_Animation</include>
-				<control type="image">
-					<!-- 25% alpha -->
-					<animation effect="fadediffuse" end="ff404040" time="0" condition="true">Conditional</animation>
-					<!-- 15% alpha: 60% of 25% -->
-					<animation effect="fadediffuse" end="ff9a9a9a" time="360" tween="sine" easing="inout" reversible="true" condition="String.IsEqual(Window(movieinformation).Property(Focused_Button),$LOCALIZE[207])">Conditional</animation>
-					<aspectratio>scale</aspectratio>
-					<texture background="true">$VAR[Dialog_Info_Background]</texture>
-				</control>
+			<visible>!$EXP[InfoWidget_HasFocus]</visible>
+			<include>Dialog_Fade_Animation</include>
+			<control type="image">
+				<!-- 25% alpha -->
+				<animation effect="fadediffuse" end="ff404040" time="0" condition="true">Conditional</animation>
+				<!-- 15% alpha: 60% of 25% -->
+				<animation effect="fadediffuse" end="ff9a9a9a" time="360" tween="sine" easing="inout" reversible="true" condition="String.IsEqual(Window(movieinformation).Property(Focused_Button),$LOCALIZE[207])">Conditional</animation>
+				<aspectratio>scale</aspectratio>
+				<texture background="true">$VAR[Dialog_Info_Background]</texture>
 			</control>
 		</control>
 
@@ -178,141 +174,129 @@
 			<visible>!Control.HasFocus(9001) + Window.IsActive(movieinformation)</visible>
 			<include>Long_Delayed_Content_Fade_Animation</include>
 			<control type="group">
-				<visible>!$EXP[InfoWidget_HasFocus]</visible>
-				<include>Content_Fade_Animation</include>
+				<visible>!$EXP[InfoWidget_HasFocus] + !$EXP[TransparentDialog_IsVisible]</visible>
+				<include>Delayed_Content_Fade_Animation</include>
 
+				<include content="Breadcrumb_Label">
+					<param name="bar" value="false"/>
+					<param name="title_label" value="$INFO[Window(movieinformation).Property(Focused_Button),$LOCALIZE[31130] ,  $LOCALIZE[31131]]"/>
+					<param name="label_color" value="$VAR[Breadcrumb_Label_Color]"/>
+					<param name="info_label_visible" value="false"/>
+				</include>
+
+				<include content="Info_Dialog_Header">
+					<param name="visible" value="!String.IsEqual(Window(movieinformation).Property(Focused_Button),$LOCALIZE[207]) + !Control.HasFocus(10) + !Control.HasFocus(7) + !String.IsEqual(Window(movieinformation).Property(Focused_Button),$LOCALIZE[184])"/>
+					<param name="left" value="120"/>
+					<param name="right" value="120"/>
+					<param name="align" value="center"/>
+				</include>
+				<include content="Info_Dialog_Plot">
+					<param name="visible" value="String.IsEqual(Window(movieinformation).Property(Focused_Button),$LOCALIZE[207])"/>
+					<param name="left" value="240"/>
+					<param name="right" value="240"/>
+					<param name="align" value="center"/>
+					<param name="font" value="Plot_Fullscreen"/>
+				</include>
+				<include content="Info_Dialog_Stars">
+					<param name="visible" value="Control.HasFocus(7) | Control.HasFocus(5003) | Control.HasFocus(5004)"/>
+					<param name="itemgap" value="30"/>
+					<param name="starheight" value="90"/>
+				</include>
 				<include content="Info_Dialog_Artwork">
 					<param name="visible" value="String.IsEqual(Window(movieinformation).Property(Focused_Button),$LOCALIZE[13511])"/>
 				</include>
 
-				<control type="group">
-					<visible>!$EXP[TransparentDialog_IsVisible]</visible>
-					<include>Content_Fade_Animation</include>
-
-					<include content="Breadcrumb_Label">
-						<param name="bar" value="false"/>
-						<param name="title_label" value="$INFO[Window(movieinformation).Property(Focused_Button),$LOCALIZE[31130] ,  $LOCALIZE[31131]]"/>
-						<param name="label_color" value="$VAR[Breadcrumb_Label_Color]"/>
-						<param name="info_label_visible" value="false"/>
-					</include>
-
-					<include content="Info_Dialog_Header">
-						<param name="visible" value="!String.IsEqual(Window(movieinformation).Property(Focused_Button),$LOCALIZE[207]) + !Control.HasFocus(10) + !Control.HasFocus(7) + !String.IsEqual(Window(movieinformation).Property(Focused_Button),$LOCALIZE[184])"/>
-						<param name="left" value="120"/>
-						<param name="right" value="120"/>
-						<param name="align" value="center"/>
-					</include>
-					<include content="Info_Dialog_Plot">
-						<param name="visible" value="String.IsEqual(Window(movieinformation).Property(Focused_Button),$LOCALIZE[207])"/>
-						<param name="left" value="240"/>
-						<param name="right" value="240"/>
-						<param name="align" value="center"/>
-						<param name="font" value="Plot_Fullscreen"/>
-					</include>
-
-					<include content="Info_Dialog_Stars">
-						<param name="visible" value="Control.HasFocus(7) | Control.HasFocus(5003) | Control.HasFocus(5004)"/>
-						<param name="itemgap" value="30"/>
-						<param name="starheight" value="90"/>
-					</include>
-
-					<!-- Button group -->
-					<control type="grouplist" id="65000">
-						<visible>Window.IsVisible(movieinformation)</visible>
-						<include>Dialog_Fade_Animation</include>
-						<centerleft>50%</centerleft>
-						<bottom>60</bottom>
-						<width>420</width>
+				<!-- Button group -->
+				<control type="grouplist" id="65000">
+					<visible>Window.IsVisible(movieinformation)</visible>
+					<include>Dialog_Fade_Animation</include>
+					<centerleft>50%</centerleft>
+					<bottom>60</bottom>
+					<width>420</width>
+					<height>60</height>
+					<orientation>horizontal</orientation>
+					<align>center</align>
+					<itemgap>0</itemgap>
+					<usecontrolcoords>true</usecontrolcoords>
+					<control type="togglebutton" id="8">
+						<include>Hidden_Button</include>
+						<description>Play/Browse</description>
+						<label>208</label>
+						<altlabel>1024</altlabel>
+						<font></font>
+						<width>60</width>
 						<height>60</height>
-						<orientation>horizontal</orientation>
-						<align>center</align>
-						<itemgap>0</itemgap>
-						<usecontrolcoords>true</usecontrolcoords>
-						<control type="togglebutton" id="8">
-							<include>Hidden_Button</include>
-							<description>Play/Browse</description>
-							<label>208</label>
-							<altlabel>1024</altlabel>
-							<font></font>
-							<width>60</width>
-							<height>60</height>
-				 <!-- <texturefocus colordiffuse="$VAR[Light_Color]">osd/icon_Play_focused.png</texturefocus>
-							<texturenofocus colordiffuse="$VAR[Light_Color]">osd/icon_Play_unfocused.png</texturenofocus>
-							<alttexturefocus colordiffuse="$VAR[Light_Color]">osd/icon_Forward_focused.png</alttexturefocus>
-							<alttexturenofocus colordiffuse="$VAR[Light_Color]">osd/icon_Forward_unfocused.png</alttexturenofocus>
-							<usealttexture>String.IsEqual(Listitem.DBType,tvshow) | String.IsEqual(Listitem.DBType,season)</usealttexture> -->
-							<onfocus condition="![String.IsEqual(Listitem.DBType,tvshow) | String.IsEqual(Listitem.DBType,season)]">SetProperty(Focused_Button,$LOCALIZE[208],movieinformation)</onfocus>
-							<onfocus condition="[String.IsEqual(Listitem.DBType,tvshow) | String.IsEqual(Listitem.DBType,season)]">SetProperty(Focused_Button,$LOCALIZE[1024],movieinformation)</onfocus>
-							<onunfocus>SetProperty(ResetScroll," ")</onunfocus>
-							<include>MovieInfo_Dialog_Menu_Navigation</include>
-						</control>
-						<control type="button" id="99">
-							<include>Hidden_Button</include>
-							<visible>!String.IsEmpty(Control.GetLabel(916)) + !String.IsEqual(ListItem.DBType,season)</visible>
-							<include content="Icon_Button">
-								<param name="description" value="Plot"/>
-								<param name="icon" value="Plot"/>
-							</include>
-							<onunfocus>SetProperty(ResetScroll,"")</onunfocus>
-							<onfocus>SetProperty(Focused_Button,$LOCALIZE[207],movieinformation)</onfocus>
-							<ondown condition="Container(4).HasNext | Container(4).HasPrevious">SetFocus(60)</ondown>
-							<include condition="![Container(4).HasNext | Container(4).HasPrevious]">MovieInfo_Dialog_Menu_Navigation</include>
-						</control>
-						<control type="button" id="11">
-							<include>Hidden_Button</include>
-							<include content="Icon_Button">
-								<param name="description" value="Trailer button"/>
-								<param name="icon" value="Trailer"/>
-							</include>
-							<onfocus>SetProperty(ResetScroll," ")</onfocus>
-							<onfocus>SetProperty(Focused_Button,$LOCALIZE[20410],movieinformation)</onfocus>
-							<visible>!String.IsEmpty(ListItem.Trailer)</visible>
-							<include>MovieInfo_Dialog_Menu_Navigation</include>
-						</control>
-						<control type="button" id="7">
-							<include>Hidden_Button</include>
-							<include content="Icon_Button">
-								<param name="description" value="User rating"/>
-								<param name="icon" value="Bookmarks"/>
-							</include>
-							<visible>!String.IsEqual(ListItem.DBType,set)</visible>
-							<onfocus>SetProperty(ResetScroll," ")</onfocus>
-							<onfocus>SetProperty(Focused_Button,$LOCALIZE[563],movieinformation)</onfocus>
-							<onup>5003</onup>
-							<ondown>5004</ondown>
-						</control>
-						<control type="button" id="10">
-							<include>Hidden_Button</include>
-							<include content="Icon_Button">
-								<param name="description" value="Choose art"/>
-								<param name="icon" value="Menu"/>
-							</include>
-							<onfocus>SetProperty(ResetScroll," ")</onfocus>
-							<onfocus>SetProperty(Focused_Button,$LOCALIZE[13511],movieinformation)</onfocus>
-							<include>MovieInfo_Dialog_Menu_Navigation</include>
-						</control>
-						<control type="button" id="6">
-							<include>Hidden_Button</include>
-							<include content="Icon_Button">
-								<param name="description" value="Refresh button"/>
-								<param name="icon" value="Refresh"/>
-							</include>
-							<visible>!String.IsEqual(ListItem.DBType,set)</visible>
-							<onfocus>SetProperty(ResetScroll," ")</onfocus>
-							<onfocus>SetProperty(Focused_Button,$LOCALIZE[184],movieinformation)</onfocus>
-							<include>MovieInfo_Dialog_Menu_Navigation</include>
-						</control>
-
+			 <!-- <texturefocus colordiffuse="$VAR[Light_Color]">osd/icon_Play_focused.png</texturefocus>
+						<texturenofocus colordiffuse="$VAR[Light_Color]">osd/icon_Play_unfocused.png</texturenofocus>
+						<alttexturefocus colordiffuse="$VAR[Light_Color]">osd/icon_Forward_focused.png</alttexturefocus>
+						<alttexturenofocus colordiffuse="$VAR[Light_Color]">osd/icon_Forward_unfocused.png</alttexturenofocus>
+						<usealttexture>String.IsEqual(Listitem.DBType,tvshow) | String.IsEqual(Listitem.DBType,season)</usealttexture> -->
+						<onfocus condition="![String.IsEqual(Listitem.DBType,tvshow) | String.IsEqual(Listitem.DBType,season)]">SetProperty(Focused_Button,$LOCALIZE[208],movieinformation)</onfocus>
+						<onfocus condition="[String.IsEqual(Listitem.DBType,tvshow) | String.IsEqual(Listitem.DBType,season)]">SetProperty(Focused_Button,$LOCALIZE[1024],movieinformation)</onfocus>
+						<onunfocus>SetProperty(ResetScroll," ")</onunfocus>
+						<include>MovieInfo_Dialog_Menu_Navigation</include>
 					</control>
+					<control type="button" id="99">
+						<include>Hidden_Button</include>
+						<visible>!String.IsEmpty(Control.GetLabel(916)) + !String.IsEqual(ListItem.DBType,season)</visible>
+						<include content="Icon_Button">
+							<param name="description" value="Plot"/>
+							<param name="icon" value="Plot"/>
+						</include>
+						<onunfocus>SetProperty(ResetScroll,"")</onunfocus>
+						<onfocus>SetProperty(Focused_Button,$LOCALIZE[207],movieinformation)</onfocus>
+						<ondown condition="Container(4).HasNext | Container(4).HasPrevious">SetFocus(60)</ondown>
+						<include condition="![Container(4).HasNext | Container(4).HasPrevious]">MovieInfo_Dialog_Menu_Navigation</include>
+					</control>
+					<control type="button" id="11">
+						<include>Hidden_Button</include>
+						<include content="Icon_Button">
+							<param name="description" value="Trailer button"/>
+							<param name="icon" value="Trailer"/>
+						</include>
+						<onfocus>SetProperty(ResetScroll," ")</onfocus>
+						<onfocus>SetProperty(Focused_Button,$LOCALIZE[20410],movieinformation)</onfocus>
+						<visible>!String.IsEmpty(ListItem.Trailer)</visible>
+						<include>MovieInfo_Dialog_Menu_Navigation</include>
+					</control>
+					<control type="button" id="7">
+						<include>Hidden_Button</include>
+						<include content="Icon_Button">
+							<param name="description" value="User rating"/>
+							<param name="icon" value="Bookmarks"/>
+						</include>
+						<visible>!String.IsEqual(ListItem.DBType,set)</visible>
+						<onfocus>SetProperty(ResetScroll," ")</onfocus>
+						<onfocus>SetProperty(Focused_Button,$LOCALIZE[563],movieinformation)</onfocus>
+						<onup>5003</onup>
+						<ondown>5004</ondown>
+					</control>
+					<control type="button" id="10">
+						<include>Hidden_Button</include>
+						<include content="Icon_Button">
+							<param name="description" value="Choose art"/>
+							<param name="icon" value="Menu"/>
+						</include>
+						<onfocus>SetProperty(ResetScroll," ")</onfocus>
+						<onfocus>SetProperty(Focused_Button,$LOCALIZE[13511],movieinformation)</onfocus>
+						<include>MovieInfo_Dialog_Menu_Navigation</include>
+					</control>
+					<control type="button" id="6">
+						<include>Hidden_Button</include>
+						<include content="Icon_Button">
+							<param name="description" value="Refresh button"/>
+							<param name="icon" value="Refresh"/>
+						</include>
+						<visible>!String.IsEqual(ListItem.DBType,set)</visible>
+						<onfocus>SetProperty(ResetScroll," ")</onfocus>
+						<onfocus>SetProperty(Focused_Button,$LOCALIZE[184],movieinformation)</onfocus>
+						<include>MovieInfo_Dialog_Menu_Navigation</include>
+					</control>
+
 				</control>
 			</control>
 
-
-			<control type="group">
-				<visible>!Window.IsVisible(selectdialog)</visible>
-				<include>Delayed_Dialog_Fade_Animation</include>
-				<include condition="!String.IsEqual(ListItem.DBType,set)" content="Info_Widget_Cast"/>
-			</control>
+			<include condition="!String.IsEqual(ListItem.DBType,set)" content="Info_Widget_Cast"/>
 			<include condition="!String.IsEqual(ListItem.DBType,set)" content="Info_Widget_ActorCredits"/>
 			<include condition="String.IsEqual(ListItem.DBType,tvshow) + Integer.IsGreater(ListItem.Property(UnwatchedEpisodes),0)" content="Info_Widget_NextUp"/>
 			<include condition="String.IsEqual(ListItem.DBType,episode)" content="Info_Widget_Episodes"/>
@@ -336,9 +320,9 @@
 			</control>
 
 			<control type="group">
-				<visible>$EXP[TransparentDialog_IsVisible] + [String.IsEqual(Window(movieinformation).Property(Focused_Button),$LOCALIZE[13511]) | $EXP[InfoWidget_HasFocus] | $EXP[PanelDialog_IsVisible]]</visible>
-				<include>Transparent_Dialog_Background</include>
+				<visible>$EXP[TransparentDialog_IsVisible] + $EXP[InfoWidget_HasFocus]</visible>
 				<include>Content_Fade_Animation</include>
+				<include>Transparent_Dialog_Background</include>
 			</control>
 
 		</control>

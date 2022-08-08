@@ -3,18 +3,42 @@
 
 	<!-- PATHS -->
 	<variable name="Slideshow_Path">
+		<!-- Global override -->
 		<value condition="Skin.HasSetting(Home_Background_Override_Enabled) + Skin.String(Home_Background_Override)">$INFO[Skin.String(Home_Background_Override)]</value>
-		<value condition="String.Contains(Container(9000).ListItem.Property(path),music)">musicdb://artists/?albumartistsonly=true</value>
-		<value condition="String.Contains(Container(9000).ListItem.Property(path),tv)">videodb://tvshows/titles/</value>
-		<value condition="String.Contains(Container(9000).ListItem.Property(path),sets)">library://video/movies/sets.xml</value>
-		<value condition="String.Contains(Container(9000).ListItem.Property(path),recentlyaddedmovies)">library://video/movies/recentlyaddedmovies.xml</value>
-		<value condition="String.Contains(Container(9000).ListItem.Property(path),kids)">special://skin/extras/playlists/kids_movies.xsp</value>
-		<value condition="String.Contains(Container(9000).ListItem.Property(path),4k)">special://skin/extras/playlists/4k_movies.xsp</value>
+		<!-- playlists and xml library paths e.g. inprogress or sets -->
+		<value condition="String.Contains(Container(9000).ListItem.Property(list),.xsp)">$INFO[Container(9000).ListItem.Property(list)]</value>
+		<value condition="String.Contains(Container(9000).ListItem.Property(list),.xml)">$INFO[Container(9000).ListItem.Property(list)]</value>
+		<!-- music paths -->
+		<value condition="String.Contains(Container(9000).ListItem.Property(list),recentlyaddedalbums)">musicdb://recentlyaddedalbums/</value>
+		<value condition="String.Contains(Container(9000).ListItem.Property(list),recentlyplayedalbums)">musicdb://recentlyplayedalbums/</value>
+		<value condition="String.Contains(Container(9000).ListItem.Property(list),musicdb)">musicdb://artists/?albumartistsonly=true</value>
+		<!-- video paths -->
+		<value condition="String.Contains(Container(9000).ListItem.Property(list),recentlyaddedepisodes)">videodb://recentlyaddedepisodes/</value>
+		<value condition="String.Contains(Container(9000).ListItem.Property(list),tvshows)">videodb://tvshows/titles/</value>
+		<value condition="String.Contains(Container(9000).ListItem.Property(list),recentlyaddedmovies)">ideodb://recentlyaddedmovies/</value>
+		<value condition="String.Contains(Container(9000).ListItem.Property(list),movies)">videodb://movies/titles/</value>
+		<!-- fallbacks -->
 		<value condition="Library.HasContent(Movies)">videodb://movies/titles/</value>
 		<value condition="Library.HasContent(TVShows)">videodb://tvshows/titles/</value>
 		<value condition="Library.HasContent(Music)">musicdb://artists/?albumartistsonly=true</value>
-		<value>skin://resources/fanart.jpg</value>
+		<value></value>
 	</variable>
+
+	<variable name="Slideshow_Source">
+		<!-- Global override -->
+		<value condition="Skin.HasSetting(Home_Background_Override_Enabled) + Skin.String(Home_Background_Override)">$INFO[Container(12340).ListItem.Art(fanart)]</value>
+		<!-- Shortcut overrides -->
+		<value condition="!String.IsEmpty(Container(9000).ListItem.Property(backgroundPlaylist))">$INFO[Container(12341).ListItem.Art(fanart)]</value>
+		<value condition="!String.IsEmpty(Container(9000).ListItem.Property(background))">$INFO[Container(9000).ListItem.Property(background)]</value>
+		<!-- Standard -->
+		<value>$INFO[Container(12340).ListItem.Art(fanart)]</value>
+	</variable>
+
+	<variable name="Dialog_Slideshow_Source">
+		<value condition="Window.Is(addonsettings) + !String.IsEmpty(ListItem.Art(fanart))">$INFO[ListItem.Art(fanart)]</value>
+		<value>$INFO[Container(12342).ListItem.Art(fanart)]</value>
+	</variable>
+
 
 	<variable name="Logo_Path">
 		<!-- fullscreeninfo -->
@@ -37,6 +61,7 @@
 	<variable name="AutoComplete_Path">
 		<value condition="System.AddonIsEnabled(plugin.program.autocompletion) + !System.HasHiddenInput">plugin://plugin.program.autocompletion?info=autocomplete&amp;&amp;id=$INFO[Control.GetLabel(312).index(1)]&amp;&amp;limit=9</value>
 	</variable>
+
 
 
 	<!-- ICONS -->
@@ -162,7 +187,7 @@
 		<value condition="VideoPlayer.IsFullscreen + [String.Contains(Player.FilenameAndPath,hddvd) | String.Contains(Player.FilenameAndPath,hd-dvd) | String.Contains(Player.FilenameAndPath,.evo,Right)]">flags/source/hddvd.png</value>
 		<value condition="VideoPlayer.IsFullscreen + [String.Contains(Player.FilenameAndPath,.ifo,Right) | String.Contains(Player.FilenameAndPath,.iso,Right) | String.Contains(Player.FilenameAndPath,dvd)]">flags/source/dvd.png</value>
 		<value condition="VideoPlayer.IsFullscreen + String.Contains(Player.FilenameAndPath,hd) + String.Contains(Player.FilenameAndPath,tv)">flags/source/hdtv.png</value>
-		<value condition="VideoPlayer.IsFullscreen + [[String.Contains(Player.FilenameAndPath,sd) + String.Contains(Player.FilenameAndPath,tv)] | [String.Contains(Player.FilenameAndPath,pd) + String.Contains(Player.FilenameAndPath,tv)] | String.Contains(Player.FilenameAndPath,dsr)]]">flags/source/sdtv.png</value>
+		<value condition="VideoPlayer.IsFullscreen + [[String.Contains(Player.FilenameAndPath,sd) + String.Contains(Player.FilenameAndPath,tv)] | [String.Contains(Player.FilenameAndPath,pd) + String.Contains(Player.FilenameAndPath,tv)] | String.Contains(Player.FilenameAndPath,dsr)]">flags/source/sdtv.png</value>
 		<value condition="String.Contains(Player.FilenameAndPath,vhs)">flags/source/vhs.png</value>
 		<value condition="String.Contains(Player.FilenameAndPath,dvhs)">flags/source/dvhs.png</value>
 		<value condition="String.Contains(Player.FilenameAndPath,dtheater)">flags/source/dtheater.png</value>
@@ -189,6 +214,15 @@
 
 
 	<!-- ARTWORK -->
+
+	<variable name="DialogSelect_Artwork">
+		<value condition="!String.IsEmpty(Container(6).ListItem.Art(square))">$INFO[Container(6).ListItem.Art(square)]</value>
+		<value condition="!String.IsEmpty(Container(6).ListItem.Art(fanart))">$INFO[Container(6).ListItem.Art(fanart)]</value>
+		<value condition="!String.IsEmpty(Container(6).ListItem.Art(keyart)) + $EXP[Prefer_Keyart]">$INFO[Container(6).ListItem.Art(keyart)]</value>
+		<value condition="!String.IsEmpty(Container(6).ListItem.Art(poster))">$INFO[Container(6).ListItem.Art(poster)]</value>
+		<value>$INFO[Container(6).ListItem.Art(thumb)]</value>
+	</variable>
+
 	<variable name="Dialog_Info_Background">
 		<value condition="String.IsEqual(ListItem.DBType,episode) + !String.IsEmpty(ListItem.Art(thumb))">$INFO[ListItem.Art(thumb)]</value>
 		<value condition="String.IsEqual(Container.FolderName,ListItem.TVShowTitle) + !String.IsEmpty(Window(home).Property(Season_Fanart))">$INFO[Window(home).Property(Season_Fanart)]</value>
@@ -1010,15 +1044,6 @@
 	</variable>
 
 	<variable name="Breadcrumb_Info_Label">
-		<!-- OK -->
-		<value condition="Window.IsVisible(filebrowser) + Control.HasFocus(413)">$LOCALIZE[31116] $LOCALIZE[186]</value>
-		<!-- Cancel -->
-		<value condition="Window.IsVisible(filebrowser) + Control.HasFocus(414)">$LOCALIZE[31116] $LOCALIZE[222]</value>
-		<!-- New folder -->
-		<value condition="Window.IsVisible(filebrowser) + Control.HasFocus(415)">$LOCALIZE[31116] $LOCALIZE[119]</value>
-		<!-- Mirror image -->
-		<value condition="Window.IsVisible(filebrowser) + Control.HasFocus(416)">$LOCALIZE[31116] $LOCALIZE[749]</value>
-
 		<value condition="Window.IsActive(musicplaylist)">$INFO[ListItem.Year,$LOCALIZE[31116] ]$INFO[ListItem.Album, $LOCALIZE[31116] ]</value>
 		<value condition="VideoPlayer.IsFullscreen + !String.IsEmpty(VideoPlayer.Season) + Integer.IsGreater(VideoPlayer.Episode,9)">$INFO[VideoPlayer.Season,$LOCALIZE[31116] ]$INFO[VideoPlayer.Episode,x]$VAR[Resolution_Label, $LOCALIZE[31116] ]$VAR[AudioCodec_Label, $LOCALIZE[31116] ]$INFO[Player.FinishTime, $LOCALIZE[31116] $LOCALIZE[32000] ]</value>
 		<value condition="VideoPlayer.IsFullscreen + !String.IsEmpty(VideoPlayer.Season) + Integer.IsGreater(VideoPlayer.Episode,0)">$INFO[VideoPlayer.Season,$LOCALIZE[31116] ]$INFO[VideoPlayer.Episode,x0]$VAR[Resolution_Label, $LOCALIZE[31116] ]$VAR[AudioCodec_Label, $LOCALIZE[31116] ]$INFO[Player.FinishTime, $LOCALIZE[31116] $LOCALIZE[32000] ]</value>
@@ -1394,6 +1419,12 @@
 		<value condition="Integer.IsGreater(Container(100).NumItems,1)">$INFO[Container(100).NumItems,, $LOCALIZE[31137]]</value>
 		<value condition="Integer.IsGreater(Container(100).NumItems,0)">$INFO[Container(100).NumItems,, $LOCALIZE[31140]]</value>
 		<value>$LOCALIZE[31139]</value>
+	</variable>
+	<!-- script.skinshortcuts label for user background override -->
+	<variable name="skinshortcuts_Background_Override_Label2">
+		<value condition="!String.IsEmpty(Container(211).ListItem.Property(backgroundPlaylist))">$INFO[Container(211).ListItem.Property(backgroundPlaylist)]</value>
+		<value condition="!String.IsEmpty(Container(211).ListItem.Property(background))">$INFO[Container(211).ListItem.Property(background)]</value>
+		<value></value>
 	</variable>
 
 

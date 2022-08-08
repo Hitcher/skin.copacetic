@@ -1,4 +1,4 @@
-<includes>
+	<includes>
 
 	<include name="Container_Content_Path">
 		<param name="limit" default="20"/>
@@ -75,6 +75,7 @@
 				<param name="sortby" value="$PARAM[sortby]"/>
 				<param name="sortorder" value="$PARAM[sortorder]"/>
 				<param name="content" value="$PARAM[content]"/>
+				<param name="limit" value="$PARAM[limit]"/>
 			</include>
 
 			<!-- Labels to check if artwork is the same as next/previous -->
@@ -126,7 +127,7 @@
 			</control>
 
 			<control type="group">
-				<visible>!Window.IsVisible(shutdownmenu)</visible>
+				<visible>!$EXP[TransparentDialog_IsVisible]</visible>
 				<include>Delayed_Content_Fade_Animation</include>
 				<!-- Details -->
 				<control type="group">
@@ -153,6 +154,7 @@
 				<!-- Breadcrumb -->
 				<control type="group">
 					<visible>Control.HasFocus(90$PARAM[widget_position]0)</visible>
+					<animation effect="fade" start="0" end="100" time="360" tween="sine" easing="inout" reversible="false" condition="$EXP[Widget_HasFocus]">Conditional</animation>
 					<include content="Breadcrumb_Label">
 						<param name="title_label" value="$PARAM[widget_header]"/>
 						<param name="info_label" value="$INFO[Container(90$PARAM[widget_position]0).CurrentItem,$LOCALIZE[31116] ,]$INFO[Container(90$PARAM[widget_position]0).NumItems,/]"/>
@@ -258,6 +260,19 @@
 		</include>
 	</include>
 
+	<include name="Widget_Custom">
+		<include content="Widget_Template">
+			<param name="widget_position" value="$PARAM[widget_position]"/>
+			<param name="widget_header" value="$INFO[Skin.String(Widget$PARAM[widget_position]_Custom_Name)]"/>
+			<param name="id" value="$PARAM[id]"/>
+			<param name="target" value="$INFO[Skin.String(Widget$PARAM[widget_position]_Custom_Target]"/>
+			<param name="sortby" value="$INFO[Skin.String(Widget$PARAM[widget_position]_Custom_SortMethod)]"/>
+			<param name="sortorder" value="$INFO[Skin.String(Widget$PARAM[widget_position]_Custom_SortOrder)]"/>
+			<param name="content" value="$INFO[Skin.String(Widget$PARAM[widget_position]_Custom_Path)]"/>
+			<param name="limit" value="$INFO[Skin.String(Widget$PARAM[widget_position]_Custom_Limit)]"/>
+		</include>
+	</include>
+
 	<include name="Widget_Item">
 		<param name="widget_position"/>
 		<param name="id"/>
@@ -288,6 +303,10 @@
 					<param name="id" value="$PARAM[id]"/>
 				</include>
 				<include condition="Skin.HasSetting(Widget$PARAM[widget_position]_Content_Favourites)" content="Widget_Favourites">
+					<param name="widget_position" value="$PARAM[widget_position]"/>
+					<param name="id" value="$PARAM[id]"/>
+				</include>
+				<include condition="Skin.HasSetting(Widget$PARAM[widget_position]_Content_Custom)" content="Widget_Custom">
 					<param name="widget_position" value="$PARAM[widget_position]"/>
 					<param name="id" value="$PARAM[id]"/>
 				</include>
@@ -395,7 +414,8 @@
 			</control>
 			<!-- Details -->
 			<control type="group">
-				<visible>!Window.IsVisible(shutdownmenu) + Control.HasFocus($PARAM[id])</visible>
+				<animation effect="fade" start="0" end="100" time="360" tween="sine" easing="inout" reversible="false" condition="$EXP[InfoWidget_HasFocus]">Conditional</animation>
+				<visible>!$EXP[TransparentDialog_IsVisible]  + Control.HasFocus($PARAM[id])</visible>
 				<include content="Breadcrumb_Label">
 					<param name="title_label" value="$PARAM[widget_header]"/>
 					<param name="info_label" value="$PARAM[widget_info]"/>
@@ -403,14 +423,14 @@
 				</include>
 			</control>
 			<control type="group">
-				<visible>!Window.IsVisible(shutdownmenu) + Control.HasFocus($PARAM[id]) + !Container($PARAM[id]).IsUpdating</visible>
+				<visible>!$EXP[TransparentDialog_IsVisible] + Control.HasFocus($PARAM[id]) + !Container($PARAM[id]).IsUpdating</visible>
 				<include>Delayed_Content_Fade_Animation</include>
 				<include content="$PARAM[widget_view]View_Details">
 					<param name="id" value="$PARAM[id]"/>
 				</include>
 			</control>
 			<control type="group">
-				<visible>!Window.IsVisible(shutdownmenu) + Control.HasFocus($PARAM[id]) + String.IsEqual(Control.GetLabel($PARAM[id]10),Grid) + !Container($PARAM[id]).IsUpdating</visible>
+				<visible>!$EXP[TransparentDialog_IsVisible] + Control.HasFocus($PARAM[id]) + String.IsEqual(Control.GetLabel($PARAM[id]10),Grid) + !Container($PARAM[id]).IsUpdating</visible>
 				<include>Delayed_Content_Fade_Animation</include>
 				<animation effect="slide" start="0" end="0,677" time="0" condition="String.IsEqual(Control.GetLabel($PARAM[id]11),Fanart)">Conditional</animation>
 				<animation effect="slide" start="0" end="0,690" time="0" condition="String.IsEqual(Control.GetLabel($PARAM[id]11),Square)">Conditional</animation>

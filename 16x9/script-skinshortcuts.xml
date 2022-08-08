@@ -6,8 +6,46 @@
 	<include>Delayed_Dialog_Fade_Animation</include>
 	<controls>
 
+		<!-- Hidden controls -->
 		<control type="group">
-			<visible>!$EXP[TransparentDialog_IsVisible]</visible>
+			<visible>false</visible>
+			<control type="list" id="111"/>
+			<control type="button" id="306"/>
+			<control type="button" id="309"/>
+			<control type="button" id="312"/>
+		</control>
+
+		<control type="button" id="304">
+			<include>Hidden_Button</include>
+			<onleft>10</onleft>
+			<onright>303</onright>
+			<onup>Control.Move(211,-1)</onup>
+			<ondown>Control.Move(211,1)</ondown>
+		</control>
+		<control type="button" id="303">
+			<include>Hidden_Button</include>
+			<onleft>304</onleft>
+			<onright>301</onright>
+			<onup>Control.Move(211,-1)</onup>
+			<ondown>Control.Move(211,1)</ondown>
+		</control>
+		<control type="button" id="301">
+			<include>Hidden_Button</include>
+			<onleft>303</onleft>
+			<onright>302</onright>
+			<onup>Control.Move(211,-1)</onup>
+			<ondown>Control.Move(211,1)</ondown>
+		</control>
+		<control type="button" id="302">
+			<include>Hidden_Button</include>
+			<onleft>301</onleft>
+			<onright>9001</onright>
+			<onup>Control.Move(211,-1)</onup>
+			<ondown>Control.Move(211,1)</ondown>
+		</control>
+
+		<control type="group">
+		<visible>!$EXP[TransparentDialog_IsVisible] + String.IsEmpty(Window.Property(additionalDialog))</visible>
 			<include>Delayed_Content_Fade_Animation</include>
 
 			<include content="Breadcrumb_Label">
@@ -18,36 +56,6 @@
 				<param name="top" value="180"/>
 				<param name="bottom" value="180"/>
 			</include>
-
-			<!-- Hidden controls -->
-			<control type="button" id="304">
-				<include>Hidden_Button</include>
-				<onleft>10</onleft>
-				<onright>303</onright>
-				<onup>Control.Move(211,-1)</onup>
-				<ondown>Control.Move(211,1)</ondown>
-			</control>
-			<control type="button" id="303">
-				<include>Hidden_Button</include>
-				<onleft>304</onleft>
-				<onright>301</onright>
-				<onup>Control.Move(211,-1)</onup>
-				<ondown>Control.Move(211,1)</ondown>
-			</control>
-			<control type="button" id="301">
-				<include>Hidden_Button</include>
-				<onleft>303</onleft>
-				<onright>302</onright>
-				<onup>Control.Move(211,-1)</onup>
-				<ondown>Control.Move(211,1)</ondown>
-			</control>
-			<control type="button" id="302">
-				<include>Hidden_Button</include>
-				<onleft>301</onleft>
-				<onright>9001</onright>
-				<onup>Control.Move(211,-1)</onup>
-				<ondown>Control.Move(211,1)</ondown>
-			</control>
 
 			<!-- Left list -->
 			<control type="list" id="211">
@@ -126,7 +134,7 @@
 
 			<!-- Sub list scrollbar -->
 			<include content="Dialog_Divider_With_Scrollbar">
-				<param name="scrollbarvisible" value="Control.HasFocus(211) | Control.HasFocus(301) | Control.HasFocus(303) | Control.HasFocus(304) | Control.HasFocus(302"/>
+				<param name="scrollbarvisible" value="Control.HasFocus(211) | Control.HasFocus(301) | Control.HasFocus(303) | Control.HasFocus(304) | Control.HasFocus(302)"/>
 			</include>
 
 			<!-- Right grouplist -->
@@ -156,12 +164,18 @@
 					<label>$ADDON[script.skinshortcuts 32027]</label>
 					<label2>$INFO[Container(211).ListItem.Property(displaypath)]</label2>
 				</control>
+				<!-- Change background path -->
+				<control type="button" id="310">
+					<label>$ADDON[script.skinshortcuts 32045]</label>
+					<label2>$VAR[skinshortcuts_Background_Override_Label2]</label2>
+					<label2></label2>
+				</control>
 			</control>
 
 			<include content="ButtonGroup">
 				<param name="onleft" value="9001"/>
 				<param name="onright" value="302"/>
-				<param name="onup" value="307"/>
+				<param name="onup" value="310"/>
 				<param name="ondown" value="401"/>
 				<param name="icons" value="true"/>
 				<!-- Restore -->
@@ -173,12 +187,16 @@
 				<param name="button2id" value="999"/>
 				<param name="button2onclick" value="RunScript(script.skinshortcuts,type=resetall)"/>
 				<param name="button2texture" value="Refresh"/>
-				<!-- Save and Close -->
+				<!-- cancel -->
 				<param name="button3" value="true"/>
-				<param name="button3id" value="10"/>
-				<param name="button3onclick" value="RunScript(script.skinshortcuts,type=buildxml&amp;mainmenuID=9000&amp;group=mainmenu)"/>
-				<param name="button3onclick2" value="Close"/>
-				<param name="button3texture" value="Check"/>
+				<param name="button3onclick" value="Close"/>
+				<param name="button3texture" value="Cross"/>
+				<!-- Save and Close -->
+				<param name="button4" value="true"/>
+				<param name="button4id" value="10"/>
+				<param name="button4onclick" value="RunScript(script.skinshortcuts,type=buildxml&amp;mainmenuID=9000&amp;group=mainmenu)"/>
+				<param name="button4onclick2" value="Close"/>
+				<param name="button4texture" value="Check"/>
 			</include>
 
 		</control>

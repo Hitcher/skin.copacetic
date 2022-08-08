@@ -73,27 +73,30 @@
 	</include>
 
 	<include name="FanartSlideshow">
-    <param name="path" default="$VAR[Slideshow_Path]"/>
-    <param name="listid" default="12341"/>
     <definition>
       <control type="group">
-				<control type="list" id="$PARAM[listid]">
-    			<content sortby="random">$PARAM[path]</content>
+				<control type="list" id="12340">
+					<visible>String.IsEmpty(Container(9000).ListItem.Property(backgroundPlaylist))</visible>
+    			<content sortby="random">$VAR[Slideshow_Path]</content>
     			<autoscroll time="7000">true</autoscroll> <!-- Time to show each image, in milliseconds -->
     			<itemlayout />
     			<focusedlayout />
     		</control>
-				<control type="videowindow">
-					<include>Hidden_Control</include>
+				<control type="list" id="12341">
+					<visible>!String.IsEmpty(Container(9000).ListItem.Property(backgroundPlaylist))</visible>
+					<content sortby="random">$INFO[Container(9000).ListItem.Property(backgroundPlaylist)]</content>
+					<autoscroll time="7000">true</autoscroll> <!-- Time to show each image, in milliseconds -->
+					<itemlayout />
+					<focusedlayout />
 				</control>
 				<control type="image">
-					<visible>!Control.HasFocus(9001) + Integer.IsGreater(Container(12341).NumItems,0)</visible>
 					<animation effect="fade" start="0" end="100" time="360" delay="1800" tween="sine" easing="inout" reversible="true">Visible</animation>
 					<texture colordiffuse="$VAR[Dark_Color]">views/white_100.png</texture>
 				</control>
     		<control type="multiimage">
-    			<imagepath colordiffuse="$VAR[Home_Artwork_Diffuse]" background="true">$INFO[Container($PARAM[listid]).ListItem.Art(fanart)]</imagepath>
+    			<imagepath colordiffuse="$VAR[Home_Artwork_Diffuse]" background="true">$VAR[Slideshow_Source]</imagepath>
     			<aspectratio>scale</aspectratio>
+					<timeperimage>7000</timeperimage>
     			<fadetime>360</fadetime>
     			<randomize>true</randomize>
     		</control>
@@ -127,7 +130,7 @@
 					<texture colordiffuse="$VAR[Dark_Color]">views/white_100.png</texture>
 				</control>
 				<control type="multiimage">
-					<imagepath colordiffuse="$VAR[Dialogs_Artwork_Diffuse]" background="true">$INFO[Container(12342).ListItem.Art(fanart)]</imagepath>
+					<imagepath colordiffuse="$VAR[Dialogs_Artwork_Diffuse]" background="true">$VAR[Dialog_Slideshow_Source]</imagepath>
 					<aspectratio>scale</aspectratio>
 					<fadetime>360</fadetime>
 					<pauseatend>10000</pauseatend>
@@ -286,16 +289,16 @@
  		<definition>
 			<control type="grouplist" id="$PARAM[dummyid]">
 				<centertop>$PARAM[top]</centertop>
-				<left>60</left>
 				<width>1800</width>
+				<centerleft>50%</centerleft>
 				<height>$PARAM[height]</height>
 				<orientation>horizontal</orientation>
 				<align>center</align>
 				<itemgap>$PARAM[itemgap]</itemgap>
 				<usecontrolcoords>true</usecontrolcoords>
 				<scrolltime tween="sine" easing="inout">360</scrolltime>
-				<animation effect="slide" start="0" end="-300" condition="!Container($PARAM[hiddenid]).OnScrollNext" reversible="false" time="180" tween="sine" easing="inout">Conditional</animation>
-				<animation effect="slide" start="0" end="300" condition="!Container($PARAM[hiddenid]).OnScrollPrevious" reversible="false" time="180" tween="sine" easing="inout">Conditional</animation>
+				<animation effect="slide" start="0" end="-120" condition="!Container($PARAM[hiddenid]).OnScrollNext" reversible="false" time="180" tween="sine" easing="inout">Conditional</animation>
+				<animation effect="slide" start="0" end="120" condition="!Container($PARAM[hiddenid]).OnScrollPrevious" reversible="false" time="180" tween="sine" easing="inout">Conditional</animation>
 
 				<!-- Previous -->
 				<control type="label">
@@ -1787,6 +1790,7 @@
 		<param name="button1" default="false"/>
 	  <param name="button1id" default="38501"/>
 		<param name="button1onclick" default=""/>
+		<param name="button1onclick2" default=""/>
 		<param name="button1label" default=""/>
 		<param name="button1left" default="0"/>
 		<param name="button1texture" default="Cross"/>
@@ -1810,6 +1814,7 @@
 		<param name="button4" default="false"/>
 		<param name="button4id" default="38504"/>
 		<param name="button4onclick" default=""/>
+		<param name="button4onclick2" default=""/>
 		<param name="button4label" default=""/>
 		<param name="button4left" default="0"/>
 		<param name="button4texture" default="Check"/>
@@ -1828,13 +1833,12 @@
 					<onup>$PARAM[onup]</onup>
 					<ondown>$PARAM[ondown]</ondown>
 		      <orientation>horizontal</orientation>
-					<itemgap>0</itemgap>
 		      <control type="button" id="$PARAM[button1id]">
 						<visible>$PARAM[button1]</visible>
 						<onclick>$PARAM[button1onclick]</onclick>
+						<onclick>$PARAM[button1onclick2]</onclick>
 						<label>$PARAM[button1label]</label>
 						<include>Hidden_Button</include>
-						<onfocus>SetProperty(Button_Group_Label,$INFO[Control.GetLabel($PARAM[button1id])],home)</onfocus>
 					</control>
 		      <control type="button" id="$PARAM[button2id]">
 						<visible>$PARAM[button2]</visible>
@@ -1842,7 +1846,6 @@
 						<onclick>$PARAM[button2onclick2]</onclick>
 						<label>$PARAM[button2label]</label>
 						<include>Hidden_Button</include>
-						<onfocus>SetProperty(Button_Group_Label,$INFO[Control.GetLabel($PARAM[button2id])],home)</onfocus>
 					</control>
 					<control type="button" id="$PARAM[button3id]">
 						<visible>$PARAM[button3]</visible>
@@ -1850,14 +1853,13 @@
 						<onclick>$PARAM[button3onclick2]</onclick>
 						<label>$PARAM[button3label]</label>
 						<include>Hidden_Button</include>
-						<onfocus>SetProperty(Button_Group_Label,$INFO[Control.GetLabel($PARAM[button3id])],home)</onfocus>
 					</control>
 					<control type="button" id="$PARAM[button4id]">
 						<visible>$PARAM[button4]</visible>
 						<onclick>$PARAM[button4onclick]</onclick>
+						<onclick>$PARAM[button4onclick2]</onclick>
 						<label>$PARAM[button4label]</label>
 						<include>Hidden_Button</include>
-						<onfocus>SetProperty(Button_Group_Label,$INFO[Control.GetLabel($PARAM[button4id])],home)</onfocus>
 					</control>
 		    </control>
 		    <control type="grouplist">

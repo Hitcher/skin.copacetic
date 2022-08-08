@@ -17,78 +17,85 @@
 		</control>
 
 		<control type="group">
-			<visible>!$EXP[TransparentDialog_IsVisible]</visible>
-			<include>Delayed_Content_Fade_Animation</include>
+			<visible>Integer.IsGreater(Player.Time,2)</visible>
+			<include>Delayed_Dialog_Fade_Animation</include>
 			<control type="group">
-				<visible>Player.HasVideo</visible>
-				<!-- progress -->
+				<visible>!$EXP[TransparentDialog_IsVisible]</visible>
+				<include>Delayed_Content_Fade_Animation</include>
+
+				<!-- Video -->
 				<control type="group">
-					<visible>Player.Seeking | Player.Rewinding | Player.Forwarding | Player.HasPerformedSeek(3) | [[Window.IsVisible(videoosd) | Player.Paused] + !System.IdleTime(3)] | [Player.Playing + Integer.IsLess(Player.Time,5)] | Window.IsVisible(fullscreeninfo)</visible>
+					<visible>Player.HasVideo</visible>
+					<!-- progress -->
+					<control type="group">
+						<visible>Player.Seeking | Player.Rewinding | Player.Forwarding | Player.HasPerformedSeek(3) | [[Window.IsVisible(videoosd) | Player.Paused] + !System.IdleTime(3)] | Window.IsVisible(fullscreeninfo)</visible>
+						<include>Delayed_Dialog_Fade_Animation</include>
+						<control type="group">
+							<visible>![Player.Paused + Skin.HasSetting(Player_Progress_Disabled)]</visible>
+							<include content="Player_Progress">
+								<param name="left" value="60"/>
+								<param name="right" value="60"/>
+								<param name="bottom" value="14"/>
+								<param name="height" value="32"/>
+								<param name="progress_id" value="1"/>
+								<param name="progress_bar_padding" value="120"/>
+								<param name="left_label" value="$INFO[Player.Time]"/>
+								<param name="right_label" value="$INFO[Player.Duration]"/>
+								<param name="text_color" value="$VAR[Light_Color]"/>
+							</include>
+						</control>
+					</control>
+					<control type="group">
+						<visible>!Window.IsVisible(fullscreeninfo)</visible>
+						<include>Content_Fade_Animation</include>
+						<!-- Breadcrumnb -->
+						<control type="group">
+							<visible>!Window.IsVisible(videoosd)</visible>
+							<include>Delayed_Dialog_Fade_Animation</include>
+							<control type="group">
+								<visible>Player.Seeking | Player.Rewinding | Player.Forwarding | Player.HasPerformedSeek(3) | [Player.Paused + !System.IdleTime(3)] | [Player.Playing + Integer.IsLess(Player.Time,8)]</visible>
+								<include>Delayed_Dialog_Fade_Animation</include>
+								<include content="Breadcrumb_Label">
+									<param name="label_color" value="$VAR[Light_Color]"/>
+								</include>
+							</control>
+						</control>
+						<!-- Player status icons -->
+						<control type="group">
+							<visible>Player.Seeking | Player.Rewinding | Player.Forwarding | Player.HasPerformedSeek(3) | Player.Paused</visible>
+							<include>Delayed_Dialog_Fade_Animation</include>
+							<include content="Player_Status_Icons">
+								<param name="large_label" value="true"/>
+							</include>
+						</control>
+					</control>
+				</control>
+
+				<!-- Music -->
+				<control type="group">
+					<visible>Window.IsVisible(visualisation) + !Window.IsVisible(1123) + Player.HasAudio</visible>
 					<include>Delayed_Dialog_Fade_Animation</include>
 					<control type="group">
-						<visible>![Player.Paused + Skin.HasSetting(Player_Progress_Disabled)]</visible>
-						<include content="Player_Progress">
-							<param name="left" value="60"/>
-							<param name="right" value="60"/>
-							<param name="bottom" value="14"/>
-							<param name="height" value="32"/>
-							<param name="progress_id" value="1"/>
-							<param name="progress_bar_padding" value="120"/>
-							<param name="left_label" value="$INFO[Player.Time]"/>
-							<param name="right_label" value="$INFO[Player.Duration]"/>
-							<param name="text_color" value="$VAR[Light_Color]"/>
-						</include>
-					</control>
-				</control>
-				<!-- Breadcrumnb -->
-				<control type="group">
-					<visible>!Window.IsVisible(videoosd) + !Window.IsVisible(fullscreeninfo)</visible>
-					<include>Content_Fade_Animation</include>
-					<control type="group">
-						<visible>Player.Seeking | Player.Rewinding | Player.Forwarding | Player.HasPerformedSeek(3) | [Player.Paused + !System.IdleTime(3)] | [Player.Playing + Integer.IsLess(Player.Time,5)]</visible>
-						<include>Delayed_Dialog_Fade_Animation</include>
-						<include content="Breadcrumb_Label">
-							<param name="label_color" value="$VAR[Light_Color]"/>
-						</include>
-					</control>
-				</control>
-				<!-- Player status icons -->
-				<control type="group">
-					<visible>!Window.IsVisible(fullscreeninfo)</visible>
-					<include>Content_Fade_Animation</include>
-					<control type="group">
-						<visible>Player.Seeking | Player.Rewinding | Player.Forwarding | Player.HasPerformedSeek(3) | Player.Paused</visible>
-						<include>Delayed_Dialog_Fade_Animation</include>
+						<visible>!Window.IsVisible(musicosd)</visible>
+						<include>Delayed_Content_Fade_Animation</include>
 						<include content="Player_Status_Icons">
 							<param name="large_label" value="true"/>
 						</include>
 					</control>
-				</control>
-			</control>
-
-			<control type="group">
-				<visible>Window.IsVisible(visualisation) + !Window.IsVisible(1123) + Player.HasAudio</visible>
-				<include>Delayed_Dialog_Fade_Animation</include>
-				<control type="group">
-					<visible>!Window.IsVisible(musicosd)</visible>
-					<include>Delayed_Content_Fade_Animation</include>
-					<include content="Player_Status_Icons">
-						<param name="large_label" value="true"/>
+					<include content="Player_Progress">
+						<param name="left" value="60"/>
+						<param name="right" value="60"/>
+						<param name="bottom" value="14"/>
+						<param name="height" value="32"/>
+						<param name="progress_bar_padding" value="120"/>
+						<param name="progress_id" value="1"/>
+						<param name="left_label" value="$INFO[Player.Time]"/>
+						<param name="right_label" value="$INFO[Player.Duration]"/>
+						<param name="text_color" value="$VAR[Primary_Color]"/>
 					</include>
 				</control>
-				<include content="Player_Progress">
-					<param name="left" value="60"/>
-					<param name="right" value="60"/>
-					<param name="bottom" value="14"/>
-					<param name="height" value="32"/>
-					<param name="progress_bar_padding" value="120"/>
-					<param name="progress_id" value="1"/>
-					<param name="left_label" value="$INFO[Player.Time]"/>
-					<param name="right_label" value="$INFO[Player.Duration]"/>
-					<param name="text_color" value="$VAR[Primary_Color]"/>
-				</include>
-			</control>
 
+			</control>
 		</control>
 
 	</controls>

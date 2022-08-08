@@ -239,7 +239,7 @@
 		<param name="nowplayingtop" default="-34"/>
 		<param name="nowplayingvisible" default="true"/>
 		<param name="icontop" default="-3"/>
-		<param name="icontexture" default="Check_Unfocused"/>
+		<param name="icontexture" default="Check_unfocused"/>
 		<param name="iconvisible" default="String.IsEqual(ListItem.Overlay,OverlayWatched.png)"/>
 		<param name="labelleft" default="120"/>
 		<param name="labelheight" default="55"/>
@@ -307,17 +307,22 @@
 	</include>
 
 	<include name="Common_List_Unfocused">
-		<include content="Common_List_Layout">
-			<param name="icontexture" value="Check_unfocused"/>
-			<param name="iconvisible" value="String.IsEqual(ListItem.Overlay,OverlayWatched.png)"/>
-			<param name="tracknumbercolor" value="$VAR[List_Text_Color]"/>
-			<param name="label" value="$VAR[Unfocused_Title_Label]"/>
-			<param name="textcolor" value="$VAR[List_Text_Color]"/>
-		</include>
+		<definition>
+			<param name="selectedcolor"/>
+			<include content="Common_List_Layout">
+				<param name="icontexture" value="Check_unfocused"/>
+				<param name="iconvisible" value="String.IsEqual(ListItem.Overlay,OverlayWatched.png)"/>
+				<param name="tracknumbercolor" value="$VAR[List_Text_Color]"/>
+				<param name="label" value="$VAR[Unfocused_Title_Label]"/>
+				<param name="textcolor" value="$VAR[List_Text_Color]"/>
+				<param name="selectedcolor" value="$PARAM[selectedcolor]"/>
+			</include>
+		</definition>
 	</include>
 
 	<include name="Common_List_Focused">
 		<param name="labelmaxwidth"/>
+		<param name="selectedcolor"/>
 		<definition>
 			<control type="group">
 				<include>HiddenFocusButton</include>
@@ -334,6 +339,7 @@
 					<param name="labelmaxwidth" value="$PARAM[labelmaxwidth]"/>
 					<param name="font" value="List_Title_Focused"/>
 					<param name="textcolor" value="$VAR[List_Text_Color]"/>
+					<param name="selectedcolor" value="$PARAM[selectedcolor]"/>
 				</include>
 			</control>
 		</definition>
@@ -3145,6 +3151,7 @@
 					<usecontrolcoords>true</usecontrolcoords>
 					<control type="image">
 						<visible>$PARAM[bar]</visible>
+						<visible>!String.IsEmpty(Control.GetLabel($PARAM[title_label_id]))</visible>
 						<top>6</top>
 						<height>48</height>
 						<width>6</width>
@@ -3179,9 +3186,9 @@
 		<param name="visible" default="true"/>
 		<param name="textcolor" default="$VAR[Overlay_Text_Color]"/>
 		<param name="label" default=""/>
-		<param name="left" default="60"/>
+		<param name="left" default="150"/>
 		<param name="right" default="240"/>
-		<param name="height" default="120"/>
+		<param name="height" default="180"/>
 		<param name="haspath" default="false"/>
 		<param name="bottom" default="0"/>
 		<definition>
@@ -3195,7 +3202,7 @@
 				<label>$PARAM[label]</label>
 				<align>left</align>
 				<aligny>center</aligny>
-				<font>Breadcrumb_Info_Label</font>
+				<font>Description</font>
 				<textcolor>$PARAM[textcolor]</textcolor>
 				<haspath>$PARAM[haspath]</haspath>
 			</control>
