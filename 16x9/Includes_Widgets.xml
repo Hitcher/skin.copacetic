@@ -26,7 +26,6 @@
 			<control type="fixedlist" id="$PARAM[id]">
 				<visible>Integer.IsGreater(Container($PARAM[id]).NumItems,$PARAM[min_items]) | Container($PARAM[id]).IsUpdating | $PARAM[bypass_min_items]</visible>
 				<onfocus>SetProperty(HomeWidget,$PARAM[id],home)</onfocus>
-				<onunfocus condition="!String.IsEmpty(window(home).property(HomeWidget))">ClearProperty(HomeWidget,home)</onunfocus>
 				<onfocus>SetProperty(Focused_Button,False,movieinformation)</onfocus>
 				<onunfocus>ClearProperty(Focused_Button,movieinformation)</onunfocus>
 				<onfocus>SetProperty(Focused_Button,False,musicinformation)</onfocus>
@@ -599,7 +598,7 @@
 			<param name="target" value="videos"/>
 			<param name="sortby" value="year"/>
 			<param name="sortorder" value="ascending"/>
-			<param name="content" value="videodb://movies/titles/?setid=$INFO[ListItem.SetID]&amp;reload=$INFO[Window(home).Property(EmbuaryWidgetUpdate)]"/>
+			<param name="content" value="$VAR[Path_MovieSet]"/>
 			<param name="click_action" value="Open_Movie_Set"/>
 			<param name="widget_header" value="$INFO[ListItem.Set]"/>
 			<param name="widget_info" value="$INFO[Container(8010).CurrentItem,$LOCALIZE[31116] ]$INFO[Container(8010).NumItems,/]"/>
@@ -630,7 +629,7 @@
 			<param name="target" value="videos"/>
 			<param name="sortby" value="season"/>
 			<param name="sortorder" value="ascending"/>
-			<param name="content" value="$VAR[CustomContent_Seasons]"/>
+			<param name="content" value="$VAR[Path_Seasons]"/>
 			<param name="click_action" value="Open_Season_Folder"/>
 			<param name="widget_header" value="$INFO[Container(8020).ListItem.Season,$LOCALIZE[20373] ]"/>
 		</include>
@@ -645,7 +644,7 @@
 			<param name="target" value="music"/>
 			<param name="sortby" value="year"/>
 			<param name="sortorder" value="descending"/>
-			<param name="content" value="$VAR[CustomContent_Discography]"/>
+			<param name="content" value="$VAR[Path_Discography]"/>
 			<param name="click_action" value="Open_Album"/>
 			<param name="widget_header" value="$VAR[Info_Widget_Discography_Label]"/>
 			<param name="widget_info" value="$INFO[Container(8020).CurrentItem,$LOCALIZE[31116] ]$INFO[Container(8020).NumItems,/]"/>
@@ -691,15 +690,16 @@
 	<include name="Info_Widget_ActorCredits">
 		<include content="Info_Widget_Template">
 			<param name="widget_view" value="Strip"/>
-			<param name="widget_display" value="Fanart"/>
+			<param name="widget_display" value="Posters"/>
 			<param name="id" value="8030"/>
 			<param name="min_items" value="0"/>
 			<param name="bypass_min_items" value="true"/>
 			<param name="target" value="videos"/>
 			<param name="sortby" value="year"/>
 			<param name="sortorder" value="descending"/>
-			<param name="content" value="$VAR[CustomContent_ActorCredits]"/>
+			<param name="content" value="$VAR[Path_ActorCredits]"/>
 			<param name="click_action" value="ActorCredits"/>
+			<param name="limit" value="35"/>
 			<param name="widget_header" value="$INFO[Container(50).ListItem.Label]"/>
 			<param name="widget_info" value="$LOCALIZE[31116] $LOCALIZE[31114]"/>
 		</include>
@@ -707,13 +707,13 @@
 
 	<include name="Info_Widget_DirectorCredits">
 		<include content="Info_Widget_Template">
-			<param name="widget_view" value="Billboard"/>
+			<param name="widget_view" value="Grid"/>
 			<param name="widget_display" value="Fanart"/>
 			<param name="id" value="8050"/>
 			<param name="target" value="videos"/>
 			<param name="sortby" value="year"/>
-			<param name="sortorder" value="ascending"/>
-			<param name="content" value="videodb://movies/titles/?xsp=%7b%22rules%22%3a%7b%22and%22%3a%5b%7b%22field%22%3a%22director%22%2c%22operator%22%3a%22is%22%2c%22value%22%3a%5b$ESCINFO[ListItem.Director]%5d%7d%5d%7d%2c%22type%22%3a%22movies%22%7d&amp;reload=$INFO[Window(home).Property(EmbuaryWidgetUpdate)]"/>
+			<param name="sortorder" value="descending"/>
+			<param name="content" value="$VAR[Path_DirectorCredits]"/>
 			<param name="click_action" value="Open_More_From_Director"/>
 			<param name="widget_header" value="$INFO[ListItem.Director]"/>
 			<param name="widget_info" value="$LOCALIZE[31116] $LOCALIZE[31114]"/>
@@ -728,7 +728,7 @@
 			<param name="target" value="videos"/>
 			<param name="sortby" value="random"/>
 			<param name="sortorder" value="ascending"/>
-			<param name="content" value="$VAR[CustomContent_Similar]"/>
+			<param name="content" value="$VAR[Path_Similar]"/>
 			<param name="click_action" value="Open_Similar"/>
 			<param name="widget_header" value="Similar"/>
 			<param name="widget_info" value=""/>
