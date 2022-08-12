@@ -248,6 +248,7 @@
 		<param name="font" default="List_Title_Unfocused"/>
 		<param name="textcolor" default="$VAR[List_Text_Color]"/>
 		<param name="selectedcolor" default="$VAR[List_Text_Color]"/>
+		<param name="tracknumber" default="true"/>
 		<param name="tracknumbercolor" default="$VAR[List_Text_Color]"/>
 		<param name="scroll" default="false"/>
 		<definition>
@@ -288,6 +289,7 @@
 					<selectedcolor>$PARAM[selectedcolor]</selectedcolor>
 					<label>$VAR[TrackNumber_Label]</label>
 					<visible>!ListItem.IsPlaying</visible>
+					<visible>$PARAM[tracknumber]</visible>
 				</control>
 				<control type="label">
 					<left>$PARAM[labelleft]</left>
@@ -642,26 +644,22 @@
 				<!-- Secondary List Mask -->
 				<control type="group">
 					<visible>$PARAM[stripview_mask]</visible>
-					<visible>$EXP[StripView_IsVisible] + !$EXP[InfoWidget_HasFocus]</visible>
+					<visible>$EXP[StripView_IsVisible] + [Container.Content(artists) | Container.Content(sets) | Container.Content(movies) | Container.Content(tvshows)]</visible>
+					<width>$PARAM[width]</width>
+					<control type="image">
+						<top>-$PARAM[stripview_mask_top]</top>
+						<height>$PARAM[stripview_mask_top]</height>
+						<texture colordiffuse="$VAR[Secondary_Color]">views/white_100.png</texture>
+					</control>
 					<control type="group">
-						<visible>[Control.HasFocus(4501) + Window.IsVisible(1121)] | $EXP[Secondary_List_ContainerSwitching] | Player.HasMedia</visible>
-						<animation effect="slide" start="0" end="0" time="360">Hidden</animation>
-						<width>$PARAM[width]</width>
+						<top>$PARAM[height]</top>
+						<height>$PARAM[stripview_mask_bottom]</height>
 						<control type="image">
-							<top>-$PARAM[stripview_mask_top]</top>
-							<height>$PARAM[stripview_mask_top]</height>
 							<texture colordiffuse="$VAR[Secondary_Color]">views/white_100.png</texture>
 						</control>
-						<control type="group">
-							<top>$PARAM[height]</top>
-							<height>$PARAM[stripview_mask_bottom]</height>
-							<control type="image">
-								<texture colordiffuse="$VAR[Secondary_Color]">views/white_100.png</texture>
-							</control>
-							<control type="image">
-								<visible>Skin.String(Theme,Light)</visible>
-								<texture colordiffuse="$VAR[Light_Grey_Color]">views/gradient_light-background_$PARAM[stripview_mask_bottom].png</texture>
-							</control>
+						<control type="image">
+							<visible>Skin.String(Theme,Light)</visible>
+							<texture colordiffuse="$VAR[Light_Grey_Color]">views/gradient_light-background_$PARAM[stripview_mask_bottom].png</texture>
 						</control>
 					</control>
 				</control>
