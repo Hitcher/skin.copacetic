@@ -801,7 +801,25 @@
 	</variable>
 
 	<!-- LABELS -->
-
+	<variable name="AudioChannels_Label">
+		<value condition="Integer.IsEqual(VideoPlayer.AudioChannels,10)">9.1</value>
+		<value condition="Integer.IsEqual(VideoPlayer.AudioChannels,8)">7.1</value>
+		<value condition="Integer.IsEqual(VideoPlayer.AudioChannels,7)">6.1</value>
+		<value condition="Integer.IsEqual(VideoPlayer.AudioChannels,6)">5.1</value>
+		<value condition="Integer.IsEqual(VideoPlayer.AudioChannels,5)">4.1</value>
+		<value condition="Integer.IsEqual(VideoPlayer.AudioChannels,4)">4</value>
+		<value condition="Integer.IsEqual(VideoPlayer.AudioChannels,3)">2.1</value>
+		<value condition="Integer.IsEqual(VideoPlayer.AudioChannels,2)">2</value>
+		<value condition="Integer.IsEqual(VideoPlayer.AudioChannels,1)">1</value>
+	</variable>
+	<variable name="AudioChannels_Label2">
+		<value condition="Integer.IsGreater(VideoPlayer.AudioChannels,1)">channels</value>
+		<value>channel</value>
+	</variable>
+	<variable name="Video_Decoder_Type">
+		<value condition="Player.Process(videohwdecoder)">HW</value>
+		<value>SW</value>
+	</variable>
 
 
 	<variable name="Theme_Label">
@@ -1044,12 +1062,21 @@
 		<value></value>
 	</variable>
 
+	<variable name="Fullscreen_Info_Label">
+		<value condition="VideoPlayer.IsFullscreen + !String.IsEmpty(VideoPlayer.Season) + Integer.IsGreater(VideoPlayer.Episode,9)">$INFO[VideoPlayer.Season,$LOCALIZE[31116] ]$INFO[VideoPlayer.Episode,x]$INFO[Player.FinishTime, $LOCALIZE[31116] $LOCALIZE[32000] ]</value>
+		<value condition="VideoPlayer.IsFullscreen + !String.IsEmpty(VideoPlayer.Season) + Integer.IsGreater(VideoPlayer.Episode,0)">$INFO[VideoPlayer.Season,$LOCALIZE[31116] ]$INFO[VideoPlayer.Episode,x0]$INFO[Player.FinishTime, $LOCALIZE[31116] $LOCALIZE[32000] ]</value>
+		<value condition="VideoPlayer.IsFullscreen + !String.IsEmpty(VideoPlayer.Year)">$INFO[VideoPlayer.Year,$LOCALIZE[31116] ]$INFO[Player.FinishTime, $LOCALIZE[31116] $LOCALIZE[32000] ]</value>
+		<value condition="VideoPlayer.IsFullscreen + !String.IsEmpty(Player.FinishTime)">$INFO[Player.FinishTime,$LOCALIZE[31116] $LOCALIZE[32000] ]</value>
+	</variable>
+
+	<variable name="Fullscreen_Info_Label2">
+		<value condition="VideoPlayer.IsFullscreen + !String.IsEmpty(VideoPlayer.Season) + Integer.IsGreater(VideoPlayer.Episode,9)">$VAR[Resolution_Label,$LOCALIZE[31116] ]$VAR[AudioChannels_Label, $LOCALIZE[31116] ]$VAR[AudioCodec_Label, ]</value>
+		<value condition="VideoPlayer.IsFullscreen + !String.IsEmpty(VideoPlayer.Season) + Integer.IsGreater(VideoPlayer.Episode,0)">$VAR[Resolution_Label,$LOCALIZE[31116] ]$VAR[AudioChannels_Label, $LOCALIZE[31116] ]$VAR[AudioCodec_Label, ]</value>
+		<value>$VAR[Resolution_Label,$LOCALIZE[31116] ]$VAR[AudioCodec_Label, $LOCALIZE[31116] ]$VAR[AudioChannels_Label, ]</value>
+	</variable>
+
 	<variable name="Breadcrumb_Info_Label">
 		<value condition="Window.IsActive(musicplaylist)">$INFO[ListItem.Year,$LOCALIZE[31116] ]$INFO[ListItem.Album, $LOCALIZE[31116] ]</value>
-		<value condition="VideoPlayer.IsFullscreen + !String.IsEmpty(VideoPlayer.Season) + Integer.IsGreater(VideoPlayer.Episode,9)">$INFO[VideoPlayer.Season,$LOCALIZE[31116] ]$INFO[VideoPlayer.Episode,x]$VAR[Resolution_Label, $LOCALIZE[31116] ]$VAR[AudioCodec_Label, $LOCALIZE[31116] ]$INFO[Player.FinishTime, $LOCALIZE[31116] $LOCALIZE[32000] ]</value>
-		<value condition="VideoPlayer.IsFullscreen + !String.IsEmpty(VideoPlayer.Season) + Integer.IsGreater(VideoPlayer.Episode,0)">$INFO[VideoPlayer.Season,$LOCALIZE[31116] ]$INFO[VideoPlayer.Episode,x0]$VAR[Resolution_Label, $LOCALIZE[31116] ]$VAR[AudioCodec_Label, $LOCALIZE[31116] ]$INFO[Player.FinishTime, $LOCALIZE[31116] $LOCALIZE[32000] ]</value>
-		<value condition="VideoPlayer.IsFullscreen + !String.IsEmpty(VideoPlayer.Year)">$INFO[VideoPlayer.Year,$LOCALIZE[31116] ]$VAR[Resolution_Label, $LOCALIZE[31116] ]$VAR[AudioCodec_Label, $LOCALIZE[31116] ]$INFO[Player.FinishTime, $LOCALIZE[31116] $LOCALIZE[32000] ]</value>
-		<value condition="VideoPlayer.IsFullscreen + !String.IsEmpty(Player.FinishTime)">$VAR[Resolution_Label,$LOCALIZE[31116] ]$VAR[AudioCodec_Label, $LOCALIZE[31116] ]$INFO[Player.FinishTime, $LOCALIZE[31116] $LOCALIZE[32000] ]</value>
 		<value condition="String.IsEqual(ListItem.DBType,movie) + $EXP[GridView_IsVisible] + $EXP[GridView_Details_Breadcrumb] + !String.IsEmpty(ListItem.Year)">$INFO[Listitem.Year,$LOCALIZE[31116] ]</value>
 		<value condition="String.IsEqual(ListItem.DBType,tvshow) + $EXP[GridView_IsVisible] + $EXP[GridView_Details_Breadcrumb] + !String.IsEmpty(ListItem.Year)">$INFO[Listitem.Year,$LOCALIZE[31116] ]$INFO[ListItem.Property(TotalSeasons), $LOCALIZE[31116] , ]$VAR[Seasons_Label]</value>
 		<value condition="String.IsEqual(ListItem.DBType,season) + $EXP[GridView_IsVisible] + $EXP[GridView_Details_Breadcrumb] + !String.IsEmpty(ListItem.Season)">$INFO[ListItem.Season,$LOCALIZE[31116] $LOCALIZE[20373] ]$INFO[ListItem.Year, $LOCALIZE[31116] ]</value>
@@ -1177,6 +1204,13 @@
 	</variable>
 	<!-- Audio codec label: Used for videoplayer and primary list -->
 	<variable name="AudioCodec_Label">
+		<value condition="VideoPlayer.IsFullscreen + String.IsEqual(VideoPlayer.AudioCodec,AC3)">Dolby Digital</value>
+		<value condition="VideoPlayer.IsFullscreen + String.IsEqual(VideoPlayer.AudioCodec,EAC3)">Dolby Digital Plus</value>
+		<value condition="VideoPlayer.IsFullscreen + String.IsEqual(VideoPlayer.AudioCodec,truehd)">Dolby TrueHD</value>
+		<value condition="VideoPlayer.IsFullscreen + String.IsEqual(VideoPlayer.AudioCodec,atmos)">Dolby Atmos</value>
+		<value condition="VideoPlayer.IsFullscreen + String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma)">DTS-HD Master Audio</value>
+		<value condition="VideoPlayer.IsFullscreen + String.IsEqual(VideoPlayer.AudioCodec,dtshd)">DTS-HD</value>
+		<value condition="VideoPlayer.IsFullscreen + [String.IsEqual(VideoPlayer.AudioCodec,dts) | String.IsEqual(VideoPlayer.AudioCodec,dca]">DTS</value>
 		<value condition="VideoPlayer.IsFullscreen + !String.IsEmpty(VideoPlayer.AudioCodec)">[UPPERCASE]$INFO[VideoPlayer.AudioCodec][/UPPERCASE]</value>
 		<value condition="VideoPlayer.IsFullscreen + String.Contains(Player.FilenameAndPath,.DTS-HD.MA)">DTS-HD.MA</value>
 		<value condition="VideoPlayer.IsFullscreen + String.Contains(Player.FilenameAndPath,.EAC3)">EAC3</value>
@@ -1383,10 +1417,10 @@
 
 	<!-- Specific Window / Dialog labels -->
 	<variable name="DialogSubtitles_Label">
-		<value condition="ListItem.Property(hearingimp) + ListItem.Property(sync)">$INFO[ListItem.Label,, CC SYNC]$INFO[ListItem.Label2, $LOCALIZE[31115] ]</value>
-		<value condition="ListItem.Property(hearingimp)">$INFO[ListItem.Label,, CC]$INFO[ListItem.Label2, $LOCALIZE[31115] ]</value>
-		<value condition="ListItem.Property(sync)">$INFO[ListItem.Label,, SYNC]$INFO[ListItem.Label2, $LOCALIZE[31115] ]</value>
-		<value>$INFO[ListItem.Label]$INFO[ListItem.Label2, $LOCALIZE[31115] ]</value>
+		<value condition="ListItem.Property(hearingimp) + ListItem.Property(sync)">$INFO[ListItem.Label,, CC SYNC]$INFO[ListItem.Label2, $LOCALIZE[31116] ]</value>
+		<value condition="ListItem.Property(hearingimp)">$INFO[ListItem.Label,, CC]$INFO[ListItem.Label2, $LOCALIZE[31116] ]</value>
+		<value condition="ListItem.Property(sync)">$INFO[ListItem.Label,, SYNC]$INFO[ListItem.Label2, $LOCALIZE[31116] ]</value>
+		<value>$INFO[ListItem.Label]$INFO[ListItem.Label2, $LOCALIZE[31116] ]</value>
 	</variable>
 	<!-- Skinsettings home background override: Choose new path... / [shows path] -->
 	<variable name="Home_Background_Override_Label">
