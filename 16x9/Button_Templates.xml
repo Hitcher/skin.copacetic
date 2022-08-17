@@ -127,6 +127,90 @@
 		</definition>
 	</include>
 
+	<include name="Button_Template_Toggle">
+		<param name="buttonid" default=""/>
+		<param name="left" default="0"/>
+		<param name="width" default="120"/>
+		<param name="unfocusedcolor" default="$VAR[List_Text_Color]"/>
+		<param name="focusedcolor" default="$VAR[List_Text_Color]"/>
+		<param name="texture" default="Cross"/>
+		<param name="alttexture" default="Plus"/>
+		<param name="usealttexture" default="false"/>
+		<param name="border" default="false"/>
+		<definition>
+			<control type="group">
+				<visible>[!Window.IsVisible(selectdialog) + !String.IsEqual(Window.Property(xmlfile),DialogSettings.xml) + Control.IsEnabled($PARAM[buttonid]) + Control.IsVisible($PARAM[buttonid])] | [Window.IsVisible(selectdialog) + Control.IsVisible($PARAM[buttonid])] | [String.IsEqual(Window.Property(xmlfile),DialogSettings.xml) + !String.IsEmpty(Control.GetLabel($PARAM[buttonid]))]</visible>
+				<left>$PARAM[left]</left>
+				<width>$PARAM[width]</width>
+				<height>$PARAM[width]</height>
+				<control type="group">
+					<visible>!$PARAM[usealttexture]</visible>
+					<control type="group">
+						<visible>!Control.HasFocus($PARAM[buttonid])</visible>
+						<centertop>50%</centertop>
+						<centerleft>50%</centerleft>
+						<include content="$PARAM[texture]_unfocused">
+							<param name="width" value="$PARAM[width]"/>
+							<param name="color" value="$PARAM[unfocusedcolor]"/>
+						</include>
+					</control>
+					<control type="group">
+						<centertop>50%</centertop>
+						<centerleft>50%</centerleft>
+						<control type="group">
+							<visible>Control.HasFocus($PARAM[buttonid])</visible>
+							<include content="$PARAM[texture]_focused">
+								<param name="width" value="$PARAM[width]"/>
+								<param name="color" value="$PARAM[focusedcolor]"/>
+							</include>
+						</control>
+						<control type="image">
+							<visible>Control.HasFocus($PARAM[buttonid])</visible>
+							<visible>$PARAM[border]</visible>
+							<bottom>15</bottom>
+							<left>30</left>
+							<right>30</right>
+							<height>5</height>
+							<texture colordiffuse="$VAR[Accent_Color]">views/white_100.png</texture>
+						</control>
+					</control>
+				</control>
+				<control type="group">
+					<visible>$PARAM[usealttexture]</visible>
+					<control type="group">
+						<visible>!Control.HasFocus($PARAM[buttonid])</visible>
+						<centertop>50%</centertop>
+						<centerleft>50%</centerleft>
+						<include content="$PARAM[alttexture]_unfocused">
+							<param name="width" value="$PARAM[width]"/>
+							<param name="color" value="$PARAM[unfocusedcolor]"/>
+						</include>
+					</control>
+					<control type="group">
+						<centertop>50%</centertop>
+						<centerleft>50%</centerleft>
+						<control type="group">
+							<visible>Control.HasFocus($PARAM[buttonid])</visible>
+							<include content="$PARAM[alttexture]_focused">
+								<param name="width" value="$PARAM[width]"/>
+								<param name="color" value="$PARAM[focusedcolor]"/>
+							</include>
+						</control>
+						<control type="image">
+							<visible>Control.HasFocus($PARAM[buttonid])</visible>
+							<visible>$PARAM[border]</visible>
+							<bottom>15</bottom>
+							<left>30</left>
+							<right>30</right>
+							<height>5</height>
+							<texture colordiffuse="$VAR[Accent_Color]">views/white_100.png</texture>
+						</control>
+					</control>
+				</control>
+			</control>
+		</definition>
+	</include>
+
 	<include name="Label_Button_Template">
 		<param name="buttonid" default=""/>
 		<param name="color" default="$VAR[List_Text_Color]"/>
@@ -313,11 +397,10 @@
 					<usecontrolcoords>true</usecontrolcoords>
 					<include content="Label_Button_Template">
 						<param name="buttonid" value="$PARAM[button1id]"/>
-						<param name="focusedcolor" value="$PARAM[color]"/>
+						<param name="color" value="$PARAM[color]"/>
 						<param name="focusedfont" value="$PARAM[focusedfont]"/>
 						<param name="unfocusedtop" value="$PARAM[unfocusedtop]"/>
 						<param name="unfocusedheight" value="$PARAM[unfocusedheight]"/>
-						<param name="unfocusedcolor" value="$PARAM[color]"/>
 						<param name="unfocusedfont" value="$PARAM[unfocusedfont]"/>
 					</include>
 					<control type="label">

@@ -561,7 +561,7 @@
 		<definition>
 			<control type="group">
 				<visible>$PARAM[visible]</visible>
-				<visible>Window.IsVisible(visualisation) | Window.IsVisible(loginscreen) | Window.IsVisible(videobookmarks) | !String.IsEmpty(Container.ListItemNoWrap($PARAM[position]).Art(thumb)) | !String.IsEmpty(Container.ListItemNoWrap($PARAM[position]).Label) | $EXP[ListView_IsVisible] | $EXP[BillboardView_IsVisible]</visible>
+				<visible>![String.IsEmpty(Container.ListItemNoWrap($PARAM[position]).Art(thumb)) + String.IsEmpty(Container.ListItemNoWrap($PARAM[position]).Label)] | Window.Is(loginscreen) | Window.Is(videobookmarks) | $EXP[ListView_IsVisible] | $EXP[BillboardView_IsVisible]</visible>
 				<animation effect="$PARAM[animationeffect]" end="$PARAM[animationend]" condition="$PARAM[animationcondition]" time="$PARAM[animationtime]" tween="$PARAM[animationtween]" easing="$PARAM[animationeasing]" reversible="$PARAM[animationreversible]">$PARAM[animationtype]</animation>
 				<left>$PARAM[left]</left>
 				<top>$PARAM[top]</top>
@@ -575,9 +575,7 @@
 						<animation effect="fadediffuse" end="ff808080" time="360" tween="sine" easing="inout"  condition="$PARAM[showcaseview_diffuse_fadein]" reversible="false">Conditional</animation>
 						<animation effect="fadediffuse" end="ff808080" time="0" condition="$PARAM[showcaseview_diffuse_fadeout_1]" reversible="false">Conditional</animation>
 						<animation effect="fadediffuse" start="ff808080" end="ffffffff" time="360" tween="sine" easing="inout"  condition="$PARAM[showcaseview_diffuse_fadeout_2]" reversible="false">Conditional</animation>
-
 						<animation effect="fadediffuse" start="ffffffff" end="ff555555" time="360" delay="540" tween="sine" easing="inout" condition="$EXP[GridView_IsVisible] + !$EXP[GridView_Details_Off] + !$EXP[GridView_Details_Breadcrumb] + !$EXP[ListItem(0)_NowPlaying]">Focus</animation>
-
 						<animation effect="fadediffuse" end="ff555555" time="0" condition="Player.HasMedia + [[$EXP[ListItem($PARAM[position])_NowPlaying] + [$EXP[ShowcaseView_IsVisible] | $EXP[StripView_IsVisible] | [$EXP[GridView_IsVisible] + $EXP[InfoWidget_HasFocus]]]] | [$EXP[ListItem(0)_NowPlaying] + $EXP[GridView_IsVisible] + !$EXP[InfoWidget_HasFocus]]]">Conditional</animation>
 						<animation effect="fadediffuse" end="80000000" time="90" delay="1800" condition="$PARAM[multiartbacking] + Skin.HasSetting(Multiart_Slideshow) + !$EXP[InfoWidget_HasFocus] + !String.IsEqual(Control.GetLabel(38000),flags/blank.png) + !$EXP[MultiartSwitching] + !String.IsEmpty(Window(home).Property(Multiart_1))" reversible="false">Conditional</animation>
 						<texture fallback="$PARAM[fallback]" background="true" colordiffuse="$PARAM[colordiffuse]" diffuse="$PARAM[diffuse]">$VAR[$PARAM[artwork_icon]($PARAM[position])Content]</texture>
@@ -1215,12 +1213,11 @@
 					</include>
 					<!-- DROPSHADOW -->
 					<control type="group">
-						<visible>![$EXP[TransparentDialog_IsVisible] | Control.HasFocus(60)]</visible>
+						<visible>[!$EXP[TransparentDialog_IsVisible]  | Window.Is(videobookmarks)] + !Control.HasFocus(60)</visible>
 						<include>Content_Fade_Animation</include>
-						<!-- Dropshadow for icon -1 to 0 -->
-						<!-- Left Side -->
+						<!-- Grid view: Left Side -->
 						<include content="DropShadow">
-							<param name="visible" value="!Container($PARAM[target_id]).OnPrevious + !String.IsEmpty(Container($PARAM[target_id]).ListItemNoWrap(-1).Label) + $EXP[GridView_IsVisible]"/>
+							<param name="visible" value="Container($PARAM[target_id]).OnPrevious + ![String.IsEmpty(Container($PARAM[target_id]).ListItemNoWrap(-1).Label) + String.IsEmpty(Container($PARAM[target_id]).ListItemNoWrap(-1).Art(thumb))] + $EXP[GridView_IsVisible]"/>
 							<param name="left" value="-$PARAM[item_width_plus_dropshadow_width]"/>
 							<param name="top" value="$PARAM[item_top]"/>
 							<param name="width" value="120"/>
@@ -1230,9 +1227,9 @@
 							<param name="animationeffect" value="slide"/>
 							<param name="animationend" value="$PARAM[item_width]"/>
 						</include>
-						<!-- Right Side -->
+						<!-- Grid view: Right Side -->
 						<include content="DropShadow">
-							<param name="visible" value="Container($PARAM[target_id]).OnPrevious + !String.IsEmpty(Container($PARAM[target_id]).ListItemNoWrap(1).Label) + $EXP[GridView_IsVisible]"/>
+							<param name="visible" value="Container($PARAM[target_id]).OnPrevious + ![String.IsEmpty(Container($PARAM[target_id]).ListItemNoWrap(1).Label) + String.IsEmpty(Container($PARAM[target_id]).ListItemNoWrap(1).Art(thumb))] + $EXP[GridView_IsVisible]"/>
 							<param name="left" value="0"/>
 							<param name="width" value="120"/>
 							<param name="top" value="$PARAM[item_top]"/>
@@ -1243,8 +1240,9 @@
 							<param name="animationeffect" value="slide"/>
 							<param name="animationend" value="$PARAM[item_width]"/>
 						</include>
+						<!-- Showcase view: Right side -->
 						<include content="DropShadow">
-							<param name="visible" value="Container($PARAM[target_id]).OnPrevious + !String.IsEmpty(Container($PARAM[target_id]).ListItemNoWrap(1).Label) + !$EXP[GridView_IsVisible] + $EXP[ShowcaseView_Details_Off] + !$EXP[InfoWidget_HasFocus]"/>
+							<param name="visible" value="Container($PARAM[target_id]).OnPrevious + ![String.IsEmpty(Container($PARAM[target_id]).ListItemNoWrap(1).Label) + String.IsEmpty(Container($PARAM[target_id]).ListItemNoWrap(1).Art(thumb))] + $EXP[ShowcaseView_IsVisible] + $EXP[ShowcaseView_Details_Off] + !$EXP[InfoWidget_HasFocus]"/>
 							<param name="left" value="0"/>
 							<param name="width" value="1"/>
 							<param name="top" value="$PARAM[item_top]"/>
@@ -1260,10 +1258,8 @@
 							<param name="animation2delay" value="95"/>
 							<param name="animation2time" value="285"/>
 						</include>
-						<!-- Dropshadow for icon 0 to 1 -->
-						<!-- Right Side -->
 						<include content="DropShadow">
-							<param name="visible" value="Container($PARAM[target_id]).OnPrevious + !String.IsEmpty(Container($PARAM[target_id]).ListItemNoWrap(2).Label) + $EXP[ShowcaseView_Details_Off] + !$EXP[InfoWidget_HasFocus]"/>
+							<param name="visible" value="Container($PARAM[target_id]).OnPrevious + ![String.IsEmpty(Container($PARAM[target_id]).ListItemNoWrap(2).Label) + String.IsEmpty(Container($PARAM[target_id]).ListItemNoWrap(2).Art(thumb))] + $EXP[ShowcaseView_IsVisible] + $EXP[ShowcaseView_Details_Off] + !$EXP[InfoWidget_HasFocus]"/>
 							<param name="left" value="$PARAM[item_width]"/>
 							<param name="top" value="$PARAM[item_top]"/>
 							<param name="height" value="$PARAM[item_height]"/>
@@ -1543,12 +1539,12 @@
 					</include>
 					<!-- DROPSHADOW -->
 					<control type="group">
-						<visible>!$EXP[TransparentDialog_IsVisible] + !Control.HasFocus(60)</visible>
+						<visible>[!$EXP[TransparentDialog_IsVisible]  | Window.Is(videobookmarks)] + !Control.HasFocus(60)</visible>
 						<include>Content_Fade_Animation</include>
 						<!-- Dropshadow for icon 1 to 0 -->
-						<!-- Left Side -->
+						<!-- Grid view: Left Side -->
 						<include content="DropShadow">
-							<param name="visible" value="Container($PARAM[target_id]).OnNext + !String.IsEmpty(Container($PARAM[target_id]).ListItemNoWrap(1).Label) + $EXP[GridView_IsVisible]"/>
+							<param name="visible" value="Container($PARAM[target_id]).OnNext + ![String.IsEmpty(Container($PARAM[target_id]).ListItemNoWrap(-1).Label) + String.IsEmpty(Container($PARAM[target_id]).ListItemNoWrap(-1).Art(thumb))] + $EXP[GridView_IsVisible]"/>
 							<param name="left" value="$PARAM[item_width_minus_dropshadow_width]"/>
 							<param name="width" value="120"/>
 							<param name="top" value="$PARAM[item_top]"/>
@@ -1558,8 +1554,22 @@
 							<param name="animationeffect" value="slide"/>
 							<param name="animationend" value="-$PARAM[item_width]"/>
 						</include>
+						<!-- Grid view: Right Side -->
 						<include content="DropShadow">
-							<param name="visible" value="Container($PARAM[target_id]).OnNext + !String.IsEmpty(Container($PARAM[target_id]).ListItemNoWrap(1).Label) + !$EXP[GridView_IsVisible] + $EXP[ShowcaseView_Details_Off] + !$EXP[InfoWidget_HasFocus]"/>
+							<param name="visible" value="Container($PARAM[target_id]).OnNext + ![String.IsEmpty(Container($PARAM[target_id]).ListItemNoWrap(1).Label) + String.IsEmpty(Container($PARAM[target_id]).ListItemNoWrap(1).Art(thumb))] + $EXP[GridView_IsVisible]"/>
+							<param name="left" value="$PARAM[2x_item_width]"/>
+							<param name="width" value="120"/>
+							<param name="top" value="$PARAM[item_top]"/>
+							<param name="height" value="$PARAM[item_height]"/>
+							<param name="flipx" value="true"/>
+							<param name="animationtype" value="Hidden"/>
+							<param name="animationcondition" value="true"/>
+							<param name="animationeffect" value="slide"/>
+							<param name="animationend" value="-$PARAM[item_width]"/>
+						</include>
+						<!-- Showcase view: Left side -->
+						<include content="DropShadow">
+							<param name="visible" value="Container($PARAM[target_id]).OnNext + ![String.IsEmpty(Container($PARAM[target_id]).ListItemNoWrap(-1).Label) + String.IsEmpty(Container($PARAM[target_id]).ListItemNoWrap(-1).Art(thumb))] + $EXP[ShowcaseView_IsVisible] + $EXP[ShowcaseView_Details_Off] + !$EXP[InfoWidget_HasFocus]"/>
 							<param name="left" value="$PARAM[item_width]"/>
 							<param name="width" value="1"/>
 							<param name="top" value="$PARAM[item_top]"/>
@@ -1574,21 +1584,9 @@
 							<param name="animation2delay" value="95"/>
 							<param name="animation2time" value="285"/>
 						</include>
-						<!-- Right Side -->
+						<!-- Showcase view: Right side -->
 						<include content="DropShadow">
-							<param name="visible" value="Container($PARAM[target_id]).OnNext + !String.IsEmpty(Container($PARAM[target_id]).ListItemNoWrap(1).Label) + $EXP[GridView_IsVisible]"/>
-							<param name="left" value="$PARAM[2x_item_width]"/>
-							<param name="width" value="120"/>
-							<param name="top" value="$PARAM[item_top]"/>
-							<param name="height" value="$PARAM[item_height]"/>
-							<param name="flipx" value="true"/>
-							<param name="animationtype" value="Hidden"/>
-							<param name="animationcondition" value="true"/>
-							<param name="animationeffect" value="slide"/>
-							<param name="animationend" value="-$PARAM[item_width]"/>
-						</include>
-						<include content="DropShadow">
-							<param name="visible" value="Container($PARAM[target_id]).OnNext + !String.IsEmpty(Container($PARAM[target_id]).ListItemNoWrap(1).Label) + !$EXP[GridView_IsVisible] + $EXP[ShowcaseView_Details_Off] + !$EXP[InfoWidget_HasFocus]"/>
+							<param name="visible" value="Container($PARAM[target_id]).OnNext + ![String.IsEmpty(Container($PARAM[target_id]).ListItemNoWrap(1).Label) + String.IsEmpty(Container($PARAM[target_id]).ListItemNoWrap(1).Art(thumb))] + $EXP[ShowcaseView_IsVisible] + $EXP[ShowcaseView_Details_Off] + !$EXP[InfoWidget_HasFocus]"/>
 							<param name="left" value="$PARAM[2x_item_width]"/>
 							<param name="width" value="1"/>
 							<param name="top" value="$PARAM[item_top]"/>
@@ -1733,7 +1731,7 @@
 					</include>
 					<!-- Move Icon -1 to 0 -->
 					<include content="ListIcon">
-						<param name="visible" value="Container($PARAM[target_id]).OnPrevious + [$EXP[$PARAM[viewtype_label]View_Details_Off] | $EXP[InfoWidget_Display_Is$PARAM[viewtype_label]View] | Window.IsVisible(loginscreen)]"/>
+						<param name="visible" value="Container($PARAM[target_id]).OnPrevious + [$EXP[$PARAM[viewtype_label]View_Details_Off] | $EXP[InfoWidget_Display_Is$PARAM[viewtype_label]View]]"/>
 						<param name="artwork_icon" value="$PARAM[artwork_icon]"/>
 						<param name="left" value="$PARAM[item_width]"/>
 						<param name="top" value="$PARAM[item_top]"/>
@@ -1845,7 +1843,7 @@
 					</include>
 					<!-- Move Icon 0 to -1 -->
 					<include content="ListIcon">
-						<param name="visible" value="Container($PARAM[target_id]).OnNext + [$EXP[$PARAM[viewtype_label]View_Details_Off] | $EXP[InfoWidget_Display_Is$PARAM[viewtype_label]View] | Window.IsVisible(loginscreen)]"/>
+						<param name="visible" value="Container($PARAM[target_id]).OnNext + [$EXP[$PARAM[viewtype_label]View_Details_Off] | $EXP[InfoWidget_Display_Is$PARAM[viewtype_label]View]]"/>
 						<param name="artwork_icon" value="$PARAM[artwork_icon]"/>
 						<param name="position" value="-1"/>
 						<param name="left" value="$PARAM[2x_item_width]"/>
@@ -1935,7 +1933,7 @@
 					<!-- Dropshadow for icon 0 to 1 -->
 					<!-- Left Side -->
 					<include content="DropShadow">
-						<param name="visible" value="Container($PARAM[target_id]).OnPrevious + [[[$EXP[$PARAM[viewtype_label]View_Details_Off] | $EXP[InfoWidget_Display_Is$PARAM[viewtype_label]View] | Window.IsVisible(loginscreen)] + !String.IsEmpty(Container($PARAM[target_id]).ListItemNoWrap(1).Label)] | [Window.IsVisible(addoninformation) + !String.IsEmpty(Container($PARAM[target_id]).ListItemNoWrap(1).Art(thumb))]]"/>
+						<param name="visible" value="Container($PARAM[target_id]).OnPrevious + ![String.IsEmpty(Container($PARAM[target_id]).ListItemNoWrap(1).Label) + String.IsEmpty(Container($PARAM[target_id]).ListItemNoWrap(1).Art(thumb))] + [$EXP[$PARAM[viewtype_label]View_Details_Off] | $EXP[InfoWidget_Display_Is$PARAM[viewtype_label]View]]"/>
 						<param name="left" value="$PARAM[2x_item_width_minus_dropshadow_width]"/>
 						<param name="top" value="$PARAM[item_top]"/>
 						<param name="height" value="$PARAM[item_height]"/>
@@ -1953,7 +1951,7 @@
 					</include>
 					<!-- Right Side -->
 					<include content="DropShadow">
-						<param name="visible" value="Container($PARAM[target_id]).OnPrevious + [!String.IsEmpty(Container($PARAM[target_id]).ListItemNoWrap(2).Label) | [Window.IsVisible(addoninformation) + !String.IsEmpty(Container($PARAM[target_id]).ListItemNoWrap(2).Art(thumb))]]"/>
+						<param name="visible" value="Container($PARAM[target_id]).OnPrevious + ![String.IsEmpty(Container($PARAM[target_id]).ListItemNoWrap(2).Label) + String.IsEmpty(Container($PARAM[target_id]).ListItemNoWrap(2).Art(thumb))]"/>
 						<param name="left" value="$PARAM[2x_item_width_plus_focus_width]"/>
 						<param name="top" value="$PARAM[item_top]"/>
 						<param name="height" value="$PARAM[item_height]"/>
@@ -1970,7 +1968,7 @@
 					<!-- Dropshadow for icon -1 to 0 -->
 					<!-- Left Side -->
 					<include content="DropShadow">
-						<param name="visible" value="!Container($PARAM[target_id]).OnPrevious + [[[$EXP[$PARAM[viewtype_label]View_Details_Off] | $EXP[InfoWidget_Display_Is$PARAM[viewtype_label]View] | Window.IsVisible(loginscreen)] + !String.IsEmpty(Container($PARAM[target_id]).ListItemNoWrap(-1).Label)] | [Window.IsVisible(addoninformation) + !String.IsEmpty(Container($PARAM[target_id]).ListItemNoWrap(-1).Art(thumb))]]"/>
+						<param name="visible" value="!Container($PARAM[target_id]).OnPrevious + ![String.IsEmpty(Container($PARAM[target_id]).ListItemNoWrap(-1).Label) + String.IsEmpty(Container($PARAM[target_id]).ListItemNoWrap(-1).Art(thumb))] + [$EXP[$PARAM[viewtype_label]View_Details_Off] | $EXP[InfoWidget_Display_Is$PARAM[viewtype_label]View]]"/>
 						<param name="left" value="$PARAM[item_width]"/>
 						<param name="top" value="$PARAM[item_top]"/>
 						<param name="width" value="1"/>
@@ -1988,7 +1986,7 @@
 					<!-- Dropshadow for icon -1 to 0 -->
 					<!-- Right Side -->
 					<include content="DropShadow">
-						<param name="visible" value="!Container($PARAM[target_id]).OnPrevious + [!String.IsEmpty(Container($PARAM[target_id]).ListItemNoWrap(1).Label) | [Window.IsVisible(addoninformation) + !String.IsEmpty(Container($PARAM[target_id]).ListItemNoWrap(1).Art(thumb))]]"/>
+						<param name="visible" value="!Container($PARAM[target_id]).OnPrevious + ![String.IsEmpty(Container($PARAM[target_id]).ListItemNoWrap(1).Label) + String.IsEmpty(Container($PARAM[target_id]).ListItemNoWrap(1).Art(thumb))]"/>
 						<param name="left" value="$PARAM[2x_item_width]"/>
 						<param name="top" value="0"/>
 						<param name="width" value="1"/>
@@ -2011,7 +2009,7 @@
 					<!-- Dropshadow for icon 0 to -1 -->
 					<!-- Left Side -->
 					<include content="DropShadow">
-						<param name="visible" value="Container($PARAM[target_id]).OnNext + [[[$EXP[$PARAM[viewtype_label]View_Details_Off] | $EXP[InfoWidget_Display_Is$PARAM[viewtype_label]View] | Window.IsVisible(loginscreen)] + !String.IsEmpty(Container($PARAM[target_id]).ListItemNoWrap(-2).Label)] | [Window.IsVisible(addoninformation) + !String.IsEmpty(Container($PARAM[target_id]).ListItemNoWrap(-2).Art(thumb))]]"/>
+						<param name="visible" value="Container($PARAM[target_id]).OnNext + ![String.IsEmpty(Container($PARAM[target_id]).ListItemNoWrap(-2).Label) + String.IsEmpty(Container($PARAM[target_id]).ListItemNoWrap(-2).Art(thumb))] + [$EXP[$PARAM[viewtype_label]View_Details_Off] | $EXP[InfoWidget_Display_Is$PARAM[viewtype_label]View]]"/>
 						<param name="left" value="$PARAM[2x_item_width_minus_dropshadow_width]"/>
 						<param name="top" value="$PARAM[item_top]"/>
 						<param name="height" value="$PARAM[item_height]"/>
@@ -2026,7 +2024,7 @@
 					</include>
 					<!-- Right Side -->
 					<include content="DropShadow">
-						<param name="visible" value="Container($PARAM[target_id]).OnNext + [!String.IsEqual(Container($PARAM[target_id]).CurrentItem,1) | [Window.IsVisible(addoninformation) + !String.IsEmpty(Container($PARAM[target_id]).ListItemNoWrap(1).Art(thumb))]]"/>
+						<param name="visible" value="Container($PARAM[target_id]).OnNext + ![String.IsEmpty(Container($PARAM[target_id]).ListItemNoWrap(-1).Label) + String.IsEmpty(Container($PARAM[target_id]).ListItemNoWrap(-1).Art(thumb))]"/>
 						<param name="left" value="$PARAM[2x_item_width_plus_focus_width]"/>
 						<param name="top" value="$PARAM[item_top]"/>
 						<param name="height" value="$PARAM[item_height]"/>
@@ -2046,7 +2044,7 @@
 					<!-- Dropshadow for icon 1 to 0 -->
 					<!-- Left Side -->
 					<include content="DropShadow">
-						<param name="visible" value="!Container($PARAM[target_id]).OnNext + [[[$EXP[$PARAM[viewtype_label]View_Details_Off] | $EXP[InfoWidget_Display_Is$PARAM[viewtype_label]View] | Window.IsVisible(loginscreen)] + !String.IsEqual(Container($PARAM[target_id]).CurrentItem,1)] | [Window.IsVisible(addoninformation) + !String.IsEmpty(Container($PARAM[target_id]).ListItemNoWrap(1).Art(thumb))]]"/>
+						<param name="visible" value="!Container($PARAM[target_id]).OnNext + ![String.IsEmpty(Container($PARAM[target_id]).ListItemNoWrap(-1).Label) + String.IsEmpty(Container($PARAM[target_id]).ListItemNoWrap(-1).Art(thumb))] + [$EXP[$PARAM[viewtype_label]View_Details_Off] | $EXP[InfoWidget_Display_Is$PARAM[viewtype_label]View]]"/>
 						<param name="left" value="$PARAM[2x_item_width_plus_focus_width]"/>
 						<param name="top" value="0"/>
 						<param name="width" value="1"/>
@@ -2063,7 +2061,7 @@
 					</include>
 					<!-- Right Side -->
 					<include content="DropShadow">
-						<param name="visible" value="!Container($PARAM[target_id]).OnNext + [!String.IsEmpty(Container($PARAM[target_id]).ListItemNoWrap(1).Label) | [Window.IsVisible(addoninformation) + !String.IsEmpty(Container($PARAM[target_id]).ListItemNoWrap(1).Art(thumb))]]"/>
+						<param name="visible" value="!Container($PARAM[target_id]).OnNext + ![String.IsEmpty(Container($PARAM[target_id]).ListItemNoWrap(1).Label) + String.IsEmpty(Container($PARAM[target_id]).ListItemNoWrap(1).Art(thumb))]"/>
 						<param name="left" value="$PARAM[3x_item_width_plus_focus_width]"/>
 						<param name="top" value="$PARAM[item_top]"/>
 						<param name="width" value="1"/>
