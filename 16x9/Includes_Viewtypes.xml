@@ -668,6 +668,7 @@
 	</include>
 
 	<include name="DropShadow">
+		<param name="visible" default="true"/>
     <param name="left" default="0"/>
     <param name="top" default="0"/>
     <param name="width" default="120"/>
@@ -675,8 +676,7 @@
     <param name="flipx" default="false"/>
     <param name="flipy" default="false"/>
     <param name="texture" default="views/dropshadow_left_120.png"/>
-    <param name="colordiffuse" default="$VAR[Dropshadow_Diffuse]"/>
-    <param name="visible" default="true"/>
+    <param name="colordiffuse" default="$VAR[Dropshadow_Diffuse]"/>    
     <param name="animationtype" default="Visible"/>
     <param name="animationcondition" default="false"/>
     <param name="animationeffect" default="fade"/>
@@ -695,18 +695,18 @@
     <param name="animation3delay" default=""/>
     <definition>
       <control type="image">
+				<visible>$PARAM[visible]</visible>
+				<animation type="$PARAM[animationtype]" condition="$PARAM[animationcondition]" reversible="false">
+					<effect type="$PARAM[animationeffect]" end="$PARAM[animationend]" time="$PARAM[animationtime]" tween="sine" easing="inout"/>
+					<effect type="$PARAM[animation2effect]" start="$PARAM[animation2start]" end="$PARAM[animation2end]" center="$PARAM[animation2center]" time="$PARAM[animation2time]" delay="$PARAM[animation2delay]" tween="sine" easing="inout"/>
+					<effect type="$PARAM[animation3effect]" start="$PARAM[animation3start]" end="$PARAM[animation3end]" time="$PARAM[animation3time]" delay="$PARAM[animation3delay]" tween="sine" easing="inout"/>
+				</animation>
         <left>$PARAM[left]</left>
 				<right>$PARAM[right]</right>
         <top>$PARAM[top]</top>
         <width>$PARAM[width]</width>
         <height>$PARAM[height]</height>
         <texture colordiffuse="$PARAM[colordiffuse]" flipx="$PARAM[flipx]" flipy="$PARAM[flipy]">$PARAM[texture]</texture>
-        <visible>$PARAM[visible]</visible>
-        <animation type="$PARAM[animationtype]" condition="$PARAM[animationcondition]" reversible="false">
-          <effect type="$PARAM[animationeffect]" end="$PARAM[animationend]" time="$PARAM[animationtime]" tween="sine" easing="inout"/>
-          <effect type="$PARAM[animation2effect]" start="$PARAM[animation2start]" end="$PARAM[animation2end]" center="$PARAM[animation2center]" time="$PARAM[animation2time]" delay="$PARAM[animation2delay]" tween="sine" easing="inout"/>
-          <effect type="$PARAM[animation3effect]" start="$PARAM[animation3start]" end="$PARAM[animation3end]" time="$PARAM[animation3time]" delay="$PARAM[animation3delay]" tween="sine" easing="inout"/>
-        </animation>
       </control>
     </definition>
   </include>
@@ -1217,7 +1217,7 @@
 						<include>Content_Fade_Animation</include>
 						<!-- Grid view: Left Side -->
 						<include content="DropShadow">
-							<param name="visible" value="Container($PARAM[target_id]).OnPrevious + ![String.IsEmpty(Container($PARAM[target_id]).ListItemNoWrap(-1).Label) + String.IsEmpty(Container($PARAM[target_id]).ListItemNoWrap(-1).Art(thumb))] + $EXP[GridView_IsVisible]"/>
+							<param name="visible" value="!Container($PARAM[target_id]).OnPrevious + ![String.IsEmpty(Container($PARAM[target_id]).ListItemNoWrap(-1).Label) + String.IsEmpty(Container($PARAM[target_id]).ListItemNoWrap(-1).Art(thumb))] + $EXP[GridView_IsVisible]"/>
 							<param name="left" value="-$PARAM[item_width_plus_dropshadow_width]"/>
 							<param name="top" value="$PARAM[item_top]"/>
 							<param name="width" value="120"/>
