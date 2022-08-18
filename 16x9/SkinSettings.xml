@@ -9,8 +9,8 @@
 	<include content="Object_Include" condition="String.IsEqual(Window(home).Property(SettingsCategory_Switcher),true)">
 		<defaultcontrol always="true">9002</defaultcontrol>
 	</include>
-	<onunload>RunScript(script.skinshortcuts,type=buildxml&amp;mainmenuID=9000)</onunload>
-	<onunload condition="!ControlGroup(9).HasFocus(10)">SetFocus(10)</onunload>
+	<onunload>RunScript(script.skinshortcuts,type=buildxml&amp;mainmenuID=9000&amp;group=mainmenu|shutdownmenu)</onunload>
+	<onunload condition="!ControlGroup(9).HasFocus(11)">SetFocus(10)</onunload>
 	<controls>
 
 		<include content="Delay_Content_Load">
@@ -23,6 +23,24 @@
 		<control type="button" id="9002">
 			<visible allowhiddenfocus="true">false</visible>
 			<onfocus>SetFocus(300000)</onfocus>
+		</control>
+
+		<!--Hidden widget resetter -->
+		<control type="button" id="9003">
+			<onfocus>Skin.Reset(Widget1_Content_Disabled)</onfocus>
+			<onfocus>Skin.Reset(Widget1_Content_InProgress)</onfocus>
+			<onfocus>Skin.Reset(Widget1_Content_NextUp)</onfocus>
+			<onfocus>Skin.Reset(Widget1_Content_LatestMovies)</onfocus>
+			<onfocus>Skin.Reset(Widget1_Content_LatestTVShows)</onfocus>
+			<onfocus>Skin.Reset(Widget1_Content_RandomMovies)</onfocus>
+			<onfocus>Skin.Reset(Widget1_Content_RandomTVShows)</onfocus>
+			<onfocus>Skin.Reset(Widget1_Content_LatestAlbums)</onfocus>
+			<onfocus>Skin.Reset(Widget1_Content_RecentAlbums)</onfocus>
+			<onfocus>Skin.Reset(Widget1_Content_RandomAlbums)</onfocus>
+			<onfocus>Skin.Reset(Widget1_Content_Favourites)</onfocus>
+			<onfocus>Skin.Reset(Widget1_Content_Custom)</onfocus>
+			<onfocus>Skin.SetBool(Widget1_Content_InProgress)</onfocus>
+			<onfocus>SetFocus(1102)</onfocus>
 		</control>
 
 
@@ -65,19 +83,23 @@
 						<orientation>vertical</orientation>
 						<scrolltime tween="sine" easing="inout">360</scrolltime>
 						<control type="button" id="10">
-							<label>$LOCALIZE[31211]</label>
+							<label>$LOCALIZE[31149]</label>
 							<texturefocus/>
 						</control>
 						<control type="button" id="11">
+							<label>$LOCALIZE[31211]</label>
+							<texturefocus/>
+						</control>
+						<control type="button" id="12">
 							<visible>Skin.HasSetting(Widgets_Enabled)</visible>
 							<label>$LOCALIZE[31219]</label>
 							<texturefocus/>
 						</control>
-						<control type="button" id="12">
+						<control type="button" id="13">
 							<label>$LOCALIZE[128]</label>
 							<texturefocus/>
 						</control>
-						<control type="button" id="13">
+						<control type="button" id="14">
 							<label>$LOCALIZE[24997]</label>
 							<texturefocus/>
 						</control>
@@ -111,72 +133,85 @@
 					<align>top</align>
 					<scrolltime tween="sine" easing="inout">360</scrolltime>
 					<pagecontrol>60</pagecontrol>
+					<!-- Menus -->
+					<control type="button" id="1000">
+						<description>Customise home menu shortcuts</description>
+						<label>$LOCALIZE[31220]</label>
+						<onclick condition="System.HasAddon(script.skinshortcuts)">RunScript(script.skinshortcuts,type=manage&amp;group=mainmenu)</onclick>
+						<onclick condition="!System.HasAddon(script.skinshortcuts)">InstallAddon(script.skinshortcuts)</onclick>
+						<visible>Control.HasFocus(300000) | ControlGroup(9).HasFocus(10)</visible>
+					</control>
+					<control type="button" id="1001">
+						<description>Customise shutdownmenu shortcuts</description>
+						<label>$LOCALIZE[31151]</label>
+						<onclick condition="System.HasAddon(script.skinshortcuts)">RunScript(script.skinshortcuts,type=manage&amp;group=shutdownmenu)</onclick>
+						<onclick condition="!System.HasAddon(script.skinshortcuts)">InstallAddon(script.skinshortcuts)</onclick>
+						<visible>Control.HasFocus(300000) | ControlGroup(9).HasFocus(10)</visible>
+					</control>
+					<control type="button" id="1002">
+						<description>Reset menu shortcuts</description>
+						<label>- $LOCALIZE[31221]</label>
+						<onclick condition="System.HasAddon(script.skinshortcuts)">RunScript(script.skinshortcuts,type=resetall)</onclick>
+						<onclick condition="!System.HasAddon(script.skinshortcuts)">InstallAddon(script.skinshortcuts)</onclick>
+						<visible>Control.HasFocus(300000) | ControlGroup(9).HasFocus(10)</visible>
+					</control>
 					<!-- Home -->
-					<!-- Menu -->
-					<control type="label" id="1000">
+					<control type="label" id="1100">
 						<height>90</height>
 						<textoffsetx>30</textoffsetx>
 						<font>Default_Settings_Header</font>
 						<textcolor>$VAR[Unfocused_Color]</textcolor>
 						<label>$LOCALIZE[31224]</label>
-						<visible>ControlGroup(9).HasFocus(10)</visible>
+						<visible>ControlGroup(9).HasFocus(11)</visible>
 					</control>
-					<control type="button" id="1001">
-						<description>Customise menu shortcuts</description>
-						<label>$LOCALIZE[31220]</label>
-						<onclick condition="System.HasAddon(script.skinshortcuts)">RunScript(script.skinshortcuts,type=manage&amp;group=mainmenu)</onclick>
-						<onclick condition="!System.HasAddon(script.skinshortcuts)">InstallAddon(script.skinshortcuts)</onclick>
-						<visible>ControlGroup(9).HasFocus(10)</visible>
-					</control>
-					<control type="button" id="1002">
-						<description>Reset menu shortcuts</description>
-						<label>$LOCALIZE[31221]</label>
-						<onclick condition="System.HasAddon(script.skinshortcuts)">RunScript(script.skinshortcuts,type=resetall)</onclick>
-						<onclick condition="!System.HasAddon(script.skinshortcuts)">InstallAddon(script.skinshortcuts)</onclick>
-						<visible>ControlGroup(9).HasFocus(10)</visible>
-					</control>
-					<control type="radiobutton" id="1003">
+					<control type="radiobutton" id="1101">
 						<description>Enable widgets</description>
 						<label>$LOCALIZE[31238]</label>
 						<onclick>Skin.ToggleSetting(Widgets_Enabled)</onclick>
 						<selected>Skin.HasSetting(Widgets_Enabled)</selected>
-						<visible>ControlGroup(9).HasFocus(10)</visible>
+						<visible>ControlGroup(9).HasFocus(11)</visible>
+					</control>
+					<control type="button" id="1102">
+						<description>Reset widgets</description>
+						<label>- $LOCALIZE[31152]</label>
+						<onclick>RunScript(script.embuary.helper,action=dialogyesno,header=$LOCALIZE[31152],message=$LOCALIZE[31153],yesaction=SetFocus(9003))</onclick>
+						<visible>ControlGroup(9).HasFocus(11) + Skin.HasSetting(Widgets_Enabled)</visible>
 					</control>
 					<!-- Background -->
-					<control type="label" id="1005">
+					<control type="label" id="1103">
 						<height>90</height>
 						<textoffsetx>30</textoffsetx>
 						<font>Default_Settings_Header</font>
 						<textcolor>$VAR[Unfocused_Color]</textcolor>
 						<label>$LOCALIZE[32102]</label>
-						<visible>!ControlGroup(9).HasFocus(11) + !ControlGroup(9).HasFocus(12) + !ControlGroup(9).HasFocus(13)</visible>
+						<visible>ControlGroup(9).HasFocus(11)</visible>
 					</control>
-					<control type="radiobutton" id="1006">
+					<control type="radiobutton" id="1104">
 						<description>Override slideshow</description>
 						<label>$LOCALIZE[31258]</label>
 						<onclick>Skin.ToggleSetting(Home_Background_Override_Enabled)</onclick>
 						<selected>Skin.HasSetting(Home_Background_Override_Enabled)</selected>
-						<visible>!ControlGroup(9).HasFocus(11) + !ControlGroup(9).HasFocus(12) + !ControlGroup(9).HasFocus(13)</visible>
+						<visible>ControlGroup(9).HasFocus(11)</visible>
 					</control>
-					<control type="button" id="1007">
+					<control type="button" id="1105">
 						<description>Choose a custom path</description>
 						<label>$VAR[Home_Background_Override_Label,- ]</label>
 						<onclick condition="System.HasAddon(script.skinshortcuts)">RunScript(script.skinshortcuts,type=shortcuts&amp;custom=True&amp;showNone=False&amp;skinList=Home_Background_Override)</onclick>
 						<onclick condition="!System.HasAddon(script.skinshortcuts)">Skin.SetString(Home_Background_Override)</onclick>
-						<visible>ControlGroup(9).HasFocus(10) + Skin.HasSetting(Home_Background_Override_Enabled)</visible>
+						<visible>ControlGroup(9).HasFocus(11) + Skin.HasSetting(Home_Background_Override_Enabled)</visible>
 					</control>
-					<control type="button" id="1008">
+					<control type="button" id="1106">
 						<description>Set artwork opacity</description>
 						<label>$LOCALIZE[31243]</label>
 						<onclick>Skin.SelectBool(746, 31248|Home_Screen_Opacity_50, 31249|Home_Screen_Opacity_33, 31250|Home_Screen_Opacity_25)</onclick>
-						<visible>!ControlGroup(9).HasFocus(11) + !ControlGroup(9).HasFocus(12) + !ControlGroup(9).HasFocus(13)</visible>
+						<visible>ControlGroup(9).HasFocus(11)</visible>
 					</control>
-					<control type="radiobutton" id="1009">
+					<control type="radiobutton" id="1107">
 						<description>Hide clock</description>
 						<label>$LOCALIZE[31244]</label>
 						<onclick>Skin.ToggleSetting(Hide_Home_Clock)</onclick>
 						<selected>Skin.HasSetting(Hide_Home_Clock)</selected>
-						<visible>!ControlGroup(9).HasFocus(11) + !ControlGroup(9).HasFocus(12) + !ControlGroup(9).HasFocus(13)</visible>
+						<visible>ControlGroup(9).HasFocus(11)</visible>
 					</control>
 
 					<!-- Widgets -->
@@ -227,7 +262,7 @@
 					</include>
 
 					<!-- General -->
-					<control type="radiobutton" id="1200">
+					<control type="radiobutton" id="1300">
 						<description>Theme</description>
 						<label>$LOCALIZE[15111] / $VAR[Theme_Label]</label>
 						<selected>!Skin.String(Theme,Light)</selected>
@@ -239,64 +274,64 @@
 						<textureradiooffnofocus/>
 						<textureradioondisabled/>
 						<textureradiooffdisabled/>
-						<visible>ControlGroup(9).HasFocus(12)</visible>
+						<visible>ControlGroup(9).HasFocus(13)</visible>
 					</control>
-					<control type="radiobutton" id="1201">
+					<control type="radiobutton" id="1301">
 						<description>Enable embedded lists</description>
 						<label>$LOCALIZE[31239]</label>
 						<onclick>Skin.ToggleSetting(Secondary_List_Enabled)</onclick>
 						<selected>Skin.HasSetting(Secondary_List_Enabled)</selected>
-						<visible>ControlGroup(9).HasFocus(12)</visible>
+						<visible>ControlGroup(9).HasFocus(13)</visible>
 					</control>
-					<control type="radiobutton" id="1202">
+					<control type="radiobutton" id="1302">
 						<description>Enable embedded music player</description>
 						<label>$LOCALIZE[31240]</label>
 						<onclick>Skin.ToggleSetting(Music_Player_Enabled)</onclick>
 						<selected>Skin.HasSetting(Music_Player_Enabled)</selected>
-						<visible>ControlGroup(9).HasFocus(12)</visible>
+						<visible>ControlGroup(9).HasFocus(13)</visible>
 					</control>
-					<control type="radiobutton" id="1203">
+					<control type="radiobutton" id="1303">
 						<description>Enable multiart slideshows</description>
 						<label>$LOCALIZE[31245]</label>
 						<onclick>Skin.ToggleSetting(Multiart_Slideshow)</onclick>
 						<selected>Skin.HasSetting(Multiart_Slideshow)</selected>
-						<visible>ControlGroup(9).HasFocus(12)</visible>
+						<visible>ControlGroup(9).HasFocus(13)</visible>
 					</control>
-					<control type="button" id="1204">
+					<control type="button" id="1304">
 						<description>Set multiart slideshow transition duration</description>
 						<label>- $LOCALIZE[31251]</label>
 						<onclick>Skin.SelectBool(31252, 31253|3_Second_Slideshow, 31254|4_Second_Slideshow, 31255|5_Second_Slideshow, 31256|7_Second_Slideshow, 31257|10_Second_Slideshow)</onclick>
-						<visible>ControlGroup(9).HasFocus(12) + Skin.HasSetting(Multiart_Slideshow)</visible>
+						<visible>ControlGroup(9).HasFocus(13) + Skin.HasSetting(Multiart_Slideshow)</visible>
 					</control>
 
 					<!-- Look and Feel -->
-					<control type="radiobutton" id="1300">
+					<control type="radiobutton" id="1400">
 						<description>Prefer keyart for poster views</description>
 						<label>$LOCALIZE[31241]</label>
 						<onclick>Skin.ToggleSetting(Prefer_Keyart)</onclick>
 						<selected>Skin.HasSetting(Prefer_Keyart)</selected>
-						<visible>ControlGroup(9).HasFocus(13)</visible>
+						<visible>ControlGroup(9).HasFocus(14)</visible>
 					</control>
-					<control type="radiobutton" id="1301">
+					<control type="radiobutton" id="1401">
 						<description>Show unwatched episodes count</description>
 						<label>$LOCALIZE[31246]</label>
 						<onclick>Skin.ToggleSetting(Unwatched_Indicator)</onclick>
 						<selected>Skin.HasSetting(Unwatched_Indicator)</selected>
-						<visible>ControlGroup(9).HasFocus(13)</visible>
+						<visible>ControlGroup(9).HasFocus(14)</visible>
 					</control>
-					<control type="radiobutton" id="1302">
+					<control type="radiobutton" id="1402">
 						<description>Show unwatched instead of watched in details</description>
 						<label>$LOCALIZE[31247]</label>
 						<onclick>Skin.ToggleSetting(Unwatched_Info)</onclick>
 						<selected>Skin.HasSetting(Unwatched_Info)</selected>
-						<visible>ControlGroup(9).HasFocus(13)</visible>
+						<visible>ControlGroup(9).HasFocus(14)</visible>
 					</control>
-					<control type="radiobutton" id="1303">
+					<control type="radiobutton" id="1403">
 						<description>Disable video player progress bar on pause screen</description>
 						<label>$LOCALIZE[31242]</label>
 						<onclick>Skin.ToggleSetting(Player_Progress_Disabled)</onclick>
 						<selected>Skin.HasSetting(Player_Progress_Disabled)</selected>
-						<visible>ControlGroup(9).HasFocus(13)</visible>
+						<visible>ControlGroup(9).HasFocus(14)</visible>
 					</control>
 				</control>
 
