@@ -1,21 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <window>
   <!-- smartplaylistrule -->
-  <defaultcontrol always="true">5</defaultcontrol>
+  <defaultcontrol always="true">9001</defaultcontrol>
   <include>Delayed_Dialog_Fade_Animation</include>
   <controls>
+
+    <!-- Delay content on Load -->
+    <include content="Delay_Content_Load">
+      <param name="id" value="9001"/>
+      <param name="time" value="360"/>
+      <param name="target_id" value="SetFocus(5)"/>
+    </include>
+
     <control type="group">
-      <visible>!Window.IsVisible(shutdownmenu) + !Window.IsVisible(virtualkeyboard) + !Window.IsVisible(selectdialog)</visible>
+      <visible>![Window.IsVisible(shutdownmenu) | Window.IsVisible(virtualkeyboard) | Window.IsVisible(numericinput) | Window.IsVisible(filebrowser) | Window.IsVisible(selectdialog)]</visible>
       <include>Delayed_Content_Fade_Animation</include>
 
       <control type="group">
-        <visible>![Window.IsVisible(shutdownmenu) | Window.IsVisible(virtualkeyboard) | Window.IsVisible(numericinput) | Window.IsVisible(filebrowser) | Window.IsVisible(selectdialog)]</visible>
-        <include>Delayed_Content_Fade_Animation</include>
-
+        <visible>!Control.HasFocus(9001)</visible>
+        <include>Content_Fade_Animation</include>
         <include content="Transparent_Dialog_Panel">
           <param name="top" value="360"/>
           <param name="bottom" value="360"/>
         </include>
+      </control>
+
+      <control type="group">
+        <visible>!Control.HasFocus(9001)</visible>
+        <include>Long_Delayed_Content_Fade_Animation</include>
 
         <include content="Breadcrumb_Label">
           <param name="visible" value="true"/>
@@ -28,6 +40,7 @@
 
         <control type="grouplist" id="5">
           <include>DialogGrouplist</include>
+          <onleft>18</onleft>
           <control type="button" id="15">
             <texturefocus border="2,2,2,2" colordiffuse="$VAR[Unfocused_Color]">dialogs/button_underline_focused.png</texturefocus>
           </control>
@@ -42,10 +55,10 @@
 
         <control type="button" id="20">
           <include>Hidden_Button</include>
-          <ondown>9000</ondown>
+          <ondown>15</ondown>
           <onright>9000</onright>
-          <onleft>5</onleft>
-          <onup>5</onup>
+          <onleft>17</onleft>
+          <onup>16</onup>
         </control>
 
         <control type="group">
@@ -66,13 +79,15 @@
               <param name="buttonid" value="20"/>
               <param name="texture" value="Browse"/>
               <param name="width" value="90"/>
-              <param name="color" value="$VAR[Unfocused_Color]"/>
+              <param name="unfocusedcolor" value="$VAR[Unfocused_Color]"/>
+              <param name="focusedcolor" value="$VAR[Light_Color]"/>
             </include>
           </control>
         </control>
 
         <include content="Button_Group_Template">
           <param name="onleft" value="20"/>
+          <param name="onright" value="5"/>
           <param name="onup" value="20" />
           <param name="icons" value="true"/>
           <param name="button1" value="true"/>
@@ -84,7 +99,6 @@
         </include>
 
       </control>
-
     </control>
   </controls>
 </window>

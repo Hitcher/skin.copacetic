@@ -2,23 +2,36 @@
 <window>
 	<!-- visualisation -->
 	<backgroundcolor>$VAR[Secondary_Color]</backgroundcolor>
+	<onload>Skin.TimerStart(music_visualisation)</onload>
+	<onunload>Skin.TimerStop(music_visualisation)</onunload>
 	<include>My_Window_Fade_Animation</include>
 	<controls>
 
 		<!-- Visualisation -->
-		<control type="visualisation" id="2">
-			<width>19020</width>
-			<height>1080</height>
-			<visible>true</visible>
+		<control type="group">
+			<control type="visualisation" id="2">
+				<visible>Skin.TimerIsRunning(music_visualisation) + Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(music_visualisation),1)</visible>
+				<width>1920</width>
+				<height>1080</height>
+			</control>
+			<control type="image">
+				<animation effect="fadediffuse" end="80000000" time="2160" condition="Skin.TimerIsRunning(music_visualisation) + Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(music_visualisation),1)" reversible="true">Conditional</animation>
+				<texture colordiffuse="$VAR[Secondary_Color]">views/white_100.png</texture>
+				<width>1920</width>
+				<height>1080</height>
+			</control>
 		</control>
 
+
+
 		<!-- Main artwork -->
-		<include content="ListIcon">
+		<include content="SimpleListIcon">
 			<param name="left" value="600"/>
 			<param name="top" value="180"/>
 			<param name="width" value="720"/>
 			<param name="height" value="720"/>
 			<param name="bordervisible" value="true"/>
+			<param name="texture" value="$INFO[Player.Art(album.thumb)]"/>
 		</include>
 		<!-- Artwork Mask -->
 		<control type="image">
