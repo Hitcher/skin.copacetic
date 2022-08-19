@@ -63,96 +63,114 @@
 		</definition>
 	</include>
 
-	<include name="Now_Playing_Bar_Fill">
-	  <param name="width" default="12"/>
-	  <param name="maxheight" default="300"/>
-		<param name="centerpoint" default="100%"/>
-	  <param name="delay" default="0"/>
-	  <param name="time" default="240"/>
-	  <param name="pulse" default="true"/>
-		<param name="color" default="$VAR[List_Text_Color]"/>
-	  <definition>
-	    <control type="image">
-				<animation effect="zoom" end="100, $PARAM[maxheight]" center="0, $PARAM[centerpoint]" time="$PARAM[time]" delay="$PARAM[delay]" tween="sine" easing="inout" pulse="$PARAM[pulse]" condition="true">Conditional</animation>
-				<width>$PARAM[width]</width>
-	      <height>$PARAM[width]</height>
-	      <texture colordiffuse="$PARAM[color]">views/white_100.png</texture>
-	    </control>
-	  </definition>
-	</include>
-
-	<include name="Now_Playing_Visualization_Fill">
-	  <param name="visible" default="Player.HasMedia"/>
-	  <param name="width" default="60"/>
-		<param name="barwidth" default="12"/>
-		<param name="bottom" default="12"/>
-	  <param name="itemgap" default="4"/>
-		<param name="pausewidth" default="12"/>
-		<param name="pausegap" default="4"/>
-	  <param name="barheight1" default="160"/>
-	  <param name="barheight2" default="300"/>
-	  <param name="barheight3" default="240"/>
-		<param name="color" default="$VAR[List_Text_Color]"/>
-	  <definition>
+	<include name="Now_Playing_Icon_Template">
+		<param name="maxbarheight1" default="160"/>
+		<param name="maxbarheight2" default="300"/>
+		<param name="maxbarheight3" default="240"/>
+		<definition>
 	    <control type="group">
+				<visible>$PARAM[visible]</visible>
+				<visible>!$EXP[TransparentDialog_IsVisible] + !Window.IsActive(busydialog)</visible>
+				<width>$PARAM[width]</width>
+				<height>$PARAM[width]</height>
 				<centerleft>50%</centerleft>
 				<centertop>50%</centertop>
-	      <visible>$PARAM[visible]</visible>
-	      <visible>!$EXP[TransparentDialog_IsVisible] + !Window.IsActive(busydialog)</visible>
-	      <width>$PARAM[width]</width>
-	      <height>$PARAM[width]</height>
 				<!-- Now playing -->
-	      <control type="grouplist">
+	      <control type="group">
 					<visible>Player.Playing</visible>
-					<bottom>$PARAM[bottom]</bottom>
-					<height>$PARAM[barwidth]</height>
-	        <itemgap>$PARAM[itemgap]</itemgap>
-	        <orientation>horizontal</orientation>
-	        <align>center</align>
-					<usecontrolcoords>true</usecontrolcoords>
-	        <include content="Now_Playing_Bar_Fill">
-						<param name="width" value="$PARAM[barwidth]"/>
-	          <param name="maxheight" value="$PARAM[barheight1]"/>
-						<param name="delay" value="111"/>
-						<param name="color" value="$PARAM[color]"/>
-	        </include>
-					<include content="Now_Playing_Bar_Fill">
-						<param name="width" value="$PARAM[barwidth]"/>
-						<param name="maxheight" value="$PARAM[barheight2]"/>
-						<param name="color" value="$PARAM[color]"/>
-					</include>
-					<include content="Now_Playing_Bar_Fill">
-						<param name="width" value="$PARAM[barwidth]"/>
-						<param name="maxheight" value="$PARAM[barheight3]"/>
-	          <param name="delay" value="190"/>
-						<param name="color" value="$PARAM[color]"/>
-					</include>
-				</control>
-				<control type="grouplist">
-					<visible>Player.Paused + !Window.IsVisible(visualisation) + !VideoPlayer.IsFullscreen</visible>
-					<include>Delayed_Content_Fade_Animation</include>
-					<centertop>50%</centertop>
-					<height>50%</height>
-					<itemgap>$PARAM[pausegap]</itemgap>
-					<orientation>horizontal</orientation>
-					<align>center</align>
 					<control type="image">
-						<width>$PARAM[pausewidth]</width>
+						<animation effect="zoom" end="100, $PARAM[maxbarheight1]" center="0,$PARAM[width]" time="240" delay="111" tween="sine" easing="inout" pulse="true" condition="true">Conditional</animation>
+						<left>$$PARAM[baredge]</left>
+						<bottom>0</bottom>
+						<width>$PARAM[barwidth]</width>
+						<height>$PARAM[barwidth]</height>
 						<texture colordiffuse="$PARAM[color]">views/white_100.png</texture>
 					</control>
 					<control type="image">
-						<width>$PARAM[pausewidth]</width>
+						<animation effect="zoom" end="100, $PARAM[maxbarheight2]" center="0,$PARAM[width]" time="240" delay="0" tween="sine" easing="inout" pulse="true" condition="true">Conditional</animation>
+						<centerleft>50%</centerleft>
+						<bottom>0</bottom>
+						<width>$PARAM[barwidth]</width>
+						<height>$PARAM[barwidth]</height>
+						<texture colordiffuse="$PARAM[color]">views/white_100.png</texture>
+					</control>
+					<control type="image">
+						<animation effect="zoom" end="100, $PARAM[maxbarheight3]" center="0,$PARAM[width]" time="190" delay="0" tween="sine" easing="inout" pulse="true" condition="true">Conditional</animation>
+						<right>$$PARAM[baredge]</right>
+						<bottom>0</bottom>
+						<width>$PARAM[barwidth]</width>
+						<height>$PARAM[barwidth]</height>
+						<texture colordiffuse="$PARAM[color]">views/white_100.png</texture>
+					</control>
+				</control>
+				<control type="group">
+					<visible>Player.Paused + !Window.IsVisible(visualisation) + !VideoPlayer.IsFullscreen</visible>
+					<control type="image">
+						<left>$PARAM[pauseedge]</left>
+						<width>$PARAM[barwidth]</width>
+						<height>75%</height>
+						<centertop>50%</centertop>
+						<texture colordiffuse="$PARAM[color]">views/white_100.png</texture>
+					</control>
+					<control type="image">
+						<right>$PARAM[pauseedge]</right>
+						<width>$PARAM[barwidth]</width>
+						<height>75%</height>
+						<centertop>50%</centertop>
 						<texture colordiffuse="$PARAM[color]">views/white_100.png</texture>
 					</control>
 				</control>
 	    </control>
-	  </definition>
+		</definition>
+	</include>
+
+	<include name="Now_Playing_Icon_Medium">
+		<param name="visible"/>
+		<param name="color"/>
+		<definition>
+			<include content="Now_Playing_Icon_Template">
+				<param name="visible" value="$PARAM[visible]"/>
+				<param name="width" value="48"/>
+				<param name="barwidth" value="12"/>
+				<param name="baredge" value="2"/>
+				<param name="pauseedge" value="9"/>
+				<param name="color" value="$PARAM[color]"/>
+			</include>
+		</definition>
+	</include>
+
+	<include name="Now_Playing_Icon_Large">
+		<param name="visible"/>
+		<param name="color"/>
+		<definition>
+			<include content="Now_Playing_Icon_Template">
+				<param name="visible" value="$PARAM[visible]"/>
+				<param name="width" value="96"/>
+				<param name="barwidth" value="24"/>
+				<param name="baredge" value="4"/>
+				<param name="pauseedge" value="18"/>
+				<param name="color" value="$PARAM[color]"/>
+			</include>
+		</definition>
+	</include>
+
+	<include name="Now_Playing_Icon">
+		<param name="size" default="Medium"/>
+		<param name="visible" default="true"/>
+		<param name="color" default="$VAR[List_Text_Color]"/>
+		<definition>
+			<include content="Now_Playing_Icon_$PARAM[size]">
+				<param name="visible" value="$PARAM[visible]"/>
+				<param name="color" value="$PARAM[color]"/>
+			</include>
+		</definition>
 	</include>
 
 	<include name="Player_Status_Icons">
 		<param name="icon_type" default="large"/>
 		<param name="large_label" default="false"/>
 		<param name="small_label" default="false"/>
+		<param name="playicon" default="true"/>
 		<definition>
 			<control type="group">
 				<animation effect="slide" start="0" end="0,300" time="0" condition="Window.IsVisible(videoosd)">Conditional</animation>
@@ -172,25 +190,9 @@
 						<centerleft>50%</centerleft>
 						<texture colordiffuse="$VAR[Light_Color]">osd/icon_Player.Paused_$PARAM[icon_type].png</texture>
 					</control>
-		 <!-- <control type="grouplist">
-						<visible>Player.Paused + !Window.IsVisible(videoosd) + !Window.IsVisible(musicosd) + [Window.IsVisible(visualisation) | VideoPlayer.IsFullscreen]</visible>
-						<include>Content_Fade_Animation</include>
-						<centertop>50%</centertop>
-						<height>50%</height>
-						<itemgap>10</itemgap>
-						<orientation>horizontal</orientation>
-						<align>center</align>
-						<control type="image">
-							<width>20</width>
-							<texture colordiffuse="$VAR[Light_Color]">views/white_100.png</texture>
-						</control>
-						<control type="image">
-							<width>20</width>
-							<texture colordiffuse="$VAR[Light_Color]">views/white_100.png</texture>
-						</control>
-					</control>-->
 					<!-- Playing -->
 					<control type="group">
+						<visible>$PARAM[playicon]</visible>
 						<visible>Player.Paused + !Window.IsVisible(videoosd) + !Window.IsVisible(musicosd)</visible>
 						<animation effect="fade" start="100" end="0" time="360" delay="540" tween="sine" easing="inout">Hidden</animation>
 						<control type="image">
@@ -304,14 +306,9 @@
 				<width>180</width>
 				<height>120</height>
 				<include>Music_Player_Navigation</include>
-				<onunfocus>ClearProperty(Music_Player_Controls,home)</onunfocus>
 				<scrolltime>0</scrolltime>
 				<itemlayout width="60" height="60"/>
 				<focusedlayout width="60" height="60">
-					<control type="button">
-						<visible allowhiddenfocus="true">false</visible>
-						<onfocus>SetProperty(Music_Player_Controls,$INFO[Container(91100).ListItem.Label],home)</onfocus>
-					</control>
 				</focusedlayout>
 				<content>
 					<item>
@@ -321,9 +318,7 @@
 					</item>
 					<item>
 						<description>Pause</description>
-						<label>$VAR[Play_Pause_Label]</label>
 						<onclick>PlayerControl(Play)</onclick>
-						<onclick>SetProperty(Music_Player_Controls,$VAR[Play_Pause_Label],home)</onclick>
 					</item>
 					<item>
 						<description>Next</description>
@@ -369,7 +364,7 @@
 		<param name="text_color" default="$VAR[Notification_Widget_Label_Color]"/>
 		<definition>
 			<control type="grouplist">
-				<visible>String.IsEmpty(Window(home).Property(Music_Player_Controls))</visible>
+				<visible>!$EXP[Music_Player_HasFocus]</visible>
 				<include>Delayed_Content_Fade_Animation</include>
 				<animation effect="slide" start="0,0" end="0,-30"  condition="$EXP[StripView_Display_IsPosters] + [$EXP[Music_Player_IsVisible] | Window.IsVisible(volumebar)] + !$EXP[InfoWidget_HasFocus] + !Window.IsVisible(home)">Conditional</animation>
 				<left>$PARAM[padding]</left>
@@ -397,9 +392,9 @@
 				</control>
 			</control>
 			<control type="label">
-				<visible>!String.IsEmpty(Window(home).Property(Music_Player_Controls))</visible>
+				<visible>$EXP[Music_Player_HasFocus]</visible>
 				<include>Delayed_Content_Fade_Animation</include>
-				<animation effect="slide" end="60" time="0" condition="!String.IsEmpty(Window(home).Property(Music_Player_Controls)) + Window.IsVisible(home) + Window.IsVisible(volumebar)" reversible="false">Conditional</animation>
+				<animation effect="slide" end="0,150" time="0" condition="$EXP[ShowcaseView_IsVisible] + $EXP[ShowcaseView_Display_IsPosters] + !$EXP[ShowcaseView_Details_Off]" reversible="false">Conditional</animation>
 				<left>$PARAM[padding]</left>
 				<right>$PARAM[padding]</right>
 				<height>40</height>
@@ -449,7 +444,7 @@
 
 					<!-- Left Label -->
 					<control type="group">
-						<animation effect="slide" end="-60,0" time="0" condition="!String.IsEmpty(Window(home).Property(Music_Player_Controls)) + [$EXP[InfoDialog_IsVisible] | ![$EXP[ListView_Display_IsThumbnails] | [$EXP[ShowcaseView_Display_IsPosters] + !$EXP[ShowcaseView_Details_Off]] | $EXP[StripView_IsVisible] | $EXP[GridView_IsVisible]]]">Conditional</animation>
+						<animation effect="slide" end="-60,0" time="0" condition="$EXP[Music_Player_HasFocus] + [Window.IsVisible(Home) | $EXP[Background_IsFanart] | $EXP[InfoDialog_IsVisible]]">Conditional</animation>
 						<visible>$PARAM[left_label_visible]</visible>
 						<height>$PARAM[height]</height>
 						<width>$PARAM[label_width]</width>
@@ -484,7 +479,7 @@
 							</control>
 							<!-- Gridview shadow -->
 							<control type="image">
-								<visible>String.IsEmpty(Window(home).Property(Music_Player_Controls)) + String.IsEqual(Container.Row,0) +  [[$EXP[GridView_Display_IsFanart] + String.IsEqual(Container.Column,2)] | [[$EXP[GridView_Display_IsPosters] | $EXP[GridView_Display_IsSquare]] + String.IsEqual(Container.Column,4)]]</visible>
+								<visible>!$EXP[Music_Player_HasFocus] + String.IsEqual(Container.Row,0) +  [[$EXP[GridView_Display_IsFanart] + String.IsEqual(Container.Column,2)] | [[$EXP[GridView_Display_IsPosters] | $EXP[GridView_Display_IsSquare]] + String.IsEqual(Container.Column,4)]]</visible>
 								<bottom>0</bottom>
 								<height>120</height>
 								<texture colordiffuse="$VAR[Dropshadow_Diffuse]">views/dropshadow_top_120.png</texture>
@@ -493,52 +488,52 @@
 						</control>
 						<!-- Music Player Controls -->
 						<control type="group">
-							<visible>!String.IsEmpty(Window(home).Property(Music_Player_Controls))</visible>
+							<visible>$EXP[Music_Player_HasFocus]</visible>
 							<include>Content_Fade_Animation</include>
 							<width>180</width>
 							<height>120</height>
 							<centerleft>50%</centerleft>
 							<centertop>50%</centertop>
 							<include content="Music_Player_Button_Template">
-								<param name="focused" value="String.IsEqual(Window(home).Property(Music_Player_Controls),$LOCALIZE[210])"/>
+								<param name="focused" value="String.IsEqual(Container(91100).Position,0)"/>
 								<param name="icon" value="Previous"/>
 								<param name="left" value="0"/>
 								<param name="top" value="0"/>
 							</include>
 							<include content="Music_Player_Button_Template">
 								<param name="visible" value="!Player.Paused"/>
-								<param name="focused" value="String.IsEqual(Window(home).Property(Music_Player_Controls),$LOCALIZE[31526]) + !Player.Paused"/>
+								<param name="focused" value="String.IsEqual(Container(91100).Position,1) + !Player.Paused"/>
 								<param name="icon" value="Pause"/>
 								<param name="left" value="60"/>
 								<param name="top" value="0"/>
 							</include>
 							<include content="Music_Player_Button_Template">
 								<param name="visible" value="Player.Paused"/>
-								<param name="focused" value="String.IsEqual(Window(home).Property(Music_Player_Controls),$LOCALIZE[208]) + Player.Paused"/>
+								<param name="focused" value="String.IsEqual(Container(91100).Position,1) + Player.Paused"/>
 								<param name="icon" value="Play"/>
 								<param name="left" value="60"/>
 								<param name="top" value="0"/>
 							</include>
 							<include content="Music_Player_Button_Template">
-								<param name="focused" value="String.IsEqual(Window(home).Property(Music_Player_Controls),$LOCALIZE[209])"/>
+								<param name="focused" value="String.IsEqual(Container(91100).Position,2)"/>
 								<param name="icon" value="Next"/>
 								<param name="left" value="120"/>
 								<param name="top" value="0"/>
 							</include>
 							<include content="Music_Player_Button_Template">
-								<param name="focused" value="String.IsEqual(Window(home).Property(Music_Player_Controls),$LOCALIZE[557])"/>
+								<param name="focused" value="String.IsEqual(Container(91100).Position,3)"/>
 								<param name="icon" value="Artist"/>
 								<param name="left" value="0"/>
 								<param name="top" value="60"/>
 							</include>
 							<include content="Music_Player_Button_Template">
-								<param name="focused" value="String.IsEqual(Window(home).Property(Music_Player_Controls),$LOCALIZE[31528])"/>
+								<param name="focused" value="String.IsEqual(Container(91100).Position,4)"/>
 								<param name="icon" value="Stop"/>
 								<param name="left" value="60"/>
 								<param name="top" value="60"/>
 							</include>
 							<include content="Music_Player_Button_Template">
-								<param name="focused" value="String.IsEqual(Window(home).Property(Music_Player_Controls),$LOCALIZE[31529])"/>
+								<param name="focused" value="String.IsEqual(Container(91100).Position,5)"/>
 								<param name="icon" value="Fullscreen"/>
 								<param name="left" value="120"/>
 								<param name="top" value="60"/>
@@ -551,17 +546,19 @@
 							<!-- Now Playing animation -->
 							<control type="group">
 								<animation effect="slide" start="0" end="0,-15" time="0" condition="Player.Rewinding | Player.Forwarding">Conditional</animation>
-								<visible>String.IsEmpty(Window(home).Property(Music_Player_Controls))</visible>
+								<visible>!$EXP[Music_Player_HasFocus]</visible>
+								<include>Delayed_Content_Fade_Animation</include>
 								<centerleft>50%</centerleft>
 								<centertop>50%</centertop>
 								<width>120</width>
 								<height>120</height>
-								<include content="Now_Playing_Visualization_Fill">
+								<include content="Now_Playing_Icon">
 									<param name="color" value="$VAR[Volume_Focus_Color]"/>
 								</include>
 								<include content="Player_Status_Icons">
 									<param name="icon_type" value="small"/>
 									<param name="small_label" value="true"/>
+									<param name="playicon" value="false"/>
 								</include>
 							</control>
 							<!-- Progress Bar -->
