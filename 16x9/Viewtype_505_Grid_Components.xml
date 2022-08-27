@@ -135,13 +135,13 @@
 								<param name="now_playing" value="$EXP[ListItem(0)_NowPlaying]"/>
 							</include>
 							<!-- Progress overlay -->
-							<include content="Icon_Component_Progress_Overlay">
-								<param name="visible" value="$EXP[GridView_Details_Off] | $EXP[GridView_Details_Breadcrumb] + ![Container.Content(artists) | Container.Content(albums) | Container.Content(songs)]"/>
+							<include condition="Window.Is(home) | Window.Is(videos) | Window.Is(movieinformation)" content="Icon_Component_Progress_Overlay">
+								<param name="visible" value="$EXP[GridView_Details_Off] | $EXP[GridView_Details_Breadcrumb] + $EXP[Progress_IsVisible]"/>
 							</include>
 							<!-- Artwork Mask -->
 							<control type="image">
 								<visible>![$EXP[GridView_Details_Off] | $EXP[GridView_Details_Breadcrumb] | $EXP[ListItem(0)_NowPlaying]]</visible>
-								<animation effect="fade" start="0" end="66" delay="540" time="360" tween="sine" easing="inout" reversible="false">Focus</animation>
+								<animation effect="fade" start="0" end="66" delay="900" time="360" tween="sine" easing="inout" reversible="false">Focus</animation>
 								<texture colordiffuse="$VAR[Dark_Color]">views/white_100.png</texture>
 							</control>
 						</include>
@@ -185,7 +185,7 @@
 				<control type="group">
 					<visible>$EXP[GridView_Display_Is$PARAM[displaytype_label]] + !$EXP[ContainerSwitching] + !$EXP[OptionsSwitching] + !$EXP[ContentSwitching] + !$EXP[TransparentDialog_IsVisible] + !Control.HasFocus(60) + !$EXP[Music_Player_HasFocus]</visible>
 					<include>Delayed_Content_Fade_Animation</include>
-					<include content="ProgressBar">
+					<include condition="Window.Is(home) | Window.Is(videos) | Window.Is(movieinformation)" content="ProgressBar">
 						<param name="left" value="$PARAM[progress_left]"/>
 						<param name="top" value="$PARAM[progress_top]"/>
 						<param name="width" value="$PARAM[progress_width]"/>
@@ -312,7 +312,6 @@
 				<width>$PARAM[width]</width>
 				<height>$PARAM[height]</height>
 				<visible>$EXP[GridView_Display_Is$PARAM[displaytype_label]] + [[$EXP[GridView_Details_On] + !$EXP[ListItem(0)_NowPlaying]] | $EXP[GridView_Widget_IsVisible]]</visible>
-				<animation effect="fade" start="0" end="100" time="360" delay="360" tween="sine" easing="inout" reversible="false">Focus</animation>
 				<control type="grouplist">
 					<left>$PARAM[edge]</left>
 					<right>$PARAM[edge]</right>
@@ -355,9 +354,7 @@
 			<param name="now_playing" value="$EXP[ListItem($PARAM[position])_NowPlaying]"/>
 			<param name="fallback" value="$PARAM[fallback]"/>
 			<!-- Progress overlay -->
-			<include content="Icon_Component_Progress_Overlay">
-				<param name="visible" value="$PARAM[progress_overlay]"/>
-			</include>
+			<include condition="Window.Is(home) | Window.Is(videos) | Window.Is(movieinformation)" content="Icon_Component_Progress_Overlay"/>
 		</include>
 	</include>
 
@@ -380,9 +377,7 @@
 				<param name="now_playing" value="$EXP[ListItem($PARAM[position])_NowPlaying]"/>
 			</include>
 			<!-- Progress overlay -->
-			<include content="Icon_Component_Progress_Overlay">
-				<param name="visible" value="$PARAM[progress_overlay]"/>
-			</include>
+			<include condition="Window.Is(home) | Window.Is(videos) | Window.Is(movieinformation)" content="Icon_Component_Progress_Overlay"/>
 			<!-- Border -->
 			<include content="Icon_Component_Border">
 				<param name="visible" value="$PARAM[border_visible]"/>
@@ -411,8 +406,8 @@
 			<param name="animationend" value="$PARAM[animationend]"/>
 			<param name="animationcondition" value="$PARAM[animationcondition]"/>
 			<!-- Progress overlay -->
-			<include content="Icon_Component_Progress_Overlay">
-				<param name="visible" value="$PARAM[progress_overlay]"/>
+			<include condition="Window.Is(home) | Window.Is(videos) | Window.Is(movieinformation)" content="Icon_Component_Progress_Overlay">
+				<param name="visible" value="!String.IsEmpty(Container($PARAM[target_id]).ListItemNoWrap($PARAM[position]).Label)"/>
 			</include>
 			<!-- Border -->
 			<include content="Icon_Component_Border">
@@ -455,8 +450,8 @@
 					<param name="animationcondition" value="$PARAM[multiartanimationcondition]"/>
 				</include>
 				<!-- Progress overlay -->
-				<include content="Icon_Component_Progress_Overlay">
-					<param name="visible" value="$PARAM[progress_overlay]"/>
+				<include condition="Window.Is(home) | Window.Is(videos) | Window.Is(movieinformation)" content="Icon_Component_Progress_Overlay">
+					<param name="visible" value="!String.IsEmpty(Container($PARAM[target_id]).ListItemNoWrap($PARAM[position]).Label)"/>
 				</include>
 			</include>
 		</definition>
@@ -478,7 +473,6 @@
 		<param name="6x_item_width"/>
 		<param name="art_icon"/>
 		<param name="fallback"/>
-		<param name="progress_overlay" default="false"/>
 		<param name="focus_border_visible"/>
 		<param name="focus_border_edge"/>
 		<param name="focus_border_size"/>
@@ -506,7 +500,6 @@
 						<param name="animationcondition" value="true"/>
 						<param name="animationeffect" value="slide"/>
 						<param name="animationend" value="$PARAM[item_width],0"/>
-						<param name="progress_overlay" value="$PARAM[progress_overlay]"/>
 					</include>
 					<!-- Move Icon 0 to 1 -->
 					<include content="GridView_Multiart_Animated">
@@ -527,7 +520,6 @@
 						<param name="multiartanimationeffect" value="fade"/>
 						<param name="multiartanimationend" value="0"/>
 						<param name="multiartanimationcondition" value="true"/>
-						<param name="progress_overlay" value="$PARAM[progress_overlay]"/>
 					</include>
 					<!-- Move Icon 1 to 2 -->
 					<include content="GridView_ListIcon_Animated">
@@ -543,7 +535,6 @@
 						<param name="animationcondition" value="true"/>
 						<param name="animationeffect" value="slide"/>
 						<param name="animationend" value="$PARAM[item_width],0"/>
-						<param name="progress_overlay" value="$PARAM[progress_overlay]"/>
 					</include>
 					<!-- Move Icon 2 to 3 -->
 					<include content="GridView_ListIcon_Animated">
@@ -559,7 +550,6 @@
 						<param name="animationcondition" value="true"/>
 						<param name="animationeffect" value="slide"/>
 						<param name="animationend" value="$PARAM[item_width],0"/>
-						<param name="progress_overlay" value="$PARAM[progress_overlay]"/>
 					</include>
 					<!-- Move Icon 3 to 4 -->
 					<include content="GridView_ListIcon_Animated">
@@ -575,7 +565,6 @@
 						<param name="animationcondition" value="true"/>
 						<param name="animationeffect" value="slide"/>
 						<param name="animationend" value="$PARAM[item_width],0"/>
-						<param name="progress_overlay" value="$PARAM[progress_overlay]"/>
 					</include>
 					<!-- Move Icon 4 to 5 -->
 					<include content="GridView_ListIcon_Animated">
@@ -591,7 +580,6 @@
 						<param name="animationcondition" value="true"/>
 						<param name="animationeffect" value="slide"/>
 						<param name="animationend" value="$PARAM[item_width],0"/>
-						<param name="progress_overlay" value="$PARAM[progress_overlay]"/>
 					</include>
 					<!-- Move Icon 5 to 6 -->
 					<include content="GridView_ListIcon_Animated">
@@ -603,7 +591,6 @@
 						<param name="height" value="$PARAM[item_height]"/>
 						<param name="art_icon" value="$PARAM[art_icon]"/>
 						<param name="fallback" value="$PARAM[fallback]"/>
-						<param name="progress_overlay" value="$PARAM[progress_overlay]"/>
 						<param name="animationtype" value="Hidden"/>
 						<param name="animationcondition" value="true"/>
 						<param name="animationeffect" value="slide"/>
@@ -653,7 +640,6 @@
 						<param name="animationcondition" value="true"/>
 						<param name="animationeffect" value="slide"/>
 						<param name="animationend" value="$PARAM[item_width],0"/>
-						<param name="progress_overlay" value="$PARAM[progress_overlay]"/>
 						<param name="border_visible" value="$PARAM[focus_border_visible]"/>
 						<param name="border_size" value="$PARAM[focus_border_size]"/>
 						<param name="border_color" value="$PARAM[focus_border_color]"/>
@@ -678,7 +664,6 @@
 						<param name="animationcondition" value="true"/>
 						<param name="animationeffect" value="slide"/>
 						<param name="animationend" value="-$PARAM[item_width],0"/>
-						<param name="progress_overlay" value="$PARAM[progress_overlay]"/>
 					</include>
 					<!-- Move Icon 0 to -1 -->
 					<include content="GridView_Multiart_Animated">
@@ -699,7 +684,6 @@
 						<param name="multiartanimationeffect" value="fade"/>
 						<param name="multiartanimationend" value="0"/>
 						<param name="multiartanimationcondition" value="true"/>
-						<param name="progress_overlay" value="$PARAM[progress_overlay]"/>
 					</include>
 					<!-- Move Icon 2 to 1 -->
 					<include content="GridView_ListIcon_Animated">
@@ -715,7 +699,6 @@
 						<param name="animationcondition" value="true"/>
 						<param name="animationeffect" value="slide"/>
 						<param name="animationend" value="-$PARAM[item_width],0"/>
-						<param name="progress_overlay" value="$PARAM[progress_overlay]"/>
 					</include>
 					<!-- Move Icon 3 to 2 -->
 					<include content="GridView_ListIcon_Animated">
@@ -731,7 +714,6 @@
 						<param name="animationcondition" value="true"/>
 						<param name="animationeffect" value="slide"/>
 						<param name="animationend" value="-$PARAM[item_width],0"/>
-						<param name="progress_overlay" value="$PARAM[progress_overlay]"/>
 					</include>
 					<!-- Move Icon 4 to 3 -->
 					<include content="GridView_ListIcon_Animated">
@@ -747,7 +729,6 @@
 						<param name="animationcondition" value="true"/>
 						<param name="animationeffect" value="slide"/>
 						<param name="animationend" value="-$PARAM[item_width],0"/>
-						<param name="progress_overlay" value="$PARAM[progress_overlay]"/>
 					</include>
 					<!-- Move Icon 5 to 4 -->
 					<include content="GridView_ListIcon_Animated">
@@ -763,7 +744,6 @@
 						<param name="animationcondition" value="true"/>
 						<param name="animationeffect" value="slide"/>
 						<param name="animationend" value="-$PARAM[item_width],0"/>
-						<param name="progress_overlay" value="$PARAM[progress_overlay]"/>
 					</include>
 					<!-- Move Icon 6 to 5 -->
 					<include content="GridView_ListIcon_Animated">
@@ -779,7 +759,6 @@
 						<param name="animationcondition" value="true"/>
 						<param name="animationeffect" value="slide"/>
 						<param name="animationend" value="-$PARAM[item_width],0"/>
-						<param name="progress_overlay" value="$PARAM[progress_overlay]"/>
 					</include>
 					<!-- Dropshadow -->
 					<control type="group">
@@ -824,7 +803,6 @@
 						<param name="animationcondition" value="true"/>
 						<param name="animationeffect" value="slide"/>
 						<param name="animationend" value="-$PARAM[item_width],0"/>
-						<param name="progress_overlay" value="$PARAM[progress_overlay]"/>
 						<param name="border_visible" value="$PARAM[focus_border_visible]"/>
 						<param name="border_size" value="$PARAM[focus_border_size]"/>
 						<param name="border_color" value="$PARAM[focus_border_color]"/>
@@ -849,7 +827,6 @@
 		<param name="5x_item_width"/>
 		<param name="art_icon"/>
 		<param name="fallback"/>
-		<param name="progress_overlay" default="false"/>
 		<param name="focus_border_visible"/>
 		<param name="focus_border_protrusion"/>
 		<param name="focus_border_size"/>
@@ -872,7 +849,6 @@
 						<param name="height" value="$PARAM[item_height]"/>
 						<param name="art_icon" value="$PARAM[art_icon]"/>
 						<param name="fallback" value="$PARAM[fallback]"/>
-						<param name="progress_overlay" value="$PARAM[progress_overlay]"/>
 					</include>
 					<include content="GridView_ListIcon_Static_Unfocused">
 						<param name="visible" value="true"/>
@@ -883,7 +859,6 @@
 						<param name="height" value="$PARAM[item_height]"/>
 						<param name="art_icon" value="$PARAM[art_icon]"/>
 						<param name="fallback" value="$PARAM[fallback]"/>
-						<param name="progress_overlay" value="$PARAM[progress_overlay]"/>
 					</include>
 					<include content="GridView_ListIcon_Static_Unfocused">
 						<param name="visible" value="true"/>
@@ -894,7 +869,6 @@
 						<param name="height" value="$PARAM[item_height]"/>
 						<param name="art_icon" value="$PARAM[art_icon]"/>
 						<param name="fallback" value="$PARAM[fallback]"/>
-						<param name="progress_overlay" value="$PARAM[progress_overlay]"/>
 					</include>
 					<include content="GridView_ListIcon_Static_Unfocused">
 						<param name="visible" value="true"/>
@@ -905,7 +879,6 @@
 						<param name="height" value="$PARAM[item_height]"/>
 						<param name="art_icon" value="$PARAM[art_icon]"/>
 						<param name="fallback" value="$PARAM[fallback]"/>
-						<param name="progress_overlay" value="$PARAM[progress_overlay]"/>
 					</include>
 					<include content="GridView_ListIcon_Static_Unfocused">
 						<param name="visible" value="!$EXP[GridView_Display_IsFanart]"/>
@@ -916,7 +889,6 @@
 						<param name="height" value="$PARAM[item_height]"/>
 						<param name="art_icon" value="$PARAM[art_icon]"/>
 						<param name="fallback" value="$PARAM[fallback]"/>
-						<param name="progress_overlay" value="$PARAM[progress_overlay]"/>
 					</include>
 					<include content="GridView_ListIcon_Static_Unfocused">
 						<param name="visible" value="!$EXP[GridView_Display_IsFanart]"/>
@@ -927,7 +899,6 @@
 						<param name="height" value="$PARAM[item_height]"/>
 						<param name="art_icon" value="$PARAM[art_icon]"/>
 						<param name="fallback" value="$PARAM[fallback]"/>
-						<param name="progress_overlay" value="$PARAM[progress_overlay]"/>
 					</include>
 					<control type="group">
 						<visible>!$EXP[TransparentDialog_IsVisible] | $EXP[StripView_IsVisible] | Window.IsVisible(videobookmarks)</visible>
@@ -955,7 +926,6 @@
 						<param name="height" value="$PARAM[item_height]"/>
 						<param name="art_icon" value="$PARAM[art_icon]"/>
 						<param name="fallback" value="$PARAM[fallback]"/>
-						<param name="progress_overlay" value="$PARAM[progress_overlay]"/>
 						<param name="border_visible" value="$PARAM[focus_border_visible]"/>
 						<param name="border_protrusion" value="$PARAM[focus_border_protrusion]"/>
 						<param name="border_size" value="$PARAM[focus_border_size]"/>
@@ -983,7 +953,6 @@
 		<param name="4x_item_width"/>
 		<param name="5x_item_width"/>
 		<param name="6x_item_width"/>
-		<param name="progress_overlay" value="Container.Content(movies) | Container.Content(tvshows) | Container.Content(episodes)"/>
 		<definition>
 			<control type="group">
 				<animation effect="slide" start="0,0" end="60,0" time="0" condition="true">Conditional</animation>
@@ -1008,7 +977,6 @@
 					<param name="focus_border_size" value="11"/>
 					<param name="focus_border_color" value="$VAR[Accent_Color]"/>
 					<param name="focus_border_texture" value="views/border_10px.png"/>
-					<param name="progress_overlay" value="$PARAM[progress_overlay]"/>
 				</include>
 				<include content="GridView_Static">
 					<param name="target_id" value="$PARAM[target_id]"/>
@@ -1028,7 +996,6 @@
 					<param name="focus_border_size" value="11"/>
 					<param name="focus_border_color" value="$VAR[Accent_Color]"/>
 					<param name="focus_border_texture" value="views/border_10px.png"/>
-					<param name="progress_overlay" value="$PARAM[progress_overlay]"/>
 				</include>
 			</control>
 		</definition>
