@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <window>
 	<!-- musicinformation -->
-	<onload condition="System.HasAddon(script.embuary.helper)">RunScript(script.embuary.helper,action=split,value='$ESCINFO[ListItem.Genre]',separator='" / "',prop=GenreSplit)</onload>
+	<onload condition="System.HasAddon(plugin.video.themoviedb.helper)">RunScript(plugin.video.themoviedb.helper,split_value=$INFO[ListItem.Genre],separator=' ',property=GenreSplit)</onload>
+	<onunload>ClearProperty(GenreSplit.0,home)</onunload>
 	<onload condition="String.IsEqual(ListItem.DBType,artist)">SetProperty(Info_Type,artist,musicinformation)</onload>
 	<onload condition="String.IsEqual(ListItem.DBType,album)">SetProperty(Info_Type,album,musicinformation)</onload>
 	<onload>SetProperty(ArtistDBID,$INFO[ListItem.DBID],musicinformation)</onload>
@@ -337,6 +338,11 @@
 				<visible>$EXP[TransparentDialog_IsVisible] + [$EXP[InfoWidget_HasFocus] | String.IsEqual(ListItem.DBType,album) | Window.Is(songinformation)]</visible>
 				<include>Transparent_Dialog_Background</include>
 				<include>Content_Fade_Animation</include>
+			</control>
+
+			<control type="label">
+				<left>960</left>
+				<label>$INFO[window(home).property(GenreSplit.0)]</label>
 			</control>
 
 		</control>

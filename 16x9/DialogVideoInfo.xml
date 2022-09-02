@@ -4,7 +4,13 @@
 	<onload condition="!String.IsEmpty(Window(home).Property(InfoDialog_Transition))">ClearProperty(InfoDialog_Transition,home)</onload>
 	<onload condition="!String.Contains(ListItem.Path,themoviedb.helper)">SetProperty(SelectedItem,$INFO[ListItem.DBID],movieinformation)</onload>
 	<onload condition="String.Contains(ListItem.Path,themoviedb.helper)">SetProperty(SelectedItem,$INFO[ListItem.Property(tmdb_id)],movieinformation)</onload>
-	<onload condition="System.HasAddon(script.embuary.helper)">RunScript(script.embuary.helper,action=split,value='$ESCINFO[ListItem.Genre]',separator='" / "',prop=GenreSplit)</onload>
+	<onload condition="System.HasAddon(plugin.video.themoviedb.helper)">RunScript(plugin.video.themoviedb.helper,split_value=$INFO[ListItem.Genre],separator=' ',property=GenreSplit)</onload>
+	<onload condition="System.HasAddon(plugin.video.themoviedb.helper) + String.IsEqual(ListItem.DBType,episode)">RunScript(plugin.video.themoviedb.helper,split_value=$INFO[ListItem.Writer],property=WriterSplit)</onload>
+	<onload condition="System.HasAddon(plugin.video.themoviedb.helper) + String.Contains(ListItem.Path,themoviedb.helper)">RunScript(plugin.video.themoviedb.helper,split_value=$INFO[ListItem.Studio],property=StudioSplit)</onload>
+	<onunload>ClearProperty(GenreSplit.0,home)</onunload>
+	<onunload>ClearProperty(WriterSplit.0,home)</onunload>
+	<onunload>ClearProperty(WriterSplit.1,home)</onunload>
+	<onunload>ClearProperty(StudioSplit.0,home)</onunload>
 	<onload>SetProperty(ResetScroll," ")</onload>
 
 	<onload condition="!String.IsEqual(window(movieinformation).property(Breadcrumb_GoToNext),true) + !String.IsEqual(window(movieinformation).property(Breadcrumb_GoToPrevious),true) + !String.IsEqual(window(movieinformation).property(SentFromInfo),true)">SetProperty(Breadcrumb_Level,1,movieinformation)</onload>
@@ -324,11 +330,14 @@
 			<!-- Widgets -->
 			<control type="group">
 				<!-- 8010 -->
-				<include condition="String.IsEqual(ListItem.DBType,tvshow) + Integer.IsGreater(ListItem.Property(UnwatchedEpisodes),0)" content="Info_Widget_NextUp"/>
-				<include condition="String.IsEqual(ListItem.DBType,episode)" content="Info_Widget_Episodes"/>
-				<include condition="!String.IsEmpty(ListItem.Set)" content="Info_Widget_MovieSet"/>
+				<!-- tvshow-->
+				<include condition="String.IsEqual(ListItem.DBType,tvshow) + String.IsEqual(ListItem.Label,ListItem.TVShowTitle) + Integer.IsGreater(ListItem.Property(UnwatchedEpisodes),0)" content="Info_Widget_NextUp"/>
+				<!-- season or episode -->
+				<include condition="[String.IsEqual(ListItem.DBType,tvshow) + String.IsEqual(Container.FolderName,ListItem.TVShowTitle)] | String.IsEqual(ListItem.DBType,episode)" content="Info_Widget_Episodes"/>
+				<include condition="String.IsEqual(ListItem.DBType,movie)" content="Info_Widget_MovieSet"/>
 				<!-- 8020 -->
-				<include condition="String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)" content="Info_Widget_Seasons"/>
+				<!-- tvshow or episode -->
+				<include condition="[String.IsEqual(ListItem.DBType,tvshow) + String.IsEqual(ListItem.Label,ListItem.TVShowTitle)] | String.IsEqual(ListItem.DBType,episode)" content="Info_Widget_Seasons"/>
 				<!-- 50 -->
 				<include condition="!String.IsEqual(ListItem.DBType,set)" content="Info_Widget_Cast"/>
 				<include condition="String.IsEqual(ListItem.DBType,set)" content="Info_Widget_Set"/>
@@ -354,12 +363,6 @@
 					<param name="left_label_visible" value="true"/>
 					<param name="background_visible" value="false"/>
 				</include>
-			</control>
-
-			<control type="group">
-				<visible>$EXP[TransparentDialog_IsVisible] + $EXP[InfoWidget_HasFocus]</visible>
-				<include>Content_Fade_Animation</include>
-				<include>Transparent_Dialog_Background</include>
 			</control>
 
 		</control>

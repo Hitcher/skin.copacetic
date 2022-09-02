@@ -18,17 +18,20 @@
 	</variable>
 
 	<variable name="Path_Episodes">
+		<!-- season infoscreen -->
 		<value condition="String.IsEqual(Container.FolderName,ListItem.TVShowTitle)">$INFO[ListItem.DBID,videodb://tvshows/titles/]$INFO[Window(home).Property(Season_Number),/,/]</value>
+		<!-- episode infoscreen -->
 		<value>videodb://tvshows/titles/$INFO[ListItem.TVShowDBID]/$INFO[ListItem.Season]/</value>
 	</variable>
 
 	<variable name="Path_Seasons">
+		<!-- tvshow infoscreen -->
+		<value condition="System.HasAddon(plugin.video.themoviedb.helper) + String.Contains(ListItem.Path,themoviedb.helper) + String.IsEqual(ListItem.DBType,tvshow) + String.IsEqual(ListItem.TVShowTitle,ListItem.Label)">plugin://plugin.video.themoviedb.helper?info=seasons&amp;type=tv&amp;query='$ESCINFO[ListItem.TVShowTitle]'&amp;year=$INFO[ListItem.Year]&amp;$VAR[TMDBHelper_Default_Params]</value>
+		<!-- episode infoscreen -->
+		<value condition="System.HasAddon(plugin.video.themoviedb.helper) + String.Contains(ListItem.Path,themoviedb.helper)">plugin://plugin.video.themoviedb.helper?info=episodes&amp;type=tv&amp;query='$ESCINFO[ListItem.TVShowTitle]'&amp;season=$INFO[ListItem.Season]&amp;year=$INFO[ListItem.Year]&amp;$VAR[TMDBHelper_Default_Params]</value>
 		<value condition="String.IsEqual(ListItem.DBType,tvshow) + Integer.IsGreater(ListItem.DBID,0)">videodb://tvshows/titles/$INFO[ListItem.DBID]/</value>
 		<value condition="String.IsEqual(ListItem.DBType,episode) + Integer.IsGreater(ListItem.DBID,0)">videodb://tvshows/titles/$INFO[ListItem.TVShowDBID]/</value>
-		<!-- Can't use dbid to determine if episode or tvshow -->
-		<value condition="System.HasAddon(plugin.video.themoviedb.helper) + String.Contains(ListItem.Path,themoviedb.helper) + String.IsEqual(ListItem.DBType,tvshow) + !String.IsEmpty(ListItem.TVShowTitle)">plugin://plugin.video.themoviedb.helper?info=seasons&amp;type=tv&amp;query='$ESCINFO[ListItem.TVShowTitle]'&amp;year=$INFO[ListItem.Year]&amp;$VAR[TMDBHelper_Default_Params]</value>
-		<value condition="System.HasAddon(plugin.video.themoviedb.helper) + String.Contains(ListItem.Path,themoviedb.helper) + String.IsEqual(ListItem.DBType,episode) + !String.IsEmpty(ListItem.TVShowTitle)">plugin://plugin.video.themoviedb.helper?info=episodes&amp;type=tv&amp;query='$ESCINFO[ListItem.TVShowTitle]'&amp;season=$INFO[ListItem.Season]&amp;year=$INFO[ListItem.Year]&amp;$VAR[TMDBHelper_Default_Params]</value>
-	</variable>
+		</variable>
 
 	<variable name="Path_ActorCredits">
 		<value condition="System.HasAddon(plugin.video.themoviedb.helper) + String.Contains(ListItem.Path,themoviedb.helper) + String.IsEqual(ListItem.DBType,movie) + !String.IsEmpty(Container(50).ListItem.Label)">plugin://plugin.video.themoviedb.helper?info=stars_in_movies&amp;type=person&amp;query=$INFO[Container(50).ListItem.Label]&amp;exclude_key=title&amp;exclude_value=$INFO[ListItem.Title]&amp;$VAR[TMDBHelper_Default_Params]</value>
@@ -55,24 +58,15 @@
 	</variable>
 
 	<variable name="Path_Similar">
-		<value condition="System.HasAddon(script.embuary.helper) + Integer.IsGreater(ListItem.DBID,0) + String.IsEqual(ListItem.DBType,movie)">plugin://script.embuary.helper/?info=getsimilar&amp;dbid=$INFO[ListItem.DBID]&amp;type=movie</value>
-		<value condition="System.HasAddon(script.embuary.helper) + Integer.IsGreater(ListItem.DBID,0) + String.IsEqual(ListItem.DBType,tvshow)">plugin://script.embuary.helper/?info=getsimilar&amp;dbid=$INFO[ListItem.DBID]&amp;type=tvshow</value>
-		<value condition="System.HasAddon(script.embuary.helper) + Integer.IsGreater(ListItem.DBID,0) + String.IsEqual(ListItem.DBType,episode)">plugin://script.embuary.helper/?info=getsimilar&amp;dbid=$INFO[ListItem.TVShowDBID]&amp;type=tvshow</value>
-		<value condition="System.HasAddon(plugin.video.themoviedb.helper) + String.Contains(ListItem.Path,themoviedb.helper) + !String.IsEmpty(ListItem.IMDBNumber) + !String.IsEmpty(ListItem.Episode)">plugin://plugin.video.themoviedb.helper?info=similar&amp;type=movie&amp;imdb_id=$INFO[ListItem.IMDBNumber]&amp;$VAR[TMDBHelper_Default_Params]</value>
-		<!--<value condition="!String.IsEmpty(ListItem.Property(Genre.1.Name)) + !String.IsEmpty(ListItem.MPAA) + !String.IsEmpty(ListItem.Episode)">videodb://tvshows/titles/?xsp=%7B%22rules%22%3A%7B%22and%22%3A%5B%7B%22field%22%3A%22genre%22%2C%22operator%22%3A%22contains%22%2C%22value%22%3A%5B$ESCINFO[ListItem.Property(Genre.1.Name)]%5D%7D%2C%7B%22field%22%3A%22mpaarating%22%2C%22operator%22%3A%22is%22%2C%22value%22%3A%5B%22$INFO[ListItem.MPAA]%22%5D%7D%5D%7D%2C%22type%22%3A%22tvshows%22%7D%0A</value>-->
-		<value condition="!String.IsEmpty(ListItem.Property(Genre.1.Name)) + !String.IsEmpty(ListItem.Episode)">videodb://tvshows/titles/?xsp=%7B%22rules%22%3A%7B%22and%22%3A%5B%7B%22field%22%3A%22genre%22%2C%22operator%22%3A%22is%22%2C%22value%22%3A%5B$ESCINFO[ListItem.Property(Genre.1.Name)]%5D%7D%5D%7D%2C%22type%22%3A%22tvshows%22%7D</value>
-		<!--<value condition="!String.IsEmpty(ListItem.Property(Genre.1.Name)) + !String.IsEmpty(ListItem.MPAA)">videodb://movies/titles/?xsp=%7B%22rules%22%3A%7B%22and%22%3A%5B%7B%22field%22%3A%22genre%22%2C%22operator%22%3A%22contains%22%2C%22value%22%3A%5B$ESCINFO[ListItem.Property(Genre.1.Name)]%5D%7D%2C%7B%22field%22%3A%22mpaarating%22%2C%22operator%22%3A%22is%22%2C%22value%22%3A%5B%22$INFO[ListItem.MPAA]%22%5D%7D%5D%7D%2C%22type%22%3A%22movies%22%7D%0A</value>-->
-		<value condition="!String.IsEmpty(ListItem.Property(Genre.1.Name))">videodb://movies/titles/?xsp=%7B%22rules%22%3A%7B%22and%22%3A%5B%7B%22field%22%3A%22genre%22%2C%22operator%22%3A%22is%22%2C%22value%22%3A%5B$ESCINFO[ListItem.Property(Genre.1.Name)]%5D%7D%5D%7D%2C%22type%22%3A%22movies%22%7D</value>
-		<!--<value condition="!String.IsEmpty(Window(home).Property(GenreSplit.0)) + !String.IsEmpty(ListItem.MPAA) + !String.IsEmpty(ListItem.Episode)">videodb://tvshows/titles/?xsp=%7B%22rules%22%3A%7B%22and%22%3A%5B%7B%22field%22%3A%22genre%22%2C%22operator%22%3A%22contains%22%2C%22value%22%3A%5B$ESCINFO[Window(home).Property(GenreSplit.0)]%5D%7D%2C%7B%22field%22%3A%22mpaarating%22%2C%22operator%22%3A%22is%22%2C%22value%22%3A%5B%22$INFO[ListItem.MPAA]%22%5D%7D%5D%7D%2C%22type%22%3A%22tvshows%22%7D%0A</value>-->
-		<value condition="!String.IsEmpty(Window(home).Property(GenreSplit.0)) + !String.IsEmpty(ListItem.Episode)">videodb://tvshows/titles/?xsp=%7B%22rules%22%3A%7B%22and%22%3A%5B%7B%22field%22%3A%22genre%22%2C%22operator%22%3A%22is%22%2C%22value%22%3A%5B$ESCINFO[Window(home).Property(GenreSplit.0)]%5D%7D%5D%7D%2C%22type%22%3A%22tvshows%22%7D</value>
-		<!--<value condition="!String.IsEmpty(Window(home).Property(GenreSplit.0)) + !String.IsEmpty(ListItem.MPAA)">videodb://movies/titles/?xsp=%7B%22rules%22%3A%7B%22and%22%3A%5B%7B%22field%22%3A%22genre%22%2C%22operator%22%3A%22contains%22%2C%22value%22%3A%5B$ESCINFO[Window(home).Property(GenreSplit.0)]%5D%7D%2C%7B%22field%22%3A%22mpaarating%22%2C%22operator%22%3A%22is%22%2C%22value%22%3A%5B%22$INFO[ListItem.MPAA]%22%5D%7D%5D%7D%2C%22type%22%3A%22movies%22%7D%0A</value>-->
-		<value condition="!String.IsEmpty(Window(home).Property(GenreSplit.0))">videodb://movies/titles/?xsp=%7B%22rules%22%3A%7B%22and%22%3A%5B%7B%22field%22%3A%22genre%22%2C%22operator%22%3A%22is%22%2C%22value%22%3A%5B$ESCINFO[Window(home).Property(GenreSplit.0)]%5D%7D%5D%7D%2C%22type%22%3A%22movies%22%7D</value>
+		<!-- tvshow, season, episode -->
+		<value condition="System.HasAddon(plugin.video.themoviedb.helper) + String.Contains(ListItem.Path,themoviedb.helper) + !String.IsEmpty(ListItem.Property(tmdb_id)) + !String.IsEmpty(ListItem.TVShowTitle)">plugin://plugin.video.themoviedb.helper?info=similar&amp;type=tv&amp;tmdb_id=$INFO[ListItem.Property(tmdb_id)]&amp;exclude_key=title&amp;exclude_value=$INFO[ListItem.Title]&amp;$VAR[TMDBHelper_Default_Params]</value>
+		<!-- movies, sets -->
+		<value condition="System.HasAddon(plugin.video.themoviedb.helper) + String.Contains(ListItem.Path,themoviedb.helper) + !String.IsEmpty(ListItem.Property(tmdb_id))">plugin://plugin.video.themoviedb.helper?info=similar&amp;type=movie&amp;tmdb_id=$INFO[ListItem.Property(tmdb_id)]&amp;exclude_key=title&amp;exclude_value=$INFO[ListItem.Title]&amp;$VAR[TMDBHelper_Default_Params]</value>
+		<value condition="!String.IsEmpty(ListItem.TVShowTitle) + !String.IsEmpty(ListItem.MPAA)">videodb://tvshows/titles/?xsp=%7B%22rules%22%3A%7B%22and%22%3A%5B%7B%22field%22%3A%22genre%22%2C%22operator%22%3A%22contains%22%2C%22value%22%3A%5B$ESCINFO[Window(home).Property(GenreSplit.0)]%5D%7D%2C%7B%22field%22%3A%22mpaarating%22%2C%22operator%22%3A%22contains%22%2C%22value%22%3A%5B%22$INFO[ListItem.MPAA]%22%5D%7D%5D%7D%2C%22type%22%3A%22tvshows%22%7D%0A</value>
+		<value condition="!String.IsEmpty(ListItem.TVShowTitle)">videodb://tvshows/titles/?xsp=%7B%22rules%22%3A%7B%22and%22%3A%5B%7B%22field%22%3A%22genre%22%2C%22operator%22%3A%22is%22%2C%22value%22%3A%5B$ESCINFO[Window(home).Property(GenreSplit.0)]%5D%7D%5D%7D%2C%22type%22%3A%22tvshows%22%7D</value>
+		<value condition="!String.IsEmpty(ListItem.MPAA)">videodb://movies/titles/?xsp=%7B%22rules%22%3A%7B%22and%22%3A%5B%7B%22field%22%3A%22genre%22%2C%22operator%22%3A%22contains%22%2C%22value%22%3A%5B$ESCINFO[Window(home).Property(GenreSplit.0)]%5D%7D%2C%7B%22field%22%3A%22mpaarating%22%2C%22operator%22%3A%22contains%22%2C%22value%22%3A%5B%22$INFO[ListItem.MPAA]%22%5D%7D%5D%7D%2C%22type%22%3A%22movies%22%7D%0A</value>
+		<value>videodb://movies/titles/?xsp=%7B%22rules%22%3A%7B%22and%22%3A%5B%7B%22field%22%3A%22genre%22%2C%22operator%22%3A%22is%22%2C%22value%22%3A%5B$ESCINFO[Window(home).Property(GenreSplit.0)]%5D%7D%5D%7D%2C%22type%22%3A%22movies%22%7D</value>
 	</variable>
 
-	<variable name="CustomContent_Similar_MPAA">
-		<value condition="String.IsEqual(ListItem.MPAA,U) | String.IsEqual(ListItem.MPAA,PG)">U</value>
-		<value condition="String.IsEqual(ListItem.MPAA,12A)">PG</value>
-		<value condition="String.IsEqual(ListItem.MPAA,15) | String.IsEqual(ListItem.MPAA,18) | String.IsEqual(ListItem.MPAA,X)">15</value>
-	</variable>
 
 </includes>
