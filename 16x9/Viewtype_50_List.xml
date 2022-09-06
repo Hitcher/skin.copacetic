@@ -125,33 +125,36 @@
 				</control>
 				<control type="group">
 					<visible>!$EXP[ContainerSwitching] + !$EXP[ContentSwitching] + !$EXP[TransparentDialog_IsVisible] + !Control.HasFocus(60) + !$EXP[InfoDialog_IsVisible] + !Window.IsVisible(pictureinfo)</visible>
-					<visible>![Control.HasFocus(4501) + Window.IsVisible(1121)] + !$EXP[Secondary_List_ContainerSwitching] + ![$EXP[ListView_Display_IsBackground] + $EXP[Secondary_List_ContentSwitching]]</visible>
 					<include>Delayed_Content_Fade_Animation</include>
-					<!-- Media flags, progress bar -->
+					<!-- Media flags -->
 					<include content="MediaFlags"/>
 					<control type="group">
-						<animation effect="slide" end="-600,0" time="0" condition="$EXP[ListView_Display_IsThumbnails]">Conditional</animation>
-						<include content="ProgressBar"/>
-						<include condition="Skin.HasSetting(Secondary_List_Enabled) + !$EXP[InfoDialog_IsVisible]" content="ProgressBar">
-							<param name="id" value="4501"/>
+						<visible>![Control.HasFocus(4501) + Window.IsVisible(1121)] + !$EXP[Secondary_List_ContainerSwitching] + ![$EXP[ListView_Display_IsBackground] + $EXP[Secondary_List_ContentSwitching]]</visible>
+						<include>Delayed_Content_Fade_Animation</include>
+						<control type="group">
+							<animation effect="slide" end="-600,0" time="0" condition="$EXP[ListView_Display_IsThumbnails]">Conditional</animation>
+							<include content="ProgressBar"/>
+							<include condition="Skin.HasSetting(Secondary_List_Enabled) + !$EXP[InfoDialog_IsVisible]" content="ProgressBar">
+								<param name="id" value="4501"/>
+							</include>
+						</control>
+						<!-- Background info -->
+						<include content="Common_List_Info_Label">
+							<param name="visible" value="$EXP[ListView_Display_IsBackground] + $EXP[ListView_Details_Info_IsVisible]"/>
+							<param name="left" value="120"/>
+							<param name="width" value="1680"/>
+							<param name="hiddenlabelmaxwidth" value="1200"/>
+							<param name="infolabelwidth" value="480"/>
+						</include>
+						<!-- Thumbnails info -->
+						<include content="Common_List_Info_Label">
+							<param name="visible" value="$EXP[ListView_Display_IsThumbnails] + [!Container.Content(artists) | Control.HasFocus(4501)] + $EXP[ListView_Details_Info_IsVisible] + !Container.Content(files)"/>
+							<param name="left" value="840"/>
+							<param name="width" value="990"/>
+							<param name="hiddenlabelmaxwidth" value="780"/>
+							<param name="infolabelwidth" value="360"/>
 						</include>
 					</control>
-					<!-- Background info -->
-					<include content="Common_List_Info_Label">
-						<param name="visible" value="$EXP[ListView_Display_IsBackground] + $EXP[ListView_Details_Info_IsVisible]"/>
-						<param name="left" value="120"/>
-						<param name="width" value="1680"/>
-						<param name="hiddenlabelmaxwidth" value="1200"/>
-						<param name="infolabelwidth" value="480"/>
-					</include>
-					<!-- Thumbnails info -->
-					<include content="Common_List_Info_Label">
-						<param name="visible" value="$EXP[ListView_Display_IsThumbnails] + [!Container.Content(artists) | Control.HasFocus(4501)] + $EXP[ListView_Details_Info_IsVisible] + !Container.Content(files)"/>
-						<param name="left" value="840"/>
-						<param name="width" value="990"/>
-						<param name="hiddenlabelmaxwidth" value="780"/>
-						<param name="infolabelwidth" value="360"/>
-					</include>
 				</control>
 			</control>
 		</definition>

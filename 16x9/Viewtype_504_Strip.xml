@@ -63,7 +63,6 @@
 				<visible>$EXP[StripView_IsVisible]</visible>
 				<control type="group">
 					<visible>!$EXP[ContainerSwitching] + !$EXP[ContentSwitching] + !$EXP[TransparentDialog_IsVisible] + !Control.HasFocus(60)</visible>
-					<visible>![Control.HasFocus(4501) + Window.IsVisible(1121)] + !$EXP[Secondary_List_ContainerSwitching] + !$EXP[Secondary_List_ContentSwitching]</visible>
 					<include>Delayed_Content_Fade_Animation</include>
 					<!-- Media flags, common details -->
 					<control type="group">
@@ -71,38 +70,42 @@
 						<include>Delayed_Content_Fade_Animation</include>
 						<include content="MediaFlags"/>
 					</control>
-					<!-- Common details -->
 					<control type="group">
-						<visible>!$EXP[InfoDialog_IsVisible] + !$EXP[StripView_Details_Off]</visible>
+						<visible>![Control.HasFocus(4501) + Window.IsVisible(1121)] + !$EXP[Secondary_List_ContainerSwitching] + !$EXP[Secondary_List_ContentSwitching]</visible>
 						<include>Delayed_Content_Fade_Animation</include>
-						<include content="Common_Details">
-							<param name="viewtype_label" value="Strip"/>
-							<param name="left" value="60"/>
-							<param name="width" value="600"/>
-							<param name="titleheight" value="336"/>
-							<param name="infoheight" value="70"/>
-							<param name="plotmaxheight" value="235"/>
+						<!-- Common details -->
+						<control type="group">
+							<visible>!$EXP[InfoDialog_IsVisible] + !$EXP[StripView_Details_Off]</visible>
+							<include>Delayed_Content_Fade_Animation</include>
+							<include content="Common_Details">
+								<param name="viewtype_label" value="Strip"/>
+								<param name="left" value="60"/>
+								<param name="width" value="600"/>
+								<param name="titleheight" value="336"/>
+								<param name="infoheight" value="70"/>
+								<param name="plotmaxheight" value="235"/>
+							</include>
+						</control>
+						<!-- Progress bar -->
+						<control type="group">
+							<animation effect="slide" end="0,-30" time="0" condition="$EXP[StripView_Display_IsSquare] | $EXP[StripView_Display_IsFanart]">Conditional</animation>
+							<animation effect="slide" end="75,0" time="0" condition="$EXP[StripView_Display_IsSquare] + !$EXP[StripView_Details_Off] + !$EXP[InfoWidget_HasFocus]">Conditional</animation>
+							<animation effect="slide" end="320,0" time="0" condition="$EXP[StripView_Display_IsFanart] + !$EXP[StripView_Details_Off] + !$EXP[InfoWidget_HasFocus]">Conditional</animation>
+							<include content="ProgressBar">
+								<param name="id" value="$PARAM[id]"/>
+								<param name="top" value="930"/>
+							</include>
+							<include condition="Skin.HasSetting(Secondary_List_Enabled) + !$EXP[InfoDialog_IsVisible]" content="ProgressBar">
+								<param name="id" value="4501"/>
+								<param name="top" value="930"/>
+							</include>
+						</control>
+						<!-- Bottom Label -->
+						<include content="Variable_Title_Label">
+							<param name="visible" value="[!$EXP[InfoWidget_HasFocus] + $EXP[StripView_Details_Title] + !$EXP[StripView_Details_Logo_IsOn]] | [$EXP[InfoWidget_HasFocus] + !Window.Is(movieinformation)]"/>
+							<param name="label" value="$VAR[Title_Label]"/>
 						</include>
 					</control>
-					<!-- Progress bar -->
-					<control type="group">
-						<animation effect="slide" end="0,-30" time="0" condition="$EXP[StripView_Display_IsSquare] | $EXP[StripView_Display_IsFanart]">Conditional</animation>
-						<animation effect="slide" end="75,0" time="0" condition="$EXP[StripView_Display_IsSquare] + !$EXP[StripView_Details_Off] + !$EXP[InfoWidget_HasFocus]">Conditional</animation>
-						<animation effect="slide" end="320,0" time="0" condition="$EXP[StripView_Display_IsFanart] + !$EXP[StripView_Details_Off] + !$EXP[InfoWidget_HasFocus]">Conditional</animation>
-						<include content="ProgressBar">
-							<param name="id" value="$PARAM[id]"/>
-							<param name="top" value="930"/>
-						</include>
-						<include condition="Skin.HasSetting(Secondary_List_Enabled) + !$EXP[InfoDialog_IsVisible]" content="ProgressBar">
-							<param name="id" value="4501"/>
-							<param name="top" value="930"/>
-						</include>
-					</control>
-					<!-- Bottom Label -->
-					<include content="Variable_Title_Label">
-						<param name="visible" value="[!$EXP[InfoWidget_HasFocus] + $EXP[StripView_Details_Title] + !$EXP[StripView_Details_Logo_IsOn]] | [$EXP[InfoWidget_HasFocus] + !Window.Is(movieinformation)]"/>
-						<param name="label" value="$VAR[Title_Label]"/>
-					</include>
 				</control>
 				<!-- Scrollbar -->
 				<control type="group">
