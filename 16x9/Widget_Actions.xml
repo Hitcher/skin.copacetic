@@ -2,19 +2,19 @@
 <includes>
 
 	<include name="Default_Transition">
-		<onclick condition="!String.IsEqual(ListItem.DBID,window(movieinformation).property(SelectedItem))">SetProperty(Refresh,true,movieinformation)</onclick>
-		<onclick condition="!String.IsEqual(ListItem.DBID,window(movieinformation).property(SelectedItem))">SetProperty(Breadcrumb_GoToNext,true,movieinformation)</onclick>
-		<onclick condition="!String.IsEqual(ListItem.DBID,window(movieinformation).property(SelectedItem))">SetProperty(InfoDialog_Transition,true,home)</onclick>
-		<onclick condition="!String.IsEqual(ListItem.DBID,window(movieinformation).property(SelectedItem))">Dialog.Close(all,true)</onclick>
+		<onclick condition="!String.IsEqual(Container($PARAM[id]).ListItem.DBID,window(movieinformation).property(SelectedItem))">SetProperty(Refresh,true,movieinformation)</onclick>
+		<onclick condition="!String.IsEqual(Container($PARAM[id]).ListItem.DBID,window(movieinformation).property(SelectedItem))">SetProperty(Breadcrumb_GoToNext,true,movieinformation)</onclick>
+		<onclick condition="!String.IsEqual(Container($PARAM[id]).ListItem.DBID,window(movieinformation).property(SelectedItem))">SetProperty(InfoDialog_Transition,true,home)</onclick>
+		<onclick condition="!String.IsEqual(Container($PARAM[id]).ListItem.DBID,window(movieinformation).property(SelectedItem))">Dialog.Close(all,true)</onclick>
 	</include>
 
 	<include name="ClickAction_Open_MovieSet">
-<!--<onclick condition="Window.IsVisible(home) + String.IsEqual(ListItem.DBID,window(movieinformation).property(SelectedItem))">SendClick(8)</onclick>
-		<onclick condition="Window.IsVisible(home) + !String.IsEqual(ListItem.DBID,window(movieinformation).property(SelectedItem))">RunScript(script.embuary.helper,action=playitem,item='$ESCINFO[Container(8010).ListItem.Filenameandpath]')</onclick>-->
-		<include condition="Integer.IsGreater(ListItem.DBID,0)">Default_Transition</include>
+		<include condition="Integer.IsGreater(ListItem.DBID,0)" content="Default_Transition">
+			<param name="id" value="8010"/>
+		</include>
 		<onclick condition="Integer.IsGreater(ListItem.DBID,0) + Window.IsVisible(home) + !String.IsEqual(Container(8010).ListItem.DBID,window(movieinformation).property(SelectedItem))">ActivateWindow(Videos,videodb://movies/titles/?xsp=%7B%22order%22%3A%7B%22direction%22%3A%22ascending%22%2C%22ignorefolders%22%3A0%2C%22method%22%3A%22sorttitle%22%7D%2C%22rules%22%3A%7B%22and%22%3A%5B%7B%22field%22%3A%22title%22%2C%22operator%22%3A%22is%22%2C%22value%22%3A%5B$ESCINFO[Container(8010).ListItem.Title]%5D%7D%5D%7D%2C%22type%22%3A%22movies%22%7D)</onclick>
 		<onclick condition="Integer.IsGreater(ListItem.DBID,0) + !Window.IsVisible(home) + !String.IsEqual(Container(8010).ListItem.DBID,window(movieinformation).property(SelectedItem))">Container.Update(videodb://movies/titles/?xsp=%7B%22order%22%3A%7B%22direction%22%3A%22ascending%22%2C%22ignorefolders%22%3A0%2C%22method%22%3A%22sorttitle%22%7D%2C%22rules%22%3A%7B%22and%22%3A%5B%7B%22field%22%3A%22title%22%2C%22operator%22%3A%22is%22%2C%22value%22%3A%5B$ESCINFO[Container(8010).ListItem.Title]%5D%7D%5D%7D%2C%22type%22%3A%22movies%22%7D)</onclick>
-		<onclick condition="Integer.IsGreater(ListItem.DBID,0) + !String.IsEqual(ListItem.DBID,window(movieinformation).property(SelectedItem))">SetFocus(5003)</onclick>
+		<onclick condition="Integer.IsGreater(ListItem.DBID,0) + !String.IsEqual(Container(8010).ListItem.DBID,window(movieinformation).property(SelectedItem))">SetFocus(5003)</onclick>
 		<onclick condition="Integer.IsGreater(ListItem.DBID,0)">SetFocus(65000)</onclick>
 		<onclick condition="Integer.IsGreater(ListItem.DBID,0) + String.IsEqual(Container(8010).ListItem.DBID,window(movieinformation).property(SelectedItem))">SendClick(8)</onclick>
 		<onclick condition="!Integer.IsGreater(ListItem.DBID,0) + !String.IsEqual(Container(8010).ListItem.Property(tmdb_id),window(movieinformation).property(SelectedItem))">Dialog.Close(all,true)</onclick>
@@ -24,12 +24,14 @@
 	</include>
 
 	<include name="ClickAction_ActorCredits">
-		<include condition="Integer.IsGreater(ListItem.DBID,0)">Default_Transition</include>
+		<include condition="Integer.IsGreater(ListItem.DBID,0)" content="Default_Transition">
+			<param name="id" value="8030"/>
+		</include>
 		<onclick condition="Integer.IsGreater(ListItem.DBID,0) + Window.IsVisible(home) + !String.IsEqual(Container(8030).ListItem.DBID,window(movieinformation).property(SelectedItem)) + String.IsEqual(Container(8030).ListItem.DBType,movie)">ActivateWindow(Videos,videodb://movies/titles/?xsp=%7B%22order%22%3A%7B%22direction%22%3A%22ascending%22%2C%22ignorefolders%22%3A0%2C%22method%22%3A%22sorttitle%22%7D%2C%22rules%22%3A%7B%22and%22%3A%5B%7B%22field%22%3A%22title%22%2C%22operator%22%3A%22is%22%2C%22value%22%3A%5B$ESCINFO[Container(8030).ListItem.Title]%5D%7D%5D%7D%2C%22type%22%3A%22movies%22%7D)</onclick>
 		<onclick condition="Integer.IsGreater(ListItem.DBID,0) + Window.IsVisible(home) + !String.IsEqual(Container(8030).ListItem.DBID,window(movieinformation).property(SelectedItem)) + String.IsEqual(Container(8030).ListItem.DBType,tvshow)">ActivateWindow(Videos,videodb://tvshows/titles/?xsp=%7B%22order%22%3A%7B%22direction%22%3A%22ascending%22%2C%22ignorefolders%22%3A0%2C%22method%22%3A%22sorttitle%22%7D%2C%22rules%22%3A%7B%22and%22%3A%5B%7B%22field%22%3A%22title%22%2C%22operator%22%3A%22is%22%2C%22value%22%3A%5B$ESCINFO[Container(8030).ListItem.Title]%5D%7D%5D%7D%2C%22type%22%3A%22tvshows%22%7D)</onclick>
 		<onclick condition="Integer.IsGreater(ListItem.DBID,0) + !Window.IsVisible(home) + !String.IsEqual(Container(8030).ListItem.DBID,window(movieinformation).property(SelectedItem)) + String.IsEqual(Container(8030).ListItem.DBType,movie)">Container.Update(videodb://movies/titles/?xsp=%7B%22order%22%3A%7B%22direction%22%3A%22ascending%22%2C%22ignorefolders%22%3A0%2C%22method%22%3A%22sorttitle%22%7D%2C%22rules%22%3A%7B%22and%22%3A%5B%7B%22field%22%3A%22title%22%2C%22operator%22%3A%22is%22%2C%22value%22%3A%5B$ESCINFO[Container(8030).ListItem.Title]%5D%7D%5D%7D%2C%22type%22%3A%22movies%22%7D)</onclick>
 		<onclick condition="Integer.IsGreater(ListItem.DBID,0) + !Window.IsVisible(home) + !String.IsEqual(Container(8030).ListItem.DBID,window(movieinformation).property(SelectedItem)) + String.IsEqual(Container(8030).ListItem.DBType,tvshow)">Container.Update(videodb://tvshows/titles/?xsp=%7B%22order%22%3A%7B%22direction%22%3A%22ascending%22%2C%22ignorefolders%22%3A0%2C%22method%22%3A%22sorttitle%22%7D%2C%22rules%22%3A%7B%22and%22%3A%5B%7B%22field%22%3A%22title%22%2C%22operator%22%3A%22is%22%2C%22value%22%3A%5B$ESCINFO[Container(8030).ListItem.Title]%5D%7D%5D%7D%2C%22type%22%3A%22tvshows%22%7D)</onclick>
-		<onclick condition="Integer.IsGreater(ListItem.DBID,0) + !String.IsEqual(ListItem.DBID,window(movieinformation).property(SelectedItem))">SetFocus(5003)</onclick>
+		<onclick condition="Integer.IsGreater(ListItem.DBID,0) + !String.IsEqual(Container(8030).ListItem.DBID,window(movieinformation).property(SelectedItem))">SetFocus(5003)</onclick>
 		<onclick condition="Integer.IsGreater(ListItem.DBID,0)">SetFocus(65000)</onclick>
 		<onclick condition="Integer.IsGreater(ListItem.DBID,0) + String.IsEqual(Container(8030).ListItem.DBID,window(movieinformation).property(SelectedItem))">SendClick(8)</onclick>
 		<onclick condition="!Integer.IsGreater(ListItem.DBID,0) + !String.IsEqual(Container(8030).ListItem.Property(tmdb_id),window(movieinformation).property(SelectedItem))">Dialog.Close(all,true)</onclick>
@@ -39,10 +41,12 @@
 	</include>
 
 	<include name="ClickAction_Open_More_From_Director">
-		<include condition="Integer.IsGreater(ListItem.DBID,0)">Default_Transition</include>
+		<include condition="Integer.IsGreater(ListItem.DBID,0)" content="Default_Transition">
+			<param name="id" value="8050"/>
+		</include>
 		<onclick condition="Integer.IsGreater(ListItem.DBID,0) + Window.IsVisible(home) + !String.IsEqual(Container(8050).ListItem.DBID,window(movieinformation).property(SelectedItem))">ActivateWindow(Videos,videodb://movies/titles/?xsp=%7B%22order%22%3A%7B%22direction%22%3A%22ascending%22%2C%22ignorefolders%22%3A0%2C%22method%22%3A%22sorttitle%22%7D%2C%22rules%22%3A%7B%22and%22%3A%5B%7B%22field%22%3A%22title%22%2C%22operator%22%3A%22is%22%2C%22value%22%3A%5B$ESCINFO[Container(8050).ListItem.Title]%5D%7D%5D%7D%2C%22type%22%3A%22movies%22%7D)</onclick>
 		<onclick condition="Integer.IsGreater(ListItem.DBID,0) + !Window.IsVisible(home) + !String.IsEqual(Container(8050).ListItem.DBID,window(movieinformation).property(SelectedItem))">Container.Update(videodb://movies/titles/?xsp=%7B%22order%22%3A%7B%22direction%22%3A%22ascending%22%2C%22ignorefolders%22%3A0%2C%22method%22%3A%22sorttitle%22%7D%2C%22rules%22%3A%7B%22and%22%3A%5B%7B%22field%22%3A%22title%22%2C%22operator%22%3A%22is%22%2C%22value%22%3A%5B$ESCINFO[Container(8050).ListItem.Title]%5D%7D%5D%7D%2C%22type%22%3A%22movies%22%7D)</onclick>
-		<onclick condition="Integer.IsGreater(ListItem.DBID,0) + !String.IsEqual(ListItem.DBID,window(movieinformation).property(SelectedItem))">SetFocus(5003)</onclick>
+		<onclick condition="Integer.IsGreater(ListItem.DBID,0) + !String.IsEqual(Container(8050).ListItem.DBID,window(movieinformation).property(SelectedItem))">SetFocus(5003)</onclick>
 		<onclick condition="Integer.IsGreater(ListItem.DBID,0)">SetFocus(65000)</onclick>
 		<onclick condition="Integer.IsGreater(ListItem.DBID,0) + String.IsEqual(Container(8050).ListItem.DBID,window(movieinformation).property(SelectedItem))">SendClick(8)</onclick>
 		<onclick condition="!Integer.IsGreater(ListItem.DBID,0) + !String.IsEqual(Container(8050).ListItem.Property(tmdb_id),window(movieinformation).property(SelectedItem))">Dialog.Close(all,true)</onclick>
@@ -52,21 +56,26 @@
 	</include>
 
 	<include name="ClickAction_Open_More_From_Studio">
-		<include condition="Integer.IsGreater(ListItem.DBID,0)">Default_Transition</include>
-		<onclick condition="Integer.IsGreater(ListItem.DBID,0) + Window.IsVisible(home) + !String.IsEqual(Container(8060).ListItem.DBID,window(movieinformation).property(SelectedItem))">ActivateWindow(Videos,videodb://movies/titles/?xsp=%7B%22order%22%3A%7B%22direction%22%3A%22ascending%22%2C%22ignorefolders%22%3A0%2C%22method%22%3A%22sorttitle%22%7D%2C%22rules%22%3A%7B%22and%22%3A%5B%7B%22field%22%3A%22title%22%2C%22operator%22%3A%22is%22%2C%22value%22%3A%5B$ESCINFO[Container(8060).ListItem.Title]%5D%7D%5D%7D%2C%22type%22%3A%22movies%22%7D)</onclick>
-		<onclick condition="Integer.IsGreater(ListItem.DBID,0) + !Window.IsVisible(home) + !String.IsEqual(Container(8060).ListItem.DBID,window(movieinformation).property(SelectedItem))">Container.Update(videodb://movies/titles/?xsp=%7B%22order%22%3A%7B%22direction%22%3A%22ascending%22%2C%22ignorefolders%22%3A0%2C%22method%22%3A%22sorttitle%22%7D%2C%22rules%22%3A%7B%22and%22%3A%5B%7B%22field%22%3A%22title%22%2C%22operator%22%3A%22is%22%2C%22value%22%3A%5B$ESCINFO[Container(8060).ListItem.Title]%5D%7D%5D%7D%2C%22type%22%3A%22movies%22%7D)</onclick>
+		<include condition="Integer.IsGreater(ListItem.DBID,0)" content="Default_Transition">
+			<param name="id" value="8060"/>
+		</include>
+		<onclick condition="Integer.IsGreater(ListItem.DBID,0) + Window.IsVisible(home) + !String.IsEqual(Container(8060).ListItem.DBID,window(movieinformation).property(SelectedItem)) + String.IsEqual(Container(8060).ListItem.DBType,movie)">ActivateWindow(Videos,videodb://movies/titles/?xsp=%7B%22order%22%3A%7B%22direction%22%3A%22ascending%22%2C%22ignorefolders%22%3A0%2C%22method%22%3A%22sorttitle%22%7D%2C%22rules%22%3A%7B%22and%22%3A%5B%7B%22field%22%3A%22title%22%2C%22operator%22%3A%22is%22%2C%22value%22%3A%5B$ESCINFO[Container(8060).ListItem.Title]%5D%7D%5D%7D%2C%22type%22%3A%22movies%22%7D)</onclick>
+		<onclick condition="Integer.IsGreater(ListItem.DBID,0) + Window.IsVisible(home) + !String.IsEqual(Container(8060).ListItem.DBID,window(movieinformation).property(SelectedItem)) + String.IsEqual(Container(8060).ListItem.DBType,tvshow)">ActivateWindow(Videos,videodb://tvshows/titles/?xsp=%7B%22order%22%3A%7B%22direction%22%3A%22ascending%22%2C%22ignorefolders%22%3A0%2C%22method%22%3A%22sorttitle%22%7D%2C%22rules%22%3A%7B%22and%22%3A%5B%7B%22field%22%3A%22title%22%2C%22operator%22%3A%22is%22%2C%22value%22%3A%5B$ESCINFO[Container(8060).ListItem.Title]%5D%7D%5D%7D%2C%22type%22%3A%22tvshows%22%7D)</onclick>
+		<onclick condition="Integer.IsGreater(ListItem.DBID,0) + !Window.IsVisible(home) + !String.IsEqual(Container(8060).ListItem.DBID,window(movieinformation).property(SelectedItem)) + String.IsEqual(Container(8060).ListItem.DBType,movie)">Container.Update(videodb://movies/titles/?xsp=%7B%22order%22%3A%7B%22direction%22%3A%22ascending%22%2C%22ignorefolders%22%3A0%2C%22method%22%3A%22sorttitle%22%7D%2C%22rules%22%3A%7B%22and%22%3A%5B%7B%22field%22%3A%22title%22%2C%22operator%22%3A%22is%22%2C%22value%22%3A%5B$ESCINFO[Container(8060).ListItem.Title]%5D%7D%5D%7D%2C%22type%22%3A%22movies%22%7D)</onclick>
+		<onclick condition="Integer.IsGreater(ListItem.DBID,0) + !Window.IsVisible(home) + !String.IsEqual(Container(8060).ListItem.DBID,window(movieinformation).property(SelectedItem)) + String.IsEqual(Container(8060).ListItem.DBType,tvshow)">Container.Update(videodb://tvshows/titles/?xsp=%7B%22order%22%3A%7B%22direction%22%3A%22ascending%22%2C%22ignorefolders%22%3A0%2C%22method%22%3A%22sorttitle%22%7D%2C%22rules%22%3A%7B%22and%22%3A%5B%7B%22field%22%3A%22title%22%2C%22operator%22%3A%22is%22%2C%22value%22%3A%5B$ESCINFO[Container(8060).ListItem.Title]%5D%7D%5D%7D%2C%22type%22%3A%22tvshows%22%7D)</onclick>
 		<onclick condition="Integer.IsGreater(ListItem.DBID,0) + !String.IsEqual(ListItem.DBID,window(movieinformation).property(SelectedItem))">SetFocus(5003)</onclick>
 		<onclick condition="Integer.IsGreater(ListItem.DBID,0)">SetFocus(65000)</onclick>
 		<onclick condition="Integer.IsGreater(ListItem.DBID,0) + String.IsEqual(Container(8060).ListItem.DBID,window(movieinformation).property(SelectedItem))">SendClick(8)</onclick>
 		<onclick condition="!Integer.IsGreater(ListItem.DBID,0) + !String.IsEqual(Container(8060).ListItem.Property(tmdb_id),window(movieinformation).property(SelectedItem))">Dialog.Close(all,true)</onclick>
 		<onclick condition="!Integer.IsGreater(ListItem.DBID,0) + !String.IsEqual(Container(8060).ListItem.Property(tmdb_id),window(movieinformation).property(SelectedItem))">RunScript(plugin.video.themoviedb.helper,add_path=$INFO[Container(8060).ListItem.FolderPath],call_auto=1190)</onclick>
 		<onclick condition="!Integer.IsGreater(ListItem.DBID,0) + String.IsEqual(Container(8060).ListItem.Property(tmdb_id),window(movieinformation).property(SelectedItem)) + String.IsEqual(Container(8060).ListItem.DBType,movie)">RunScript(plugin.video.themoviedb.helper,close_dialog=1190)</onclick>
-		<onclick condition="!Integer.IsGreater(ListItem.DBID,0) + String.IsEqual(Container(8060).ListItem.Property(tmdb_id),window(movieinformation).property(SelectedItem)) + String.IsEqual(Container(8060).ListItem.DBType,movie)">Runscript(plugin.video.themoviedb.helper,play=movie,tmdb_id=$INFO[Container(8050).ListItem.UniqueID(tmdb)]),imdb_id=$INFO[Container(8050).ListItem.UniqueID(imdb)])</onclick>
-
+		<onclick condition="!Integer.IsGreater(ListItem.DBID,0) + String.IsEqual(Container(8060).ListItem.Property(tmdb_id),window(movieinformation).property(SelectedItem)) + String.IsEqual(Container(8060).ListItem.DBType,movie)">Runscript(plugin.video.themoviedb.helper,play=movie,tmdb_id=$INFO[Container(8060).ListItem.UniqueID(tmdb)]),imdb_id=$INFO[Container(8060).ListItem.UniqueID(imdb)])</onclick>
 	</include>
 
 	<include name="ClickAction_Open_Similar">
-		<include condition="Integer.IsGreater(ListItem.DBID,0)">Default_Transition</include>
+		<include condition="Integer.IsGreater(ListItem.DBID,0)" content="Default_Transition">
+			<param name="id" value="8070"/>
+		</include>
 		<onclick condition="Integer.IsGreater(ListItem.DBID,0) + Window.IsVisible(home) + !String.IsEqual(Container(8070).ListItem.DBID,window(movieinformation).property(SelectedItem)) + String.IsEqual(Container(8070).ListItem.DBType,movie)">ActivateWindow(Videos,videodb://movies/titles/?xsp=%7B%22order%22%3A%7B%22direction%22%3A%22ascending%22%2C%22ignorefolders%22%3A0%2C%22method%22%3A%22sorttitle%22%7D%2C%22rules%22%3A%7B%22and%22%3A%5B%7B%22field%22%3A%22title%22%2C%22operator%22%3A%22is%22%2C%22value%22%3A%5B$ESCINFO[Container(8070).ListItem.Title]%5D%7D%5D%7D%2C%22type%22%3A%22movies%22%7D)</onclick>
 		<onclick condition="Integer.IsGreater(ListItem.DBID,0) + Window.IsVisible(home) + !String.IsEqual(Container(8070).ListItem.DBID,window(movieinformation).property(SelectedItem)) + String.IsEqual(Container(8070).ListItem.DBType,tvshow)">ActivateWindow(Videos,videodb://tvshows/titles/?xsp=%7B%22order%22%3A%7B%22direction%22%3A%22ascending%22%2C%22ignorefolders%22%3A0%2C%22method%22%3A%22sorttitle%22%7D%2C%22rules%22%3A%7B%22and%22%3A%5B%7B%22field%22%3A%22title%22%2C%22operator%22%3A%22is%22%2C%22value%22%3A%5B$ESCINFO[Container(8070).ListItem.Title]%5D%7D%5D%7D%2C%22type%22%3A%22tvshows%22%7D)</onclick>
 		<onclick condition="Integer.IsGreater(ListItem.DBID,0) + !Window.IsVisible(home) + !String.IsEqual(Container(8050).ListItem.DBID,window(movieinformation).property(SelectedItem)) + String.IsEqual(Container(8070).ListItem.DBType,movie)">Container.Update(videodb://movies/titles/?xsp=%7B%22order%22%3A%7B%22direction%22%3A%22ascending%22%2C%22ignorefolders%22%3A0%2C%22method%22%3A%22sorttitle%22%7D%2C%22rules%22%3A%7B%22and%22%3A%5B%7B%22field%22%3A%22title%22%2C%22operator%22%3A%22is%22%2C%22value%22%3A%5B$ESCINFO[Container(8070).ListItem.Title]%5D%7D%5D%7D%2C%22type%22%3A%22movies%22%7D)</onclick>
@@ -80,24 +89,20 @@
 		<onclick condition="!Integer.IsGreater(ListItem.DBID,0) + String.IsEqual(Container(8070).ListItem.Property(tmdb_id),window(movieinformation).property(SelectedItem)) + String.IsEqual(Container(8070).ListItem.DBType,movie)">Runscript(plugin.video.themoviedb.helper,play=movie,tmdb_id=$INFO[Container(8070).ListItem.UniqueID(tmdb)]),imdb_id=$INFO[Container(8070).ListItem.UniqueID(imdb)])</onclick>
 	</include>
 
-
-
-
-
-
 	<include name="ClickAction_Blank"/>
 
 	<include name="ClickAction_Home_Open_Album">
-		<onclick condition="Integer.IsGreater(ListItem.DBID,0)">ActivateWindow(music,musicdb://albums/$INFO[Container.ListItem.DBID]/-2/?albumid=$INFO[Container.ListItem.DBID],return)</onclick>
+		<onclick>ActivateWindow(music,musicdb://albums/$INFO[Container.ListItem.DBID]/-2/?albumid=$INFO[Container.ListItem.DBID],return)</onclick>
 	</include>
 
 	<include name="ClickAction_Play_All_Songs">
-		<onclick condition="Integer.IsGreater(ListItem.DBID,0)">RunScript(script.embuary.helper,action=playall,id=8010,type=music,method=fromhere)</onclick>
+		<onclick>RunScript(script.embuary.helper,action=playall,id=8010,type=music,method=fromhere)</onclick>
 	</include>
 
 	<include name="ClickAction_Play_Episodes">
-		<onclick condition="Window.IsVisible(home) + String.IsEqual(ListItem.DBID,window(movieinformation).property(SelectedItem))">SendClick(8)</onclick>
-		<onclick condition="!String.IsEqual(ListItem.DBID,window(movieinformation).property(SelectedItem))">RunScript(script.embuary.helper,action=playitem,item='$ESCINFO[ListItem.Filenameandpath]')</onclick>
+		<onclick condition="Window.IsVisible(home) + String.IsEqual(Container(8010).ListItem.DBID,window(movieinformation).property(SelectedItem))">SendClick(8)</onclick>
+		<onclick condition="!String.IsEqual(Container(8010).ListItem.DBID,window(movieinformation).property(SelectedItem))">Dialog.Close(all)</onclick>
+		<onclick condition="!String.IsEqual(Container(8010).ListItem.DBID,window(movieinformation).property(SelectedItem))">PlayMedia($INFO[LIstItem.Filenameandpath])</onclick>
 	</include>
 
 	<include name="ClickAction_Open_Season_Folder">
