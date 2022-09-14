@@ -1,0 +1,140 @@
+<includes>
+
+	<include name="Scrollbars">
+		<param name="visible" default="true"/>
+		<param name="scrollbartype" default="Default"/>
+		<param name="right"/>
+		<param name="bottom"/>
+		<param name="width"/>
+		<param name="height"/>
+		<param name="onleft"/>
+		<param name="onright"/>
+		<param name="onright_fallback"/>
+		<param name="onup"/>
+		<param name="ondown"/>
+		<param name="ondown_fallback"/>
+		<param name="orientation"/>
+		<definition>
+			<include content="Jump_Button_$PARAM[orientation]"/>
+			<control type="group">
+				<nested/>
+				<visible>$PARAM[visible]</visible>
+				<right>$PARAM[right]</right>
+				<bottom>$PARAM[bottom]</bottom>
+				<width>$PARAM[width]</width>
+				<height>$PARAM[height]</height>
+				<control type="scrollbar" id="60">
+					<visible allowhiddenfocus="true">Container.Scrolling | Control.HasFocus(60) | Control.HasFocus(63)</visible>
+					<include>Scrollbar_Fade_Animation</include>
+					<onleft>$PARAM[onleft]</onleft>
+					<onright condition="$EXP[SortLetter_Enabled]">$PARAM[onright]</onright>
+					<onright condition="!$EXP[SortLetter_Enabled]">$PARAM[onright)fallback]</onright>
+					<onup>$PARAM[onup]</onup>
+					<ondown condition="$EXP[SortLetter_Enabled]">$PARAM[ondown]</ondown>
+					<ondown condition="!$EXP[SortLetter_Enabled]">$PARAM[ondown_fallback]</ondown>
+					<onback>62</onback>
+					<showonepage>false</showonepage>
+					<orientation>$PARAM[orientation]</orientation>
+					<texturesliderbackground colordiffuse="$VAR[Scroll_Background_Color]">views/white_100.png</texturesliderbackground>
+					<texturesliderbar colordiffuse="$VAR[Scroll_Background_Color]">views/white_100.png</texturesliderbar>
+					<texturesliderbarfocus colordiffuse="$VAR[Scroll_Focused_Color]">views/white_100.png</texturesliderbarfocus>
+					<textureslidernib></textureslidernib>
+					<textureslidernibfocus></textureslidernibfocus>
+				</control>
+				<control type="group">
+					<animation effect="slide" end="-12" time="0" condition="$EXP[ListView_IsVisible] | $EXP[GridView_IsVisible]">Conditional</animation>
+					<animation effect="slide" end="0,-12" time="0" condition="![$EXP[ListView_IsVisible] | $EXP[GridView_IsVisible]]">Conditional</animation>
+					<include>Jump_Icon_Slides_$PARAM[scrollbartype]_$PARAM[orientation]</include>
+					<visible>Container.Scrolling | Control.HasFocus(60) | Control.HasFocus(63)</visible>
+					<visible>$EXP[SortLetter_Enabled] + !String.IsEmpty(ListItem.SortLetter)</visible>
+					<include>Scrollbar_Fade_Animation</include>
+					<width>30</width>
+					<height>30</height>
+					<left>0</left>
+					<top>0</top>
+					<control type="image">
+						<texture colordiffuse="$VAR[SortLetter_Background_Color]">views/white_100.png</texture>
+					</control>
+					<control type="label">
+						<width>100%</width>
+						<height>100%</height>
+						<align>center</align>
+						<aligny>center</aligny>
+						<font>Unwatched_Indicator</font>
+						<textcolor>$VAR[SortLetter_Label_Color]</textcolor>
+						<label>$INFO[ListItem.SortLetter]</label>
+					</control>
+				</control>
+			</control>
+		</definition>
+	</include>
+
+	<include name="Jump_Button_horizontal">
+		<control type="button" id="63">
+			<visible allowhiddenfocus="true">false</visible>
+			<onleft>SetFocus(50)</onleft>
+			<onleft>Action(PrevLetter)</onleft>
+			<onleft>SetFocus(63)</onleft>
+			<onright>SetFocus(50)</onright>
+			<onright>Action(NextLetter)</onright>
+			<onright>SetFocus(63)</onright>
+			<onup>SetFocus(50)</onup>
+			<ondown>SetFocus(3000,0)</ondown>
+		</control>
+	</include>
+
+	<include name="Jump_Button_vertical">
+		<control type="button" id="63">
+			<visible allowhiddenfocus="true">false</visible>
+			<onup>SetFocus(50)</onup>
+			<onup>Action(PrevLetter)</onup>
+			<onup>SetFocus(63)</onup>
+			<ondown>SetFocus(50)</ondown>
+			<ondown>Action(NextLetter)</ondown>
+			<ondown>SetFocus(63)</ondown>
+			<onleft>SetFocus(50)</onleft>
+			<onright>SetFocus(3000,0)</onright>
+		</control>
+	</include>
+
+	<include name="Jump_Icon_Slides_Default_vertical">
+	<!--20-->
+	</include>
+
+
+
+	<include name="Jump_Icon_Slides_Default_horizontal">
+		<animation effect="slide" end="40" time="0" condition="String.IsEqual(Container.SortOrder,Ascending) + $EXP[SortLetter_IsA]">Conditional</animation>
+		<animation effect="slide" end="80" time="0" condition="String.IsEqual(Container.SortOrder,Ascending) + $EXP[SortLetter_IsB]">Conditional</animation>
+		<animation effect="slide" end="120" time="0" condition="String.IsEqual(Container.SortOrder,Ascending) + $EXP[SortLetter_IsC]">Conditional</animation>
+		<animation effect="slide" end="160" time="0" condition="String.IsEqual(Container.SortOrder,Ascending) + $EXP[SortLetter_IsD]">Conditional</animation>
+		<animation effect="slide" end="200" time="0" condition="String.IsEqual(Container.SortOrder,Ascending) + $EXP[SortLetter_IsE]">Conditional</animation>
+		<animation effect="slide" end="240" time="0" condition="String.IsEqual(Container.SortOrder,Ascending) + $EXP[SortLetter_IsF]">Conditional</animation>
+		<animation effect="slide" end="280" time="0" condition="String.IsEqual(Container.SortOrder,Ascending) + $EXP[SortLetter_IsG]">Conditional</animation>
+		<animation effect="slide" end="320" time="0" condition="String.IsEqual(Container.SortOrder,Ascending) + $EXP[SortLetter_IsH]">Conditional</animation>
+		<animation effect="slide" end="360" time="0" condition="String.IsEqual(Container.SortOrder,Ascending) + $EXP[SortLetter_IsI]">Conditional</animation>
+		<animation effect="slide" end="400" time="0" condition="String.IsEqual(Container.SortOrder,Ascending) + $EXP[SortLetter_IsJ]">Conditional</animation>
+		<animation effect="slide" end="440" time="0" condition="String.IsEqual(Container.SortOrder,Ascending) + $EXP[SortLetter_IsK]">Conditional</animation>
+		<animation effect="slide" end="480" time="0" condition="String.IsEqual(Container.SortOrder,Ascending) + $EXP[SortLetter_IsL]">Conditional</animation>
+		<animation effect="slide" end="520" time="0" condition="String.IsEqual(Container.SortOrder,Ascending) + $EXP[SortLetter_IsM]">Conditional</animation>
+
+		<animation effect="slide" end="570" time="0" condition="String.IsEqual(Container.SortOrder,Ascending) + $EXP[SortLetter_IsN]">Conditional</animation>
+		<animation effect="slide" end="610" time="0" condition="String.IsEqual(Container.SortOrder,Ascending) + $EXP[SortLetter_IsO]">Conditional</animation>
+		<animation effect="slide" end="650" time="0" condition="String.IsEqual(Container.SortOrder,Ascending) + $EXP[SortLetter_IsP]">Conditional</animation>
+		<animation effect="slide" end="690" time="0" condition="String.IsEqual(Container.SortOrder,Ascending) + $EXP[SortLetter_IsQ]">Conditional</animation>
+		<animation effect="slide" end="730" time="0" condition="String.IsEqual(Container.SortOrder,Ascending) + $EXP[SortLetter_IsR]">Conditional</animation>
+		<animation effect="slide" end="770" time="0" condition="String.IsEqual(Container.SortOrder,Ascending) + $EXP[SortLetter_IsS]">Conditional</animation>
+		<animation effect="slide" end="810" time="0" condition="String.IsEqual(Container.SortOrder,Ascending) + $EXP[SortLetter_IsT]">Conditional</animation>
+		<animation effect="slide" end="850" time="0" condition="String.IsEqual(Container.SortOrder,Ascending) + $EXP[SortLetter_IsU]">Conditional</animation>
+		<animation effect="slide" end="890" time="0" condition="String.IsEqual(Container.SortOrder,Ascending) + $EXP[SortLetter_IsV]">Conditional</animation>
+		<animation effect="slide" end="930" time="0" condition="String.IsEqual(Container.SortOrder,Ascending) + $EXP[SortLetter_IsW]">Conditional</animation>
+		<animation effect="slide" end="970" time="0" condition="String.IsEqual(Container.SortOrder,Ascending) + $EXP[SortLetter_IsX]">Conditional</animation>
+		<animation effect="slide" end="1010" time="0" condition="String.IsEqual(Container.SortOrder,Ascending) + $EXP[SortLetter_IsY]">Conditional</animation>
+		<animation effect="slide" end="1050" time="0" condition="String.IsEqual(Container.SortOrder,Ascending) + $EXP[SortLetter_IsZ]">Conditional</animation>
+	</include>
+	
+	<include name="Jump_Icon_Slides_Alt1_horizontal">
+		<!--18-->
+	</include>
+
+</includes>
