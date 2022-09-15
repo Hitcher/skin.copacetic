@@ -51,9 +51,17 @@
 			<description>Start a recursive picture slideshow</description>
 			<visible allowhiddenfocus="true">false</visible>
 		</control>
-		<control type="togglebutton" id="9">
+		<control type="radiobutton" id="9">
+			<onup>SetFocus(3000)</onup>
+			<ondown>0</ondown>
+			<onback>3001</onback>
+			<onleft>3001</onleft>
+			<onright>3001</onright>
 			<description>Randomize the picture slideshow</description>
 			<visible allowhiddenfocus="true">false</visible>
+			<onfocus>ClearProperty(Scrollbars,home)</onfocus>
+			<onfocus>SetProperty(OptionsMenu,Active,home)</onfocus>
+			<onunfocus>ClearProperty(OptionsMenu,home)</onunfocus>
 		</control>
 
 		<include content="Hidden_List">
@@ -731,7 +739,7 @@
 		<param name="top" default="230"/>
 		<definition>
 			<control type="group">
-				<visible>String.IsEqual(Window(home).Property(OptionsMenu),Active)</visible>
+				<visible>String.IsEqual(Window(home).Property(OptionsMenu),Active) | [Window.IsVisible(pictures) + Control.HasFocus(9)]</visible>
 				<include>Options_Menu_Fade_Animation</include>
 					<control type="image">
 						<texture colordiffuse="$VAR[Transparent_Dialog_Mask]">views/white_100.png</texture>
@@ -739,7 +747,7 @@
 			</control>
 
 			<control type="group">
-				<visible>String.IsEqual(Window(home).Property(OptionsMenu),Active)</visible>
+				<visible>String.IsEqual(Window(home).Property(OptionsMenu),Active) | [Window.IsVisible(pictures) + Control.HasFocus(9)]</visible>
 				<include>Delayed_Dialog_Fade_Animation</include>
 				<left>$PARAM[left]</left>
 				<top>$PARAM[top]</top>
@@ -747,6 +755,7 @@
 				<control type="group">
 					<visible>!Window.IsVisible(shutdownmenu)</visible>
 					<include>Content_Fade_Animation</include>
+					<!-- dummy labels for viewmode -->
 					<control type="label">
 						<include>ContextMenuLabelFocused</include>
 						<label>$INFO[Container.ViewMode,$LOCALIZE[31130] ,  $LOCALIZE[31131]]</label>
@@ -757,9 +766,18 @@
 						<label>$LOCALIZE[31224]$INFO[Container.ViewMode, $LOCALIZE[31116] ]</label>
 						<visible>!Container(3000).HasFocus(939) + Integer.IsGreater(Container(3000).ViewCount,1)</visible>
 					</control>
-					<control type="label" id="3002">
-						<label>$INFO[Container.SortMethod]</label>
-						<visible>false</visible>
+					<!-- dummy labels for Random button on pictures -->
+					<control type="label">
+						<top>220</top>
+						<include>ContextMenuLabelFocused</include>
+						<label>$VAR[Pictures_RandomButton_Focused_Label]</label>
+						<visible>Window.IsVisible(pictures) + !Control.HasFocus(3000)</visible>
+					</control>
+					<control type="label">
+						<top>220</top>
+						<include>ContextMenuLabelUnfocused</include>
+						<label>$VAR[Pictures_RandomButton_Unfocused_Label]</label>
+						<visible>Window.IsVisible(pictures) + Control.HasFocus(3000)</visible>
 					</control>
 				</control>
 
@@ -771,13 +789,14 @@
 					<width>1080</width>
 					<height>675</height>
 					<onup>0</onup>
-					<ondown>0</ondown>
 					<onback>3001</onback>
 					<onfocus>ClearProperty(Scrollbars,home)</onfocus>
 					<onfocus>SetProperty(OptionsMenu,Active,home)</onfocus>
 					<onunfocus>ClearProperty(OptionsMenu,home)</onunfocus>
-					<onleft condition="String.IsEmpty(Container(3000).ListItem.Property(ActionLeft))">50</onleft>
-					<onright condition="String.IsEmpty(Container(3000).ListItem.Property(ActionRight))">50</onright>
+					<ondown condition="Window.Is(pictures)">SetFocus(9)</ondown>
+					<ondown condition="!Window.Is(pictures)">0</ondown>
+					<onleft condition="String.IsEmpty(Container(3000).ListItem.Property(ActionLeft))">3001</onleft>
+					<onright condition="String.IsEmpty(Container(3000).ListItem.Property(ActionRight))">3001</onright>
 					<onleft condition="!String.IsEmpty(Container(3000).ListItem.Property(ActionLeft))">$INFO[Container(3000).ListItem.Property(ActionLeft)]</onleft>
 					<onright condition="!String.IsEmpty(Container(3000).ListItem.Property(ActionRight))">$INFO[Container(3000).ListItem.Property(ActionRight)]</onright>
 					<onleft condition="!String.IsEmpty(Container(3000).ListItem.Property(ActionLeft2))">$INFO[Container(3000).ListItem.Property(ActionLeft2)]</onleft>
@@ -836,7 +855,6 @@
 					<scrolltime tween="sine" easing="inout">380</scrolltime>
 					<itemlayout height="55" width="1080">
 						<include content="Common_List_Layout">
-							<param name="groupvisible" value="true"/>
 							<param name="nowplayingvisible" value="false"/>
 							<param name="iconvisible" value="false"/>
 							<param name="label" value="$INFO[ListItem.Label2]"/>
@@ -848,13 +866,23 @@
 					</itemlayout>
 					<focusedlayout height="60" width="1080">
 						<include content="Common_List_Layout">
-							<param name="groupvisible" value="true"/>
+							<param name="visible" value="![Window.Is(pictures) + !Control.HasFocus(3000)]"/>
 							<param name="nowplayingvisible" value="false"/>
 							<param name="iconvisible" value="false"/>
 							<param name="label" value="$INFO[ListItem.Label]"/>
 							<param name="labelleft" value="0"/>
 							<param name="labelmaxwidth" value="100%"/>
 							<param name="font" value="List_Title_Focused"/>
+							<param name="textcolor" value="$VAR[Light_Color]"/>
+							<param name="tracknumber" value="false"/>
+						</include>
+						<include content="Common_List_Layout">
+							<param name="visible" value="Window.Is(pictures) + !Control.HasFocus(3000)"/>
+							<param name="nowplayingvisible" value="false"/>
+							<param name="iconvisible" value="false"/>
+							<param name="label" value="$INFO[ListItem.Label]"/>
+							<param name="labelleft" value="0"/>
+							<param name="labelmaxwidth" value="100%"/>
 							<param name="textcolor" value="$VAR[Light_Color]"/>
 							<param name="tracknumber" value="false"/>
 						</include>
@@ -884,8 +912,8 @@
 						<!-- Sort -->
 						<item id="942">
 						  <onclick>SetFocus(50)</onclick>
-						  <label>$LOCALIZE[31130] $INFO[Control.GetLabel(3002)] $LOCALIZE[31131]</label>
-						  <label2>$LOCALIZE[32118] $LOCALIZE[31116] $INFO[Control.GetLabel(3002)]</label2>
+						  <label>$LOCALIZE[31130] $INFO[Container.SortMethod] $LOCALIZE[31131]</label>
+						  <label2>$LOCALIZE[32118] $LOCALIZE[31116] $INFO[Container.SortMethod]</label2>
 						  <property name="ActionLeft">Container.PreviousSortMethod</property>
 						  <property name="ActionRight">Container.NextSortMethod</property>
 						  <visible>Control.IsEnabled(3)</visible>
@@ -1073,22 +1101,6 @@
 							<label2>$LOCALIZE[13318]</label2>
 							<visible>Window.Is(pictures) + Control.IsEnabled(7)</visible>
 						</item>
-						<!-- Randomise / off -->
-						<item>
-							<label>$LOCALIZE[31130] $LOCALIZE[591] $LOCALIZE[31131]</label>
-							<label2>$LOCALIZE[13319] $LOCALIZE[31116] $LOCALIZE[591]</label2>
-							<property name="ActionLeft">SendClick(9)</property>
-							<property name="ActionRight">SendClick(9)</property>
-							<visible>Window.Is(pictures) + Control.IsEnabled(9) + !String.Contains(Control.GetLabel(9),*)</visible>
-						</item>
-						<!-- Randomise / On -->
-						<item>
-							<label>$LOCALIZE[31130] $LOCALIZE[34222] $LOCALIZE[31131]</label>
-							<label2>$LOCALIZE[13319] $LOCALIZE[31116] $LOCALIZE[34222]</label2>
-							<property name="ActionLeft">SendClick(9)</property>
-							<property name="ActionRight">SendClick(9)</property>
-							<visible>Window.Is(pictures) + Control.IsEnabled(9) +  String.Contains(Control.GetLabel(9),*)</visible>
-						</item>
 
 						<!-- Addon Browser -->
 						<!-- Settings -->
@@ -1130,6 +1142,7 @@
 
 					</content>
 				</control>
+
 			</control>
 		</definition>
 	</include>
