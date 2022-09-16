@@ -130,40 +130,89 @@
 		</definition>
 	</include>
 
-	<include name="GridView_Details">
-		<param name="id" default="505"/>
+	<include name="ProgressBar_Grid_Fanart">
+		<param name="id"/>
 		<definition>
+			<include content="ProgressBar">
+				<param name="id" value="$PARAM[id]"/>
+				<param name="left" value="188"/>
+				<param name="top" value="690"/>
+				<param name="unwatched_indicator_background" value="$VAR[Accent_Color]"/>
+				<param name="slides" value="Default"/>
+			</include>
+		</definition>
+	</include>
+
+	<include name="ProgressBar_Grid_Posters">
+		<param name="id"/>
+		<definition>
+			<include content="ProgressBar">
+				<param name="id" value="$PARAM[id]"/>
+				<param name="left" value="120"/>
+				<param name="top" value="793"/>
+				<param name="width" value="240"/>
+				<param name="unwatched_indicator_background" value="$VAR[Accent_Color]"/>
+				<param name="slides" value="Narrow"/>
+			</include>
+		</definition>
+	</include>
+
+	<include name="ProgressBar_Grid_Square">
+		<param name="id"/>
+		<definition>
+			<include content="ProgressBar">
+				<param name="id" value="$PARAM[id]"/>
+				<param name="left" value="120"/>
+				<param name="top" value="703"/>
+				<param name="width" value="240"/>
+				<param name="unwatched_indicator_background" value="$VAR[Accent_Color]"/>
+				<param name="slides" value="Narrow"/>
+			</include>
+		</definition>
+	</include>
+
+	<include name="GridView_Details">
+		<param name="id"/>
+		<param name="widget_position"/>
+		<param name="widget_display"/>
+		<definition>
+			<!-- Details -->
 			<control type="group">
-				<visible>!$EXP[ContentSwitching] + !$EXP[TransparentDialog_IsVisible]</visible>
+				<visible>!$EXP[TransparentDialog_IsVisible]</visible>
 				<include>Delayed_Content_Fade_Animation</include>
-				<!-- ProgressBar -->
-				<!-- Fanart -->
 				<control type="group">
-					<visible>$EXP[GridView_Display_IsFanart]</visible>
-					<include condition="Window.Is(videos) | Window.Is(home) | Window.Is(movieinformation)" content="ProgressBar">
-						<param name="id" value="$PARAM[id]"/>
-						<param name="left" value="188"/>
-						<param name="top" value="690"/>
-						<param name="unwatched_indicator_background" value="$VAR[Accent_Color]"/>
-						<param name="slides" value="Default"/>
+					<animation effect="slide" start="0" end="0,780" time="0" condition="String.IsEqual(Control.GetLabel($PARAM[id]11),Posters)">Conditional</animation>
+					<animation effect="slide" start="0" end="0,780" time="0" condition="!Skin.HasSetting(Widget$PARAM[widget_position]_Display_Fanart) + !Skin.HasSetting(Widget$PARAM[widget_position]_Display_Square)">Conditional</animation>
+					<animation effect="slide" start="0" end="0,677" time="0" condition="String.IsEqual(Control.GetLabel($PARAM[id]11),Fanart)">Conditional</animation>
+					<animation effect="slide" start="0" end="0,677" time="0" condition="Skin.HasSetting(Widget$PARAM[widget_position]_Display_Fanart)">Conditional</animation>
+					<animation effect="slide" start="0" end="0,690" time="0" condition="String.IsEqual(Control.GetLabel($PARAM[id]11),Square)">Conditional</animation>
+					<animation effect="slide" start="0" end="0,690" time="0" condition="Skin.HasSetting(Widget$PARAM[widget_position]_Display_Square)">Conditional</animation>
+					<include content="Breadcrumb_Label">
+						<param name="bar" value="false"/>
+						<param name="title_label" value="$VAR[Title_Label]"/>
+						<param name="info_label" value="$VAR[Info_Label,$LOCALIZE[31116] ]"/>
+						<param name="label_color" value="$VAR[Primary_Color]"/>
 					</include>
 				</control>
-				<!-- Poster/Square -->
+				<!-- ProgressBar -->
 				<control type="group">
-					<animation effect="slide" end="0,-90" time="0" reversible="false" condition="$EXP[GridView_Display_IsSquare]">Conditional</animation>
-					<visible>$EXP[GridView_Display_IsPosters] | $EXP[GridView_Display_IsSquare]</visible>
-					<include condition="Window.Is(videos) | Window.Is(home) | Window.Is(movieinformation)" content="ProgressBar">
+					<visible>!$EXP[ContentSwitching]</visible>
+					<include>Delayed_Content_Fade_Animation</include>
+					<include condition="Window.Is(movieinformation) | Window.Is(musicinformation) | Window.Is(songinformation)" content="ProgressBar_Grid_$PARAM[widget_display]">
 						<param name="id" value="$PARAM[id]"/>
-						<param name="left" value="120"/>
-						<param name="top" value="793"/>
-						<param name="width" value="240"/>
-						<param name="unwatched_indicator_background" value="$VAR[Accent_Color]"/>
-						<param name="slides" value="Narrow"/>
+					</include>
+					<include condition="Window.Is(home) + !Skin.HasSetting(Widget$PARAM[widget_position]_Display_Fanart) + !Skin.HasSetting(Widget$PARAM[widget_position]_Display_Square)" content="ProgressBar_Grid_Posters">
+						<param name="id" value="$PARAM[id]"/>
+					</include>
+					<include condition="Window.Is(home) + Skin.HasSetting(Widget$PARAM[widget_position]_Display_Fanart)" content="ProgressBar_Grid_Fanart">
+						<param name="id" value="$PARAM[id]"/>
+					</include>
+					<include condition="Window.Is(home) + Skin.HasSetting(Widget$PARAM[widget_position]_Display_Square)" content="ProgressBar_Grid_Square">
+						<param name="id" value="$PARAM[id]"/>
 					</include>
 				</control>
 			</control>
 		</definition>
 	</include>
-
 
 </includes>
