@@ -232,42 +232,52 @@
 
 
 	<!-- ARTWORK -->
-	<variable name="DialogSelect_Artwork">
-		<value condition="!String.IsEmpty(Container(6).ListItem.Art(square))">$INFO[Container(6).ListItem.Art(square)]</value>
-		<value condition="!String.IsEmpty(Container(6).ListItem.Art(fanart))">$INFO[Container(6).ListItem.Art(fanart)]</value>
-		<value condition="!String.IsEmpty(Container(6).ListItem.Art(keyart)) + $EXP[Prefer_Keyart]">$INFO[Container(6).ListItem.Art(keyart)]</value>
-		<value condition="!String.IsEmpty(Container(6).ListItem.Art(poster))">$INFO[Container(6).ListItem.Art(poster)]</value>
-		<value>$INFO[Container(6).ListItem.Art(thumb)]</value>
+	<variable name="List_Thumbnail(0)Content">
+		<value condition="!String.IsEqual(Control.GetLabel(38000),flags/blank.png)">$INFO[Control.GetLabel(38001)]</value>
+		<value condition="String.IsEqual(ListItem.DBType,episode) + String.IsEmpty(ListItem.TVShowTitle) + !ListItem.IsFolder + !String.IsEmpty(ListItem.Art(fanart))">$INFO[ListItem.Art(fanart)]</value>
+		<value condition="String.IsEqual(ListItem.DBType,episode) + String.IsEmpty(ListItem.TVShowTitle) + !ListItem.IsFolder">$INFO[ListItem.Path,,fanart.jpg]</value>
+		<value condition="String.IsEqual(ListItem.DBType,episode) + $EXP[ListView_Display_IsThumbnails] + ListItem.IsFolder">$INFO[ListItem.Path,,poster.jpg]</value>
+		<value condition="String.IsEqual(ListItem.DBType,episode) + $EXP[ListView_Display_IsBackground] + ListItem.IsFolder">$INFO[ListItem.Path,,fanart.jpg]</value>
+		<value condition="Window.IsActive(music) + Container.Content(files) + !ListItem.IsFolder + !String.IsEmpty(ListItem.Art(thumb))">$INFO[ListItem.Art(thumb)]</value>
+		<!--Pictures / Addons-->
+		<value condition="Window.IsVisible(pictures) + ListItem.IsFolder + Integer.IsGreater(Container(4500).NumItems,0)">$INFO[ListItem.FolderPath]$INFO[Container(4500).ListItem.Label]</value>
+		<!-- Background Artwork for Albums/Songs -->
+		<value condition="$EXP[ListView_Display_IsBackground] + String.IsEqual(ListItem.DBType,album) + !String.IsEmpty(ListItem.Art(fanart))">$INFO[ListItem.Art(fanart)]</value>
+		<value condition="$EXP[ListView_Display_IsBackground] + String.IsEqual(ListItem.DBType,song) + !String.IsEmpty(ListItem.Art(album.fanart))">$INFO[ListItem.Art(album.fanart)]</value>
+		<value condition="$EXP[ListView_Display_IsBackground] + [String.IsEqual(ListItem.DBType,album) | String.IsEqual(ListItem.DBType,song)] + !String.IsEmpty(ListItem.Art(artist.fanart))">$INFO[ListItem.Art(artist.fanart)]</value>
+		<value condition="$EXP[ListView_Display_IsBackground] + [String.IsEqual(ListItem.DBType,album) | String.IsEqual(ListItem.DBType,song)] + !String.IsEmpty(ListItem.Art(artist.thumb))">$INFO[ListItem.Art(artist.thumb)]</value>
+		<!-- Standard views -->
+		<value condition="[String.IsEqual(ListItem.DBType,episode) | String.IsEqual(ListItem.DBType,album) | String.IsEqual(ListItem.DBType,song)] + !String.IsEmpty(ListItem.Art(thumb))">$INFO[ListItem.Art(thumb)]</value>
+		<value condition="$EXP[ListView_Display_IsThumbnails] + String.IsEqual(ListItem.DBType,artist) + !String.IsEmpty(ListItem.Art(thumb))">$INFO[ListItem.Art(thumb)]</value>
+		<value condition="$EXP[ListView_Display_IsThumbnails] + String.IsEqual(ListItem.DBType,artist) + !String.IsEmpty(ListItem.Art(fanart))">$INFO[ListItem.Art(fanart)]</value>
+		<value condition="$EXP[ListView_Display_IsThumbnails] + $EXP[Prefer_Keyart] + !String.IsEmpty(ListItem.Art(keyart))">$INFO[ListItem.Art(keyart)]</value>
+		<value condition="$EXP[ListView_Display_IsThumbnails] + !String.IsEmpty(ListItem.Art(poster))">$INFO[ListItem.Art(poster)]</value>
+		<value condition="$EXP[ListView_Display_IsThumbnails] + !String.IsEmpty(ListItem.Art(fanart))">$INFO[ListItem.Art(fanart)]</value>
+		<value condition="$EXP[ListView_Display_IsThumbnails] + !String.IsEmpty(ListItem.Art(tvshow.poster))">$INFO[ListItem.Art(tvshow.poster)]</value>
+		<value condition="$EXP[ListView_Display_IsBackground] + !String.IsEmpty(ListItem.Art(fanart))">$INFO[ListItem.Art(fanart)]</value>
+		<value condition="$EXP[ListView_Display_IsBackground] + String.IsEqual(ListItem.DBType,season) + !String.IsEmpty(ListItem.Art(tvshow.fanart))">$INFO[ListItem.Art(tvshow.fanart)]</value>
+		<!-- Fallback -->
+		<value condition="!String.IsEmpty(ListItem.Art(thumb))">$INFO[ListItem.Art(thumb)]</value>
 	</variable>
 
-	<variable name="Dialog_Info_Background">
+	<variable name="Billboard_Thumbnail(0)Content">
+		<value condition="!String.IsEqual(Control.GetLabel(38000),flags/blank.png)">$INFO[Control.GetLabel(38001)]</value>
+		<value condition="String.IsEqual(ListItem.DBType,episode) + String.IsEmpty(ListItem.TVShowTitle) + !ListItem.IsFolder + !String.IsEmpty(ListItem.Art(fanart))">$INFO[ListItem.Art(fanart)]</value>
+		<value condition="String.IsEqual(ListItem.DBType,episode) + String.IsEmpty(ListItem.TVShowTitle) + !ListItem.IsFolder">$INFO[ListItem.Path,,fanart.jpg]</value>
 		<value condition="String.IsEqual(ListItem.DBType,episode) + !String.IsEmpty(ListItem.Art(thumb))">$INFO[ListItem.Art(thumb)]</value>
-		<value condition="String.IsEqual(Container.FolderName,ListItem.TVShowTitle) + !String.IsEmpty(Window(home).Property(Season_Fanart))">$INFO[Window(home).Property(Season_Fanart)]</value>
 		<value condition="!String.IsEmpty(ListItem.Art(fanart))">$INFO[ListItem.Art(fanart)]</value>
+		<value condition="!String.IsEmpty(ListItem.Art(tvshow.fanart))">$INFO[ListItem.Art(tvshow.fanart)]</value>
+		<!-- Fallback -->
 		<value condition="!String.IsEmpty(ListItem.Art(thumb))">$INFO[ListItem.Art(thumb)]</value>
 	</variable>
 
-	<variable name="MusicPlaylistEditor_Background">
-		<value condition="String.IsEqual(Window(musicplaylisteditor).Property(ActiveList),Right) + String.IsEqual(Container(100).ListItem.DBType,album) + !String.IsEmpty(Container(100).ListItem.Art(fanart))">$INFO[Container(100).ListItem.Art(fanart)]</value>
-		<value condition="String.IsEqual(Window(musicplaylisteditor).Property(ActiveList),Right) + String.IsEqual(Container(100).ListItem.DBType,song) + !String.IsEmpty(Container(100).ListItem.Art(album.fanart))">$INFO[Container(100).ListItem.Art(album.fanart)]</value>
-		<value condition="String.IsEqual(Window(musicplaylisteditor).Property(ActiveList),Right) + [String.IsEqual(Container(100).ListItem.DBType,album) | String.IsEqual(Container(100).ListItem.DBType,song)] + !String.IsEmpty(Container(100).ListItem.Art(artist.fanart))">$INFO[Container(100).ListItem.Art(artist.fanart)]</value>
-		<value condition="String.IsEqual(Window(musicplaylisteditor).Property(ActiveList),Right) + [String.IsEqual(Container(100).ListItem.DBType,album) | String.IsEqual(Container(100).ListItem.DBType,song)] + !String.IsEmpty(Container(100).ListItem.Art(artist.thumb))">$INFO[Container(100).ListItem.Art(artist.thumb)]</value>
-		<value condition="String.IsEqual(Window(musicplaylisteditor).Property(ActiveList),Right) + !String.IsEmpty(Container(100).ListItem.Art(fanart))">$INFO[Container(100).ListItem.Art(fanart)]</value>
-		<value condition="String.IsEqual(Window(musicplaylisteditor).Property(ActiveList),Right) + !String.IsEmpty(Container(100).ListItem.Art(thumb))">$INFO[Container(100).ListItem.Art(thumb)]</value>
-		<value condition="String.IsEqual(Container(50).ListItem.DBType,album) + !String.IsEmpty(Container(50).ListItem.Art(fanart))">$INFO[Container(50).ListItem.Art(fanart)]</value>
-		<value condition="String.IsEqual(Container(50).ListItem.DBType,song) + !String.IsEmpty(Container(50).ListItem.Art(album.fanart))">$INFO[Container(50).ListItem.Art(album.fanart)]</value>
-		<value condition="[String.IsEqual(Container(50).ListItem.DBType,album) | String.IsEqual(Container(50).ListItem.DBType,song)] + !String.IsEmpty(Container(50).ListItem.Art(artist.fanart))">$INFO[Container(50).ListItem.Art(artist.fanart)]</value>
-		<value condition="[String.IsEqual(Container(50).ListItem.DBType,album) | String.IsEqual(Container(50).ListItem.DBType,song)] + !String.IsEmpty(Container(50).ListItem.Art(artist.thumb))">$INFO[Container(50).ListItem.Art(artist.thumb)]</value>
-		<value condition="!String.IsEmpty(ListItem.Art(fanart))">$INFO[ListItem.Art(fanart)]</value>
-		<value condition="!String.IsEmpty(ListItem.Art(thumb))">$INFO[ListItem.Art(thumb)]</value>
-	</variable>
 
 	<variable name="Thumbnail(-3)Content">
-		<!-- Special Windows -->
-		<value condition="!String.IsEmpty(Container(52).ListItemNoWrap(-3).Label) + Window.IsVisible(loginscreen) + !String.Contains(Container(52).ListItem(-3).Art(thumb),DefaultUser)">$INFO[Container(52).ListItem(-3).Art(thumb)]</value>
-		<value condition="!String.IsEmpty(Container(52).ListItemNoWrap(-3).Label) + Window.IsVisible(loginscreen)">fallback/fallback_square.png</value>
-		<!-- Standard Views -->
+		<!-- Exceptions -->
+		<value condition="Window.Is(loginscreen) + !String.IsEmpty(Container(52).ListItemNoWrap(-3).Label) + !String.Contains(Container(52).ListItem(-3).Art(thumb),DefaultUser)">$INFO[Container(52).ListItem(-3).Art(thumb)]</value>
+		<value condition="Window.Is(loginscreen) + !String.IsEmpty(Container(52).ListItemNoWrap(-3).Label)">fallback/fallback_square.png</value>
 		<value condition="!String.IsEmpty(Container.ListItemNoWrap(-3).Label) + [String.IsEqual(ListItem(-3).DBType,episode) | String.IsEqual(ListItem(-3).DBType,album) | String.IsEqual(ListItem(-3).DBType,song)] + !String.IsEmpty(ListItem(-3).Art(thumb))">$INFO[ListItem(-3).Art(thumb)]</value>
+		<!-- Standard -->
 		<value condition="!String.IsEmpty(Container.ListItemNoWrap(-3).Label) + $EXP[StripView_Display_IsPosters] + $EXP[StripView_Details_Logo_IsOn] + !String.IsEmpty(ListItem(-3).Art(clearlogo)) + !String.IsEmpty(ListItem(-3).Art(keyart))">$INFO[ListItem(-3).Art(keyart)]</value>
 		<value condition="!String.IsEmpty(Container.ListItemNoWrap(-3).Label) + $EXP[StripView_Display_IsPosters] + $EXP[Prefer_Keyart] + !String.IsEmpty(ListItem(-3).Art(keyart))">$INFO[ListItem(-3).Art(keyart)]</value>
 		<value condition="!String.IsEmpty(Container.ListItemNoWrap(-3).Label) + $EXP[StripView_Display_IsPosters] + !String.IsEmpty(ListItem(-3).Art(poster))">$INFO[ListItem(-3).Art(poster)]</value>
@@ -279,15 +289,15 @@
 		<value condition="!String.IsEmpty(Container.ListItemNoWrap(-3).Label) + $EXP[StripView_Display_IsSquare] + String.IsEqual(ListItem.DBType,artist) + !String.IsEmpty(ListItem(-3).Art(thumb))">$INFO[ListItem(-3).Art(thumb)]</value>
 		<value condition="!String.IsEmpty(Container.ListItemNoWrap(-3).Label) + $EXP[StripView_Display_IsSquare] + !String.IsEmpty(ListItem(-3).Art(square))">$INFO[ListItem(-3).Art(square)]</value>
 		<value condition="!String.IsEmpty(Container.ListItemNoWrap(-3).Label) + $EXP[StripView_Display_IsSquare] + !String.IsEmpty(ListItem(-3).Art(fanart))">$INFO[ListItem(-3).Art(fanart)]</value>
-		<value condition="!String.IsEmpty(Container.ListItemNoWrap(-3).Label) + !String.Contains(ListItem(-3 ).Icon,Default)">$INFO[ListItem(-3).Art(thumb)]</value>
+		<value condition="!String.IsEmpty(Container.ListItemNoWrap(-3).Label) + !String.IsEmpty(ListItem(-3).Art(thumb))">$INFO[ListItem(-3).Art(thumb)]</value>
 	</variable>
 
 	<variable name="Thumbnail(-2)Content">
-		<!-- Special Windows -->
-		<value condition="!String.IsEmpty(Container(52).ListItemNoWrap(-2).Label) + Window.IsVisible(loginscreen) + !String.Contains(Container(52).ListItem(-2).Art(thumb),DefaultUser)">$INFO[Container(52).ListItem(-2).Art(thumb)]</value>
-		<value condition="!String.IsEmpty(Container(52).ListItemNoWrap(-2).Label) + Window.IsVisible(loginscreen)">fallback/fallback_square.png</value>
-		<!-- Standard Views -->
+		<!-- Exceptions -->
+		<value condition="Window.Is(loginscreen) + !String.IsEmpty(Container(52).ListItemNoWrap(-2).Label) + !String.Contains(Container(52).ListItem(-2).Art(thumb),DefaultUser)">$INFO[Container(52).ListItem(-2).Art(thumb)]</value>
+		<value condition="Window.Is(loginscreen) + !String.IsEmpty(Container(52).ListItemNoWrap(-2).Label)">fallback/fallback_square.png</value>
 		<value condition="!String.IsEmpty(Container.ListItemNoWrap(-2).Label) + [String.IsEqual(ListItem(-2).DBType,episode) | String.IsEqual(ListItem(-2).DBType,album) | String.IsEqual(ListItem(-2).DBType,song)] + !String.IsEmpty(ListItem(-2).Art(thumb))">$INFO[ListItem(-2).Art(thumb)]</value>
+		<!-- Standard -->
 		<value condition="!String.IsEmpty(Container.ListItemNoWrap(-2).Label) + $EXP[StripView_Display_IsPosters] + $EXP[StripView_Details_Logo_IsOn] + !String.IsEmpty(ListItem(-2).Art(clearlogo)) + !String.IsEmpty(ListItem(-2).Art(keyart))">$INFO[ListItem(-2).Art(keyart)]</value>
 		<value condition="!String.IsEmpty(Container.ListItemNoWrap(-2).Label) + $EXP[StripView_Display_IsPosters] + $EXP[Prefer_Keyart] + !String.IsEmpty(ListItem(-2).Art(keyart))">$INFO[ListItem(-2).Art(keyart)]</value>
 		<value condition="!String.IsEmpty(Container.ListItemNoWrap(-2).Label) + $EXP[StripView_Display_IsPosters] + !String.IsEmpty(ListItem(-2).Art(poster))">$INFO[ListItem(-2).Art(poster)]</value>
@@ -303,31 +313,12 @@
 	</variable>
 
 	<variable name="Thumbnail(-1)Content">
-		<!-- Special Windows -->
-		<value condition="!String.IsEmpty(Container(52).ListItemNoWrap(-1).Label) + Window.IsVisible(loginscreen) + !String.Contains(Container(52).ListItem(-1).Art(thumb),DefaultUser)">$INFO[Container(52).ListItem(-1).Art(thumb)]</value>
-		<value condition="!String.IsEmpty(Container(52).ListItemNoWrap(-1).Label) + Window.IsVisible(loginscreen)">fallback/fallback_square.png</value>
-		<value condition="!String.IsEmpty(Container(11).ListItemNoWrap(-1).Label) + Window.IsVisible(videobookmarks)">$INFO[Container(11).ListItem(-1).Art(thumb)]</value>
-		<!-- Files -->
-		<value condition="String.IsEqual(ListItem.DBType,episode) + String.IsEmpty(ListItem(-1).TVShowTitle) + $EXP[ListView_Display_IsThumbnails] + ListItem(-1).IsFolder">$INFO[ListItem(-1).Path,,poster.jpg]</value>
-		<value condition="String.IsEqual(ListItem.DBType,episode) + String.IsEmpty(ListItem(-1).TVShowTitle) + $EXP[ListView_Display_IsBackground] + ListItem(-1).IsFolder">$INFO[ListItem(-1).Path,,fanart.jpg]</value>
-		<value condition="String.IsEqual(ListItem.DBType,episode) + $EXP[ListView_Display_IsThumbnails] + ListItem(-1).IsFolder">$INFO[ListItem(-1).Path,,poster.jpg]</value>
-		<value condition="String.IsEqual(ListItem.DBType,episode) + $EXP[ListView_Display_IsBackground] + ListItem(-1).IsFolder">$INFO[ListItem(-1).Path,,fanart.jpg]</value>
-		<value condition="Window.IsActive(music) + Container.Content(files) + !ListItem(-1).IsFolder + !String.IsEmpty(ListItem(-1).Art(thumb))">$INFO[ListItem(-1).Art(thumb)]</value>
-		<!-- Background Artwork for Albums/Songs -->
-		<value condition="$EXP[ListView_Display_IsBackground] + String.IsEqual(ListItem.DBType,album) + !String.IsEmpty(ListItem(-1).Art(fanart))">$INFO[ListItem(-1).Art(fanart)]</value>
-		<value condition="$EXP[ListView_Display_IsBackground] + String.IsEqual(ListItem.DBType,song) + !String.IsEmpty(ListItem(-1).Art(album.fanart))">$INFO[ListItem(-1).Art(album.fanart)]</value>
-		<value condition="$EXP[ListView_Display_IsBackground] + [String.IsEqual(ListItem.DBType,album) | String.IsEqual(ListItem.DBType,song)] + !String.IsEmpty(ListItem(-1).Art(artist.fanart))">$INFO[ListItem(-1).Art(artist.fanart)]</value>
-		<value condition="$EXP[ListView_Display_IsBackground] + [String.IsEqual(ListItem.DBType,album) | String.IsEqual(ListItem.DBType,song)] + !String.IsEmpty(ListItem(-1).Art(artist.thumb))">$INFO[ListItem(-1).Art(artist.thumb)]</value>
-		<!-- Standard views -->
-		<value condition="[$EXP[ListView_IsVisible] | $EXP[BillboardView_IsVisible] | !String.IsEmpty(Container.ListItemNoWrap(-1).Label)] + [String.IsEqual(ListItem(-1).DBType,episode) | String.IsEqual(ListItem(-1).DBType,album) | String.IsEqual(ListItem(-1).DBType,song)] + !String.IsEmpty(ListItem(-1).Art(thumb))">$INFO[ListItem(-1).Art(thumb)]</value>
-		<value condition="$EXP[ListView_Display_IsThumbnails] + String.IsEqual(ListItem.DBType,artist) + !String.IsEmpty(ListItem(-1).Art(thumb))">$INFO[ListItem(-1).Art(thumb)]</value>
-		<value condition="$EXP[ListView_Display_IsThumbnails] + String.IsEqual(ListItem.DBType,artist) + !String.IsEmpty(ListItem(-1).Art(fanart))">$INFO[ListItem(-1).Art(fanart)]</value>
-		<value condition="$EXP[ListView_Display_IsThumbnails] + $EXP[Prefer_Keyart] + !String.IsEmpty(ListItem(-1).Art(keyart))">$INFO[ListItem(-1).Art(keyart)]</value>
-		<value condition="$EXP[ListView_Display_IsThumbnails] + !String.IsEmpty(ListItem(-1).Art(poster))">$INFO[ListItem(-1).Art(poster)]</value>
-		<value condition="$EXP[ListView_Display_IsThumbnails] + !String.IsEmpty(ListItem(-1).Art(fanart))">$INFO[ListItem(-1).Art(fanart)]</value>
-		<value condition="$EXP[ListView_Display_IsThumbnails] + !String.IsEmpty(ListItem(-1).Art(tvshow.poster))">$INFO[ListItem(-1).Art(tvshow.poster)]</value>
-		<value condition="[$EXP[ListView_Display_IsBackground] | $EXP[BillboardView_IsVisible]] + !String.IsEmpty(ListItem(-1).Art(fanart))">$INFO[ListItem(-1).Art(fanart)]</value>
-		<value condition="[$EXP[ListView_Display_IsBackground] | $EXP[BillboardView_IsVisible]] + !String.IsEmpty(ListItem(-1).Art(tvshow.fanart))">$INFO[ListItem(-1).Art(tvshow.fanart)]</value>
+		<!-- Exceptions -->
+		<value condition="Window.Is(loginscreen) + !String.IsEmpty(Container(52).ListItemNoWrap(-1).Label) + !String.Contains(Container(52).ListItem(-1).Art(thumb),DefaultUser)">$INFO[Container(52).ListItem(-1).Art(thumb)]</value>
+		<value condition="Window.Is(loginscreen) + !String.IsEmpty(Container(52).ListItemNoWrap(-1).Label)">fallback/fallback_square.png</value>
+		<value condition="Window.Is(videobookmarks) + !String.IsEmpty(Container(11).ListItemNoWrap(-1).Label)">$INFO[Container(11).ListItem(-1).Art(thumb)]</value>
+		<value condition="!String.IsEmpty(Container.ListItemNoWrap(-1).Label) + [String.IsEqual(ListItem(-1).DBType,episode) | String.IsEqual(ListItem(-1).DBType,album) | String.IsEqual(ListItem(-1).DBType,song)] + !String.IsEmpty(ListItem(-1).Art(thumb))">$INFO[ListItem(-1).Art(thumb)]</value>
+		<!-- Standard -->
 		<value condition="!String.IsEmpty(Container.ListItemNoWrap(-1).Label) + $EXP[ShowcaseView_Display_IsPosters] + $EXP[ShowcaseView_Details_Overlay_IsVisible] + !String.IsEmpty(ListItem(-1).Art(keyart))">$INFO[ListItem(-1).Art(keyart)]</value>
 		<value condition="!String.IsEmpty(Container.ListItemNoWrap(-1).Label) + $EXP[ShowcaseView_Display_IsPosters] + $EXP[ShowcaseView_Details_Logo_IsOn] + !String.IsEmpty(ListItem(-1).Art(clearlogo)) + !String.IsEmpty(ListItem(-1).Art(keyart))">$INFO[ListItem(-1).Art(keyart)]</value>
 		<value condition="!String.IsEmpty(Container.ListItemNoWrap(-1).Label) + $EXP[ShowcaseView_Display_IsPosters] + $EXP[Prefer_Keyart] + !String.IsEmpty(ListItem(-1).Art(keyart))">$INFO[ListItem(-1).Art(keyart)]</value>
@@ -355,34 +346,12 @@
 	</variable>
 
 	<variable name="Thumbnail(0)Content">
-		<!-- Special Windows -->
-		<value condition="Window.IsVisible(loginscreen) + !String.Contains(Container(52).ListItem.Art(thumb),DefaultUser)">$INFO[Container(52).ListItem.Art(thumb)]</value>
-		<value condition="Window.IsVisible(loginscreen)">fallback/fallback_square.png</value>
-		<value condition="Window.IsVisible(videobookmarks)">$INFO[Container(11).ListItem.Art(thumb)]</value>
-		<!-- Files -->
-		<value condition="String.IsEqual(ListItem.DBType,episode) + String.IsEmpty(ListItem.TVShowTitle) + !ListItem.IsFolder + !String.IsEmpty(ListItem.Art(fanart))">$INFO[ListItem.Art(fanart)]</value>
-		<value condition="String.IsEqual(ListItem.DBType,episode) + String.IsEmpty(ListItem.TVShowTitle) + !ListItem.IsFolder">$INFO[ListItem.Path,,fanart.jpg]</value>
-		<value condition="String.IsEqual(ListItem.DBType,episode) + $EXP[ListView_Display_IsThumbnails] + ListItem.IsFolder">$INFO[ListItem.Path,,poster.jpg]</value>
-		<value condition="String.IsEqual(ListItem.DBType,episode) + $EXP[ListView_Display_IsBackground] + ListItem.IsFolder">$INFO[ListItem.Path,,fanart.jpg]</value>
-		<value condition="Window.IsActive(music) + Container.Content(files) + !ListItem.IsFolder + !String.IsEmpty(ListItem.Art(thumb))">$INFO[ListItem.Art(thumb)]</value>
-		<!--Pictures / Addons-->
-		<value condition="Window.IsVisible(pictures) + ListItem.IsFolder + Integer.IsGreater(Container(4500).NumItems,0)">$INFO[ListItem.FolderPath]$INFO[Container(4500).ListItem.Label]</value>
-		<value condition="$EXP[GridView_IsVisible] + Container.Content(addons)">$INFO[ListItem.Art(thumb)]</value>
-		<!-- Background Artwork for Albums/Songs -->
-		<value condition="$EXP[ListView_Display_IsBackground] + String.IsEqual(ListItem.DBType,album) + !String.IsEmpty(ListItem.Art(fanart))">$INFO[ListItem.Art(fanart)]</value>
-		<value condition="$EXP[ListView_Display_IsBackground] + String.IsEqual(ListItem.DBType,song) + !String.IsEmpty(ListItem.Art(album.fanart))">$INFO[ListItem.Art(album.fanart)]</value>
-		<value condition="$EXP[ListView_Display_IsBackground] + [String.IsEqual(ListItem.DBType,album) | String.IsEqual(ListItem.DBType,song)] + !String.IsEmpty(ListItem.Art(artist.fanart))">$INFO[ListItem.Art(artist.fanart)]</value>
-		<value condition="$EXP[ListView_Display_IsBackground] + [String.IsEqual(ListItem.DBType,album) | String.IsEqual(ListItem.DBType,song)] + !String.IsEmpty(ListItem.Art(artist.thumb))">$INFO[ListItem.Art(artist.thumb)]</value>
-		<!-- Standard views -->
+		<!-- Exceptions -->
+		<value condition="Window.Is(loginscreen) + !String.Contains(Container(52).ListItem.Art(thumb),DefaultUser)">$INFO[Container(52).ListItem.Art(thumb)]</value>
+		<value condition="Window.Is(loginscreen)">fallback/fallback_square.png</value>
+		<value condition="Window.Is(videobookmarks)">$INFO[Container(11).ListItem.Art(thumb)]</value>
 		<value condition="[String.IsEqual(ListItem.DBType,episode) | String.IsEqual(ListItem.DBType,album) | String.IsEqual(ListItem.DBType,song)] + !String.IsEmpty(ListItem.Art(thumb))">$INFO[ListItem.Art(thumb)]</value>
-		<value condition="$EXP[ListView_Display_IsThumbnails] + String.IsEqual(ListItem.DBType,artist) + !String.IsEmpty(ListItem.Art(thumb))">$INFO[ListItem.Art(thumb)]</value>
-		<value condition="$EXP[ListView_Display_IsThumbnails] + String.IsEqual(ListItem.DBType,artist) + !String.IsEmpty(ListItem.Art(fanart))">$INFO[ListItem.Art(fanart)]</value>
-		<value condition="$EXP[ListView_Display_IsThumbnails] + $EXP[Prefer_Keyart] + !String.IsEmpty(ListItem.Art(keyart))">$INFO[ListItem.Art(keyart)]</value>
-		<value condition="$EXP[ListView_Display_IsThumbnails] + !String.IsEmpty(ListItem.Art(poster))">$INFO[ListItem.Art(poster)]</value>
-		<value condition="$EXP[ListView_Display_IsThumbnails] + !String.IsEmpty(ListItem.Art(fanart))">$INFO[ListItem.Art(fanart)]</value>
-		<value condition="$EXP[ListView_Display_IsThumbnails] + !String.IsEmpty(ListItem.Art(tvshow.poster))">$INFO[ListItem.Art(tvshow.poster)]</value>
-		<value condition="[$EXP[ListView_Display_IsBackground] | $EXP[BillboardView_IsVisible]] + !String.IsEmpty(ListItem.Art(fanart))">$INFO[ListItem.Art(fanart)]</value>
-		<value condition="[$EXP[ListView_Display_IsBackground] | $EXP[BillboardView_IsVisible]] + String.IsEqual(ListItem.DBType,season) + !String.IsEmpty(ListItem.Art(tvshow.fanart))">$INFO[ListItem.Art(tvshow.fanart)]</value>
+		<!-- Standard -->
 		<value condition="$EXP[ShowcaseView_Display_IsPosters] + $EXP[ShowcaseView_Details_Overlay_IsVisible] + !String.IsEmpty(ListItem.Art(keyart))">$INFO[ListItem.Art(keyart)]</value>
 		<value condition="$EXP[ShowcaseView_Display_IsPosters] + $EXP[ShowcaseView_Details_Logo_IsOn] + !String.IsEmpty(ListItem.Art(clearlogo)) + !String.IsEmpty(ListItem.Art(keyart))">$INFO[ListItem.Art(keyart)]</value>
 		<value condition="$EXP[ShowcaseView_Display_IsPosters] + $EXP[Prefer_Keyart] + !String.IsEmpty(ListItem.Art(keyart))">$INFO[ListItem.Art(keyart)]</value>
@@ -417,40 +386,16 @@
 		<value condition="$EXP[GridView_Display_IsSquare] + String.IsEqual(ListItem.DBType,artist) + !String.IsEmpty(ListItem.Art(thumb))">$INFO[ListItem.Art(thumb)]</value>
 		<value condition="$EXP[GridView_Display_IsSquare] + !String.IsEmpty(ListItem.Art(square))">$INFO[ListItem.Art(square)]</value>
 		<value condition="$EXP[GridView_Display_IsSquare] + !String.IsEmpty(ListItem.Art(fanart))">$INFO[ListItem.Art(fanart)]</value>
-		<!-- Dialog Favourites -->
-		<value condition="Control.IsVisible(450) + !String.IsEmpty(ListItem.Art(poster))">$INFO[ListItem.Art(poster)]</value>
-		<value condition="Control.IsVisible(450) + !String.IsEmpty(ListItem.Art(fanart))">$INFO[ListItem.Art(fanart)]</value>
-		<value condition="Control.IsVisible(450) + !String.IsEmpty(ListItem.Art(thumb))">$INFO[ListItem.Art(thumb)]</value>
-		<!-- Fallback -->
 		<value condition="!String.IsEmpty(ListItem.Art(thumb))">$INFO[ListItem.Art(thumb)]</value>
 	</variable>
 
 	<variable name="Thumbnail(1)Content">
-		<!-- Special Windows -->
-		<value condition="!String.IsEmpty(Container(52).ListItemNoWrap(1).Label) + Window.IsVisible(loginscreen) + !String.Contains(Container(52).ListItem(1).Art(thumb),DefaultUser)">$INFO[Container(52).ListItem(1).Art(thumb)]</value>
-		<value condition="!String.IsEmpty(Container(52).ListItemNoWrap(1).Label) + Window.IsVisible(loginscreen)">fallback/fallback_square.png</value>
-		<value condition="!String.IsEmpty(Container(11).ListItemNoWrap(1).Label) + Window.IsVisible(videobookmarks)">$INFO[Container(11).ListItem(1).Art(thumb)]</value>
-		<!-- Files -->
-		<value condition="String.IsEqual(ListItem.DBType,episode) + String.IsEmpty(ListItem(1).TVShowTitle) + $EXP[ListView_Display_IsThumbnails] + ListItem(1).IsFolder">$INFO[ListItem(1).Path,,poster.jpg]</value>
-		<value condition="String.IsEqual(ListItem.DBType,episode) + String.IsEmpty(ListItem(1).TVShowTitle) + $EXP[ListView_Display_IsBackground] + ListItem(1).IsFolder">$INFO[ListItem(1).Path,,fanart.jpg]</value>
-		<value condition="String.IsEqual(ListItem.DBType,episode) + $EXP[ListView_Display_IsThumbnails] + ListItem(1).IsFolder">$INFO[ListItem(1).Path,,poster.jpg]</value>
-		<value condition="String.IsEqual(ListItem.DBType,episode) + $EXP[ListView_Display_IsBackground] + ListItem(1).IsFolder">$INFO[ListItem(1).Path,,fanart.jpg]</value>
-		<value condition="Window.IsActive(music) + Container.Content(files) + !ListItem(1).IsFolder + !String.IsEmpty(ListItem(1).Art(thumb))">$INFO[ListItem(-).Art(thumb)]</value>
-		<!-- Background Artwork for Albums/Songs -->
-		<value condition="$EXP[ListView_Display_IsBackground] + String.IsEqual(ListItem.DBType,album) + !String.IsEmpty(ListItem(1).Art(fanart))">$INFO[ListItem(1).Art(fanart)]</value>
-		<value condition="$EXP[ListView_Display_IsBackground] + String.IsEqual(ListItem.DBType,song) + !String.IsEmpty(ListItem(1).Art(album.fanart))">$INFO[ListItem(1).Art(album.fanart)]</value>
-		<value condition="$EXP[ListView_Display_IsBackground] + [String.IsEqual(ListItem.DBType,album) | String.IsEqual(ListItem.DBType,song)] + !String.IsEmpty(ListItem(1).Art(artist.fanart))">$INFO[ListItem(1).Art(artist.fanart)]</value>
-		<value condition="$EXP[ListView_Display_IsBackground] + [String.IsEqual(ListItem.DBType,album) | String.IsEqual(ListItem.DBType,song)] + !String.IsEmpty(ListItem(1).Art(artist.thumb))">$INFO[ListItem(1).Art(artist.thumb)]</value>
-		<!-- Standard views -->
-		<value condition="[$EXP[ListView_IsVisible] | $EXP[BillboardView_IsVisible] | !String.IsEmpty(Container.ListItemNoWrap(1).Label)] + [String.IsEqual(ListItem(1).DBType,episode) | String.IsEqual(ListItem(1).DBType,album) | String.IsEqual(ListItem(1).DBType,song)] + !String.IsEmpty(ListItem(1).Art(thumb))">$INFO[ListItem(1).Art(thumb)]</value>
-		<value condition="$EXP[ListView_Display_IsThumbnails] + String.IsEqual(ListItem.DBType,artist) + !String.IsEmpty(ListItem(1).Art(thumb))">$INFO[ListItem(1).Art(thumb)]</value>
-		<value condition="$EXP[ListView_Display_IsThumbnails] + String.IsEqual(ListItem.DBType,artist) + !String.IsEmpty(ListItem(1).Art(fanart))">$INFO[ListItem(1).Art(fanart)]</value>
-		<value condition="$EXP[ListView_Display_IsThumbnails] + $EXP[Prefer_Keyart] + !String.IsEmpty(ListItem(1).Art(keyart))">$INFO[ListItem(1).Art(keyart)]</value>
-		<value condition="$EXP[ListView_Display_IsThumbnails] + !String.IsEmpty(ListItem(1).Art(poster))">$INFO[ListItem(1).Art(poster)]</value>
-		<value condition="$EXP[ListView_Display_IsThumbnails] + !String.IsEmpty(ListItem(1).Art(fanart))">$INFO[ListItem(1).Art(fanart)]</value>
-		<value condition="$EXP[ListView_Display_IsThumbnails] + !String.IsEmpty(ListItem(1).Art(tvshow.poster))">$INFO[ListItem(1).Art(tvshow.poster)]</value>
-		<value condition="[$EXP[ListView_Display_IsBackground] | $EXP[BillboardView_IsVisible]] + !String.IsEmpty(ListItem(1).Art(fanart))">$INFO[ListItem(1).Art(fanart)]</value>
-		<value condition="[$EXP[ListView_Display_IsBackground] | $EXP[BillboardView_IsVisible]] + !String.IsEmpty(ListItem(1).Art(tvshow.fanart))">$INFO[ListItem(1).Art(tvshow.fanart)]</value>
+		<!-- Exceptions -->
+		<value condition="Window.Is(loginscreen) + !String.IsEmpty(Container(52).ListItemNoWrap(1).Label) + !String.Contains(Container(52).ListItem(1).Art(thumb),DefaultUser)">$INFO[Container(52).ListItem(1).Art(thumb)]</value>
+		<value condition="Window.Is(loginscreen) + !String.IsEmpty(Container(52).ListItemNoWrap(1).Label)">fallback/fallback_square.png</value>
+		<value condition="Window.Is(videobookmarks) + !String.IsEmpty(Container(11).ListItemNoWrap(1).Label)">$INFO[Container(11).ListItem(1).Art(thumb)]</value>
+		<value condition="!String.IsEmpty(Container.ListItemNoWrap(1).Label) + [String.IsEqual(ListItem(1).DBType,episode) | String.IsEqual(ListItem(1).DBType,album) | String.IsEqual(ListItem(1).DBType,song)] + !String.IsEmpty(ListItem(1).Art(thumb))">$INFO[ListItem(1).Art(thumb)]</value>
+		<!-- Standard -->
 		<value condition="!String.IsEmpty(Container.ListItemNoWrap(1).Label) + $EXP[ShowcaseView_Display_IsPosters] + $EXP[ShowcaseView_Details_Overlay_IsVisible] + !String.IsEmpty(ListItem(1).Art(keyart))">$INFO[ListItem(1).Art(keyart)]</value>
 		<value condition="!String.IsEmpty(Container.ListItemNoWrap(1).Label) + $EXP[ShowcaseView_Display_IsPosters] + $EXP[ShowcaseView_Details_Logo_IsOn] + !String.IsEmpty(ListItem(1).Art(clearlogo)) + !String.IsEmpty(ListItem(1).Art(keyart))">$INFO[ListItem(1).Art(keyart)]</value>
 		<value condition="!String.IsEmpty(Container.ListItemNoWrap(1).Label) + $EXP[ShowcaseView_Display_IsPosters] + $EXP[Prefer_Keyart] + !String.IsEmpty(ListItem(1).Art(keyart))">$INFO[ListItem(1).Art(keyart)]</value>
@@ -475,17 +420,15 @@
 		<value condition="!String.IsEmpty(Container.ListItemNoWrap(1).Label) + $EXP[StripView_Display_IsSquare] + !String.IsEmpty(ListItem(1).Art(square))">$INFO[ListItem(1).Art(square)]</value>
 		<value condition="!String.IsEmpty(Container.ListItemNoWrap(1).Label) + $EXP[StripView_Display_IsSquare] + !String.IsEmpty(ListItem(1).Art(fanart))">$INFO[ListItem(1).Art(fanart)]</value>
 		<value condition="!String.IsEmpty(Container.ListItemNoWrap(1).Label) + !String.IsEmpty(ListItem(1).Art(thumb))">$INFO[ListItem(1).Art(thumb)]</value>
-		<!-- Visualisation -->
-		<value condition="Window.IsVisible(visualisation) + !String.IsEmpty(MusicPlayer.offset(1).Cover)">$INFO[MusicPlayer.offset(1).Cover]</value>
 	</variable>
 
 	<variable name="Thumbnail(2)Content">
-		<!-- Special Windows -->
-		<value condition="!String.IsEmpty(Container(52).ListItemNoWrap(2).Label) + Window.IsVisible(loginscreen) + !String.Contains(Container(52).ListItem(2).Art(thumb),DefaultUser)">$INFO[Container(52).ListItem(2).Art(thumb)]</value>
-		<value condition="!String.IsEmpty(Container(52).ListItemNoWrap(2).Label) + Window.IsVisible(loginscreen)">fallback/fallback_square.png</value>
-		<value condition="!String.IsEmpty(Container(11).ListItemNoWrap(2).Label) + Window.IsVisible(videobookmarks)">$INFO[Container(11).ListItem(2).Art(thumb)]</value>
-		<!-- Standard Views -->
+		<!-- Exceptions -->
+		<value condition="Window.Is(loginscreen) + !String.IsEmpty(Container(52).ListItemNoWrap(2).Label) + !String.Contains(Container(52).ListItem(2).Art(thumb),DefaultUser)">$INFO[Container(52).ListItem(2).Art(thumb)]</value>
+		<value condition="Window.Is(loginscreen) + !String.IsEmpty(Container(52).ListItemNoWrap(2).Label)">fallback/fallback_square.png</value>
+		<value condition="Window.Is(videobookmarks) + !String.IsEmpty(Container(11).ListItemNoWrap(2).Label)">$INFO[Container(11).ListItem(2).Art(thumb)]</value>
 		<value condition="!String.IsEmpty(Container.ListItemNoWrap(2).Label) + [String.IsEqual(ListItem(2).DBType,episode) | String.IsEqual(ListItem(2).DBType,album) | String.IsEqual(ListItem(2).DBType,song)] + !String.IsEmpty(ListItem(2).Art(thumb))">$INFO[ListItem(2).Art(thumb)]</value>
+		<!-- Standard -->
 		<value condition="!String.IsEmpty(Container.ListItemNoWrap(2).Label) + $EXP[ShowcaseView_Display_IsPosters] + $EXP[ShowcaseView_Details_Overlay_IsVisible] + !String.IsEmpty(ListItem(2).Art(keyart))">$INFO[ListItem(2).Art(keyart)]</value>
 		<value condition="!String.IsEmpty(Container.ListItemNoWrap(2).Label) + $EXP[ShowcaseView_Display_IsPosters] + $EXP[ShowcaseView_Details_Logo_IsOn] + !String.IsEmpty(ListItem(2).Art(clearlogo)) + !String.IsEmpty(ListItem(2).Art(keyart))">$INFO[ListItem(2).Art(keyart)]</value>
 		<value condition="!String.IsEmpty(Container.ListItemNoWrap(2).Label) + $EXP[ShowcaseView_Display_IsPosters] + $EXP[Prefer_Keyart] + !String.IsEmpty(ListItem(2).Art(keyart))">$INFO[ListItem(2).Art(keyart)]</value>
@@ -513,12 +456,12 @@
 	</variable>
 
 	<variable name="Thumbnail(3)Content">
-		<!-- Special Windows -->
-		<value condition="!String.IsEmpty(Container(52).ListItemNoWrap(3).Label) + Window.IsVisible(loginscreen) + !String.Contains(Container(52).ListItem(3).Art(thumb),DefaultUser)">$INFO[Container(52).ListItem(3).Art(thumb)]</value>
-		<value condition="!String.IsEmpty(Container(52).ListItemNoWrap(3).Label) + Window.IsVisible(loginscreen)">fallback/fallback_square.png</value>
-		<value condition="!String.IsEmpty(Container(11).ListItemNoWrap(3).Label) + Window.IsVisible(videobookmarks)">$INFO[Container(11).ListItem(3).Art(thumb)]</value>
-		<!-- Standard Views -->
+		<!-- Exceptions -->
+		<value condition="Window.Is(loginscreen) + !String.IsEmpty(Container(52).ListItemNoWrap(3).Label) + !String.Contains(Container(52).ListItem(3).Art(thumb),DefaultUser)">$INFO[Container(52).ListItem(3).Art(thumb)]</value>
+		<value condition="Window.Is(loginscreen) + !String.IsEmpty(Container(52).ListItemNoWrap(3).Label)">fallback/fallback_square.png</value>
+		<value condition="Window.Is(videobookmarks) + !String.IsEmpty(Container(11).ListItemNoWrap(3).Label)">$INFO[Container(11).ListItem(3).Art(thumb)]</value>
 		<value condition="!String.IsEmpty(Container.ListItemNoWrap(3).Label) + [String.IsEqual(ListItem(3).DBType,episode) | String.IsEqual(ListItem(3).DBType,album) | String.IsEqual(ListItem(3).DBType,song)] + !String.IsEmpty(ListItem(3).Art(thumb))">$INFO[ListItem(3).Art(thumb)]</value>
+		<!-- Standard -->
 		<value condition="!String.IsEmpty(Container.ListItemNoWrap(3).Label) + $EXP[ShowcaseView_Display_IsPosters] + $EXP[ShowcaseView_Details_Overlay_IsVisible] + !String.IsEmpty(ListItem(3).Art(keyart))">$INFO[ListItem(3).Art(keyart)]</value>
 		<value condition="!String.IsEmpty(Container.ListItemNoWrap(3).Label) + $EXP[ShowcaseView_Display_IsPosters] + $EXP[ShowcaseView_Details_Logo_IsOn] + !String.IsEmpty(ListItem(3).Art(clearlogo)) + !String.IsEmpty(ListItem(3).Art(keyart))">$INFO[ListItem(3).Art(keyart)]</value>
 		<value condition="!String.IsEmpty(Container.ListItemNoWrap(3).Label) + $EXP[ShowcaseView_Display_IsPosters] + $EXP[Prefer_Keyart] + !String.IsEmpty(ListItem(3).Art(keyart))">$INFO[ListItem(3).Art(keyart)]</value>
@@ -660,10 +603,6 @@
 		<value condition="Control.HasFocus(9090) + Skin.HasSetting(Widget9_Display_Square) + String.IsEqual(ListItem(-1).DBType,episode) + !String.IsEmpty(ListItem(-1).Art(tvshow.square1))">$INFO[Control.GetLabel(38001)]</value>
 		<!-- Standard -->
 		<value condition="!Window.IsActive(home) + [String.IsEqual(ListItem(-1).DBType,episode) | String.IsEqual(ListItem(-1).DBType,album) | String.IsEqual(ListItem(-1).DBType,song)] + !String.IsEmpty(ListItem(-1).Art(thumb1))">$INFO[Control.GetLabel(38001)]</value>
-	  <value condition="$EXP[ListView_Display_IsThumbnails] + String.IsEqual(ListItem(-1).DBType,artist) + !String.IsEmpty(ListItem(-1).Art(thumb1))">$INFO[Control.GetLabel(38001)]</value>
-	  <value condition="$EXP[ListView_Display_IsThumbnails] + $EXP[Prefer_Keyart] + !String.IsEmpty(ListItem(-1).Art(keyart1))">$INFO[Control.GetLabel(38001)]</value>
-	  <value condition="$EXP[ListView_Display_IsThumbnails] + !String.IsEmpty(ListItem(-1).Art(poster1))">$INFO[Control.GetLabel(38001)]</value>
-	  <value condition="![String.Contains(ListItem.Path,themoviedb.helper) + !Window.Is(home)] + [$EXP[ListView_Display_IsBackground] | $EXP[BillboardView_IsVisible]] + !String.IsEmpty(ListItem(-1).Art(fanart1))">$INFO[Control.GetLabel(38001)]</value>
 	  <value condition="$EXP[ShowcaseView_Display_IsPosters] + $EXP[ShowcaseView_Details_Overlay_IsVisible] + !String.IsEmpty(ListItem(-1).Art(keyart1))">$INFO[Control.GetLabel(38001)]</value>
 	  <value condition="$EXP[ShowcaseView_Display_IsPosters] + $EXP[ShowcaseView_Details_Logo_IsOn] + !String.IsEmpty(ListItem(-1).Art(clearlogo)) + !String.IsEmpty(ListItem(-1).Art(keyart1))">$INFO[Control.GetLabel(38001)]</value>
 	  <value condition="$EXP[ShowcaseView_Display_IsPosters] + $EXP[Prefer_Keyart] + !String.IsEmpty(ListItem(-1).Art(keyart1))">$INFO[Control.GetLabel(38001)]</value>
@@ -723,11 +662,6 @@
 		<value condition="Control.HasFocus(9090) + Skin.HasSetting(Widget9_Display_Square) + String.IsEqual(ListItem.DBType,episode) + !String.IsEmpty(ListItem.Art(tvshow.square1))">$INFO[Control.GetLabel(38001)]</value>
 		<!-- Standard -->
 	  <value condition="!Window.IsActive(home) + [String.IsEqual(ListItem.DBType,episode) | String.IsEqual(ListItem.DBType,album) | String.IsEqual(ListItem.DBType,song)] + !String.IsEmpty(ListItem.Art(thumb1))">$INFO[Control.GetLabel(38001)]</value>
-	  <value condition="$EXP[ListView_Display_IsThumbnails] + String.IsEqual(ListItem.DBType,artist) + !String.IsEmpty(ListItem.Art(thumb1))">$INFO[Control.GetLabel(38001)]</value>
-	  <value condition="![String.Contains(ListItem.Path,themoviedb.helper) + !Window.Is(home)] + $EXP[ListView_Display_IsThumbnails] + String.IsEqual(ListItem.DBType,artist) + !String.IsEmpty(ListItem.Art(fanart1))">$INFO[Control.GetLabel(38001)]</value>
-	  <value condition="$EXP[ListView_Display_IsThumbnails] + $EXP[Prefer_Keyart] + !String.IsEmpty(ListItem.Art(keyart1))">$INFO[Control.GetLabel(38001)]</value>
-	  <value condition="$EXP[ListView_Display_IsThumbnails] + !String.IsEmpty(ListItem.Art(poster1))">$INFO[Control.GetLabel(38001)]</value>
-	  <value condition="![String.Contains(ListItem.Path,themoviedb.helper) + !Window.Is(home)] + [$EXP[ListView_Display_IsBackground] | $EXP[BillboardView_IsVisible]] + !String.IsEmpty(ListItem.Art(fanart1))">$INFO[Control.GetLabel(38001)]</value>
 	  <value condition="$EXP[ShowcaseView_Display_IsPosters] + $EXP[ShowcaseView_Details_Overlay_IsVisible] + !String.IsEmpty(ListItem.Art(keyart1))">$INFO[Control.GetLabel(38001)]</value>
 	  <value condition="$EXP[ShowcaseView_Display_IsPosters] + $EXP[ShowcaseView_Details_Logo_IsOn] + !String.IsEmpty(ListItem.Art(clearlogo)) + !String.IsEmpty(ListItem.Art(keyart1))">$INFO[Control.GetLabel(38001)]</value>
 	  <value condition="$EXP[ShowcaseView_Display_IsPosters] + $EXP[Prefer_Keyart] + !String.IsEmpty(ListItem.Art(keyart1))">$INFO[Control.GetLabel(38001)]</value>
@@ -788,11 +722,7 @@
 		<value condition="Control.HasFocus(9090) + Skin.HasSetting(Widget9_Display_Square) + String.IsEqual(ListItem(1).DBType,episode) + !String.IsEmpty(ListItem(1).Art(tvshow.square1))">$INFO[Control.GetLabel(38001)]</value>
 		<!-- Standard -->
 		<value condition="!Window.IsActive(home) + [String.IsEqual(ListItem(1).DBType,episode) | String.IsEqual(ListItem(1).DBType,album) | String.IsEqual(ListItem(1).DBType,song)] + !String.IsEmpty(ListItem(1).Art(thumb1))">$INFO[Control.GetLabel(38001)]</value>
-	  <value condition="$EXP[ListView_Display_IsThumbnails] + String.IsEqual(ListItem(1).DBType,artist) + !String.IsEmpty(ListItem(1).Art(thumb1))">$INFO[Control.GetLabel(38001)]</value>
-	  <value condition="$EXP[ListView_Display_IsThumbnails] + $EXP[Prefer_Keyart] + !String.IsEmpty(ListItem(1).Art(keyart1))">$INFO[Control.GetLabel(38001)]</value>
-	  <value condition="$EXP[ListView_Display_IsThumbnails] + !String.IsEmpty(ListItem(1).Art(poster1))">$INFO[Control.GetLabel(38001)]</value>
-	  <value condition="![String.Contains(ListItem.Path,themoviedb.helper) + !Window.Is(home)] + [$EXP[ListView_Display_IsBackground] | $EXP[BillboardView_IsVisible]] + !String.IsEmpty(ListItem(1).Art(fanart1))">$INFO[Control.GetLabel(38001)]</value>
-	  <value condition="$EXP[ShowcaseView_Display_IsPosters] + $EXP[ShowcaseView_Details_Overlay_IsVisible] + !String.IsEmpty(ListItem(1).Art(keyart1))">$INFO[Control.GetLabel(38001)]</value>
+	 	<value condition="$EXP[ShowcaseView_Display_IsPosters] + $EXP[ShowcaseView_Details_Overlay_IsVisible] + !String.IsEmpty(ListItem(1).Art(keyart1))">$INFO[Control.GetLabel(38001)]</value>
 	  <value condition="$EXP[ShowcaseView_Display_IsPosters] + $EXP[ShowcaseView_Details_Logo_IsOn] + !String.IsEmpty(ListItem(1).Art(clearlogo)) + !String.IsEmpty(ListItem(1).Art(keyart1))">$INFO[Control.GetLabel(38001)]</value>
 	  <value condition="$EXP[ShowcaseView_Display_IsPosters] + $EXP[Prefer_Keyart] + !String.IsEmpty(ListItem(1).Art(keyart1))">$INFO[Control.GetLabel(38001)]</value>
 	  <value condition="$EXP[ShowcaseView_Display_IsPosters] + !String.IsEmpty(ListItem(1).Art(poster1))">$INFO[Control.GetLabel(38001)]</value>
@@ -827,28 +757,34 @@
 		<value></value>
 	</variable>
 
-	<variable name="List_Thumbnail_Content">
-		<value condition="!String.IsEqual(Control.GetLabel(38000),flags/blank.png)">$INFO[Control.GetLabel(38001)]</value>
-		<value condition="String.IsEqual(ListItem.DBType,episode) + String.IsEmpty(ListItem.TVShowTitle) + !ListItem.IsFolder + !String.IsEmpty(ListItem.Art(fanart))">$INFO[ListItem.Art(fanart)]</value>
-		<value condition="String.IsEqual(ListItem.DBType,episode) + String.IsEmpty(ListItem.TVShowTitle) + !ListItem.IsFolder">$INFO[ListItem.Path,,fanart.jpg]</value>
-		<value condition="String.IsEqual(ListItem.DBType,episode) + $EXP[ListView_Display_IsThumbnails] + ListItem.IsFolder">$INFO[ListItem.Path,,poster.jpg]</value>
-		<value condition="String.IsEqual(ListItem.DBType,episode) + $EXP[ListView_Display_IsBackground] + ListItem.IsFolder">$INFO[ListItem.Path,,fanart.jpg]</value>
-		<value condition="Window.IsActive(music) + Container.Content(files) + !ListItem.IsFolder + !String.IsEmpty(ListItem.Art(thumb))">$INFO[ListItem.Art(thumb)]</value>
-		<!-- Background Artwork for Albums/Songs -->
-		<value condition="$EXP[ListView_Display_IsBackground] + String.IsEqual(ListItem.DBType,album) + !String.IsEmpty(ListItem.Art(fanart))">$INFO[ListItem.Art(fanart)]</value>
-		<value condition="$EXP[ListView_Display_IsBackground] + String.IsEqual(ListItem.DBType,song) + !String.IsEmpty(ListItem.Art(album.fanart))">$INFO[ListItem.Art(album.fanart)]</value>
-		<value condition="$EXP[ListView_Display_IsBackground] + [String.IsEqual(ListItem.DBType,album) | String.IsEqual(ListItem.DBType,song)] + !String.IsEmpty(ListItem.Art(artist.fanart))">$INFO[ListItem.Art(artist.fanart)]</value>
-		<value condition="$EXP[ListView_Display_IsBackground] + [String.IsEqual(ListItem.DBType,album) | String.IsEqual(ListItem.DBType,song)] + !String.IsEmpty(ListItem.Art(artist.thumb))">$INFO[ListItem.Art(artist.thumb)]</value>
-		<!-- Standard views -->
-		<value condition="[String.IsEqual(ListItem.DBType,episode) | String.IsEqual(ListItem.DBType,album) | String.IsEqual(ListItem.DBType,song)] + !String.IsEmpty(ListItem.Art(thumb))">$INFO[ListItem.Art(thumb)]</value>
-		<value condition="$EXP[ListView_Display_IsThumbnails] + String.IsEqual(ListItem.DBType,artist) + !String.IsEmpty(ListItem.Art(thumb))">$INFO[ListItem.Art(thumb)]</value>
-		<value condition="$EXP[ListView_Display_IsThumbnails] + String.IsEqual(ListItem.DBType,artist) + !String.IsEmpty(ListItem.Art(fanart))">$INFO[ListItem.Art(fanart)]</value>
-		<value condition="$EXP[ListView_Display_IsThumbnails] + $EXP[Prefer_Keyart] + !String.IsEmpty(ListItem.Art(keyart))">$INFO[ListItem.Art(keyart)]</value>
-		<value condition="$EXP[ListView_Display_IsThumbnails] + !String.IsEmpty(ListItem.Art(poster))">$INFO[ListItem.Art(poster)]</value>
-		<value condition="$EXP[ListView_Display_IsThumbnails] + !String.IsEmpty(ListItem.Art(fanart))">$INFO[ListItem.Art(fanart)]</value>
-		<value condition="$EXP[ListView_Display_IsThumbnails] + !String.IsEmpty(ListItem.Art(tvshow.poster))">$INFO[ListItem.Art(tvshow.poster)]</value>
-		<value condition="$EXP[ListView_Display_IsBackground] + !String.IsEmpty(ListItem.Art(fanart))">$INFO[ListItem.Art(fanart)]</value>
-		<value condition="$EXP[ListView_Display_IsBackground] + String.IsEqual(ListItem.DBType,season) + !String.IsEmpty(ListItem.Art(tvshow.fanart))">$INFO[ListItem.Art(tvshow.fanart)]</value>
+	<variable name="DialogSelect_Artwork">
+		<value condition="!String.IsEmpty(Container(6).ListItem.Art(square))">$INFO[Container(6).ListItem.Art(square)]</value>
+		<value condition="!String.IsEmpty(Container(6).ListItem.Art(fanart))">$INFO[Container(6).ListItem.Art(fanart)]</value>
+		<value condition="!String.IsEmpty(Container(6).ListItem.Art(keyart)) + $EXP[Prefer_Keyart]">$INFO[Container(6).ListItem.Art(keyart)]</value>
+		<value condition="!String.IsEmpty(Container(6).ListItem.Art(poster))">$INFO[Container(6).ListItem.Art(poster)]</value>
+		<value>$INFO[Container(6).ListItem.Art(thumb)]</value>
+	</variable>
+
+	<variable name="Dialog_Info_Background">
+		<value condition="String.IsEqual(ListItem.DBType,episode) + !String.IsEmpty(ListItem.Art(thumb))">$INFO[ListItem.Art(thumb)]</value>
+		<value condition="String.IsEqual(Container.FolderName,ListItem.TVShowTitle) + !String.IsEmpty(Window(home).Property(Season_Fanart))">$INFO[Window(home).Property(Season_Fanart)]</value>
+		<value condition="!String.IsEmpty(ListItem.Art(fanart))">$INFO[ListItem.Art(fanart)]</value>
+		<value condition="!String.IsEmpty(ListItem.Art(thumb))">$INFO[ListItem.Art(thumb)]</value>
+	</variable>
+
+	<variable name="MusicPlaylistEditor_Background">
+		<value condition="String.IsEqual(Window(musicplaylisteditor).Property(ActiveList),Right) + String.IsEqual(Container(100).ListItem.DBType,album) + !String.IsEmpty(Container(100).ListItem.Art(fanart))">$INFO[Container(100).ListItem.Art(fanart)]</value>
+		<value condition="String.IsEqual(Window(musicplaylisteditor).Property(ActiveList),Right) + String.IsEqual(Container(100).ListItem.DBType,song) + !String.IsEmpty(Container(100).ListItem.Art(album.fanart))">$INFO[Container(100).ListItem.Art(album.fanart)]</value>
+		<value condition="String.IsEqual(Window(musicplaylisteditor).Property(ActiveList),Right) + [String.IsEqual(Container(100).ListItem.DBType,album) | String.IsEqual(Container(100).ListItem.DBType,song)] + !String.IsEmpty(Container(100).ListItem.Art(artist.fanart))">$INFO[Container(100).ListItem.Art(artist.fanart)]</value>
+		<value condition="String.IsEqual(Window(musicplaylisteditor).Property(ActiveList),Right) + [String.IsEqual(Container(100).ListItem.DBType,album) | String.IsEqual(Container(100).ListItem.DBType,song)] + !String.IsEmpty(Container(100).ListItem.Art(artist.thumb))">$INFO[Container(100).ListItem.Art(artist.thumb)]</value>
+		<value condition="String.IsEqual(Window(musicplaylisteditor).Property(ActiveList),Right) + !String.IsEmpty(Container(100).ListItem.Art(fanart))">$INFO[Container(100).ListItem.Art(fanart)]</value>
+		<value condition="String.IsEqual(Window(musicplaylisteditor).Property(ActiveList),Right) + !String.IsEmpty(Container(100).ListItem.Art(thumb))">$INFO[Container(100).ListItem.Art(thumb)]</value>
+		<value condition="String.IsEqual(Container(50).ListItem.DBType,album) + !String.IsEmpty(Container(50).ListItem.Art(fanart))">$INFO[Container(50).ListItem.Art(fanart)]</value>
+		<value condition="String.IsEqual(Container(50).ListItem.DBType,song) + !String.IsEmpty(Container(50).ListItem.Art(album.fanart))">$INFO[Container(50).ListItem.Art(album.fanart)]</value>
+		<value condition="[String.IsEqual(Container(50).ListItem.DBType,album) | String.IsEqual(Container(50).ListItem.DBType,song)] + !String.IsEmpty(Container(50).ListItem.Art(artist.fanart))">$INFO[Container(50).ListItem.Art(artist.fanart)]</value>
+		<value condition="[String.IsEqual(Container(50).ListItem.DBType,album) | String.IsEqual(Container(50).ListItem.DBType,song)] + !String.IsEmpty(Container(50).ListItem.Art(artist.thumb))">$INFO[Container(50).ListItem.Art(artist.thumb)]</value>
+		<value condition="!String.IsEmpty(ListItem.Art(fanart))">$INFO[ListItem.Art(fanart)]</value>
+		<value condition="!String.IsEmpty(ListItem.Art(thumb))">$INFO[ListItem.Art(thumb)]</value>
 	</variable>
 
 	<!-- LABELS -->
