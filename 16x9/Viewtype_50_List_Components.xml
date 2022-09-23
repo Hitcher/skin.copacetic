@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <includes>
 
-	<include name="ListView_Icon">
+	<include name="TempListIcon">
 		<param name="visible" default="true"/>
-		<param name="art_icon" default="List_Thumbnail"/>
 		<param name="art_diffuse" default="false"/>
 		<param name="aspectratio" default="scale"/>
 		<param name="fallback" default="fallback/fallback.png"/>
@@ -11,7 +10,7 @@
 			<control type="group">
 				<visible>$PARAM[visible]</visible>
 				<include content="Icon_Art_Focused">
-					<param name="texture" value="$VAR[$PARAM[art_icon](0)Content]"/>
+					<param name="texture" value="$VAR[List_Thumbnail_Content]"/>
 					<param name="art_diffuse" value="$PARAM[art_diffuse]"/>
 					<param name="multiart_fade" value="false"/>
 					<param name="aspectratio" value="$PARAM[aspectratio]"/>
@@ -19,6 +18,185 @@
 					<param name="fadetime" value="360"/>
 				</include>
 				<nested/>
+			</control>
+		</definition>
+	</include>
+
+	<!-- Legacy code -->
+
+	<include name="ListView_ListIcon_Static_Focused">
+		<include content="ListIcon_Static_Focused">
+			<param name="visible" value="$PARAM[visible]"/>
+			<param name="position" value="$PARAM[position]"/>
+			<param name="left" value="$PARAM[left]"/>
+			<param name="top" value="$PARAM[top]"/>
+			<param name="width" value="$PARAM[width]"/>
+			<param name="height" value="$PARAM[height]"/>
+			<param name="art_icon" value="$PARAM[art_icon]"/>
+			<param name="art_diffuse" value="$PARAM[art_diffuse]"/>
+			<param name="now_playing" value="false"/>
+			<param name="aspectratio" value="$PARAM[aspectratio]"/>
+			<param name="fallback" value="$PARAM[fallback]"/>
+			<!-- Multiart -->
+			<include condition="Skin.HasSetting(Multiart_Slideshow) + !Window.Is(movieinformation) + !Window.Is(musicinformation) + !Window.Is(songinformation)" content="Icon_Component_Multiart_Static">
+				<param name="visible" value="$PARAM[multiart]"/>
+				<param name="texture" value="$VAR[Multiart(0)Content]"/>
+				<param name="art_diffuse" value="$PARAM[art_diffuse]"/>
+				<param name="now_playing" value="false"/>
+				<param name="aspectratio" value="$PARAM[aspectratio]"/>
+				<param name="fadetime" value="360"/>
+			</include>
+			<!-- Progress overlay -->
+			<include condition="Window.Is(home) | Window.Is(videos) | Window.Is(movieinformation)" content="Icon_Component_Progress_Overlay">
+				<param name="visible" value="$EXP[ListView_Display_IsThumbnails] + !String.IsEmpty(Container($PARAM[target_id]).ListItemNoWrap($PARAM[position]).Label)"/>
+			</include>
+		</include>
+	</include>
+
+	<include name="ListView_ListIcon_Animated">
+		<include content="ListIcon_Animated">
+			<param name="visible" value="$PARAM[visible]"/>
+			<param name="position" value="$PARAM[position]"/>
+			<param name="left" value="$PARAM[left]"/>
+			<param name="top" value="$PARAM[top]"/>
+			<param name="width" value="$PARAM[width]"/>
+			<param name="height" value="$PARAM[height]"/>
+			<param name="art_icon" value="$PARAM[art_icon]"/>
+			<param name="art_diffuse" value="$PARAM[art_diffuse]"/>
+			<param name="now_playing" value="false"/>
+			<param name="aspectratio" value="$PARAM[aspectratio]"/>
+			<param name="fallback" value="$PARAM[fallback]"/>
+			<param name="animationtype" value="$PARAM[animationtype]"/>
+			<param name="animationeffect" value="$PARAM[animationeffect]"/>
+			<param name="animationend" value="$PARAM[animationend]"/>
+			<param name="animationcondition" value="$PARAM[animationcondition]"/>
+			<!-- Progress overlay -->
+			<include condition="Window.Is(home) | Window.Is(videos) | Window.Is(movieinformation)" content="Icon_Component_Progress_Overlay">
+				<param name="visible" value="$EXP[ListView_Display_IsThumbnails] + !String.IsEmpty(Container($PARAM[target_id]).ListItemNoWrap($PARAM[position]).Label)"/>
+			</include>
+		</include>
+	</include>
+
+	<include name="ListView_Multiart_Animated">
+		<include content="ListIcon_Animated">
+			<param name="visible" value="$PARAM[visible]"/>
+			<param name="position" value="$PARAM[position]"/>
+			<param name="left" value="$PARAM[left]"/>
+			<param name="top" value="$PARAM[top]"/>
+			<param name="width" value="$PARAM[width]"/>
+			<param name="height" value="$PARAM[height]"/>
+			<param name="art_icon" value="$PARAM[art_icon]"/>
+			<param name="art_diffuse" value="$PARAM[art_diffuse]"/>
+			<param name="now_playing" value="false"/>
+			<param name="aspectratio" value="$PARAM[aspectratio]"/>
+			<param name="fallback" value="$PARAM[fallback]"/>
+			<param name="animationtype" value="$PARAM[animationtype]"/>
+			<param name="animationeffect" value="$PARAM[animationeffect]"/>
+			<param name="animationend" value="$PARAM[animationend]"/>
+			<param name="animationcondition" value="$PARAM[animationcondition]"/>
+			<!-- Multiart -->
+			<include condition="Skin.HasSetting(Multiart_Slideshow) + !Window.Is(movieinformation) + !Window.Is(musicinformation) + !Window.Is(songinformation)" content="Icon_Component_Multiart_Animated">
+				<param name="visible" value="$PARAM[multiart]"/>
+				<param name="texture" value="$VAR[Multiart($PARAM[position])Content]"/>
+				<param name="art_diffuse" value="$PARAM[art_diffuse]"/>
+				<param name="now_playing" value="false"/>
+				<param name="aspectratio" value="$PARAM[aspectratio]"/>
+				<param name="fadetime" value="0"/>
+				<param name="animationtype" value="$PARAM[multiartanimationtype]"/>
+				<param name="animationeffect" value="$PARAM[multiartanimationeffect]"/>
+				<param name="animationend" value="$PARAM[multiartanimationend]"/>
+				<param name="animationcondition" value="$PARAM[multiartanimationcondition]"/>
+				<param name="animationdelay" value="$PARAM[multiartanimationdelay]"/>
+			</include>
+			<!-- Progress overlay -->
+			<include condition="Window.Is(home) | Window.Is(videos) | Window.Is(movieinformation)" content="Icon_Component_Progress_Overlay">
+				<param name="visible" value="$EXP[ListView_Display_IsThumbnails] + !String.IsEmpty(Container($PARAM[target_id]).ListItemNoWrap($PARAM[position]).Label)"/>
+			</include>
+		</include>
+	</include>
+
+	<include name="Artwork_Transition_Fade">
+		<param name="visible" default="true"/>
+		<param name="target_id"/>
+		<param name="art_icon" default="Thumbnail"/>
+		<param name="fallback"/>>
+		<param name="aspectratio" default="scale"/>
+		<definition>
+			<control type="group">
+				<visible>$PARAM[visible]</visible>
+				<!-- STATIC or during overlap of ContentPrevious and ContentNext -->
+				<include content="ListView_ListIcon_Static_Focused">
+					<param name="visible" value="!$EXP[ContentSwitching] | String.IsEqual(Container($PARAM[target_id]).NumItems,1) | [$EXP[ContentPrevious] + String.IsEqual(Control.GetLabel($PARAM[target_id]21),Control.GetLabel($PARAM[target_id]22))] | [$EXP[ContentNext] + String.IsEqual(Control.GetLabel($PARAM[target_id]21),Control.GetLabel($PARAM[target_id]20))]"/>
+					<param name="position" value="0"/>
+					<param name="art_icon" value="$PARAM[art_icon]"/>
+					<param name="art_diffuse" value="!$EXP[ListView_Display_IsThumbnails]"/>
+					<param name="aspectratio" value="$PARAM[aspectratio]"/>
+					<param name="fallback" value="$PARAM[fallback]"/>
+				</include>
+				<!-- PREVIOUS SCROLL -->
+				<control type="group">
+					<visible>$EXP[ContentPrevious] + !$EXP[ContentNext] + !String.IsEqual(Container($PARAM[target_id]).NumItems,1) + !String.IsEqual(Control.GetLabel($PARAM[target_id]21),Control.GetLabel($PARAM[target_id]22))</visible>
+					<include content="ListView_Multiart_Animated">
+						<param name="position" value="1"/>
+						<param name="art_icon" value="$PARAM[art_icon]"/>
+						<param name="art_diffuse" value="!$EXP[ListView_Display_IsThumbnails]"/>
+						<param name="aspectratio" value="$PARAM[aspectratio]"/>
+						<param name="fallback" value="$PARAM[fallback]"/>
+						<param name="multiart" value="Container($PARAM[target_id]).OnPrevious + !String.IsEqual(Control.GetLabel(38003),flags/blank.png)"/>
+						<param name="multiartanimationtype" value="Hidden"/>
+						<param name="multiartanimationeffect" value="fade"/>
+						<param name="multiartanimationend" value="0"/>
+						<param name="multiartanimationcondition" value="true"/>
+						<param name="multiartanimationdelay" value="360"/>
+					</include>
+					<control type="group">
+						<animation effect="zoom" start="-45,0,1965,1080" end="0,0,1920,1080" time="135" reversible="false" condition="$EXP[BillboardView_IsVisible] + !Container($PARAM[target_id]).OnPrevious">Conditional</animation>
+						<include content="ListView_ListIcon_Animated">
+							<param name="visible" value="!Container($PARAM[target_id]).OnPrevious"/>
+							<param name="position" value="0"/>
+							<param name="art_icon" value="$PARAM[art_icon]"/>
+							<param name="art_diffuse" value="!$EXP[ListView_Display_IsThumbnails]"/>
+							<param name="aspectratio" value="$PARAM[aspectratio]"/>
+							<param name="fallback" value="$PARAM[fallback]"/>
+							<param name="animationtype" value="Visible"/>
+							<param name="animationcondition" value="true"/>
+							<param name="animationeffect" value="fade"/>
+							<param name="animationend" value="100"/>
+						</include>
+					</control>
+				</control>
+				<!-- NEXT SCROLL -->
+				<control type="group">
+					<visible>$EXP[ContentNext] + !$EXP[ContentPrevious] + !String.IsEqual(Container($PARAM[target_id]).NumItems,1) + !String.IsEqual(Control.GetLabel($PARAM[target_id]21),Control.GetLabel($PARAM[target_id]20))</visible>
+					<include content="ListView_Multiart_Animated">
+						<param name="position" value="-1"/>
+						<param name="art_icon" value="$PARAM[art_icon]"/>
+						<param name="art_diffuse" value="!$EXP[ListView_Display_IsThumbnails]"/>
+						<param name="aspectratio" value="$PARAM[aspectratio]"/>
+						<param name="fallback" value="$PARAM[fallback]"/>
+						<param name="multiart" value="Container($PARAM[target_id]).OnNext + !String.IsEqual(Control.GetLabel(38002),flags/blank.png)"/>
+						<param name="multiartanimationtype" value="Hidden"/>
+						<param name="multiartanimationeffect" value="fade"/>
+						<param name="multiartanimationend" value="0"/>
+						<param name="multiartanimationcondition" value="true"/>
+						<param name="multiartanimationdelay" value="360"/>
+					</include>
+					<control type="group">
+						<animation effect="zoom" start="0,0,1965,1080" end="0,0,1920,1080" time="135" reversible="false" condition="$EXP[BillboardView_IsVisible] + !Container($PARAM[target_id]).OnNext">Conditional</animation>
+						<include content="ListView_ListIcon_Animated">
+							<param name="visible" value="!Container($PARAM[target_id]).OnNext"/>
+							<param name="position" value="0"/>
+							<param name="art_icon" value="$PARAM[art_icon]"/>
+							<param name="art_diffuse" value="!$EXP[ListView_Display_IsThumbnails]"/>
+							<param name="aspectratio" value="$PARAM[aspectratio]"/>
+							<param name="fallback" value="$PARAM[fallback]"/>
+							<param name="animationtype" value="Visible"/>
+							<param name="animationcondition" value="true"/>
+							<param name="animationeffect" value="fade"/>
+							<param name="animationend" value="100"/>
+						</include>
+					</control>
+				</control>
 			</control>
 		</definition>
 	</include>
