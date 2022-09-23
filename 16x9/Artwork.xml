@@ -33,10 +33,12 @@
 		<param name="art_diffuse_fadeout_1" default="false"/>
 		<param name="art_diffuse_fadeout_2" default="false"/>
 		<param name="now_playing" default="false"/>
+		<param name="watched_fade" default="false"/>
 		<definition>
 			<control type="image">
 				<animation effect="fadediffuse" end="ff808080" time="0" condition="$PARAM[art_diffuse]">Conditional</animation>
 				<animation effect="fadediffuse" end="ff808080" time="360" tween="sine" easing="inout"  condition="$PARAM[art_diffuse_fadein]" reversible="false">Conditional</animation>
+				<animation effect="fade" end="66" time="0" condition="$PARAM[watched_fade]" reversible="false">Conditional</animation>
 				<animation effect="fadediffuse" end="ff808080" time="0" condition="$PARAM[art_diffuse_fadeout_1]" reversible="false">Conditional</animation>
 				<animation effect="fadediffuse" start="ff808080" end="ffffffff" time="360" tween="sine" easing="inout"  condition="$PARAM[art_diffuse_fadeout_2]" reversible="false">Conditional</animation>
 				<animation effect="fadediffuse" end="ff555555" time="0" condition="$PARAM[now_playing]">Conditional</animation>
@@ -53,6 +55,8 @@
 		<param name="art_diffuse_fadein" default="false"/>
 		<param name="art_diffuse_fadeout_1" default="false"/>
 		<param name="art_diffuse_fadeout_2" default="false"/>
+		<param name="multiart_fade" default="true"/>
+		<param name="fadetime" default="0"/>
 		<definition>
 			<control type="image">
 				<include>Secondary_List_Scroll_Animation</include>
@@ -61,10 +65,10 @@
 				<animation effect="fadediffuse" end="ff808080" time="0" condition="$PARAM[art_diffuse_fadeout_1]" reversible="false">Conditional</animation>
 				<animation effect="fadediffuse" start="ff808080" end="ffffffff" time="360" tween="sine" easing="inout"  condition="$PARAM[art_diffuse_fadeout_2]" reversible="false">Conditional</animation>
 				<animation effect="fadediffuse" end="ff555555" time="0" condition="$PARAM[now_playing]">Conditional</animation>
-				<animation effect="fadediffuse" end="80000000" time="90" delay="3000" condition="Skin.HasSetting(Multiart_Slideshow) + !$EXP[Scrollbar_HasFocus] + !$EXP[InfoWidget_HasFocus] + !String.IsEqual(Control.GetLabel(38000),flags/blank.png) + !$EXP[MultiartSwitching] + !String.IsEmpty(Window(home).Property(Multiart_1)) + ![$EXP[GridView_IsVisible] + $EXP[TransparentDialog_IsVisible]]" reversible="false">Conditional</animation>
+				<animation effect="fadediffuse" end="80000000" time="90" delay="3000" condition="$PARAM[multiart_fade] + Skin.HasSetting(Multiart_Slideshow) + !$EXP[Scrollbar_HasFocus] + !$EXP[InfoWidget_HasFocus] + !String.IsEqual(Control.GetLabel(38000),flags/blank.png) + !$EXP[MultiartSwitching] + !String.IsEmpty(Window(home).Property(Multiart_1)) + ![$EXP[GridView_IsVisible] + $EXP[TransparentDialog_IsVisible]]" reversible="false">Conditional</animation>
 				<texture fallback="$PARAM[fallback]" background="true">$PARAM[texture]</texture>
 				<aspectratio align="center" aligny="center">$PARAM[aspectratio]</aspectratio>
-				<fadetime>0</fadetime>
+				<fadetime>$PARAM[fadetime]</fadetime>
 			</control>
 		</definition>
 	</include>
@@ -206,6 +210,7 @@
 		<param name="art_icon" default="Thumbnail"/>
 		<param name="art_diffuse" default="false"/>
 		<param name="now_playing" default="false"/>
+		<param name="watched_fade" default="false"/>
 		<param name="aspectratio" default="scale"/>
 		<definition>
 			<control type="group">
@@ -219,6 +224,7 @@
 					<param name="texture" value="$VAR[$PARAM[art_icon]($PARAM[position])Content]"/>
 					<param name="art_diffuse" value="$PARAM[art_diffuse]"/>
 					<param name="now_playing" value="$PARAM[now_playing]"/>
+					<param name="watched_fade" value="$PARAM[watched_fade]"/>
 					<param name="aspectratio" value="$PARAM[aspectratio]"/>
 					<param name="fallback" value="$PARAM[fallback]"/>
 				</include>
