@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<window>
+	<defaultcontrol always="true">9001</defaultcontrol>
+	<include>Delayed_Dialog_Fade_Animation</include>
+	<controls>
+
+		<include content="Delay_Content_Load">
+			<param name="id" value="9001"/>
+			<param name="time" value="360"/>
+			<param name="target_id" value="SetFocus(6)"/>
+		</include>
+
+		<control type="group">
+			<visible>!Window.IsVisible(shutdownmenu)</visible>
+			<include>Delayed_Content_Fade_Animation</include>
+
+			<control type="group">
+				<visible>!Control.HasFocus(9001)</visible>
+				<include>Content_Fade_Animation</include>
+				<include content="Transparent_Dialog_Panel">
+					<param name="top" value="180"/>
+					<param name="bottom" value="180"/>
+				</include>
+			</control>
+
+			<control type="group">
+				<visible>!Control.HasFocus(9001)</visible>
+				<include>Long_Delayed_Content_Fade_Animation</include>
+
+				<include content="Breadcrumb_Label">
+					<param name="visible" value="true"/>
+					<param name="title_label" value="$LOCALIZE[737]"/>
+					<param name="info_label" value="$INFO[Container(6).ListItem.Label,$LOCALIZE[31116] ]$INFO[Container(6).ListItem.Label2, $LOCALIZE[31116] #]"/>
+				</include>
+
+				<!-- Color picker panel -->
+				<control type="panel" id="6">
+					<centertop>50%</centertop>
+					<centerleft>50%</centerleft>
+					<height>540</height>
+					<width>1620</width>
+					<onup>6</onup>
+					<ondown>6</ondown>
+					<onleft>7</onleft>
+					<onright>61</onright>
+					<orientation>vertical</orientation>
+					<pagecontrol>61</pagecontrol>
+					<viewtype label="100">icon</viewtype>
+					<itemlayout height="180" width="180">
+						<control type="image">
+							<top>5</top>
+							<bottom>5</bottom>
+							<left>5</left>
+							<right>5</right>
+							<texture>views/white_100.png</texture>
+							<colordiffuse>$INFO[ListItem.Label2]</colordiffuse>
+						</control>
+					</itemlayout>
+					<focusedlayout height="180" width="180">
+						<control type="group">
+							<animation effect="zoom" time="200" tween="sine" easing="inout" start="100" end="124" center="auto">Focus</animation>
+							<control type="image">
+								<texture>views/white_100.png</texture>
+								<colordiffuse>$INFO[ListItem.Label2]</colordiffuse>
+							</control>
+						</control>
+					</focusedlayout>
+				</control>
+
+				<control type="scrollbar" id="61">
+					<visible allowhiddenfocus="true">Container.Scrolling | Control.HasFocus(6) | Control.HasFocus(61)</visible>
+					<include>Scrollbar_Fade_Animation</include>
+					<right>102</right>
+					<bottom>270</bottom>
+					<width>6</width>
+					<height>540</height>
+					<onleft condition="Control.IsVisible(6)">6</onleft>
+					<onright>7</onright>
+					<showonepage>false</showonepage>
+					<orientation>vertical</orientation>
+					<texturesliderbackground colordiffuse="$VAR[List_Scroll_Background_Color]">views/white_100.png</texturesliderbackground>
+					<texturesliderbar colordiffuse="$VAR[List_Scroll_Background_Color]">views/white_100.png</texturesliderbar>
+					<texturesliderbarfocus colordiffuse="$VAR[List_Scroll_Focused_Color]">views/white_100.png</texturesliderbarfocus>
+					<textureslidernib></textureslidernib>
+					<textureslidernibfocus></textureslidernibfocus>
+				</control>
+
+				<include content="Button_Group_Template">
+					<param name="onleft" value="61"/>
+					<param name="onright" value="6"/>
+					<param name="icons" value="true"/>
+					<param name="button1" value="true"/>
+					<param name="button1id" value="7"/>
+				</include>
+
+			</control>
+		</control>
+	</controls>
+</window>
