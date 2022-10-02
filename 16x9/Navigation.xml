@@ -8,9 +8,9 @@
 			<ondown condition="Integer.IsEqual(Container.NumItems,1)">SetFocus(3000,0)</ondown>
 			<onleft condition="$EXP[Secondary_List_Focus] + Integer.IsGreater(Container(4501).NumItems,0)">SetFocus(4501,0)</onleft>
 			<onleft condition="![$EXP[Secondary_List_Focus] + Integer.IsGreater(Container(4501).NumItems,0)]">SetFocus(3000,0)</onleft>
-			<onright condition="Skin.HasSetting(Music_Player_Enabled) + Player.HasAudio">SetFocus(91100,1)</onright>
-			<onright condition="![Skin.HasSetting(Music_Player_Enabled) + Player.HasAudio] + Integer.IsGreaterOrEqual(Container.NumItems,12)">60</onright>
-			<onright condition="![Skin.HasSetting(Music_Player_Enabled) + Player.HasAudio] + Integer.IsLess(Container.NumItems,12)">SetFocus(3000,0)</onright>
+			<onright condition="$EXP[Music_Player_IsVisible]">SetFocus(91100,1)</onright>
+			<onright condition="!$EXP[Music_Player_IsVisible] + Integer.IsGreaterOrEqual(Container.NumItems,12)">60</onright>
+			<onright condition="!$EXP[Music_Player_IsVisible] + Integer.IsLess(Container.NumItems,12)">SetFocus(3000,0)</onright>
 			<onback condition="String.IsEqual(window(movieinformation).property(SentFromInfo),true)">SetFocus(5003)</onback>
 		</definition>
 	</include>
@@ -18,8 +18,8 @@
 	<include name="Simple_List_Navigation">
 		<definition>
 			<onleft condition="Window.Is(favourites)">0</onleft>
-			<onright condition="Window.Is(favourites) + Skin.HasSetting(Music_Player_Enabled) + Player.HasAudio">SetFocus(91100,1)</onright>
-			<onright condition="Window.Is(favourites) + ![Skin.HasSetting(Music_Player_Enabled) + Player.HasAudio]">0</onright>
+			<onright condition="Window.Is(favourites) + $EXP[Music_Player_IsVisible]">SetFocus(91100,1)</onright>
+			<onright condition="Window.Is(favourites) + !$EXP[Music_Player_IsVisible]">0</onright>
 			<onleft condition="Window.Is(musicinformation) + String.IsEqual(ListItem.DBType,album) + !String.IsEmpty(Control.GetLabel(916))">99</onleft>
 			<onleft condition="Window.Is(musicinformation) + String.IsEqual(ListItem.DBType,album) + String.IsEmpty(Control.GetLabel(916))">97</onleft>
 			<onright condition="Window.Is(musicinformation) + String.IsEqual(ListItem.DBType,album)">SetFocus(7)</onright>
@@ -32,32 +32,44 @@
 
 	<include name="Secondary_List_Navigation">
 		<definition>
-			<onright condition="$EXP[ListView_IsVisible]">SetFocus(4502)</onright>
-			<onleft condition="$EXP[ListView_IsVisible]">SetFocus(4506)</onleft>
+			<onleft condition="$EXP[Trailer_Autoplay_IsVisible] + $EXP[ListView_IsVisible]">PlayerControl(Stop)</onleft>
+			<onleft condition="!$EXP[Trailer_Autoplay_IsVisible] + $EXP[ListView_IsVisible]">SetFocus(4506)</onleft>
+			<onright condition="$EXP[Trailer_Autoplay_IsVisible] + $EXP[ListView_IsVisible]">PlayerControl(Stop)</onright>
+			<onright condition="!$EXP[Trailer_Autoplay_IsVisible] + $EXP[ListView_IsVisible]">SetFocus(4502)</onright>
 			<onup condition="$EXP[ListView_IsVisible]">0</onup>
 			<ondown condition="$EXP[ListView_IsVisible]">0</ondown>
-			<onleft condition="$EXP[BillboardView_IsVisible]">SetFocus(4502)</onleft>
-			<onright condition="$EXP[BillboardView_IsVisible]">SetFocus(4502)</onright>
+			<onleft condition="$EXP[Trailer_Autoplay_IsVisible] + $EXP[BillboardView_IsVisible]">PlayerControl(Stop)</onleft>
+			<onleft condition="!$EXP[Trailer_Autoplay_IsVisible] + $EXP[BillboardView_IsVisible]">SetFocus(4502)</onleft>
+			<onright condition="$EXP[Trailer_Autoplay_IsVisible] + $EXP[BillboardView_IsVisible]">PlayerControl(Stop)</onright>
+			<onright condition="!$EXP[Trailer_Autoplay_IsVisible] + $EXP[BillboardView_IsVisible]">SetFocus(4502)</onright>
 			<onup condition="$EXP[BillboardView_IsVisible]">0</onup>
 			<ondown condition="$EXP[BillboardView_IsVisible]">SetFocus(4504)</ondown>
-			<onleft condition="$EXP[ShowcaseView_IsVisible]">SetFocus(4502)</onleft>
-			<onright condition="$EXP[ShowcaseView_IsVisible]">SetFocus(4502)</onright>
+			<onleft condition="$EXP[Trailer_Autoplay_IsVisible] + $EXP[ShowcaseView_IsVisible]">PlayerControl(Stop)</onleft>
+			<onleft condition="!$EXP[Trailer_Autoplay_IsVisible] + $EXP[ShowcaseView_IsVisible]">SetFocus(4502)</onleft>
+			<onright condition="$EXP[Trailer_Autoplay_IsVisible] + $EXP[ShowcaseView_IsVisible]">PlayerControl(Stop)</onright>
+			<onright condition="!$EXP[Trailer_Autoplay_IsVisible] + $EXP[ShowcaseView_IsVisible]">SetFocus(4502)</onright>
 			<onup condition="$EXP[ShowcaseView_IsVisible]">0</onup>
 			<ondown condition="$EXP[ShowcaseView_IsVisible]">SetFocus(4504)</ondown>
-			<onleft condition="$EXP[StripView_IsVisible]">SetFocus(4502)</onleft>
-			<onright condition="$EXP[StripView_IsVisible]">SetFocus(4502)</onright>
-			<onup condition="$EXP[StripView_IsVisible]">0</onup>
-			<ondown condition="$EXP[StripView_IsVisible]">SetFocus(4504)</ondown>
+			<onleft condition="$EXP[StripView_IsVisible] + $EXP[Trailer_Autoplay_IsVisible]">PlayerControl(Stop)</onleft>
+			<onleft condition="$EXP[StripView_IsVisible] + !$EXP[Trailer_Autoplay_IsVisible]">SetFocus(4502)</onleft>
+			<onright condition="$EXP[StripView_IsVisible] + $EXP[Trailer_Autoplay_IsVisible]">PlayerControl(Stop)</onright>
+			<onright condition="$EXP[StripView_IsVisible] + !$EXP[Trailer_Autoplay_IsVisible]">SetFocus(4502)</onright>
+			<onup condition="$EXP[StripView_IsVisible] + $EXP[Trailer_Autoplay_IsVisible]">PlayerControl(Stop)</onup>
+			<onup condition="$EXP[StripView_IsVisible] + !$EXP[Trailer_Autoplay_IsVisible]">0</onup>
+			<ondown condition="$EXP[StripView_IsVisible] + $EXP[Trailer_Autoplay_IsVisible]">PlayerControl(Stop)</ondown>
+			<ondown condition="$EXP[StripView_IsVisible] + !$EXP[Trailer_Autoplay_IsVisible]">SetFocus(4504)</ondown>
 		</definition>
 	</include>
 
 	<include name="Billboard_Navigation">
 		<definition>
-			<onup condition="Skin.HasSetting(Music_Player_Enabled) + Player.HasAudio">SetFocus(91100,1)</onup>
-			<onup condition="![Skin.HasSetting(Music_Player_Enabled) + Player.HasAudio]">SetFocus(3000,0)</onup>
-			<ondown condition="Skin.HasSetting(Secondary_List_Enabled) + $EXP[Secondary_List_Video_Conditions] + Integer.IsGreater(Container(4501).NumItems,0)">SetFocus(4501,0)</ondown>
-			<ondown condition="![Skin.HasSetting(Secondary_List_Enabled) + $EXP[Secondary_List_Video_Conditions] + Integer.IsGreater(Container(4501).NumItems,0)] + Integer.IsGreater(Container.NumItems,1)">60</ondown>
-			<ondown condition="![Skin.HasSetting(Secondary_List_Enabled) + $EXP[Secondary_List_Video_Conditions] + Integer.IsGreater(Container(4501).NumItems,0)] + Integer.IsEqual(Container.NumItems,1)">SetFocus(3000,0)</ondown>
+			<onup condition="$EXP[Music_Player_IsVisible]">SetFocus(91100,1)</onup>
+			<onup condition="!$EXP[Music_Player_IsVisible] + $EXP[Trailer_Autoplay_IsVisible]">PlayerControl(Stop)</onup>
+			<onup condition="!$EXP[Trailer_Autoplay_IsVisible] + !$EXP[Music_Player_IsVisible]">SetFocus(3000,0)</onup>
+			<ondown condition="$EXP[Trailer_Autoplay_IsVisible]">PlayerControl(Stop)</ondown>
+			<ondown condition="!$EXP[Trailer_Autoplay_IsVisible] + $EXP[Secondary_List_Focus] + Integer.IsGreater(Container(4501).NumItems,0)">SetFocus(4501,0)</ondown>
+			<ondown condition="!$EXP[Trailer_Autoplay_IsVisible] + ![$EXP[Secondary_List_Focus] + Integer.IsGreater(Container(4501).NumItems,0)] + Integer.IsGreater(Container.NumItems,1)">60</ondown>
+			<ondown condition="!$EXP[Trailer_Autoplay_IsVisible] + ![$EXP[Secondary_List_Focus] + Integer.IsGreater(Container(4501).NumItems,0)] + Integer.IsEqual(Container.NumItems,1)">SetFocus(3000,0)</ondown>
 			<onleft condition="Integer.IsGreater(Container.NumItems,3)">501</onleft>
 			<onleft condition="Integer.IsLessOrEqual(Container.NumItems,3) + Integer.IsGreater(Container.NumItems,1)">0</onleft>
 			<onleft condition="Integer.IsEqual(Container.NumItems,1)">SetFocus(3000,0)</onleft>
@@ -70,11 +82,13 @@
 
 	<include name="Showcase_Navigation">
 		<definition>
-			<onup condition="Skin.HasSetting(Music_Player_Enabled) + Player.HasAudio">SetFocus(91100,1)</onup>
-			<onup condition="![Skin.HasSetting(Music_Player_Enabled) + Player.HasAudio]">SetFocus(3000,0)</onup>
-			<ondown condition="[$EXP[Secondary_List_Focus] + Integer.IsGreater(Container(4501).NumItems,0)]">SetFocus(4501,0)</ondown>
-			<ondown condition="![$EXP[Secondary_List_Focus] + Integer.IsGreater(Container(4501).NumItems,0)] + Integer.IsGreater(Container.NumItems,1)">60</ondown>
-			<ondown condition="![$EXP[Secondary_List_Focus] + Integer.IsGreater(Container(4501).NumItems,0)] + Integer.IsEqual(Container.NumItems,1)">SetFocus(3000,0)</ondown>
+			<onup condition="$EXP[Music_Player_IsVisible]">SetFocus(91100,1)</onup>
+			<onup condition="!$EXP[Music_Player_IsVisible] + $EXP[Trailer_Autoplay_IsVisible]">PlayerControl(Stop)</onup>
+			<onup condition="!$EXP[Trailer_Autoplay_IsVisible] + !$EXP[Music_Player_IsVisible]">SetFocus(3000,0)</onup>
+			<ondown condition="$EXP[Trailer_Autoplay_IsVisible]">PlayerControl(Stop)</ondown>
+			<ondown condition="!$EXP[Trailer_Autoplay_IsVisible] + $EXP[Secondary_List_Focus] + Integer.IsGreater(Container(4501).NumItems,0)">SetFocus(4501,0)</ondown>
+			<ondown condition="!$EXP[Trailer_Autoplay_IsVisible] + ![$EXP[Secondary_List_Focus] + Integer.IsGreater(Container(4501).NumItems,0)] + Integer.IsGreater(Container.NumItems,1)">60</ondown>
+			<ondown condition="!$EXP[Trailer_Autoplay_IsVisible] + ![$EXP[Secondary_List_Focus] + Integer.IsGreater(Container(4501).NumItems,0)] + Integer.IsEqual(Container.NumItems,1)">SetFocus(3000,0)</ondown>
 			<onleft condition="Integer.IsGreater(Container.NumItems,10)">502</onleft>
 			<onleft condition="Integer.IsLessOrEqual(Container.NumItems,10) + Integer.IsGreater(Container.NumItems,1)">0</onleft>
 			<onleft condition="Integer.IsEqual(Container.NumItems,1)">SetFocus(3000,0)</onleft>
@@ -87,11 +101,13 @@
 
 	<include name="Strip_Navigation">
 		<definition>
-			<onup condition="Skin.HasSetting(Music_Player_Enabled) + Player.HasAudio">SetFocus(91100,1)</onup>
-			<onup condition="![Skin.HasSetting(Music_Player_Enabled) + Player.HasAudio]">SetFocus(3000,0)</onup>
-			<ondown condition="$EXP[Secondary_List_Focus] + Integer.IsGreater(Container(4501).NumItems,0)">SetFocus(4501,0)</ondown>
-			<ondown condition="![$EXP[Secondary_List_Focus] + Integer.IsGreater(Container(4501).NumItems,0)] + Integer.IsGreater(Container.NumItems,1)">60</ondown>
-			<ondown condition="![$EXP[Secondary_List_Focus] + Integer.IsGreater(Container(4501).NumItems,0)] + Integer.IsEqual(Container.NumItems,1)">SetFocus(3000,0)</ondown>
+			<onup condition="$EXP[Music_Player_IsVisible]">SetFocus(91100,1)</onup>
+			<onup condition="!$EXP[Music_Player_IsVisible] + $EXP[Trailer_Autoplay_IsVisible]">PlayerControl(Stop)</onup>
+			<onup condition="!$EXP[Trailer_Autoplay_IsVisible] + !$EXP[Music_Player_IsVisible]">SetFocus(3000,0)</onup>
+			<ondown condition="$EXP[Trailer_Autoplay_IsVisible]">PlayerControl(Stop)</ondown>
+			<ondown condition="!$EXP[Trailer_Autoplay_IsVisible] + $EXP[Secondary_List_Focus] + Integer.IsGreater(Container(4501).NumItems,0)">SetFocus(4501,0)</ondown>
+			<ondown condition="!$EXP[Trailer_Autoplay_IsVisible] + ![$EXP[Secondary_List_Focus] + Integer.IsGreater(Container(4501).NumItems,0)] + Integer.IsGreater(Container.NumItems,1)">60</ondown>
+			<ondown condition="!$EXP[Trailer_Autoplay_IsVisible] + ![$EXP[Secondary_List_Focus] + Integer.IsGreater(Container(4501).NumItems,0)] + Integer.IsEqual(Container.NumItems,1)">SetFocus(3000,0)</ondown>
 			<onleft condition="Integer.IsGreater(Container.NumItems,10)">504</onleft>
 			<onleft condition="Integer.IsLessOrEqual(Container.NumItems,10) + Integer.IsGreater(Container.NumItems,1)">0</onleft>
 			<onleft condition="Integer.IsEqual(Container.NumItems,1)">SetFocus(3000,0)</onleft>
@@ -105,13 +121,13 @@
 	<include name="Grid_Navigation">
 		<definition>
 			<onleft>SetFocus(3000,0)</onleft>
-			<onright condition="Skin.HasSetting(Music_Player_Enabled) + Player.HasAudio">SetFocus(91100,1)</onright>
-			<onright condition="![Skin.HasSetting(Music_Player_Enabled) + Player.HasAudio] + $EXP[GridView_Display_IsFanart] + Integer.IsGreater(Container.NumItems,3)">60</onright>
-			<onright condition="![Skin.HasSetting(Music_Player_Enabled) + Player.HasAudio] + $EXP[GridView_Display_IsPosters] + Integer.IsGreater(Container.NumItems,5)">60</onright>
-			<onright condition="![Skin.HasSetting(Music_Player_Enabled) + Player.HasAudio] + $EXP[GridView_Display_IsSquare] + Integer.IsGreater(Container.NumItems,10)">60</onright>
-			<onright condition="![Skin.HasSetting(Music_Player_Enabled) + Player.HasAudio]  + $EXP[GridView_Display_IsFanart] + Integer.IsLessorEqual(Container.NumItems,3)">SetFocus(3000,0)</onright>
-			<onright condition="![Skin.HasSetting(Music_Player_Enabled) + Player.HasAudio]  + $EXP[GridView_Display_IsPosters] + Integer.IsLessorEqual(Container.NumItems,5)">SetFocus(3000,0)</onright>
-			<onright condition="![Skin.HasSetting(Music_Player_Enabled) + Player.HasAudio]  + $EXP[GridView_Display_IsSquare] + Integer.IsLessorEqual(Container.NumItems,10)">SetFocus(3000,0)</onright>
+			<onright condition="$EXP[Music_Player_IsVisible]">SetFocus(91100,1)</onright>
+			<onright condition="!$EXP[Music_Player_IsVisible] + $EXP[GridView_Display_IsFanart] + Integer.IsGreater(Container.NumItems,3)">60</onright>
+			<onright condition="!$EXP[Music_Player_IsVisible] + $EXP[GridView_Display_IsPosters] + Integer.IsGreater(Container.NumItems,5)">60</onright>
+			<onright condition="!$EXP[Music_Player_IsVisible] + $EXP[GridView_Display_IsSquare] + Integer.IsGreater(Container.NumItems,10)">60</onright>
+			<onright condition="!$EXP[Music_Player_IsVisible]  + $EXP[GridView_Display_IsFanart] + Integer.IsLessorEqual(Container.NumItems,3)">SetFocus(3000,0)</onright>
+			<onright condition="!$EXP[Music_Player_IsVisible]  + $EXP[GridView_Display_IsPosters] + Integer.IsLessorEqual(Container.NumItems,5)">SetFocus(3000,0)</onright>
+			<onright condition="!$EXP[Music_Player_IsVisible]  + $EXP[GridView_Display_IsSquare] + Integer.IsLessorEqual(Container.NumItems,10)">SetFocus(3000,0)</onright>
 			<onup condition="$EXP[GridView_Display_IsFanart] + Integer.IsGreater(Container.NumItems,3)">505</onup>
 			<onup condition="!$EXP[GridView_Display_IsFanart] + Integer.IsGreater(Container.NumItems,5)">505</onup>
 			<onup condition="$EXP[GridView_Display_IsFanart] + Integer.IsLessorEqual(Container.NumItems,3)">0</onup>
@@ -345,17 +361,17 @@
 		<ondown condition="!Control.IsVisible(8010) + !Control.IsVisible(8020) + !Control.IsVisible(50) + ![Control.IsVisible(8030) + Integer.IsGreater(Container(8030).NumItems,1)] + !Control.IsVisible(8040) + !Control.IsVisible(8050) + !Control.IsVisible(8060) + Control.IsVisible(8070)">8070</ondown>
 		<ondown condition="!Control.IsVisible(8010) + !Control.IsVisible(8020) + !Control.IsVisible(50) + ![Control.IsVisible(8030) + Integer.IsGreater(Container(8030).NumItems,1)] + !Control.IsVisible(8040) + !Control.IsVisible(8050) + !Control.IsVisible(8060) + !Control.IsVisible(8070) + Control.IsVisible(8080)">8080</ondown>
 		<ondown condition="!Control.IsVisible(8010) + !Control.IsVisible(8020) + !Control.IsVisible(50) + ![Control.IsVisible(8030) + Integer.IsGreater(Container(8030).NumItems,1)] + !Control.IsVisible(8040) + !Control.IsVisible(8050) + !Control.IsVisible(8060) + !Control.IsVisible(8070) + !Control.IsVisible(8080) + Control.IsVisible(8090)">8090</ondown>
-		<onup condition="Skin.HasSetting(Music_Player_Enabled) + Player.HasAudio">SetFocus(91100,1)</onup>
-		<onup condition="![Skin.HasSetting(Music_Player_Enabled) + Player.HasAudio] + Control.IsVisible(8090)">8090</onup>
-		<onup condition="![Skin.HasSetting(Music_Player_Enabled) + Player.HasAudio] + !Control.IsVisible(8090) + Control.IsVisible(8080)">8080</onup>
-		<onup condition="![Skin.HasSetting(Music_Player_Enabled) + Player.HasAudio] + !Control.IsVisible(8090) + !Control.IsVisible(8080) + Control.IsVisible(8070)">8070</onup>
-		<onup condition="![Skin.HasSetting(Music_Player_Enabled) + Player.HasAudio] + !Control.IsVisible(8090) + !Control.IsVisible(8080) + !Control.IsVisible(8070) + Control.IsVisible(8060)">8060</onup>
-		<onup condition="![Skin.HasSetting(Music_Player_Enabled) + Player.HasAudio] + !Control.IsVisible(8090) + !Control.IsVisible(8080) + !Control.IsVisible(8070) + !Control.IsVisible(8060) + Control.IsVisible(8050)">8050</onup>
-		<onup condition="![Skin.HasSetting(Music_Player_Enabled) + Player.HasAudio] + !Control.IsVisible(8090) + !Control.IsVisible(8080) + !Control.IsVisible(8070) + !Control.IsVisible(8060) + !Control.IsVisible(8050) + Control.IsVisible(8040)">8040</onup>
-		<onup condition="![Skin.HasSetting(Music_Player_Enabled) + Player.HasAudio] + !Control.IsVisible(8090) + !Control.IsVisible(8080) + !Control.IsVisible(8070) + !Control.IsVisible(8060) + !Control.IsVisible(8050) + !Control.IsVisible(8040) + [Control.IsVisible(8030) + Integer.IsGreater(Container(8030).NumItems,1)]">8030</onup>
-		<onup condition="![Skin.HasSetting(Music_Player_Enabled) + Player.HasAudio] + !Control.IsVisible(8090) + !Control.IsVisible(8080) + !Control.IsVisible(8070) + !Control.IsVisible(8060) + !Control.IsVisible(8050) + !Control.IsVisible(8040) + ![Control.IsVisible(8030) + Integer.IsGreater(Container(8030).NumItems,1)] + Control.IsVisible(50)">50</onup>
-		<onup condition="![Skin.HasSetting(Music_Player_Enabled) + Player.HasAudio] + !Control.IsVisible(8090) + !Control.IsVisible(8080) + !Control.IsVisible(8070) + !Control.IsVisible(8060) + !Control.IsVisible(8050) + !Control.IsVisible(8040) + ![Control.IsVisible(8030) + Integer.IsGreater(Container(8030).NumItems,1)] + !Control.IsVisible(50) + Control.IsVisible(8020)">8020</onup>
-		<onup condition="![Skin.HasSetting(Music_Player_Enabled) + Player.HasAudio] + !Control.IsVisible(8090) + !Control.IsVisible(8080) + !Control.IsVisible(8070) + !Control.IsVisible(8060) + !Control.IsVisible(8050) + !Control.IsVisible(8040) + ![Control.IsVisible(8030) + Integer.IsGreater(Container(8030).NumItems,1)] + !Control.IsVisible(50) + !Control.IsVisible(8020) + Control.IsVisible(8010)">8010</onup>
+		<onup condition="$EXP[Music_Player_IsVisible]">SetFocus(91100,1)</onup>
+		<onup condition="!$EXP[Music_Player_IsVisible] + Control.IsVisible(8090)">8090</onup>
+		<onup condition="!$EXP[Music_Player_IsVisible] + !Control.IsVisible(8090) + Control.IsVisible(8080)">8080</onup>
+		<onup condition="!$EXP[Music_Player_IsVisible] + !Control.IsVisible(8090) + !Control.IsVisible(8080) + Control.IsVisible(8070)">8070</onup>
+		<onup condition="!$EXP[Music_Player_IsVisible] + !Control.IsVisible(8090) + !Control.IsVisible(8080) + !Control.IsVisible(8070) + Control.IsVisible(8060)">8060</onup>
+		<onup condition="!$EXP[Music_Player_IsVisible] + !Control.IsVisible(8090) + !Control.IsVisible(8080) + !Control.IsVisible(8070) + !Control.IsVisible(8060) + Control.IsVisible(8050)">8050</onup>
+		<onup condition="!$EXP[Music_Player_IsVisible] + !Control.IsVisible(8090) + !Control.IsVisible(8080) + !Control.IsVisible(8070) + !Control.IsVisible(8060) + !Control.IsVisible(8050) + Control.IsVisible(8040)">8040</onup>
+		<onup condition="!$EXP[Music_Player_IsVisible] + !Control.IsVisible(8090) + !Control.IsVisible(8080) + !Control.IsVisible(8070) + !Control.IsVisible(8060) + !Control.IsVisible(8050) + !Control.IsVisible(8040) + [Control.IsVisible(8030) + Integer.IsGreater(Container(8030).NumItems,1)]">8030</onup>
+		<onup condition="!$EXP[Music_Player_IsVisible] + !Control.IsVisible(8090) + !Control.IsVisible(8080) + !Control.IsVisible(8070) + !Control.IsVisible(8060) + !Control.IsVisible(8050) + !Control.IsVisible(8040) + ![Control.IsVisible(8030) + Integer.IsGreater(Container(8030).NumItems,1)] + Control.IsVisible(50)">50</onup>
+		<onup condition="!$EXP[Music_Player_IsVisible] + !Control.IsVisible(8090) + !Control.IsVisible(8080) + !Control.IsVisible(8070) + !Control.IsVisible(8060) + !Control.IsVisible(8050) + !Control.IsVisible(8040) + ![Control.IsVisible(8030) + Integer.IsGreater(Container(8030).NumItems,1)] + !Control.IsVisible(50) + Control.IsVisible(8020)">8020</onup>
+		<onup condition="!$EXP[Music_Player_IsVisible] + !Control.IsVisible(8090) + !Control.IsVisible(8080) + !Control.IsVisible(8070) + !Control.IsVisible(8060) + !Control.IsVisible(8050) + !Control.IsVisible(8040) + ![Control.IsVisible(8030) + Integer.IsGreater(Container(8030).NumItems,1)] + !Control.IsVisible(50) + !Control.IsVisible(8020) + Control.IsVisible(8010)">8010</onup>
 
 		<include content="InfoWidget_Reset"/>
 	</include>

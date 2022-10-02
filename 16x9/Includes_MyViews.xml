@@ -557,10 +557,14 @@
 
 	<include name="MyViews_Main">
 		<control type="group">
-			<!-- To fix audiostutter on navigation during video playback
+			<!-- To fix audiostutter on navigation during video playback -->
 			<control type="videowindow">
+				<visible>![Skin.HasSetting(Trailer_Autoplay) + String.IsEqual(Window(home).Property(Trailer_Autoplay),true)] | $EXP[GridView_IsVisible]</visible>
 				<include>Hidden_Control</include>
-			</control> -->
+			</control>
+
+			<!-- Trailer autoplay -->
+			<include condition="Skin.HasSetting(Trailer_Autoplay)" content="Trailer_Autoplay_Function"/>
 
 			<!-- Light view gradient -->
 			<control type="image">
@@ -576,7 +580,6 @@
 				<include>Viewtype_Fade_Animation</include>
 
 				<!-- Embedded Lists -->
-
 				<include condition="Skin.HasSetting(Secondary_List_Enabled)" content="Secondary_List">
 					<param name="visible" value="Control.HasFocus(505) + Container.Content(sets)"/>
 					<param name="layout" value="Hidden"/>
@@ -644,21 +647,29 @@
 						<param name="layout" value="630x630"/>
 					</include>
 				</control>
-				<!-- Primary Views -->
-				<include>ListView_Display</include>
-				<include>ListView_Container</include>
-				<include>BillboardView_Container</include>
-				<include>BillboardView_Display</include>
-				<include>BillboardView_Details</include>
-				<include>ShowcaseView_Container</include>
-				<include>ShowcaseView_Display</include>
-				<include>ShowcaseView_Details</include>
-				<include>StripView_Container</include>
-				<include>StripView_Display</include>
-				<include>StripView_Details</include>
+
 				<!-- Music Player -->
 				<include condition="Skin.HasSetting(Music_Player_Enabled)" content="Shared_Dialog_Layouts"/>
-				<include>GridView_Container</include>
+
+				<!-- Primary Views -->
+				<control type="group">
+					<include>Trailer_Autoplay_Fade_Animation</include>
+					<include>ListView_Display</include>
+					<include>BillboardView_Display</include>
+					<include>ShowcaseView_Display</include>
+					<include>StripView_Display</include>
+					<include>GridView_Container</include>
+				</control>
+
+				<include>ListView_Container</include>
+				<include>BillboardView_Container</include>
+				<include>BillboardView_Details</include>
+				<include>ShowcaseView_Container</include>
+				<include>ShowcaseView_Details</include>
+				<include>StripView_Container</include>
+				<include>StripView_Details</include>
+
+
 				<!-- Busy spinner for transition between infodialogs -->
 				<control type="image">
 					<visible>String.IsEqual(Window(home).Property(InfoDialog_Transition),true)</visible>
