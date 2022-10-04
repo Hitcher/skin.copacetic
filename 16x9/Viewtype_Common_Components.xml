@@ -34,7 +34,7 @@
 			<onfocus condition="Skin.HasSetting(Multiart_Slideshow) + !Window.IsVisible(1126) + String.IsEqual(Control.GetLabel(38000),tvshow.poster) + !String.IsEmpty(ListItem.Art(tvshow.poster))">SetProperty(Multiart_0,$ESCINFO[Container.ListItem.Art(tvshow.poster)],home)</onfocus>
 			<onfocus condition="Skin.HasSetting(Multiart_Slideshow) + !Window.IsVisible(1126) + String.IsEqual(Control.GetLabel(38000),tvshow.fanart) + !String.IsEmpty(ListItem.Art(tvshow.fanart))">SetProperty(Multiart_0,$ESCINFO[Container.ListItem.Art(tvshow.fanart)],home)</onfocus>
 			<onfocus condition="Skin.HasSetting(Multiart_Slideshow) + !Window.IsVisible(1126) + String.IsEqual(Control.GetLabel(38000),tvshow.square) + !String.IsEmpty(ListItem.Art(tvshow.square))">SetProperty(Multiart_0,$ESCINFO[Container.ListItem.Art(tvshow.square)],home)</onfocus>
-			<onunfocus condition="String.IsEqual(Window(home).Property(Trailer_Autoplay),true)">PlayerControl(Stop)</onunfocus>
+			<onunfocus condition="String.IsEqual(Window(home).Property(Trailer_Autoplay),true) + Player.HasVideo">PlayerControl(Stop)</onunfocus>
 			<onunfocus condition="String.IsEqual(Window(home).Property(Trailer_Autoplay),true)">ClearProperty(Trailer_Autoplay,home)</onunfocus>
 		</control>
 	</include>
@@ -602,7 +602,7 @@
 						<control type="textbox">
 							<visible>[$EXP[$PARAM[viewtype_label]View_Details_Plot_IsVisible] | VideoPlayer.IsFullscreen] + !String.IsEmpty(Control.GetLabel(916)) + !$EXP[InfoWidget_HasFocus]</visible>
 							<visible>![Control.HasFocus(4501) + Container.Content(tvshows)]</visible>
-							<include>Trailer_Autoplay_Fade_Animation</include>
+							<include>Trailer_Autoplay_Billboard_Details_Fade_Animation</include>
 							<top>$PARAM[plotgap]</top>
 							<height max="$PARAM[plotmaxheight]">auto</height>
 							<font>$PARAM[plotfont]</font>
@@ -800,6 +800,7 @@
 			<control type="group">
 				<visible>Control.HasFocus($PARAM[id])</visible>
 				<visible>!String.IsEqual(Container($PARAM[id]).ListItem.DBType,artist) + !String.IsEqual(Container($PARAM[id]).ListItem.DBType,album) + !String.IsEqual(Container($PARAM[id]).ListItem.DBType,song) + ![$EXP[InfoDialog_IsVisible] + Control.HasFocus(50)]</visible>
+				<include>Trailer_Autoplay_Details_Fade_Animation</include>
 				<left>$PARAM[left]</left>
 				<top>$PARAM[top]</top>
 				<width>$PARAM[width]</width>
@@ -934,6 +935,7 @@
 		<definition>
 			<control type="group">
 				<visible>$PARAM[groupvisible]</visible>
+				<include>Trailer_Autoplay_Details_Fade_Animation</include>
 				<animation effect="slide" end="-60" time="0" condition="$EXP[ListView_Display_IsThumbnails]">Conditional</animation>
 				<control type="group">
 					<!-- Studio -->
