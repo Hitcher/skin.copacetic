@@ -796,7 +796,6 @@
 					<onright condition="!String.IsEmpty(Container(3000).ListItem.Property(ActionRight))">$INFO[Container(3000).ListItem.Property(ActionRight)]</onright>
 					<onleft condition="!String.IsEmpty(Container(3000).ListItem.Property(ActionLeft2))">$INFO[Container(3000).ListItem.Property(ActionLeft2)]</onleft>
 					<onright condition="!String.IsEmpty(Container(3000).ListItem.Property(ActionRight2))">$INFO[Container(3000).ListItem.Property(ActionRight2)]</onright>
-
 					<!-- Reset multiart on viewchange -->
 					<onleft condition="Container(3000).HasFocus(939)">SetFocus(940)</onleft>
 					<onright condition="Container(3000).HasFocus(939)">SetFocus(940)</onright>
@@ -935,13 +934,32 @@
 							<visible>Integer.IsGreater(Container.ViewCount,1) + String.IsEqual(Container.ViewMode,$LOCALIZE[31205])</visible>
 						</item>
 
-
 						<!-- View Opions -->
 						<include content="ListView_Menu_Options"/>
 						<include condition="Window.Is(videos) | Window.Is(music)" content="BillboardView_Menu_Options"/>
 						<include condition="Window.Is(videos) | Window.Is(music)" content="ShowcaseView_Menu_Options"/>
 						<include condition="Window.Is(videos) | Window.Is(music)" content="StripView_Menu_Options"/>
 						<include condition="!Window.Is(musicplaylisteditor) + !Window.Is(pictures) + !Window.Is(musicplaylist) + !Window.Is(videoplaylist)" content="GridView_Menu_Options"/>
+
+						<!-- Trailer Auto Playback -->
+						<item>
+							<description>Trailer Autoplay / Off</description>
+							<onclick>SetFocus(50)</onclick>
+							<label>$LOCALIZE[31130] $LOCALIZE[591] $LOCALIZE[31131]</label>
+							<label2>$LOCALIZE[31053] $LOCALIZE[31116] $LOCALIZE[591]</label2>
+							<property name="ActionLeft">Skin.SetString(Trailer_Autoplay_Enabled,true)</property>
+							<property name="ActionRight">Skin.SetString(Trailer_Autoplay_Enabled,true)</property>
+							<visible>Skin.HasSetting(Trailer_Autoplay) + [Container.Content(movies) | Container.Content(tvshows)] + !$EXP[GridView_IsVisible] + !Skin.String(Trailer_Autoplay_Enabled,true)</visible>
+						</item>
+						<item>
+							<description>Trailer Autoplay / On</description>
+							<onclick>SetFocus(50)</onclick>
+							<label>$LOCALIZE[31130] $LOCALIZE[34222] $LOCALIZE[31131]</label>
+							<label2>$LOCALIZE[31053] $LOCALIZE[31116] $LOCALIZE[34222]</label2>
+							<property name="ActionLeft">Skin.SetString(Trailer_Autoplay_Enabled,false)</property>
+							<property name="ActionRight">Skin.SetString(Trailer_Autoplay_Enabled,false)</property>
+							<visible>Skin.HasSetting(Trailer_Autoplay) + [Container.Content(movies) | Container.Content(tvshows)] + !$EXP[GridView_IsVisible] + Skin.String(Trailer_Autoplay_Enabled,true)</visible>
+						</item>
 
 						<!-- Shared -->
 						<!-- Sort -->
