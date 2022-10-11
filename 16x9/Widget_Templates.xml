@@ -8,6 +8,7 @@
 		<param name="id"/>
 		<param name="focus_button" default="HiddenFocusButton"/>
 		<param name="use_custom_content" default="true"/>
+		<param name="content_path" default="Widget_Container_Content_Path"/>
 		<param name="use_custom_click" default="false"/>
 		<param name="click_action" default="Blank"/>
 		<definition>
@@ -32,7 +33,7 @@
 					<!--<include condition="Skin.HasSetting(Multiart_Slideshow)" content="Multiart_Setter"/>-->
 				</focusedlayout>
 				<itemlayout/>
-				<include condition="$PARAM[use_custom_content]" content="Widget_Container_Content_Path">
+				<include condition="$PARAM[use_custom_content]" content="$PARAM[content_path]">
 					<param name="target" value="$PARAM[target]"/>
 					<param name="sortby" value="$PARAM[sortby]"/>
 					<param name="sortorder" value="$PARAM[sortorder]"/>
@@ -45,6 +46,7 @@
 
 	<include name="Widget_Template">
 		<param name="use_custom_content" default="true"/>
+		<param name="content_path" default="Widget_Container_Content_Path"/>
 		<param name="use_custom_click" default="false"/>
 		<param name="click_action" default="Blank"/>
 		<param name="widget_position" default="0"/>
@@ -56,6 +58,7 @@
 				<param name="id" value="$PARAM[id]"/>
 				<param name="widget_position" value="$PARAM[widget_position]"/>
 				<param name="use_custom_content" value="$PARAM[use_custom_content]"/>
+				<param name="content_path" value="$PARAM[content_path]"/>
 				<param name="use_custom_click" value="$PARAM[use_custom_click]"/>
 				<param name="click_action" value="$PARAM[click_action]"/>
 				<param name="target" value="$PARAM[target]"/>
@@ -145,6 +148,7 @@
 						<param name="label_color" value="$VAR[Breadcrumb_Label_Color]"/>
 					</include>
 				</control>
+				<nested/>
 				<!-- Busy spinner if container is updating -->
 				<control type="image">
 					<visible>Control.HasFocus(90$PARAM[widget_position]0) + Container(90$PARAM[widget_position]0).IsUpdating</visible>
@@ -161,25 +165,47 @@
 	</include>
 
 	<include name="Widget_InProgress">
-		<include content="Widget_Template">
+		<include condition="System.AddonIsEnabled(script.embuary.helper)" content="Widget_Template">
 			<param name="widget_position" value="$PARAM[widget_position]"/>
 			<param name="widget_header" value="$LOCALIZE[31226]"/>
 			<param name="id" value="$PARAM[id]"/>
+			<param name="content" value="plugin://script.embuary.helper/?info=getinprogress"/>
 			<param name="target" value="videos"/>
 			<param name="sortby" value="lastplayed"/>
 			<param name="sortorder" value="descending"/>
-			<param name="content" value="plugin://script.embuary.helper/?info=getinprogress"/>
+		</include>
+		<include condition="!System.AddonIsEnabled(script.embuary.helper)" content="Widget_Template">
+			<param name="widget_position" value="$PARAM[widget_position]"/>
+			<param name="widget_header" value="$LOCALIZE[31226]"/>
+			<param name="id" value="$PARAM[id]"/>
+			<param name="content_path" value="Widget_Container_Content_Path_InProgress"/>
 		</include>
 	</include>
 
 	<include name="Widget_NextUp">
-		<include content="Widget_Template">
+		<include condition="System.AddonIsEnabled(script.embuary.helper)" content="Widget_Template">
 			<param name="widget_position" value="$PARAM[widget_position]"/>
 			<param name="widget_header" value="$LOCALIZE[31227]"/>
 			<param name="id" value="$PARAM[id]"/>
 			<param name="content" value="plugin://script.embuary.helper/?info=getnextup"/>
 		</include>
+		<include condition="!System.AddonIsEnabled(script.embuary.helper)" content="Widget_Template">
+			<param name="widget_position" value="$PARAM[widget_position]"/>
+			<param name="widget_header" value="$LOCALIZE[31227]"/>
+			<param name="id" value="$PARAM[id]"/>
+			<param name="target" value="videos"/>
+			<param name="content" value="special://skin/extras/playlists/inprogress_tvshows.xsp"/>
+			<param name="use_custom_click" value="true"/>
+			<param name="click_action" value="Next_Up"/>
+			<control type="list" id="92200">
+				<visible>Control.HasFocus($PARAM[id])</visible>
+				<itemlayout/>
+				<focusedlayout/>
+				<content target="videos" sortby="playcount" sortorder="ascending" limit="1">videodb://inprogresstvshows/$INFO[Container($PARAM[id]).ListItem.DBID]/-2/?xsp=%7B%22rules%22%3A%7B%22and%22%3A%5B%7B%22field%22%3A%22playcount%22%2C%22operator%22%3A%22is%22%2C%22value%22%3A%5B%220%22%5D%7D%5D%7D%2C%22type%22%3A%22episodes%22%7D</content>
+			</control>
+		</include>
 	</include>
+
 
 	<include name="Widget_LatestMovies">
 		<include content="Widget_Template">
