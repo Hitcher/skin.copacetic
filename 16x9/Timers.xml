@@ -25,19 +25,26 @@
     <name>season_info_monitor</name>
     <description>Properties set as soon as navigation stops on a listitem</description>
     <start reset="true">Container.Content(seasons)</start>
-    <stop>Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(test_multiart),0) + !Window.IsVisible(movieinformation)</stop>
+    <stop>Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(season_info_monitor),0) + !Window.IsVisible(movieinformation)</stop>
     <onstop>SetProperty(Season_Number,$INFO[ListItem.Season],home)</onstop>
     <onstop>SetProperty(Season_Year,$INFO[ListItem.Year],home)</onstop>
     <onstop>SetProperty(Season_Fanart,$ESCINFO[ListItem.Art(fanart)],home)</onstop>
   </timer>
   <timer>
     <name>trailer_autoplay</name>
-    <start reset="true">Skin.HasSetting(Trailer_Autoplay) + Skin.String(Trailer_Autoplay_Enabled,true) + String.IsEmpty(Window(home).Property(Trailer_Autoplay)) + [Window.Is(videos) + !Window.IsVisible(1120)] + !Player.HasMedia + System.IdleTime(3)</start>
+    <start reset="true">Window.Is(videos) + !Window.IsVisible(1120) + Skin.HasSetting(Trailer_Autoplay) + Skin.String(Trailer_Autoplay_Enabled,true) + String.IsEmpty(Window(home).Property(Trailer_Autoplay)) + !Player.HasMedia + System.IdleTime(3)</start>
     <stop>String.IsEmpty(Window(home).Property(Trailer_Autoplay)) + !Player.HasVideo</stop>
     <onstart condition="[Control.HasFocus(50) | Control.HasFocus(501) | Control.HasFocus(502) | Control.HasFocus(504)] + !String.IsEmpty(ListItem.Trailer)">SetProperty(Trailer_Autoplay,true,home)</onstart>
     <onstart condition="[Control.HasFocus(50) | Control.HasFocus(501) | Control.HasFocus(502) | Control.HasFocus(504)] + !String.IsEmpty(ListItem.Trailer)">PlayMedia($ESCINFO[ListItem.Trailer],1,noresume)</onstart>
     <onstart condition="Control.HasFocus(4501) + !String.IsEmpty(Container(4501).ListItem.Trailer)">SetProperty(Trailer_Autoplay,true,home)</onstart>
     <onstart condition="Control.HasFocus(4501) + !String.IsEmpty(Container(4501).ListItem.Trailer)">PlayMedia($ESCINFO[Container(4501).ListItem.Trailer],1,noresume)</onstart>
+  </timer>
+  <timer>
+    <name>trailer_autoplay_home</name>
+    <start reset="true">Window.Is(home) + !Window.IsVisible(1122) + Skin.HasSetting(Trailer_Autoplay) + String.IsEmpty(Window(home).Property(Trailer_Autoplay)) + !Player.HasMedia + System.IdleTime(3)</start>
+    <stop>String.IsEmpty(Window(home).Property(Trailer_Autoplay)) + !Player.HasVideo</stop>
+    <onstart condition="[Control.HasFocus(9010) | Control.HasFocus(9020) | Control.HasFocus(9030) | Control.HasFocus(9040) | Control.HasFocus(9050) | Control.HasFocus(9060) | Control.HasFocus(9070) | Control.HasFocus(9080) | Control.HasFocus(9090)] + !String.IsEmpty(ListItem.Trailer)">SetProperty(Trailer_Autoplay,true,home)</onstart>
+    <onstart condition="[Control.HasFocus(9010) | Control.HasFocus(9020) | Control.HasFocus(9030) | Control.HasFocus(9040) | Control.HasFocus(9050) | Control.HasFocus(9060) | Control.HasFocus(9070) | Control.HasFocus(9080) | Control.HasFocus(9090)] + !String.IsEmpty(ListItem.Trailer)">PlayMedia($ESCINFO[ListItem.Trailer],1,noresume)</onstart>
   </timer>
   <timer>
     <name>multiart_setter</name>
