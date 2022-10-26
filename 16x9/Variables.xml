@@ -2,9 +2,11 @@
 <includes>
 
 	<!-- PATHS -->
-	<variable name="Slideshow_Path">
+	<variable name="Home_Slideshow_Path">
 		<!-- Global override -->
 		<value condition="Skin.HasSetting(Home_Background_Override_Enabled) + Skin.String(Home_Background_Override)">$INFO[Skin.String(Home_Background_Override)]</value>
+		<!-- Item override -->
+		<value condition="!String.IsEmpty(Container(9000).ListItem.Property(backgroundPlaylist))">$INFO[Container(9000).ListItem.Property(backgroundPlaylist)]</value>
 		<!-- playlists and xml library paths e.g. inprogress or sets -->
 		<value condition="String.Contains(Container(9000).ListItem.Property(list),.xsp)">$INFO[Container(9000).ListItem.Property(list)]</value>
 		<value condition="String.Contains(Container(9000).ListItem.Property(list),.xml)">$INFO[Container(9000).ListItem.Property(list)]</value>
@@ -24,13 +26,10 @@
 		<value></value>
 	</variable>
 
-	<variable name="Slideshow_Source">
-		<!-- Global override -->
+	<variable name="Home_Slideshow_Source">
+		<!-- Global/Shortcut override -->
 		<value condition="Skin.HasSetting(Home_Background_Override_Enabled) + Skin.String(Home_Background_Override)">$INFO[Container(12340).ListItem.Art(fanart)]</value>
-		<!-- Shortcut overrides -->
-		<value condition="!String.IsEmpty(Container(9000).ListItem.Property(backgroundPlaylist))">$INFO[Container(12341).ListItem.Art(fanart)]</value>
 		<value condition="!String.IsEmpty(Container(9000).ListItem.Property(background))">$INFO[Container(9000).ListItem.Property(background)]</value>
-		<!-- Standard -->
 		<value>$INFO[Container(12340).ListItem.Art(fanart)]</value>
 	</variable>
 
@@ -42,8 +41,8 @@
 
 	<variable name="Logo_Path">
 		<!-- fullscreeninfo -->
-		<value condition="Window.Is(fullscreeninfo) + !String.IsEmpty(VideoPlayer.Art(clearlogo-aligned))">$INFO[VideoPlayer.Art(clearlogo-aligned)]</value>
-		<value condition="Window.Is(fullscreeninfo) + !String.IsEmpty(VideoPlayer.Art(clearlogo))">$INFO[VideoPlayer.Art(clearlogo)]</value>
+		<value condition="VideoPlayer.IsFullscreen + !String.IsEmpty(VideoPlayer.Art(clearlogo-aligned))">$INFO[VideoPlayer.Art(clearlogo-aligned)]</value>
+		<value condition="VideoPlayer.IsFullscreen + !String.IsEmpty(VideoPlayer.Art(clearlogo))">$INFO[VideoPlayer.Art(clearlogo)]</value>
 		<!-- Secondary List -->
 		<value condition="Control.HasFocus(4501) + $EXP[BillboardView_IsVisible] + !String.IsEmpty(Container(4501).ListItem.Art(clearlogo-billboard))">$INFO[Container(4501).ListItem.Art(clearlogo-billboard)]</value>
 		<value condition="Control.HasFocus(4501) + Skin.String(Theme,Light) + $EXP[Logo_Aligned] + !String.IsEmpty(Container(4501).ListItem.Art(clearlogo-alt-aligned))">$INFO[Container(4501).ListItem.Art(clearlogo-alt-aligned)]</value>
@@ -927,7 +926,7 @@
 
 	<variable name="Title_Label">
 		<!-- Fullscreeninfo -->
-		<value condition="Window.Is(fullscreeninfo)">$INFO[VideoPlayer.Title]</value>
+		<value condition="VideoPlayer.IsFullscreen">$INFO[VideoPlayer.Title]</value>
 		<!-- WIDGETS -->
 		<value condition="$EXP[InfoDialog_IsVisible] + Control.HasFocus(50)">$INFO[Container(50).ListItem.Label]</value>
 		<value condition="Window.IsVisible(addoninformation)">$INFO[ListItem.AddonName]</value>
@@ -974,11 +973,11 @@
 
 	<variable name="Info_Label">
 		<!-- Fullscreeninfo -->
-		<value condition="Window.Is(fullscreeninfo) + !String.IsEmpty(VideoPlayer.TVShowTitle) + Integer.IsGreater(VideoPlayer.Episode,9)">$INFO[VideoPlayer.Season]$INFO[VideoPlayer.Episode,x][UPPERCASE]$INFO[VideoPlayer.TVShowTitle, $LOCALIZE[31115] ]$INFO[VideoPlayer.Duration(mins), $LOCALIZE[31115] , $LOCALIZE[31138]][/UPPERCASE]</value>
-		<value condition="Window.Is(fullscreeninfo) + !String.IsEmpty(VideoPlayer.TVShowTitle) + Integer.IsGreater(VideoPlayer.Episode,0)">$INFO[VideoPlayer.Season]$INFO[VideoPlayer.Episode,x0][UPPERCASE]$INFO[VideoPlayer.TVShowTitle, $LOCALIZE[31115] ]$INFO[VideoPlayer.Duration(mins), $LOCALIZE[31115] , $LOCALIZE[31138]][/UPPERCASE]</value>
-		<value condition="Window.Is(fullscreeninfo) + !String.IsEmpty(VideoPlayer.TVShowTitle)">[UPPERCASE]$INFO[VideoPlayer.TVShowTitle]$INFO[VideoPlayer.Duration(mins), $LOCALIZE[31115] , $LOCALIZE[31138]][/UPPERCASE]</value>
-		<value condition="Window.Is(fullscreeninfo) + !String.IsEmpty(VideoPlayer.Year)">[UPPERCASE]$INFO[VideoPlayer.Year]$VAR[Resolution_Label, $LOCALIZE[31115] ]$INFO[VideoPlayer.AudioLanguage, $LOCALIZE[31115] ]$INFO[VideoPlayer.Duration(mins), $LOCALIZE[31115] , $LOCALIZE[31138]][/UPPERCASE]</value>
-		<value condition="Window.Is(fullscreeninfo) + !String.IsEmpty(VideoPlayer.Duration)">[UPPERCASE]$INFO[VideoPlayer.Duration(mins),, $LOCALIZE[31138]][/UPPERCASE]</value>
+		<value condition="VideoPlayer.IsFullscreen + !String.IsEmpty(VideoPlayer.TVShowTitle) + Integer.IsGreater(VideoPlayer.Episode,9)">$INFO[VideoPlayer.Season]$INFO[VideoPlayer.Episode,x][UPPERCASE]$INFO[VideoPlayer.TVShowTitle, $LOCALIZE[31115] ]$INFO[VideoPlayer.Duration(mins), $LOCALIZE[31115] , $LOCALIZE[31138]][/UPPERCASE]</value>
+		<value condition="VideoPlayer.IsFullscreen + !String.IsEmpty(VideoPlayer.TVShowTitle) + Integer.IsGreater(VideoPlayer.Episode,0)">$INFO[VideoPlayer.Season]$INFO[VideoPlayer.Episode,x0][UPPERCASE]$INFO[VideoPlayer.TVShowTitle, $LOCALIZE[31115] ]$INFO[VideoPlayer.Duration(mins), $LOCALIZE[31115] , $LOCALIZE[31138]][/UPPERCASE]</value>
+		<value condition="VideoPlayer.IsFullscreen + !String.IsEmpty(VideoPlayer.TVShowTitle)">[UPPERCASE]$INFO[VideoPlayer.TVShowTitle]$INFO[VideoPlayer.Duration(mins), $LOCALIZE[31115] , $LOCALIZE[31138]][/UPPERCASE]</value>
+		<value condition="VideoPlayer.IsFullscreen + !String.IsEmpty(VideoPlayer.Year)">[UPPERCASE]$INFO[VideoPlayer.Year]$VAR[Resolution_Label, $LOCALIZE[31115] ]$INFO[VideoPlayer.AudioLanguage, $LOCALIZE[31115] ]$INFO[VideoPlayer.Duration(mins), $LOCALIZE[31115] , $LOCALIZE[31138]][/UPPERCASE]</value>
+		<value condition="VideoPlayer.IsFullscreen + !String.IsEmpty(VideoPlayer.Duration)">[UPPERCASE]$INFO[VideoPlayer.Duration(mins),, $LOCALIZE[31138]][/UPPERCASE]</value>
 		<!-- Info Widgets -->
 		<value condition="$EXP[InfoDialog_IsVisible] + Control.HasFocus(50)">$INFO[Container(50).ListItem.Label2]</value>
 		<value condition="Control.HasFocus(8010) + String.IsEqual(Container(8010).ListItem.DBType,episode) + Integer.IsGreater(Container(8010).ListItem.Episode,9) + $EXP[GridView_IsVisible]">$INFO[Container(8010).ListItem.Season]$INFO[Container(8010).ListItem.Episode,x]$INFO[Container(8010).ListItem.Duration(mins), $LOCALIZE[31116] , $LOCALIZE[31138]]</value>
@@ -1312,8 +1311,8 @@
 	</variable>
 	<!-- Plot label for fullscreen info, secondary list, primary list and infodialogs -->
 	<variable name="Plot_Label">
-		<value condition="Window.Is(fullscreeninfo) + !String.IsEmpty(VideoPlayer.PlotOutline)">$INFO[VideoPlayer.PlotOutline]</value>
-		<value condition="Window.Is(fullscreeninfo) + !String.IsEmpty(VideoPlayer.Plot)">$INFO[VideoPlayer.Plot]</value>
+		<value condition="VideoPlayer.IsFullscreen + !String.IsEmpty(VideoPlayer.PlotOutline)">$INFO[VideoPlayer.PlotOutline]</value>
+		<value condition="VideoPlayer.IsFullscreen + !String.IsEmpty(VideoPlayer.Plot)">$INFO[VideoPlayer.Plot]</value>
 		<value condition="Control.HasFocus(4501) + !String.IsEmpty(Container(4501).ListItem.Property(Album_Description))">$INFO[Container(4501).ListItem.Property(Album_Description)]</value>
 		<value condition="Control.HasFocus(4501) + !String.IsEmpty(Container(4501).ListItem.Property(Artist_Description))">$INFO[Container(4501).ListItem.Property(Artist_Description)]</value>
 		<value condition="Control.HasFocus(4501) + !String.IsEmpty(Container(4501).ListItem.PlotOutline)">$INFO[Container(4501).ListItem.PlotOutline]</value>
