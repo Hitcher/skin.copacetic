@@ -29,7 +29,7 @@
 		<param name="art_icon"/>
 		<param name="fallback" default="fallback/fallback.png"/>
 		<param name="progress_left"/>
-		<param name="progress_top"/>
+		<param name="progress_bottom"/>
 		<param name="progress_width" default="360"/>
 		<param name="progress_slides" default="Narrow"/>
 		<definition>
@@ -132,12 +132,12 @@
 							<!-- Multiart -->
 							<control type="group">
 								<visible>System.IdleTime(1)</visible>
-							<include condition="Skin.HasSetting(Multiart_Slideshow) + !Window.Is(movieinformation) + !Window.Is(musicinformation) + !Window.Is(songinformation)" content="Icon_Component_Multiart_Static">
-								<param name="texture" value="$VAR[Multiart(0)Content]"/>
-								<param name="fadetime" value="360"/>
-								<param name="now_playing" value="$EXP[ListItem(0)_NowPlaying]"/>
-							</include>
-						</control>
+								<include condition="Skin.HasSetting(Multiart_Slideshow) + !Window.Is(movieinformation) + !Window.Is(musicinformation) + !Window.Is(songinformation)" content="Icon_Component_Multiart_Static">
+									<param name="texture" value="$VAR[Multiart(0)Content]"/>
+									<param name="fadetime" value="360"/>
+									<param name="now_playing" value="$EXP[ListItem(0)_NowPlaying]"/>
+								</include>
+							</control>
 							<!-- Progress overlay -->
 							<include condition="Window.Is(home) | Window.Is(videos) | Window.Is(movieinformation)" content="Icon_Component_Progress_Overlay">
 								<param name="visible" value="$EXP[GridView_Details_Off] | $EXP[GridView_Details_Breadcrumb] + $EXP[Progress_IsVisible]"/>
@@ -189,19 +189,13 @@
 						</control>
 					</control>
 				</control>
-				<!-- ProgressBar -->
-				<control type="group">
-					<visible>$EXP[GridView_Display_Is$PARAM[displaytype_label]] + !$EXP[ContainerSwitching] + !$EXP[OptionsSwitching] + !$EXP[ContentSwitching] + !$EXP[TransparentDialog_IsVisible] + !$EXP[Scrollbar_HasFocus] + !$EXP[Music_Player_HasFocus]</visible>
-					<include>Delayed_Content_Fade_Animation</include>
-					<include condition="Window.Is(home) | Window.Is(videos) | Window.Is(movieinformation)" content="ProgressBar">
-						<param name="id" value="505"/>
-						<param name="left" value="$PARAM[progress_left]"/>
-						<param name="top" value="$PARAM[progress_top]"/>
-						<param name="width" value="$PARAM[progress_width]"/>
-						<param name="unwatched_indicator_background" value="$VAR[Accent_Color]"/>
-						<param name="slides" value="$PARAM[progress_slides]"/>
-					</include>
-				</control>
+				<!-- Progress -->
+				<include content="Progress_Grid">
+					<param name="id" value="505"/>
+					<param name="left" value="$PARAM[progress_left]"/>
+					<param name="width" value="$PARAM[progress_width]"/>
+					<param name="progress_slides" value="$PARAM[progress_slides]"/>
+				</include>
 			</control>
 		</definition>
 	</include>
@@ -223,7 +217,6 @@
 					<param name="displaytype_label" value="Fanart"/>
 					<param name="art_icon" value="$PARAM[art_icon]"/>
 					<param name="progress_left" value="126"/>
-					<param name="progress_top" value="315"/>
 					<param name="progress_slides" value="Default"/>
 				</include>
 			</focusedlayout>
@@ -248,7 +241,7 @@
 					<param name="art_icon" value="$PARAM[art_icon]"/>
 					<param name="progress_width" value="240"/>
 					<param name="progress_left" value="70"/>
-					<param name="progress_top" value="522"/>
+					<param name="progress_slides" value="Narrow"/>
 				</include>
 			</focusedlayout>
 		</definition>
@@ -272,7 +265,7 @@
 					<param name="art_icon" value="$PARAM[art_icon]"/>
 					<param name="progress_width" value="240"/>
 					<param name="progress_left" value="70"/>
-					<param name="progress_top" value="342"/>
+					<param name="progress_slides" value="Narrow"/>
 				</include>
 			</focusedlayout>
 		</definition>

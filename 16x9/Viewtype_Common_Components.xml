@@ -787,13 +787,8 @@
 		</definition>
 	</include>
 
-	<include name="ProgressBar">
+	<include name="Progress_Template">
 		<param name="id" default="50"/>
-		<param name="left" default="780"/>
-		<param name="top" default="1047"/>
-		<param name="width" default="360"/>
-		<param name="slides" default="Default"/>
-		<param name="height" default="6"/>
 		<param name="background_color" default="$VAR[Progress_Background_Color]"/>
 		<param name="focus_color" default="$VAR[Progress_Focused_Color]"/>
 		<param name="unwatched_indicator_background" default="$VAR[Unwatched_Indicator_Background_Color]"/>
@@ -802,10 +797,6 @@
 			<control type="group">
 				<visible>Control.HasFocus($PARAM[id])</visible>
 				<visible>!String.IsEqual(Container($PARAM[id]).ListItem.DBType,artist) + !String.IsEqual(Container($PARAM[id]).ListItem.DBType,album) + !String.IsEqual(Container($PARAM[id]).ListItem.DBType,song) + ![$EXP[InfoDialog_IsVisible] + Control.HasFocus(50)]</visible>
-				<left>$PARAM[left]</left>
-				<top>$PARAM[top]</top>
-				<width>$PARAM[width]</width>
-				<height>$PARAM[height]</height>
 				<!-- Movie/Episode Resumable -->
 				<control type="progress">
 					<width>100%</width>
@@ -849,35 +840,42 @@
 						<overlaytexture></overlaytexture>
 					</control>
 					<!-- Unwatched Indicator -->
-					<control type="group">
-						<visible>Skin.HasSetting(Unwatched_Indicator)</visible>
-						<visible>!Integer.IsEqual(Container($PARAM[id]).ListItem.Property(UnWatchedEpisodes),0)</visible>
-						<include content="ProgressBar_Slides_$PARAM[slides]">
-							<param name="id" value="$PARAM[id]"/>
-						</include>
-						<width>30</width>
-						<height>30</height>
-						<centertop>50%</centertop>
-						<left>0</left>
-						<control type="image">
-							<texture colordiffuse="$PARAM[unwatched_indicator_background]">views/white_100.png</texture>
-						</control>
-						<control type="label">
-							<width>100%</width>
-							<height>100%</height>
-							<align>center</align>
-							<aligny>center</aligny>
-							<font>Unwatched_Indicator</font>
-							<textcolor>$VAR[Unwatched_Indicator_Label_Color]</textcolor>
-							<label>$INFO[Container($PARAM[id]).ListItem.Property(UnWatchedEpisodes)]</label>
-						</control>
-					</control>
+					<include condition="Skin.HasSetting(Unwatched_Indicator)" content="Progress_Unwatched_Indicator">
+						<param name="id" value="$PARAM[id]"/>
+						<param name="slides" value="$PARAM[slides]"/>
+						<param name="unwatched_indicator_background" value="$PARAM[unwatched_indicator_background]"/>
+					</include>
 				</control>
 			</control>
 		</definition>
 	</include>
 
-	<include name="ProgressBar_Slides_Default">
+	<include name="Progress_Unwatched_Indicator">
+		<control type="group">
+			<visible>!Integer.IsEqual(Container($PARAM[id]).ListItem.Property(UnWatchedEpisodes),0)</visible>
+			<include content="Progress_Slides_$PARAM[slides]">
+				<param name="id" value="$PARAM[id]"/>
+			</include>
+			<width>30</width>
+			<height>30</height>
+			<centertop>50%</centertop>
+			<left>0</left>
+			<control type="image">
+				<texture colordiffuse="$PARAM[unwatched_indicator_background]">views/white_100.png</texture>
+			</control>
+			<control type="label">
+				<width>100%</width>
+				<height>100%</height>
+				<align>center</align>
+				<aligny>center</aligny>
+				<font>Unwatched_Indicator</font>
+				<textcolor>$VAR[Unwatched_Indicator_Label_Color]</textcolor>
+				<label>$INFO[Container($PARAM[id]).ListItem.Property(UnWatchedEpisodes)]</label>
+			</control>
+		</control>
+	</include>
+
+	<include name="Progress_Slides_Default">
 		<param name="id"/>
 		<definition>
 			<animation effect="slide" end="165" time="0" condition="Integer.IsEqual(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),0)">Conditional</animation>
@@ -904,7 +902,7 @@
 		</definition>
 	</include>
 
-	<include name="ProgressBar_Slides_Narrow">
+	<include name="Progress_Slides_Narrow">
 		<param name="id"/>
 		<definition>
 			<animation effect="slide" end="105" time="0" condition="Integer.IsEqual(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),0)">Conditional</animation>
@@ -931,6 +929,55 @@
 		</definition>
 	</include>
 
+	<include name="Progress">
+		<param name="id"/>
+		<param name="width" default="360"/>
+		<param name="height" default="6"/>
+		<param name="bottom" default="27"/>
+		<definition>
+			<control type="group">
+				<visible>!$EXP[ContainerSwitching] + !$EXP[ContentSwitching] + !$EXP[TransparentDialog_IsVisible] + !$EXP[Scrollbar_HasFocus]</visible>
+				<visible>![Control.HasFocus(4501) + Window.IsVisible(1121)] + !$EXP[Secondary_List_ContainerSwitching] + !$EXP[Secondary_List_ContentSwitching]</visible>
+				<include>Delayed_Content_Fade_Animation</include>
+				<nested/>
+				<centerleft>50%</centerleft>
+				<bottom>$PARAM[bottom]</bottom>
+				<width>$PARAM[width]</width>
+				<height>$PARAM[height]</height>
+				<include condition="Window.Is(videos) | Window.Is(home) | Window.Is(movieinformation)" content="Progress_Template">
+					<param name="id" value="$PARAM[id]"/>
+				</include>
+				<include condition="Skin.HasSetting(Secondary_List_Enabled) + Window.Is(videos)" content="Progress_Template">
+					<param name="id" value="4501"/>
+				</include>
+			</control>
+		</definition>
+	</include>
+
+	<include name="Progress_Grid">
+		<param name="id"/>
+		<param name="left" default="0"/>
+		<param name="width" default="360"/>
+		<param name="height" default="6"/>
+		<param name="bottom" default="12"/>
+		<param name="slides" default="Narrow"/>
+		<definition>
+			<control type="group">
+				<visible>!$EXP[ContainerSwitching] + !$EXP[ContentSwitching] + !$EXP[TransparentDialog_IsVisible] + !$EXP[Scrollbar_HasFocus]</visible>
+				<include>Delayed_Content_Fade_Animation</include>
+				<left>$PARAM[left]</left>
+				<bottom>$PARAM[bottom]</bottom>
+				<width>$PARAM[width]</width>
+				<height>$PARAM[height]</height>
+				<include condition="Window.Is(videos) | Window.Is(home) | Window.Is(movieinformation)" content="Progress_Template">
+					<param name="id" value="$PARAM[id]"/>
+					<param name="unwatched_indicator_background" value="$VAR[Accent_Color]"/>
+					<param name="slides" value="$PARAM[progress_slides]"/>
+				</include>
+			</control>
+		</definition>
+	</include>
+
 	<include name="MediaFlags">
 		<param name="groupvisible" default="[$EXP[ListView_Flags_IsOn] | $EXP[BillboardView_Flags_IsOn] | $EXP[ShowcaseView_Flags_IsOn] | $EXP[StripView_Flags_IsOn]]"/>
 		<definition>
@@ -938,9 +985,11 @@
 				<visible>$PARAM[groupvisible]</visible>
 				<animation effect="slide" end="-60" time="0" condition="$EXP[ListView_Display_IsThumbnails]">Conditional</animation>
 				<control type="group">
+					<visible>!$EXP[ContainerSwitching] + !$EXP[ContentSwitching] + !$EXP[TransparentDialog_IsVisible] + !$EXP[Scrollbar_HasFocus] + !$EXP[InfoDialog_IsVisible] + !Window.Is(pictureinfo)</visible>
+					<include>Delayed_Content_Fade_Animation</include>
 					<!-- Studio -->
 					<control type="image">
-						<visible>$EXP[ListView_Flags_Studio_IsVisible] | $EXP[BillboardView_Flags_Studio_IsVisible] | $EXP[ShowcaseView_Flags_Studio_IsVisible] | $EXP[StripView_Flags_Studio_IsVisible]</visible>
+						<visible>$EXP[ListView_Flags_Studio_IsVisible] | [$EXP[BillboardView_Flags_Studio_IsVisible] + !$EXP[BillboardView_Details_Off]] | [$EXP[ShowcaseView_Flags_Studio_IsVisible] + !$EXP[ShowcaseView_Details_Off]] | [$EXP[StripView_Flags_Studio_IsVisible] + !$EXP[StripView_Details_Off]]</visible>
 						<left>1605</left>
 						<top>960</top>
 						<width>90</width>
@@ -952,7 +1001,7 @@
 					</control>
 					<!-- MPAA flag -->
 					<control type="image">
-						<visible>$EXP[ListView_Flags_Rating_IsVisible] | $EXP[BillboardView_Flags_Rating_IsVisible] | $EXP[ShowcaseView_Flags_Rating_IsVisible] | $EXP[StripView_Flags_Rating_IsVisible]</visible>
+						<visible>$EXP[ListView_Flags_Rating_IsVisible] | [$EXP[BillboardView_Flags_Rating_IsVisible] + !$EXP[BillboardView_Details_Off]] | [$EXP[ShowcaseView_Flags_Rating_IsVisible] + !$EXP[ShowcaseView_Details_Off]] | [$EXP[StripView_Flags_Rating_IsVisible] + !$EXP[StripView_Details_Off]]</visible>
 						<left>1785</left>
 						<top>960</top>
 						<width>90</width>

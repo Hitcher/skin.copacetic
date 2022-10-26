@@ -15,7 +15,7 @@
 		<!-- Hidden controls -->
 		<control type="button" id="11">
 			<include>Hidden_Button</include>
-			<onleft>18</onleft>
+			<onleft>10</onleft>
 			<onright>13</onright>
 			<onup condition="!String.IsEmpty(Container(10).ListItemNoWrap(-1).Label)">Control.Move(10,-1)</onup>
 			<onup condition="!String.IsEmpty(Container(10).ListItemNoWrap(-1).Label)">SetFocus(10)</onup>
@@ -48,11 +48,12 @@
 			<ondown condition="!String.IsEmpty(Container(10).ListItemNoWrap(1).Label)">SetFocus(10)</ondown>
 			<ondown condition="!String.IsEmpty(Container(10).ListItemNoWrap(1).Label)">SetFocus(14)</ondown>
 			<ondown condition="String.IsEmpty(Container(10).ListItemNoWrap(1).Label)">12</ondown>
+			<onclick>SetFocus(11)</onclick>
 		</control>
 
 		<control type="group">
 			<visible>!Window.IsVisible(filemanager)</visible>
-			<include content="Global_Fanart_Slideshow"/>
+			<include condition="Skin.HasSetting(Global_Fanart_Slideshow_Enabled" content="Global_Fanart_Slideshow"/>
 		</control>
 
 		<control type="group">
@@ -83,12 +84,13 @@
 				</control>
 
 				<control type="list" id="10">
-					<visible allowhiddenfocus="true">true</visible>
 					<width>1200</width>
 					<centerleft>50%</centerleft>
 					<top>300</top>
 					<height>270</height>
 					<pagecontrol>60</pagecontrol>
+					<onleft>18</onleft>
+					<onright>11</onright>
 					<itemlayout width="1200" height="90">
 						<control type="label">
 							<textoffsetx>60</textoffsetx>
@@ -98,20 +100,26 @@
 						</control>
 					</itemlayout>
 					<focusedlayout width="1200" height="90">
-						<control type="button">
-							<visible allowhiddenfocus="true">false</visible>
-							<onfocus>SetFocus(11)</onfocus>
-						</control>
 						<control type="label">
+							<visible>!Control.HasFocus(10)</visible>
 							<textoffsetx>60</textoffsetx>
 							<label>$INFO[ListItem.Label]</label>
 							<textcolor>$VAR[Unfocused_Color]</textcolor>
+							<selectedcolor>$VAR[Unfocused_Color]</selectedcolor>
+							<label>$INFO[ListItem.Label]</label>
+							<aligny>center</aligny>
+						</control>
+						<control type="label">
+							<visible>Control.HasFocus(10)</visible>
+							<textoffsetx>60</textoffsetx>
+							<label>$INFO[ListItem.Label]</label>
+							<textcolor>$VAR[Light_Color]</textcolor>
 							<selectedcolor>$VAR[Light_Color]</selectedcolor>
 							<label>$INFO[ListItem.Label]</label>
 							<aligny>center</aligny>
 						</control>
 						<control type="image">
-							<visible>Control.HasFocus(11) | Control.HasFocus(13) | Control.HasFocus(14)</visible>
+							<visible>Control.HasFocus(10) | Control.HasFocus(11) | Control.HasFocus(13) | Control.HasFocus(14)</visible>
 							<width>100%</width>
 							<bottom>0</bottom>
 							<height>1</height>
@@ -120,6 +128,7 @@
 						<control type="group">
 							<visible>!Control.HasFocus(12) + !Control.HasFocus(18) + !Control.HasFocus(19)</visible>
 							<animation effect="slide" end="90" time="0" condition="Integer.IsLessOrEqual(Container(10).NumItems,1)">Conditional</animation>
+							<animation effect="slide" end="90" time="0" condition="Integer.IsLessOrEqual(Container(10).NumItems,1) + String.Contains(Container(10).ListItem.Label,$LOCALIZE[231])">Conditional</animation>
 							<height>90</height>
 							<right>0</right>
 							<width>270</width>
