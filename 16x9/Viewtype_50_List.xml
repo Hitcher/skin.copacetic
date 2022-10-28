@@ -12,6 +12,7 @@
 				<control type="group">
 					<visible>$EXP[ListView_Display_IsThumbnails]</visible>
 					<include>Content_Fade_Animation</include>
+					<!-- Panel -->
 					<control type="group">
 						<visible>!Window.IsVisible(virtualkeyboard) + !Window.IsVisible(mediafilter)</visible>
 						<include>Content_Fade_Animation</include>
@@ -24,46 +25,42 @@
 					</control>
 					<control type="group">
 						<width>720</width>
-						<control type="group">
-							<height>100%</height>
-							<!-- Posters -->
-							<include content="Artwork_Transition_Fade">
-								<param name="visible" value="[!Window.Is(videoplaylist) + $EXP[Poster_Containers]] | [Window.Is(videoplaylist) + String.IsEqual(ListItem.DBType,movie)]"/>
-								<param name="target_id" value="$PARAM[id]"/>
-								<param name="art_icon" value="$PARAM[art_icon]"/>
-								<param name="fallback" value="fallback/fallback.png"/>
-								<param name="progress_overlay" value="true"/>
-							</include>
-						</control>
+						<height>1080</height>
+						<!-- Posters -->
+						<include condition="Window.Is(videos)" content="Artwork_Transition_Fade">
+							<param name="visible" value="[!Window.Is(videoplaylist) + $EXP[Poster_Containers]] | [Window.Is(videoplaylist) + String.IsEqual(ListItem.DBType,movie)]"/>
+							<param name="target_id" value="$PARAM[id]"/>
+							<param name="art_icon" value="$PARAM[art_icon]"/>
+							<param name="fallback" value="fallback/fallback.png"/>
+							<param name="progress_overlay" value="true"/>
+						</include>
+						<!-- Mixed / Other -->
+						<include content="SimpleListIcon">
+							<param name="visible" value="![Window.Is(videoplaylist) + String.IsEqual(ListItem.DBType,movie)] + ![!Window.Is(videoplaylist) + [$EXP[Poster_Containers] | $EXP[Square_Containers]]]"/>
+							<param name="texture" value="$VAR[Thumbnail(0)Content]"/>
+							<param name="align" value="right"/>
+							<param name="aspectratio" value="keep"/>
+							<param name="fallback" value="fallback_square.png"/>
+							<param name="fadetime" value="360"/>
+						</include>
 						<!-- Square/Other -->
 						<control type="group">
 							<height>720</height>
 							<centertop>50%</centertop>
-							<include content="Artwork_Transition_Fade">
+							<include condition="Window.Is(music) | Window.Is(addonbrowser)" content="Artwork_Transition_Fade">
 								<param name="visible" value="!Window.Is(videoplaylist) + $EXP[Square_Containers]"/>
 								<param name="target_id" value="$PARAM[id]"/>
 								<param name="art_icon" value="$PARAM[art_icon]"/>
 								<param name="fallback" value="fallback/fallback.png"/>
 							</include>
 						</control>
-						<!-- Mixed / Other -->
-						<include content="SimpleListIcon">
-							<param name="visible" value="![Window.Is(videoplaylist) + String.IsEqual(ListItem.DBType,movie)] + ![!Window.Is(videoplaylist) + [$EXP[Poster_Containers] | $EXP[Square_Containers]]]"/>
-							<param name="texture" value="$VAR[Thumbnail(0)Content]"/>
-							<param name="top" value="0"/>
-							<param name="width" value="720"/>
-							<param name="height" value="1080"/>
-							<param name="align" value="right"/>
-							<param name="aspectratio" value="keep"/>
-							<param name="fallback" value="fallback_square.png"/>
-						</include>
 					</control>
 				</control>
 				<!-- Background Artwork -->
 				<control type="group">
 					<visible>$EXP[ListView_Display_IsBackground]</visible>
 					<include>Content_Fade_Animation</include>
-					<include content="Artwork_Transition_Fade">
+					<include condition="Window.Is(videos) | Window.Is(music)" content="Artwork_Transition_Fade">
 						<param name="target_id" value="$PARAM[id]"/>
 						<param name="art_icon" value="$PARAM[art_icon]"/>
 						<param name="fallback" value="fallback/fallback.png"/>
@@ -73,7 +70,7 @@
 			<!-- Details -->
 			<control type="group">
 				<visible>$EXP[ListView_IsVisible]</visible>
-				<include content="Progress">
+				<include condition="Window.Is(videos)" content="Progress">
 					<param name="id" value="$PARAM[id]"/>
 					<animation effect="slide" end="-600,0" time="0" condition="$EXP[ListView_Display_IsThumbnails]">Conditional</animation>
 				</include>
