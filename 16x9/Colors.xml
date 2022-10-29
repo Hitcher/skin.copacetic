@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <includes>
 
-	<!-- HEXES -->
-	<!-- RGB -->
+	<!-- Hexes - RGB -->
 	<variable name="Dark_Hex">
 		<value>000000</value>
 	</variable>
@@ -29,7 +28,7 @@
 	</variable>
 
 
-	<!-- Alpha -->
+	<!-- Hexes - Alpha -->
 	<variable name="Alpha_100">
 		<value>ff</value>
 	</variable>
@@ -107,7 +106,6 @@
 	</variable>
 
 
-
 	<!-- Color palette -->
 	<variable name="Blank_Color">
 		<value>$VAR[Alpha_0]$VAR[Dark_Hex]</value>
@@ -158,32 +156,18 @@
 	</variable>
 
 
-
-	<!-- Scenarios  -->
+	<!-- Masks and Diffuses  -->
 	<variable name="Home_Artwork_Diffuse">
 		<value condition="Skin.HasSetting(Home_Screen_Opacity_50)">$VAR[Brightness_50]</value>
 		<value condition="Skin.HasSetting(Home_Screen_Opacity_25)">$VAR[Brightness_25]</value>
 		<value>$VAR[Brightness_33]</value>
 	</variable>
-
 	<variable name="Dialogs_Artwork_Diffuse">
 		<value>$VAR[Brightness_50]</value>
 	</variable>
-
-	<variable name="GridView_Focused_Diffuse">
-		<value condition="!$EXP[GridView_Details_Off] + !$EXP[GridView_Details_Breadcrumb]">$VAR[Brightness_33]</value>
-		<value>$VAR[Brightness_100]</value>
-	</variable>
-
 	<variable name="Dropshadow_Diffuse">
 		<value>$VAR[Alpha_100]$VAR[Dark_Hex]</value>
 	</variable>
-
-	<variable name="Watched_Dropshadow_Diffuse">
-		<value condition="Skin.String(Theme,Light)">$VAR[Alpha_40]$VAR[Dark_Hex]</value>
-		<value>$VAR[Alpha_100]$VAR[Dark_Hex]</value>
-	</variable>
-
 	<variable name="Panel_Diffuse">
 		<value condition="Window.IsVisible(loginscreen)">$VAR[Dark_Grey_Color]</value>
 		<value condition="Window.Is(addonsettings)">$VAR[Alpha_75]$VAR[Dark_Grey_Hex]</value>
@@ -194,13 +178,6 @@
 		<value condition="Window.IsVisible(movieinformation) | Window.IsVisible(songinformation) | Window.IsVisible(musicinformation) | Window.IsVisible(addoninformation)">$VAR[Dark_Grey_Color]</value>
 		<value>$VAR[Alpha_75]$VAR[Dark_Grey_Hex]</value>
 	</variable>
-
-	<variable name="Artwork_Mask">
-		<value condition="Window.IsVisible(visualisation)">$VAR[Alpha_75]$VAR[Dark_Hex]</value>
-		<value condition="$EXP[GridView_IsVisible]">$VAR[Alpha_66]$VAR[Dark_Hex]</value>
-		<value>$VAR[Alpha_50]$VAR[Dark_Hex]</value>
-	</variable>
-
 	<variable name="Transparent_Dialog_Mask">
 		<value condition="VideoPlayer.IsFullscreen">$VAR[Alpha_50]$VAR[Dark_Hex]</value>
 		<value condition="Window.IsActive(home) + Skin.HasSetting(Widget1_View_Billboard) + String.IsEqual(window(home).property(HomeWidget),9010)">$VAR[Alpha_32]$VAR[Dark_Hex]</value>
@@ -216,24 +193,52 @@
 		<value>$VAR[Alpha_66]$VAR[Dark_Hex]</value>
 	</variable>
 
-	<variable name="List_Text_Color">
-		<value condition="[Window.IsActive(home) + String.IsEmpty(window(home).property(HomeWidget))] | $EXP[Background_IsFanart] | $EXP[ListView_Display_IsThumbnails]">$VAR[Light_Color]</value>
+
+	<!-- Labels -->
+	<variable name="Breadcrumb_Label_Color">
+		<!-- Movie information visible / main menu focused -->
+		<value condition="Window.IsVisible(movieinformation) + !String.IsEqual(Window(movieinformation).Property(Focused_Button),False)">$VAR[Light_Color]</value>
+		<!-- Artist information visible / Light theme / Choose Art focused -->
+		<value condition="Skin.String(Theme,Light) + Window.IsVisible(musicinformation) + String.IsEqual(Window(musicinformation).Property(Info_Type),artist) + String.IsEqual(Window(musicinformation).Property(Focused_Button),$LOCALIZE[13511]) + !$EXP[PanelDialog_IsVisible]">$VAR[Dark_Color]</value>
+		<!-- Artist information visible / main menu focused -->
+		<value condition="Window.IsVisible(musicinformation) + String.IsEqual(Window(musicinformation).Property(Info_Type),artist) + !String.IsEqual(Window(musicinformation).Property(Focused_Button),False)">$VAR[Light_Color]</value>
+		<!-- Album information visible / Artist information focused -->
+		<value condition="Window.IsVisible(musicinformation) + String.IsEqual(Window(musicinformation).Property(Info_Type),album) + String.IsEqual(Window(musicinformation).Property(Focused_Button),$LOCALIZE[21891])">$VAR[Light_Color]</value>
+		<!-- Artist information visible / Light theme / main menu focused -->
+		<value condition="Skin.String(Theme,Light) + Window.IsVisible(musicinformation) + String.IsEqual(Window(musicinformation).Property(Info_Type),album) + !String.IsEqual(Window(musicinformation).Property(Focused_Button),False)">$VAR[Dark_Color]</value>
+		<!-- Artist information visible / main menu focused -->
+		<value condition="Window.IsVisible(musicinformation) + String.IsEqual(Window(musicinformation).Property(Info_Type),album) + !String.IsEqual(Window(musicinformation).Property(Focused_Button),False)">$VAR[Light_Color]</value>
+		<value condition="$EXP[InfoWidget_Display_IsBillboardView] | $EXP[InfoWidget_Display_IsShowcaseView]">$VAR[Light_Color]</value>
+		<!-- Info Dialog visible, Light Theme -->
+		<value condition="$EXP[InfoDialog_IsVisible] + Skin.String(Theme,Light)">$VAR[Dark_Color]</value>
+		<!-- Info visible -->
+		<value condition="$EXP[InfoDialog_IsVisible]">$VAR[Light_Color]</value>
+		<!-- Home widgets -->
+		<value condition="Window.IsVisible(home) + [Skin.HasSetting(Widget1_View_Billboard) | Skin.HasSetting(Widget1_View_Showcase)] + String.IsEqual(window(home).property(HomeWidget),9010)">$VAR[Light_Color]</value>
+		<value condition="Window.IsVisible(home) + [Skin.HasSetting(Widget2_View_Billboard) | Skin.HasSetting(Widget2_View_Showcase)] + String.IsEqual(window(home).property(HomeWidget),9020)">$VAR[Light_Color]</value>
+		<value condition="Window.IsVisible(home) + [Skin.HasSetting(Widget3_View_Billboard) | Skin.HasSetting(Widget3_View_Showcase)] + String.IsEqual(window(home).property(HomeWidget),9030)">$VAR[Light_Color]</value>
+		<value condition="Window.IsVisible(home) + [Skin.HasSetting(Widget4_View_Billboard) | Skin.HasSetting(Widget4_View_Showcase)] + String.IsEqual(window(home).property(HomeWidget),9040)">$VAR[Light_Color]</value>
+		<value condition="Window.IsVisible(home) + [Skin.HasSetting(Widget5_View_Billboard) | Skin.HasSetting(Widget5_View_Showcase)] + String.IsEqual(window(home).property(HomeWidget),9050)">$VAR[Light_Color]</value>
+		<value condition="Window.IsVisible(home) + [Skin.HasSetting(Widget6_View_Billboard) | Skin.HasSetting(Widget6_View_Showcase)] + String.IsEqual(window(home).property(HomeWidget),9060)">$VAR[Light_Color]</value>
+		<value condition="Window.IsVisible(home) + [Skin.HasSetting(Widget7_View_Billboard) | Skin.HasSetting(Widget7_View_Showcase)] + String.IsEqual(window(home).property(HomeWidget),9070)">$VAR[Light_Color]</value>
+		<value condition="Window.IsVisible(home) + [Skin.HasSetting(Widget8_View_Billboard) | Skin.HasSetting(Widget8_View_Showcase)] + String.IsEqual(window(home).property(HomeWidget),9080)">$VAR[Light_Color]</value>
+		<value condition="Window.IsVisible(home) + [Skin.HasSetting(Widget9_View_Billboard) | Skin.HasSetting(Widget9_View_Showcase)] + String.IsEqual(window(home).property(HomeWidget),9090)">$VAR[Light_Color]</value>
 		<value condition="Window.IsVisible(addonbrowser) + !Container.Content(addons)">$VAR[Light_Color]</value>
 		<value>$VAR[Primary_Color]</value>
 	</variable>
-
+	<variable name="Common_List_Label_Color">
+		<value condition="VideoPlayer.IsFullscreen">$VAR[Light_Color]</value>
+		<value condition="$EXP[Global_Fanart_Slideshow_Windows] + Skin.String(Theme,Light) + Skin.HasSetting(Global_Fanart_Slideshow_Disabled)">$VAR[Dark_Color]</value>
+		<value condition="[Window.Is(home) + String.IsEmpty(window(home).property(HomeWidget))] | $EXP[Background_IsFanart] | $EXP[ListView_Display_IsThumbnails]">$VAR[Light_Color]</value>
+		<value condition="Window.IsVisible(addonbrowser) + !Container.Content(addons)">$VAR[Light_Color]</value>
+		<value>$VAR[Primary_Color]</value>
+	</variable>
 	<variable name="Common_List_Info_Label_Color">
 		<value condition="Control.HasFocus(4501)">$VAR[Light_Color]</value>
 		<value>$VAR[Blank_Color]</value>
 	</variable>
-
-
-	<variable name="View_Furniture_Color">
-		<value condition="[Window.IsActive(home) + String.IsEmpty(window(home).property(HomeWidget))] | $EXP[Background_IsFanart] | VideoPlayer.IsFullscreen">$VAR[Light_Color]</value>
-		<value>$VAR[Primary_Color]</value>
-	</variable>
-
-	<variable name="Overlay_Text_Color">
+	<variable name="Common_Overlay_Label_Color">
+		<value condition="Skin.String(Theme,Light) + Skin.HasSetting(Global_Fanart_Slideshow_Disabled) + $EXP[Global_Fanart_Slideshow_Windows]">$VAR[Dark_Color]</value>
 		<value condition="Window.Is(pictureinfo)">$VAR[Primary_Color]</value>
 		<value condition="Window.IsVisible(addonsettings)">$VAR[Light_Color]</value>
 		<value condition="Window.IsVisible(addonbrowser) + !Container.Content(addons)">$VAR[Light_Color]</value>
@@ -245,147 +250,104 @@
 		<value condition="$EXP[PanelDialog_IsVisible] + $EXP[Background_IsFanart]">$VAR[Light_Color]</value>
 		<value>$VAR[Light_Color]</value>
 	</variable>
-
+	<variable name="DialogPictureInfo_Focused_Label_Color">
+		<value condition="Control.HasFocus(5)">$VAR[Light_Color]</value>
+		<value>$VAR[Unfocused_Color]</value>
+	</variable>
+	<variable name="DialogSubtitles_Left_Label_Focused_Color">
+		<value condition="Control.HasFocus(150)">$VAR[Light_Color]</value>
+		<value>$VAR[Unfocused_Color]</value>
+	</variable>
+	<variable name="DialogSubtitles_Right_Label_Focused_Color">
+		<value condition="Control.HasFocus(120)">$VAR[Light_Color]</value>
+		<value>$VAR[Unfocused_Color]</value>
+	</variable>
 	<variable name="Plot_Color">
 		<value condition="$EXP[Background_IsFanart]">$VAR[Light_Color]</value>
 		<value condition="Skin.String(Theme,Light)">$VAR[Dark_Grey_Color]</value>
 		<value>$VAR[Light_Grey_Color]</value>
 	</variable>
-
-	<variable name="Shift_Key_Color">
+	<variable name="Privacy_Policy_Color">
+		<value condition="Control.HasFocus(61)">$VAR[Light_Color]</value>
+		<value>$VAR[Unfocused_Color]</value>
+	</variable>
+	<variable name="Settings_Label_Color">
+		<value condition="Skin.String(Theme,Light) + Skin.HasSetting(Global_Fanart_Slideshow_Disabled)">$VAR[Dark_Color]</value>
+		<value>$VAR[Light_Color]</value>
+	</variable>
+	<variable name="Settings_Grouplist_Label_Color">
+		<value condition="Window.Is(smartplaylisteditor) + String.IsEqual(Container(100).CurrentItem,-1) + !ControlGroup(9000).HasFocus">$VAR[Light_Color]</value>
+		<value condition="Window.Is(addonsettings) + String.IsEqual(Container(5).CurrentItem,-1) + !ControlGroup(9000).HasFocus">$VAR[Light_Color]</value>
+		<value condition="Window.Is(pictureinfo) + Control.HasFocus(5)">$VAR[Light_Color]</value>
+		<value condition="Window.Is(profiles) + Control.HasFocus(2)">$VAR[Light_Color]</value>
+		<value condition="Window.Is(systeminfo) + ControlGroup(50).HasFocus">$VAR[Light_Color]</value>
+		<value condition="!Window.Is(addonsettings) + String.IsEqual(Container(5).CurrentItem,-1) + !ControlGroup(30000).HasFocus + !Control.HasFocus(20) + !Control.HasFocus(9001)">$VAR[Light_Color]</value>
+		<value condition="Control.HasFocus(211) | Control.HasFocus(301) | Control.HasFocus(303) | Control.HasFocus(304) | Control.HasFocus(302)">$VAR[Light_Color]</value>
+		<value>$VAR[Unfocused_Color]</value>
+	</variable>
+	<variable name="Settings_Main_Focus_Color">
+		<value condition="Window.Is(filemanager) + Control.HasFocus(20)">$VAR[Light_Color]</value>
+		<value condition="Window.Is(musicplaylisteditor) + Control.HasFocus(50)">$VAR[Light_Color]</value>
+		<value>$VAR[Unfocused_Color]</value>
+	</variable>
+	<variable name="Settings_Sub_Focus_Color">
+		<value condition="Window.Is(filemanager) + Control.HasFocus(21)">$VAR[Light_Color]</value>
+		<value condition="Window.Is(musicplaylisteditor) + Control.HasFocus(100)">$VAR[Light_Color]</value>
+		<value>$VAR[Unfocused_Color]</value>
+	</variable>
+	<variable name="Skinsettings_Widget_SortOrder_Label">
+		<value condition="Control.HasFocus(12014)">$VAR[Light_Color]</value>
+		<value condition="Control.HasFocus(12114)">$VAR[Light_Color]</value>
+		<value condition="Control.HasFocus(12214)">$VAR[Light_Color]</value>
+		<value condition="Control.HasFocus(12314)">$VAR[Light_Color]</value>
+		<value condition="Control.HasFocus(12414)">$VAR[Light_Color]</value>
+		<value condition="Control.HasFocus(12514)">$VAR[Light_Color]</value>
+		<value condition="Control.HasFocus(12614)">$VAR[Light_Color]</value>
+		<value condition="Control.HasFocus(12714)">$VAR[Light_Color]</value>
+		<value condition="Control.HasFocus(12814)">$VAR[Light_Color]</value>
+		<value condition="Control.HasFocus(12914)">$VAR[Light_Color]</value>
+		<value>$VAR[Unfocused_Color]</value>
+	</variable>
+	<variable name="SortLetter_Background_Color">
+		<value condition="Control.HasFocus(63) + $EXP[Background_IsFanart]">$VAR[Light_Color]</value>
+		<value condition="Control.HasFocus(63) + Skin.String(Theme,Light)">$VAR[Dark_Color]</value>
+		<value condition="Control.HasFocus(63)">$VAR[Light_Color]</value>
+		<value condition="Skin.String(Theme,Light)">$VAR[Accent_Color]</value>
+		<value>$VAR[Dark_Grey_Color]</value>
+	</variable>
+	<variable name="SortLetter_Label_Color">
+		<value condition="Control.HasFocus(63) + $EXP[Background_IsFanart]">$VAR[Dark_Color]</value>
+		<value condition="Control.HasFocus(63) + Skin.String(Theme,Light)">$VAR[Light_Color]</value>
+		<value condition="Control.HasFocus(63)">$VAR[Dark_Color]</value>
+		<value>$VAR[Light_Color]</value>
+	</variable>
+	<variable name="Shutdownmenu_Label_Color">
+		<value condition="Skin.String(Theme,Light) + Skin.HasSetting(Global_Fanart_Slideshow_Disabled) + $EXP[Global_Fanart_Slideshow_Windows]">$VAR[Dark_Color]</value>
+		<value>$VAR[Light_Color]</value>
+	</variable>
+	<variable name="VirtualKeyboard_Shift_Key_Color">
 		<value condition="!Control.HasFocus(302) + String.Contains(Control.GetLabel(302),*)">$VAR[Accent_Color]</value>
-		<value>$VAR[Light_Color]</value>
+		<value>$VAR[Common_Overlay_Label_Color]</value>
 	</variable>
-	<variable name="Caps_Key_Color">
+	<variable name="VirtualKeyboard_Caps_Key_Color">
 		<value condition="!Control.HasFocus(303) + String.Contains(Control.GetLabel(303),*)">$VAR[Accent_Color]</value>
-		<value>$VAR[Light_Color]</value>
+		<value>$VAR[Common_Overlay_Label_Color]</value>
 	</variable>
-	<variable name="Symbols_Key_Color">
+	<variable name="VirtualKeyboard_Symbols_Key_Color">
 		<value condition="!Control.HasFocus(304) + String.Contains(Control.GetLabel(304),*)">$VAR[Accent_Color]</value>
-		<value>$VAR[Light_Color]</value>
-	</variable>``
+		<value>$VAR[Common_Overlay_Label_Color]</value>
+	</variable>
 
-	<variable name="Light_Progress_Background_Color">
+
+	<!-- Other Controls -->
+	<variable name="DialogSlider_Bar_Color">
 		<value>$VAR[Alpha_15]$VAR[Light_Hex]</value>
 	</variable>
-
-	<variable name="Light_Progress_Focused_Color">
-		<value>$VAR[Light_Color]</value>
-	</variable>
-
-	<variable name="Progress_Background_Color">
-		<value condition="Skin.String(Theme,Light) + [$EXP[StripView_IsVisible] | [$EXP[ListView_Display_IsThumbnails] + !$EXP[Poster_Containers]] | Window.IsVisible(progressdialog) | Window.IsVisible(visualisation) | Window.Is(busydialog)]">$VAR[Alpha_15]$VAR[Dark_Hex]</value>
-		<value>$VAR[Light_Progress_Background_Color]</value>
-	</variable>
-
-	<variable name="Progress_Focused_Color">
-		<value condition="Skin.String(Theme,Light) + [$EXP[StripView_IsVisible] | [$EXP[ListView_Display_IsThumbnails] + !$EXP[Poster_Containers]] | Window.IsVisible(progressdialog) | Window.IsVisible(visualisation) | Window.Is(busydialog)]">$VAR[Dark_Color]</value>
-		<value>$VAR[Light_Progress_Focused_Color]</value>
-	</variable>
-
-	<variable name="Star_Color">
-		<value condition="!String.IsEmpty(ListItem.UserRating)">$VAR[User_Rating_Color]</value>
-		<value>$VAR[Accent_Color]</value>
-	</variable>
-
-	<variable name="Unwatched_Indicator_Background_Color">
-		<value condition="[$EXP[StripView_IsVisible] | [$EXP[ListView_IsVisible] + !$EXP[Poster_Containers]]] + Skin.String(Theme,Light)">$VAR[Dark_Color]</value>
-		<value>$VAR[Light_Color]</value>
-	</variable>
-
-	<variable name="Unwatched_Indicator_Label_Color">
-		<value condition="$EXP[GridView_IsVisible]">$VAR[Light_Color]</value>
-		<value condition="[$EXP[StripView_IsVisible] | [$EXP[ListView_IsVisible] + !$EXP[Poster_Containers]]] + Skin.String(Theme,Light)">$VAR[Light_Color]</value>
-		<value>$VAR[Dark_Color]</value>
-	</variable>
-
 	<variable name="Notification_Widget_Background_Color">
 		<value condition="Player.HasAudio">$VAR[Dark_Color]</value>
 		<value>$VAR[Dark_Grey_Color]</value>
 	</variable>
-
-	<variable name="DialogPictureInfo_Focused_Label_Color">
-		<value condition="Control.HasFocus(5)">$VAR[Light_Color]</value>
-		<value>$VAR[Unfocused_Color]</value>
-	</variable>
-
-	<variable name="Volume_Focus_Color">
-		<!-- Movie information visible / Light theme / Choose Art focused -->
-		<value condition="Skin.String(Theme,Light) + Window.IsVisible(movieinformation) + String.IsEqual(Window(movieinformation).Property(Focused_Button),$LOCALIZE[13511])">$VAR[Dark_Grey_Color]</value>
-		<!-- Movie information visible / main menu focused -->
-		<value condition="Window.IsVisible(movieinformation) + !String.IsEqual(Window(movieinformation).Property(Focused_Button),False)">$VAR[Light_Color]</value>
-		<!-- Artist information visible / Light theme / Choose Art focused -->
-		<value condition="Skin.String(Theme,Light) + Window.IsVisible(musicinformation) + String.IsEqual(Window(musicinformation).Property(Info_Type),artist) + String.IsEqual(Window(musicinformation).Property(Focused_Button),$LOCALIZE[13511])">$VAR[Dark_Grey_Color]</value>
-		<!-- Artist information visible / main menu focused -->
-		<value condition="Window.IsVisible(musicinformation) + String.IsEqual(Window(musicinformation).Property(Info_Type),artist) + !String.IsEqual(Window(musicinformation).Property(Focused_Button),False)">$VAR[Light_Color]</value>
-		<!-- Album information visible / Artist information focused -->
-		<value condition="Window.IsVisible(musicinformation) + String.IsEqual(Window(musicinformation).Property(Info_Type),album) + String.IsEqual(Window(musicinformation).Property(Focused_Button),$LOCALIZE[21891])">$VAR[Light_Color]</value>
-		<!-- Artist information visible / Light theme / main menu focused -->
-		<value condition="Skin.String(Theme,Light) + Window.IsVisible(musicinformation) + String.IsEqual(Window(musicinformation).Property(Info_Type),album) + !String.IsEqual(Window(musicinformation).Property(Focused_Button),False)">$VAR[Dark_Grey_Color]</value>
-		<!-- Artist information visible / main menu focused -->
-		<value condition="Window.IsVisible(musicinformation) + String.IsEqual(Window(musicinformation).Property(Info_Type),album) + !String.IsEqual(Window(musicinformation).Property(Focused_Button),False)">$VAR[Light_Color]</value>
-		<!-- Info Dialog visible, Billboard view visible -->
-		<value condition="$EXP[InfoDialog_IsVisible] + String.IsEqual(Window(home).Property(HomeWidget),8050)">$VAR[Light_Color]</value>
-		<!-- Info Dialog visible, Light Theme -->
-		<value condition="$EXP[InfoDialog_IsVisible] + Skin.String(Theme,Light)">$VAR[Dark_Grey_Color]</value>
-		<!-- Info visible -->
-		<value condition="$EXP[InfoDialog_IsVisible]">$VAR[Light_Color]</value>
-		<!-- Home widgets -->
-		<value condition="Skin.String(Theme,Light) + Window.IsVisible(home) + !Skin.HasSetting(Widget1_View_Billboard) + String.IsEqual(window(home).property(HomeWidget),9010)">$VAR[Dark_Grey_Color]</value>
-		<value condition="Skin.String(Theme,Light) + Window.IsVisible(home) + !Skin.HasSetting(Widget2_View_Billboard) + String.IsEqual(window(home).property(HomeWidget),9020)">$VAR[Dark_Grey_Color]</value>
-		<value condition="Skin.String(Theme,Light) + Window.IsVisible(home) + !Skin.HasSetting(Widget3_View_Billboard) + String.IsEqual(window(home).property(HomeWidget),9030)">$VAR[Dark_Grey_Color]</value>
-		<value condition="Skin.String(Theme,Light) + Window.IsVisible(home) + !Skin.HasSetting(Widget4_View_Billboard) + String.IsEqual(window(home).property(HomeWidget),9040)">$VAR[Dark_Grey_Color]</value>
-		<value condition="Skin.String(Theme,Light) + Window.IsVisible(home) + !Skin.HasSetting(Widget5_View_Billboard) + String.IsEqual(window(home).property(HomeWidget),9050)">$VAR[Dark_Grey_Color]</value>
-		<value condition="Skin.String(Theme,Light) + Window.IsVisible(home) + !Skin.HasSetting(Widget6_View_Billboard) + String.IsEqual(window(home).property(HomeWidget),9060)">$VAR[Dark_Grey_Color]</value>
-		<value condition="Skin.String(Theme,Light) + Window.IsVisible(home) + !Skin.HasSetting(Widget7_View_Billboard) + String.IsEqual(window(home).property(HomeWidget),9070)">$VAR[Dark_Grey_Color]</value>
-		<value condition="Skin.String(Theme,Light) + Window.IsVisible(home) + !Skin.HasSetting(Widget8_View_Billboard) + String.IsEqual(window(home).property(HomeWidget),9080)">$VAR[Dark_Grey_Color]</value>
-		<value condition="Skin.String(Theme,Light) + Window.IsVisible(home) + !Skin.HasSetting(Widget9_View_Billboard) + String.IsEqual(window(home).property(HomeWidget),9090)">$VAR[Dark_Grey_Color]</value>
-		<!-- Views -->
-		<value condition="Skin.String(Theme,Light) + $EXP[ShowcaseView_IsVisible] + $EXP[ShowcaseView_Details_Off] + String.IsEmpty(Window(home).Property(Next_Art))">$VAR[Dark_Grey_Color]</value>
-		<value condition="Skin.String(Theme,Light) + $EXP[ShowcaseView_Display_IsPosters] + !$EXP[ShowcaseView_Details_Off] + $EXP[Music_Player_IsVisible]">$VAR[Light_Color]</value>
-		<value condition="Skin.String(Theme,Light) + $EXP[ShowcaseView_IsVisible] + !$EXP[ShowcaseView_Details_Off]">$VAR[Dark_Grey_Color]</value>
-		<value>$VAR[Light_Color]</value>
-	</variable>
-
-	<variable name="Volume_Background_Color">
-		<!-- Movie information visible / Light theme / Choose Art focused -->
-		<value condition="Skin.String(Theme,Light) + Window.IsVisible(movieinformation) + String.IsEqual(Window(movieinformation).Property(Focused_Button),$LOCALIZE[13511])">$VAR[Alpha_15]$VAR[Dark_Grey_Hex]</value>
-		<!-- Movie information visible / main menu focused -->
-		<value condition="Window.IsVisible(movieinformation) + !String.IsEqual(Window(movieinformation).Property(Focused_Button),False)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
-		<!-- Artist information visible / Light theme / Choose Art focused -->
-		<value condition="Skin.String(Theme,Light) + Window.IsVisible(musicinformation) + String.IsEqual(Window(musicinformation).Property(Info_Type),artist) + String.IsEqual(Window(musicinformation).Property(Focused_Button),$LOCALIZE[13511])">$VAR[Alpha_15]$VAR[Dark_Grey_Hex]</value>
-		<!-- Artist information visible / main menu focused -->
-		<value condition="Window.IsVisible(musicinformation) + String.IsEqual(Window(musicinformation).Property(Info_Type),artist) + !String.IsEqual(Window(musicinformation).Property(Focused_Button),False)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
-		<!-- Album information visible / Artist information focused -->
-		<value condition="Window.IsVisible(musicinformation) + String.IsEqual(Window(musicinformation).Property(Info_Type),album) + String.IsEqual(Window(musicinformation).Property(Focused_Button),$LOCALIZE[21891])">$VAR[Alpha_15]$VAR[Light_Hex]</value>
-		<!-- Artist information visible / Light theme / main menu focused -->
-		<value condition="Skin.String(Theme,Light) + Window.IsVisible(musicinformation) + String.IsEqual(Window(musicinformation).Property(Info_Type),album) + !String.IsEqual(Window(musicinformation).Property(Focused_Button),False)">$VAR[Alpha_15]$VAR[Dark_Grey_Hex]</value>
-		<!-- Artist information visible / main menu focused -->
-		<value condition="Window.IsVisible(musicinformation) + String.IsEqual(Window(musicinformation).Property(Info_Type),album) + !String.IsEqual(Window(musicinformation).Property(Focused_Button),False)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
-		<!-- Info Dialog visible, Billboard view visible -->
-		<value condition="$EXP[InfoDialog_IsVisible] + String.IsEqual(Window(home).Property(HomeWidget),8050)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
-		<!-- Info Dialog visible, Light Theme -->
-		<value condition="$EXP[InfoDialog_IsVisible] + Skin.String(Theme,Light)">$VAR[Alpha_15]$VAR[Dark_Grey_Hex]</value>
-		<!-- Info visible -->
-		<value condition="$EXP[InfoDialog_IsVisible]">$VAR[Alpha_15]$VAR[Light_Hex]</value>
-		<!-- Home widgets -->
-		<value condition="Skin.String(Theme,Light) + Window.IsVisible(home) + !Skin.HasSetting(Widget1_View_Billboard) + String.IsEqual(window(home).property(HomeWidget),9010)">$VAR[Alpha_15]$VAR[Dark_Grey_Hex]</value>
-		<value condition="Skin.String(Theme,Light) + Window.IsVisible(home) + !Skin.HasSetting(Widget2_View_Billboard) + String.IsEqual(window(home).property(HomeWidget),9020)">$VAR[Alpha_15]$VAR[Dark_Grey_Hex]</value>
-		<value condition="Skin.String(Theme,Light) + Window.IsVisible(home) + !Skin.HasSetting(Widget3_View_Billboard) + String.IsEqual(window(home).property(HomeWidget),9030)">$VAR[Alpha_15]$VAR[Dark_Grey_Hex]</value>
-		<value condition="Skin.String(Theme,Light) + Window.IsVisible(home) + !Skin.HasSetting(Widget4_View_Billboard) + String.IsEqual(window(home).property(HomeWidget),9040)">$VAR[Alpha_15]$VAR[Dark_Grey_Hex]</value>
-		<value condition="Skin.String(Theme,Light) + Window.IsVisible(home) + !Skin.HasSetting(Widget5_View_Billboard) + String.IsEqual(window(home).property(HomeWidget),9050)">$VAR[Alpha_15]$VAR[Dark_Grey_Hex]</value>
-		<value condition="Skin.String(Theme,Light) + Window.IsVisible(home) + !Skin.HasSetting(Widget6_View_Billboard) + String.IsEqual(window(home).property(HomeWidget),9060)">$VAR[Alpha_15]$VAR[Dark_Grey_Hex]</value>
-		<value condition="Skin.String(Theme,Light) + Window.IsVisible(home) + !Skin.HasSetting(Widget7_View_Billboard) + String.IsEqual(window(home).property(HomeWidget),9070)">$VAR[Alpha_15]$VAR[Dark_Grey_Hex]</value>
-		<value condition="Skin.String(Theme,Light) + Window.IsVisible(home) + !Skin.HasSetting(Widget8_View_Billboard) + String.IsEqual(window(home).property(HomeWidget),9080)">$VAR[Alpha_15]$VAR[Dark_Grey_Hex]</value>
-		<value condition="Skin.String(Theme,Light) + Window.IsVisible(home) + !Skin.HasSetting(Widget9_View_Billboard) + String.IsEqual(window(home).property(HomeWidget),9090)">$VAR[Alpha_15]$VAR[Dark_Grey_Hex]</value>
-		<!-- Views -->
-		<value condition="Skin.String(Theme,Light) + $EXP[ShowcaseView_IsVisible] + $EXP[ShowcaseView_Details_Off] + String.IsEmpty(Window(home).Property(Next_Art))">$VAR[Alpha_15]$VAR[Dark_Grey_Hex]</value>
-		<value condition="Skin.String(Theme,Light) + $EXP[ShowcaseView_Display_IsPosters] + !$EXP[ShowcaseView_Details_Off] + $EXP[Music_Player_IsVisible]">$VAR[Alpha_15]$VAR[Light_Hex]</value>
-		<value condition="Skin.String(Theme,Light) + $EXP[ShowcaseView_IsVisible] + !$EXP[ShowcaseView_Details_Off]">$VAR[Alpha_15]$VAR[Dark_Grey_Hex]</value>
-		<value>$VAR[Alpha_15]$VAR[Light_Hex]</value>
-	</variable>
-
-	<variable name="Notification_Icon_Color">
+	<variable name="Notification_Widget_Icon_Color">
 		<value condition="Window.IsActive(addonbrowser) + !Container.Content(addons)">$VAR[Light_Color]</value>
 		<!-- Movie information visible / Light theme / Choose Art focused -->
 		<value condition="Skin.String(Theme,Light) + Window.IsVisible(movieinformation) + String.IsEqual(Window(movieinformation).Property(Focused_Button),$LOCALIZE[13511])">$VAR[Dark_Grey_Color]</value>
@@ -427,7 +389,6 @@
 		<value condition="Skin.String(Theme,Light)">$VAR[Dark_Grey_Color]</value>
 		<value>$VAR[Light_Color]</value>
 	</variable>
-
 	<variable name="Notification_Widget_Label_Color">
 		<value condition="Window.IsActive(addonbrowser) + !Container.Content(addons)">$VAR[Light_Color]</value>
 		<!-- Movie information visible / Light theme / Choose Art focused -->
@@ -470,135 +431,31 @@
 		<value condition="Skin.String(Theme,Light)">$VAR[Dark_Grey_Color]</value>
 		<value>$VAR[Light_Color]</value>
 	</variable>
-
-	<variable name="Breadcrumb_Label_Color">
-		<!-- Movie information visible / main menu focused -->
-		<value condition="Window.IsVisible(movieinformation) + !String.IsEqual(Window(movieinformation).Property(Focused_Button),False)">$VAR[Light_Color]</value>
-		<!-- Artist information visible / Light theme / Choose Art focused -->
-		<value condition="Skin.String(Theme,Light) + Window.IsVisible(musicinformation) + String.IsEqual(Window(musicinformation).Property(Info_Type),artist) + String.IsEqual(Window(musicinformation).Property(Focused_Button),$LOCALIZE[13511]) + !$EXP[PanelDialog_IsVisible]">$VAR[Dark_Color]</value>
-		<!-- Artist information visible / main menu focused -->
-		<value condition="Window.IsVisible(musicinformation) + String.IsEqual(Window(musicinformation).Property(Info_Type),artist) + !String.IsEqual(Window(musicinformation).Property(Focused_Button),False)">$VAR[Light_Color]</value>
-		<!-- Album information visible / Artist information focused -->
-		<value condition="Window.IsVisible(musicinformation) + String.IsEqual(Window(musicinformation).Property(Info_Type),album) + String.IsEqual(Window(musicinformation).Property(Focused_Button),$LOCALIZE[21891])">$VAR[Light_Color]</value>
-		<!-- Artist information visible / Light theme / main menu focused -->
-		<value condition="Skin.String(Theme,Light) + Window.IsVisible(musicinformation) + String.IsEqual(Window(musicinformation).Property(Info_Type),album) + !String.IsEqual(Window(musicinformation).Property(Focused_Button),False)">$VAR[Dark_Color]</value>
-		<!-- Artist information visible / main menu focused -->
-		<value condition="Window.IsVisible(musicinformation) + String.IsEqual(Window(musicinformation).Property(Info_Type),album) + !String.IsEqual(Window(musicinformation).Property(Focused_Button),False)">$VAR[Light_Color]</value>
-		<value condition="$EXP[InfoWidget_Display_IsBillboardView] | $EXP[InfoWidget_Display_IsShowcaseView]">$VAR[Light_Color]</value>
-		<!-- Info Dialog visible, Light Theme -->
-		<value condition="$EXP[InfoDialog_IsVisible] + Skin.String(Theme,Light)">$VAR[Dark_Color]</value>
-		<!-- Info visible -->
-		<value condition="$EXP[InfoDialog_IsVisible]">$VAR[Light_Color]</value>
-		<!-- Home widgets -->
-		<value condition="Window.IsVisible(home) + [Skin.HasSetting(Widget1_View_Billboard) | Skin.HasSetting(Widget1_View_Showcase)] + String.IsEqual(window(home).property(HomeWidget),9010)">$VAR[Light_Color]</value>
-		<value condition="Window.IsVisible(home) + [Skin.HasSetting(Widget2_View_Billboard) | Skin.HasSetting(Widget2_View_Showcase)] + String.IsEqual(window(home).property(HomeWidget),9020)">$VAR[Light_Color]</value>
-		<value condition="Window.IsVisible(home) + [Skin.HasSetting(Widget3_View_Billboard) | Skin.HasSetting(Widget3_View_Showcase)] + String.IsEqual(window(home).property(HomeWidget),9030)">$VAR[Light_Color]</value>
-		<value condition="Window.IsVisible(home) + [Skin.HasSetting(Widget4_View_Billboard) | Skin.HasSetting(Widget4_View_Showcase)] + String.IsEqual(window(home).property(HomeWidget),9040)">$VAR[Light_Color]</value>
-		<value condition="Window.IsVisible(home) + [Skin.HasSetting(Widget5_View_Billboard) | Skin.HasSetting(Widget5_View_Showcase)] + String.IsEqual(window(home).property(HomeWidget),9050)">$VAR[Light_Color]</value>
-		<value condition="Window.IsVisible(home) + [Skin.HasSetting(Widget6_View_Billboard) | Skin.HasSetting(Widget6_View_Showcase)] + String.IsEqual(window(home).property(HomeWidget),9060)">$VAR[Light_Color]</value>
-		<value condition="Window.IsVisible(home) + [Skin.HasSetting(Widget7_View_Billboard) | Skin.HasSetting(Widget7_View_Showcase)] + String.IsEqual(window(home).property(HomeWidget),9070)">$VAR[Light_Color]</value>
-		<value condition="Window.IsVisible(home) + [Skin.HasSetting(Widget8_View_Billboard) | Skin.HasSetting(Widget8_View_Showcase)] + String.IsEqual(window(home).property(HomeWidget),9080)">$VAR[Light_Color]</value>
-		<value condition="Window.IsVisible(home) + [Skin.HasSetting(Widget9_View_Billboard) | Skin.HasSetting(Widget9_View_Showcase)] + String.IsEqual(window(home).property(HomeWidget),9090)">$VAR[Light_Color]</value>
-		<value condition="Window.IsVisible(addonbrowser) + !Container.Content(addons)">$VAR[Light_Color]</value>
-		<value>$VAR[Primary_Color]</value>
+	<variable name="Progress_Background_Color">
+		<value condition="Skin.String(Theme,Light) + [$EXP[StripView_IsVisible] | [$EXP[ListView_Display_IsThumbnails] + !$EXP[Poster_Containers]] | Window.IsVisible(progressdialog) | Window.IsVisible(visualisation) | Window.Is(busydialog)]">$VAR[Alpha_15]$VAR[Dark_Hex]</value>
+		<value>$VAR[Progress_Light_Background_Color]</value>
 	</variable>
-
-	<variable name="Settings_Grouplist_Label_Color">
-		<!-- smartplaylisteditor -->
-		<value condition="Window.Is(smartplaylisteditor) + String.IsEqual(Container(100).CurrentItem,-1) + !ControlGroup(9000).HasFocus">$VAR[Light_Color]</value>
-		<!-- addonsettings -->
-		<value condition="Window.Is(addonsettings) + String.IsEqual(Container(5).CurrentItem,-1) + !ControlGroup(9000).HasFocus">$VAR[Light_Color]</value>
-		<!-- pictureinfo -->
-		<value condition="Window.Is(pictureinfo) + Control.HasFocus(5)">$VAR[Light_Color]</value>
-		<!-- profiles -->
-		<value condition="Window.Is(profiles) + Control.HasFocus(2)">$VAR[Light_Color]</value>
-		<!-- systeminfo -->
-		<value condition="Window.Is(systeminfo) + ControlGroup(50).HasFocus">$VAR[Light_Color]</value>
-		<!-- SettingsCategory.xml -->
-		<value condition="!Window.Is(addonsettings) + String.IsEqual(Container(5).CurrentItem,-1) + !ControlGroup(30000).HasFocus + !Control.HasFocus(20) + !Control.HasFocus(9001)">$VAR[Light_Color]</value>
-		<!-- script-skinshortcuts.xml -->
-		<value condition="Control.HasFocus(211) | Control.HasFocus(301) | Control.HasFocus(303) | Control.HasFocus(304) | Control.HasFocus(302)">$VAR[Light_Color]</value>
-		<value>$VAR[Unfocused_Color]</value>
+	<variable name="Progress_Focused_Color">
+		<value condition="Control.HasFocus(87)">$VAR[Accent_Color]</value>
+		<value condition="Skin.String(Theme,Light) + [$EXP[StripView_IsVisible] | [$EXP[ListView_Display_IsThumbnails] + !$EXP[Poster_Containers]] | Window.IsVisible(progressdialog) | Window.IsVisible(visualisation) | Window.Is(busydialog)]">$VAR[Dark_Color]</value>
+		<value>$VAR[Progress_Light_Focused_Color]</value>
 	</variable>
-
-	<variable name="Skinsettings_Widget_SortOrder_Label">
-		<value condition="Control.HasFocus(12014)">$VAR[Light_Color]</value>
-		<value condition="Control.HasFocus(12114)">$VAR[Light_Color]</value>
-		<value condition="Control.HasFocus(12214)">$VAR[Light_Color]</value>
-		<value condition="Control.HasFocus(12314)">$VAR[Light_Color]</value>
-		<value condition="Control.HasFocus(12414)">$VAR[Light_Color]</value>
-		<value condition="Control.HasFocus(12514)">$VAR[Light_Color]</value>
-		<value condition="Control.HasFocus(12614)">$VAR[Light_Color]</value>
-		<value condition="Control.HasFocus(12714)">$VAR[Light_Color]</value>
-		<value condition="Control.HasFocus(12814)">$VAR[Light_Color]</value>
-		<value condition="Control.HasFocus(12914)">$VAR[Light_Color]</value>
-		<value>$VAR[Unfocused_Color]</value>
+	<variable name="Progress_Light_Background_Color">
+		<value>$VAR[Alpha_15]$VAR[Light_Hex]</value>
 	</variable>
-
-	<variable name="Left_Grouplist_Focus_Color">
-		<value condition="Window.Is(filemanager) + Control.HasFocus(20)">$VAR[Light_Color]</value>
-		<value condition="Window.Is(musicplaylisteditor) + Control.HasFocus(50)">$VAR[Light_Color]</value>
-		<value>$VAR[Unfocused_Color]</value>
+	<variable name="Progress_Light_Focused_Color">
+		<value>$VAR[Light_Color]</value>
 	</variable>
-
-	<variable name="Right_Grouplist_Focus_Color">
-		<value condition="Window.Is(filemanager) + Control.HasFocus(21)">$VAR[Light_Color]</value>
-		<value condition="Window.Is(musicplaylisteditor) + Control.HasFocus(100)">$VAR[Light_Color]</value>
-		<value>$VAR[Unfocused_Color]</value>
-	</variable>
-
-	<variable name="Privacy_Policy_Color">
-		<value condition="Control.HasFocus(61)">$VAR[Light_Color]</value>
-		<value>$VAR[Unfocused_Color]</value>
-	</variable>
-
-
-
-	<variable name="Settings_Disabled_Unfocused_Color">
-		<value>$VAR[Dark_Color]</value>
-	</variable>
-	<variable name="Settings_Disabled_Focused_Color">
-		<value>$VAR[Unfocused_Color]</value>
-	</variable>
-
-	<variable name="DialogSubtitles_Left_Label_Focused_Color">
-		<value condition="Control.HasFocus(150)">$VAR[Light_Color]</value>
-		<value>$VAR[Unfocused_Color]</value>
-	</variable>
-
-	<variable name="DialogSubtitles_Right_Label_Focused_Color">
-		<value condition="Control.HasFocus(120)">$VAR[Light_Color]</value>
-		<value>$VAR[Unfocused_Color]</value>
-	</variable>
-
-	<variable name="List_Scroll_Background_Color">
+	<variable name="Scroll_Background_Color">
 		<value condition="$EXP[Background_IsFanart]">$VAR[Alpha_15]$VAR[Light_Hex]</value>
 		<value condition="Skin.String(Theme,Light)">$VAR[Alpha_15]$VAR[Dark_Hex]</value>
 		<value>$VAR[Alpha_15]$VAR[Light_Hex]</value>
 	</variable>
-
-	<variable name="List_Scroll_Focused_Color">
+	<variable name="Scroll_Focused_Color">
 			<value condition="Control.HasFocus(9000) | $EXP[Music_Player_HasFocus] | $EXP[Background_IsFanart]">$VAR[Light_Color]</value>
 		<value>$VAR[Primary_Color]</value>
 	</variable>
-
-	<variable name="SortLetter_Background_Color">
-		<value condition="Control.HasFocus(63) + $EXP[Background_IsFanart]">$VAR[Light_Color]</value>
-		<value condition="Control.HasFocus(63) + Skin.String(Theme,Light)">$VAR[Dark_Color]</value>
-		<value condition="Control.HasFocus(63)">$VAR[Light_Color]</value>
-		<value condition="Skin.String(Theme,Light)">$VAR[Accent_Color]</value>
-		<value>$VAR[Dark_Grey_Color]</value>
-	</variable>
-
-	<variable name="SortLetter_Label_Color">
-		<value condition="Control.HasFocus(63) + $EXP[Background_IsFanart]">$VAR[Dark_Color]</value>
-		<value condition="Control.HasFocus(63) + Skin.String(Theme,Light)">$VAR[Light_Color]</value>
-		<value condition="Control.HasFocus(63)">$VAR[Dark_Color]</value>
-		<value>$VAR[Light_Color]</value>
-	</variable>
-
-
-	<variable name="Scroll_Background_Color">
+	<variable name="Scroll_Widget_Background_Color">
 		<value condition="ControlGroup(65000).HasFocus + [Window.Is(movieinformation) | String.IsEqual(ListItem.DBType,artist)] + !Control.HasFocus(10)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
 		<value condition="ControlGroup(65000).HasFocus + String.IsEqual(ListItem.DBType,album) + Control.HasFocus(12)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
 		<value condition="$EXP[InfoDialog_IsVisible] + Control.HasFocus(60) + !String.IsEqual(ListItem.DBType,album) + !String.IsEqual(ListItem.DBType,song)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
@@ -730,8 +587,7 @@
 		<value condition="Skin.String(Theme,Light)">$VAR[Alpha_15]$VAR[Dark_Hex]</value>
 		<value>$VAR[Alpha_15]$VAR[Light_Hex]</value>
 	</variable>
-
-	<variable name="Scroll_Focused_Color">
+	<variable name="Scroll_Widget_Focused_Color">
 		<value condition="Window.Is(addonsettings)">$VAR[Unfocused_Color]</value>
 		<value condition="ControlGroup(65000).HasFocus + [Window.Is(movieinformation) | String.IsEqual(ListItem.DBType,artist)] + !Control.HasFocus(10)">$VAR[Light_Color]</value>
 		<value condition="ControlGroup(65000).HasFocus + String.IsEqual(ListItem.DBType,album) + Control.HasFocus(12)">$VAR[Light_Color]</value>
@@ -863,37 +719,92 @@
 		<value condition="Control.HasFocus(9090) + Skin.HasSetting(Widget9_View_Grid) + Skin.HasSetting(Widget9_Display_Fanart) + !String.IsEmpty(Container(9090).ListItemNoWrap(3).Label)">$VAR[Light_Color]</value>
 		<value>$VAR[Primary_Color]</value>
 	</variable>
-
-
-
-	<variable name="DialogSlider_Bar_Color">
-		<value>$VAR[Alpha_15]$VAR[Light_Hex]</value>
-	</variable>
-
-
-
-
-
-	<!-- OLD -->
-	<variable name="BackgroundColor">
+	<variable name="Star_Color">
+		<value condition="!String.IsEmpty(ListItem.UserRating)">$VAR[User_Rating_Color]</value>
 		<value>$VAR[Accent_Color]</value>
 	</variable>
-	<variable name="DiffuseColor">
-		<value>$VAR[Primary_Color]</value>
+	<variable name="Unwatched_Indicator_Background_Color">
+		<value condition="[$EXP[StripView_IsVisible] | [$EXP[ListView_IsVisible] + !$EXP[Poster_Containers]]] + Skin.String(Theme,Light)">$VAR[Dark_Color]</value>
+		<value>$VAR[Light_Color]</value>
 	</variable>
-	<variable name="TextColor">
-		<value>$VAR[Primary_Color]</value>
+	<variable name="Unwatched_Indicator_Label_Color">
+		<value condition="$EXP[GridView_IsVisible]">$VAR[Light_Color]</value>
+		<value condition="[$EXP[StripView_IsVisible] | [$EXP[ListView_IsVisible] + !$EXP[Poster_Containers]]] + Skin.String(Theme,Light)">$VAR[Light_Color]</value>
+		<value>$VAR[Dark_Color]</value>
 	</variable>
-	<variable name="FocusedColor">
-		<value>ff46ef75</value>
+	<variable name="Volume_Background_Color">
+		<!-- Movie information visible / Light theme / Choose Art focused -->
+		<value condition="Skin.String(Theme,Light) + Window.IsVisible(movieinformation) + String.IsEqual(Window(movieinformation).Property(Focused_Button),$LOCALIZE[13511])">$VAR[Alpha_15]$VAR[Dark_Grey_Hex]</value>
+		<!-- Movie information visible / main menu focused -->
+		<value condition="Window.IsVisible(movieinformation) + !String.IsEqual(Window(movieinformation).Property(Focused_Button),False)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
+		<!-- Artist information visible / Light theme / Choose Art focused -->
+		<value condition="Skin.String(Theme,Light) + Window.IsVisible(musicinformation) + String.IsEqual(Window(musicinformation).Property(Info_Type),artist) + String.IsEqual(Window(musicinformation).Property(Focused_Button),$LOCALIZE[13511])">$VAR[Alpha_15]$VAR[Dark_Grey_Hex]</value>
+		<!-- Artist information visible / main menu focused -->
+		<value condition="Window.IsVisible(musicinformation) + String.IsEqual(Window(musicinformation).Property(Info_Type),artist) + !String.IsEqual(Window(musicinformation).Property(Focused_Button),False)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
+		<!-- Album information visible / Artist information focused -->
+		<value condition="Window.IsVisible(musicinformation) + String.IsEqual(Window(musicinformation).Property(Info_Type),album) + String.IsEqual(Window(musicinformation).Property(Focused_Button),$LOCALIZE[21891])">$VAR[Alpha_15]$VAR[Light_Hex]</value>
+		<!-- Artist information visible / Light theme / main menu focused -->
+		<value condition="Skin.String(Theme,Light) + Window.IsVisible(musicinformation) + String.IsEqual(Window(musicinformation).Property(Info_Type),album) + !String.IsEqual(Window(musicinformation).Property(Focused_Button),False)">$VAR[Alpha_15]$VAR[Dark_Grey_Hex]</value>
+		<!-- Artist information visible / main menu focused -->
+		<value condition="Window.IsVisible(musicinformation) + String.IsEqual(Window(musicinformation).Property(Info_Type),album) + !String.IsEqual(Window(musicinformation).Property(Focused_Button),False)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
+		<!-- Info Dialog visible, Billboard view visible -->
+		<value condition="$EXP[InfoDialog_IsVisible] + String.IsEqual(Window(home).Property(HomeWidget),8050)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
+		<!-- Info Dialog visible, Light Theme -->
+		<value condition="$EXP[InfoDialog_IsVisible] + Skin.String(Theme,Light)">$VAR[Alpha_15]$VAR[Dark_Grey_Hex]</value>
+		<!-- Info visible -->
+		<value condition="$EXP[InfoDialog_IsVisible]">$VAR[Alpha_15]$VAR[Light_Hex]</value>
+		<!-- Home widgets -->
+		<value condition="Skin.String(Theme,Light) + Window.IsVisible(home) + !Skin.HasSetting(Widget1_View_Billboard) + String.IsEqual(window(home).property(HomeWidget),9010)">$VAR[Alpha_15]$VAR[Dark_Grey_Hex]</value>
+		<value condition="Skin.String(Theme,Light) + Window.IsVisible(home) + !Skin.HasSetting(Widget2_View_Billboard) + String.IsEqual(window(home).property(HomeWidget),9020)">$VAR[Alpha_15]$VAR[Dark_Grey_Hex]</value>
+		<value condition="Skin.String(Theme,Light) + Window.IsVisible(home) + !Skin.HasSetting(Widget3_View_Billboard) + String.IsEqual(window(home).property(HomeWidget),9030)">$VAR[Alpha_15]$VAR[Dark_Grey_Hex]</value>
+		<value condition="Skin.String(Theme,Light) + Window.IsVisible(home) + !Skin.HasSetting(Widget4_View_Billboard) + String.IsEqual(window(home).property(HomeWidget),9040)">$VAR[Alpha_15]$VAR[Dark_Grey_Hex]</value>
+		<value condition="Skin.String(Theme,Light) + Window.IsVisible(home) + !Skin.HasSetting(Widget5_View_Billboard) + String.IsEqual(window(home).property(HomeWidget),9050)">$VAR[Alpha_15]$VAR[Dark_Grey_Hex]</value>
+		<value condition="Skin.String(Theme,Light) + Window.IsVisible(home) + !Skin.HasSetting(Widget6_View_Billboard) + String.IsEqual(window(home).property(HomeWidget),9060)">$VAR[Alpha_15]$VAR[Dark_Grey_Hex]</value>
+		<value condition="Skin.String(Theme,Light) + Window.IsVisible(home) + !Skin.HasSetting(Widget7_View_Billboard) + String.IsEqual(window(home).property(HomeWidget),9070)">$VAR[Alpha_15]$VAR[Dark_Grey_Hex]</value>
+		<value condition="Skin.String(Theme,Light) + Window.IsVisible(home) + !Skin.HasSetting(Widget8_View_Billboard) + String.IsEqual(window(home).property(HomeWidget),9080)">$VAR[Alpha_15]$VAR[Dark_Grey_Hex]</value>
+		<value condition="Skin.String(Theme,Light) + Window.IsVisible(home) + !Skin.HasSetting(Widget9_View_Billboard) + String.IsEqual(window(home).property(HomeWidget),9090)">$VAR[Alpha_15]$VAR[Dark_Grey_Hex]</value>
+		<!-- Views -->
+		<value condition="Skin.String(Theme,Light) + $EXP[ShowcaseView_IsVisible] + $EXP[ShowcaseView_Details_Off] + String.IsEmpty(Window(home).Property(Next_Art))">$VAR[Alpha_15]$VAR[Dark_Grey_Hex]</value>
+		<value condition="Skin.String(Theme,Light) + $EXP[ShowcaseView_Display_IsPosters] + !$EXP[ShowcaseView_Details_Off] + $EXP[Music_Player_IsVisible]">$VAR[Alpha_15]$VAR[Light_Hex]</value>
+		<value condition="Skin.String(Theme,Light) + $EXP[ShowcaseView_IsVisible] + !$EXP[ShowcaseView_Details_Off]">$VAR[Alpha_15]$VAR[Dark_Grey_Hex]</value>
+		<value>$VAR[Alpha_15]$VAR[Light_Hex]</value>
 	</variable>
-	<variable name="UnFocusedColor">
-		<value>$VAR[Primary_Color]</value>
+	<variable name="Volume_Focused_Color">
+		<!-- Movie information visible / Light theme / Choose Art focused -->
+		<value condition="Skin.String(Theme,Light) + Window.IsVisible(movieinformation) + String.IsEqual(Window(movieinformation).Property(Focused_Button),$LOCALIZE[13511])">$VAR[Dark_Grey_Color]</value>
+		<!-- Movie information visible / main menu focused -->
+		<value condition="Window.IsVisible(movieinformation) + !String.IsEqual(Window(movieinformation).Property(Focused_Button),False)">$VAR[Light_Color]</value>
+		<!-- Artist information visible / Light theme / Choose Art focused -->
+		<value condition="Skin.String(Theme,Light) + Window.IsVisible(musicinformation) + String.IsEqual(Window(musicinformation).Property(Info_Type),artist) + String.IsEqual(Window(musicinformation).Property(Focused_Button),$LOCALIZE[13511])">$VAR[Dark_Grey_Color]</value>
+		<!-- Artist information visible / main menu focused -->
+		<value condition="Window.IsVisible(musicinformation) + String.IsEqual(Window(musicinformation).Property(Info_Type),artist) + !String.IsEqual(Window(musicinformation).Property(Focused_Button),False)">$VAR[Light_Color]</value>
+		<!-- Album information visible / Artist information focused -->
+		<value condition="Window.IsVisible(musicinformation) + String.IsEqual(Window(musicinformation).Property(Info_Type),album) + String.IsEqual(Window(musicinformation).Property(Focused_Button),$LOCALIZE[21891])">$VAR[Light_Color]</value>
+		<!-- Artist information visible / Light theme / main menu focused -->
+		<value condition="Skin.String(Theme,Light) + Window.IsVisible(musicinformation) + String.IsEqual(Window(musicinformation).Property(Info_Type),album) + !String.IsEqual(Window(musicinformation).Property(Focused_Button),False)">$VAR[Dark_Grey_Color]</value>
+		<!-- Artist information visible / main menu focused -->
+		<value condition="Window.IsVisible(musicinformation) + String.IsEqual(Window(musicinformation).Property(Info_Type),album) + !String.IsEqual(Window(musicinformation).Property(Focused_Button),False)">$VAR[Light_Color]</value>
+		<!-- Info Dialog visible, Billboard view visible -->
+		<value condition="$EXP[InfoDialog_IsVisible] + String.IsEqual(Window(home).Property(HomeWidget),8050)">$VAR[Light_Color]</value>
+		<!-- Info Dialog visible, Light Theme -->
+		<value condition="$EXP[InfoDialog_IsVisible] + Skin.String(Theme,Light)">$VAR[Dark_Grey_Color]</value>
+		<!-- Info visible -->
+		<value condition="$EXP[InfoDialog_IsVisible]">$VAR[Light_Color]</value>
+		<!-- Home widgets -->
+		<value condition="Skin.String(Theme,Light) + Window.IsVisible(home) + !Skin.HasSetting(Widget1_View_Billboard) + String.IsEqual(window(home).property(HomeWidget),9010)">$VAR[Dark_Grey_Color]</value>
+		<value condition="Skin.String(Theme,Light) + Window.IsVisible(home) + !Skin.HasSetting(Widget2_View_Billboard) + String.IsEqual(window(home).property(HomeWidget),9020)">$VAR[Dark_Grey_Color]</value>
+		<value condition="Skin.String(Theme,Light) + Window.IsVisible(home) + !Skin.HasSetting(Widget3_View_Billboard) + String.IsEqual(window(home).property(HomeWidget),9030)">$VAR[Dark_Grey_Color]</value>
+		<value condition="Skin.String(Theme,Light) + Window.IsVisible(home) + !Skin.HasSetting(Widget4_View_Billboard) + String.IsEqual(window(home).property(HomeWidget),9040)">$VAR[Dark_Grey_Color]</value>
+		<value condition="Skin.String(Theme,Light) + Window.IsVisible(home) + !Skin.HasSetting(Widget5_View_Billboard) + String.IsEqual(window(home).property(HomeWidget),9050)">$VAR[Dark_Grey_Color]</value>
+		<value condition="Skin.String(Theme,Light) + Window.IsVisible(home) + !Skin.HasSetting(Widget6_View_Billboard) + String.IsEqual(window(home).property(HomeWidget),9060)">$VAR[Dark_Grey_Color]</value>
+		<value condition="Skin.String(Theme,Light) + Window.IsVisible(home) + !Skin.HasSetting(Widget7_View_Billboard) + String.IsEqual(window(home).property(HomeWidget),9070)">$VAR[Dark_Grey_Color]</value>
+		<value condition="Skin.String(Theme,Light) + Window.IsVisible(home) + !Skin.HasSetting(Widget8_View_Billboard) + String.IsEqual(window(home).property(HomeWidget),9080)">$VAR[Dark_Grey_Color]</value>
+		<value condition="Skin.String(Theme,Light) + Window.IsVisible(home) + !Skin.HasSetting(Widget9_View_Billboard) + String.IsEqual(window(home).property(HomeWidget),9090)">$VAR[Dark_Grey_Color]</value>
+		<!-- Views -->
+		<value condition="Skin.String(Theme,Light) + $EXP[ShowcaseView_IsVisible] + $EXP[ShowcaseView_Details_Off] + String.IsEmpty(Window(home).Property(Next_Art))">$VAR[Dark_Grey_Color]</value>
+		<value condition="Skin.String(Theme,Light) + $EXP[ShowcaseView_Display_IsPosters] + !$EXP[ShowcaseView_Details_Off] + $EXP[Music_Player_IsVisible]">$VAR[Light_Color]</value>
+		<value condition="Skin.String(Theme,Light) + $EXP[ShowcaseView_IsVisible] + !$EXP[ShowcaseView_Details_Off]">$VAR[Dark_Grey_Color]</value>
+		<value>$VAR[Light_Color]</value>
 	</variable>
-	<variable name="SelectedColor">
-		<value>ff46ef75</value>
-	</variable>
-	<variable name="DisabledColor">
-		<value>$VAR[Primary_Color]</value>
-	</variable>
+
 </includes>

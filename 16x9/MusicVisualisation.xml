@@ -15,6 +15,7 @@
 				<height>1080</height>
 			</control>
 			<control type="image">
+				<visible>!Skin.String(Theme,Light)</visible>
 				<animation effect="fadediffuse" end="80000000" time="2160" condition="Skin.TimerIsRunning(music_visualisation) + Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(music_visualisation),1)" reversible="true">Conditional</animation>
 				<texture colordiffuse="$VAR[Secondary_Color]">views/white_100.png</texture>
 				<width>1920</width>
@@ -22,7 +23,14 @@
 			</control>
 		</control>
 
-
+		<!-- Light view gradient -->
+		<control type="image">
+			<visible>Skin.String(Theme,Light)</visible>
+			<width>100%</width>
+			<bottom>0</bottom>
+			<height>50%</height>
+			<texture colordiffuse="$VAR[Light_Grey_Color]">views/gradient_light-background.png</texture>
+		</control>
 
 		<!-- Main artwork -->
 		<include content="SimpleListIcon">
@@ -31,31 +39,13 @@
 			<param name="width" value="720"/>
 			<param name="height" value="720"/>
 			<param name="texture" value="$INFO[Player.Art(album.thumb)]"/>
+			<animation effect="fadediffuse" end="ff3f3f3f" time="360" condition="Window.IsVisible(musicosd) | Player.Paused | Player.Rewinding | Player.Forwarding" reversible="true">Conditional</animation>
 		</include>
-		<!-- Artwork Mask -->
-		<control type="image">
-			<visible>Window.IsVisible(musicosd) | Player.Paused | Player.Rewinding | Player.Forwarding</visible>
-			<include>Dialog_Fade_Animation</include>
-			<left>600</left>
-			<top>180</top>
-			<width>720</width>
-			<height>720</height>
-			<texture colordiffuse="$VAR[Artwork_Mask]">views/white_100.png</texture>
-		</control>
 
 		<!-- Details -->
 		<control type="group">
 			<visible>!Window.IsVisible(1123) + !$EXP[TransparentDialog_IsVisible]</visible>
 			<include>Delayed_Content_Fade_Animation</include>
- <!--<control type="group">
-				<visible>!Window.IsVisible(musicosd)</visible>
-				<include>Delayed_Content_Fade_Animation</include>
-				<include content="Breadcrumb_Label">
-					<param name="label_color" value="$VAR[Primary_Color]"/>
-					<param name="title_label" value="$INFO[MusicPlayer.Artist]"/>
-					<param name="info_label" value="$INFO[MusicPlayer.Year,$LOCALIZE[31116] ]$INFO[MusicPlayer.Album, $LOCALIZE[31116] ]"/>
-				</include>
-			</control>-->
 			<control type="grouplist">
 				<visible>!Window.IsVisible(musicosd)</visible>
 				<include>Delayed_Content_Fade_Animation</include>
