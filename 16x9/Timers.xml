@@ -19,7 +19,7 @@
     <name>global_fanart_slideshow</name>
     <start reset="true">true</start>
     <stop>Integer.IsGreater(Skin.TimerElapsedSecs(global_fanart_slideshow),6)</stop>
-    <onstart condition="!String.IsEmpty(Container(12342).ListItem.Art(fanart))">SetProperty(Global_Fanart_Slideshow,$INFO[Container(12342).ListItem.Art(fanart)],home)</onstart>
+    <onstart>SetProperty(Global_Fanart_Slideshow,$INFO[Container(12342).ListItem.Art(fanart)],home)</onstart>
   </timer>
   <timer>
     <name>season_info_monitor</name>
@@ -32,7 +32,7 @@
   </timer>
   <timer>
     <name>trailer_autoplay</name>
-    <start reset="true">Skin.HasSetting(Trailer_Autoplay) + Skin.String(Trailer_Autoplay_Enabled,true) + Window.Is(videos) + !Window.IsVisible(1120) + String.IsEmpty(Window(home).Property(Trailer_Autoplay)) + !Player.HasMedia + System.IdleTime(2)</start>
+    <start reset="true">Skin.HasSetting(Trailer_Autoplay) + Window.Is(videos) + [[Skin.String(Trailer_Autoplay_Movies_Enabled,true) + Container.Content(movies)] | [Skin.String(Trailer_Autoplay_TVShows_Enabled,true) + !Container.Content(movies)]]  + !Window.IsVisible(1120) + String.IsEmpty(Window(home).Property(Trailer_Autoplay)) + !Player.HasMedia + System.IdleTime(2)</start>
     <stop>String.IsEmpty(Window(home).Property(Trailer_Autoplay)) + !Player.HasVideo</stop>
     <onstart condition="[Control.HasFocus(50) | Control.HasFocus(501) | Control.HasFocus(502) | Control.HasFocus(504)] + !String.IsEmpty(ListItem.Trailer)">SetProperty(Trailer_Autoplay,true,home)</onstart>
     <onstart condition="[Control.HasFocus(50) | Control.HasFocus(501) | Control.HasFocus(502) | Control.HasFocus(504)] + !String.IsEmpty(ListItem.Trailer)">PlayMedia($ESCINFO[ListItem.Trailer],1,noresume)</onstart>
