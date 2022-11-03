@@ -2,11 +2,9 @@
 <includes>
 
 	<!-- DEFAULT GRID -->
-
 	<include name="GridView_Icon_Unfocused">
 		<param name="displaytype_label"/>
 		<param name="art_icon"/>
-		<param name="fallback" default="fallback/fallback.png"/>
 		<definition>
 			<control type="group">
 				<visible>$EXP[GridView_Display_Is$PARAM[displaytype_label]] + !$EXP[ContainerSwitching] + !$EXP[OptionsSwitching]</visible>
@@ -16,7 +14,8 @@
 					<include content="ListIcon_Static_Unfocused">
 						<param name="visible" value="$EXP[GridView_Display_Is$PARAM[displaytype_label]]"/>
 						<param name="left" value="10"/>
-						<param name="fallback" value="$PARAM[fallback]"/>
+						<param name="fallback" value="fallback/fallback-$PARAM[displaytype_label].png"/>
+						<param name="watched_diffuse" value="Skin.HasSetting(GridView_WatchedStatus_Enabled) + String.IsEqual(ListItem.Overlay,OverlayWatched.png)"/>
 						<param name="now_playing" value="$EXP[ListItem(0)_NowPlaying]"/>
 					</include>
 				</control>
@@ -27,7 +26,6 @@
 	<include name="GridView_Icon_Focused">
 		<param name="displaytype_label"/>
 		<param name="art_icon"/>
-		<param name="fallback" default="fallback/fallback.png"/>
 		<param name="progress_left"/>
 		<param name="progress_bottom"/>
 		<param name="progress_width" default="360"/>
@@ -128,23 +126,21 @@
 						<include content="ListIcon_Static_Focused">
 							<param name="visible" value="$EXP[GridView_Display_Is$PARAM[displaytype_label]]"/>
 							<param name="now_playing" value="$EXP[ListItem(0)_NowPlaying]"/>
-							<param name="fallback" value="$PARAM[fallback]"/>
+							<param name="fallback" value="fallback/fallback-$PARAM[displaytype_label].png"/>
 							<!-- Multiart -->
-							<control type="group">
-								<visible>System.IdleTime(1)</visible>
-								<include condition="Skin.HasSetting(Multiart_Slideshow) + !Window.Is(movieinformation) + !Window.Is(musicinformation) + !Window.Is(songinformation)" content="Icon_Component_Multiart_Static">
-									<param name="texture" value="$VAR[Multiart(0)Content]"/>
-									<param name="fadetime" value="360"/>
-									<param name="now_playing" value="$EXP[ListItem(0)_NowPlaying]"/>
-								</include>
-							</control>
+							<include condition="Skin.HasSetting(Multiart_Slideshow) + [Window.Is(videos) | Window.Is(music)]" content="Icon_Component_Multiart_Static">
+								<param name="texture" value="$VAR[Multiart(0)Content]"/>
+								<param name="fadetime" value="360"/>
+								<param name="now_playing" value="$EXP[ListItem(0)_NowPlaying]"/>
+							</include>
 							<!-- Progress overlay -->
 							<include condition="Window.Is(home) | Window.Is(videos) | Window.Is(movieinformation)" content="Icon_Component_Progress_Overlay">
 								<param name="visible" value="$EXP[GridView_Details_Off] | $EXP[GridView_Details_Breadcrumb] + $EXP[Progress_IsVisible]"/>
 							</include>
 							<!-- Artwork Mask -->
 							<control type="image">
-								<visible>![$EXP[GridView_Details_Off] | $EXP[GridView_Details_Breadcrumb] | $EXP[ListItem(0)_NowPlaying]]</visible>
+								<visible>![$EXP[GridView_Details_Off] | $EXP[GridView_Details_Breadcrumb] | $EXP[ListItem(0)_NowPlaying]] + !$EXP[TransparentDialog_IsVisible]</visible>
+								<include>Content_Fade_Animation</include>
 								<animation effect="fade" start="0" end="66" delay="720" time="360" tween="sine" easing="inout" reversible="true">Focus</animation>
 								<texture colordiffuse="$VAR[Dark_Color]">views/white_100.png</texture>
 							</control>
@@ -197,7 +193,7 @@
 	</include>
 
 	<include name="GridView_Layout_Fanart">
-		<param name="art_icon"/>
+		<param name="art_icon" default="Thumbnail"/>
 		<definition>
 			<itemlayout width="592" height="333" condition="$EXP[GridView_Display_IsFanart]">
 				<include content="GridView_Icon_Unfocused">
@@ -219,7 +215,7 @@
 	</include>
 
 	<include name="GridView_Layout_Posters">
-		<param name="art_icon"/>
+		<param name="art_icon" default="Thumbnail"/>
 		<definition>
 			<itemlayout width="360" height="540" condition="$EXP[GridView_Display_IsPosters]">
 				<include content="GridView_Icon_Unfocused">
@@ -242,7 +238,7 @@
 	</include>
 
 	<include name="GridView_Layout_Square">
-		<param name="art_icon"/>
+		<param name="art_icon" default="Thumbnail"/>
 		<definition>
 			<itemlayout width="360" height="360" condition="$EXP[GridView_Display_IsSquare]">
 				<include content="GridView_Icon_Unfocused">

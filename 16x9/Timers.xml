@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <timers>
   <timer>
+    <name>home_screensaver</name>
+    <start reset="true">Skin.HasSetting(Home_Screensaver_Enabled) + Window.Is(home) + Control.HasFocus(9000) + System.IdleTime(10)</start>
+    <onstart>SetFocus(9500)</onstart>
+    <stop>!Control.HasFocus(9500)</stop>
+  </timer>
+  <timer>
     <name>video_playback</name>
     <description>timer that starts whenever video has fullscreen playback</description>
-    <start reset="true">Player.HasVideo</start>
-    <stop>!Player.HasVideo</stop>
+    <start reset="true">VideoPlayer.IsFullscreen</start>
+    <stop>!VideoPlayer.IsFullscreen</stop>
   </timer>
   <timer>
     <name>video_playback_label_interruptor</name>
@@ -41,10 +47,10 @@
   </timer>
   <timer>
     <name>trailer_autoplay_home</name>
-    <start reset="true">Window.Is(home) + !Window.IsVisible(1122) + Skin.HasSetting(Trailer_Autoplay) + Skin.String(Trailer_Autoplay_Home_Enabled,true) + String.IsEmpty(Window(home).Property(Trailer_Autoplay)) + !Player.HasMedia + System.IdleTime(2)</start>
+    <start reset="true">Window.Is(home) + !Control.HasFocus(9000) + !Window.IsVisible(1122) + Skin.HasSetting(Trailer_Autoplay) + Skin.String(Trailer_Autoplay_Home_Enabled,true) + String.IsEmpty(Window(home).Property(Trailer_Autoplay)) + !Player.HasMedia + System.IdleTime(2)</start>
     <stop>String.IsEmpty(Window(home).Property(Trailer_Autoplay)) + !Player.HasVideo</stop>
-    <onstart condition="[Control.HasFocus(9010) | Control.HasFocus(9020) | Control.HasFocus(9030) | Control.HasFocus(9040) | Control.HasFocus(9050) | Control.HasFocus(9060) | Control.HasFocus(9070) | Control.HasFocus(9080) | Control.HasFocus(9090)] + !String.IsEmpty(ListItem.Trailer)">SetProperty(Trailer_Autoplay,true,home)</onstart>
-    <onstart condition="[Control.HasFocus(9010) | Control.HasFocus(9020) | Control.HasFocus(9030) | Control.HasFocus(9040) | Control.HasFocus(9050) | Control.HasFocus(9060) | Control.HasFocus(9070) | Control.HasFocus(9080) | Control.HasFocus(9090)] + !String.IsEmpty(ListItem.Trailer)">PlayMedia($ESCINFO[ListItem.Trailer],1,noresume)</onstart>
+    <onstart condition="![[Control.HasFocus(9010) + Window.IsVisible(1131)] | [Control.HasFocus(9020) + Window.IsVisible(1132)] | [Control.HasFocus(9030) + Window.IsVisible(1133)] | [Control.HasFocus(9040) + Window.IsVisible(1134)] | [Control.HasFocus(9050) + Window.IsVisible(1135)] | [Control.HasFocus(9060) + Window.IsVisible(1136)] | [Control.HasFocus(9070) + Window.IsVisible(1137)] | [Control.HasFocus(9080) + Window.IsVisible(1138)] | [Control.HasFocus(9090) + Window.IsVisible(1139)]] + !String.IsEmpty(ListItem.Trailer)">SetProperty(Trailer_Autoplay,true,home)</onstart>
+    <onstart condition="![[Control.HasFocus(9010) + Window.IsVisible(1131)] | [Control.HasFocus(9020) + Window.IsVisible(1132)] | [Control.HasFocus(9030) + Window.IsVisible(1133)] | [Control.HasFocus(9040) + Window.IsVisible(1134)] | [Control.HasFocus(9050) + Window.IsVisible(1135)] | [Control.HasFocus(9060) + Window.IsVisible(1136)] | [Control.HasFocus(9070) + Window.IsVisible(1137)] | [Control.HasFocus(9080) + Window.IsVisible(1138)] | [Control.HasFocus(9090) + Window.IsVisible(1139)]] + !String.IsEmpty(ListItem.Trailer)">PlayMedia($ESCINFO[ListItem.Trailer],1,noresume)</onstart>
   </timer>
   <timer>
     <name>multiart_setter</name>

@@ -81,6 +81,7 @@
 				<onleft>$PARAM[target_id]</onleft>
 				<ontop>$PARAM[target_id]</ontop>
 				<onbottom>$PARAM[target_id]</onbottom>
+				<nested/>
 			</control>
 		</definition>
 	</include>
@@ -98,6 +99,7 @@
       <texture colordiffuse="$VAR[Dark_Color]">views/white_100.png</texture>
     </control>
     <control type="multiimage">
+			<include content="Ken_Burns_Effect_Animation"/>
       <imagepath colordiffuse="$VAR[Home_Artwork_Diffuse]" background="true">$VAR[Home_Slideshow_Source]</imagepath>
       <aspectratio>scale</aspectratio>
       <timeperimage>7000</timeperimage>
@@ -107,13 +109,24 @@
 	</include>
 
 	<include name="Home_Clearlogo">
+		<control type="button" id="9500">
+			<visible allowhiddenfocus="true">false</visible>
+			<onclick>SetFocus(9000)</onclick>
+			<onup>SetFocus(9000)</onup>
+			<ondown>SetFocus(9000)</ondown>
+			<onleft>SetFocus(9000)</onleft>
+			<onright>SetFocus(9000)</onright>
+			<onback>SetFocus(9000)</onback>
+		</control>
 		<control type="image">
-			<visible>String.IsEmpty(Container(9000).ListItem.Property(background)) | [Skin.HasSetting(Home_Background_Override_Enabled) + Skin.String(Home_Background_Override)]</visible>
-			<include>Dialog_Fade_Animation</include>
-			<left>30</left>
-			<top>30</top>
-			<width>400</width>
-			<height>155</height>
+			<visible>Skin.HasSetting(Home_Screensaver_Enabled)</visible>
+			<visible>[String.IsEmpty(Container(9000).ListItem.Property(background)) | [Skin.HasSetting(Home_Background_Override_Enabled) + Skin.String(Home_Background_Override)]]</visible>
+			<visible>Control.HasFocus(9500) + !$EXP[TransparentDialog_IsVisible]</visible>
+			<include>Delayed_Dialog_Fade_Animation</include>
+			<left>60</left>
+			<centertop>75%</centertop>
+			<width>560</width>
+			<height>237</height>
 			<aspectratio>keep</aspectratio>
 			<texture background="true">$INFO[Container(12340).ListItem.Art(clearlogo)]</texture>
 			<fadetime>360</fadetime>
@@ -142,11 +155,13 @@
 				<texture colordiffuse="$VAR[Dark_Color]">views/white_100.png</texture>
 			</control>
 			<control type="multiimage">
+				<include content="Ken_Burns_Effect_Animation"/>
 				<imagepath colordiffuse="$VAR[Dialogs_Artwork_Diffuse]" background="true">$VAR[Dialog_Slideshow_Source]</imagepath>
 				<aspectratio>scale</aspectratio>
 				<fadetime>0</fadetime>
 			</control>
 			<control type="multiimage">
+				<include content="Ken_Burns_Effect_Animation"/>
 				<imagepath colordiffuse="$VAR[Dialogs_Artwork_Diffuse]" background="true">$VAR[Dialog_Slideshow_Source]</imagepath>
 				<aspectratio>scale</aspectratio>
 				<fadetime>360</fadetime>

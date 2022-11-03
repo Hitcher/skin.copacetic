@@ -33,6 +33,7 @@
 		<param name="art_diffuse_fadein" default="false"/>
 		<param name="art_diffuse_fadeout_1" default="false"/>
 		<param name="art_diffuse_fadeout_2" default="false"/>
+		<param name="watched_diffuse" default="false"/>
 		<param name="now_playing" default="false"/>
 		<definition>
 			<control type="image">
@@ -40,6 +41,8 @@
 				<animation effect="fadediffuse" end="ff808080" time="360" tween="sine" easing="inout"  condition="$PARAM[art_diffuse_fadein]" reversible="false">Conditional</animation>
 				<animation effect="fadediffuse" end="ff808080" time="0" condition="$PARAM[art_diffuse_fadeout_1]" reversible="false">Conditional</animation>
 				<animation effect="fadediffuse" start="ff808080" end="ffffffff" time="360" tween="sine" easing="inout"  condition="$PARAM[art_diffuse_fadeout_2]" reversible="false">Conditional</animation>
+				<animation effect="fadediffuse" end="a9ffffff" time="0" condition="$PARAM[watched_diffuse] + Skin.String(Theme,Light)">Conditional</animation>
+				<animation effect="fadediffuse" end="80ffffff" time="0" condition="$PARAM[watched_diffuse] + !Skin.String(Theme,Light)">Conditional</animation>
 				<animation effect="fadediffuse" end="ff555555" time="0" condition="$PARAM[now_playing]">Conditional</animation>
 				<texture fallback="$PARAM[fallback]" background="true">$PARAM[texture]</texture>
 				<aspectratio align="center" aligny="center">$PARAM[aspectratio]</aspectratio>
@@ -71,6 +74,38 @@
 	</include>
 
 	<!-- Components-->
+	<include name="Icon_Component_Border">
+		<param name="visible" default="false"/>
+		<param name="protrusion" default="0"/>
+		<definition>
+			<control type="image">
+				<visible>$PARAM[visible]</visible>
+				<visible>!$EXP[TransparentDialog_IsVisible]</visible>
+				<include>Content_Fade_Animation</include>
+				<left>-$PARAM[protrusion]</left>
+				<top>-$PARAM[protrusion]</top>
+				<right>-$PARAM[protrusion]</right>
+				<bottom>-$PARAM[protrusion]</bottom>
+				<aspectratio>stretch</aspectratio>
+				<texture border="$PARAM[size]" colordiffuse="$PARAM[color]" infill="false">$PARAM[texture]</texture>
+			</control>
+		</definition>
+	</include>
+
+	<include name="Icon_Component_Breadcrumb_Overlay">
+		<param name="visible" default="true"/>
+		<definition>
+			<control type="image">
+				<visible>$PARAM[visible]</visible>
+				<visible>$EXP[Progress_IsVisible]</visible>
+				<top>0</top>
+				<height>50%</height>
+				<aspectratio>stretch</aspectratio>
+				<texture colordiffuse="$VAR[Dark_Color]" flipy="true">views/progress_overlay.png</texture>
+			</control>
+		</definition>
+	</include>
+
 	<include name="Icon_Component_Multiart_Static">
 		<param name="visible" default="!String.IsEqual(Control.GetLabel(38000),flags/blank.png) + !$EXP[MultiartSwitching]"/>
 		<param name="art_diffuse" default="false"/>
@@ -123,6 +158,7 @@
 		</definition>
 	</include>
 
+
 	<include name="Icon_Component_Progress_Overlay">
 		<param name="visible" default="true"/>
 		<definition>
@@ -133,38 +169,6 @@
 				<height>50%</height>
 				<aspectratio>stretch</aspectratio>
 				<texture colordiffuse="$VAR[Dark_Color]">views/progress_overlay.png</texture>
-			</control>
-		</definition>
-	</include>
-
-	<include name="Icon_Component_Breadcrumb_Overlay">
-		<param name="visible" default="true"/>
-		<definition>
-			<control type="image">
-				<visible>$PARAM[visible]</visible>
-				<visible>$EXP[Progress_IsVisible]</visible>
-				<top>0</top>
-				<height>50%</height>
-				<aspectratio>stretch</aspectratio>
-				<texture colordiffuse="$VAR[Dark_Color]" flipy="true">views/progress_overlay.png</texture>
-			</control>
-		</definition>
-	</include>
-
-	<include name="Icon_Component_Border">
-		<param name="visible" default="false"/>
-		<param name="protrusion" default="0"/>
-		<definition>
-			<control type="image">
-				<visible>$PARAM[visible]</visible>
-				<visible>!$EXP[TransparentDialog_IsVisible]</visible>
-				<include>Content_Fade_Animation</include>
-				<left>-$PARAM[protrusion]</left>
-				<top>-$PARAM[protrusion]</top>
-				<right>-$PARAM[protrusion]</right>
-				<bottom>-$PARAM[protrusion]</bottom>
-				<aspectratio>stretch</aspectratio>
-				<texture border="$PARAM[size]" colordiffuse="$PARAM[color]" infill="false">$PARAM[texture]</texture>
 			</control>
 		</definition>
 	</include>
@@ -204,6 +208,7 @@
 		<param name="height" default="100%"/>
 		<param name="art_icon" default="Thumbnail"/>
 		<param name="art_diffuse" default="false"/>
+		<param name="watched_diffuse" default="false"/>
 		<param name="now_playing" default="false"/>
 		<param name="aspectratio" default="scale"/>
 		<definition>
@@ -217,6 +222,7 @@
 				<include content="Icon_Art_Unfocused">
 					<param name="texture" value="$VAR[$PARAM[art_icon]($PARAM[position])Content]"/>
 					<param name="art_diffuse" value="$PARAM[art_diffuse]"/>
+					<param name="watched_diffuse" value="$PARAM[watched_diffuse]"/>
 					<param name="now_playing" value="$PARAM[now_playing]"/>
 					<param name="aspectratio" value="$PARAM[aspectratio]"/>
 					<param name="fallback" value="$PARAM[fallback]"/>
