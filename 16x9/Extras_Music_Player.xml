@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes>
+
+	<include name="Music_Player_Buttons">
+		<control type="panel" id="91100">
+			<width>180</width>
+			<height>120</height>
+			<include>Music_Player_Navigation</include>
+			<scrolltime>0</scrolltime>
+			<itemlayout width="60" height="60"/>
+			<focusedlayout width="60" height="60">
+			</focusedlayout>
+			<content>
+				<item>
+					<description>Previous</description>
+					<label>$LOCALIZE[210]</label>
+					<onclick>PlayerControl(Previous)</onclick>
+				</item>
+				<item>
+					<description>Pause</description>
+					<onclick>PlayerControl(Play)</onclick>
+				</item>
+				<item>
+					<description>Next</description>
+					<label>$LOCALIZE[209]</label>
+					<onclick>PlayerControl(Next)</onclick>
+				</item>
+				<item>
+					<description>Artist</description>
+					<label>$LOCALIZE[557]</label>
+					<onclick>Dialog.Close(all)</onclick>
+					<onclick>ActivateWindow(music,musicdb://albums/?xsp=%7b%22rules%22%3a%7b%22and%22%3a%5b%7b%22field%22%3a%22artist%22%2c%22operator%22%3a%22is%22%2c%22value%22%3a%5b$ESCINFO[MusicPlayer.Artist]%5d%7d%5d%7d%2c%22type%22%3a%22albums%22%7d,return)</onclick>
+				</item>
+				<item>
+					<description>Stop</description>
+					<label>$LOCALIZE[31528]</label>
+					<onclick>PlayerControl(Stop)</onclick>
+					<onclick condition="Window.IsVisible(home)">SetFocus(9000)</onclick>
+					<onclick condition="Window.IsVisible(favourites)">SetFocus(450)</onclick>
+					<onclick condition="$EXP[ListView_IsVisible]">SetFocus(50)</onclick>
+					<onclick condition="$EXP[BillboardView_IsVisible]">SetFocus(501)</onclick>
+					<onclick condition="$EXP[ShowcaseView_IsVisible]">SetFocus(502)</onclick>
+					<onclick condition="$EXP[StripView_IsVisible]">SetFocus(504)</onclick>
+					<onclick condition="$EXP[GridView_IsVisible]">SetFocus(505)</onclick>
+				</item>
+				<item>
+					<description>Go to music visualisation</description>
+					<label>$LOCALIZE[31529]</label>
+					<onclick>ActivateWindow(visualisation)</onclick>
+				</item>
+			</content>
+		</control>
+	</include>
+
+	<include name="Music_Player_Label_Template">
+		<param name="padding" default="30"/>
+		<param name="group_align" default="center"/>
+		<param name="label_align" default="left"/>
+		<param name="label_1" default="$INFO[MusicPlayer.Title]"/>
+		<param name="label_2" default="$INFO[MusicPlayer.Artist]"/>
+		<param name="title_label_scroll" default="false"/>
+		<param name="info_label_scroll" default="false"/>
+		<param name="text_color" default="$VAR[Notification_Widget_Label_Color]"/>
+		<definition>
+			<control type="grouplist">
+				<visible>!$EXP[Music_Player_HasFocus]</visible>
+				<include content="Visible_Fade_Delayed_Animation"/>
+				<animation effect="slide" start="0,0" end="0,-30"  condition="$EXP[StripView_Display_IsPosters] + [$EXP[Music_Player_IsVisible] | Window.IsVisible(volumebar)] + !$EXP[InfoWidget_HasFocus] + !Window.IsVisible(home)">Conditional</animation>
+				<left>$PARAM[padding]</left>
+				<right>$PARAM[padding]</right>
+				<orientation>vertical</orientation>
+				<align>$PARAM[group_align]</align>
+				<itemgap>0</itemgap>
+				<control type="label">
+					<height>40</height>
+					<label>$PARAM[label_1]</label>
+					<font>MusicPlayer_Title</font>
+					<textcolor>$PARAM[text_color]</textcolor>
+					<align>$PARAM[label_align]</align>
+					<scroll>$PARAM[title_label_scroll]</scroll>
+					<scrollsuffix> / </scrollsuffix>
+				</control>
+				<control type="label">
+					<height>35</height>
+					<label>$PARAM[label_2]</label>
+					<font>MusicPlayer_Info</font>
+					<textcolor>$PARAM[text_color]</textcolor>
+					<align>$PARAM[label_align]</align>
+					<scroll>$PARAM[info_label_scroll]</scroll>
+					<scrollsuffix> / </scrollsuffix>
+				</control>
+			</control>
+			<control type="label">
+				<visible>$EXP[Music_Player_HasFocus]</visible>
+				<include content="Visible_Fade_Delayed_Animation"/>
+				<animation effect="slide" end="0,150" time="0" condition="$EXP[ShowcaseView_IsVisible] + $EXP[ShowcaseView_Display_IsPosters] + !$EXP[ShowcaseView_Details_Off]" reversible="false">Conditional</animation>
+				<left>$PARAM[padding]</left>
+				<right>$PARAM[padding]</right>
+				<height>40</height>
+				<centertop>50%</centertop>
+				<label>$VAR[Music_Player_Label]</label>
+				<font>MusicPlayer_Title</font>
+				<textcolor>$PARAM[text_color]</textcolor>
+				<align>$PARAM[label_align]</align>
+			</control>
+		</definition>
+	</include>
+
+	<include name="Music_Player_Widget">
+		<param name="visible" default="true"/>
+		<param name="width" default="100%"/>
+		<param name="top" default="0"/>
+		<param name="height" default="180"/>
+		<param name="label_padding" default="-30"/>
+		<param name="label_width" default="600"/>
+		<param name="align" default="right"/>
+		<param name="background_visible" default="true"/>
+		<param name="Visible" default="![Window.IsVisible(volumebar) | Window.IsVisible(notification) | Window.IsVisible(extendedprogressdialog)]"/>
+		<param name="progress_info" default="Player.Progress"/>
+		<param name="progress_side" default="0"/>
+		<param name="progress_top" default="0"/>
+		<param name="progress_height" default="6"/>
+		<param name="title_label_scroll" default="false"/>
+		<param name="label_1" default="$INFO[MusicPlayer.Title]"/>
+		<param name="label_2" default="$INFO[MusicPlayer.Artist]"/>
+		<param name="center_label_visible" default="false"/>
+		<param name="left_label_visible" default="false"/>
+		<param name="right_label_visible" default="false"/>
+		<definition>
+			<control type="group">
+				<visible>$EXP[Music_Player_IsVisible]</visible>
+				<visible>$PARAM[visible]</visible>
+				<nested/>
+				<control type="grouplist">
+					<visible>!$EXP[ContainerSwitching] + !$EXP[OpaqueDialog_IsVisible] + !$EXP[TransparentDialog_IsVisible]</visible>
+					<include content="Visible_Fade_Delayed_Animation"/>
+					<width>$PARAM[width]</width>
+					<top>$PARAM[top]</top>
+					<height>$PARAM[height]</height>
+					<itemgap>0</itemgap>
+					<orientation>horizontal</orientation>
+					<align>$PARAM[align]</align>
+					<usecontrolcoords>true</usecontrolcoords>
+
+					<!-- Left Label -->
+					<control type="group">
+						<animation effect="slide" end="-60,0" time="0" condition="$EXP[Music_Player_HasFocus] + [Window.IsVisible(Home) | $EXP[Background_IsFanart] | $EXP[InfoDialog_IsVisible]]">Conditional</animation>
+						<visible>$PARAM[left_label_visible]</visible>
+						<height>$PARAM[height]</height>
+						<width>$PARAM[label_width]</width>
+						<control type="group">
+							<visible>$PARAM[Visible]</visible>
+							<include content="Notification_Label_Fade_Animation"/>
+							<include content="Music_Player_Label_Template">
+								<param name="padding" value="$PARAM[label_padding]"/>
+								<param name="group_align" value="center"/>
+								<param name="label_align" value="right"/>
+								<param name="label_1" value="$PARAM[label_1]"/>
+								<param name="label_2" value="$PARAM[label_2]"/>
+								<param name="title_label_scroll" value="$PARAM[title_label_scroll]"/>
+							</include>
+						</control>
+					</control>
+
+					<!-- Main -->
+					<control type="group">
+						<width>$PARAM[height]</width>
+						<height>$PARAM[height]</height>
+						<!-- Artwork -->
+						<control type="group">
+							<visible>$PARAM[background_visible]</visible>
+							<control type="image">
+								<texture colordiffuse="$VAR[Dark_Color]">views/white_100.png</texture>
+								<aspectratio>scale</aspectratio>
+							</control>
+							<control type="image">
+								<texture colordiffuse="$VAR[Home_Artwork_Diffuse]" fallback="fallback/fallback-square.png">$INFO[Player.Art(album.thumb)]</texture>
+								<aspectratio>scale</aspectratio>
+							</control>
+							<!-- Gridview shadow -->
+							<control type="image">
+								<visible>!$EXP[Music_Player_HasFocus] + String.IsEqual(Container.Row,0) +  [[$EXP[GridView_Display_IsFanart] + String.IsEqual(Container.Column,2)] | [[$EXP[GridView_Display_IsPosters] | $EXP[GridView_Display_IsSquare]] + String.IsEqual(Container.Column,4)]]</visible>
+								<bottom>0</bottom>
+								<height>120</height>
+								<texture colordiffuse="$VAR[Dropshadow_Diffuse]">views/dropshadow_top_120.png</texture>
+								<aspectratio>stretch</aspectratio>
+							</control>
+						</control>
+						<!-- Music Player Controls -->
+						<control type="group">
+							<visible>$EXP[Music_Player_HasFocus]</visible>
+							<include content="Visible_Fade_Animation"/>
+							<width>180</width>
+							<height>120</height>
+							<centerleft>50%</centerleft>
+							<centertop>50%</centertop>
+							<include content="Music_Player_Button_Template">
+								<param name="focused" value="String.IsEqual(Container(91100).Position,0)"/>
+								<param name="icon" value="Previous"/>
+								<param name="left" value="0"/>
+								<param name="top" value="0"/>
+							</include>
+							<include content="Music_Player_Button_Template">
+								<param name="visible" value="!Player.Paused"/>
+								<param name="focused" value="String.IsEqual(Container(91100).Position,1) + !Player.Paused"/>
+								<param name="icon" value="Pause"/>
+								<param name="left" value="60"/>
+								<param name="top" value="0"/>
+							</include>
+							<include content="Music_Player_Button_Template">
+								<param name="visible" value="Player.Paused"/>
+								<param name="focused" value="String.IsEqual(Container(91100).Position,1) + Player.Paused"/>
+								<param name="icon" value="Play"/>
+								<param name="left" value="60"/>
+								<param name="top" value="0"/>
+							</include>
+							<include content="Music_Player_Button_Template">
+								<param name="focused" value="String.IsEqual(Container(91100).Position,2)"/>
+								<param name="icon" value="Next"/>
+								<param name="left" value="120"/>
+								<param name="top" value="0"/>
+							</include>
+							<include content="Music_Player_Button_Template">
+								<param name="focused" value="String.IsEqual(Container(91100).Position,3)"/>
+								<param name="icon" value="Artist"/>
+								<param name="left" value="0"/>
+								<param name="top" value="60"/>
+							</include>
+							<include content="Music_Player_Button_Template">
+								<param name="focused" value="String.IsEqual(Container(91100).Position,4)"/>
+								<param name="icon" value="Stop"/>
+								<param name="left" value="60"/>
+								<param name="top" value="60"/>
+							</include>
+							<include content="Music_Player_Button_Template">
+								<param name="focused" value="String.IsEqual(Container(91100).Position,5)"/>
+								<param name="icon" value="Fullscreen"/>
+								<param name="left" value="120"/>
+								<param name="top" value="60"/>
+							</include>
+						</control>
+						<!-- Other Furniture -->
+						<control type="group">
+							<visible>$PARAM[Visible]</visible>
+							<include content="Notification_Label_Fade_Animation"/>
+							<!-- Now Playing animation -->
+							<control type="group">
+								<animation effect="slide" start="0" end="0,-15" time="0" condition="Player.Rewinding | Player.Forwarding">Conditional</animation>
+								<visible>!$EXP[Music_Player_HasFocus]</visible>
+								<include content="Visible_Fade_Delayed_Animation"/>
+								<centerleft>50%</centerleft>
+								<centertop>50%</centertop>
+								<width>120</width>
+								<height>120</height>
+								<include content="Now_Playing_Icon">
+									<param name="color" value="$VAR[Volume_Focused_Color]"/>
+								</include>
+								<include content="Player_Status_Icons">
+									<param name="icon_type" value="small"/>
+									<param name="small_label" value="true"/>
+									<param name="playicon" value="false"/>
+									<param name="color" value="$VAR[Volume_Focused_Color]"/>
+								</include>
+							</control>
+							<!-- Progress Bar -->
+							<control type="progress">
+								<visible>$PARAM[background_visible]</visible>
+								<left>$PARAM[progress_side]</left>
+								<right>$PARAM[progress_side]</right>
+								<top>$PARAM[progress_top]</top>
+								<height>$PARAM[progress_height]</height>
+								<info>$PARAM[progress_info]</info>
+								<texturebg colordiffuse="$VAR[Progress_Light_Background_Color]">views/white_100.png</texturebg>
+								<midtexture colordiffuse="$VAR[Progress_Light_Focused_Color]">views/white_100.png</midtexture>
+							</control>
+							<!-- Center Label -->
+							<control type="group">
+								<left>0</left>
+								<right>0</right>
+								<bottom>20</bottom>
+								<visible>$PARAM[center_label_visible]</visible>
+								<include content="Music_Player_Label_Template">
+									<param name="group_align" value="right"/>
+									<param name="label_align" value="left"/>
+									<param name="title_label_scroll" value="true"/>
+									<param name="label_1" value="$PARAM[label_1]"/>
+									<param name="label_2" value="$PARAM[label_2]"/>
+									<param name="text_color" value="$VAR[Light_Color]"/>
+								</include>
+							</control>
+						</control>
+					</control>
+
+					<!-- Right Label -->
+					<control type="group">
+						<visible>$PARAM[right_label_visible]</visible>
+						<height>$PARAM[height]</height>
+						<width>$PARAM[label_width]</width>
+						<control type="group">
+							<visible>$PARAM[Visible]</visible>
+							<include content="Notification_Label_Fade_Animation"/>
+							<include content="Music_Player_Label_Template">
+								<param name="padding" value="$PARAM[label_padding]"/>
+								<param name="group_align" value="center"/>
+								<param name="label_align" value="left"/>
+								<param name="label_1" value="$PARAM[label_1]"/>
+								<param name="label_2" value="$PARAM[label_2]"/>
+								<param name="title_label_scroll" value="$PARAM[title_label_scroll]"/>
+							</include>
+						</control>
+					</control>
+
+				</control>
+			</control>
+		</definition>
+	</include>
+
+</includes>

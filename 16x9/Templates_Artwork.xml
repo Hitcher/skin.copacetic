@@ -1,7 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <includes>
 
-	<include name="SimpleListIcon">
+	<include name="Fanart_Slideshow_Multiart">
+		<control type="multiimage">
+			<imagepath colordiffuse="$PARAM[colordiffuse]">$PARAM[texture_path]</imagepath>
+			<aspectratio>scale</aspectratio>
+			<fadetime>$PARAM[fadetime]</fadetime>
+		</control>
+	</include>
+
+	<include name="Fanart_Slideshow_Backing">
+		<control type="image">
+			<visible>$PARAM[visible]</visible>
+			<animation effect="fade" start="0" end="100" time="360" delay="1800" tween="sine" easing="inout" reversible="true">Visible</animation>
+			<texture colordiffuse="$VAR[Dark_Color]">views/white_100.png</texture>
+		</control>
+	</include>
+
+	<include name="Simple_ListIcon">
 		<param name="visible" default="true"/>
 		<param name="left" default="0"/>
 		<param name="top" default="0"/>
@@ -59,7 +75,7 @@
 		<param name="art_diffuse_fadeout_2" default="false"/>
 		<definition>
 			<control type="image">
-				<include>Secondary_List_Scroll_Animation</include>
+				<include content="Secondary_List_Scroll_Animation"/>
 				<animation effect="fadediffuse" end="ff808080" time="0" condition="$PARAM[art_diffuse]">Conditional</animation>
 				<animation effect="fadediffuse" end="ff808080" time="360" tween="sine" easing="inout"  condition="$PARAM[art_diffuse_fadein]" reversible="false">Conditional</animation>
 				<animation effect="fadediffuse" end="ff808080" time="0" condition="$PARAM[art_diffuse_fadeout_1]" reversible="false">Conditional</animation>
@@ -81,7 +97,7 @@
 			<control type="image">
 				<visible>$PARAM[visible]</visible>
 				<visible>!$EXP[TransparentDialog_IsVisible]</visible>
-				<include>Content_Fade_Animation</include>
+				<include content="Visible_Fade_Animation"/>
 				<left>-$PARAM[protrusion]</left>
 				<top>-$PARAM[protrusion]</top>
 				<right>-$PARAM[protrusion]</right>
@@ -116,8 +132,8 @@
 			<control type="image">
 				<visible>$PARAM[visible]</visible>
 				<visible>!$EXP[MultiartContainerSwitching] + ![$EXP[GridView_IsVisible] + $EXP[Scrollbar_HasFocus]]</visible>
-				<include>Multiart_Fade_Animation</include>
-				<include>Secondary_List_Scroll_Animation</include>
+				<include content="Multiart_Fade_Animation"/>
+				<include content="Secondary_List_Scroll_Animation"/>
 				<animation effect="fadediffuse" end="ff808080" time="0" condition="$PARAM[art_diffuse]">Conditional</animation>
 				<animation effect="fadediffuse" end="ff555555" time="0" condition="$PARAM[now_playing]">Conditional</animation>
 				<texture fallback="$PARAM[fallback]" background="true">$PARAM[texture]</texture>
@@ -198,7 +214,6 @@
 		</control>
 	</include>
 
-	<!-- ListIcons -->
 	<include name="ListIcon_Static_Unfocused">
 		<param name="visible" default="true"/>
 		<param name="position" default="0"/>
@@ -275,7 +290,7 @@
 				<nested/>
 				<!-- Now Playing icon -->
 				<control type="group">
-					<include>Secondary_List_Scroll_Animation</include>
+					<include content="Secondary_List_Scroll_Animation"/>
 					<include content="Now_Playing_Icon">
 						<param name="visible" value="$PARAM[now_playing]"/>
 						<param name="size" value="Large"/>

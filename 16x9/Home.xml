@@ -1,21 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <window>
 	<!-- home -->
-	<backgroundcolor>$VAR[Secondary_Color]</backgroundcolor>
 	<onload>RunScript(script.skinshortcuts,type=buildxml&amp;mainmenuID=9000&amp;group=mainmenu|shutdownmenu)</onload>
-	<onunload condition="String.IsEmpty(Window(home).Property(Global_Fanart_Slideshow))">SetProperty(Global_Fanart_Slideshow,$ESCINFO[Container(12340).ListItem.Art(fanart)],home)</onunload>
+	<onunload condition="!Skin.HasSetting(Global_Fanart_Slideshow_Disabled) + String.IsEmpty(Window(home).Property(Global_Fanart_Slideshow))">SetProperty(Global_Fanart_Slideshow,$ESCINFO[Container(12340).ListItem.Art(fanart)],home)</onunload>
 	<onunload condition="String.IsEqual(Window(home).Property(Trailer_Autoplay),true)">PlayerControl(Stop)</onunload>
 	<onunload condition="String.IsEqual(Window(home).Property(Trailer_Autoplay),true)">ClearProperty(Trailer_Autoplay,home)</onunload>
 	<defaultcontrol always="true">9001</defaultcontrol>
-	<include>Multiart_Reset_OnLoad</include>
-	<include>My_Window_Fade_Animation</include>
+	<backgroundcolor>$VAR[Dark_Color]</backgroundcolor>
+	<include content="WindowOpenClose_Fade_Animation"/>
 	<controls>
-
-		<!-- Delay content on Load -->
-		<include content="Delay_Content_Load">
+		<!-- Focus setter to ensure widget scrollbar displays correctly -->
+		<include content="Focus_Setter">
 			<param name="target_id" value="SetFocus(9000)"/>
 		</include>
-
 		<!-- Hidden list -->
 		<control type="list" id="9000">
 			<viewtype label="535">list</viewtype>
@@ -31,203 +28,65 @@
 				<include>skinshortcuts-mainmenu</include>
 			</content>
 		</control>
-		<!-- To fix audiostutter on navigation during video playback -->
-		<control type="videowindow">
-			<visible>![Skin.HasSetting(Trailer_Autoplay) + String.IsEqual(Window(home).Property(Trailer_Autoplay),true)] | $EXP[GridView_IsVisible]</visible>
-			<include>Hidden_Control</include>
-		</control>
-
-		<!-- Trailer autoplay -->
-		<include condition="Skin.HasSetting(Trailer_Autoplay)" content="Trailer_Autoplay_Function"/>
-
 		<!-- OnPrevious delay -->
 		<control type="group" id="5001">
 			<visible>Container(9010).OnPrevious | Container(9020).OnPrevious | Container(9030).OnPrevious | Container(9040).OnPrevious | Container(9050).OnPrevious | Container(9060).OnPrevious | Container(9070).OnPrevious | Container(9080).OnPrevious | Container(9090).OnPrevious</visible>
 			<animation effect="slide" end="0,0" time="360" reversible="false">Hidden</animation>
 		</control>
-
 		<!-- OnNext delay -->
 		<control type="group" id="5002">
 			<visible>Container(9010).OnNext | Container(9020).OnNext | Container(9030).OnNext | Container(9040).OnNext | Container(9050).OnNext | Container(9060).OnNext | Container(9070).OnNext | Container(9080).OnNext | Container(9090).OnNext</visible>
 			<animation effect="slide" end="0,0" time="360" reversible="false">Hidden</animation>
 		</control>
-
-		<!-- Grid Overlay fade timer -->
-		<control type="group" id="5003">
-			<visible>Control.IsVisible(5001) | Control.IsVisible(5002)</visible>
-			<animation effect="slide" end="0,0" time="540" reversible="false">Hidden</animation>
-		</control>
-
+		<!-- Music Player buttons -->
+		<include condition="Skin.HasSetting(Music_Player_Enabled)" content="Music_Player_Buttons"/>
 		<!-- Labels for Multiart support -->
 		<include condition="Skin.HasSetting(Multiart_Slideshow)" content="MyViews_Multiart_Labels"/>
-
+		<!-- Fix for audio stutter / Trailer autoplay -->
+		<control type="videowindow">
+			<visible>String.IsEqual(Window(home).Property(Trailer_Autoplay),true)</visible>
+		</control>
+		<include condition="Skin.HasSetting(Trailer_Autoplay)" content="Trailer_Autoplay_Mask">
+			<param name="timer" value="trailer_autoplay_home"/>
+		</include>
+		<!-- Background -->
+		<include content="Light_Theme_Background">
+			<param name="visible" value="!Control.HasFocus(9001) + !Control.HasFocus(9000) + !$EXP[Music_Player_HasFocus]"/>
+			<include condition="Skin.HasSetting(Trailer_Autoplay)" content="Trailer_Autoplay_Fade_Delayed_Animation"/>
+		</include>
 		<control type="group">
+			<visible>Control.HasFocus(9000) | Control.HasFocus(9500) | $EXP[Music_Player_HasFocus]</visible>
+			<include content="WindowOpenClose_Fade_Animation"/>
+			<include content="Home_Fanart_Slideshow"/>
+			<include condition="Skin.HasSetting(Home_Screensaver_Enabled)" content="Home_Clearlogo"/>
+		</control>
+		<!-- Content -->
+		<control type="group">
+			<include content="WindowOpenClose_Fade_Delayed_Long_Animation"/>
 			<include condition="Skin.HasSetting(Trailer_Autoplay)" content="Trailer_Autoplay_Fade_Animation"/>
-			<!-- Light view gradient -->
-			<control type="image">
-				<visible>Skin.String(Theme,Light) + !Control.HasFocus(9001) + !Control.HasFOcus(9000) + !$EXP[Music_Player_HasFocus]</visible>
-				<width>100%</width>
-				<bottom>0</bottom>
-				<height>50%</height>
-				<texture colordiffuse="$VAR[Light_Grey_Color]">views/gradient_light-background.png</texture>
-			</control>
-
+			<!-- Main menu and clock -->
 			<control type="group">
-				<visible>Control.HasFocus(9001) | Control.HasFocus(9000) | Control.HasFocus(9500) | $EXP[Music_Player_HasFocus]</visible>
-				<include>Dialog_Fade_Animation</include>
-				<include content="Home_Fanart_Slideshow"/>
-				<include condition="Skin.HasSetting(Home_Screensaver_Enabled)" content="Home_Clearlogo"/>
+				<visible>Control.HasFocus(9000) | $EXP[Music_Player_HasFocus]</visible>
+				<visible>!$EXP[TransparentDialog_IsVisible] + !Window.IsVisible(favourites) + !$EXP[InfoDialog_IsVisible]</visible>
+				<include content="VisibleHidden_Fade_Delayed_Animation"/>
+				<include content="Horizontal_List">
+					<param name="hidden_id" value="9000"/>
+					<param name="focused_color" value="$VAR[Light_Color]"/>
+					<param name="unfocused_color" value="$VAR[Light_Color]"/>
+				</include>
+				<include condition="!Skin.HasSetting(Hide_Home_Clock)" content="Clock">
+					<param name="textcolor" value="$VAR[Notification_Widget_Label_Color]"/>
+				</include>
 			</control>
-
-			<control type="group">
-				<visible>!Control.HasFocus(9001)</visible>
-				<include>Delayed_Content_Fade_Animation</include>
-
-				<control type="group">
-					<visible>!Control.HasFocus(9500)</visible>
-					<include>Dialog_Fade_Animation</include>
-					<control type="group">
-						<visible>!Window.IsActive(favourites) + [Control.HasFocus(9000) | $EXP[Music_Player_HasFocus]]</visible>
-						<include>Delayed_Content_Fade_Animation</include>
-
-						<!-- Clock -->
-						<control type="group">
-							<visible>!$EXP[Music_Player_IsVisible] + !$EXP[Music_Player_HasFocus] + !Window.IsVisible(contextmenu) + ![String.IsEqual(Window(home).Property(HomeWidget),Active) + Window.IsVisible(shutdownmenu)]</visible>
-							<include>Delayed_Content_Fade_Animation</include>
-							<include condition="!Skin.HasSetting(Hide_Home_Clock)" content="Clock">
-								<param name="textcolor" value="$VAR[Notification_Widget_Label_Color]"/>
-							</include>
-						</control>
-
-						<!-- Dummy Horizontal List -->
-						<control type="group">
-							<visible>!$EXP[TransparentDialog_IsVisible]</visible>
-							<include>Delayed_Content_Fade_Animation</include>
-							<animation effect="slide" start="0" end="0,660" time="0" condition="true">Conditional</animation>
-							<animation effect="slide" start="0" end="0,-660" time="0" condition="Control.HasFocus(9001) | Control.HasFocus(9000) | $EXP[Music_Player_HasFocus]">Conditional</animation>
-							<animation effect="fade" start="100" end="1" time="360" tween="sine" easing="inout" reversible="true" condition="![Control.HasFocus(9001) | Control.HasFocus(9000) | $EXP[Music_Player_HasFocus]]">Conditional</animation>
-							<include content="DummyHorizontalList">
-								<param name="dummyid" value="9003"/>
-								<param name="hiddenid" value="9000"/>
-								<param name="focusedtextcolor" value="$VAR[Light_Color]"/>
-								<param name="unfocusedtextcolor" value="$VAR[Light_Color]"/>
-							</include>
-						</control>
-					</control>
-				</control>
-
-				<!-- Widgets -->
-				<control type="group">
-					<visible>!$EXP[InfoDialog_IsVisible]</visible>
-					<include content="Viewtype_Fade_Animation"/>
-					<include condition="Skin.HasSetting(Widgets_Enabled)" content="Widget_1"/>
-					<include condition="Skin.HasSetting(Widgets_Enabled)" content="Widget_2"/>
-					<include condition="Skin.HasSetting(Widgets_Enabled)" content="Widget_3"/>
-					<include condition="Skin.HasSetting(Widgets_Enabled)" content="Widget_4"/>
-					<include condition="Skin.HasSetting(Widgets_Enabled)" content="Widget_5"/>
-					<include condition="Skin.HasSetting(Widgets_Enabled)" content="Widget_6"/>
-					<include condition="Skin.HasSetting(Widgets_Enabled)" content="Widget_7"/>
-					<include condition="Skin.HasSetting(Widgets_Enabled)" content="Widget_8"/>
-					<include condition="Skin.HasSetting(Widgets_Enabled)" content="Widget_9"/>
-				</control>
-
-
-				<control type="group">
-					<visible>!Window.IsActive(favourites) + !$EXP[TransparentDialog_IsVisible] + !Control.HasFocus(9001)</visible>
-					<include>Delayed_Content_Fade_Animation</include>
-
-					<!-- Music player -->
-					<include condition="Skin.HasSetting(Music_Player_Enabled)" content="Music_Player_Buttons"/>
-					<include condition="Skin.HasSetting(Music_Player_Enabled)" content="Music_Player_Widget">
-						<param name="left_label_visible" value="true"/>
-						<param name="background_visible" value="false"/>
-					</include>
-
-					<!-- Scrollbar -->
-					<control type="group">
-						<visible>!$EXP[Music_Player_HasFocus] + !Control.HasFocus(9500) + Skin.HasSetting(Widgets_Enabled) + Control.IsVisible(9010)</visible>
-						<include>Delayed_Content_Fade_Animation</include>
-						<control type="group">
-							<visible>!Control.HasFocus(9000)</visible>
-							<include>Home_Scrollbar_Fade_Animation_Sub</include>
-							<control type="group">
-								<visible>!Control.HasFocus(9010)</visible>
-								<include>Home_Scrollbar_Fade_Animation_Sub</include>
-								<control type="group">
-									<visible>!Control.HasFocus(9020)</visible>
-									<include>Home_Scrollbar_Fade_Animation_Sub</include>
-									<control type="group">
-										<visible>!Control.HasFocus(9030)</visible>
-										<include>Home_Scrollbar_Fade_Animation_Sub</include>
-										<control type="group">
-											<visible>!Control.HasFocus(9040)</visible>
-											<include>Home_Scrollbar_Fade_Animation_Sub</include>
-											<control type="group">
-												<visible>!Control.HasFocus(9050)</visible>
-												<include>Home_Scrollbar_Fade_Animation_Sub</include>
-												<control type="group">
-													<visible>!Control.HasFocus(9060)</visible>
-													<include>Home_Scrollbar_Fade_Animation_Sub</include>
-													<control type="group">
-														<visible>!Control.HasFocus(9070)</visible>
-														<include>Home_Scrollbar_Fade_Animation_Sub</include>
-														<control type="group">
-															<visible>!Control.HasFocus(9080)</visible>
-															<include>Home_Scrollbar_Fade_Animation_Sub</include>
-															<control type="group">
-																<visible>!Control.HasFocus(9090)</visible>
-																<include>Home_Scrollbar_Fade_Animation_Sub</include>
-																<control type="grouplist">
-																	<right>30</right>
-																	<width>6</width>
-																	<height>100%</height>
-																	<align>center</align>
-																	<orientation>vertical</orientation>
-																	<itemgap>0</itemgap>
-																	<include content="Home_Scrollbar_Nib">
-																		<param name="id" value="9000"/>
-																	</include>
-																	<include content="Home_Scrollbar_Nib">
-																		<param name="id" value="9010"/>
-																	</include>
-																	<include content="Home_Scrollbar_Nib">
-																		<param name="id" value="9020"/>
-																	</include>
-																	<include content="Home_Scrollbar_Nib">
-																		<param name="id" value="9030"/>
-																	</include>
-																	<include content="Home_Scrollbar_Nib">
-																		<param name="id" value="9040"/>
-																	</include>
-																	<include content="Home_Scrollbar_Nib">
-																		<param name="id" value="9050"/>
-																	</include>
-																	<include content="Home_Scrollbar_Nib">
-																		<param name="id" value="9060"/>
-																	</include>
-																	<include content="Home_Scrollbar_Nib">
-																		<param name="id" value="9070"/>
-																	</include>
-																	<include content="Home_Scrollbar_Nib">
-																		<param name="id" value="9080"/>
-																	</include>
-																	<include content="Home_Scrollbar_Nib">
-																		<param name="id" value="9090"/>
-																	</include>
-																</control>
-															</control>
-														</control>
-													</control>
-												</control>
-											</control>
-										</control>
-									</control>
-								</control>
-							</control>
-						</control>
-					</control>
-				</control>
-			</control>
+			<!-- Widgets -->
+			<include condition="Skin.HasSetting(Widgets_Enabled)" content="Home_Widgets"/>
+			<!-- Music Player -->
+			<include condition="Skin.HasSetting(Music_Player_Enabled)" content="Music_Player_Widget">
+				<param name="visible" value="!$EXP[TransparentDialog_IsVisible]"/>
+				<param name="left_label_visible" value="true"/>
+				<param name="background_visible" value="false"/>
+				<include content="VisibleHidden_Fade_Delayed_Animation"/>
+			</include>
 		</control>
 	</controls>
 </window>

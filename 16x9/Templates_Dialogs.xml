@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes>
+
+	<!-- Default templates -->
+	<include name="Default_Dialog_Panel_Layout">
+		<param name="window_animation" default="WindowOpenClose_Fade_Delayed_Long_Animation"/>
+		<param name="window_animation_condition" default="true"/>
+		<param name="visible" default="!Window.IsVisible(shutdownmenu)"/>
+		<param name="panel_edge_top" default="180"/>
+		<param name="panel_edge_bottom" default="180"/>
+		<definition>
+			<include content="Transparent_Dialog_Panel">
+				<param name="visible" value="$PARAM[visible]"/>
+				<param name="top" value="$PARAM[panel_edge_top]"/>
+				<param name="bottom" value="$PARAM[panel_edge_bottom]"/>
+				<include content="Visible_Fade_Animation"/>
+			</include>
+			<control type="group">
+				<include condition="$PARAM[window_animation_condition]" content="$PARAM[window_animation]"/>
+				<visible>$PARAM[visible]</visible>
+				<include content="Visible_Fade_Delayed_Long_Animation"/>
+				<nested/>
+			</control>
+		</definition>
+	</include>
+
+	<include name="Default_Settings_Panel_Layout">
+		<param name="visible" default="!System.HasVisibleModalDialog"/>
+		<param name="panel_edge_top" default="180"/>
+		<param name="panel_edge_bottom" default="180"/>
+		<param name="alt_right_id" default="20"/>
+		<param name="alt_right_condition" default="false"/>
+		<definition>
+			<include content="Transparent_Dialog_Panel">
+				<param name="visible" value="$PARAM[visible]"/>
+				<param name="top" value="$PARAM[panel_edge_top]"/>
+				<param name="bottom" value="$PARAM[panel_edge_bottom]"/>
+				<include content="Visible_Fade_Animation"/>
+			</include>
+			<control type="group">
+				<include content="Settings_WindowOpenClose_Fade_Delayed_Long_Animation"/>
+				<visible>$PARAM[visible]</visible>
+				<include content="Visible_Fade_Delayed_Long_Animation"/>
+				<include content="SettingsCategory_Layout">
+					<param name="settings_level_button_visible" value="$PARAM[settings_level_button_visible]"/>
+					<param name="left_list_id" value="$PARAM[left_list_id]"/>
+					<param name="right_list_id" value="$PARAM[right_list_id]"/>
+					<param name="alt_right_id" value="$PARAM[alt_right_id]"/>
+					<param name="alt_right_condition" value="$PARAM[alt_right_condition]"/>
+				</include>
+				<nested/>
+			</control>
+		</definition>
+	</include>
+
+	<include name="Default_Dialog_Panel_And_Lists_Layout">
+		<param name="visible" default="![System.HasVisibleModalDialog + !Window.IsVisible(contextmenu) + !Window.IsVisible(busydialog)]"/>
+		<param name="window_name"/>
+		<param name="breadcrumb_label_id" default="980"/>
+		<param name="breadcrumb_label"/>
+		<param name="breadcrumb_info_label_visible" default="false"/>
+		<param name="breadcrumb_info_label" default=""/>
+		<param name="grouplist_height" default="630"/>
+		<param name="grouplist_itemgap" default="0"/>
+		<param name="left_list_visible" default="true"/>
+		<param name="left_list_id"/>
+		<param name="left_list_scrollbar_id" default="60"/>
+		<param name="left_list_width" default="870"/>
+		<param name="left_list_height" default="100%"/>
+		<param name="left_list_onleft"/>
+		<param name="left_list_focus_color" default="$VAR[Settings_Left_List_Focus_Color]"/>
+		<param name="left_list_label" default="$INFO[ListItem.Label]"/>
+		<param name="left_list_label2" default="$INFO[ListItem.Label2]"/>
+		<param name="right_list_visible" default="true"/>
+		<param name="right_list_id"/>
+		<param name="right_list_scrollbar_id" default="61"/>
+		<param name="right_list_width" default="870"/>
+		<param name="right_list_height" default="100%"/>
+		<param name="right_list_top" default="0"/>
+		<param name="right_list_onright"/>
+		<param name="right_list_focus_border_visible"/>
+		<param name="right_list_focus_color" default="$VAR[Settings_Right_List_Focus_Color]"/>
+		<param name="right_list_label" default="$INFO[ListItem.Label]"/>
+		<param name="right_list_label2" default="$INFO[ListItem.Label2]"/>
+		<param name="right_list_label2_visible" default="true"/>
+		<param name="right_list_label2_offset" default="90"/>
+		<param name="right_list_divider_visible" default="false"/>
+		<definition>
+			<include content="Default_Dialog_Panel_Layout">
+				<param name="visible" value="$PARAM[visible]"/>
+				<param name="window_animation_condition" value="!Window.Is(filemanager)"/>
+				<include condition="!Window.Is(filemanager) + !Window.Is(musicplaylisteditor)" content="Breadcrumb_Label">
+					<param name="title_label_id" value="$PARAM[breadcrumb_label_id]"/>
+					<param name="title_label" value="$PARAM[breadcrumb_label]"/>
+					<param name="info_label_visible" value="$PARAM[breadcrumb_info_label_visible]"/>
+					<param name="info_label" value="$PARAM[breadcrumb_info_label]"/>
+				</include>
+				<control type="grouplist">
+					<height>$PARAM[grouplist_height]</height>
+					<centertop>50%</centertop>
+					<orientation>horizontal</orientation>
+					<align>center</align>
+					<itemgap>$PARAM[grouplist_itemgap]</itemgap>
+					<usecontrolcoords>true</usecontrolcoords>
+					<include content="Settings_Left_List_Template">
+						<param name="visible" value="$PARAM[left_list_visible]"/>
+						<param name="id" value="$PARAM[left_list_id]"/>
+						<param name="window_name" value="$PARAM[window_name]"/>
+						<param name="scrollbar_id" value="$PARAM[left_list_scrollbar_id]"/>
+						<param name="width" value="$PARAM[left_list_width]"/>
+						<param name="height" value="$PARAM[left_list_height]"/>
+						<param name="onleft" value="$PARAM[left_list_onleft]"/>
+						<param name="onright" value="$PARAM[right_list_id]"/>
+						<param name="focus_color" value="$PARAM[left_list_focus_color]"/>
+						<param name="label" value="$PARAM[left_list_label]"/>
+						<param name="label2" value="$PARAM[left_list_label2]"/>
+					</include>
+					<include content="Settings_Right_List_Template">
+						<param name="visible" value="$PARAM[right_list_visible]"/>
+						<param name="id" value="$PARAM[right_list_id]"/>
+						<param name="window_name" value="$PARAM[window_name]"/>
+						<param name="scrollbar_id" value="$PARAM[right_list_scrollbar_id]"/>
+						<param name="width" value="$PARAM[right_list_width]"/>
+						<param name="height" value="$PARAM[right_list_height]"/>
+						<param name="top" value="$PARAM[right_list_top]"/>
+						<param name="onleft" value="$PARAM[left_list_id]"/>
+						<param name="onright" value="$PARAM[right_list_onright]"/>
+						<param name="focus_color" value="$PARAM[right_list_focus_color]"/>
+						<param name="focus_border_visible" value="$PARAM[right_list_focus_border_visible]"/>
+						<param name="label" value="$PARAM[right_list_label]"/>
+						<param name="label2" value="$PARAM[right_list_label2]"/>
+						<param name="label2_visible" value="$PARAM[right_list_label2_visible]"/>
+						<param name="label2_offset" value="$PARAM[right_list_label2_offset]"/>
+						<param name="divider_visible" value="$PARAM[right_list_divider_visible]"/>
+					</include>
+				</control>
+				<nested/>
+			</include>
+		</definition>
+	</include>
+
+	<!-- Window specific -->
+	<include name="DialogContextMenu_Default_Template">
+		<control type="group">
+			<visible>!Window.IsVisible(shutdownmenu) + !Window.IsVisible(textviewer)</visible>
+			<include content="Visible_Fade_Delayed_Long_Animation"/>
+			<control type="grouplist">
+				<animation effect="slide" start="0,0" end="-180,0"  condition="Window.IsVisible(favourites)">Conditional</animation>
+				<left>960</left>
+				<top>60</top>
+				<width>900</width>
+				<height>960</height>
+				<itemgap>0</itemgap>
+				<align>center</align>
+				<include content="Default_ContextMenu_Label">
+					<param name="id" value="1001"/>
+				</include>
+				<include content="Default_ContextMenu_Label">
+					<param name="id" value="1002"/>
+				</include>
+				<include content="Default_ContextMenu_Label">
+					<param name="id" value="1003"/>
+				</include>
+				<include content="Default_ContextMenu_Label">
+					<param name="id" value="1004"/>
+				</include>
+				<include content="Default_ContextMenu_Label">
+					<param name="id" value="1005"/>
+				</include>
+				<include content="Default_ContextMenu_Label">
+					<param name="id" value="1006"/>
+				</include>
+				<include content="Default_ContextMenu_Label">
+					<param name="id" value="1007"/>
+				</include>
+				<include content="Default_ContextMenu_Label">
+					<param name="id" value="1008"/>
+				</include>
+				<include content="Default_ContextMenu_Label">
+					<param name="id" value="1009"/>
+				</include>
+				<include content="Default_ContextMenu_Label">
+					<param name="id" value="1010"/>
+				</include>
+				<include content="Default_ContextMenu_Label">
+					<param name="id" value="1011"/>
+				</include>
+				<include content="Default_ContextMenu_Label">
+					<param name="id" value="1012"/>
+				</include>
+				<include content="Default_ContextMenu_Label">
+					<param name="id" value="1013"/>
+				</include>
+				<include content="Default_ContextMenu_Label">
+					<param name="id" value="1014"/>
+				</include>
+				<include content="Default_ContextMenu_Label">
+					<param name="id" value="1015"/>
+				</include>
+			</control>
+		</control>
+		<control type="grouplist" id="996">
+			<visible allowhiddenfocus="true">false</visible>
+			<onup>0</onup>
+			<ondown>0</ondown>
+			<onleft>Close</onleft>
+			<onright>Close</onright>
+		</control>
+		<control type="button" id="1000">
+			<texturefocus/>
+		</control>
+	</include>
+
+	<include name="DialogContextMenu_Alt_Template">
+		<control type="group">
+			<visible>!Window.IsVisible(shutdownmenu) + !Window.IsVisible(textviewer)</visible>
+			<include content="Visible_Fade_Delayed_Long_Animation"/>
+			<control type="group">
+				<animation effect="slide" start="0,0" end="870,0"  condition="Window.IsVisible(filemanager) + String.IsEqual(Window(filemanager).Property(ActiveList),Left)">Conditional</animation>
+				<animation effect="slide" start="0,0" end="-30,0"  condition="Window.IsVisible(musicplaylisteditor)">Conditional</animation>
+				<animation effect="slide" start="0,0" end="1070,0"  condition="Window.IsVisible(musicplaylisteditor) + String.IsEqual(Window(musicplaylisteditor).Property(ActiveList),Left)">Conditional</animation>
+				<left>90</left>
+				<width>870</width>
+				<!-- List -->
+				<control type="grouplist" id="996">
+					<height>630</height>
+					<centertop>50%</centertop>
+					<onup>0</onup>
+					<ondown>0</ondown>
+					<onleft>Close</onleft>
+					<onright>Close</onright>
+					<orientation>vertical</orientation>
+					<align>top</align>
+					<itemgap>0</itemgap>
+					<scrolltime tween="sine" easing="inout">360</scrolltime>
+					<pagecontrol>60</pagecontrol>
+				</control>
+				<!-- Underline -->
+				<control type="image">
+					<animation effect="zoom" end="60,0,660,1"  condition="Window.IsVisible(musicplaylisteditor)">Conditional</animation>
+					<animation effect="slide" start="0,0" end="-60,0"  condition="[Window.IsVisible(filemanager) + String.IsEqual(Window(filemanager).Property(ActiveList),Left)] | [Window.IsVisible(musicplaylisteditor) + String.IsEqual(Window(musicplaylisteditor).Property(ActiveList),Left)]">Conditional</animation>
+					<animation effect="slide" end="0,90" time="0" reversible="false" condition="Container(996).Position(1)">Conditional</animation>
+					<animation effect="slide" end="0,180" time="0" reversible="false" condition="Container(996).Position(2)">Conditional</animation>
+					<animation effect="slide" end="0,270" time="0" reversible="false" condition="Container(996).Position(3)">Conditional</animation>
+					<animation effect="slide" end="0,360" time="0" reversible="false" condition="Container(996).Position(4)">Conditional</animation>
+					<animation effect="slide" end="0,450" time="0" reversible="false" condition="Container(996).Position(5)">Conditional</animation>
+					<animation effect="slide" end="0,540" time="0" reversible="false" condition="Container(996).Position(6)">Conditional</animation>
+					<left>60</left>
+					<height>1</height>
+					<top>314</top>
+					<texture colordiffuse="$VAR[Unfocused_Color]">views/white_100.png</texture>
+				</control>
+			</control>
+			<!-- Scrollbar -->
+			<control type="group">
+				<animation effect="slide" start="0,0" end="-5,0"  condition="[Window.IsVisible(filemanager) + String.IsEqual(Window(filemanager).Property(ActiveList),Left)] | [Window.IsVisible(musicplaylisteditor) + String.IsEqual(Window(musicplaylisteditor).Property(ActiveList),Left)]">Conditional</animation>
+				<include content="Dialog_Divider_With_Scrollbar">
+					<param name="scrollbarvisible" value="Window.IsVisible(filemanager) | Window.IsVisible(musicplaylisteditor)"/>
+					<param name="dividervisible" value="false"/>
+				</include>
+			</control>
+			<!-- Default button -->
+			<control type="button" id="1000">
+				<texturefocus/>
+			</control>
+		</control>
+	</include>
+
+	<include name="DialogSelect_Template">
+		<param name="breadcrumb_label_id"/>
+		<param name="description_label" default=""/>
+		<param name="description_label_id" default=""/>
+		<param name="thumb_visible"/>
+		<param name="thumb_texture"/>
+		<definition>
+			<include content="Default_Dialog_Panel_Layout">
+				<param name="panel_edge_top" value="235"/>
+				<param name="panel_edge_bottom" value="235"/>
+				<include content="Breadcrumb_Label">
+					<param name="title_label_id" value="$PARAM[breadcrumb_label_id]"/>
+				</include>
+				<include content="Description_Label">
+					<param name="id" value="$PARAM[description_label_id]"/>
+					<param name="label" value="$PARAM[description_label]"/>
+				</include>
+				<include content="Simple_ListIcon">
+					<param name="visible" value="$PARAM[thumb_visible]"/>
+					<param name="top" value="180"/>
+					<param name="width" value="720"/>
+					<param name="height" value="720"/>
+					<param name="fallback" value=""/>
+					<param name="align" value="right"/>
+					<param name="aspectratio" value="keep"/>
+					<param name="texture" value="$PARAM[thumb_texture]"/>
+					<param name="fadetime" value="180"/>
+				</include>
+				<nested/>
+			</include>
+		</definition>
+	</include>
+
+</includes>

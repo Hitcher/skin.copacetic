@@ -1,48 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <window>
 	<!-- confirmdialog,yesnodialog,okdialog,progressdialog -->
-	<!-- Window property to set default skin.strings via startup.xml on first load -->
 	<onunload condition="String.IsEmpty(Window(Home).Property(SkinInitStarted))">ReplaceWindow(Startup.xml)</onunload>
 	<defaultcontrol always="true">9000</defaultcontrol>
-	<include>Delayed_Dialog_Fade_Animation</include>
+	<include content="WindowOpenClose_Fade_Delayed_Animation"/>
 	<controls>
-
 		<control type="group">
 			<visible>!Window.IsVisible(shutdownmenu) + !Window.IsVisible(selectdialog) + ![Window.Is(progressdialog) + [Window.IsActive(yesnodialog) | Window.IsActive(okdialog)]]</visible>
-			<include>Content_Fade_Animation</include>
-			<control type="grouplist">
-				<left>120</left>
-				<top>60</top>
-				<width>1680</width>
-				<height>960</height>
-				<itemgap>0</itemgap>
-				<orientation>vertical</orientation>
-				<align>center</align>
-				<!-- Heading -->
+			<include content="Visible_Fade_Animation"/>
+			<include content="Settings_Grouplist_Template">
+				<param name="left" value="120"/>
+				<param name="width" value="1680"/>
+				<param name="height" value="960"/>
+				<param name="onleft_condition" value="false"/>
+				<param name="onright_condition" value="false"/>
+				<param name="align" value="center"/>
 				<control type="textbox" id="1">
 					<height max="480">auto</height>
 					<font>List_Title_Focused</font>
 					<textcolor>$VAR[Light_Color]</textcolor>
 					<label>$INFO[Control.GetLabel(1)] $INFO[System.Progressbar,- ,%]</label>
 				</control>
-				<!-- Details -->
 				<control type="textbox" id="9">
 					<height max="480">auto</height>
 					<font>List_Title_Unfocused</font>
 					<textcolor>$VAR[Light_Color]</textcolor>
 				</control>
-			</control>
-			<!-- Progress Bar -->
+			</include>
 			<control type="progress" id="20">
 				<width>360</width>
 				<height>8</height>
 				<left>780</left>
 				<top>1047</top>
 				<texturebg colordiffuse="$VAR[Progress_Light_Background_Color]">views/white_100.png</texturebg>
-				<lefttexture></lefttexture>
 				<midtexture colordiffuse="$VAR[Progress_Light_Focus_Color]">views/white_100.png</midtexture>
-				<righttexture></righttexture>
-				<overlaytexture></overlaytexture>
 			</control>
 			<include content="Button_Group_Template">
 				<param name="icons" value="[String.IsEqual(Control.GetLabel(10),$LOCALIZE[106]) | String.IsEqual(Control.GetLabel(10),$LOCALIZE[222]) | String.IsEqual(Control.GetLabel(11),$LOCALIZE[107]) | String.IsEqual(Control.GetLabel(11),$LOCALIZE[186])]"/>

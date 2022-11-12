@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <includes>
 
 	<include name="AlbumInfo_Content_Path">
@@ -33,7 +34,7 @@
 			<definition>
 				<control type="grouplist">
 					<visible>$PARAM[visible]</visible>
-					<include>Delayed_Content_Fade_Animation</include>
+					<include content="Visible_Fade_Delayed_Animation"/>
 					<left>$PARAM[left]</left>
 					<right>$PARAM[right]</right>
 					<centertop>50%</centertop>
@@ -134,7 +135,7 @@
 			<definition>
 				<control type="group">
 					<visible>$PARAM[visible]</visible>
-					<include>Delayed_Content_Fade_Animation</include>
+					<include content="Visible_Fade_Delayed_Animation"/>
 					<!-- Hidden Label empty checker -->
 					<control type="label" id="916">
 						<visible>false</visible>
@@ -155,7 +156,7 @@
 					</control>
 					<control type="scrollbar" id="60">
 						<visible allowhiddenfocus="true">Control.HasFocus(60)</visible>
-						<include>Scrollbar_Fade_Animation</include>
+						<include content="Scrollbar_Fade_Animation"/>
 						<right>27</right>
 						<bottom>180</bottom>
 						<width>6</width>
@@ -185,7 +186,7 @@
 		<include name="Info_Dialog_Stars">
 			<control type="grouplist">
 				<visible>$PARAM[visible]</visible>
-				<include>Delayed_Content_Fade_Animation</include>
+				<include content="Visible_Fade_Delayed_Animation"/>
 				<animation effect="slide" end="330,0" time="0" condition="Window.Is(songinformation) | String.IsEqual(ListItem.DBType,album)" reversible="false">Conditional</animation>
 				<width>364</width>
 				<centerleft>50%</centerleft>
@@ -234,11 +235,8 @@
 			<control type="group">
 				<visible>$PARAM[visible]</visible>
 				<visible>![Window.IsVisible(selectdialog) | Window.IsVisible(filebrowser)]</visible>
-				<include>Delayed_Content_Fade_Animation</include>
-				<include content="Transparent_Dialog_Panel">
-					<param name="top" value="180"/>
-					<param name="bottom" value="180"/>
-				</include>
+				<include content="Visible_Fade_Delayed_Animation"/>
+				<include content="Transparent_Dialog_Panel"/>
 
 				<!-- Episodes -->
 				<control type="image">
@@ -338,7 +336,15 @@
 		</include>
 
 		<include name="Fullscreen_Info">
-			<!-- Hidden flag checkers -->
+			<!-- Hidden Label/flag checkers -->
+			<control type="label" id="916">
+				<visible>false</visible>
+				<label>$VAR[Plot_Label]</label>
+			</control>
+			<control type="label" id="917">
+				<visible>false</visible>
+				<label>$VAR[Info_Label]</label>
+			</control>
 			<control type="image" id="920">
 				<include content="Hidden_Control"/>
 				<texture fallback="flags/blank.png">$VAR[Studio_Flag]</texture>
@@ -359,10 +365,9 @@
 				<include content="Hidden_Control"/>
 				<texture fallback="flags/blank.png">$VAR[AudioCodec_Flag]</texture>
 			</control>
-
 			<control type="grouplist">
 				<visible>!$EXP[TransparentDialog_IsVisible] + !Window.IsVisible(playerprocessinfo)</visible>
-				<include>Delayed_Content_Fade_Animation</include>
+				<include content="Visible_Fade_Delayed_Animation"/>
 				<width>1560</width>
 				<centerleft>50%</centerleft>
 				<height>100%</height>
@@ -388,6 +393,7 @@
 				</control>
 				<!-- Info -->
 				<control type="label">
+					<visible>!String.IsEmpty(Control.GetLabel(917))</visible>
 					<top>0</top>
 					<height max="35">auto</height>
 					<font>Billboard_Info</font>
@@ -396,6 +402,7 @@
 				</control>
 				<!-- Plot -->
 				<control type="textbox">
+					<visible>!String.IsEmpty(Control.GetLabel(916))</visible>
 					<top>60</top>
 					<height max="103">auto</height>
 					<font>Body</font>
@@ -410,27 +417,22 @@
 					<height>180</height>
 					<orientation>horizontal</orientation>
 					<align>center</align>
-					<!-- Studio -->
 					<include content="FlagLayout">
 						<param name="id" value="920"/>
 						<param name="content" value="$VAR[Studio_Flag]"/>
 					</include>
-					<!-- Rating -->
 					<include content="FlagLayout">
 						<param name="id" value="921"/>
 						<param name="content" value="$VAR[MPAA_Flag]"/>
 					</include>
-					<!-- Video Source -->
 					<include content="FlagLayout">
 						<param name="id" value="922"/>
 						<param name="content" value="$VAR[VideoSource_Flag]"/>
 					</include>
-					<!-- Video Codec -->
 					<include content="FlagLayout">
 						<param name="id" value="923"/>
 						<param name="content" value="$VAR[VideoCodec_Flag]"/>
 					</include>
-					<!-- Audio Source -->
 					<include content="FlagLayout">
 						<param name="id" value="924"/>
 						<param name="content" value="$VAR[AudioCodec_Flag]"/>

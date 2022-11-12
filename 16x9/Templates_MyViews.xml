@@ -1,4 +1,5 @@
-	<includes>
+<?xml version="1.0" encoding="UTF-8"?>
+<includes>
 
 	<include name="AddonBrowser_Controls">
 		<control type="radiobutton" id="5">
@@ -120,7 +121,6 @@
 			<description>Update library</description>
 			<visible allowhiddenfocus="true">false</visible>
 		</control>
-
 		<!-- Flag checkers -->
 		<control type="image" id="914">
 			<left>-100</left>
@@ -134,7 +134,6 @@
 			<height>10</height>
 			<texture fallback="flags/blank.png">$VAR[MPAA_Flag]</texture>
 		</control>
-
 		<include condition="!Skin.HasSetting(Secondary_List_Enabled) | Skin.HasSetting(GridView_Enabled)" content="Hidden_List">
 			<param name="visible" value="!Skin.HasSetting(Secondary_List_Enabled) + ListItem.IsCollection"/>
 			<param name="sortby" value="year"/>
@@ -142,10 +141,8 @@
 		</include>
 	</include>
 
-
-	<include name="MyViews_Hidden_Controls">
-
-		<!-- Hidden buttons for all windows -->
+	<include name="MyViews_Common_Controls">
+		<!-- Common buttons for all windows -->
 		<control type="button" id="2">
 			<description>Select viewtype</description>
 			<visible allowhiddenfocus="true">false</visible>
@@ -158,30 +155,23 @@
 			<description>Select sortmode (ascending or descending)</description>
 			<visible allowhiddenfocus="true">false</visible>
 		</control>
-
 		<!-- Close Options Menu -->
 		<control type="button" id="3001">
 			<visible allowhiddenfocus="true">false</visible>
 			<onfocus>SetFocus(50)</onfocus>
 		</control>
-
 		<!-- Open Scrollbars -->
 		<control type="button" id="61">
 			<visible allowhiddenfocus="true">false</visible>
 			<onfocus>SetProperty(Scrollbars,true,home)</onfocus>
 			<onfocus>SetFocus(60)</onfocus>
 		</control>
-
 		<!-- Close Scrollbars -->
 		<control type="button" id="62">
 			<visible allowhiddenfocus="true">false</visible>
 			<onfocus>ClearProperty(Scrollbars,home)</onfocus>
 			<onfocus>SetFocus(50)</onfocus>
 		</control>
-
-		<!-- Hidden Music Player Controls -->
-		<include condition="Skin.HasSetting(Music_Player_Enabled)" content="Music_Player_Buttons"/>
-
 		<!-- Hidden Controls for animation trigger on menu switching and resetting multiart if enabled-->
 		<control type="button" id="940">
 			<visible allowhiddenfocus="true">false</visible>
@@ -194,19 +184,16 @@
 			<visible>Control.HasFocus(940)</visible>
 			<animation effect="slide" end="0,0" time="360" reversible="false">Hidden</animation>
 		</control>
-
 		<!-- OnPrevious delay -->
 		<control type="group" id="5001">
 			<visible>Container.OnPrevious</visible>
 			<animation effect="slide" end="0,0" time="360" reversible="false">Hidden</animation>
 		</control>
-
 		<!-- OnNext delay -->
 		<control type="group" id="5002">
 			<visible>Container.OnNext</visible>
 			<animation effect="slide" end="0,0" time="360" reversible="false">Hidden</animation>
 		</control>
-
 		<!-- Container Update Bounce Test For Dialog_Info_Label -->
 		<control type="button" id="5003">
 			<visible allowhiddenfocus="true">false</visible>
@@ -214,123 +201,72 @@
 			<onfocus condition="!Container.IsUpdating">SetFocus(50)</onfocus>
 			<onfocus condition="!Container.IsUpdating">Action(Info)</onfocus>
 		</control>
-
 		<control type="button" id="5004">
 			<visible allowhiddenfocus="true">false</visible>
 			<onfocus condition="Container.IsUpdating">SetFocus(5003)</onfocus>
 			<onfocus condition="!Container.IsUpdating">SetFocus(50)</onfocus>
 			<onfocus condition="!Container.IsUpdating">Action(Info)</onfocus>
 		</control>
-	</include>
-
-	<include name="MyViews_Main">
-		<!-- To fix audiostutter on navigation during video playback -->
+		<!-- Musicplayer controls -->
+		<include condition="Skin.HasSetting(Music_Player_Enabled)" content="Music_Player_Buttons"/>
+		<!-- Fix for audio stutter / Trailer autoplay -->
 		<control type="videowindow">
-			<visible>![Skin.HasSetting(Trailer_Autoplay) + String.IsEqual(Window(home).Property(Trailer_Autoplay),true)] | $EXP[GridView_IsVisible]</visible>
-			<include>Hidden_Control</include>
+			<visible>String.IsEqual(Window(home).Property(Trailer_Autoplay),true)</visible>
 		</control>
-
-		<!-- Trailer autoplay -->
-		<include condition="Skin.HasSetting(Trailer_Autoplay)" content="Trailer_Autoplay_Function"/>
-
-		<control type="group">
-			<include condition="Skin.HasSetting(Trailer_Autoplay)" content="Trailer_Autoplay_Fade_Animation"/>
-
-			<!-- Light view gradient -->
-			<control type="image">
-				<visible>Skin.String(Theme,Light)</visible>
-				<width>100%</width>
-				<bottom>0</bottom>
-				<height>50%</height>
-				<texture colordiffuse="$VAR[Light_Grey_Color]">views/gradient_light-background.png</texture>
-			</control>
-
-			<control type="group">
-				<visible>!$EXP[InfoDialog_IsVisible]</visible>
-				<include>Viewtype_Fade_Animation</include>
-
-				<include condition="Skin.HasSetting(Secondary_List_Enabled)" content="Secondary_List_Array"/>
-				<include content="ListView_Display"/>
-				<include content="ListView_Container"/>
-				<include condition="Skin.HasSetting(BillboardView_Enabled)" content="BillboardView_Container"/>
-				<include condition="Skin.HasSetting(BillboardView_Enabled)" content="BillboardView_Display"/>
-				<include condition="Skin.HasSetting(BillboardView_Enabled)" content="BillboardView_Details"/>
-				<include condition="Skin.HasSetting(ShowcaseView_Enabled)" content="ShowcaseView_Container"/>
-				<include condition="Skin.HasSetting(ShowcaseView_Enabled)" content="ShowcaseView_Display"/>
-				<include condition="Skin.HasSetting(ShowcaseView_Enabled)" content="ShowcaseView_Details"/>
-				<include condition="Skin.HasSetting(StripView_Enabled)" content="StripView_Container"/>
-				<include condition="Skin.HasSetting(StripView_Enabled)" content="StripView_Display"/>
-				<include condition="Skin.HasSetting(StripView_Enabled)" content="StripView_Details"/>
-				<include condition="Skin.HasSetting(Music_Player_Enabled)" content="Shared_Dialog_Layouts"/>
-				<include condition="Skin.HasSetting(GridView_Enabled)" content="GridView_Container"/>
-				<include content="MediaFlags"/>
-
-				<!-- Busy spinner for transition between infodialogs -->
-				<control type="image">
-					<visible>String.IsEqual(Window(home).Property(InfoDialog_Transition),true)</visible>
-					<include>Dialog_Fade_Animation</include>
-					<centerleft>50%</centerleft>
-					<centertop>50%</centertop>
-					<width>90</width>
-					<height>90</height>
-					<texture colordiffuse="$VAR[Primary_Color]">views/dialogs/busy.png</texture>
-					<animation effect="rotate" start="0" end="-360" center="auto" time="1800" loop="true" tween="cubic" easing="out" condition="true">Conditional</animation>
-				</control>
-			</control>
-		</control>
+		<include condition="Skin.HasSetting(Trailer_Autoplay)" content="Trailer_Autoplay_Mask"/>
+		<!-- Light background -->
+		<include content="Light_Theme_Background">
+			<include condition="Skin.HasSetting(Trailer_Autoplay)" content="Trailer_Autoplay_Fade_Delayed_Animation"/>
+		</include>
 	</include>
 
 	<include name="MyViews_ListOnly">
 		<control type="group">
-			<!-- To fix audiostutter on navigation during video playback -->
-			<control type="videowindow">
-				<include>Hidden_Control</include>
-			</control>
-			<!-- Light view gradient -->
-			<control type="image">
-				<visible>Skin.String(Theme,Light)</visible>
-				<width>100%</width>
-				<bottom>0</bottom>
-				<height>50%</height>
-				<texture colordiffuse="$VAR[Light_Grey_Color]">views/gradient_light-background.png</texture>
-			</control>
-			<control type="group">
-				<visible>!$EXP[InfoDialog_IsVisible]</visible>
-				<include>Viewtype_Fade_Animation</include>
-				<include>ListView_Display</include>
-				<include>ListView_Container</include>
-				<include condition="Skin.HasSetting(Music_Player_Enabled)" content="Shared_Dialog_Layouts"/>
-			</control>
+			<visible>!$EXP[InfoDialog_IsVisible]</visible>
+			<include content="Visible_Fade_Delayed_Animation"/>
+			<include content="ListView_Display"/>
+			<include content="ListView_Container"/>
+			<include condition="Skin.HasSetting(Music_Player_Enabled)" content="Shared_Dialog_Layouts"/>
 		</control>
 	</include>
 
 	<include name="MyViews_Addons">
+		<include condition="Window.Is(addonbrowser) + !Skin.HasSetting(Global_Fanart_Slideshow_Disabled)" content="Global_Fanart_Slideshow">
+			<param name="visible" value="!Container.Content(addons)"/>
+		</include>
 		<control type="group">
-			<!-- To fix audiostutter on navigation during video playback -->
-			<control type="videowindow">
-				<include>Hidden_Control</include>
-			</control>
-			<!-- Light view gradient -->
-			<control type="image">
-				<visible>Skin.String(Theme,Light)</visible>
-				<width>100%</width>
-				<bottom>0</bottom>
-				<height>50%</height>
-				<texture colordiffuse="$VAR[Light_Grey_Color]">views/gradient_light-background.png</texture>
-			</control>
-			<control type="group">
-				<visible>Window.Is(addonbrowser) + !Container.Content(addons)</visible>
-				<include>Dialog_Fade_Animation</include>
-				<include condition="!Skin.HasSetting(Global_Fanart_Slideshow_Disabled)" content="Global_Fanart_Slideshow"/>
-			</control>
-			<control type="group">
-				<visible>!$EXP[InfoDialog_IsVisible] + !Window.IsVisible(addonsettings) + ![Window.Is(addonbrowser) + Window.IsVisible(selectdialog)]</visible>
-				<include>Viewtype_Fade_Animation</include>
-				<include>ListView_Display</include>
-				<include>ListView_Container</include>
-				<include condition="Skin.HasSetting(Music_Player_Enabled)" content="Shared_Dialog_Layouts"/>
-				<include condition="Skin.HasSetting(GridView_Enabled)">GridView_Container</include>
-			</control>
+			<visible>!$EXP[InfoDialog_IsVisible] + !Window.IsVisible(addonsettings) + ![Window.Is(addonbrowser) + Window.IsVisible(selectdialog)]</visible>
+			<include content="Visible_Fade_Delayed_Animation"/>
+			<include content="ListView_Display"/>
+			<include content="ListView_Container"/>
+			<include condition="Skin.HasSetting(Music_Player_Enabled)" content="Shared_Dialog_Layouts"/>
+			<include condition="Skin.HasSetting(GridView_Enabled)">GridView_Container</include>
+		</control>
+	</include>
+
+	<include name="MyViews_Main">
+		<control type="group">
+			<visible>!$EXP[InfoDialog_IsVisible]</visible>
+			<include content="Visible_Fade_Delayed_Animation"/>
+			<include condition="Skin.HasSetting(Trailer_Autoplay)" content="Trailer_Autoplay_Fade_Animation"/>
+			<include condition="Skin.HasSetting(Secondary_List_Enabled)" content="Secondary_List_Array"/>
+			<include content="ListView_Display"/>
+			<include content="ListView_Container"/>
+			<include condition="Skin.HasSetting(BillboardView_Enabled)" content="BillboardView_Container"/>
+			<include condition="Skin.HasSetting(BillboardView_Enabled)" content="BillboardView_Display"/>
+			<include condition="Skin.HasSetting(BillboardView_Enabled)" content="BillboardView_Details"/>
+			<include condition="Skin.HasSetting(ShowcaseView_Enabled)" content="ShowcaseView_Container"/>
+			<include condition="Skin.HasSetting(ShowcaseView_Enabled)" content="ShowcaseView_Display"/>
+			<include condition="Skin.HasSetting(ShowcaseView_Enabled)" content="ShowcaseView_Details"/>
+			<include condition="Skin.HasSetting(StripView_Enabled)" content="StripView_Container"/>
+			<include condition="Skin.HasSetting(StripView_Enabled)" content="StripView_Display"/>
+			<include condition="Skin.HasSetting(StripView_Enabled)" content="StripView_Details"/>
+			<include condition="Skin.HasSetting(Music_Player_Enabled)" content="Shared_Dialog_Layouts"/>
+			<include condition="Skin.HasSetting(GridView_Enabled)" content="GridView_Container"/>
+			<include content="MediaFlags"/>
+			<include content="Busy_Spinner">
+				<param name="visible" value="String.IsEqual(Window(home).Property(InfoDialog_Transition),true)"/>
+			</include>
 		</control>
 	</include>
 
@@ -339,24 +275,21 @@
 		<param name="top" default="230"/>
 		<definition>
 			<include content="Scrollbars"/>
-
 			<control type="group">
 				<visible>String.IsEqual(Window(home).Property(OptionsMenu),Active) | [Window.IsVisible(pictures) + Control.HasFocus(9)]</visible>
-				<include>Options_Menu_Fade_Animation</include>
+				<include content="Options_Menu_Fade_Animation"/>
 					<control type="image">
 						<texture colordiffuse="$VAR[Transparent_Dialog_Mask]">views/white_100.png</texture>
 					</control>
 			</control>
-
 			<control type="group">
 				<visible>String.IsEqual(Window(home).Property(OptionsMenu),Active) | [Window.IsVisible(pictures) + Control.HasFocus(9)]</visible>
-				<include>Delayed_Dialog_Fade_Animation</include>
+				<include content="VisibleHidden_Fade_Delayed_Animation"/>
 				<left>$PARAM[left]</left>
 				<top>$PARAM[top]</top>
-
 				<control type="group">
 					<visible>!Window.IsVisible(shutdownmenu) + !Window.IsVisible(virtualkeyboard)</visible>
-					<include>Content_Fade_Animation</include>
+					<include content="Visible_Fade_Animation"/>
 					<!-- dummy labels for Random button on pictures -->
 					<control type="label">
 						<top>220</top>
@@ -371,11 +304,10 @@
 						<visible>Window.IsVisible(pictures) + Control.HasFocus(3000)</visible>
 					</control>
 				</control>
-
 				<control type="fixedlist" id="3000">
 					<viewtype label="535">list</viewtype>
 					<visible allowhiddenfocus="true">!Window.IsVisible(shutdownmenu) + !Window.IsVisible(virtualkeyboard)</visible>
-					<include>Content_Fade_Animation</include>
+					<include content="Visible_Fade_Animation"/>
 					<description>Options menu</description>
 					<width>1080</width>
 					<height>675</height>
@@ -441,7 +373,6 @@
 					<onleft condition="Container(3000).HasFocus(951)">SetFocus(940)</onleft>
 					<onright condition="Container(3000).HasFocus(952)">SetFocus(505)</onright>
 					<onright condition="Container(3000).HasFocus(952)">SetFocus(940)</onright>
-
 					<orientation>vertical</orientation>
 					<focusposition>0</focusposition>
 					<movement>12</movement>
@@ -482,7 +413,6 @@
 						</include>
 					</focusedlayout>
 					<content>
-
 						<!-- Layout -->
 						<item id="939">
 							<description>Layout / List</description>
@@ -529,14 +459,12 @@
 							<property name="ActionRight">Container.NextViewMode</property>
 							<visible>Integer.IsGreater(Container.ViewCount,1) + Control.IsVisible(505)</visible>
 						</item>
-
 						<!-- View Opions -->
 						<include content="ListView_Menu_Options"/>
 						<include condition="Skin.HasSetting(BillboardView_Enabled) + [Window.Is(videos) | Window.Is(music)]" content="BillboardView_Menu_Options"/>
 						<include condition="Skin.HasSetting(ShowcaseView_Enabled) + [Window.Is(videos) | Window.Is(music)]" content="ShowcaseView_Menu_Options"/>
 						<include condition="Skin.HasSetting(StripView_Enabled) + [Window.Is(videos) | Window.Is(music)]" content="StripView_Menu_Options"/>
 						<include condition="Skin.HasSetting(GridView_Enabled) + !Window.Is(musicplaylisteditor) + !Window.Is(pictures) + !Window.Is(musicplaylist) + !Window.Is(videoplaylist)" content="GridView_Menu_Options"/>
-
 						<!-- Trailer Auto Playback -->
 						<item>
 							<description>Trailer Autoplay (Movies) / Off</description>
@@ -574,7 +502,6 @@
 							<property name="ActionRight">Skin.SetString(Trailer_Autoplay_TVShows_Enabled,false)</property>
 							<visible>Skin.HasSetting(Trailer_Autoplay) + [Container.Content(tvshows) | Container.Content(seasons) | Container.Content(episodes)] + !Control.IsVisible(505) + Skin.String(Trailer_Autoplay_TVShows_Enabled,true)</visible>
 						</item>
-
 						<!-- Shared -->
 						<!-- Sort -->
 						<item id="942">
@@ -585,7 +512,6 @@
 						  <property name="ActionRight">Container.NextSortMethod</property>
 						  <visible>Control.IsEnabled(3)</visible>
 						</item>
-
 						<!-- Sort mode -->
 						<item id="942">
 							<description>Order / Ascending</description>
@@ -605,7 +531,6 @@
 							<property name="ActionRight">Container.SetSortDirection</property>
 							<visible>Control.IsEnabled(4) + Container.SortDirection(descending)</visible>
 						</item>
-
 						<!-- Show only unwatched or all videos -->
 						<item id="942">
 							<onclick>SetFocus(50)</onclick>
@@ -623,7 +548,6 @@
 							<property name="ActionRight">SendClick(14)</property>
 							<visible>Window.Is(videos) + Control.IsEnabled(14) + System.Setting(hidewatched) + !Container.Content(actors) + !Container.Content(sets)</visible>
 						</item>
-
 						<!-- Party mode -->
 						<item>
 							<onclick>SetFocus(50)</onclick>
@@ -632,7 +556,6 @@
 							<label2>$LOCALIZE[589]</label2>
 							<visible>Control.IsEnabled(16) + !MusicPartyMode.Enabled</visible>
 						</item>
-
 						<!-- Filter -->
 						<item>
 							<onclick>SetFocus(50)</onclick>
@@ -641,7 +564,6 @@
 							<label2>$LOCALIZE[587]</label2>
 							<visible>Container.CanFilterAdvanced</visible>
 						</item>
-
 						<!-- Search -->
 						<item>
 							<onclick>SetFocus(50)</onclick>
@@ -650,7 +572,6 @@
 							<label2>$LOCALIZE[137]</label2>
 							<visible>Control.IsEnabled(8) + !Window.Is(addonbrowser) + !Window.Is(programs)</visible>
 						</item>
-
 						<!-- Current playlist -->
 						<item>
 							<onclick>SetFocus(50)</onclick>
@@ -666,7 +587,6 @@
 							<label2>$LOCALIZE[13350]</label2>
 							<visible>Window.Is(music) + !String.IsEqual(Playlist.Length(music),0)</visible>
 						</item>
-
 						<!-- Update Library -->
 						<item>
 							<description>Update Library</description>
@@ -684,7 +604,6 @@
 							<label2>$LOCALIZE[13353]</label2>
 							<visible>Control.IsEnabled(20) + Library.IsScanningVideo | Library.IsScanningMusic</visible>
 						</item>
-
 						<!-- Playlist -->
 						<!-- Shuffle playlist -->
 						<!-- Off -->
@@ -752,7 +671,6 @@
 							<label2>$LOCALIZE[192]</label2>
 							<visible>[Window.Is(musicplaylist) | Window.Is(videoplaylist)] + Control.IsEnabled(22)</visible>
 						</item>
-
 						<!-- Pictures -->
 						<!-- Start slideshow -->
 						<item>
@@ -768,7 +686,6 @@
 							<label2>$LOCALIZE[13318]</label2>
 							<visible>Window.Is(pictures) + Control.IsEnabled(7)</visible>
 						</item>
-
 						<!-- Addon Browser -->
 						<!-- Settings -->
 						<item>
@@ -806,12 +723,9 @@
 							<label2>$LOCALIZE[24034]</label2>
 							<visible>Window.Is(addonbrowser) + Control.IsEnabled(9)</visible>
 						</item>
-
 					</content>
 				</control>
-
 			</control>
 		</definition>
 	</include>
-
 </includes>

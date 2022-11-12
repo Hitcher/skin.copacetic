@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <window>
 	<!-- visualisation -->
-	<backgroundcolor>$VAR[Secondary_Color]</backgroundcolor>
 	<onload>Skin.TimerStart(music_visualisation)</onload>
 	<onunload>Skin.TimerStop(music_visualisation)</onunload>
-	<include>My_Window_Fade_Animation</include>
+	<backgroundcolor>$VAR[Dark_Color]</backgroundcolor>
+	<include content="WindowOpenClose_Fade_Animation"/>
 	<controls>
-
 		<!-- Visualisation -->
 		<control type="group">
 			<control type="visualisation" id="2">
@@ -22,18 +21,10 @@
 				<height>1080</height>
 			</control>
 		</control>
-
-		<!-- Light view gradient -->
-		<control type="image">
-			<visible>Skin.String(Theme,Light)</visible>
-			<width>100%</width>
-			<bottom>0</bottom>
-			<height>50%</height>
-			<texture colordiffuse="$VAR[Light_Grey_Color]">views/gradient_light-background.png</texture>
-		</control>
-
+		<!-- Background -->
+		<include content="Light_Theme_Background"/>
 		<!-- Main artwork -->
-		<include content="SimpleListIcon">
+		<include content="Simple_ListIcon">
 			<param name="left" value="600"/>
 			<param name="top" value="180"/>
 			<param name="width" value="720"/>
@@ -41,14 +32,13 @@
 			<param name="texture" value="$INFO[Player.Art(album.thumb)]"/>
 			<animation effect="fadediffuse" end="ff3f3f3f" time="360" condition="Window.IsVisible(musicosd) | Player.Paused | Player.Rewinding | Player.Forwarding" reversible="true">Conditional</animation>
 		</include>
-
 		<!-- Details -->
 		<control type="group">
 			<visible>!Window.IsVisible(1123) + !$EXP[TransparentDialog_IsVisible]</visible>
-			<include>Delayed_Content_Fade_Animation</include>
+			<include content="VisibleHidden_Fade_Delayed_Animation"/>
 			<control type="grouplist">
 				<visible>!Window.IsVisible(musicosd)</visible>
-				<include>Delayed_Content_Fade_Animation</include>
+				<include content="VisibleHidden_Fade_Delayed_Animation"/>
 				<centertop>50%</centertop>
 				<height>360</height>
 				<width>480</width>
@@ -79,7 +69,7 @@
 			<control type="grouplist">
 				<visible>MusicPlayer.HasNext + !String.IsEmpty(MusicPlayer.offset(1).Title)</visible>
 				<visible>!Window.IsVisible(volumebar)</visible>
-				<include>Content_Fade_Animation</include>
+				<include content="Visible_Fade_Animation"/>
 				<centertop>50%</centertop>
 				<height>360</height>
 				<width>480</width>
@@ -103,6 +93,5 @@
 				</control>
 			</control>
 		</control>
-
 	</controls>
 </window>

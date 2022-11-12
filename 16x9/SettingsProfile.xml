@@ -1,160 +1,70 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <window>
 	<!-- profiles -->
-	<backgroundcolor>$VAR[Secondary_Color]</backgroundcolor>
-	<include>SettingsCategory_Fade_Animation</include>
-	<defaultcontrol always="true">9001</defaultcontrol>
+	<defaultcontrol always="true">300008</defaultcontrol>
+	<backgroundcolor>$VAR[Global_Fanart_Slideshow_Background_Color]</backgroundcolor>
+	<include content="Settings_WindowOpenClose_Fade_Delayed_Animation"/>
 	<controls>
-
-		<!-- Hidden Focus setter -->
-		<include content="Delay_Content_Load">
-			<param name="time" value="0"/>
-			<param name="target_id" value="SetFocus(300008)"/>
-			<onfocus condition="String.IsEmpty(Window(home).Property(Global_Fanart_Slideshow))">SetProperty(Global_Fanart_Slideshow,$ESCINFO[Container(12342).ListItem.Art(fanart)],home)</onfocus>
-		</include>
-
+		<!-- Background -->
+		<include condition="Skin.HasSetting(Global_Fanart_Slideshow_Disabled)" content="Light_Theme_Background"/>
 		<include condition="!Skin.HasSetting(Global_Fanart_Slideshow_Disabled)" content="Global_Fanart_Slideshow"/>
-
 		<!-- Content -->
-		<control type="group">
-			<visible>!$EXP[TransparentDialog_IsVisible]</visible>
-			<include>Delayed_Content_Fade_Animation</include>
-
-			<include content="Transparent_Dialog_Panel">
-				<param name="top" value="180"/>
-				<param name="bottom" value="180"/>
+		<include content="Default_Settings_Panel_Layout">
+			<param name="left_list_id" value="500"/>
+			<param name="right_list_id" value="2"/>
+			<param name="alt_right_id" value="501"/>
+			<param name="alt_right_condition" value="ControlGroup(500).HasFocus(100)"/>
+			<!-- Left list -->
+			<include content="Settings_Grouplist_Template">
+				<param name="id" value="500"/>
+				<param name="onleft" value="300008"/>
+				<param name="onright" value="2"/>
+				<param name="onright_condition" value="ControlGroup(500).HasFocus(101)"/>
+				<param name="onright2" vale="501"/>
+				<param name="onright2_condition" value="!ControlGroup(500).HasFocus(101)"/>
+				<include content="profiles_Left_List_Content"/>
 			</include>
-
-			<include content="SettingsCategory_Layout">
-				<param name="mainlist" value="500"/>
-				<param name="sublist" value="2"/>
+			<include content="Settings_Grouplist_Underline">
+				<param name="id" value="500"/>
 			</include>
-
-			<!-- Artwork -->
-			<control type="image">
-				<left>150</left>
-				<top>435</top>
-				<width>390</width>
-				<height>390</height>
-				<texture fallback="fallback/fallback-square.png">$VAR[Profiles_Icon]</texture>
-				<aspectratio>scale</aspectratio>
-			</control>
-			<control type="image">
-				<left>150</left>
-				<width>420</width>
-				<height>1</height>
-				<top>855</top>
-				<texture colordiffuse="$VAR[Unfocused_Color]">views/white_100.png</texture>
-			</control>
-
-			<!-- Main list -->
-			<control type="group">
-				<left>90</left>
-				<width>480</width>
-				<control type="grouplist" id="500">
-					<height>630</height>
-					<centertop>50%</centertop>
-					<itemgap>0</itemgap>
-					<onleft>300008</onleft>
-					<orientation>vertical</orientation>
-					<defaultcontrol always="true">100</defaultcontrol>
-					<!-- General -->
-					<control type="button" id="100">
-						<onright>501</onright>
-						<label>$LOCALIZE[128]</label>
-						<texturefocus/>
-					</control>
-					<control type="button" id="101">
-						<onright>2</onright>
-						<label>$LOCALIZE[13200]</label>
-						<texturefocus/>
-					</control>
-				</control>
-				<!-- Dummy underline for main list -->
-				<control type="image">
-					<animation effect="slide" end="0,90" time="0" reversible="false" condition="Container(500).Position(1)">Conditional</animation>
-					<left>60</left>
-					<height>1</height>
-					<top>314</top>
-					<texture colordiffuse="$VAR[Unfocused_Color]">views/white_100.png</texture>
-				</control>
-			</control>
-
-			<!-- General -->
-			<control type="grouplist" id="501">
+			<!-- Right list -->
+			<include content="Settings_Grouplist_Template">
+				<param name="id" value="501"/>
+				<param name="left" value="570"/>
+				<param name="width" value="1260"/>
+				<param name="onleft" value="100"/>
+				<param name="onright" value="300008"/>
 				<visible>!ControlGroup(500).HasFocus(101)</visible>
-				<left>570</left>
-				<width>1260</width>
-				<height>630</height>
-				<centertop>50%</centertop>
-				<itemgap>0</itemgap>
-				<onleft>500</onleft>
-				<onright>300008</onright>
-				<orientation>vertical</orientation>
 				<defaultcontrol always="true">4</defaultcontrol>
-				<!-- Enable login screen -->
-				<control type="radiobutton" id="4">
-					<label>20096</label>
-				</control>
-				<!-- Auto login -->
-				<control type="button" id="5">
-					<label>33084</label>
-					<label2>$INFO[System.ProfileAutoLogin]</label2>
-					<enable>!System.HasLoginScreen</enable>
-				</control>
-			</control>
-
-			<!-- Profiles -->
-			<control type="list" id="2">
-				<visible>ControlGroup(500).HasFocus(101)</visible>
-				<width>1260</width>
-				<left>570</left>
-				<height>630</height>
-				<centertop>50%</centertop>
-				<itemgap>0</itemgap>
-				<onleft>101</onleft>
-				<onright>300008</onright>
-				<orientation>vertical</orientation>
-				<align>top</align>
-				<scrolltime tween="sine" easing="inout">360</scrolltime>
-				<itemlayout height="90" width="1260">
-					<control type="label">
-						<textoffsetx>60</textoffsetx>
-						<label>$INFO[ListItem.Label]</label>
-						<textcolor>$VAR[Unfocused_Color]</textcolor>
-					</control>
-					<control type="label">
-						<textoffsetx>60</textoffsetx>
-						<align>right</align>
-						<label>$INFO[ListItem.Label2]</label>
-						<textcolor>$VAR[Unfocused_Color]</textcolor>
-					</control>
-				</itemlayout>
-				<focusedlayout height="90" width="1260">
-					<control type="label">
-						<textoffsetx>60</textoffsetx>
-						<label>$INFO[ListItem.Label]</label>
-						<textcolor>$VAR[Settings_Grouplist_Label_Color]</textcolor>
-					</control>
-					<control type="label">
-						<textoffsetx>60</textoffsetx>
-						<align>right</align>
-						<label>$INFO[ListItem.Label2]</label>
-						<textcolor>$VAR[Settings_Grouplist_Label_Color]</textcolor>
-					</control>
-					<control type="image">
-						<visible>Control.HasFocus(2)</visible>
-						<left>0</left>
-						<right>60</right>
-						<height>1</height>
-						<bottom>0</bottom>
-						<texture colordiffuse="$VAR[Unfocused_Color]">views/white_100.png</texture>
-					</control>
-				</focusedlayout>
-			</control>
-
-		</control>
-
+				<include content="profiles_Right_List_Content"/>
+			</include>
+			<!-- Right list 2 -->
+			<include content="Settings_List_Template">
+				<param name="visible" value="ControlGroup(500).HasFocus(101)"/>
+				<param name="id" value="2"/>
+				<param name="width" value="1260"/>
+				<param name="top" value="225"/>
+				<param name="onleft" value="101"/>
+				<param name="onright" value="300008"/>
+				<param name="focus_border_visible" value="Control.HasFocus(2)"/>
+				<param name="focus_border_margin_right" value="60"/>
+				<param name="focus_color" value="$VAR[Settings_Grouplist_Label_Color]"/>
+			</include>
+			<!-- Artwork -->
+			<include content="Simple_ListIcon">
+				<param name="left" value="150"/>
+				<param name="top" value="435"/>
+				<param name="width" value="390"/>
+				<param name="height" value="390"/>
+				<param name="texture" value="$VAR[Profiles_Icon]"/>
+				<param name="fallback" value="flags/fallback-square.png"/>
+				<param name="fadetime" value="180"/>
+			</include>
+			<include content="Dialog_Divider">
+				<animation effect="rotate" start="0" end="-90" center="auto" time="0" condition="true">Conditional</animation>
+				<animation effect="slide" start="0" end="315,0" center="auto" time="0" condition="true">Conditional</animation>
+				<param name="height" value="420"/>
+			</include>
+		</include>
 	</controls>
-
 </window>

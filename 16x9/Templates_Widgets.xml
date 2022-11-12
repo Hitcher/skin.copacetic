@@ -117,11 +117,11 @@
 
 			<control type="group">
 				<visible>!$EXP[TransparentDialog_IsVisible]</visible>
-				<include>Delayed_Content_Fade_Animation</include>
+				<include content="Visible_Fade_Delayed_Animation"/>
 				<!-- Details -->
 				<control type="group">
 					<visible>Control.HasFocus(90$PARAM[widget_position]0)</visible>
-					<include>Delayed_Content_Fade_Animation</include>
+					<include content="Visible_Fade_Delayed_Animation"/>
 					<include condition="Skin.HasSetting(Widget$PARAM[widget_position]_View_Billboard)" content="BillboardView_Details">
 						<param name="id" value="$PARAM[id]"/>
 					</include>
@@ -148,21 +148,13 @@
 					</include>
 				</control>
 				<nested/>
-				<!-- Busy spinner if container is updating -->
-				<control type="group">
-					<visible>Control.HasFocus(90$PARAM[widget_position]0) + Container(90$PARAM[widget_position]0).IsUpdating</visible>
-					<include>Content_Fade_Animation</include>
-					<control type="image">
-						<visible>!String.IsEqual(Window(home).Property(Trailer_Autoplay),true)</visible>
-						<animation effect="fade" start="0" end="100" time="360" delay="900"  tween="sine" easing="inout" reversible="false">Visible</animation>
-						<centerleft>50%</centerleft>
-						<centertop>50%</centertop>
-						<width>60</width>
-						<height>60</height>
-						<texture colordiffuse="$VAR[Volume_Focused_Color]">dialogs/busy.png</texture>
-						<animation effect="rotate" start="0" end="-360" center="auto" time="1800" loop="true" tween="cubic" easing="out" condition="true">Conditional</animation>
-					</control>
-				</control>
+				<!-- Busy spinner -->
+				<include content="Busy_Spinner">
+					<param name="visible" value="Control.HasFocus(90$PARAM[widget_position]0) + Container(90$PARAM[widget_position]0).IsUpdating"/>
+					<param name="size" value="60"/>
+					<param name="color" value="$VAR[Volume_Focused_Color]"/>
+					<include condition="Skin.HasSetting(Trailer_Autoplay)" content="Trailer_Autoplay_Fade_Delayed_Animation"/>
+				</include>
 			</control>
 		</definition>
 	</include>
@@ -434,6 +426,23 @@
 		</include>
 	</include>
 
+	<include name="Home_Widgets">
+		<control type="group">
+			<visible>!$EXP[InfoDialog_IsVisible]</visible>
+			<include content="VisibleHidden_Fade_Delayed_Animation"/>
+			<include content="Widget_1"/>
+			<include content="Widget_2"/>
+			<include content="Widget_3"/>
+			<include content="Widget_4"/>
+			<include content="Widget_5"/>
+			<include content="Widget_6"/>
+			<include content="Widget_7"/>
+			<include content="Widget_8"/>
+			<include content="Widget_9"/>
+			<include content="Home_Scrollbar"/>
+		</control>
+	</include>
+
 
 	<include name="Info_Widget_Template">
 		<param name="use_custom_content" default="true"/>
@@ -482,23 +491,18 @@
 			<!-- Details -->
 			<control type="group">
 				<visible>Control.HasFocus($PARAM[id]) + !Container($PARAM[id]).IsUpdating + !$EXP[TransparentDialog_IsVisible]</visible>
-				<include>Delayed_Content_Fade_Animation</include>
+				<include content="Visible_Fade_Delayed_Animation"/>
 				<include content="$PARAM[widget_view]View_Details">
 					<param name="id" value="$PARAM[id]"/>
 					<param name="widget_display" value="$PARAM[widget_display]"/>
 				</include>
 			</control>
-			<!-- Busy spinner if container is updating -->
-			<control type="image">
-				<visible>Control.HasFocus($PARAM[id]) + Container($PARAM[id]).IsUpdating + !$EXP[TransparentDialog_IsVisible]</visible>
-				<include>Content_Fade_Animation</include>
-				<centerleft>50%</centerleft>
-				<centertop>50%</centertop>
-				<width>60</width>
-				<height>60</height>
-				<texture colordiffuse="$VAR[Volume_Focused_Color]">dialogs/busy.png</texture>
-				<animation effect="rotate" start="0" end="-360" center="auto" time="1800" loop="true" tween="cubic" easing="out" condition="true">Conditional</animation>
-			</control>
+			<!-- Busy spinner -->
+			<include content="Busy_Spinner">
+				<param name="visible" value="Control.HasFocus($PARAM[id]) + Container($PARAM[id]).IsUpdating + !$EXP[TransparentDialog_IsVisible]"/>
+				<param name="size" value="60"/>
+				<param name="color" value="$VAR[Volume_Focused_Color]"/>
+			</include>
 			<!-- Labels to check view and display type -->
 			<control type="label" id="$PARAM[id]10">
 				<visible>false</visible>

@@ -2,12 +2,10 @@
 <window>
 	<!-- musicinformation -->
 	<onload condition="System.AddonIsEnabled(plugin.video.themoviedb.helper)">RunScript(plugin.video.themoviedb.helper,split_value=$INFO[ListItem.Genre],separator='/',property=GenreSplit)</onload>
-	<onunload>ClearProperty(GenreSplit.0,home)</onunload>
 	<onload condition="String.IsEqual(ListItem.DBType,artist)">SetProperty(Info_Type,artist,musicinformation)</onload>
 	<onload condition="String.IsEqual(ListItem.DBType,album)">SetProperty(Info_Type,album,musicinformation)</onload>
 	<onload>SetProperty(ArtistDBID,$INFO[ListItem.DBID],musicinformation)</onload>
 	<onload>SetProperty(ResetScroll," ")</onload>
-
 	<onload condition="Integer.IsGreater(Container(65000).CurrentItem,1)">Control.Move(65000,$INFO[Container(65000).CurrentItem,-])</onload>
 	<onload condition="Integer.IsGreater(Container(65000).CurrentItem,1)">Control.Move(65000,1)</onload>
 	<onload condition="Integer.IsGreater(Container(50).CurrentItem,1)">Control.Move(50,$INFO[Container(50).CurrentItem,-])</onload>
@@ -30,14 +28,14 @@
 	<onload condition="Integer.IsGreater(Container(8080).CurrentItem,1)">Control.Move(8080,1)</onload>
 	<onload condition="Integer.IsGreater(Container(8090).CurrentItem,1)">Control.Move(8090,$INFO[Container(8090).CurrentItem,-])</onload>
 	<onload condition="Integer.IsGreater(Container(8090).CurrentItem,1)">Control.Move(8090,1)</onload>
-
+	<onunload>ClearProperty(GenreSplit.0,home)</onunload>
 	<defaultcontrol always="true">9001</defaultcontrol>
 	<backgroundcolor>$VAR[Secondary_Color]</backgroundcolor>
-	<include>Delayed_Dialog_Fade_Animation</include>
+	<include content="WindowOpenClose_Fade_Delayed_Animation"/>
 	<controls>
 
 		<!-- Delay content on Load -->
-		<include content="Delay_Content_Load">
+		<include content="Focus_Setter">
 			<param name="time" value="720"/>
 			<param name="target_id" value="SetFocus(97)"/>
 		</include>
@@ -69,15 +67,15 @@
 		<!-- Artwork -->
 		<control type="group">
 			<visible>[Window.IsActive(musicinformation) | Window.IsActive(songinformation)] + ![Window.Is(songinformation) + Window.IsActive(musicinformation)]</visible>
-			<include>Delayed_Content_Fade_Animation</include>
+			<include content="Visible_Fade_Delayed_Animation"/>
 
 			<!-- Background -->
 			<control type="group">
 				<visible>!$EXP[InfoWidget_HasFocus]</visible>
-				<include>Dialog_Fade_Animation</include>
-{				<control type="group">
+				<include content="WindowOpenClose_Fade_Animation"/>
+				<control type="group">
 					<visible>String.IsEqual(ListItem.DBType,artist) | [String.IsEqual(ListItem.DBType,album) + Control.HasFocus(12)]</visible>
-					<include>Delayed_Dialog_Fade_Animation</include>
+					<include content="WindowOpenClose_Fade_Delayed_Animation"/>
 					<control type="image">
 						<!-- 25% alpha -->
 						<animation effect="fadediffuse" end="ff404040" time="0" condition="true">Conditional</animation>
@@ -91,18 +89,16 @@
 			<!-- Thumbnails -->
 			<control type="group">
 				<visible>!Control.HasFocus(9001)</visible>
-				<include>Content_Fade_Animation</include>
+				<include content="Visible_Fade_Animation"/>
 				<control type="group">
 					<visible>!String.IsEqual(ListItem.DBType,artist) + !Control.HasFocus(12) + !Control.HasFocus(10) + !$EXP[InfoWidget_HasFocus]</visible>
-					<include>Delayed_Content_Fade_Animation</include>
+					<include content="Visible_Fade_Delayed_Animation"/>
 					<include content="Transparent_Dialog_Panel">
 						<param name="left" value="0"/>
-						<param name="top" value="180"/>
-						<param name="bottom" value="180"/>
 					</include>
 					<control type="image">
 						<visible>!Control.HasFocus(10)</visible>
-						<include>Delayed_Content_Fade_Animation</include>
+						<include content="Visible_Fade_Delayed_Animation"/>
 						<left>0</left>
 						<centertop>50%</centertop>
 						<width>720</width>
@@ -112,7 +108,7 @@
 				</control>
 				<control type="image">
 					<visible>String.IsEqual(ListItem.DBType,song) + Control.HasFocus(12)</visible>
-					<include>Delayed_Content_Fade_Animation</include>
+					<include content="Visible_Fade_Delayed_Animation"/>
 					<centerleft>50%</centerleft>
 					<centertop>50%</centertop>
 					<width>720</width>
@@ -125,11 +121,11 @@
 		<!-- Content -->
 		<control type="group">
 			<visible>[Window.IsActive(musicinformation) | Window.IsActive(songinformation)] + !Control.HasFocus(9001) + ![Window.Is(songinformation) + Window.IsActive(musicinformation)]</visible>
-			<include>Long_Delayed_Content_Fade_Animation</include>
+			<include content="Visible_Fade_Delayed_Long_Animation"/>
 			<control type="group">
 				<visible>![$EXP[TransparentDialog_IsVisible] + String.IsEqual(ListItem.DBType,artist)]</visible>
 				<visible>!$EXP[InfoWidget_HasFocus]</visible>
-				<include>Delayed_Content_Fade_Animation</include>
+				<include content="Visible_Fade_Delayed_Animation"/>
 				<include content="Info_Dialog_Artwork">
 					<param name="visible" value="Control.HasFocus(10)"/>
 				</include>
@@ -137,7 +133,7 @@
 			<control type="group">
 				<visible>!$EXP[TransparentDialog_IsVisible]</visible>
 				<visible>!$EXP[InfoWidget_HasFocus]</visible>
-				<include>Delayed_Content_Fade_Animation</include>
+				<include content="Visible_Fade_Delayed_Animation"/>
 
 				<include content="Breadcrumb_Label">
 					<param name="bar" value="false"/>
@@ -173,14 +169,14 @@
 					<param name="font" value="Plot_Fullscreen"/>
 				</include>
 				<include condition="String.IsEqual(ListItem.DBType,album)" content="Simple_List">
+					<include content="Visible_Fade_Delayed_Animation"/>
 					<param name="id" value="4500"/>
 					<param name="visible" value="Control.HasFocus(4500)"/>
-					<param name="animation" value="Delayed_Content_Fade_Animation"/>
 					<param name="left" value="720"/>
+					<param name="width" value="960"/>
 					<param name="nowplayingvisible" value="true"/>
 					<param name="labelleft" value="120"/>
 					<param name="label" value="$INFO[ListItem.Label]"/>
-					<param name="labelmaxwidth" value="960"/>
 					<param name="selectedcolor" value="$VAR[Light_Color]"/>
 					<param name="include" value="AlbumInfo_Content_Path"/>
 				</include>
@@ -192,7 +188,7 @@
 
 				<control type="textbox">
 					<visible>Control.HasFocus(12) + String.IsEqual(ListItem.DBType,album)</visible>
-					<include>Delayed_Content_Fade_Animation</include>
+					<include content="Visible_Fade_Delayed_Animation"/>
 					<width>1680</width>
 					<centerleft>50%</centerleft>
 					<height max="146">auto</height>
@@ -282,17 +278,20 @@
 				</control>
 			</control>
 
-			<include content="Info_Widget_Discography"/>
+			<!-- 8010 -->
 			<include condition="!String.IsEqual(ListItem.DBType,album)" content="Info_Widget_MostPlayed"/>
+			<!-- 8020 -->
+			<include content="Info_Widget_Discography"/>
+			<!-- 8070 -->
 			<include condition="String.IsEqual(ListItem.DBType,artist)" content="Info_Widget_SimilarArtists"/>
 			<include condition="!String.IsEqual(ListItem.DBType,artist)" content="Info_Widget_SimilarAlbums"/>
-
-			<include content="Dialog_Widget_Scrollbar"/>
+			<!-- Scrollbar -->
+			<include content="DialogMusicInfo_Scrollbar"/>
 
 			<!-- Music Player -->
 			<control type="group">
 				<visible>!Window.IsVisible(shutdownmenu)</visible>
-				<include>Delayed_Content_Fade_Animation</include>
+				<include content="Visible_Fade_Delayed_Animation"/>
 				<include condition="Skin.HasSetting(Music_Player_Enabled)" content="Music_Player_Buttons"/>
 				<include condition="Skin.HasSetting(Music_Player_Enabled)" content="Music_Player_Widget">
 					<param name="left_label_visible" value="true"/>
@@ -304,7 +303,7 @@
 			<control type="group">
 				<visible>$EXP[TransparentDialog_IsVisible] + [$EXP[InfoWidget_HasFocus] | String.IsEqual(ListItem.DBType,album) | Window.Is(songinformation)]</visible>
 				<include>Transparent_Dialog_Background</include>
-				<include>Content_Fade_Animation</include>
+				<include content="VisibleHidden_Fade_Animation"/>
 			</control>
 
 		</control>

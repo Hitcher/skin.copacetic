@@ -1,44 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <includes>
+
 	<include file="Animations.xml"/>
-	<include file="Artwork.xml"/>
-	<include file="Button_Templates.xml"/>
-	<include file="Button_Textures.xml"/>
+	<include file="Buttons.xml"/>
 	<include file="Colors.xml"/>
+	<include file="Content_Settings.xml"/>
+	<include file="Content_SmartPlaylistEditor.xml"/>
+	<include file="Content_Viewtype_Options_List.xml"/>
+	<include file="Content_Viewtype_Options_Billboard.xml"/>
+	<include file="Content_Viewtype_Options_Showcase.xml"/>
+	<include file="Content_Viewtype_Options_Strip.xml"/>
+	<include file="Content_Viewtype_Options_Grid.xml"/>
 	<include file="Defaults.xml"/>
+	<include file="Components_DialogKeyboard.xml"/>
+	<include file="Components_Dialogs.xml"/>
+	<include file="Components_Home.xml"/>
+	<include file="Components_Infoscreens.xml"/>
+	<include file="Components_OSD.xml"/>
+	<include file="Components_Settings.xml"/>
+	<include file="Components_Viewtype_50_List.xml"/>
+	<include file="Components_Viewtype_501_Billboard.xml"/>
+	<include file="Components_Viewtype_502_Showcase.xml"/>
+	<include file="Components_Viewtype_504_Strip.xml"/>
+	<include file="Components_Viewtype_505_Grid.xml"/>
+	<include file="Components_Viewtypes_Common.xml"/>
 	<include file="Expressions.xml"/>
 	<include file="Extras_Multiart.xml"/>
+	<include file="Extras_Music_Player.xml"/>
 	<include file="Extras_Secondary_List.xml"/>
 	<include file="Extras_Trailer_Autoplay.xml"/>
-	<include file="Includes_Dialogs.xml"/>
-	<include file="Includes_Information.xml"/>
-	<include file="Includes_MyViews.xml"/>
-	<include file="Includes_Notifications.xml"/>
-	<include file="Includes_Player.xml"/>
 	<include file="Includes_script-upnext.xml"/>
-	<include file="Includes_Settings.xml"/>
-	<include file="Menu_Options_List.xml"/>
-	<include file="Menu_Options_Billboard.xml"/>
-	<include file="Menu_Options_Showcase.xml"/>
-	<include file="Menu_Options_Strip.xml"/>
-	<include file="Menu_Options_Grid.xml"/>
 	<include file="Navigation.xml"/>
+	<include file="Notifications.xml"/>
 	<include file="Scrollbars.xml"/>
 	<include file="script-skinshortcuts-includes.xml"/>
+	<include file="Templates_Artwork.xml"/>
+	<include file="Templates_Buttons.xml"/>
+	<include file="Templates_Dialogs.xml"/>
+	<include file="Templates_MyViews.xml"/>
+	<include file="Templates_Widgets.xml"/>
 	<include file="Viewtype_50_List.xml"/>
-	<include file="Viewtype_50_List_Components.xml"/>
 	<include file="Viewtype_501_Billboard.xml"/>
-	<include file="Viewtype_501_Billboard_Components.xml"/>
 	<include file="Viewtype_502_Showcase.xml"/>
-	<include file="Viewtype_502_Showcase_Components.xml"/>
 	<include file="Viewtype_504_Strip.xml"/>
-	<include file="Viewtype_504_Strip_Components.xml"/>
 	<include file="Viewtype_505_Grid.xml"/>
-	<include file="Viewtype_505_Grid_Components.xml"/>
-	<include file="Viewtype_Common_Components.xml"/>
 	<include file="Variables.xml"/>
 	<include file="Widget_Actions.xml"/>
 	<include file="Widget_Paths.xml"/>
-	<include file="Widget_Templates.xml"/>
+	<include file="Widget_Reset.xml"/>
 	<include file="Widget_Variables.xml"/>
 
 	<include name="Object_Include">
@@ -47,6 +56,13 @@
 
 	<include name="Blank_Include">
 		<control type="group"/>
+	</include>
+
+	<include name="Hidden_Components">
+		<control type="group">
+			<visible>false</visible>
+			<nested/>
+		</control>
 	</include>
 
 	<include name="Hidden_Button">
@@ -68,9 +84,28 @@
 		<height>10</height>
 	</include>
 
-	<include name="Delay_Content_Load">
+	<include name="Busy_Spinner">
+		<param name="visible"/>
+		<param name="size" default="90"/>
+		<param name="color" default="$VAR[Primary_Color]"/>
+		<definition>
+			<control type="image">
+				<visible>$PARAM[visible]</visible>
+				<include content="Visible_Fade_Animation"/>
+				<centerleft>50%</centerleft>
+				<centertop>50%</centertop>
+				<width>$PARAM[size]</width>
+				<height>$PARAM[size]</height>
+				<texture colordiffuse="$PARAM[color]">views/dialogs/busy.png</texture>
+				<animation effect="rotate" start="0" end="-360" center="auto" time="1800" loop="true" tween="cubic" easing="out" condition="true">Conditional</animation>
+				<nested/>
+			</control>
+		</definition>
+	</include>
+
+	<include name="Focus_Setter">
 		<param name="id" default="9001"/>
-		<param name="time" default="360"/>
+		<param name="time" default="0"/>
 		<param name="target_id"/>
 		<definition>
 			<control type="button" id="$PARAM[id]">
@@ -82,6 +117,27 @@
 				<ontop>$PARAM[target_id]</ontop>
 				<onbottom>$PARAM[target_id]</onbottom>
 				<nested/>
+			</control>
+		</definition>
+	</include>
+
+	<include name="Light_Theme_Background">
+		<param name="visible" default="true"/>
+		<definition>
+			<control type="group">
+				<nested/>
+				<visible>Skin.String(Theme,Light)</visible>
+				<visible>$PARAM[visible]</visible>
+				<include content="WindowOpenClose_Fade_Animation"/>
+				<include content="VisibleHidden_Fade_Animation"/>
+				<control type="image">
+					<texture colordiffuse="$VAR[Light_Color]">views/white_100.png</texture>
+				</control>
+				<control type="image">
+					<bottom>0</bottom>
+					<height>50%</height>
+					<texture colordiffuse="$VAR[Light_Grey_Color]">views/gradient_light-background.png</texture>
+				</control>
 			</control>
 		</definition>
 	</include>
@@ -122,7 +178,7 @@
 			<visible>Skin.HasSetting(Home_Screensaver_Enabled)</visible>
 			<visible>[String.IsEmpty(Container(9000).ListItem.Property(background)) | [Skin.HasSetting(Home_Background_Override_Enabled) + Skin.String(Home_Background_Override)]]</visible>
 			<visible>Control.HasFocus(9500) + !$EXP[TransparentDialog_IsVisible]</visible>
-			<include>Delayed_Dialog_Fade_Animation</include>
+			<include content="WindowOpenClose_Fade_Delayed_Animation"/>
 			<left>60</left>
 			<centertop>75%</centertop>
 			<width>560</width>
@@ -134,627 +190,51 @@
 	</include>
 
 	<include name="Global_Fanart_Slideshow">
-		<control type="group">
-			<visible>!VideoPlayer.IsFullscreen + !Skin.HasSetting(Global_Fanart_Slideshow_Disabled)</visible>
-			<control type="list" id="12342">
-				<include>Hidden_Control</include>
-				<content sortby="random" limit="5">videodb://movies/titles/</content>
-				<content sortby="random" limit="5">videodb://tvshows/titles/</content>
-				<content sortby="random" limit="5">videodb://movies/titles/</content>
-				<content sortby="random" limit="5">videodb://tvshows/titles/</content>
-				<autoscroll time="7000">true</autoscroll>
-				<itemlayout />
-				<focusedlayout />
-			</control>
-			<control type="videowindow">
-				<include>Hidden_Control</include>
-			</control>
-			<control type="image">
-				<visible>Integer.IsGreater(Container(12342).NumItems,0)</visible>
-				<animation effect="fade" start="0" end="100" time="360" delay="1800" tween="sine" easing="inout" reversible="true">Visible</animation>
-				<texture colordiffuse="$VAR[Dark_Color]">views/white_100.png</texture>
-			</control>
-			<control type="multiimage">
-				<imagepath colordiffuse="$VAR[Dialogs_Artwork_Diffuse]" background="true">$VAR[Dialog_Slideshow_Source]</imagepath>
-				<aspectratio>scale</aspectratio>
-				<fadetime>0</fadetime>
-			</control>
-			<control type="multiimage">
-				<imagepath colordiffuse="$VAR[Dialogs_Artwork_Diffuse]" background="true">$VAR[Dialog_Slideshow_Source]</imagepath>
-				<aspectratio>scale</aspectratio>
-				<fadetime>360</fadetime>
-			</control>
-		</control>
-	</include>
-
-  <!-- Home Menu Label Focused -->
-	<include name="HomeMenuLabelFocused">
-		<param name="hiddenid"/>
-		<param name="position"/>
-		<param name="focusedtop" default="0"/>
-		<param name="focusedheight" default="80"/>
-		<param name="focusedfont" default="Main_Menu_Focused"/>
-		<param name="focusedtextcolor" default="$VAR[Common_List_Label_Color]"/>
-		<param name="unfocusedtop" default="16"/>
-		<param name="unfocusedheight" default="55"/>
-		<param name="unfocusedfont" default="Main_Menu_unfocused"/>
-		<param name="unfocusdtextcolor" default="$VAR[Common_List_Label_Color]"/>
+		<param name="visible" default="true"/>
+		<param name="content_source" default="Global"/>
+		<param name="texture_path" default="$VAR[Dialog_Slideshow_Source]"/>
 		<definition>
-			<control type="label">
-				<top>$PARAM[focusedtop]</top>
-				<height>$PARAM[focusedheight]</height>
-				<aligny>top</aligny>
-				<width>auto</width>
-				<font>$PARAM[focusedfont]</font>
-				<textcolor>$PARAM[focusedtextcolor]</textcolor>
-				<label>$INFO[Container($PARAM[hiddenid]).ListItemPosition($PARAM[position]).Label]</label>
-				<visible>Control.HasFocus($PARAM[hiddenid]) + String.IsEqual(Container($PARAM[hiddenid]).ListItemPosition($PARAM[position]).Label, Container($PARAM[hiddenid]).ListItem.Label)</visible>
-			</control>
-			<control type="label">
-				<top>$PARAM[unfocusedtop]</top>
-				<height>$PARAM[unfocusedheight]</height>
-				<width>auto</width>
-				<font>$PARAM[unfocusedfont]</font>
-				<textcolor>$PARAM[unfocusedtextcolor]</textcolor>
-				<label>$INFO[Container($PARAM[hiddenid]).ListItemPosition($PARAM[position]).Label]</label>
-				<visible>!Control.HasFocus($PARAM[hiddenid]) + String.IsEqual(Container($PARAM[hiddenid]).ListItemPosition($PARAM[position]).Label, Container($PARAM[hiddenid]).ListItem.Label)</visible>
-			</control>
-		</definition>
-	</include>
-
-	<!-- Home Menu Label Unfocused -->
-	<include name="HomeMenuLabelUnfocused">
-		<param name="top" default="16"/>
-		<param name="height" default="55"/>
-		<param name="font" default="Main_Menu_unfocused"/>
-		<param name="textcolor" default="$VAR[Primary_Color]"/>
-		<definition>
-			<height>$PARAM[height]</height>
-			<top>$PARAM[top]</top>
-			<width>auto</width>
-			<font>$PARAM[font]</font>
-			<textcolor>$PARAM[textcolor]</textcolor>
-		</definition>
-	</include>
-
-	<!-- Home Menu Label Unfocused Content -->
-	<include name="HomeMenuLabelUnfocusedContent">
-		<param name="hiddenid"/>"
-		<param name="previousposition"/>
-		<param name="position"/>
-		<param name="nextposition"/>
-    <param name="top" default="16"/>
-		<param name="height" default="55"/>
-		<param name="font" default="Main_Menu_unfocused"/>
-		<param name="textcolor" default="$VAR[Primary_Color]"/>
-		<definition>
-			<control type="label">
-				<description>position is not empty. previousposition is focused. nextposition is empty. position is last in list</description>
-        <visible>!String.IsEmpty(Container($PARAM[hiddenid]).ListItemPosition($PARAM[position]).Label)</visible>
-				<visible>!String.IsEqual(Container($PARAM[hiddenid]).ListItemPosition($PARAM[position]).Label, Container($PARAM[hiddenid]).ListItem.Label)</visible>
-				<visible>String.IsEqual(Container($PARAM[hiddenid]).ListItemPosition($PARAM[previousposition]).Label, Container($PARAM[hiddenid]).ListItem.Label)</visible>
-				<visible>String.IsEmpty(Container($PARAM[hiddenid]).ListItemPosition($PARAM[nextposition]).Label)</visible>
-				<label>$INFO[Container($PARAM[hiddenid]).ListItemPosition($PARAM[position]).Label, $LOCALIZE[31116] ]</label>
-				<include content="HomeMenuLabelUnfocused">
-					<param name="top" value="$PARAM[top]"/>
-					<param name="height" value="$PARAM[height]"/>
-					<param name="font" value="$PARAM[font]"/>
-					<param name="textcolor" value="$PARAM[textcolor]"/>
-				</include>
-			</control>
-			<control type="label">
-				<description>previousposition is focused. nextposition is not empty. position is not last in list</description>
-				<visible>!String.IsEqual(Container($PARAM[hiddenid]).ListItemPosition($PARAM[position]).Label, Container($PARAM[hiddenid]).ListItem.Label)</visible>
-				<visible>String.IsEqual(Container($PARAM[hiddenid]).ListItemPosition($PARAM[previousposition]).Label, Container($PARAM[hiddenid]).ListItem.Label)</visible>
-				<visible>!String.IsEmpty(Container($PARAM[hiddenid]).ListItemPosition($PARAM[nextposition]).Label)</visible>
-				<label>$INFO[Container($PARAM[hiddenid]).ListItemPosition($PARAM[position]).Label, $LOCALIZE[31116] , $LOCALIZE[31116] ]</label>
-				<include content="HomeMenuLabelUnfocused">
-					<param name="top" value="$PARAM[top]"/>
-					<param name="height" value="$PARAM[height]"/>
-					<param name="font" value="$PARAM[font]"/>
-					<param name="textcolor" value="$PARAM[textcolor]"/>
-				</include>
-			</control>
-			<control type="label">
-				<description>position is not empty. previousposition is not focused. position is not focused. nextposition is empty. position is last in list</description>
-        <visible>!String.IsEmpty(Container($PARAM[hiddenid]).ListItemPosition($PARAM[position]).Label)</visible>
-				<visible>!String.IsEqual(Container($PARAM[hiddenid]).ListItemPosition($PARAM[position]).Label, Container($PARAM[hiddenid]).ListItem.Label)</visible>
-				<visible>!String.IsEqual(Container($PARAM[hiddenid]).ListItemPosition($PARAM[previousposition]).Label, Container($PARAM[hiddenid]).ListItem.Label)</visible>
-				<visible>String.IsEmpty(Container($PARAM[hiddenid]).ListItemPosition($PARAM[nextposition]).Label)</visible>
-				<label>$INFO[Container($PARAM[hiddenid]).ListItemPosition($PARAM[position]).Label]</label>
-				<include content="HomeMenuLabelUnfocused">
-					<param name="top" value="$PARAM[top]"/>
-					<param name="height" value="$PARAM[height]"/>
-					<param name="font" value="$PARAM[font]"/>
-					<param name="textcolor" value="$PARAM[textcolor]"/>
-				</include>
-			</control>
-			<control type="label">
-				<description>previousposition is not focused. position is not focused. nextposition is not empty. position is not last in list</description>
-				<visible>!String.IsEqual(Container($PARAM[hiddenid]).ListItemPosition($PARAM[position]).Label, Container($PARAM[hiddenid]).ListItem.Label)</visible>
-				<visible>!String.IsEqual(Container($PARAM[hiddenid]).ListItemPosition($PARAM[previousposition]).Label, Container($PARAM[hiddenid]).ListItem.Label)</visible>
-				<visible>!String.IsEmpty(Container($PARAM[hiddenid]).ListItemPosition($PARAM[nextposition]).Label)</visible>
-				<label>$INFO[Container($PARAM[hiddenid]).ListItemPosition($PARAM[position]).Label,, $LOCALIZE[31116] ]</label>
-				<include content="HomeMenuLabelUnfocused">
-					<param name="top" value="$PARAM[top]"/>
-					<param name="height" value="$PARAM[height]"/>
-					<param name="font" value="$PARAM[font]"/>
-					<param name="textcolor" value="$PARAM[textcolor]"/>
-				</include>
-			</control>
-		</definition>
-	</include>
-
-	<!-- Dummy Horizontal List -->
-	<include name="DummyHorizontalList">
-		<param name="dummyid"/>
-		<param name="hiddenid"/>
-		<param name="top" default="50%"/>
-		<param name="height" default="80"/>
-		<param name="itemgap" default="0"/>
-		<param name="focusedtop" default="0"/>
-		<param name="focusedheight" default="0"/>
-		<param name="focusedfont" default="Main_Menu_Focused"/>
-		<param name="focusedtextcolor" default="$VAR[Primary_Color]"/>
-		<param name="unfocusedtop" default="16"/>
-		<param name="unfocusedheight" default="55"/>
-		<param name="unfocusedfont" default="Main_Menu_unfocused"/>
-		<param name="unfocusedtextcolor" default="$VAR[Primary_Color]"/>
- 		<definition>
-			<control type="grouplist" id="$PARAM[dummyid]">
-				<centertop>$PARAM[top]</centertop>
-				<width>1800</width>
-				<centerleft>50%</centerleft>
-				<height>$PARAM[height]</height>
-				<orientation>horizontal</orientation>
-				<align>center</align>
-				<itemgap>$PARAM[itemgap]</itemgap>
-				<usecontrolcoords>true</usecontrolcoords>
-				<scrolltime tween="sine" easing="inout">360</scrolltime>
-				<animation effect="slide" start="0" end="-120" condition="!Container($PARAM[hiddenid]).OnScrollNext" reversible="false" time="180" tween="sine" easing="inout">Conditional</animation>
-				<animation effect="slide" start="0" end="120" condition="!Container($PARAM[hiddenid]).OnScrollPrevious" reversible="false" time="180" tween="sine" easing="inout">Conditional</animation>
-
-				<!-- Previous -->
-				<control type="label">
-					<visible>Container($PARAM[hiddenid]).HasPrevious</visible>
-					<label>...</label>
-					<include content="HomeMenuLabelUnfocused">
-						<param name="top" value="$PARAM[unfocusedtop]"/>
-						<param name="height" value="$PARAM[unfocusedheight]"/>
-						<param name="font" value="$PARAM[unfocusedfont]"/>
-						<param name="textcolor" value="$PARAM[unfocusedtextcolor]"/>
-					</include>
-				</control>
-
-        <!-- Position 0 Focused -->
-				<include content="HomeMenuLabelFocused">
-					<param name="hiddenid" value="$PARAM[hiddenid]"/>
-					<param name="position" value="0"/>
-					<param name="focusedtop" value="$PARAM[focusedtop]"/>
-					<param name="focusedheight" value="$PARAM[focusedheight]"/>
-					<param name="focusedfont" value="$PARAM[focusedfont]"/>
-					<param name="focusedtextcolor" value="$PARAM[focusedtextcolor]"/>
-					<param name="unfocusedtop" value="$PARAM[unfocusedtop]"/>
-					<param name="unfocusedheight" value="$PARAM[unfocusedheight]"/>
-					<param name="unfocusedfont" value="$PARAM[unfocusedfont]"/>
-					<param name="unfocusedtextcolor" value="$PARAM[unfocusedtextcolor]"/>
-				</include>
-				<!-- Position 0 Unfocused -->
-				<include content="HomeMenuLabelUnfocusedContent">
-					<param name="hiddenid" value="$PARAM[hiddenid]"/>
-					<param name="previousposition" value="-1"/>
-					<param name="position" value="0"/>
-					<param name="nextposition" value="1"/>
-					<param name="top" value="$PARAM[unfocusedtop]"/>
-					<param name="height" value="$PARAM[unfocusedheight]"/>
-					<param name="font" value="$PARAM[unfocusedfont]"/>
-					<param name="textcolor" value="$PARAM[unfocusedtextcolor]"/>
-				</include>
-
-				<!-- Position 1 Focused -->
-				<include content="HomeMenuLabelFocused">
-					<param name="hiddenid" value="$PARAM[hiddenid]"/>
-					<param name="position" value="1"/>
-					<param name="focusedtop" value="$PARAM[focusedtop]"/>
-					<param name="focusedheight" value="$PARAM[focusedheight]"/>
-					<param name="focusedfont" value="$PARAM[focusedfont]"/>
-					<param name="focusedtextcolor" value="$PARAM[focusedtextcolor]"/>
-					<param name="unfocusedtop" value="$PARAM[unfocusedtop]"/>
-					<param name="unfocusedheight" value="$PARAM[unfocusedheight]"/>
-					<param name="unfocusedfont" value="$PARAM[unfocusedfont]"/>
-					<param name="unfocusedtextcolor" value="$PARAM[unfocusedtextcolor]"/>
-				</include>
-				<!-- Position 1 Unfocused -->
-				<include content="HomeMenuLabelUnfocusedContent">
-					<param name="hiddenid" value="$PARAM[hiddenid]"/>
-					<param name="previousposition" value="0"/>
-					<param name="position" value="1"/>
-					<param name="nextposition" value="2"/>
-					<param name="top" value="$PARAM[unfocusedtop]"/>
-					<param name="height" value="$PARAM[unfocusedheight]"/>
-					<param name="font" value="$PARAM[unfocusedfont]"/>
-					<param name="textcolor" value="$PARAM[unfocusedtextcolor]"/>
-				</include>
-
-				<!-- Position 2 Focused -->
-				<include content="HomeMenuLabelFocused">
-					<param name="hiddenid" value="$PARAM[hiddenid]"/>
-					<param name="position" value="2"/>
-					<param name="focusedtop" value="$PARAM[focusedtop]"/>
-					<param name="focusedheight" value="$PARAM[focusedheight]"/>
-					<param name="focusedfont" value="$PARAM[focusedfont]"/>
-					<param name="focusedtextcolor" value="$PARAM[focusedtextcolor]"/>
-					<param name="unfocusedtop" value="$PARAM[unfocusedtop]"/>
-					<param name="unfocusedheight" value="$PARAM[unfocusedheight]"/>
-					<param name="unfocusedfont" value="$PARAM[unfocusedfont]"/>
-					<param name="unfocusedtextcolor" value="$PARAM[unfocusedtextcolor]"/>
-				</include>
-				<!-- Position 2 Unfocused -->
-				<include content="HomeMenuLabelUnfocusedContent">
-					<param name="hiddenid" value="$PARAM[hiddenid]"/>
-					<param name="previousposition" value="1"/>
-					<param name="position" value="2"/>
-					<param name="nextposition" value="3"/>
-					<param name="top" value="$PARAM[unfocusedtop]"/>
-					<param name="height" value="$PARAM[unfocusedheight]"/>
-					<param name="font" value="$PARAM[unfocusedfont]"/>
-					<param name="textcolor" value="$PARAM[unfocusedtextcolor]"/>
-				</include>
-
-				<!-- Position 3 Focused -->
-				<include content="HomeMenuLabelFocused">
-					<param name="hiddenid" value="$PARAM[hiddenid]"/>
-					<param name="position" value="3"/>
-					<param name="focusedtop" value="$PARAM[focusedtop]"/>
-					<param name="focusedheight" value="$PARAM[focusedheight]"/>
-					<param name="focusedfont" value="$PARAM[focusedfont]"/>
-					<param name="focusedtextcolor" value="$PARAM[focusedtextcolor]"/>
-					<param name="unfocusedtop" value="$PARAM[unfocusedtop]"/>
-					<param name="unfocusedheight" value="$PARAM[unfocusedheight]"/>
-					<param name="unfocusedfont" value="$PARAM[unfocusedfont]"/>
-					<param name="unfocusedtextcolor" value="$PARAM[unfocusedtextcolor]"/>
-				</include>
-				<!-- Position 3 Unfocused -->
-				<include content="HomeMenuLabelUnfocusedContent">
-					<param name="hiddenid" value="$PARAM[hiddenid]"/>
-					<param name="previousposition" value="2"/>
-					<param name="position" value="3"/>
-					<param name="nextposition" value="4"/>
-					<param name="top" value="$PARAM[unfocusedtop]"/>
-					<param name="height" value="$PARAM[unfocusedheight]"/>
-					<param name="font" value="$PARAM[unfocusedfont]"/>
-					<param name="textcolor" value="$PARAM[unfocusedtextcolor]"/>
-				</include>
-
-				<!-- Position 4 Focused -->
-				<include content="HomeMenuLabelFocused">
-					<param name="hiddenid" value="$PARAM[hiddenid]"/>
-					<param name="position" value="4"/>
-					<param name="focusedtop" value="$PARAM[focusedtop]"/>
-					<param name="focusedheight" value="$PARAM[focusedheight]"/>
-					<param name="focusedfont" value="$PARAM[focusedfont]"/>
-					<param name="focusedtextcolor" value="$PARAM[focusedtextcolor]"/>
-					<param name="unfocusedtop" value="$PARAM[unfocusedtop]"/>
-					<param name="unfocusedheight" value="$PARAM[unfocusedheight]"/>
-					<param name="unfocusedfont" value="$PARAM[unfocusedfont]"/>
-					<param name="unfocusedtextcolor" value="$PARAM[unfocusedtextcolor]"/>
-				</include>
-				<!-- Position 4 Unfocused -->
-				<include content="HomeMenuLabelUnfocusedContent">
-					<param name="hiddenid" value="$PARAM[hiddenid]"/>
-					<param name="previousposition" value="3"/>
-					<param name="position" value="4"/>
-					<param name="nextposition" value="5"/>
-					<param name="top" value="$PARAM[unfocusedtop]"/>
-					<param name="height" value="$PARAM[unfocusedheight]"/>
-					<param name="font" value="$PARAM[unfocusedfont]"/>
-					<param name="textcolor" value="$PARAM[unfocusedtextcolor]"/>
-				</include>
-
-				<!-- Position 5 Focused -->
-				<include content="HomeMenuLabelFocused">
-					<param name="hiddenid" value="$PARAM[hiddenid]"/>
-					<param name="position" value="5"/>
-					<param name="focusedtop" value="$PARAM[focusedtop]"/>
-					<param name="focusedheight" value="$PARAM[focusedheight]"/>
-					<param name="focusedfont" value="$PARAM[focusedfont]"/>
-					<param name="focusedtextcolor" value="$PARAM[focusedtextcolor]"/>
-					<param name="unfocusedtop" value="$PARAM[unfocusedtop]"/>
-					<param name="unfocusedheight" value="$PARAM[unfocusedheight]"/>
-					<param name="unfocusedfont" value="$PARAM[unfocusedfont]"/>
-					<param name="unfocusedtextcolor" value="$PARAM[unfocusedtextcolor]"/>
-				</include>
-				<!-- Position 5 Unfocused -->
-				<include content="HomeMenuLabelUnfocusedContent">
-					<param name="hiddenid" value="$PARAM[hiddenid]"/>
-					<param name="previousposition" value="4"/>
-					<param name="position" value="5"/>
-					<param name="nextposition" value="6"/>
-					<param name="top" value="$PARAM[unfocusedtop]"/>
-					<param name="height" value="$PARAM[unfocusedheight]"/>
-					<param name="font" value="$PARAM[unfocusedfont]"/>
-					<param name="textcolor" value="$PARAM[unfocusedtextcolor]"/>
-				</include>
-
-        <!-- Position 6 Focused -->
-        <include content="HomeMenuLabelFocused">
-          <param name="hiddenid" value="$PARAM[hiddenid]"/>
-          <param name="position" value="6"/>
-					<param name="focusedtop" value="$PARAM[focusedtop]"/>
-					<param name="focusedheight" value="$PARAM[focusedheight]"/>
-					<param name="focusedfont" value="$PARAM[focusedfont]"/>
-					<param name="focusedtextcolor" value="$PARAM[focusedtextcolor]"/>
-					<param name="unfocusedtop" value="$PARAM[unfocusedtop]"/>
-					<param name="unfocusedheight" value="$PARAM[unfocusedheight]"/>
-					<param name="unfocusedfont" value="$PARAM[unfocusedfont]"/>
-					<param name="unfocusedtextcolor" value="$PARAM[unfocusedtextcolor]"/>
-				</include>
-        <!-- Position 6 Unfocused -->
-        <include content="HomeMenuLabelUnfocusedContent">
-          <param name="hiddenid" value="$PARAM[hiddenid]"/>
-          <param name="previousposition" value="5"/>
-          <param name="position" value="6"/>
-          <param name="nextposition" value="7"/>
-          <param name="top" value="$PARAM[unfocusedtop]"/>
-          <param name="height" value="$PARAM[unfocusedheight]"/>
-          <param name="font" value="$PARAM[unfocusedfont]"/>
-          <param name="textcolor" value="$PARAM[unfocusedtextcolor]"/>
-        </include>
-
-        <!-- Position 7 Focused -->
-        <include content="HomeMenuLabelFocused">
-          <param name="hiddenid" value="$PARAM[hiddenid]"/>
-          <param name="position" value="7"/>
-					<param name="focusedtop" value="$PARAM[focusedtop]"/>
-					<param name="focusedheight" value="$PARAM[focusedheight]"/>
-					<param name="focusedfont" value="$PARAM[focusedfont]"/>
-					<param name="focusedtextcolor" value="$PARAM[focusedtextcolor]"/>
-					<param name="unfocusedtop" value="$PARAM[unfocusedtop]"/>
-					<param name="unfocusedheight" value="$PARAM[unfocusedheight]"/>
-					<param name="unfocusedfont" value="$PARAM[unfocusedfont]"/>
-					<param name="unfocusedtextcolor" value="$PARAM[unfocusedtextcolor]"/>
-				</include>
-        <!-- Position 7 Unfocused -->
-        <include content="HomeMenuLabelUnfocusedContent">
-          <param name="hiddenid" value="$PARAM[hiddenid]"/>
-          <param name="previousposition" value="6"/>
-          <param name="position" value="7"/>
-          <param name="nextposition" value="8"/>
-          <param name="top" value="$PARAM[unfocusedtop]"/>
-          <param name="height" value="$PARAM[unfocusedheight]"/>
-          <param name="font" value="$PARAM[unfocusedfont]"/>
-          <param name="textcolor" value="$PARAM[unfocusedtextcolor]"/>
-        </include>
-
-				<!-- Next -->
-				<control type="label">
-					<include content="HomeMenuLabelUnfocused">
-						<param name="top" value="$PARAM[unfocusedtop]"/>
-						<param name="height" value="$PARAM[unfocusedheight]"/>
-						<param name="font" value="$PARAM[unfocusedfont]"/>
-						<param name="textcolor" value="$PARAM[unfocusedtextcolor]"/>
-					</include>
-					<visible>Container($PARAM[hiddenid]).HasNext</visible>
-					<label>...</label>
-				</control>
-
-			</control>
-		</definition>
-	</include>
-
-	<include name="DialogVideo_Top_Scrollbar_Nib">
-		<param name="id" default="65000"/>
-		<param name="width" default="100%"/>
-		<param name="height" default="80"/>
-		<definition>
-			<control type="image">
-				<width>$PARAM[width]</width>
-				<height>$PARAM[height]</height>
-				<texture colordiffuse="$VAR[Scroll_Widget_Background_Color]">views/white_100.png</texture>
-				<visible>Control.IsVisible($PARAM[id]) + !ControlGroup($PARAM[id]).HasFocus</visible>
-			</control>
-			<control type="image">
-				<width>$PARAM[width]</width>
-				<height>$PARAM[height]</height>
-				<texture colordiffuse="$VAR[Scroll_Widget_Focused_Color]">views/white_100.png</texture>
-				<visible>ControlGroup($PARAM[id]).HasFocus</visible>
-			</control>
-		</definition>
-	</include>
-
-	<include name="DialogVideo_ActorCredits_Scrollbar_Nib">
-		<param name="width" default="100%"/>
-		<param name="height" default="80"/>
-		<param name="id" default="8030"/>
-		<definition>
-			<control type="image">
-				<width>$PARAM[width]</width>
-				<height>$PARAM[height]</height>
-				<texture colordiffuse="$VAR[Scroll_Widget_Background_Color]">views/white_100.png</texture>
-				<visible>Control.IsVisible($PARAM[id]) + Integer.IsGreater(Container($PARAM[id]).NumItems,1) + !Control.HasFocus($PARAM[id])</visible>
-			</control>
-			<control type="image">
-				<width>$PARAM[width]</width>
-				<height>$PARAM[height]</height>
-				<texture colordiffuse="$VAR[Scroll_Widget_Focused_Color]">views/white_100.png</texture>
-				<visible>Control.HasFocus($PARAM[id])</visible>
-			</control>
-		</definition>
-	</include>
-
-
-	<include name="Home_Scrollbar_Nib">
-		<param name="id"/>
-		<param name="width" default="100%"/>
-		<param name="height" default="80"/>
-		<definition>
-		<control type="image">
-			<width>$PARAM[width]</width>
-			<height>$PARAM[height]</height>
-			<texture colordiffuse="$VAR[Scroll_Widget_Background_Color]">views/white_100.png</texture>
-			<visible>Control.IsVisible($PARAM[id]) + !Control.HasFocus($PARAM[id]) + Integer.IsGreater(Container($PARAM[id]).NumItems,0)</visible>
-		</control>
-		<control type="image">
-			<width>$PARAM[width]</width>
-			<height>$PARAM[height]</height>
-			<texture colordiffuse="$VAR[Scroll_Widget_Focused_Color]">views/white_100.png</texture>
-			<visible>Control.HasFocus($PARAM[id]) + Integer.IsGreater(Container($PARAM[id]).NumItems,0)</visible>
-		</control>
-		</definition>
-	</include>
-
-	<include name="Widget_Scrollbar_Template">
-		<control type="group">
-			<visible>$PARAM[visible]</visible>
-			<visible>Control.IsVisible($PARAM[id2]) | Control.IsVisible($PARAM[id3]) | Control.IsVisible($PARAM[id4]) | Control.IsVisible($PARAM[id5]) | Control.IsVisible($PARAM[id6]) | Control.IsVisible($PARAM[id2]) | Control.IsVisible($PARAM[id7]) | Control.IsVisible($PARAM[id8]) | Control.IsVisible($PARAM[id9]) | Control.IsVisible($PARAM[id10]) | Control.IsVisible($PARAM[id11])</visible>
-			<include>Delayed_Content_Fade_Animation</include>
 			<control type="group">
-				<visible>!ControlGroup($PARAM[id1]).HasFocus</visible>
-				<include>Home_Scrollbar_Fade_Animation_Sub</include>
-				<control type="group">
-					<visible>!Control.HasFocus($PARAM[id2])</visible>
-					<include>Home_Scrollbar_Fade_Animation_Sub</include>
-					<control type="group">
-						<visible>!Control.HasFocus($PARAM[id3])</visible>
-						<include>Home_Scrollbar_Fade_Animation_Sub</include>
-						<control type="group">
-							<visible>!Control.HasFocus($PARAM[id4])</visible>
-							<include>Home_Scrollbar_Fade_Animation_Sub</include>
-							<control type="group">
-								<visible>!Control.HasFocus($PARAM[id5])</visible>
-								<include>Home_Scrollbar_Fade_Animation_Sub</include>
-								<control type="group">
-									<visible>!Control.HasFocus($PARAM[id6])</visible>
-									<include>Home_Scrollbar_Fade_Animation_Sub</include>
-									<control type="group">
-										<visible>!Control.HasFocus($PARAM[id7])</visible>
-										<include>Home_Scrollbar_Fade_Animation_Sub</include>
-										<control type="group">
-											<visible>!Control.HasFocus($PARAM[id8])</visible>
-											<include>Home_Scrollbar_Fade_Animation_Sub</include>
-											<control type="group">
-												<visible>!Control.HasFocus($PARAM[id9])</visible>
-												<include>Home_Scrollbar_Fade_Animation_Sub</include>
-												<control type="group">
-													<visible>!Control.HasFocus($PARAM[id10])</visible>
-													<include>Home_Scrollbar_Fade_Animation_Sub</include>
-													<control type="group">
-														<visible>!Control.HasFocus($PARAM[id11])</visible>
-														<include>Home_Scrollbar_Fade_Animation_Sub</include>
-
-														<control type="grouplist">
-															<right>27</right>
-															<width>6</width>
-															<height>100%</height>
-															<align>center</align>
-															<orientation>vertical</orientation>
-															<itemgap>0</itemgap>
-															<include content="$PARAM[nibstyle1]_Scrollbar_Nib">
-																<param name="id" value="$PARAM[id1]"/>
-															</include>
-															<include content="$PARAM[nibstyle2]_Scrollbar_Nib">
-																<param name="id" value="$PARAM[id2]"/>
-															</include>
-															<include content="$PARAM[nibstyle3]_Scrollbar_Nib">
-																<param name="id" value="$PARAM[id3]"/>
-															</include>
-															<include content="$PARAM[nibstyle4]_Scrollbar_Nib">
-																<param name="id" value="$PARAM[id4]"/>
-															</include>
-															<include content="$PARAM[nibstyle5]_Scrollbar_Nib">
-																<param name="id" value="$PARAM[id5]"/>
-															</include>
-															<include content="$PARAM[nibstyle6]_Scrollbar_Nib">
-																<param name="id" value="$PARAM[id6]"/>
-															</include>
-															<include content="$PARAM[nibstyle7]_Scrollbar_Nib">
-																<param name="id" value="$PARAM[id7]"/>
-															</include>
-															<include content="$PARAM[nibstyle8]_Scrollbar_Nib">
-																<param name="id" value="$PARAM[id8]"/>
-															</include>
-															<include content="$PARAM[nibstyle9]_Scrollbar_Nib">
-																<param name="id" value="$PARAM[id9]"/>
-															</include>
-															<include content="$PARAM[nibstyle10]_Scrollbar_Nib">
-																<param name="id" value="$PARAM[id10]"/>
-															</include>
-															<include content="$PARAM[nibstyle11]_Scrollbar_Nib">
-																<param name="id" value="$PARAM[id11]"/>
-															</include>
-														</control>
-
-													</control>
-												</control>
-											</control>
-										</control>
-									</control>
-								</control>
-							</control>
-						</control>
-					</control>
+				<visible>!VideoPlayer.IsFullscreen + !Skin.HasSetting(Global_Fanart_Slideshow_Disabled)</visible>
+				<visible>$PARAM[visible]</visible>
+				<include content="VisibleHidden_Fade_Animation"/>
+				<control type="list" id="12342">
+					<include>Hidden_Control</include>
+					<include content="$PARAM[content_source]_Fanart_Slideshow_Content"/>
+					<autoscroll time="7000">true</autoscroll>
+					<itemlayout />
+					<focusedlayout />
 				</control>
+				<control type="videowindow">
+					<include>Hidden_Control</include>
+				</control>
+				<include condition="Skin.String(Theme,Light)" content="Fanart_Slideshow_Backing">
+					<param name="visible" value="Integer.IsGreater(Container(12342).NumItems,0)"/>
+				</include>
+				<include condition="$EXP[Settings_IsVisible] + !Skin.HasSetting(Global_Fanart_Slideshow_Disabled)" content="Fanart_Slideshow_Multiart">
+					<param name="colordiffuse" value="$VAR[Dialogs_Artwork_Diffuse]"/>
+					<param name="texture_path" value="$PARAM[texture_path]"/>
+					<param name="fadetime" value="0"/>
+				</include>
+				<include content="Fanart_Slideshow_Multiart">
+					<param name="colordiffuse" value="$VAR[Dialogs_Artwork_Diffuse]"/>
+					<param name="texture_path" value="$PARAM[texture_path]"/>
+					<param name="fadetime" value="180"/>
+				</include>
 			</control>
-		</control>
+		</definition>
 	</include>
 
-<include name="Dialog_Widget_Scrollbar">
-	<include content="Widget_Scrollbar_Template">
-		<param name="visible" value="!Window.IsVisible(shutdownmenu) + !$EXP[Music_Player_HasFocus] + !Control.HasFocus(4500) + !$EXP[Scrollbar_HasFocus]"/>
-		<param name="id1" value="65000"/>
-		<param name="nibstyle1" value="DialogVideo_Top"/>
-		<param name="id2" value="8010"/>
-		<param name="nibstyle2" value="Home"/>
-		<param name="id3" value="8020"/>
-		<param name="nibstyle3" value="Home"/>
-		<param name="id4" value="50"/>
-		<param name="nibstyle4" value="Home"/>
-		<param name="id5" value="8030"/>
-		<param name="nibstyle5" value="DialogVideo_ActorCredits"/>
-		<param name="id6" value="8040"/>
-		<param name="nibstyle6" value="Home"/>
-		<param name="id7" value="8050"/>
-		<param name="nibstyle7" value="Home"/>
-		<param name="id8" value="8060"/>
-		<param name="nibstyle8" value="Home"/>
-		<param name="id9" value="8070"/>
-		<param name="nibstyle9" value="Home"/>
-		<param name="id10" value="8080"/>
-		<param name="nibstyle10" value="Home"/>
-		<param name="id11" value="8090"/>
-		<param name="nibstyle11" value="Home"/>
+	<include name="Global_Fanart_Slideshow_Content">
+		<content sortby="random" limit="5">videodb://movies/titles/</content>
+		<content sortby="random" limit="5">videodb://tvshows/titles/</content>
+		<content sortby="random" limit="5">videodb://movies/titles/</content>
+		<content sortby="random" limit="5">videodb://tvshows/titles/</content>
 	</include>
-</include>
 
-<include name="Home_Widget_Scrollbar">
-	<include content="Widget_Scrollbar_Template">
-		<param name="visible" value="!$EXP[Music_Player_HasFocus] + Skin.HasSetting(Widgets_Enabled) + Control.IsVisible(9010)"/>
-		<param name="id1" value="65000"/>
-		<param name="nibstyle1" value="DialogVideo_Top"/>
-		<param name="id2" value="8010"/>
-		<param name="nibstyle2" value="Home"/>
-		<param name="id3" value="8020"/>
-		<param name="nibstyle3" value="Home"/>
-		<param name="id4" value="50"/>
-		<param name="nibstyle4" value="Home"/>
-		<param name="id5" value="8030"/>
-		<param name="nibstyle5" value="DialogVideo_ActorCredits"/>
-		<param name="id6" value="8040"/>
-		<param name="nibstyle6" value="Home"/>
-		<param name="id7" value="8050"/>
-		<param name="nibstyle7" value="Home"/>
-		<param name="id8" value="8060"/>
-		<param name="nibstyle8" value="Home"/>
-		<param name="id9" value="8070"/>
-		<param name="nibstyle9" value="Home"/>
-		<param name="id10" value="8080"/>
-		<param name="nibstyle10" value="Home"/>
-		<param name="id11" value="8090"/>
-		<param name="nibstyle11" value="Home"/>
+	<include name="Music_Fanart_Slideshow_Content">
+		<content sortby="random" limit="25">musicdb://artists/</content>
 	</include>
-</include>
-
-
 
 	<include name="Clock">
 		<param name="visible" default="true"/>
@@ -765,14 +245,14 @@
 		<definition>
 			<control type="group">
 				<visible>![$EXP[Music_Player_IsVisible] | Window.IsVisible(volumebar) | Window.IsVisible(notification) | Window.IsVisible(extendedprogressdialog)] | Window.IsVisible(shutdownmenu)</visible>
-				<include>Content_Fade_Animation</include>
+				<include content="VisibleHidden_Fade_Animation"/>
 				<control type="group">
 					<visible>$PARAM[visible]</visible>
 					<right>$PARAM[right]</right>
 					<top>0</top>
 					<width>$PARAM[size]</width>
 					<height>$PARAM[size]</height>
-					<include>Delayed_Content_Fade_Animation</include>
+					<include content="Visible_Fade_Delayed_Animation"/>
 					<control type="image">
 						<texture colordiffuse="$PARAM[backgroundcolor]">views/white_100.png</texture>
 					</control>
@@ -808,112 +288,6 @@
 				</control>
 			</control>
 		</definition>
-	</include>
-
-	<include name="Opacity">
-		<!-- Opacity -->
-		<animation effect="fade" start="100" end="80" condition="String.IsEmpty(Skin.String(Opacity))">Conditional</animation>
-		<animation effect="fade" start="100" end="0" condition="String.IsEqual(Skin.String(Opacity),$NUMBER[0])">Conditional</animation>
-		<animation effect="fade" start="100" end="1" condition="String.IsEqual(Skin.String(Opacity),$NUMBER[1])">Conditional</animation>
-		<animation effect="fade" start="100" end="2" condition="String.IsEqual(Skin.String(Opacity),$NUMBER[2])">Conditional</animation>
-		<animation effect="fade" start="100" end="3" condition="String.IsEqual(Skin.String(Opacity),$NUMBER[3])">Conditional</animation>
-		<animation effect="fade" start="100" end="4" condition="String.IsEqual(Skin.String(Opacity),$NUMBER[4])">Conditional</animation>
-		<animation effect="fade" start="100" end="5" condition="String.IsEqual(Skin.String(Opacity),$NUMBER[5])">Conditional</animation>
-		<animation effect="fade" start="100" end="6" condition="String.IsEqual(Skin.String(Opacity),$NUMBER[6])">Conditional</animation>
-		<animation effect="fade" start="100" end="7" condition="String.IsEqual(Skin.String(Opacity),$NUMBER[7])">Conditional</animation>
-		<animation effect="fade" start="100" end="8" condition="String.IsEqual(Skin.String(Opacity),$NUMBER[8])">Conditional</animation>
-		<animation effect="fade" start="100" end="9" condition="String.IsEqual(Skin.String(Opacity),$NUMBER[9])">Conditional</animation>
-		<animation effect="fade" start="100" end="10" condition="String.IsEqual(Skin.String(Opacity),$NUMBER[10])">Conditional</animation>
-		<animation effect="fade" start="100" end="11" condition="String.IsEqual(Skin.String(Opacity),$NUMBER[11])">Conditional</animation>
-		<animation effect="fade" start="100" end="12" condition="String.IsEqual(Skin.String(Opacity),$NUMBER[12])">Conditional</animation>
-		<animation effect="fade" start="100" end="13" condition="String.IsEqual(Skin.String(Opacity),$NUMBER[13])">Conditional</animation>
-		<animation effect="fade" start="100" end="14" condition="String.IsEqual(Skin.String(Opacity),$NUMBER[14])">Conditional</animation>
-		<animation effect="fade" start="100" end="15" condition="String.IsEqual(Skin.String(Opacity),$NUMBER[15])">Conditional</animation>
-		<animation effect="fade" start="100" end="16" condition="String.IsEqual(Skin.String(Opacity),$NUMBER[16])">Conditional</animation>
-		<animation effect="fade" start="100" end="17" condition="String.IsEqual(Skin.String(Opacity),$NUMBER[17])">Conditional</animation>
-		<animation effect="fade" start="100" end="18" condition="String.IsEqual(Skin.String(Opacity),$NUMBER[18])">Conditional</animation>
-		<animation effect="fade" start="100" end="19" condition="String.IsEqual(Skin.String(Opacity),$NUMBER[19])">Conditional</animation>
-		<animation effect="fade" start="100" end="20" condition="String.IsEqual(Skin.String(Opacity),$NUMBER[20])">Conditional</animation>
-		<animation effect="fade" start="100" end="21" condition="String.IsEqual(Skin.String(Opacity),$NUMBER[21])">Conditional</animation>
-		<animation effect="fade" start="100" end="22" condition="String.IsEqual(Skin.String(Opacity),$NUMBER[22])">Conditional</animation>
-		<animation effect="fade" start="100" end="23" condition="String.IsEqual(Skin.String(Opacity),$NUMBER[23])">Conditional</animation>
-		<animation effect="fade" start="100" end="24" condition="String.IsEqual(Skin.String(Opacity),$NUMBER[24])">Conditional</animation>
-		<animation effect="fade" start="100" end="25" condition="String.IsEqual(Skin.String(Opacity),$NUMBER[25])">Conditional</animation>
-		<animation effect="fade" start="100" end="26" condition="String.IsEqual(Skin.String(Opacity),$NUMBER[26])">Conditional</animation>
-		<animation effect="fade" start="100" end="27" condition="String.IsEqual(Skin.String(Opacity),$NUMBER[27])">Conditional</animation>
-		<animation effect="fade" start="100" end="28" condition="String.IsEqual(Skin.String(Opacity),$NUMBER[28])">Conditional</animation>
-		<animation effect="fade" start="100" end="29" condition="String.IsEqual(Skin.String(Opacity),$NUMBER[29])">Conditional</animation>
-		<animation effect="fade" start="100" end="30" condition="String.IsEqual(Skin.String(Opacity),$NUMBER[30])">Conditional</animation>
-		<animation effect="fade" start="100" end="31" condition="String.IsEqual(Skin.String(Opacity),$NUMBER[31])">Conditional</animation>
-		<animation effect="fade" start="100" end="32" condition="String.IsEqual(Skin.String(Opacity),$NUMBER[32])">Conditional</animation>
-		<animation effect="fade" start="100" end="33" condition="String.IsEqual(Skin.String(Opacity),$NUMBER[33])">Conditional</animation>
-		<animation effect="fade" start="100" end="34" condition="String.IsEqual(Skin.String(Opacity),$NUMBER[34])">Conditional</animation>
-		<animation effect="fade" start="100" end="35" condition="String.IsEqual(Skin.String(Opacity),$NUMBER[35])">Conditional</animation>
-		<animation effect="fade" start="100" end="36" condition="String.IsEqual(Skin.String(Opacity),$NUMBER[36])">Conditional</animation>
-		<animation effect="fade" start="100" end="37" condition="String.IsEqual(Skin.String(Opacity),$NUMBER[37])">Conditional</animation>
-		<animation effect="fade" start="100" end="38" condition="String.IsEqual(Skin.String(Opacity),$NUMBER[38])">Conditional</animation>
-		<animation effect="fade" start="100" end="39" condition="String.IsEqual(Skin.String(Opacity),$NUMBER[39])">Conditional</animation>
-		<animation effect="fade" start="100" end="40" condition="String.IsEqual(Skin.String(Opacity),$NUMBER[40])">Conditional</animation>
-		<animation effect="fade" start="100" end="41" condition="String.IsEqual(Skin.String(Opacity),$NUMBER[41])">Conditional</animation>
-		<animation effect="fade" start="100" end="42" condition="String.IsEqual(Skin.String(Opacity),$NUMBER[42])">Conditional</animation>
-		<animation effect="fade" start="100" end="43" condition="String.IsEqual(Skin.String(Opacity),$NUMBER[43])">Conditional</animation>
-		<animation effect="fade" start="100" end="44" condition="String.IsEqual(Skin.String(Opacity),$NUMBER[44])">Conditional</animation>
-		<animation effect="fade" start="100" end="45" condition="String.IsEqual(Skin.String(Opacity),$NUMBER[45])">Conditional</animation>
-		<animation effect="fade" start="100" end="46" condition="String.IsEqual(Skin.String(Opacity),$NUMBER[46])">Conditional</animation>
-		<animation effect="fade" start="100" end="47" condition="String.IsEqual(Skin.String(Opacity),$NUMBER[47])">Conditional</animation>
-		<animation effect="fade" start="100" end="48" condition="String.IsEqual(Skin.String(Opacity),$NUMBER[48])">Conditional</animation>
-		<animation effect="fade" start="100" end="49" condition="String.IsEqual(Skin.String(Opacity),$NUMBER[49])">Conditional</animation>
-		<animation effect="fade" start="100" end="50" condition="String.IsEqual(Skin.String(Opacity),$NUMBER[50])">Conditional</animation>
-		<animation effect="fade" start="100" end="51" condition="String.IsEqual(Skin.String(Opacity),$NUMBER[51])">Conditional</animation>
-		<animation effect="fade" start="100" end="52" condition="String.IsEqual(Skin.String(Opacity),$NUMBER[52])">Conditional</animation>
-		<animation effect="fade" start="100" end="53" condition="String.IsEqual(Skin.String(Opacity),$NUMBER[53])">Conditional</animation>
-		<animation effect="fade" start="100" end="54" condition="String.IsEqual(Skin.String(Opacity),$NUMBER[54])">Conditional</animation>
-		<animation effect="fade" start="100" end="55" condition="String.IsEqual(Skin.String(Opacity),$NUMBER[55])">Conditional</animation>
-		<animation effect="fade" start="100" end="56" condition="String.IsEqual(Skin.String(Opacity),$NUMBER[56])">Conditional</animation>
-		<animation effect="fade" start="100" end="57" condition="String.IsEqual(Skin.String(Opacity),$NUMBER[57])">Conditional</animation>
-		<animation effect="fade" start="100" end="58" condition="String.IsEqual(Skin.String(Opacity),$NUMBER[58])">Conditional</animation>
-		<animation effect="fade" start="100" end="59" condition="String.IsEqual(Skin.String(Opacity),$NUMBER[59])">Conditional</animation>
-		<animation effect="fade" start="100" end="60" condition="String.IsEqual(Skin.String(Opacity),$NUMBER[60])">Conditional</animation>
-		<animation effect="fade" start="100" end="61" condition="String.IsEqual(Skin.String(Opacity),$NUMBER[61])">Conditional</animation>
-		<animation effect="fade" start="100" end="62" condition="String.IsEqual(Skin.String(Opacity),$NUMBER[62])">Conditional</animation>
-		<animation effect="fade" start="100" end="63" condition="String.IsEqual(Skin.String(Opacity),$NUMBER[63])">Conditional</animation>
-		<animation effect="fade" start="100" end="64" condition="String.IsEqual(Skin.String(Opacity),$NUMBER[64])">Conditional</animation>
-		<animation effect="fade" start="100" end="65" condition="String.IsEqual(Skin.String(Opacity),$NUMBER[65])">Conditional</animation>
-		<animation effect="fade" start="100" end="66" condition="String.IsEqual(Skin.String(Opacity),$NUMBER[66])">Conditional</animation>
-		<animation effect="fade" start="100" end="67" condition="String.IsEqual(Skin.String(Opacity),$NUMBER[67])">Conditional</animation>
-		<animation effect="fade" start="100" end="68" condition="String.IsEqual(Skin.String(Opacity),$NUMBER[68])">Conditional</animation>
-		<animation effect="fade" start="100" end="69" condition="String.IsEqual(Skin.String(Opacity),$NUMBER[69])">Conditional</animation>
-		<animation effect="fade" start="100" end="70" condition="String.IsEqual(Skin.String(Opacity),$NUMBER[70])">Conditional</animation>
-		<animation effect="fade" start="100" end="71" condition="String.IsEqual(Skin.String(Opacity),$NUMBER[71])">Conditional</animation>
-		<animation effect="fade" start="100" end="72" condition="String.IsEqual(Skin.String(Opacity),$NUMBER[72])">Conditional</animation>
-		<animation effect="fade" start="100" end="73" condition="String.IsEqual(Skin.String(Opacity),$NUMBER[73])">Conditional</animation>
-		<animation effect="fade" start="100" end="74" condition="String.IsEqual(Skin.String(Opacity),$NUMBER[74])">Conditional</animation>
-		<animation effect="fade" start="100" end="75" condition="String.IsEqual(Skin.String(Opacity),$NUMBER[75])">Conditional</animation>
-		<animation effect="fade" start="100" end="76" condition="String.IsEqual(Skin.String(Opacity),$NUMBER[76])">Conditional</animation>
-		<animation effect="fade" start="100" end="77" condition="String.IsEqual(Skin.String(Opacity),$NUMBER[77])">Conditional</animation>
-		<animation effect="fade" start="100" end="78" condition="String.IsEqual(Skin.String(Opacity),$NUMBER[78])">Conditional</animation>
-		<animation effect="fade" start="100" end="79" condition="String.IsEqual(Skin.String(Opacity),$NUMBER[79])">Conditional</animation>
-		<animation effect="fade" start="100" end="80" condition="String.IsEqual(Skin.String(Opacity),$NUMBER[80])">Conditional</animation>
-		<animation effect="fade" start="100" end="81" condition="String.IsEqual(Skin.String(Opacity),$NUMBER[81])">Conditional</animation>
-		<animation effect="fade" start="100" end="82" condition="String.IsEqual(Skin.String(Opacity),$NUMBER[82])">Conditional</animation>
-		<animation effect="fade" start="100" end="83" condition="String.IsEqual(Skin.String(Opacity),$NUMBER[83])">Conditional</animation>
-		<animation effect="fade" start="100" end="84" condition="String.IsEqual(Skin.String(Opacity),$NUMBER[84])">Conditional</animation>
-		<animation effect="fade" start="100" end="85" condition="String.IsEqual(Skin.String(Opacity),$NUMBER[85])">Conditional</animation>
-		<animation effect="fade" start="100" end="86" condition="String.IsEqual(Skin.String(Opacity),$NUMBER[86])">Conditional</animation>
-		<animation effect="fade" start="100" end="87" condition="String.IsEqual(Skin.String(Opacity),$NUMBER[87])">Conditional</animation>
-		<animation effect="fade" start="100" end="88" condition="String.IsEqual(Skin.String(Opacity),$NUMBER[88])">Conditional</animation>
-		<animation effect="fade" start="100" end="89" condition="String.IsEqual(Skin.String(Opacity),$NUMBER[89])">Conditional</animation>
-		<animation effect="fade" start="100" end="90" condition="String.IsEqual(Skin.String(Opacity),$NUMBER[90])">Conditional</animation>
-		<animation effect="fade" start="100" end="91" condition="String.IsEqual(Skin.String(Opacity),$NUMBER[91])">Conditional</animation>
-		<animation effect="fade" start="100" end="92" condition="String.IsEqual(Skin.String(Opacity),$NUMBER[92])">Conditional</animation>
-		<animation effect="fade" start="100" end="93" condition="String.IsEqual(Skin.String(Opacity),$NUMBER[93])">Conditional</animation>
-		<animation effect="fade" start="100" end="94" condition="String.IsEqual(Skin.String(Opacity),$NUMBER[94])">Conditional</animation>
-		<animation effect="fade" start="100" end="95" condition="String.IsEqual(Skin.String(Opacity),$NUMBER[95])">Conditional</animation>
-		<animation effect="fade" start="100" end="96" condition="String.IsEqual(Skin.String(Opacity),$NUMBER[96])">Conditional</animation>
-		<animation effect="fade" start="100" end="97" condition="String.IsEqual(Skin.String(Opacity),$NUMBER[97])">Conditional</animation>
-		<animation effect="fade" start="100" end="98" condition="String.IsEqual(Skin.String(Opacity),$NUMBER[98])">Conditional</animation>
-		<animation effect="fade" start="100" end="99" condition="String.IsEqual(Skin.String(Opacity),$NUMBER[99])">Conditional</animation>
-		<animation effect="fade" start="100" end="100" condition="String.IsEqual(Skin.String(Opacity),$NUMBER[100])">Conditional</animation>
 	</include>
 
 </includes>

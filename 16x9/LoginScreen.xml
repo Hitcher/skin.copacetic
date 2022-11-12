@@ -1,62 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <window>
 	<!-- loginscreen -->
-	<backgroundcolor>$VAR[Secondary_Color]</backgroundcolor>
-	<defaultcontrol always="true">9001</defaultcontrol>
-	<include>Delayed_Dialog_Fade_Animation</include>ssss
+	<onunload condition="!Skin.HasSetting(Global_Fanart_Slideshow_Disabled) + String.IsEmpty(Window(home).Property(Global_Fanart_Slideshow))">SetProperty(Global_Fanart_Slideshow,$ESCINFO[Container(12340).ListItem.Art(fanart)],home)</onunload>
+	<defaultcontrol always="true">52</defaultcontrol>
+	<backgroundcolor>$VAR[Dark_Color]</backgroundcolor>
+	<include content="WindowOpenClose_Fade_Animation"/>
 	<controls>
-
-		<!-- Delay content on Load -->
-		<include content="Delay_Content_Load">
-			<param name="time" value="2160"/>
-			<param name="target_id" value="SetFocus(52)"/>
-		</include>
-
-		<!-- Hidden list -->
-		<include content="Custom_List">
-			<param name="type" value="fixedlist"/>
-			<param name="visible" value="true"/>
-			<param name="id" value="52"/>
-			<param name="viewtype_label" value="LoginScreen"/>
-			<param name="viewtype" value="wrap"/>
-			<param name="orientation" value="horizontal"/>
-		</include>
-
-		<!-- OnPrevious delay -->
-		<control type="group" id="5001">
-			<visible>Container(52).OnPrevious</visible>
-			<animation effect="slide" end="0,0" time="360" reversible="false">Hidden</animation>
-		</control>
-
-		<!-- OnNext delay -->
-		<control type="group" id="5002">
-			<visible>Container(52).OnNext</visible>
-			<animation effect="slide" end="0,0" time="360" reversible="false">Hidden</animation>
-		</control>
-
-		<include content="FanartSlideshow"/>
-
-		<control type="group">
-			<visible>!$EXP[TransparentDialog_IsVisible]</visible>
-			<include>Delayed_Content_Fade_Animation</include>
-			<!-- Artwork -->
+		<!-- Background -->
+		<include condition="Skin.HasSetting(Global_Fanart_Slideshow_Disabled)" content="Light_Theme_Background"/>
+		<include condition="!Skin.HasSetting(Global_Fanart_Slideshow_Disabled)" content="Global_Fanart_Slideshow"/>
+		<!-- Content -->
+		<include content="Default_Dialog_Panel_Layout">
+			<param name="visible" value="Window.IsActive(loginscreen) + !System.HasVisibleModalDialog"/>
+			<param name="window_animation" value="WindowOpenClose_Fade_Delayed_Extra_Long_Animation"/>
+			<param name="panel_edge_top" value="120"/>
+			<param name="panel_edge_bottom" value="120"/>
+			<include  content="StripView_Art_LoginScreen">
+				<param name="target_id" value="52"/>
+				<param name="art_icon" value="Thumbnail"/>
+			</include>
 			<control type="group">
-				<visible>!Control.HasFocus(9001)</visible>
-				<include>Content_Fade_Animation</include>
-				<include content="Transparent_Dialog_Panel">
-					<param name="top" value="120"/>
-					<param name="bottom" value="120"/>
-				</include>
-				<include  content="StripView_Art_LoginScreen">
-					<param name="target_id" value="52"/>
-					<param name="art_icon" value="Thumbnail"/>
-				</include>
-			</control>
-			<!-- Details -->
-			<control type="group">
-				<visible>!Control.HasFocus(9001)</visible>
-				<include>Long_Delayed_Content_Fade_Animation</include>
-
+				<include content="WindowOpenClose_Fade_Delayed_Long_Animation"/>
 				<control type="label">
 					<label>$VAR[LoginScreen_Welcome_Label]</label>
 					<top>180</top>
@@ -67,7 +31,6 @@
 					<font>Breadcrumb_Title_Label</font>
 					<textcolor>$VAR[Light_Color]</textcolor>
 				</control>
-
 				<control type="label">
 					<centerleft>50%</centerleft>
 					<width>720</width>
@@ -79,19 +42,35 @@
 					<align>center</align>
 					<aligny>center</aligny>
 				</control>
-
 				<include content="Button_Group_Template">
 					<param name="right" value="900"/>
 					<param name="bottom" value="0"/>
 					<param name="onup" value="52"/>
-					<param name="icons" value="true"/>
 					<param name="button1" value="true"/>
 					<param name="button1texture" value="Power"/>
 					<param name="button1onclick" value="ActivateWindow(shutdownmenu)"/>
-					<param name="color" value="$VAR[Light_Color]"/>
+					<param name="color" value="$VAR[Settings_Label_Color]"/>
 				</include>
 			</control>
+		</include>
+		<!-- Hidden list -->
+		<include content="Custom_List">
+			<param name="type" value="fixedlist"/>
+			<param name="visible" value="true"/>
+			<param name="id" value="52"/>
+			<param name="viewtype_label" value="LoginScreen"/>
+			<param name="viewtype" value="wrap"/>
+			<param name="orientation" value="horizontal"/>
+		</include>
+		<!-- OnPrevious delay -->
+		<control type="group" id="5001">
+			<visible>Container(52).OnPrevious</visible>
+			<animation effect="slide" end="0,0" time="360" reversible="false">Hidden</animation>
 		</control>
-
+		<!-- OnNext delay -->
+		<control type="group" id="5002">
+			<visible>Container(52).OnNext</visible>
+			<animation effect="slide" end="0,0" time="360" reversible="false">Hidden</animation>
+		</control>
 	</controls>
 </window>

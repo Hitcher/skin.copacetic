@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <includes>
 
 	<include name="Player_Progress">
@@ -23,10 +24,7 @@
 					<height>6</height>
 					<info>Player.ProgressCache</info>
 					<texturebg colordiffuse="$VAR[Progress_Background_Color]">views/white_100.png</texturebg>
-					<lefttexture></lefttexture>
 					<midtexture colordiffuse="$VAR[Progress_Background_Color]">views/white_100.png</midtexture>
-					<righttexture></righttexture>
-					<overlaytexture></overlaytexture>
 				</control>
 				<!-- Progress bar -->
 				<control type="progress" id="$PARAM[progress_id]">
@@ -36,10 +34,7 @@
 					<height>6</height>
 					<info>Player.Progress</info>
 					<texturebg colordiffuse="$VAR[Blank_Color]">views/white_100.png</texturebg>
-					<lefttexture></lefttexture>
 					<midtexture colordiffuse="$VAR[Progress_Focused_Color]">views/white_100.png</midtexture>
-					<righttexture></righttexture>
-					<overlaytexture></overlaytexture>
 				</control>
 				<control type="label">
 					<height>100%</height>
@@ -178,7 +173,7 @@
 				<animation effect="slide" start="0" end="0,240" time="180" tween="sine" easing="inout" reversible="true" condition="Window.IsVisible(musicosd)">Conditional</animation>
 				<animation effect="slide" start="0" end="-900,0" time="0" condition="Window.Is(fullscreeninfo)">Conditional</animation>
 				<visible>!Window.IsActive(busydialog)</visible>
-				<include>Content_Fade_Animation</include>
+				<include content="Visible_Fade_Animation"/>
 				<control type="group">
 					<width>120</width>
 					<height>120</height>
@@ -208,7 +203,7 @@
 					<!-- Rewinding -->
 					<control type="group">
 						<visible>Player.Rewinding</visible>
-						<include>Delayed_Content_Fade_Animation</include>
+						<include content="Visible_Fade_Delayed_Animation"/>
 						<control type="image">
 							<visible>Player.Rewinding2x</visible>
 							<centertop>50%</centertop>
@@ -243,7 +238,7 @@
 					<!-- Forwarding -->
 					<control type="group">
 						<visible>Player.Forwarding</visible>
-						<include>Delayed_Content_Fade_Animation</include>
+						<include content="Visible_Fade_Delayed_Animation"/>
 						<control type="image">
 							<visible>Player.Forwarding2x</visible>
 							<centertop>50%</centertop>
@@ -278,7 +273,7 @@
 					<!-- label -->
 					<control type="label">
 						<visible>$PARAM[large_label] + [Player.Rewinding | Player.Forwarding]</visible>
-						<include>Delayed_Content_Fade_Animation</include>
+						<include content="Visible_Fade_Delayed_Animation"/>
 						<top>90</top>
 						<width>auto</width>
 						<align>center</align>
@@ -289,7 +284,7 @@
 					</control>
 					<control type="label">
 						<visible>$PARAM[small_label] + [Player.Rewinding | Player.Forwarding]</visible>
-						<include>Delayed_Content_Fade_Animation</include>
+						<include content="Visible_Fade_Delayed_Animation"/>
 						<top>50</top>
 						<width>auto</width>
 						<align>center</align>
@@ -368,7 +363,7 @@
 		<definition>
 			<control type="grouplist">
 				<visible>!$EXP[Music_Player_HasFocus]</visible>
-				<include>Delayed_Content_Fade_Animation</include>
+				<include content="Visible_Fade_Delayed_Animation"/>
 				<animation effect="slide" start="0,0" end="0,-30"  condition="$EXP[StripView_Display_IsPosters] + [$EXP[Music_Player_IsVisible] | Window.IsVisible(volumebar)] + !$EXP[InfoWidget_HasFocus] + !Window.IsVisible(home)">Conditional</animation>
 				<left>$PARAM[padding]</left>
 				<right>$PARAM[padding]</right>
@@ -396,7 +391,7 @@
 			</control>
 			<control type="label">
 				<visible>$EXP[Music_Player_HasFocus]</visible>
-				<include>Delayed_Content_Fade_Animation</include>
+				<include content="Visible_Fade_Delayed_Animation"/>
 				<animation effect="slide" end="0,150" time="0" condition="$EXP[ShowcaseView_IsVisible] + $EXP[ShowcaseView_Display_IsPosters] + !$EXP[ShowcaseView_Details_Off]" reversible="false">Conditional</animation>
 				<left>$PARAM[padding]</left>
 				<right>$PARAM[padding]</right>
@@ -419,7 +414,7 @@
 		<param name="label_width" default="600"/>
 		<param name="align" default="right"/>
 		<param name="background_visible" default="true"/>
-		<param name="content_visible" default="![Window.IsVisible(volumebar) | Window.IsVisible(notification) | Window.IsVisible(extendedprogressdialog)]"/>
+		<param name="Visible" default="![Window.IsVisible(volumebar) | Window.IsVisible(notification) | Window.IsVisible(extendedprogressdialog)]"/>
 		<param name="progress_info" default="Player.Progress"/>
 		<param name="progress_side" default="0"/>
 		<param name="progress_top" default="0"/>
@@ -437,7 +432,7 @@
 				<nested/>
 				<control type="grouplist">
 					<visible>!$EXP[ContainerSwitching] + !$EXP[OpaqueDialog_IsVisible] + !$EXP[TransparentDialog_IsVisible]</visible>
-					<include>Delayed_Content_Fade_Animation</include>
+					<include content="Visible_Fade_Delayed_Animation"/>
 					<width>$PARAM[width]</width>
 					<top>$PARAM[top]</top>
 					<height>$PARAM[height]</height>
@@ -445,7 +440,6 @@
 					<orientation>horizontal</orientation>
 					<align>$PARAM[align]</align>
 					<usecontrolcoords>true</usecontrolcoords>
-
 					<!-- Left Label -->
 					<control type="group">
 						<animation effect="slide" end="-60,0" time="0" condition="$EXP[Music_Player_HasFocus] + [Window.IsVisible(Home) | $EXP[Background_IsFanart] | $EXP[InfoDialog_IsVisible]]">Conditional</animation>
@@ -453,8 +447,8 @@
 						<height>$PARAM[height]</height>
 						<width>$PARAM[label_width]</width>
 						<control type="group">
-							<visible>$PARAM[content_visible]</visible>
-							<include>Notification_Label_Fade_Animation</include>
+							<visible>$PARAM[Visible]</visible>
+							<include content="Notification_Label_Fade_Animation"/>
 							<include content="Music_Player_Label_Template">
 								<param name="padding" value="$PARAM[label_padding]"/>
 								<param name="group_align" value="center"/>
@@ -465,7 +459,6 @@
 							</include>
 						</control>
 					</control>
-
 					<!-- Main -->
 					<control type="group">
 						<width>$PARAM[height]</width>
@@ -493,7 +486,7 @@
 						<!-- Music Player Controls -->
 						<control type="group">
 							<visible>$EXP[Music_Player_HasFocus]</visible>
-							<include>Content_Fade_Animation</include>
+							<include content="Visible_Fade_Animation"/>
 							<width>180</width>
 							<height>120</height>
 							<centerleft>50%</centerleft>
@@ -545,13 +538,13 @@
 						</control>
 						<!-- Other Furniture -->
 						<control type="group">
-							<visible>$PARAM[content_visible]</visible>
-							<include>Notification_Label_Fade_Animation</include>
+							<visible>$PARAM[Visible]</visible>
+							<include content="Notification_Label_Fade_Animation"/>
 							<!-- Now Playing animation -->
 							<control type="group">
 								<animation effect="slide" start="0" end="0,-15" time="0" condition="Player.Rewinding | Player.Forwarding">Conditional</animation>
 								<visible>!$EXP[Music_Player_HasFocus]</visible>
-								<include>Delayed_Content_Fade_Animation</include>
+								<include content="Visible_Fade_Delayed_Animation"/>
 								<centerleft>50%</centerleft>
 								<centertop>50%</centertop>
 								<width>120</width>
@@ -575,10 +568,7 @@
 								<height>$PARAM[progress_height]</height>
 								<info>$PARAM[progress_info]</info>
 								<texturebg colordiffuse="$VAR[Progress_Light_Background_Color]">views/white_100.png</texturebg>
-								<lefttexture></lefttexture>
 								<midtexture colordiffuse="$VAR[Progress_Light_Focused_Color]">views/white_100.png</midtexture>
-								<righttexture></righttexture>
-								<overlaytexture></overlaytexture>
 							</control>
 							<!-- Center Label -->
 							<control type="group">
@@ -604,8 +594,8 @@
 						<height>$PARAM[height]</height>
 						<width>$PARAM[label_width]</width>
 						<control type="group">
-							<visible>$PARAM[content_visible]</visible>
-							<include>Notification_Label_Fade_Animation</include>
+							<visible>$PARAM[Visible]</visible>
+							<include content="Notification_Label_Fade_Animation"/>
 							<include content="Music_Player_Label_Template">
 								<param name="padding" value="$PARAM[label_padding]"/>
 								<param name="group_align" value="center"/>

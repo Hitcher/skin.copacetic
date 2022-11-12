@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <includes>
 
 	<include name="Hidden_List">
@@ -266,10 +267,9 @@
 	<include name="Simple_List">
 		<param name="id"/>
 		<param name="visible" default="true"/>
-		<param name="animation" default="Blank_Include"/>
 		<param name="orientation" default="vertical"/>
 		<param name="left" default="780"/>
-		<param name="right" default="120"/>
+		<param name="width" default="1020"/>
 		<param name="height" default="500"/>
 		<param name="focusposition" default="4"/>
 		<param name="nowplayingvisible" default="false"/>
@@ -284,9 +284,10 @@
       <control type="fixedlist" id="$PARAM[id]">
 				<viewtype label="List">list</viewtype>
 				<visible allowhiddenfocus="true">$PARAM[visible]</visible>
+				<nested/>
 				<include>$PARAM[animation]</include>
 				<left>$PARAM[left]</left>
-				<right>$PARAM[right]</right>
+				<width>$PARAM[width]</width>
 				<centertop>50%</centertop>
 				<height>$PARAM[height]</height>
 				<include>Simple_List_Navigation</include>
@@ -297,11 +298,7 @@
 				<focusposition>$PARAM[focusposition]</focusposition>
 				<orientation>vertical</orientation>
 				<scrolltime tween="sine" easing="inout">360</scrolltime>
-				<itemlayout height="55" width="100%">
-					<control type="image">
-						<texture>views/white_100.png,</texture>
-						<width>200</width>
-					</control>
+				<itemlayout height="55" width="$PARAM[width]">
 					<include content="Common_List_Layout">
 						<param name="nowplayingvisible" value="$PARAM[nowplayingvisible]"/>
 						<param name="iconvisible" value="false"/>
@@ -312,13 +309,13 @@
 						<param name="selectedcolor" value="$PARAM[selectedcolor]"/>
           </include>
 				</itemlayout>
-				<focusedlayout height="60" width="100%" condition="Control.HasFocus($PARAM[id])">
+				<focusedlayout height="60" width="$PARAM[width]" condition="Control.HasFocus($PARAM[id])">
 					<include content="Common_List_Layout">
 						<param name="nowplayingvisible" value="$PARAM[nowplayingvisible]"/>
 						<param name="iconvisible" value="false"/>
 						<param name="labelleft" value="$PARAM[labelleft]"/>
             <param name="label" value="$PARAM[label]"/>
-						<param name="labelmaxwidth" value="$PARAM[labelmaxwidth]"/>
+						<param name="labelmaxwidth" value="$PARAM[width]"/>
 						<param name="font" value="List_Title_Focused"/>
 						<param name="tracknumbercolor" value="$PARAM[textcolor]"/>
 						<param name="textcolor" value="$PARAM[textcolor]"/>
@@ -326,7 +323,7 @@
 					</include>
 					<include>$PARAM[focusedinclude]</include>
 				</focusedlayout>
-				<focusedlayout height="60" width="100%" condition="!Control.HasFocus($PARAM[id])">
+				<focusedlayout height="60" width="$PARAM[width]" condition="!Control.HasFocus($PARAM[id])">
 					<control type="group">
 						<top>5</top>
 						<include content="Common_List_Layout">
@@ -334,7 +331,7 @@
 							<param name="iconvisible" value="false"/>
 							<param name="labelleft" value="$PARAM[labelleft]"/>
 	            <param name="label" value="$PARAM[label]"/>
-							<param name="labelmaxwidth" value="$PARAM[labelmaxwidth]"/>
+							<param name="labelmaxwidth" value="$PARAM[width]"/>
 							<param name="tracknumbercolor" value="$PARAM[textcolor]"/>
 							<param name="textcolor" value="$PARAM[textcolor]"/>
 							<param name="selectedcolor" value="$PARAM[selectedcolor]"/>
@@ -392,7 +389,7 @@
 				<bottom>$PARAM[bottom]</bottom>
 				<control type="group">
 					<visible>![Control.HasFocus(4501) + $EXP[Secondary_List_ContentSwitching]]</visible>
-					<include>Delayed_Content_Fade_Animation</include>
+					<include content="Visible_Fade_Delayed_Animation"/>
 					<control type="grouplist">
 						<orientation>vertical</orientation>
 						<align>$PARAM[align]</align>
@@ -556,14 +553,14 @@
 		<param name="maxtitlelabelwidth" default="960"/>
 		<param name="haspath" default="false"/>
 		<param name="label_color" default="$VAR[Common_Overlay_Label_Color]"/>
-		<param name="info_label_id" default=""/>
+		<param name="info_label_id" default="981"/>
 		<param name="info_label" default="$VAR[Breadcrumb_Info_Label]"/>
-		<param name="info_label_visible" default="true"/>
+		<param name="info_label_visible" default="false"/>
 		<param name="maxinfolabelwidth" default="600"/>
 		<definition>
 			<control type="group">
 				<visible>$PARAM[visible]</visible>
-				<include>Content_Fade_Animation</include>
+				<include content="Visible_Fade_Animation"/>
 				<nested/>
 				<control type="grouplist">
 					<left>$PARAM[left]</left>
@@ -618,7 +615,7 @@
 		<param name="bottom" default="0"/>
 		<definition>
 			<control type="$PARAM[type]" id="$PARAM[id]">
-				<include>Content_Fade_Animation</include>
+				<include content="Visible_Fade_Animation"/>
 				<visible>$PARAM[visible]</visible>
 				<left>$PARAM[left]</left>
 				<right>$PARAM[right]</right>
@@ -650,10 +647,7 @@
 					<height>100%</height>
 					<visible>Container($PARAM[id]).ListItem.IsResumable</visible>
 					<texturebg colordiffuse="$PARAM[background_color]">views/white_100.png</texturebg>
-					<lefttexture></lefttexture>
 					<midtexture colordiffuse="$PARAM[focus_color]">views/white_100.png</midtexture>
-					<righttexture></righttexture>
-					<overlaytexture></overlaytexture>
 					<info>Container($PARAM[id]).ListItem.PercentPlayed</info>
 				</control>
 				<!-- ListItem Watched -->
@@ -785,7 +779,7 @@
 			<control type="group">
 				<visible>!$EXP[ContainerSwitching] + !$EXP[ContentSwitching] + !$EXP[TransparentDialog_IsVisible] + !$EXP[Scrollbar_HasFocus]</visible>
 				<visible>![Control.HasFocus(4501) + Window.IsVisible(1121)] + !$EXP[Secondary_List_ContainerSwitching] + !$EXP[Secondary_List_ContentSwitching]</visible>
-				<include>Delayed_Content_Fade_Animation</include>
+				<include content="Visible_Fade_Delayed_Animation"/>
 				<nested/>
 				<centerleft>50%</centerleft>
 				<bottom>$PARAM[bottom]</bottom>
@@ -811,7 +805,7 @@
 		<definition>
 			<control type="group">
 				<visible>!$EXP[ContainerSwitching] + !$EXP[ContentSwitching] + !$EXP[TransparentDialog_IsVisible] + !$EXP[Scrollbar_HasFocus]</visible>
-				<include>Delayed_Content_Fade_Animation</include>
+				<include content="Visible_Fade_Delayed_Animation"/>
 				<left>$PARAM[left]</left>
 				<bottom>$PARAM[bottom]</bottom>
 				<width>$PARAM[width]</width>
@@ -833,7 +827,7 @@
 				<animation effect="slide" end="-60" time="0" condition="$EXP[ListView_Display_IsThumbnails]">Conditional</animation>
 				<control type="group">
 					<visible>!$EXP[ContainerSwitching] + !$EXP[ContentSwitching] + !$EXP[TransparentDialog_IsVisible] + !$EXP[Scrollbar_HasFocus] + !$EXP[InfoDialog_IsVisible] + !Window.Is(pictureinfo)</visible>
-					<include>Delayed_Content_Fade_Animation</include>
+					<include content="Visible_Fade_Delayed_Animation"/>
 					<!-- Studio -->
 					<control type="image">
 						<visible>$EXP[ListView_Flags_Studio_IsVisible] | [$EXP[BillboardView_Flags_Studio_IsVisible] + !$EXP[BillboardView_Details_Off]] | [$EXP[ShowcaseView_Flags_Studio_IsVisible] + !$EXP[ShowcaseView_Details_Off]] | [$EXP[StripView_Flags_Studio_IsVisible] + [!$EXP[StripView_Details_Off] | $EXP[StripView_Details_Title]]]</visible>

@@ -1,17 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <window>
 	<!-- mediasource -->
-	<defaultcontrol always="true">9001</defaultcontrol>
-	<include>Delayed_Dialog_Fade_Animation</include>
+	<defaultcontrol always="true">11</defaultcontrol>
+	<backgroundcolor>$VAR[Global_Fanart_Slideshow_Background_Color]</backgroundcolor>
+	<include content="WindowOpenClose_Fade_Delayed_Animation"/>
 	<controls>
-
-		<!-- Delay content on Load -->
-		<include content="Delay_Content_Load">
-			<param name="target_id" value="SetFocus(11)"/>
-			<onfocus condition="String.IsEmpty(Window(home).Property(Global_Fanart_Slideshow))">SetProperty(Global_Fanart_Slideshow,$ESCINFO[Container(12342).ListItem.Art(fanart)],home)</onfocus>
-		</include>
-
-		<!-- Hidden controls -->
+		<!-- Hidden components -->
 		<control type="button" id="11">
 			<include>Hidden_Button</include>
 			<onleft>10</onleft>
@@ -23,6 +17,7 @@
 			<ondown condition="!String.IsEmpty(Container(10).ListItemNoWrap(1).Label)">SetFocus(10)</ondown>
 			<ondown condition="!String.IsEmpty(Container(10).ListItemNoWrap(1).Label)">SetFocus(11)</ondown>
 			<ondown condition="String.IsEmpty(Container(10).ListItemNoWrap(1).Label)">12</ondown>
+			<onfocus condition="String.IsEmpty(Window(home).Property(Global_Fanart_Slideshow))">SetProperty(Global_Fanart_Slideshow,$ESCINFO[Container(12342).ListItem.Art(fanart)],home)</onfocus>
 		</control>
 		<control type="button" id="13">
 			<include>Hidden_Button</include>
@@ -49,28 +44,24 @@
 			<ondown condition="String.IsEmpty(Container(10).ListItemNoWrap(1).Label)">12</ondown>
 			<onclick>SetFocus(11)</onclick>
 		</control>
-
-		<control type="group">
-			<visible>!Window.IsVisible(filemanager)</visible>
-			<include condition="!Skin.HasSetting(Global_Fanart_Slideshow_Disabled)" content="Global_Fanart_Slideshow"/>
-		</control>
+		<!-- Background -->
+		<include condition="Window.IsVisible(filemanager) + !Skin.HasSetting(Global_Fanart_Slideshow_Disabled)" content="Global_Fanart_Slideshow">
+			<param name="visible" value="!Window.IsVisible(filemanager)"/>
+		</include>
 
 		<control type="group">
 			<visible>![Window.IsVisible(shutdownmenu) | Window.IsVisible(sliderdialog) | Window.IsVisible(selectdialog) | Window.IsVisible(filebrowser) | Window.IsVisible(subtitlesearch) | Window.IsVisible(virtualkeyboard)]</visible>
-			<include>Delayed_Content_Fade_Animation</include>
+			<include content="Visible_Fade_Delayed_Animation"/>
 			<control type="group">
 				<visible>!Control.HasFocus(9001)</visible>
-				<include>Content_Fade_Animation</include>
+				<include content="Visible_Fade_Animation"/>
 
 				<include content="Breadcrumb_Label">
 					<param name="title_label_id" value="2"/>
 					<param name="label_color" value="$VAR[Settings_Label_Color]"/>
 				</include>
 
-				<include content="Transparent_Dialog_Panel">
-					<param name="top" value="180"/>
-					<param name="bottom" value="180"/>
-				</include>
+				<include content="Transparent_Dialog_Panel"/>
 
 				<!-- Divider and secondary list scrollbar -->
 				<control type="group">
@@ -177,7 +168,6 @@
 				<param name="onup" value="12"/>
 				<param name="onleft" value="12"/>
 				<param name="onright" value="12"/>
-				<param name="icons" value="true"/>
 				<param name="color" value="$VAR[Settings_Label_Color]"/>
 				<param name="button1" value="true"/>
 				<param name="button1id" value="19"/>
