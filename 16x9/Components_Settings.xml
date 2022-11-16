@@ -1,8 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <includes>
 
+	<include name="Settings_Control_Templates_Togglebutton">
+		<control type="togglebutton" id="10">
+			<focusedcolor>$VAR[Settings_Grouplist_Label_Color]</focusedcolor>
+			<texturefocus border="62,2,2,2" colordiffuse="$VAR[Unfocused_Color]">dialogs/button_underline_except_60_left.png</texturefocus>
+			<alttexturefocus border="62,2,2,2" colordiffuse="$VAR[Unfocused_Color]">dialogs/button_underline_except_60_left.png</alttexturefocus>
+		</control>
+	</include>
+
+	<include name="Settings_Control_Templates_Colorbutton">
+		<control type="colorbutton" id="15"/>
+	</include>
+
+	<include name="Settings_Control_Templates">
+		<param name="include_togglebutton" default="false"/>
+		<param name="include_colorbutton" default="false"/>
+		<definition>
+			<control type="button" id="7"/>
+			<control type="radiobutton" id="8"/>
+			<control type="spincontrolex" id="9"/>
+			<include condition="$PARAM[include_togglebutton]" content="Settings_Control_Templates_Togglebutton"/>
+			<control type="image" id="11">
+				<height>1</height>
+				<texture colordiffuse="$VAR[Blank_Color]">views/white_100.png</texture>
+			</control>
+			<control type="edit" id="12"/>
+			<control type="sliderex" id="13"/>
+			<control type="label" id="14">
+				<height>90</height>
+				<textoffsetx>30</textoffsetx>
+				<font>Default_Settings_Header</font>
+				<textcolor>$VAR[Unfocused_Color]</textcolor>
+			</control>
+			<include condition="$PARAM[include_colorbutton]" content="Settings_Control_Templates_Colorbutton"/>
+		</definition>
+	</include>
+
 	<include name="Settings_Grouplist_Template">
 		<param name="id"/>
+		<param name="pagecontrol" default="60"/>
 		<param name="left" default="90"/>
 		<param name="width" default="480"/>
 		<param name="height" default="630"/>
@@ -15,6 +52,12 @@
 		<param name="onright2"/>
 		<param name="onright2_condition" default="false"/>
 		<param name="align" default="top"/>
+		<param name="include_permanent_underline" default="false"/>
+		<param name="include_scrollbar" default="true"/>
+		<param name="divider_visible" default="true"/>
+		<param name="scrollbar_visible" default="false"/>
+		<param name="scrollbar_height" default="630"/>
+		<param name="scrollbar_mirror" default="false"/>
 		<definition>
 			<control type="grouplist" id="$PARAM[id]">
 				<left>$PARAM[left]</left>
@@ -29,8 +72,21 @@
 				<orientation>vertical</orientation>
 				<align>$PARAM[align]</align>
 				<scrolltime tween="sine" easing="inout">360</scrolltime>
+				<pagecontrol>$PARAM[pagecontrol]</pagecontrol>
 				<nested/>
 			</control>
+			<include condition="$PARAM[include_permanent_underline]" content="Settings_Grouplist_Underline">
+				<param name="id" value="$PARAM[id]"/>
+			</include>
+			<include condition="$PARAM[include_scrollbar]" content="Dialog_Divider_With_Scrollbar">
+				<param name="dividervisible" value="$PARAM[divider_visible]"/>
+				<param name="scrollbarvisible" value="$PARAM[scrollbar_visible]"/>
+				<param name="id" value="$PARAM[pagecontrol]"/>
+				<param name="left" value="$PARAM[left]"/>
+				<param name="height" value="$PARAM[scrollbar_height]"/>
+				<param name="scrollbaralignleft" value="!$PARAM[scrollbar_mirror]"/>
+				<animation effect="slide" end="$PARAM[width]" time="0" reversible="false" condition="$PARAM[scrollbar_mirror]">Conditional</animation>
+			</include>
 		</definition>
 	</include>
 
@@ -54,11 +110,6 @@
 				<texture colordiffuse="$VAR[Unfocused_Color]">views/white_100.png</texture>
 			</control>
 		</definition>
-	</include>
-
-	<include name="Settings_Left_List_Toggle_Button_Texture">
-		<texturefocus border="62,2,2,2" colordiffuse="$VAR[Unfocused_Color]">dialogs/button_underline_except_60_left.png</texturefocus>
-		<alttexturefocus border="62,2,2,2" colordiffuse="$VAR[Unfocused_Color]">dialogs/button_underline_except_60_left.png</alttexturefocus>
 	</include>
 
 	<include name="Settings_List_Label">
@@ -87,11 +138,12 @@
 	<include name="Settings_List_Template">
 		<param name="visible" default="true"/>
 		<param name="id"/>
-		<param name="scrollbar_id"/>
+		<param name="pagecontrol"/>
 		<param name="window_name"/>
+		<param name="left" default="0"/>
 		<param name="width" default="100%"/>
-		<param name="height" default="100%"/>
 		<param name="top" default="0"/>
+		<param name="height" default="100%"/>
 		<param name="onleft"/>
 		<param name="onleft_condition" default="true"/>
 		<param name="onleft2"/>
@@ -114,6 +166,7 @@
 				<include condition="!Window.Is(profiles)" content="Visible_Fade_Delayed_Animation"/>
 				<animation effect="slide" end="570,0" time="0" condition="Window.Is(profiles)">Conditional</animation>
 				<animation effect="slide" end="960,180" time="0" condition="Window.Is(smartplaylisteditor)">Conditional</animation>
+				<left>$PARAM[left]</left>
 				<width>$PARAM[width]</width>
 				<height>$PARAM[height]</height>
 				<top>$PARAM[top]</top>
@@ -126,7 +179,7 @@
 				<ondown>$PARAM[id]</ondown>
 				<orientation>vertical</orientation>
 				<align>top</align>
-				<pagecontrol>$PARAM[scrollbar_id]</pagecontrol>
+				<pagecontrol>$PARAM[pagecontrol]</pagecontrol>
 				<scrolltime tween="sine" easing="inout">360</scrolltime>
 				<itemlayout height="90" width="$PARAM[width]">
 					<include content="Settings_List_Label">
@@ -160,7 +213,7 @@
 	<include name="Settings_Left_List_Template">
 		<param name="visible" default="true"/>
 		<param name="id"/>
-		<param name="scrollbar_id"/>
+		<param name="pagecontrol"/>
 		<param name="window_name"/>
 		<param name="left" default="0"/>
 		<param name="width" default="900"/>
@@ -183,7 +236,7 @@
 				<include content="Settings_List_Template">
 					<param name="visible" value="$PARAM[visible]"/>
 					<param name="id" value="$PARAM[id]"/>
-					<param name="scrollbar_id" value="$PARAM[scrollbar_id]"/>
+					<param name="pagecontrol" value="$PARAM[pagecontrol]"/>
 					<param name="window_name" value="$PARAM[window_name]"/>
 					<param name="side" value="left"/>
 					<param name="width" value="$PARAM[width]"/>
@@ -191,7 +244,7 @@
 					<param name="onleft" value="$PARAM[onleft]"/>
 					<param name="onright" value="$PARAM[onright]"/>
 					<param name="onright_condition" value="![Container($PARAM[id]).HasPrevious | Container($PARAM[id]).HasNext]"/>
-					<param name="onright2" value="$PARAM[scrollbar_id]"/>
+					<param name="onright2" value="$PARAM[pagecontrol]"/>
 					<param name="onright2_condition" value="Container($PARAM[id]).HasPrevious | Container($PARAM[id]).HasNext"/>
 					<param name="focus_border_visible" value="$PARAM[focus_border_visible]"/>
 					<param name="focus_border_margin_left" value="60"/>
@@ -203,9 +256,9 @@
 					<param name="label2" value="$PARAM[label2]"/>
 				</include>
 				<include content="Dialog_Divider_With_Scrollbar">
-					<param name="scrollbarvisible" value="[Control.HasFocus($PARAM[id]) | Control.HasFocus($PARAM[scrollbar_id])] + !Window.IsVisible(contextmenu)"/>
+					<param name="scrollbarvisible" value="[Control.HasFocus($PARAM[id]) | Control.HasFocus($PARAM[pagecontrol])] + !Window.IsVisible(contextmenu)"/>
 					<param name="dividervisible" value="$PARAM[divider_visible]"/>
-					<param name="id" value="$PARAM[scrollbar_id]"/>
+					<param name="id" value="$PARAM[pagecontrol]"/>
 					<param name="height" value="$PARAM[scrollbar_height]"/>
 					<param name="left" value="$PARAM[width]"/>
 					<param name="onleft" value="$PARAM[id]"/>
@@ -218,7 +271,7 @@
 	<include name="Settings_Right_List_Template">
 		<param name="visible" default="true"/>
 		<param name="id"/>
-		<param name="scrollbar_id"/>
+		<param name="pagecontrol"/>
 		<param name="window_name"/>
 		<param name="width" default="900"/>
 		<param name="height" default="100%"/>
@@ -241,7 +294,7 @@
 				<include content="Settings_List_Template">
 					<param name="visible" value="$PARAM[visible]"/>
 					<param name="id" value="$PARAM[id]"/>
-					<param name="scrollbar_id" value="$PARAM[scrollbar_id]"/>
+					<param name="pagecontrol" value="$PARAM[pagecontrol]"/>
 					<param name="window_name" value="$PARAM[window_name]"/>
 					<param name="side" value="right"/>
 					<param name="width" value="$PARAM[width]"/>
@@ -249,7 +302,7 @@
 					<param name="top" value="$PARAM[top]"/>
 					<param name="onleft" value="$PARAM[onleft]"/>
 					<param name="onleft_condition" value="![Container($PARAM[id]).HasPrevious | Container($PARAM[id]).HasNext]"/>
-					<param name="onleft2" value="$PARAM[scrollbar_id]"/>
+					<param name="onleft2" value="$PARAM[pagecontrol]"/>
 					<param name="onleft2_condition" value="Container($PARAM[id]).HasPrevious | Container($PARAM[id]).HasNext"/>
 					<param name="onright" value="$PARAM[onright]"/>
 					<param name="focus_border_visible" value="$PARAM[focus_border_visible]"/>
@@ -262,9 +315,9 @@
 					<param name="label2" value="$PARAM[label2]"/>
 				</include>
 				<include content="Dialog_Divider_With_Scrollbar">
-					<param name="scrollbarvisible" value="[Control.HasFocus($PARAM[id]) | Control.HasFocus($PARAM[scrollbar_id])] + !Window.IsVisible(contextmenu)"/>
+					<param name="scrollbarvisible" value="[Control.HasFocus($PARAM[id]) | Control.HasFocus($PARAM[pagecontrol])] + !Window.IsVisible(contextmenu)"/>
 					<param name="dividervisible" value="$PARAM[divider_visible]"/>
-					<param name="id" value="$PARAM[scrollbar_id]"/>
+					<param name="id" value="$PARAM[pagecontrol]"/>
 					<param name="height" value="$PARAM[scrollbar_height]"/>
 					<param name="left" value="0"/>
 					<param name="scrollbaralignleft" value="true"/>
@@ -400,18 +453,6 @@
 					<animation effect="slide" start="0" end="0" time="90">Hidden</animation>
 					<onfocus condition="!Window.Is(filemanager)">ReplaceWindowAndFocus(filemanager,$PARAM[categoryid]10)</onfocus>
 				</control>
-			</control>
-			<!-- Divider and scrollbar for secondary list -->
-			<control type="group">
-				<visible>!Control.HasFocus(3000010)</visible>
-				<include content="Visible_Fade_Delayed_Animation"/>
-				<include content="Dialog_Divider_With_Scrollbar">
-					<param name="visible" value="!Window.Is(filemanager)"/>
-					<param name="dividervisible" value="true"/>
-					<param name="scrollbarvisible" value="ControlGroup($PARAM[right_list_id]).HasFocus"/>
-					<param name="left" value="570"/>
-					<param name="scrollbaralignleft" value="true"/>
-				</include>
 			</control>
 		</definition>
 	</include>

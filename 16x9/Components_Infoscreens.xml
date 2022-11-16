@@ -1,32 +1,109 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <includes>
 
-	<include name="AlbumInfo_Content_Path">
-		<content>musicdb://albums/$INFO[ListItem.DBID]/</content>
+	<include name="Infoscreen_Menu">
+		<definition>
+			<control type="grouplist" id="65000">
+				<centerleft>50%</centerleft>
+				<bottom>60</bottom>
+				<width>420</width>
+				<height>60</height>
+				<orientation>horizontal</orientation>
+				<align>center</align>
+				<itemgap>0</itemgap>
+				<usecontrolcoords>true</usecontrolcoords>
+				<include condition="Window.Is(movieinformation)" content="movieinformation_Menu_Content"/>
+			</control>
+		</definition>
 	</include>
 
-	<include name="FlagLayout">
-		<param name="id" default=""/>
-		<param name="content" default=""/>
+	<include name="Infoscreen_Flag_Template">
+		<param name="id"/>
+		<param name="texture"/>
 		<param name="colordiffuse" default="$VAR[Light_Color]"/>
 		<definition>
 			<control type="group">
 				<visible>!String.IsEqual(Control.GetLabel($PARAM[id]),flags/blank.png)</visible>
 				<width>180</width>
 				<height>180</height>
-				<control type="image">
+				<control type="image" id="$PARAM[id]">
 					<centerleft>50%</centerleft>
 					<centertop>50%</centertop>
 					<width>90</width>
 					<height>60</height>
 					<aspectratio>keep</aspectratio>
-					<texture colordiffuse="$PARAM[colordiffuse]">$PARAM[content]</texture>
+					<texture fallback="flags/blank.png" colordiffuse="$PARAM[colordiffuse]">$PARAM[texture]</texture>
 				</control>
 			</control>
 		</definition>
 	</include>
 
-	<include name="Info_Dialog_Header">
+	<include name="Infoscreen_Flags_Layout">
+		<param name="VideoSource_condition" default="!String.IsEqual(ListItem.DBType,set) + !String.IsEqual(ListItem.DBType,tvshow) + !String.IsEqual(ListItem.DBType,episode)"/>
+		<param name="VideoCodec_condition" default="!String.IsEqual(ListItem.DBType,set) + !String.IsEqual(ListItem.DBType,tvshow) + !String.IsEqual(ListItem.DBType,episode)"/>
+		<param name="AudioCodec_condition" default="!String.IsEqual(ListItem.DBType,set) + !String.IsEqual(ListItem.DBType,tvshow) + !String.IsEqual(ListItem.DBType,episode)"/>
+		<definition>
+			<control type="grouplist">
+				<width>100%</width>
+				<height>180</height>
+				<orientation>horizontal</orientation>
+				<align>center</align>
+				<itemgap>0</itemgap>
+				<include content="Infoscreen_Flag_Template">
+					<param name="id" value="920"/>
+					<param name="texture" value="$VAR[Studio_Flag]"/>
+				</include>
+				<include content="Infoscreen_Flag_Template">
+					<param name="id" value="921"/>
+					<param name="texture" value="$VAR[MPAA_Flag]"/>
+				</include>
+				<include condition="$PARAM[VideoSource_condition]" content="Infoscreen_Flag_Template">
+					<param name="id" value="922"/>
+					<param name="texture" value="$VAR[VideoSource_Flag]"/>
+				</include>
+				<include condition="!String.IsEqual(ListItem.DBType,set) + !String.IsEqual(ListItem.DBType,tvshow) + !String.IsEqual(ListItem.DBType,episode)" content="Infoscreen_Flag_Template">
+					<param name="id" value="923"/>
+					<param name="texture" value="$VAR[VideoCodec_Flag]"/>
+				</include>
+				<include condition="!String.IsEqual(ListItem.DBType,set) + !String.IsEqual(ListItem.DBType,tvshow) + !String.IsEqual(ListItem.DBType,episode)" content="Infoscreen_Flag_Template">
+					<param name="id" value="924"/>
+					<param name="texture" value="$VAR[AudioCodec_Flag]"/>
+				</include>
+			</control>
+		</definition>
+	</include>
+
+	<include name="Infoscreen_Stars_Layout">
+		<param name="align"/>
+		<definition>
+			<control type="grouplist">
+				<top>15</top>
+				<centerleft>50%</centerleft>
+				<height>30</height>
+				<orientation>horizontal</orientation>
+				<align>$PARAM[align]</align>
+				<control type="image">
+					<width>182</width>
+					<aspectratio>keep</aspectratio>
+					<texture colordiffuse="$VAR[Star_Color]">$VAR[StarRating_Label]</texture>
+				</control>
+			</control>
+		</definition>
+	</include>
+
+	<include name="Infoscreen_Description_Layout">
+		<control type="textbox">
+			<top>60</top>
+			<height max="206">auto</height>
+			<font>Body</font>
+			<textcolor>$VAR[Light_Color]</textcolor>
+			<label>$INFO[ListItem.AddonDescription]</label>
+			<align>left</align>
+			<autoscroll delay="5000" time="1500" repeat="2000">true</autoscroll>
+		</control>
+	</include>
+
+	<include name="Infoscreen_Header">
 		<param name="visible"/>
 		<param name="left"/>
 		<param name="right"/>
@@ -54,7 +131,6 @@
 					</control>
 					<!-- Details -->
 					<control type="textbox">
-						<visible>$PARAM[single_row_info]</visible>
 						<top>0</top>
 						<width>100%</width>
 						<height max="90">auto</height>
@@ -63,70 +139,16 @@
 						<label>$VAR[Dialog_Info_Label]</label>
 						<align>$PARAM[align]</align>
 					</control>
-					<!-- Star Rating -->
-					<control type="grouplist">
-						<visible>!Window.IsVisible(addoninformation) + !ListItem.DBType(season) + !ListItem.DBType(artist) + [!String.IsEmpty(ListItem.Rating) | !String.IsEmpty(ListItem.UserRating)]</visible>
-						<top>15</top>
-						<centerleft>50%</centerleft>
-						<height>30</height>
-						<orientation>horizontal</orientation>
-						<align>$PARAM[align]</align>
-						<control type="image">
-							<width>182</width>
-							<aspectratio>keep</aspectratio>
-							<texture colordiffuse="$VAR[Star_Color]">$VAR[StarRating_Label]</texture>
-						</control>
-					</control>
-					<!-- Flags -->
-					<control type="grouplist">
-						<visible>Window.IsActive(movieinformation)</visible>
-						<top>0</top>
-						<width>100%</width>
-						<height>180</height>
-						<orientation>horizontal</orientation>
-						<align>center</align>
-						<itemgap>0</itemgap>
-						<!-- Studio -->
-						<include content="FlagLayout">
-							<param name="id" value="920"/>
-							<param name="content" value="$VAR[Studio_Flag]"/>
-						</include>
-						<!-- Rating -->
-						<include content="FlagLayout">
-							<param name="id" value="921"/>
-							<param name="content" value="$VAR[MPAA_Flag]"/>
-						</include>
-						<!-- Video Source -->
-						<include content="FlagLayout">
-							<param name="id" value="922"/>
-							<param name="content" value="$VAR[VideoSource_Flag]"/>
-						</include>
-						<!-- Video Codec -->
-						<include content="FlagLayout">
-							<param name="id" value="923"/>
-							<param name="content" value="$VAR[VideoCodec_Flag]"/>
-						</include>
-						<!-- Audio Source -->
-						<include content="FlagLayout">
-							<param name="id" value="924"/>
-							<param name="content" value="$VAR[AudioCodec_Flag]"/>
-						</include>
-					</control>
-					<control type="textbox">
-						<top>60</top>
-						<height max="206">auto</height>
-						<visible>Window.IsVisible(addoninformation)</visible>
-						<font>Body</font>
-						<textcolor>$VAR[Light_Color]</textcolor>
-						<label>$INFO[ListItem.AddonDescription]</label>
-						<align>left</align>
-						<autoscroll delay="5000" time="1500" repeat="2000">true</autoscroll>
-					</control>
+					<include condition="!Window.Is(addoninformation) + !String.IsEqual(ListItem.DBType,set) + !String.IsEqual(ListItem.DBType,artist)" content="Infoscreen_Stars_Layout">
+						<param name="align" value="$PARAM[align]"/>
+					</include>
+					<include condition="Window.Is(movieinformation)" content="Infoscreen_Flags_Layout"/>
+					<include condition="Window.Is(addoninformation)" content="Infoscreen_Description_Layout"/>
 				</control>
 			</definition>
 		</include>
 
-		<include name="Info_Dialog_Plot">
+		<include name="Infoscreen_Plot">
 			<param name="visible"/>
 			<param name="left"/>
 			<param name="right"/>
@@ -174,16 +196,23 @@
 						<showonepage>false</showonepage>
 						<orientation>vertical</orientation>
 						<texturesliderbackground colordiffuse="$VAR[Scroll_Widget_Background_Color]">views/white_100.png</texturesliderbackground>
-						<texturesliderbar/>
 						<texturesliderbarfocus colordiffuse="$VAR[Scroll_Widget_Focused_Color]">views/white_100.png</texturesliderbarfocus>
-						<textureslidernib></textureslidernib>
-						<textureslidernibfocus></textureslidernibfocus>
 					</control>
 				</control>
 			</definition>
 		</include>
 
-		<include name="Info_Dialog_Stars">
+		<include name="Infoscreen_Stars">
+			<control type="button" id="5003">
+				<visible allowhiddenfocus="true">false</visible>
+				<onfocus>IncreaseRating</onfocus>
+				<onfocus>SetFocus(7)</onfocus>
+			</control>
+			<control type="button" id="5004">
+				<visible allowhiddenfocus="true">false</visible>
+				<onfocus>DecreaseRating</onfocus>
+				<onfocus>SetFocus(7)</onfocus>
+			</control>
 			<control type="grouplist">
 				<visible>$PARAM[visible]</visible>
 				<include content="Visible_Fade_Delayed_Animation"/>
@@ -231,107 +260,94 @@
 			</control>
 		</include>
 
-		<include name="Info_Dialog_Artwork">
+		<include name="Infoscreen_Artwork_Icon">
+			<param name="top"/>
+			<param name="height"/>
+			<param name="width"/>
+			<param name="texture"/>
+			<param name="dropshadow_condition"/>
+			<definition>
+				<control type="group">
+					<top>$PARAM[top]</top>
+					<height>$PARAM[height]</height>
+					<width>$PARAM[width]</width>
+					<control type="image">
+						<texture background="true">$PARAM[texture]</texture>
+						<aspectratio>scale</aspectratio>
+					</control>
+					<include condition="$PARAM[dropshadow_condition]" content="DropShadow">
+						<param name="height" value="100%"/>
+						<param name="flipx" value="true"/>
+					</include>
+				</control>
+		</definition>
+		</include>
+
+		<include name="Infoscreen_Artwork_Layout">
+			<control type="grouplist">
+				<centertop>50%</centertop>
+				<centerleft>50%</centerleft>
+				<height>594</height>
+				<width>1920</width>
+				<orientation>horizontal</orientation>
+				<align>center</align>
+				<usecontrolcoords>true</usecontrolcoords>
+				<itemgap>0</itemgap>
+				<!-- Position 1 -->
+				<include condition="!String.IsEmpty(ListItem.Art(fanart))" content="Simple_ListIcon">
+					<param name="width" value="1056"/>
+					<param name="height" value="594"/>
+					<param name="texture" value="$INFO[ListItem.Art(fanart)]"/>
+					<param name="fallback" value=""/>
+				</include>
+				<!-- Position 2 -->
+				<include condition="Window.Is(movieinformation) + !String.IsEmpty(ListItem.Art(poster))" content="Infoscreen_Artwork_Icon">
+					<param name="width" value="320"/>
+					<param name="top" value="57"/>
+					<param name="height" value="480"/>
+					<param name="texture" value="$INFO[ListItem.Art(poster)]"/>
+					<param name="dropshadow_condition" value="!String.IsEmpty(ListItem.Art(fanart))"/>
+				</include>
+				<include condition="!Window.Is(movieinformation) + !String.IsEmpty(ListItem.Art(thumb))" content="Infoscreen_Artwork_Icon">
+					<param name="width" value="504"/>
+					<param name="top" value="45"/>
+					<param name="height" value="504"/>
+					<param name="texture" value="$INFO[ListItem.Art(thumb)]"/>
+					<param name="dropshadow_condition" value="!String.IsEmpty(ListItem.Art(fanart))"/>
+				</include>
+				<!-- Position 3 -->
+				<include condition="Window.Is(movieinformation) + !String.IsEmpty(ListItem.Art(keyart))"  content="Infoscreen_Artwork_Icon">
+					<param name="width" value="260"/>
+					<param name="top" value="102"/>
+					<param name="height" value="390"/>
+					<param name="texture" value="$INFO[ListItem.Art(keyart)]"/>
+					<param name="dropshadow_condition" value="!String.IsEmpty(ListItem.Art(fanart)) | !String.IsEmpty(ListItem.Art(poster))"/>
+				</include>
+				<!-- Position 4 -->
+				<include condition="Window.Is(movieinformation) + !String.IsEmpty(ListItem.Art(square))"  content="Infoscreen_Artwork_Icon">
+					<param name="width" value="284"/>
+					<param name="top" value="155"/>
+					<param name="height" value="284"/>
+					<param name="texture" value="$INFO[ListItem.Art(square)]"/>
+					<param name="dropshadow_condition" value="!String.IsEmpty(ListItem.Art(fanart)) | !String.IsEmpty(ListItem.Art(poster)) | !String.IsEmpty(ListItem.Art(keyart))"/>
+				</include>
+			</control>
+		</include>
+
+		<include name="Infoscreen_Artwork">
 			<control type="group">
 				<visible>$PARAM[visible]</visible>
 				<visible>![Window.IsVisible(selectdialog) | Window.IsVisible(filebrowser)]</visible>
 				<include content="Visible_Fade_Delayed_Animation"/>
 				<include content="Transparent_Dialog_Panel"/>
-
-				<!-- Episodes -->
-				<control type="image">
-					<visible>String.IsEqual(ListItem.DBType,episode) | [String.IsEmpty(ListItem.Art(fanart)) + String.IsEmpty(ListItem.Art(poster))]</visible>
-					<height>610</height>
-					<width>1084</width>
-					<centerleft>50%</centerleft>
-					<centertop>50%</centertop>
-					<width>auto</width>
-					<aspectratio>fixed</aspectratio>
-					<texture background="true">$INFO[ListItem.Art(thumb)]</texture>
-				</control>
-
-				<!-- Others -->
-				<control type="grouplist">
-					<visible>!String.IsEqual(ListItem.DBType,episode) + ![String.IsEmpty(ListItem.Art(fanart)) + String.IsEmpty(ListItem.Art(poster))]</visible>
-					<centertop>50%</centertop>
-					<centerleft>50%</centerleft>
-					<height>594</height>
-					<width>1920</width>
-					<orientation>horizontal</orientation>
-					<align>center</align>
-					<usecontrolcoords>true</usecontrolcoords>
-					<itemgap>0</itemgap>
-					<!-- Position 1 -->
-					<control type="image">
-						<visible>!String.IsEmpty(ListItem.Art(fanart))</visible>
-						<height>594</height>
-						<width>1056</width>
-						<aspectratio>scale</aspectratio>
-						<texture background="true">$INFO[ListItem.Art(fanart)]</texture>
-					</control>
-					<!-- Position 2 -->
-					<control type="group">
-						<visible>!String.IsEmpty(ListItem.Art(poster)) + Window.IsVisible(movieinformation)</visible>
-						<top>57</top>
-						<height>480</height>
-						<width>320</width>
-						<control type="image">
-							<texture background="true">$INFO[ListItem.Art(poster)]</texture>
-							<aspectratio>scale</aspectratio>
-						</control>
-						<include content="DropShadow">
-							<param name="height" value="100%"/>
-							<param name="flipx" value="true"/>
-							<param name="visible" value="!String.IsEmpty(ListItem.Art(fanart))"/>
-						</include>
-					</control>
-					<control type="group">
-						<visible>!String.IsEmpty(ListItem.Art(thumb)) + !Window.IsVisible(movieinformation)</visible>
-						<top>45</top>
-						<height>504</height>
-						<width>504</width>
-						<control type="image">
-							<texture background="true">$INFO[ListItem.Art(thumb)]</texture>
-							<aspectratio>scale</aspectratio>
-						</control>
-						<include content="DropShadow">
-							<param name="height" value="100%"/>
-							<param name="flipx" value="true"/>
-							<param name="visible" value="!String.IsEmpty(ListItem.Art(fanart))"/>
-						</include>
-					</control>
-					<!-- Postiion 3 -->
-					<control type="group">
-						<visible>!String.IsEmpty(ListItem.Art(keyart)) + Window.IsVisible(movieinformation)</visible>
-						<top>102</top>
-						<height>390</height>
-						<width>260</width>
-						<control type="image">
-							<texture background="true">$INFO[ListItem.Art(keyart)]</texture>
-							<aspectratio>scale</aspectratio>
-						</control>
-						<include content="DropShadow">
-							<param name="height" value="100%"/>
-							<param name="flipx" value="true"/>
-							<param name="visible" value="!String.IsEmpty(ListItem.Art(poster))"/>
-						</include>
-					</control>
-					<control type="group">
-						<visible>!String.IsEmpty(ListItem.Art(square)) + Window.IsVisible(movieinformation)</visible>
-						<top>155</top>
-						<height>284</height>
-						<width>284</width>
-						<control type="image">
-							<texture background="true">$INFO[ListItem.Art(square)]</texture>
-							<aspectratio>scale</aspectratio>
-						</control>
-						<include content="DropShadow">
-							<param name="height" value="100%"/>
-							<param name="flipx" value="true"/>
-							<param name="visible" value="!String.IsEmpty(ListItem.Art(keyart))"/>
-						</include>
-					</control>
-				</control>
+				<include condition="String.IsEqual(ListItem.DBType,episode) | [String.IsEmpty(ListItem.Art(fanart)) + String.IsEmpty(ListItem.Art(poster))]" content="Simple_ListIcon">
+					<param name="left" value="420"/>
+					<param name="top" value="235"/>
+					<param name="width" value="1080"/>
+					<param name="height" value="610"/>
+					<param name="fallback" value=""/>
+				</include>
+				<include condition="!String.IsEqual(ListItem.DBType,episode) + ![String.IsEmpty(ListItem.Art(fanart)) + String.IsEmpty(ListItem.Art(poster))]" content="Infoscreen_Artwork_Layout"/>
 			</control>
 		</include>
 
@@ -344,26 +360,6 @@
 			<control type="label" id="917">
 				<visible>false</visible>
 				<label>$VAR[Info_Label]</label>
-			</control>
-			<control type="image" id="920">
-				<include content="Hidden_Control"/>
-				<texture fallback="flags/blank.png">$VAR[Studio_Flag]</texture>
-			</control>
-			<control type="image" id="921">
-				<include content="Hidden_Control"/>
-				<texture fallback="flags/blank.png">$VAR[MPAA_Flag]</texture>
-			</control>
-			<control type="image" id="922">
-				<include content="Hidden_Control"/>
-				<texture fallback="flags/blank.png">$VAR[VideoSource_Flag]</texture>
-			</control>
-			<control type="image" id="923">
-				<include content="Hidden_Control"/>
-				<texture fallback="flags/blank.png">$VAR[VideoCodec_Flag]</texture>
-			</control>
-			<control type="image" id="924">
-				<include content="Hidden_Control"/>
-				<texture fallback="flags/blank.png">$VAR[AudioCodec_Flag]</texture>
 			</control>
 			<control type="grouplist">
 				<visible>!$EXP[TransparentDialog_IsVisible] + !Window.IsVisible(playerprocessinfo)</visible>
@@ -417,25 +413,25 @@
 					<height>180</height>
 					<orientation>horizontal</orientation>
 					<align>center</align>
-					<include content="FlagLayout">
+					<include content="Infoscreen_Flag_Template">
 						<param name="id" value="920"/>
-						<param name="content" value="$VAR[Studio_Flag]"/>
+						<param name="texture" value="$VAR[Studio_Flag]"/>
 					</include>
-					<include content="FlagLayout">
+					<include content="Infoscreen_Flag_Template">
 						<param name="id" value="921"/>
-						<param name="content" value="$VAR[MPAA_Flag]"/>
+						<param name="texture" value="$VAR[MPAA_Flag]"/>
 					</include>
-					<include content="FlagLayout">
+					<include content="Infoscreen_Flag_Template">
 						<param name="id" value="922"/>
-						<param name="content" value="$VAR[VideoSource_Flag]"/>
+						<param name="texture" value="$VAR[VideoSource_Flag]"/>
 					</include>
-					<include content="FlagLayout">
+					<include content="Infoscreen_Flag_Template">
 						<param name="id" value="923"/>
-						<param name="content" value="$VAR[VideoCodec_Flag]"/>
+						<param name="texture" value="$VAR[VideoCodec_Flag]"/>
 					</include>
-					<include content="FlagLayout">
+					<include content="Infoscreen_Flag_Template">
 						<param name="id" value="924"/>
-						<param name="content" value="$VAR[AudioCodec_Flag]"/>
+						<param name="texture" value="$VAR[AudioCodec_Flag]"/>
 					</include>
 				</control>
 			</control>
