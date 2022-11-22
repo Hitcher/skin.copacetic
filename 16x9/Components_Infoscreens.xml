@@ -3,7 +3,7 @@
 
 	<include name="Infoscreen_Menu">
 		<definition>
-			<control type="grouplist" id="65000">
+			<control type="grouplist" id="3000">
 				<centerleft>50%</centerleft>
 				<bottom>60</bottom>
 				<width>420</width>
@@ -13,27 +13,7 @@
 				<itemgap>0</itemgap>
 				<usecontrolcoords>true</usecontrolcoords>
 				<include condition="Window.Is(movieinformation)" content="movieinformation_Menu_Content"/>
-			</control>
-		</definition>
-	</include>
-
-	<include name="Infoscreen_Flag_Template">
-		<param name="id"/>
-		<param name="texture"/>
-		<param name="colordiffuse" default="$VAR[Light_Color]"/>
-		<definition>
-			<control type="group">
-				<visible>!String.IsEqual(Control.GetLabel($PARAM[id]),flags/blank.png)</visible>
-				<width>180</width>
-				<height>180</height>
-				<control type="image" id="$PARAM[id]">
-					<centerleft>50%</centerleft>
-					<centertop>50%</centertop>
-					<width>90</width>
-					<height>60</height>
-					<aspectratio>keep</aspectratio>
-					<texture fallback="flags/blank.png" colordiffuse="$PARAM[colordiffuse]">$PARAM[texture]</texture>
-				</control>
+				<include condition="Window.Is(musicinformation) | Window.Is(songinformation)" content="musicinformation_Menu_Content"/>
 			</control>
 		</definition>
 	</include>
@@ -49,24 +29,24 @@
 				<orientation>horizontal</orientation>
 				<align>center</align>
 				<itemgap>0</itemgap>
-				<include content="Infoscreen_Flag_Template">
-					<param name="id" value="920"/>
+				<include content="Flag_Icon">
+					<param name="id" value="6303"/>
 					<param name="texture" value="$VAR[Studio_Flag]"/>
 				</include>
-				<include content="Infoscreen_Flag_Template">
-					<param name="id" value="921"/>
+				<include content="Flag_Icon">
+					<param name="id" value="6304"/>
 					<param name="texture" value="$VAR[MPAA_Flag]"/>
 				</include>
-				<include condition="$PARAM[VideoSource_condition]" content="Infoscreen_Flag_Template">
-					<param name="id" value="922"/>
+				<include condition="$PARAM[VideoSource_condition]" content="Flag_Icon">
+					<param name="id" value="6305"/>
 					<param name="texture" value="$VAR[VideoSource_Flag]"/>
 				</include>
-				<include condition="!String.IsEqual(ListItem.DBType,set) + !String.IsEqual(ListItem.DBType,tvshow) + !String.IsEqual(ListItem.DBType,episode)" content="Infoscreen_Flag_Template">
-					<param name="id" value="923"/>
+				<include condition="!String.IsEqual(ListItem.DBType,set) + !String.IsEqual(ListItem.DBType,tvshow) + !String.IsEqual(ListItem.DBType,episode)" content="Flag_Icon">
+					<param name="id" value="6306"/>
 					<param name="texture" value="$VAR[VideoCodec_Flag]"/>
 				</include>
-				<include condition="!String.IsEqual(ListItem.DBType,set) + !String.IsEqual(ListItem.DBType,tvshow) + !String.IsEqual(ListItem.DBType,episode)" content="Infoscreen_Flag_Template">
-					<param name="id" value="924"/>
+				<include condition="!String.IsEqual(ListItem.DBType,set) + !String.IsEqual(ListItem.DBType,tvshow) + !String.IsEqual(ListItem.DBType,episode)" content="Flag_Icon">
+					<param name="id" value="6307"/>
 					<param name="texture" value="$VAR[AudioCodec_Flag]"/>
 				</include>
 			</control>
@@ -85,7 +65,7 @@
 				<control type="image">
 					<width>182</width>
 					<aspectratio>keep</aspectratio>
-					<texture colordiffuse="$VAR[Star_Color]">$VAR[StarRating_Label]</texture>
+					<texture colordiffuse="$VAR[Star_Color]">$VAR[Rating_Label]</texture>
 				</control>
 			</control>
 		</definition>
@@ -134,9 +114,9 @@
 						<top>0</top>
 						<width>100%</width>
 						<height max="90">auto</height>
-						<font>Dialog_Info_Label</font>
+						<font>Info_Infoscreens_Label</font>
 						<textcolor>$VAR[Light_Color]</textcolor>
-						<label>$VAR[Dialog_Info_Label]</label>
+						<label>$VAR[Info_Infoscreens_Label]</label>
 						<align>$PARAM[align]</align>
 					</control>
 					<include condition="!Window.Is(addoninformation) + !String.IsEqual(ListItem.DBType,set) + !String.IsEqual(ListItem.DBType,artist)" content="Infoscreen_Stars_Layout">
@@ -159,7 +139,7 @@
 					<visible>$PARAM[visible]</visible>
 					<include content="Visible_Fade_Delayed_Animation"/>
 					<!-- Hidden Label empty checker -->
-					<control type="label" id="916">
+					<control type="label" id="6003">
 						<visible>false</visible>
 						<label>$VAR[Plot_Label]</label>
 					</control>
@@ -183,7 +163,7 @@
 						<bottom>180</bottom>
 						<width>6</width>
 						<height>720</height>
-						<onup>65000</onup>
+						<onup>3000</onup>
 						<onleft condition="Window.IsVisible(movieinformation)">8</onleft>
 						<onleft condition="!Window.IsVisible(movieinformation)">97</onleft>
 						<onright condition="Window.IsVisible(movieinformation) + !String.IsEmpty(ListItem.Trailer)">11</onright>
@@ -192,7 +172,7 @@
 						<onright condition="String.IsEqual(ListItem.DBType,album)">98</onright>
 						<onright condition="String.IsEqual(ListItem.DBType,song)">7</onright>
 						<onright condition="String.IsEqual(ListItem.DBType,artist)">10</onright>
-						<onback>65000</onback>
+						<onback>3000</onback>
 						<showonepage>false</showonepage>
 						<orientation>vertical</orientation>
 						<texturesliderbackground colordiffuse="$VAR[Scroll_Widget_Background_Color]">views/white_100.png</texturesliderbackground>
@@ -203,12 +183,12 @@
 		</include>
 
 		<include name="Infoscreen_Stars">
-			<control type="button" id="5003">
+			<control type="button" id="4021">
 				<visible allowhiddenfocus="true">false</visible>
 				<onfocus>IncreaseRating</onfocus>
 				<onfocus>SetFocus(7)</onfocus>
 			</control>
-			<control type="button" id="5004">
+			<control type="button" id="4022">
 				<visible allowhiddenfocus="true">false</visible>
 				<onfocus>DecreaseRating</onfocus>
 				<onfocus>SetFocus(7)</onfocus>
@@ -226,8 +206,8 @@
 				<itemgap>$PARAM[itemgap]</itemgap>
 				<usecontrolcoords>true</usecontrolcoords>
 				<control type="image">
-					<animation effect="zoom" center="auto" start="130" end="100" time="360" tween="back" easing="out" condition="!Control.HasFocus(5003)" reversible="false">Conditional</animation>
-					<animation effect="slide" end="0,7" time="360" tween="back" easing="out" condition="!Control.HasFocus(5003)" reversible="false">Conditional</animation>
+					<animation effect="zoom" center="auto" start="130" end="100" time="360" tween="back" easing="out" condition="!Control.HasFocus(4021)" reversible="false">Conditional</animation>
+					<animation effect="slide" end="0,7" time="360" tween="back" easing="out" condition="!Control.HasFocus(4021)" reversible="false">Conditional</animation>
 					<width>60</width>
 					<centerleft>50%</centerleft>
 					<height>60</height>
@@ -238,13 +218,13 @@
 					<centerleft>50%</centerleft>
 					<visible>!ListItem.DBType(season) + !ListItem.DBType(artist)</visible>
 					<aspectratio>keep</aspectratio>
-					<texture colordiffuse="$VAR[Star_Color]">$VAR[StarRating_Label]</texture>
+					<texture colordiffuse="$VAR[Star_Color]">$VAR[Rating_Label]</texture>
 				</control>
 				<control type="image">
 					<visible>!String.IsEmpty(ListItem.UserRating)</visible>
 					<animation effect="rotate" center="auto" end="180" time="0" condition="true" reversible="false">Conditional</animation>
-					<animation effect="zoom" center="auto" start="130" end="100" time="360" tween="back" easing="out" condition="!Control.HasFocus(5004)" reversible="false">Conditional</animation>
-					<animation effect="slide" end="0,7" time="360" tween="back" easing="out" condition="!Control.HasFocus(5004)" reversible="false">Conditional</animation>
+					<animation effect="zoom" center="auto" start="130" end="100" time="360" tween="back" easing="out" condition="!Control.HasFocus(4022)" reversible="false">Conditional</animation>
+					<animation effect="slide" end="0,7" time="360" tween="back" easing="out" condition="!Control.HasFocus(4022)" reversible="false">Conditional</animation>
 					<width>60</width>
 					<centerleft>50%</centerleft>
 					<height>60</height>
@@ -353,13 +333,9 @@
 
 		<include name="Fullscreen_Info">
 			<!-- Hidden Label/flag checkers -->
-			<control type="label" id="916">
+			<control type="label" id="6003">
 				<visible>false</visible>
 				<label>$VAR[Plot_Label]</label>
-			</control>
-			<control type="label" id="917">
-				<visible>false</visible>
-				<label>$VAR[Info_Label]</label>
 			</control>
 			<control type="grouplist">
 				<visible>!$EXP[TransparentDialog_IsVisible] + !Window.IsVisible(playerprocessinfo)</visible>
@@ -377,7 +353,7 @@
 					<width>560</width>
 					<height>237</height>
 					<aspectratio>keep</aspectratio>
-					<texture background="true">$VAR[Logo_Path]</texture>
+					<texture background="true">$VAR[Clearlogo_Texture]</texture>
 				</control>
 				<!-- Title -->
 				<control type="textbox">
@@ -389,7 +365,6 @@
 				</control>
 				<!-- Info -->
 				<control type="label">
-					<visible>!String.IsEmpty(Control.GetLabel(917))</visible>
 					<top>0</top>
 					<height max="35">auto</height>
 					<font>Billboard_Info</font>
@@ -398,7 +373,7 @@
 				</control>
 				<!-- Plot -->
 				<control type="textbox">
-					<visible>!String.IsEmpty(Control.GetLabel(916))</visible>
+					<visible>!String.IsEmpty(Control.GetLabel(6003))</visible>
 					<top>60</top>
 					<height max="103">auto</height>
 					<font>Body</font>
@@ -413,24 +388,24 @@
 					<height>180</height>
 					<orientation>horizontal</orientation>
 					<align>center</align>
-					<include content="Infoscreen_Flag_Template">
-						<param name="id" value="920"/>
+					<include content="Flag_Icon">
+						<param name="id" value="6303"/>
 						<param name="texture" value="$VAR[Studio_Flag]"/>
 					</include>
-					<include content="Infoscreen_Flag_Template">
-						<param name="id" value="921"/>
+					<include content="Flag_Icon">
+						<param name="id" value="6304"/>
 						<param name="texture" value="$VAR[MPAA_Flag]"/>
 					</include>
-					<include content="Infoscreen_Flag_Template">
-						<param name="id" value="922"/>
+					<include content="Flag_Icon">
+						<param name="id" value="6305"/>
 						<param name="texture" value="$VAR[VideoSource_Flag]"/>
 					</include>
-					<include content="Infoscreen_Flag_Template">
-						<param name="id" value="923"/>
+					<include content="Flag_Icon">
+						<param name="id" value="6306"/>
 						<param name="texture" value="$VAR[VideoCodec_Flag]"/>
 					</include>
-					<include content="Infoscreen_Flag_Template">
-						<param name="id" value="924"/>
+					<include content="Flag_Icon">
+						<param name="id" value="6307"/>
 						<param name="texture" value="$VAR[AudioCodec_Flag]"/>
 					</include>
 				</control>

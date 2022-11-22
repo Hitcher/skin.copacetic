@@ -14,8 +14,8 @@
 		</control>
 		<control type="button" id="99">
 			<description>Plot</description>
-			<include>Hidden_Button</include>
-			<visible>!String.IsEmpty(Control.GetLabel(916))</visible>
+			<include content="Hidden_Button_Template"/>
+			<visible>!String.IsEmpty(Control.GetLabel(6003))</visible>
 			<onunfocus>SetProperty(ResetScroll,"")</onunfocus>
 			<onfocus>SetProperty(Focused_Button,$LOCALIZE[207],movieinformation)</onfocus>
 			<ondown condition="Container(4).HasNext | Container(4).HasPrevious">SetFocus(60)</ondown>
@@ -23,7 +23,7 @@
 		<control type="button" id="11">
 			<description>Trailer</description>
 			<visible>!String.IsEmpty(ListItem.Trailer)</visible>
-			<include>Hidden_Button</include>
+			<include content="Hidden_Button_Template"/>
 			<include>MovieInfo_Dialog_Menu_Navigation</include>
 			<onfocus>SetProperty(ResetScroll," ")</onfocus>
 			<onfocus>SetProperty(Focused_Button,$LOCALIZE[20410],movieinformation)</onfocus>
@@ -31,15 +31,15 @@
 		<control type="button" id="7">
 			<description>Rating</description>
 			<visible>!String.IsEqual(ListItem.DBType,set)</visible>
-			<include>Hidden_Button</include>
+			<include content="Hidden_Button_Template"/>
 			<onfocus>SetProperty(ResetScroll," ")</onfocus>
 			<onfocus>SetProperty(Focused_Button,$LOCALIZE[563],movieinformation)</onfocus>
-			<onup>5003</onup>
-			<ondown>5004</ondown>
+			<onup>4021</onup>
+			<ondown>4022</ondown>
 		</control>
 		<control type="button" id="10">
 			<description>Choose art</description>
-			<include>Hidden_Button</include>
+			<include content="Hidden_Button_Template"/>
 			<onfocus>SetProperty(ResetScroll," ")</onfocus>
 			<onfocus>SetProperty(Focused_Button,$LOCALIZE[13511],movieinformation)</onfocus>
 			<include>MovieInfo_Dialog_Menu_Navigation</include>
@@ -47,10 +47,71 @@
 		<control type="button" id="6">
 			<description>Refresh</description>
 			<visible>!String.IsEqual(ListItem.DBType,set)</visible>
-			<include>Hidden_Button</include>
+			<include content="Hidden_Button_Template"/>
 			<onfocus>SetProperty(ResetScroll," ")</onfocus>
 			<onfocus>SetProperty(Focused_Button,$LOCALIZE[184],movieinformation)</onfocus>
 			<include>MovieInfo_Dialog_Menu_Navigation</include>
+		</control>
+	</include>
+
+	<include name="musicinformation_Menu_Content">
+		<control type="button" id="97">
+			<description>Play</description>
+			<include content="Hidden_Button_Template"/>
+			<onfocus>SetProperty(Focused_Button,$LOCALIZE[208],musicinformation)</onfocus>
+			<onfocus>SetProperty(ResetScroll," ")</onfocus>
+			<onclick condition="String.IsEmpty(ListItem.DBID)">PlayMedia($INFO[ListItem.FilenameAndPath])</onclick>
+			<onclick condition="System.AddonIsEnabled(script.playalbum) + String.IsEqual(ListItem.DBType,album)">RunScript(script.playalbum,albumid=$INFO[ListItem.DBID])</onclick>
+			<onclick condition="System.AddonIsEnabled(script.playalbum) + String.IsEqual(ListItem.DBType,song)">RunScript(script.playalbum,songid=$INFO[ListItem.DBID])</onclick>
+			<onclick condition="System.AddonIsEnabled(script.playalbum)">Action(close)</onclick>
+			<onclick condition="System.AddonIsEnabled(script.playalbum) + !System.AddonIsEnabled(script.playalbum) + !String.IsEmpty(ListItem.DBID)">EnableAddon(script.playalbum)</onclick>
+			<onclick condition="!System.AddonIsEnabled(script.playalbum) + !String.IsEmpty(ListItem.DBID)">InstallAddon(script.playalbum)</onclick>
+			<include>MusicInfo_Dialog_Menu_Navigation</include>
+		</control>
+		<control type="button" id="99">
+			<description>Bio/Review</description>
+			<visible>!String.IsEmpty(Control.GetLabel(6003)) + Window.Is(musicinformation)</visible>
+			<include content="Hidden_Button_Template"/>
+			<onunfocus>SetProperty(ResetScroll,"")</onunfocus>
+			<onfocus>SetProperty(Focused_Button,$VAR[PlotType_Label],musicinformation)</onfocus>
+			<ondown condition="Container(4).HasNext | Container(4).HasPrevious">SetFocus(60)</ondown>
+		</control>
+		<control type="button" id="98">
+			<description>Tracks</description>
+			<visible>String.IsEqual(ListItem.DBType,album)</visible>
+			<include content="Hidden_Button_Template"/>
+			<onfocus>SetProperty(ResetScroll," ")</onfocus>
+			<onfocus>SetProperty(Focused_Button,$LOCALIZE[182],musicinformation)</onfocus>
+			<onfocus>SetFocus(3100,0,absolute)</onfocus>
+		</control>
+		<control type="button" id="7">
+			<description>Rating</description>
+			<include content="Hidden_Button_Template"/>
+			<onfocus>SetProperty(ResetScroll," ")</onfocus>
+			<onfocus>SetProperty(Focused_Button,$INFO[Control.GetLabel(7)],musicinformation)</onfocus>
+			<onup>4021</onup>
+			<ondown>4022</ondown>
+		</control>
+		<control type="button" id="12">
+			<description>Artist/Album information</description>
+			<include content="Hidden_Button_Template"/>
+			<onfocus>SetProperty(ResetScroll," ")</onfocus>
+			<onfocus>SetProperty(Focused_Button,$INFO[Control.GetLabel(12)],musicinformation)</onfocus>
+			<include>MusicInfo_Dialog_Menu_Navigation</include>
+		</control>
+		<control type="button" id="10">
+			<description>Artwork</description>
+			<include content="Hidden_Button_Template"/>
+			<onfocus>SetProperty(ResetScroll," ")</onfocus>
+			<onfocus>SetProperty(Focused_Button,$LOCALIZE[13511],musicinformation)</onfocus>
+			<include>MusicInfo_Dialog_Menu_Navigation</include>
+		</control>
+		<control type="button" id="6">
+			<description>Refresh</description>
+			<include content="Hidden_Button_Template"/>
+			<onfocus>SetProperty(ResetScroll," ")</onfocus>
+			<onfocus>SetProperty(Focused_Button,$LOCALIZE[184],musicinformation)</onfocus>
+			<include>MusicInfo_Dialog_Menu_Navigation</include>
 		</control>
 	</include>
 

@@ -1,9 +1,20 @@
-infoscreen
--turn off bits of views that widgets don't need (with a param to turn off bits based on widget has settings??)
+Night/Light button
+sort out visibility of views
+Timings on templates (home, infoscreens)
+infoscreen and fullscreen info
+CHECK ALL VARIABLS AND EXPRESSIONS
+
+
+pictures id 9 hack
+
+ids - Keyboard lists (9500?)
+cut down variables
+content | condition
+order of localised strings
 -path tracing for musicinformation
 -system.hasmodal test to see if it can replace transparentdialog_isvisible
 
-simplelist - blankinclude
+simplelist - blankinclude -cut off bits (see info for Fever to Tell and tracklist, 11)
 SELECTEDCOLOR -> dialogsubtitles and mediasettings
 User_Scroll_Delay
 global fanart when quickly scrolling before it is set
@@ -35,3 +46,50 @@ OSDs
 Scripts
 
 Includes
+
+
+
+
+WIDGET IN PROGRESS
+<!--<include condition="!System.AddonIsEnabled(script.embuary.helper)" content="Widget_Template">
+<param name="widget_position" value="$PARAM[widget_position]"/>
+<param name="widget_header" value="$LOCALIZE[31226]"/>
+<param name="id" value="$PARAM[id]"/>
+<param name="content_path" value="Widget_Container_Content_InProgress"/>
+</include>-->
+
+WIDGET NEXT UP
+<!--<include condition="!System.AddonIsEnabled(script.embuary.helper)" content="Widget_Template">
+<param name="widget_position" value="$PARAM[widget_position]"/>
+<param name="widget_header" value="$LOCALIZE[31227]"/>
+<param name="id" value="$PARAM[id]"/>
+<param name="content" value="special://skin/extras/playlists/inprogress_tvshows.xsp"/>
+<param name="use_custom_click" value="true"/>
+<param name="click_action" value="Next_Up"/>
+<control type="list" id="92200">
+<visible>Control.HasFocus($PARAM[id])</visible>
+<itemlayout/>
+<focusedlayout/>
+<content target="videos" sortby="playcount" sortorder="ascending" limit="1">videodb://inprogresstvshows/$INFO[Container($PARAM[id]).ListItem.DBID]/-2/?xsp=%7B%22rules%22%3A%7B%22and%22%3A%5B%7B%22field%22%3A%22playcount%22%2C%22operator%22%3A%22is%22%2C%22value%22%3A%5B%220%22%5D%7D%5D%7D%2C%22type%22%3A%22episodes%22%7D</content>
+</control>
+</include>-->
+
+
+TITLE_LABEL 
+<value condition="Window.IsActive(home) + Control.IsVisible(92200) + Integer.IsGreater(Container(92200).ListItem.Episode,9)">$INFO[Container(92200).ListItem.Season]$INFO[Container(92200).ListItem.Episode,x,.]$INFO[Container(92200).ListItem.Title, ]</value>
+<value condition="Window.IsActive(home) + Control.IsVisible(92200) + Integer.IsGreater(Container(92200).ListItem.Episode,0)">$INFO[Container(92200).ListItem.Season]$INFO[Container(92200).ListItem.Episode,x0,.]$INFO[Container(92200).ListItem.Title, ]</value>
+
+INFO_LABEL 
+<value condition="Window.IsActive(home) + $EXP[GridView_Widget_IsVisible] + Control.IsVisible(92200) + !String.IsEmpty(Container(92200).ListItem.TVShowTitle)">[UPPERCASE]$INFO[Container(92200).ListItem.TVShowTitle]$INFO[Container(92200).ListItem.Duration(mins), $LOCALIZE[31115] , $LOCALIZE[31138]]$INFO[Container(92200).ListItem.Premiered, $LOCALIZE[31115] ][/UPPERCASE]</value>
+
+ACTIONS
+	<include name="ClickAction_Next_Up">
+		<onclick>PlayMedia($INFO[Container(92200).ListItem.Filenameandpath])</onclick>
+	</include>
+
+COMPONENTS_VIEWTYPES_COMMON
+Progressbar_template
+				<!-- TV show / Season not watched -->
+	      <control type="group">
+					<animation effect="slide" start="0,0" end="0,6" time="0" condition="Skin.HasSetting(Unwatched_Indicator) + $EXP[ShowcaseView_IsVisible] + $EXP[ShowcaseView_Details_Off]">Conditional</animation>
+	        <visible>[String.IsEqual(Container($PARAM[id]).ListItem.DBType,tvshow) | String.IsEqual(Container($PARAM[id]).ListItem.DBType,season)] + !String.IsEqual(Container($PARAM[id]).ListItem.Overlay,OverlayWatched.png) + !Integer.IsGreater(Container($PARAM[id]).ListItem.PlayCount,0) + !Control.IsVisible(92200)</visible>

@@ -1,312 +1,89 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <window>
 	<!-- musicinformation -->
-	<onload condition="System.AddonIsEnabled(plugin.video.themoviedb.helper)">RunScript(plugin.video.themoviedb.helper,split_value=$INFO[ListItem.Genre],separator='/',property=GenreSplit)</onload>
-	<onload condition="String.IsEqual(ListItem.DBType,artist)">SetProperty(Info_Type,artist,musicinformation)</onload>
-	<onload condition="String.IsEqual(ListItem.DBType,album)">SetProperty(Info_Type,album,musicinformation)</onload>
-	<onload>SetProperty(ArtistDBID,$INFO[ListItem.DBID],musicinformation)</onload>
-	<onload>SetProperty(ResetScroll," ")</onload>
-	<onload condition="Integer.IsGreater(Container(65000).CurrentItem,1)">Control.Move(65000,$INFO[Container(65000).CurrentItem,-])</onload>
-	<onload condition="Integer.IsGreater(Container(65000).CurrentItem,1)">Control.Move(65000,1)</onload>
-	<onload condition="Integer.IsGreater(Container(50).CurrentItem,1)">Control.Move(50,$INFO[Container(50).CurrentItem,-])</onload>
-	<onload condition="Integer.IsGreater(Container(50).CurrentItem,1)">Control.Move(50,1)</onload>
-	<onload condition="Integer.IsGreater(Container(8010).CurrentItem,1)">Control.Move(8010,$INFO[Container(8010).CurrentItem,-])</onload>
-	<onload condition="Integer.IsGreater(Container(8010).CurrentItem,1)">Control.Move(8010,1)</onload>
-	<onload condition="Integer.IsGreater(Container(8020).CurrentItem,1)">Control.Move(8020,$INFO[Container(8020).CurrentItem,-])</onload>
-	<onload condition="Integer.IsGreater(Container(8020).CurrentItem,1)">Control.Move(8020,1)</onload>
-	<onload condition="Integer.IsGreater(Container(8030).CurrentItem,1)">Control.Move(8030,$INFO[Container(8030).CurrentItem,-])</onload>
-	<onload condition="Integer.IsGreater(Container(8030).CurrentItem,1)">Control.Move(8030,1)</onload>
-	<onload condition="Integer.IsGreater(Container(8040).CurrentItem,1)">Control.Move(8040,$INFO[Container(8040).CurrentItem,-])</onload>
-	<onload condition="Integer.IsGreater(Container(8040).CurrentItem,1)">Control.Move(8040,1)</onload>
-	<onload condition="Integer.IsGreater(Container(8050).CurrentItem,1)">Control.Move(8050,$INFO[Container(8050).CurrentItem,-])</onload>
-	<onload condition="Integer.IsGreater(Container(8050).CurrentItem,1)">Control.Move(8050,1)</onload>
-	<onload condition="Integer.IsGreater(Container(8060).CurrentItem,1)">Control.Move(8060,$INFO[Container(8060).CurrentItem,-])</onload>
-	<onload condition="Integer.IsGreater(Container(8060).CurrentItem,1)">Control.Move(8060,1)</onload>
-	<onload condition="Integer.IsGreater(Container(8070).CurrentItem,1)">Control.Move(8070,$INFO[Container(8070).CurrentItem,-])</onload>
-	<onload condition="Integer.IsGreater(Container(8070).CurrentItem,1)">Control.Move(8070,1)</onload>
-	<onload condition="Integer.IsGreater(Container(8080).CurrentItem,1)">Control.Move(8080,$INFO[Container(8080).CurrentItem,-])</onload>
-	<onload condition="Integer.IsGreater(Container(8080).CurrentItem,1)">Control.Move(8080,1)</onload>
-	<onload condition="Integer.IsGreater(Container(8090).CurrentItem,1)">Control.Move(8090,$INFO[Container(8090).CurrentItem,-])</onload>
-	<onload condition="Integer.IsGreater(Container(8090).CurrentItem,1)">Control.Move(8090,1)</onload>
-	<onunload>ClearProperty(GenreSplit.0,home)</onunload>
-	<defaultcontrol always="true">9001</defaultcontrol>
+	<include content="movieinformation_OnLoadUnload"/>
+	<defaultcontrol always="true">4010</defaultcontrol>
 	<backgroundcolor>$VAR[Secondary_Color]</backgroundcolor>
-	<include content="WindowOpenClose_Fade_Delayed_Animation"/>
+	<include content="WindowClose_Fade_Animation"/>
 	<controls>
-
-		<!-- Delay content on Load -->
-		<include content="Focus_Setter">
-			<param name="time" value="720"/>
-			<param name="target_id" value="SetFocus(97)"/>
+		<include content="Infoscreen_Header_Template">
+			<param name="windowname" value="musicinformation"/>
+			<param name="default_control" value="SetFocus(97)"/>
+			<include content="Infoscreen_Header" condition="String.IsEqual(ListItem.DBType,artist)" >
+				<param name="visible" value="$EXP[Hidden_Focus_Setter] | Control.HasFocus(97)"/>
+				<param name="left" value="120"/>
+				<param name="right" value="120"/>
+				<param name="align" value="center"/>
+			</include>
+			<include content="Infoscreen_Header" condition="!String.IsEqual(ListItem.DBType,artist)" >
+				<param name="visible" value="$EXP[Hidden_Focus_Setter] | Control.HasFocus(97)"/>
+				<param name="left" value="780"/>
+				<param name="right" value="120"/>
+				<param name="align" value="left"/>
+			</include>
+			<include content="Infoscreen_Plot" condition="String.IsEqual(ListItem.DBType,album)" >
+				<param name="visible" value="String.IsEqual(Window($PARAM[windowname]).Property(Focused_Button),$LOCALIZE[183]) + !Control.HasFocus(3100)"/>
+				<param name="left" value="780"/>
+				<param name="right" value="120"/>
+				<param name="align" value="left"/>
+				<param name="font" value="Plot_Panel"/>
+			</include>
+			<include content="Infoscreen_Plot" condition="String.IsEqual(ListItem.DBType,artist)" >
+				<param name="visible" value="String.IsEqual(Window($PARAM[windowname]).Property(Focused_Button),$LOCALIZE[21887])"/>
+				<param name="left" value="240"/>
+				<param name="right" value="240"/>
+				<param name="align" value="center"/>
+				<param name="font" value="Plot_Fullscreen"/>
+			</include>
+			<include content="Simple_List" condition="String.IsEqual(ListItem.DBType,album)">
+				<include content="Visible_Fade_Delayed_Animation"/>
+				<param name="id" value="3100"/>
+				<param name="visible" value="Control.HasFocus(3100)"/>
+				<param name="left" value="720"/>
+				<param name="width" value="960"/>
+				<param name="nowplayingvisible" value="true"/>
+				<param name="labelleft" value="120"/>
+				<param name="label" value="$INFO[ListItem.Label]"/>
+				<param name="selectedcolor" value="$VAR[Light_Color]"/>
+				<content>musicdb://albums/$INFO[ListItem.DBID]/</content>
+			</include>
+			<include content="Infoscreen_Stars" condition="!String.IsEqual(ListItem.DBType,artist)">
+				<param name="visible" value="Control.HasFocus(7) | Control.HasFocus(4021) | Control.HasFocus(4022)"/>
+				<param name="itemgap" value="30"/>
+				<param name="starheight" value="60"/>
+			</include>
+			<control type="textbox">
+				<visible>Control.HasFocus(12) + String.IsEqual(ListItem.DBType,album)</visible>
+				<include content="Visible_Fade_Delayed_Animation"/>
+				<width>1680</width>
+				<centerleft>50%</centerleft>
+				<height max="146">auto</height>
+				<centertop>50%</centertop>
+				<font>Billboard_Title</font>
+				<textcolor>$VAR[Light_Color]</textcolor>
+				<label>$INFO[ListItem.Artist]</label>
+				<align>left</align>
+			</control>
+			<control type="label">
+				<visible>Control.HasFocus(12) + String.IsEqual(ListItem.DBType,song)</visible>
+				<width>1440</width>
+				<centerleft>50%</centerleft>
+				<height>52</height>
+				<top>964</top>
+				<font>Strip_Title</font>
+				<textcolor>$VAR[Primary_Color]</textcolor>
+				<label>$INFO[ListItem.Album]</label>
+				<align>center</align>
+				<aligny>center</aligny>
+				<scroll>false</scroll>
+			</control>
 		</include>
-
-		<!-- OnPrevious delay -->
-		<control type="group" id="5001">
-			<visible>$EXP[InfoWidget_OnPrevious]</visible>
-			<animation effect="slide" end="0,0" time="360" reversible="false">Hidden</animation>
-		</control>
-
-		<!-- OnNext delay -->
-		<control type="group" id="5002">
-			<visible>$EXP[InfoWidget_OnNext]</visible>
-			<animation effect="slide" end="0,0" time="360" reversible="false">Hidden</animation>
-		</control>
-
-		<!-- Hidden buttons for Ratings bounce -->
-		<control type="button" id="5003">
-			<visible allowhiddenfocus="true">false</visible>
-			<onfocus>IncreaseRating</onfocus>
-			<onfocus>SetFocus(7)</onfocus>
-		</control>
-		<control type="button" id="5004">
-			<visible allowhiddenfocus="true">false</visible>
-			<onfocus>DecreaseRating</onfocus>
-			<onfocus>SetFocus(7)</onfocus>
-		</control>
-
-		<!-- Artwork -->
-		<control type="group">
-			<visible>[Window.IsActive(musicinformation) | Window.IsActive(songinformation)] + ![Window.Is(songinformation) + Window.IsActive(musicinformation)]</visible>
-			<include content="Visible_Fade_Delayed_Animation"/>
-
-			<!-- Background -->
-			<control type="group">
-				<visible>!$EXP[InfoWidget_HasFocus]</visible>
-				<include content="WindowOpenClose_Fade_Animation"/>
-				<control type="group">
-					<visible>String.IsEqual(ListItem.DBType,artist) | [String.IsEqual(ListItem.DBType,album) + Control.HasFocus(12)]</visible>
-					<include content="WindowOpenClose_Fade_Delayed_Animation"/>
-					<control type="image">
-						<!-- 25% alpha -->
-						<animation effect="fadediffuse" end="ff404040" time="0" condition="true">Conditional</animation>
-						<!-- 15% alpha: 60% of 25% -->
-						<animation effect="fadediffuse" end="ff9a9a9a" time="360" tween="sine" easing="inout" reversible="true" condition="String.IsEqual(Window(musicinformation).Property(Focused_Button),$LOCALIZE[183]) | String.IsEqual(Window(musicinformation).Property(Focused_Button),$LOCALIZE[21887])">Conditional</animation>
-						<aspectratio>scale</aspectratio>
-						<texture background="true">$VAR[Dialog_Info_Background]</texture>
-					</control>
-				</control>}
-			</control>
-			<!-- Thumbnails -->
-			<control type="group">
-				<visible>!Control.HasFocus(9001)</visible>
-				<include content="Visible_Fade_Animation"/>
-				<control type="group">
-					<visible>!String.IsEqual(ListItem.DBType,artist) + !Control.HasFocus(12) + !Control.HasFocus(10) + !$EXP[InfoWidget_HasFocus]</visible>
-					<include content="Visible_Fade_Delayed_Animation"/>
-					<include content="Transparent_Dialog_Panel">
-						<param name="left" value="0"/>
-					</include>
-					<control type="image">
-						<visible>!Control.HasFocus(10)</visible>
-						<include content="Visible_Fade_Delayed_Animation"/>
-						<left>0</left>
-						<centertop>50%</centertop>
-						<width>720</width>
-						<height>720</height>
-						<texture fallback="fallback/fallback-square.png" background="true">$INFO[ListItem.Art(thumb)]</texture>
-					</control>
-				</control>
-				<control type="image">
-					<visible>String.IsEqual(ListItem.DBType,song) + Control.HasFocus(12)</visible>
-					<include content="Visible_Fade_Delayed_Animation"/>
-					<centerleft>50%</centerleft>
-					<centertop>50%</centertop>
-					<width>720</width>
-					<height>720</height>
-					<texture fallback="fallback/fallback-square.png" background="true">$INFO[ListItem.Art(thumb)]</texture>
-				</control>
-			</control>
-		</control>
-
-		<!-- Content -->
-		<control type="group">
-			<visible>[Window.IsActive(musicinformation) | Window.IsActive(songinformation)] + !Control.HasFocus(9001) + ![Window.Is(songinformation) + Window.IsActive(musicinformation)]</visible>
-			<include content="Visible_Fade_Delayed_Long_Animation"/>
-			<control type="group">
-				<visible>![$EXP[TransparentDialog_IsVisible] + String.IsEqual(ListItem.DBType,artist)]</visible>
-				<visible>!$EXP[InfoWidget_HasFocus]</visible>
-				<include content="Visible_Fade_Delayed_Animation"/>
-				<include content="Info_Artwork">
-					<param name="visible" value="Control.HasFocus(10)"/>
-				</include>
-			</control>
-			<control type="group">
-				<visible>!$EXP[TransparentDialog_IsVisible]</visible>
-				<visible>!$EXP[InfoWidget_HasFocus]</visible>
-				<include content="Visible_Fade_Delayed_Animation"/>
-
-				<include content="Breadcrumb_Label">
-					<param name="bar" value="false"/>
-					<param name="title_label" value="$INFO[Window(musicinformation).Property(Focused_Button),$LOCALIZE[31130] ,  $LOCALIZE[31131]]"/>
-					<param name="label_color" value="$VAR[Breadcrumb_Label_Color]"/>
-					<param name="info_label_visible" value="false"/>
-				</include>
-				<!-- Details -->
-				<include condition="!String.IsEqual(ListItem.DBType,artist)" content="Info_Header">
-					<param name="visible" value="String.IsEqual(Window(musicinformation).Property(Focused_Button),$LOCALIZE[208]) | String.IsEqual(Window(movieinformation).Property(Focused_Button),$LOCALIZE[184])"/>
-					<param name="left" value="780"/>
-					<param name="right" value="120"/>
-					<param name="align" value="left"/>
-				</include>
-				<include condition="String.IsEqual(ListItem.DBType,artist)" content="Info_Header">
-					<param name="visible" value="String.IsEqual(Window(musicinformation).Property(Focused_Button),$LOCALIZE[208])"/>
-					<param name="left" value="120"/>
-					<param name="right" value="120"/>
-					<param name="align" value="center"/>
-				</include>
-				<include condition="String.IsEqual(ListItem.DBType,album)" content="Info_Plot">
-					<param name="visible" value="String.IsEqual(Window(musicinformation).Property(Focused_Button),$LOCALIZE[183]) + !Control.HasFocus(4500)"/>
-					<param name="left" value="780"/>
-					<param name="right" value="120"/>
-					<param name="align" value="left"/>
-					<param name="font" value="Plot_Panel"/>
-				</include>
-				<include condition="String.IsEqual(ListItem.DBType,artist)" content="Info_Plot">
-					<param name="visible" value="String.IsEqual(Window(musicinformation).Property(Focused_Button),$LOCALIZE[21887])"/>
-					<param name="left" value="240"/>
-					<param name="right" value="240"/>
-					<param name="align" value="center"/>
-					<param name="font" value="Plot_Fullscreen"/>
-				</include>
-				<include condition="String.IsEqual(ListItem.DBType,album)" content="Simple_List">
-					<include content="Visible_Fade_Delayed_Animation"/>
-					<param name="id" value="4500"/>
-					<param name="visible" value="Control.HasFocus(4500)"/>
-					<param name="left" value="720"/>
-					<param name="width" value="960"/>
-					<param name="nowplayingvisible" value="true"/>
-					<param name="labelleft" value="120"/>
-					<param name="label" value="$INFO[ListItem.Label]"/>
-					<param name="selectedcolor" value="$VAR[Light_Color]"/>
-					<param name="include" value="AlbumInfo_Content_Path"/>
-				</include>
-				<include content="Info_Stars">
-					<param name="visible" value="Control.HasFocus(7) | Control.HasFocus(5003) | Control.HasFocus(5004)"/>
-					<param name="itemgap" value="30"/>
-					<param name="starheight" value="60"/>
-				</include>
-
-				<control type="textbox">
-					<visible>Control.HasFocus(12) + String.IsEqual(ListItem.DBType,album)</visible>
-					<include content="Visible_Fade_Delayed_Animation"/>
-					<width>1680</width>
-					<centerleft>50%</centerleft>
-					<height max="146">auto</height>
-					<centertop>50%</centertop>
-					<font>Billboard_Title</font>
-					<textcolor>$VAR[Light_Color]</textcolor>
-					<label>$INFO[ListItem.Artist]</label>
-					<align>left</align>
-				</control>
-
-				<control type="label">
-					<visible>Control.HasFocus(12) + String.IsEqual(ListItem.DBType,song)</visible>
-					<width>1440</width>
-					<centerleft>50%</centerleft>
-					<height>52</height>
-					<top>964</top>
-					<font>Strip_Title</font>
-					<textcolor>$VAR[Primary_Color]</textcolor>
-					<label>$INFO[ListItem.Album]</label>
-					<align>center</align>
-					<aligny>center</aligny>
-					<scroll>false</scroll>
-				</control>
-
-
-				<!-- Button group -->
-				<control type="grouplist" id="65000">
-					<centerleft>50%</centerleft>
-					<bottom>60</bottom>
-					<width>420</width>
-					<height>60</height>
-					<orientation>horizontal</orientation>
-					<align>center</align>
-					<itemgap>0</itemgap>
-					<usecontrolcoords>true</usecontrolcoords>
-					<control type="button" id="97">
-						<include>Hidden_Button</include>
-						<onfocus>SetProperty(Focused_Button,$LOCALIZE[208],musicinformation)</onfocus>
-						<onfocus>SetProperty(ResetScroll," ")</onfocus>
-						<onclick condition="String.IsEmpty(ListItem.DBID)">PlayMedia($INFO[ListItem.FilenameAndPath])</onclick>
-						<onclick condition="System.AddonIsEnabled(script.playalbum) + String.IsEqual(ListItem.DBType,album)">RunScript(script.playalbum,albumid=$INFO[ListItem.DBID])</onclick>
-						<onclick condition="System.AddonIsEnabled(script.playalbum) + String.IsEqual(ListItem.DBType,song)">RunScript(script.playalbum,songid=$INFO[ListItem.DBID])</onclick>
-						<onclick condition="System.AddonIsEnabled(script.playalbum)">Action(close)</onclick>
-						<onclick condition="System.AddonIsEnabled(script.playalbum) + !System.AddonIsEnabled(script.playalbum) + !String.IsEmpty(ListItem.DBID)">EnableAddon(script.playalbum)</onclick>
-						<onclick condition="!System.AddonIsEnabled(script.playalbum) + !String.IsEmpty(ListItem.DBID)">InstallAddon(script.playalbum)</onclick>
-						<include>MusicInfo_Dialog_Menu_Navigation</include>
-					</control>
-					<control type="button" id="99">
-						<visible>!String.IsEmpty(Control.GetLabel(916)) + Window.Is(musicinformation)</visible>
-						<include>Hidden_Button</include>
-						<onunfocus>SetProperty(ResetScroll,"")</onunfocus>
-						<onfocus>SetProperty(Focused_Button,$VAR[PlotType_Label],musicinformation)</onfocus>
-						<ondown condition="Container(4).HasNext | Container(4).HasPrevious">SetFocus(60)</ondown>
-					</control>
-					<control type="button" id="98">
-						<visible>String.IsEqual(ListItem.DBType,album)</visible>
-						<include>Hidden_Button</include>
-						<onfocus>SetProperty(ResetScroll," ")</onfocus>
-						<onfocus>SetProperty(Focused_Button,$LOCALIZE[182],musicinformation)</onfocus>
-						<onfocus>SetFocus(4500,0,absolute)</onfocus>
-					</control>
-					<control type="button" id="7">
-						<include>Hidden_Button</include>
-						<onfocus>SetProperty(ResetScroll," ")</onfocus>
-						<onfocus>SetProperty(Focused_Button,$INFO[Control.GetLabel(7)],musicinformation)</onfocus>
-						<onup>5003</onup>
-						<ondown>5004</ondown>
-					</control>
-					<control type="button" id="12">
-						<include>Hidden_Button</include>
-						<onfocus>SetProperty(ResetScroll," ")</onfocus>
-						<onfocus>SetProperty(Focused_Button,$INFO[Control.GetLabel(12)],musicinformation)</onfocus>
-						<include>MusicInfo_Dialog_Menu_Navigation</include>
-					</control>
-					<control type="button" id="10">
-						<include>Hidden_Button</include>
-						<onfocus>SetProperty(ResetScroll," ")</onfocus>
-						<onfocus>SetProperty(Focused_Button,$LOCALIZE[13511],musicinformation)</onfocus>
-						<include>MusicInfo_Dialog_Menu_Navigation</include>
-					</control>
-					<control type="button" id="6">
-						<include>Hidden_Button</include>
-						<onfocus>SetProperty(ResetScroll," ")</onfocus>
-						<onfocus>SetProperty(Focused_Button,$LOCALIZE[184],musicinformation)</onfocus>
-						<include>MusicInfo_Dialog_Menu_Navigation</include>
-					</control>
-				</control>
-			</control>
-
-			<!-- 8010 -->
-			<include condition="!String.IsEqual(ListItem.DBType,album)" content="Infoscreen_Widget_8010_MostPlayed"/>
-			<!-- 8020 -->
-			<include content="Infoscreen_Widget_8020_Discography"/>
-			<!-- 8070 -->
-			<include condition="String.IsEqual(ListItem.DBType,artist)" content="Infoscreen_Widget_8070_SimilarArtists"/>
-			<include condition="!String.IsEqual(ListItem.DBType,artist)" content="Infoscreen_Widget_8070_SimilarAlbums"/>
-			<!-- Scrollbar -->
+		<include content="Infoscreen_Furniture_Template">
+			<include content="Infoscreen_Widget_3201_MostPlayed" condition="!String.IsEqual(ListItem.DBType,album)"/>
+			<include content="Infoscreen_Widget_3202_Discography"/>
+			<include content="Infoscreen_Widget_3207_SimilarArtists" condition="String.IsEqual(ListItem.DBType,artist)"/>
+			<include content="Infoscreen_Widget_3207_SimilarAlbums" condition="!String.IsEqual(ListItem.DBType,artist)"/>
 			<include content="DialogMusicInfo_Scrollbar"/>
-
-			<!-- Music Player -->
-			<control type="group">
-				<visible>!Window.IsVisible(shutdownmenu)</visible>
-				<include content="Visible_Fade_Delayed_Animation"/>
-				<include condition="Skin.HasSetting(Music_Player_Enabled)" content="Music_Player_Buttons"/>
-				<include condition="Skin.HasSetting(Music_Player_Enabled)" content="Music_Player_Widget">
-					<param name="left_label_visible" value="true"/>
-					<param name="background_visible" value="false"/>
-				</include>
-			</control>
-
-			<!-- Transparent dialogs background over widgets -->
-			<control type="group">
-				<visible>$EXP[TransparentDialog_IsVisible] + [$EXP[InfoWidget_HasFocus] | String.IsEqual(ListItem.DBType,album) | Window.Is(songinformation)]</visible>
-				<include>Transparent_Dialog_Background</include>
-				<include content="VisibleHidden_Fade_Animation"/>
-			</control>
-
-		</control>
-
+		</include>
 	</controls>
 </window>

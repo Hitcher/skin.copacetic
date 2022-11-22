@@ -2,14 +2,13 @@
 <includes>
 
 	<include name="Notification_Widget">
-		<param name="visible" default="true"/>
+		<param name="visible" default="!Window.IsVisible(extendedprogressdialog)" />
 		<param name="width" default="100%"/>
 		<param name="top" default="0"/>
 		<param name="height" default="180"/>
 		<param name="label_width" default="600"/>
 		<param name="align" default="right"/>
 		<param name="background_visible" default="!$EXP[Music_Player_IsVisible]"/>
-		<param name="Visible" default="!Window.IsVisible(extendedprogressdialog)"/>
 		<param name="label_padding" default="-30"/>
 		<param name="label_scroll" default="false"/>
 		<param name="label_1" default="$INFO[Control.GetLabel(401)]"/>
@@ -34,15 +33,14 @@
 						<orientation>horizontal</orientation>
 						<align>$PARAM[align]</align>
 						<usecontrolcoords>true</usecontrolcoords>
-
 						<!-- Left Label -->
 						<control type="group">
-							<animation effect="slide" end="-600,0" time="0" condition="$EXP[Music_Player_HasFocus] + [Window.IsVisible(Home) | $EXP[Background_IsFanart] | $EXP[InfoDialog_IsVisible]]">Conditional</animation>
+							<animation effect="slide" end="-600,0" time="0" condition="$EXP[Music_Player_HasFocus] + [Window.IsVisible(Home) | $EXP[Background_IsFanart] | $EXP[Infoscreen_IsVisible]]">Conditional</animation>
 							<visible>$PARAM[left_label_visible]</visible>
 							<height>$PARAM[height]</height>
 							<width>$PARAM[label_width]</width>
 							<control type="group">
-								<visible>$PARAM[Visible]</visible>
+								<visible>$PARAM[visible]</visible>
 								<include content="Notification_Label_Fade_Animation"/>
 								<include content="Music_Player_Label_Template">
 									<param name="padding" value="$PARAM[label_padding]"/>
@@ -54,7 +52,6 @@
 								</include>
 							</control>
 						</control>
-
 						<!-- Main -->
 						<control type="group">
 							<width>$PARAM[height]</width>
@@ -80,7 +77,7 @@
 							</control>
 							<!-- Busy Spinner -->
 							<include content="Busy_Spinner">
-								<param name="visible" value="[Window.IsVisible(notification) | Window.IsVisible(extendedprogressdialog)] + !Window.IsVisible(volumebar) + !$EXP[Music_Player_HasFocus]"/>
+								<param name="visible" value="true + !Window.IsVisible(volumebar) + !$EXP[Music_Player_HasFocus]"/>
 								<param name="size" value="60"/>
 								<param name="color" value="$PARAM[Notification_Widget_Icon_Color]"/>
 							</include>
@@ -135,14 +132,13 @@
 								</include>
 							</control>
 						</control>
-
 						<!-- Right Label -->
 						<control type="group">
 							<visible>$PARAM[right_label_visible]</visible>
 							<height>$PARAM[height]</height>
 							<width>$PARAM[label_width]</width>
 							<control type="group">
-								<visible>$PARAM[Visible]</visible>
+								<visible>$PARAM[visible]</visible>
 								<include content="Notification_Label_Fade_Animation"/>
 								<include content="Music_Player_Label_Template">
 									<param name="padding" value="$PARAM[label_padding]"/>
@@ -164,7 +160,7 @@
 	<include name="Shared_Dialog_Layouts">
 		<param name="type" default="Music_Player"/>
 		<param name="visible" default="true"/>
-		<param name="Visible" default="![Window.IsVisible(volumebar) | Window.IsVisible(notification) | Window.IsVisible(extendedprogressdialog)]"/>
+		<param name="visible" default="![Window.IsVisible(volumebar) | Window.IsVisible(notification) | Window.IsVisible(extendedprogressdialog)]"/>
 		<param name="label_1" default="$INFO[MusicPlayer.Title]"/>
 		<param name="label_2" default="$INFO[MusicPlayer.Artist]"/>
 		<definition>
@@ -175,7 +171,7 @@
 					<param name="visible" value="!$EXP[ListView_Display_IsThumbnails] + ![$EXP[ShowcaseView_Display_IsPosters] + !$EXP[ShowcaseView_Details_Off] + $EXP[Music_Player_IsVisible]] + !$EXP[StripView_IsVisible] + !$EXP[GridView_IsVisible]"/>
 					<param name="align" value="right"/>
 					<param name="background_visible" value="false"/>
-					<param name="Visible" value="$PARAM[Visible]"/>
+					<param name="visible" value="$PARAM[visible]"/>
 					<param name="label_width" value="600"/>
 					<param name="label_1" value="$PARAM[label_1]"/>
 					<param name="label_2" value="$PARAM[label_2]"/>
@@ -186,7 +182,7 @@
 				<include condition="Window.IsMedia" content="$PARAM[type]_Widget">
 					<param name="visible" value="$EXP[ListView_Display_IsThumbnails]"/>
 					<param name="align" value="right"/>
-					<param name="Visible" value="$PARAM[Visible]"/>
+					<param name="visible" value="$PARAM[visible]"/>
 					<param name="progress_top" value="174"/>
 					<param name="label_padding" value="30"/>
 					<param name="label_width" value="960"/>
@@ -201,7 +197,7 @@
 					<param name="visible" value="$EXP[ShowcaseView_Display_IsPosters] + !$EXP[ShowcaseView_Details_Off] + $EXP[Music_Player_IsVisible]"/>
 					<param name="height" value="360"/>
 					<param name="align" value="left"/>
-					<param name="Visible" value="$PARAM[Visible]"/>
+					<param name="visible" value="$PARAM[visible]"/>
 					<param name="label_padding" value="30"/>
 					<param name="label_1" value="$PARAM[label_1]"/>
 					<param name="label_2" value="$PARAM[label_2]"/>
@@ -212,7 +208,7 @@
 					<param name="visible" value="$EXP[StripView_IsVisible]"/>
 					<param name="align" value="right"/>
 					<param name="height" value="240"/>
-					<param name="Visible" value="$PARAM[Visible]"/>
+					<param name="visible" value="$PARAM[visible]"/>
 					<param name="label_padding" value="30"/>
 					<param name="label_width" value="1035"/>
 					<param name="label_1" value="$PARAM[label_1]"/>
@@ -227,7 +223,7 @@
 				<include condition="Window.IsMedia + Skin.HasSetting(GridView_Enabled)" content="$PARAM[type]_Widget">
 					<param name="visible" value="$EXP[GridView_IsVisible]"/>
 					<param name="height" value="180"/>
-					<param name="Visible" value="$PARAM[Visible]"/>
+					<param name="visible" value="$PARAM[visible]"/>
 					<param name="label_padding" value="30"/>
 					<param name="label_width" value="900"/>
 					<param name="label_1" value="$PARAM[label_1]"/>
@@ -245,7 +241,7 @@
 		<param name="visible" default="![$EXP[Music_Player_IsVisible] | Window.IsVisible(volumebar)]"/>
 		<param name="background_visible" default="false"/>
 		<param name="label_padding" default="-30"/>
-		<param name="Visible" default="!Window.IsVisible(extendedprogressdialog)"/>
+		<param name="visible" default="!Window.IsVisible(extendedprogressdialog)"/>
 		<param name="label_1" default="$INFO[Control.GetLabel(401)]"/>
 		<param name="label_2" default="$INFO[Control.GetLabel(402)]"/>
 		<definition>
@@ -256,7 +252,7 @@
 					<param name="visible" value="!$EXP[ListView_Display_IsThumbnails] + ![$EXP[ShowcaseView_IsVisible] + !$EXP[Background_IsFanart]] + !$EXP[GridView_IsVisible]"/>
 					<param name="align" value="right"/>
 					<param name="background_visible" value="$PARAM[background_visible]"/>
-					<param name="Visible" value="$PARAM[Visible]"/>
+					<param name="visible" value="$PARAM[visible]"/>
 					<param name="label_width" value="720"/>
 					<param name="label_padding" value="$PARAM[label_padding]"/>
 					<param name="label_1" value="$PARAM[label_1]"/>
@@ -268,7 +264,7 @@
 				<include condition="Window.IsMedia" content="$PARAM[type]_Widget">
 					<param name="visible" value="$EXP[ListView_Display_IsThumbnails]"/>
 					<param name="background_visible" value="$PARAM[background_visible]"/>
-					<param name="Visible" value="$PARAM[Visible]"/>
+					<param name="visible" value="$PARAM[visible]"/>
 					<param name="label_width" value="960"/>
 					<param name="label_padding" value="$PARAM[label_padding]"/>
 					<param name="label_1" value="$PARAM[label_1]"/>
@@ -280,7 +276,7 @@
 				<include condition="[Window.Is(videos) | Window.Is(music)] + Skin.HasSetting(ShowcaseView_Enabled)" content="$PARAM[type]_Widget">
 					<param name="visible" value="$EXP[ShowcaseView_Display_IsSquare] + !$EXP[Background_IsFanart]"/>
 					<param name="background_visible" value="$PARAM[background_visible]"/>
-					<param name="Visible" value="$PARAM[Visible]"/>
+					<param name="visible" value="$PARAM[visible]"/>
 					<param name="label_width" value="630"/>
 					<param name="label_padding" value="$PARAM[label_padding]"/>
 					<param name="label_1" value="$PARAM[label_1]"/>
@@ -291,7 +287,7 @@
 				<include condition="[Window.Is(videos) | Window.Is(music)] + Skin.HasSetting(ShowcaseView_Enabled)" content="$PARAM[type]_Widget">
 					<param name="visible" value="$EXP[ShowcaseView_Display_IsPosters] + !$EXP[Background_IsFanart]"/>
 					<param name="background_visible" value="$PARAM[background_visible]"/>
-					<param name="Visible" value="$PARAM[Visible]"/>
+					<param name="visible" value="$PARAM[visible]"/>
 					<param name="label_width" value="1020"/>
 					<param name="label_padding" value="$PARAM[label_padding]"/>
 					<param name="label_1" value="$PARAM[label_1]"/>
@@ -303,7 +299,7 @@
 				<include condition="Window.IsMedia + Skin.HasSetting(GridView_Enabled)" content="$PARAM[type]_Widget">
 					<param name="visible" value="$EXP[GridView_IsVisible]"/>
 					<param name="background_visible" value="$PARAM[background_visible]"/>
-					<param name="Visible" value="$PARAM[Visible]"/>
+					<param name="visible" value="$PARAM[visible]"/>
 					<param name="label_width" value="900"/>
 					<param name="label_padding" value="$PARAM[label_padding]"/>
 					<param name="label_1" value="$PARAM[label_1]"/>

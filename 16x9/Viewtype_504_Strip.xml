@@ -22,37 +22,34 @@
 		<param name="widget_view" default="false"/>
 		<param name="widget_position"/>
 		<definition>
-			<control type="group">
-				<visible>$EXP[StripView_IsVisible] + !$EXP[OptionsSwitching] + !$EXP[ContainerSwitching]</visible>
-				<include condition="$PARAM[media_view]" content="Visible_Fade_Animation"/>
-				<!-- Artwork -->
-				<control type="group">
-					<include condition="$PARAM[media_view]" content="StripView_Art_Posters">
-						<param name="target_id" value="$PARAM[id]"/>
-						<param name="art_icon" value="$PARAM[art_icon]"/>
-					</include>
-					<include  condition="$PARAM[media_view]" content="StripView_Art_Fanart">
-						<param name="target_id" value="$PARAM[id]"/>
-						<param name="art_icon" value="$PARAM[art_icon]"/>
-					</include>
-					<include  condition="$PARAM[media_view]" content="StripView_Art_Square">
-						<param name="target_id" value="$PARAM[id]"/>
-						<param name="art_icon" value="$PARAM[art_icon]"/>
-					</include>
-					<include condition="$PARAM[widget_view] + !Skin.HasSetting(Widget$PARAM[widget_position]_Display_Fanart) + !Skin.HasSetting(Widget$PARAM[widget_position]_Display_Square) + !Skin.HasSetting(Widget$PARAM[widget_position]_Content_LatestAlbums) + !Skin.HasSetting(Widget$PARAM[widget_position]_Content_RecentAlbums)" content="StripView_Art_Posters">
-						<param name="target_id" value="$PARAM[id]"/>
-						<param name="art_icon" value="$PARAM[art_icon]"/>
-					</include>
-					<include condition="$PARAM[widget_view] + Skin.HasSetting(Widget$PARAM[widget_position]_Display_Fanart) + !Skin.HasSetting(Widget$PARAM[widget_position]_Content_LatestAlbums) + !Skin.HasSetting(Widget$PARAM[widget_position]_Content_RecentAlbums)" content="StripView_Art_Fanart">
-						<param name="target_id" value="$PARAM[id]"/>
-						<param name="art_icon" value="$PARAM[art_icon]"/>
-					</include>
-					<include condition="$PARAM[widget_view] + [Skin.HasSetting(Widget$PARAM[widget_position]_Display_Square) | Skin.HasSetting(Widget$PARAM[widget_position]_Content_LatestAlbums) | Skin.HasSetting(Widget$PARAM[widget_position]_Content_RecentAlbums)]" content="StripView_Art_Square">
-						<param name="target_id" value="$PARAM[id]"/>
-						<param name="art_icon" value="$PARAM[art_icon]"/>
-					</include>
-				</control>
-			</control>
+			<include content="Viewtype_Display_Template">
+				<param name="viewtype_label" value="Strip" />
+				<param name="media_view" value="$PARAM[media_view]" />
+				<include content="StripView_Art_Posters"  condition="$PARAM[media_view]">
+					<param name="target_id" value="$PARAM[id]"/>
+					<param name="art_icon" value="$PARAM[art_icon]"/>
+				</include>
+				<include content="StripView_Art_Fanart" condition="$PARAM[media_view]">
+					<param name="target_id" value="$PARAM[id]"/>
+					<param name="art_icon" value="$PARAM[art_icon]"/>
+				</include>
+				<include content="StripView_Art_Square" condition="$PARAM[media_view]">
+					<param name="target_id" value="$PARAM[id]"/>
+					<param name="art_icon" value="$PARAM[art_icon]"/>
+				</include>
+				<include content="StripView_Art_Posters" condition=" $PARAM[widget_view] + !Skin.HasSetting(Widget$PARAM[widget_position]_Display_Fanart) + !Skin.HasSetting(Widget$PARAM[widget_position]_Display_Square) + !Skin.HasSetting(Widget$PARAM[widget_position]_Content_LatestAlbums) + !Skin.HasSetting(Widget$PARAM[widget_position]_Content_RecentAlbums)">
+					<param name="target_id" value="$PARAM[id]"/>
+					<param name="art_icon" value="$PARAM[art_icon]"/>
+				</include>
+				<include content="StripView_Art_Fanart" condition="$PARAM[widget_view] + Skin.HasSetting(Widget$PARAM[widget_position]_Display_Fanart) + !Skin.HasSetting(Widget$PARAM[widget_position]_Content_LatestAlbums) + !Skin.HasSetting(Widget$PARAM[widget_position]_Content_RecentAlbums)">
+					<param name="target_id" value="$PARAM[id]"/>
+					<param name="art_icon" value="$PARAM[art_icon]"/>
+				</include>
+				<include content="StripView_Art_Square" condition="$PARAM[widget_view] + [Skin.HasSetting(Widget$PARAM[widget_position]_Display_Square) | Skin.HasSetting(Widget$PARAM[widget_position]_Content_LatestAlbums) | Skin.HasSetting(Widget$PARAM[widget_position]_Content_RecentAlbums)]">
+					<param name="target_id" value="$PARAM[id]"/>
+					<param name="art_icon" value="$PARAM[art_icon]"/>
+				</include>
+			</include>
 		</definition>
 	</include>
 
@@ -65,34 +62,24 @@
 					<param name="id" value="$PARAM[id]"/>
 					<param name="bottom" value="144"/>
 					<animation effect="slide" end="0,-30" time="0" condition="$EXP[StripView_Display_IsSquare] | $EXP[StripView_Display_IsFanart]">Conditional</animation>
-					<animation effect="slide" end="75,0" time="0" condition="$EXP[StripView_Display_IsSquare] + !$EXP[StripView_Details_Off] + !$EXP[InfoWidget_HasFocus]">Conditional</animation>
-					<animation effect="slide" end="320,0" time="0" condition="$EXP[StripView_Display_IsFanart] + !$EXP[StripView_Details_Off] + !$EXP[InfoWidget_HasFocus]">Conditional</animation>
+					<animation effect="slide" end="75,0" time="0" condition="$EXP[StripView_Display_IsSquare] + !$EXP[StripView_Details_Off] + !$EXP[Infoscreen_Widget_HasFocus]">Conditional</animation>
+					<animation effect="slide" end="320,0" time="0" condition="$EXP[StripView_Display_IsFanart] + !$EXP[StripView_Details_Off] + !$EXP[Infoscreen_Widget_HasFocus]">Conditional</animation>
 				</include>
 				<control type="group">
-					<visible>!$EXP[ContainerSwitching] + !$EXP[ContentSwitching] + !$EXP[TransparentDialog_IsVisible] + !$EXP[Scrollbar_HasFocus]</visible>
+					<visible>!$EXP[ContainerSwitching] + !$EXP[ContentSwitching] + !$EXP[TransparentDialog_IsVisible] + !$EXP[Scrollbar_HasFocus] + ![Control.HasFocus(3100) + Window.IsVisible(1121)] + !$EXP[Secondary_List_ContainerSwitching] + !$EXP[Secondary_List_ContentSwitching]</visible>
 					<include content="Visible_Fade_Delayed_Animation"/>
-					<control type="group">
-						<visible>![Control.HasFocus(4501) + Window.IsVisible(1121)] + !$EXP[Secondary_List_ContainerSwitching] + !$EXP[Secondary_List_ContentSwitching]</visible>
-						<include content="Visible_Fade_Delayed_Animation"/>
-						<!-- Common details -->
-						<control type="group">
-							<visible>!$EXP[InfoDialog_IsVisible] + !$EXP[StripView_Details_Off]</visible>
-							<include content="Visible_Fade_Delayed_Animation"/>
-							<include content="Common_Details">
-								<param name="viewtype_label" value="Strip"/>
-								<param name="left" value="60"/>
-								<param name="width" value="600"/>
-								<param name="titleheight" value="336"/>
-								<param name="infoheight" value="70"/>
-								<param name="plotmaxheight" value="235"/>
-							</include>
-						</control>
-						<!-- Bottom Label -->
-						<include content="Variable_Title_Label">
-							<param name="visible" value="[!$EXP[InfoWidget_HasFocus] + $EXP[StripView_Details_Title] + !$EXP[StripView_Details_Logo_IsOn]] | [$EXP[InfoWidget_HasFocus] + ![String.IsEqual(Container(8020).ListItem.DBType,Season) + Control.HasFocus(8020)]]"/>
-							<param name="label" value="$VAR[Title_Label]"/>
-						</include>
-					</control>
+					<include content="Common_Details" condition="!$EXP[Infoscreen_IsVisible]">
+						<param name="viewtype_label" value="Strip"/>
+						<param name="left" value="60"/>
+						<param name="width" value="600"/>
+						<param name="title_maxheight" value="336"/>
+						<param name="info_height" value="70"/>
+						<param name="plot_maxheight" value="235"/>
+					</include>
+					<include content="Variable_Title_Label" condition="!Window.Is(home)">
+						<param name="visible" value="[!$EXP[Infoscreen_Widget_HasFocus] + $EXP[StripView_Details_Title] + !$EXP[StripView_Details_Logo_IsOn]] | [$EXP[Infoscreen_Widget_HasFocus] + ![String.IsEqual(Container(3202).ListItem.DBType,Season) + Control.HasFocus(3202)]]"/>
+						<param name="label" value="$VAR[Title_Label]"/>
+					</include>
 				</control>
 			</control>
 		</definition>
