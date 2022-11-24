@@ -58,6 +58,30 @@
 		</definition>
 	</include>
 
+	<include name="Paused_Icon_Template">
+		<param name="visible" default="true"/>
+		<definition>
+			<control type="group">
+				<visible>$PARAM[visible]</visible>
+				<nested />
+				<control type="image">
+					<left>$PARAM[pauseedge]</left>
+					<width>$PARAM[barwidth]</width>
+					<height>75%</height>
+					<centertop>50%</centertop>
+					<texture colordiffuse="$PARAM[color]">views/white_100.png</texture>
+				</control>
+				<control type="image">
+					<right>$PARAM[pauseedge]</right>
+					<width>$PARAM[barwidth]</width>
+					<height>75%</height>
+					<centertop>50%</centertop>
+					<texture colordiffuse="$PARAM[color]">views/white_100.png</texture>
+				</control>
+			</control>
+		</definition>
+	</include>
+
 	<include name="Now_Playing_Icon_Template">
 		<param name="maxbarheight1" default="160"/>
 		<param name="maxbarheight2" default="300"/>
@@ -71,7 +95,6 @@
 				<height>$PARAM[width]</height>
 				<centerleft>50%</centerleft>
 				<centertop>50%</centertop>
-				<!-- Now playing -->
 	      <control type="group">
 					<visible>Player.Playing</visible>
 					<control type="image">
@@ -99,23 +122,11 @@
 						<texture colordiffuse="$PARAM[color]">views/white_100.png</texture>
 					</control>
 				</control>
-				<control type="group">
-					<visible>Player.Paused + !Window.IsVisible(visualisation) + !VideoPlayer.IsFullscreen</visible>
-					<control type="image">
-						<left>$PARAM[pauseedge]</left>
-						<width>$PARAM[barwidth]</width>
-						<height>75%</height>
-						<centertop>50%</centertop>
-						<texture colordiffuse="$PARAM[color]">views/white_100.png</texture>
-					</control>
-					<control type="image">
-						<right>$PARAM[pauseedge]</right>
-						<width>$PARAM[barwidth]</width>
-						<height>75%</height>
-						<centertop>50%</centertop>
-						<texture colordiffuse="$PARAM[color]">views/white_100.png</texture>
-					</control>
-				</control>
+				<include content="Paused_Icon_Template" condition="!Window.IsVisible(visualisation) + !VideoPlayer.IsFullscreen">
+					<param name="pauseedge" value="$PARAM[pauseedge]" />
+					<param name="barwidth" value="$PARAM[barwidth]" />
+					<param name="color" value="$PARAM[color]" />
+				</include>
 	    </control>
 		</definition>
 	</include>
@@ -152,15 +163,38 @@
 		</definition>
 	</include>
 
+	<include name="Paused_Icon_Medium">
+		<param name="visible" default="Player.Paused" />
+		<param name="width" default="120" />
+		<param name="color" />
+		<definition>
+			<control type="group">
+				<visible>$PARAM[visible]</visible>
+				<width>$PARAM[width]</width>
+				<height>$PARAM[width]</height>
+				<nested/>
+				<include content="Paused_Icon_Template">
+					<param name="barwidth" value="18" />
+					<param name="pauseedge" value="10" />
+					<param name="color" value="$PARAM[color]" />
+					<width>64</width>
+					<height>64</height>
+					<centerleft>50%</centerleft>
+					<centertop>50%</centertop>
+				</include>
+			</control>
+		</definition>
+	</include>
+
 	<include name="Now_Playing_Icon">
+		<param name="visible" default="true" />
 		<param name="size" default="Medium"/>
-		<param name="visible" default="true"/>
 		<param name="color" default="$VAR[Common_List_Label_Color]"/>
 		<definition>
 			<include content="Now_Playing_Icon_$PARAM[size]">
-				<param name="visible" value="$PARAM[visible]"/>
-				<param name="color" value="$PARAM[color]"/>
-				<nested/>
+				<param name="visible" value="$PARAM[visible]" />
+				<param name="color" value="$PARAM[color]" />
+				<nested />
 			</include>
 		</definition>
 	</include>

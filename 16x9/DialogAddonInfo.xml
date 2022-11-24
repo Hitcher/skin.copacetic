@@ -7,169 +7,20 @@
 	<backgroundcolor>$VAR[Secondary_Color]</backgroundcolor>
 	<include content="WindowOpenClose_Fade_Delayed_Animation"/>
 	<controls>
-
-		<!-- Delay content on Load -->
-		<include content="Focus_Setter">
-			<param name="target_id" value="SetFocus(3000,0,absolute)"/>
+		<include content="Infoscreen_Header_Template">
+			<param name="windowname" value="addoninformation" />
+			<param name="visible" value="!Window.IsVisible(selectdialog) + !Window.IsVisible(addonsettings)" />
+			<param name="default_control" value="SetFocus(3000,0,absolute)" />
+			<include content="Infoscreen_Header">
+				<param name="left" value="780" />
+				<param name="right" value="120" />
+				<param name="align" value="left" />
+			</include>
 		</include>
-
-		<!-- Hidden Button -->
-		<control id="13" type="radiobutton">
-			<visible>Control.IsEnabled(13)</visible>
-			<visible allowhiddenfocus="true">false</visible>
-		</control>
-
-
-
-		<control type="group">
-			<visible>!Window.IsVisible(selectdialog)</visible>
-			<include content="Visible_Fade_Delayed_Animation"/>
-
-			<!-- Background -->
-			<control type="group">
-				<visible>Window.IsActive(addoninformation) + !Control.HasFocus(50) + !$EXP[Hidden_Focus_Setter] + !Window.IsVisible(addonsettings) + !Window.IsVisible(selectdialog)</visible>
-				<include content="Visible_Fade_Delayed_Animation"/>
-				<animation effect="slide" start="0" end="0,660" time="0" condition="ControlGroup(3000).HasFocus">Conditional</animation>
-				<animation effect="slide" start="0" end="0,-660" time="180" tween="sine" easing="inout" reversible="false" condition="ControlGroup(3000).HasFocus">Conditional</animation>
-				<animation effect="fade" start="0" end="100" time="360" tween="sine" easing="inout" reversible="false" condition="ControlGroup(3000).HasFocus">Conditional</animation>
-				<include content="Transparent_Dialog_Panel">
-					<param name="left" value="0"/>
-				</include>
-				<control type="image">
-					<left>0</left>
-					<centertop>50%</centertop>
-					<width>720</width>
-					<height>720</height>
-					<texture fallback="fallback/fallback-square.png" background="true">$INFO[ListItem.Art(thumb)]</texture>
-				</control>
-			</control>
-
-			<!-- Content -->
-			<control type="group">
-				<visible>Window.IsActive(addoninformation) + !$EXP[Hidden_Focus_Setter] + !Window.IsVisible(addonsettings) + !Window.IsVisible(selectdialog)</visible>
-				<include content="Visible_Fade_Delayed_Long_Animation"/>
-				<control type="group">
-					<visible>!$EXP[TransparentDialog_IsVisible]</visible>
-					<include content="Visible_Fade_Animation"/>
-
-					<control type="group">
-						<visible>!Control.HasFocus(50)</visible>
-						<include content="Visible_Fade_Delayed_Long_Animation"/>
-
-						`<include content="Breadcrumb_Label">
-							<param name="bar" value="false"/>
-							<param name="title_label" value="$INFO[Window(addoninformation).Property(Focused_Button),$LOCALIZE[31130] ,  $LOCALIZE[31131]]"/>
-							<param name="label_color" value="$VAR[Breadcrumb_Label_Color]"/>
-							<param name="info_label_visible" value="false"/>
-						</include>
-
-						<!-- Details -->
-						<include content="Info_Header">
-							<param name="visible" value="true"/>
-							<param name="left" value="780"/>
-							<param name="right" value="120"/>
-							<param name="align" value="left"/>
-						</include>
-
-						<!-- Button group -->
-						<control type="grouplist" id="3000">
-							<centerleft>50%</centerleft>
-							<bottom>60</bottom>
-							<width>420</width>
-							<height>60</height>
-							<orientation>horizontal</orientation>
-							<align>center</align>
-							<itemgap>0</itemgap>
-							<usecontrolcoords>true</usecontrolcoords>
-							<!-- Run -->
-							<control type="button" id="12">
-								<visible>Control.IsEnabled(12)</visible>
-								<include content="Hidden_Button_Template"/>
-								<onfocus>SetProperty(Focused_Button,$INFO[Control.GetLabel(12)],addoninformation)</onfocus>
-								<include>AddonInfo_Dialog_Menu_Navigation</include>
-							</control>
-							<!-- Show settings -->
-							<control type="button" id="9">
-								<include content="Hidden_Button_Template"/>
-								<visible>Control.IsEnabled(9)</visible>
-								<onfocus>SetProperty(Focused_Button,$LOCALIZE[24020],addoninformation)</onfocus>
-								<include>AddonInfo_Dialog_Menu_Navigation</include>
-							</control>
-							<!-- Update button -->
-							<control type="button" id="8">
-								<include content="Hidden_Button_Template"/>
-								<visible>Control.IsEnabled(8)</visible>
-								<onfocus>SetProperty(Focused_Button,$INFO[Control.GetLabel(8)],addoninformation)</onfocus>
-								<include>AddonInfo_Dialog_Menu_Navigation</include>
-							</control>
-							<!-- Install/Uninstall Addon button -->
-							<control type="button" id="6">
-								<include content="Hidden_Button_Template"/>
-								<visible>Control.IsEnabled(6)</visible>
-								<onfocus>SetProperty(Focused_Button,$INFO[Control.GetLabel(6)],addoninformation)</onfocus>
-								<onclick>SetProperty(Focused_Button,$INFO[Control.GetLabel(6)],addoninformation)</onclick>
-								<include>AddonInfo_Dialog_Menu_Navigation</include>
-							</control>
-							<!-- Enable/Disable Addon button -->
-							<control type="button" id="7">
-								<include content="Hidden_Button_Template"/>
-								<visible>Control.IsEnabled(7)</visible>
-								<onfocus>SetProperty(Focused_Button,$INFO[Control.GetLabel(7)],addoninformation)</onfocus>
-								<onclick>SetProperty(Focused_Button,$INFO[Control.GetLabel(7)],addoninformation)</onclick>
-								<include>AddonInfo_Dialog_Menu_Navigation</include>
-							</control>
-							<!-- Show dependencies -->
-							<control type="button" id="10">
-								<include content="Hidden_Button_Template"/>
-								<visible>Control.IsEnabled(10)</visible>
-								<onfocus>SetProperty(Focused_Button,$LOCALIZE[39024],addoninformation)</onfocus>
-								<include>AddonInfo_Dialog_Menu_Navigation</include>
-							</control>
-							<!-- Select version -->
-							<control type="button" id="14">
-								<include content="Hidden_Button_Template"/>
-								<visible>Control.IsEnabled(14)</visible>
-								<onfocus>SetProperty(Focused_Button,$LOCALIZE[21338],addoninformation)</onfocus>
-								<include>AddonInfo_Dialog_Menu_Navigation</include>
-							</control>
-							<!-- Auto-update button Button -->
-							<control type="button" id="20">
-								<include content="Hidden_Button_Template"/>
-								<label>$VAR[Auto_Updated_Label]</label>
-								<onfocus>SetProperty(Focused_Button,$VAR[Auto_Updated_Label],addoninformation)</onfocus>
-								<onclick>SetFocus(13)</onclick>
-								<onclick>Select</onclick>
-								<onclick>SetFocus(20)</onclick>
-								<onclick condition="String.Contains(Skin.String(AutoUpdate),off)">Skin.SetString(AutoUpdate,on)</onclick>
-								<onclick condition="String.Contains(Skin.String(AutoUpdate),on)">Skin.SetString(AutoUpdate,off)</onclick>
-								<include>AddonInfo_Dialog_Menu_Navigation</include>
-							</control>
-						</control>
-					</control>
-				</control>
-
-				<include content="Infoscreen_Widget_50_Screenshots"/>
-				<include content="DialogAddonInfo_Scrollbar"/>
-
-				<!-- Music Player -->
-				<control type="group">
-					<visible>!Window.IsVisible(shutdownmenu)</visible>
-					<include content="Visible_Fade_Delayed_Animation"/>
-					<include condition="Skin.HasSetting(Music_Player_Enabled)" content="Music_Player_Buttons"/>
-					<include condition="Skin.HasSetting(Music_Player_Enabled)" content="Music_Player_Widget">
-						<param name="left_label_visible" value="true"/>
-						<param name="background_visible" value="false"/>
-					</include>
-				</control>
-			</control>
-
-			<!-- Transparent dialogs background over widgets -->
-			<control type="group">
-				<visible>$EXP[TransparentDialog_IsVisible]</visible>
-				<include>Transparent_Dialog_Background</include>
-				<include content="VisibleHidden_Fade_Animation"/>
-			</control>
-
-		</control>
+		<include content="Infoscreen_Furniture_Template">
+			<param name="visible" value="!Window.IsVisible(selectdialog) + !Window.IsVisible(addonsettings)" />
+			<include content="Infoscreen_Widget_50_Screenshots" />
+			<include content="DialogAddonInfo_Scrollbar" />
+		</include>
 	</controls>
 </window>

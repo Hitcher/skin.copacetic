@@ -76,64 +76,9 @@
 				</include>
 			</control>
 		</control>
-
-		<!-- Hidden GridView dropshadow checkers -->
-		<control type="group" id="9601">
-			<visible>!String.IsEmpty(ListItemNoWrap(1).Label)</visible>
-		</control>
-		<control type="group" id="9602">
-			<visible>!String.IsEmpty(ListItemNoWrap(2).Label)</visible>
-		</control>
-		<control type="group" id="9603">
-			<visible>!String.IsEmpty(ListItemNoWrap(3).Label)</visible>
-		</control>
-		<control type="group" id="9604">
-			<visible>!String.IsEmpty(ListItemNoWrap(4).Label)</visible>
-		</control>
-		<control type="group" id="9605">
-			<visible>!String.IsEmpty(ListItemNoWrap(5).Label)</visible>
-		</control>
-		<control type="group" id="9606">
-			<visible>!String.IsEmpty(ListItemNoWrap(6).Label)</visible>
-		</control>
-		<control type="group" id="9607">
-			<visible>String.IsEqual(ListItemNoWrap(-6).Overlay,OverlayWatched.png)</visible>
-		</control>
-		<control type="group" id="9608">
-			<visible>String.IsEqual(ListItemNoWrap(-5).Overlay,OverlayWatched.png)</visible>
-		</control>
-		<control type="group" id="9609">
-			<visible>String.IsEqual(ListItemNoWrap(-4).Overlay,OverlayWatched.png)</visible>
-		</control>
-		<control type="group" id="9610">
-			<visible>String.IsEqual(ListItemNoWrap(-3).Overlay,OverlayWatched.png)</visible>
-		</control>
-		<control type="group" id="9611">
-			<visible>String.IsEqual(ListItemNoWrap(-2).Overlay,OverlayWatched.png)</visible>
-		</control>
-		<control type="group" id="9612">
-			<visible>String.IsEqual(ListItemNoWrap(-1).Overlay,OverlayWatched.png)</visible>
-		</control>
-		<control type="group" id="9613">
-			<visible>String.IsEqual(ListItemNoWrap(1).Overlay,OverlayWatched.png)</visible>
-		</control>
-		<control type="group" id="9614">
-			<visible>String.IsEqual(ListItemNoWrap(2).Overlay,OverlayWatched.png)</visible>
-		</control>
-		<control type="group" id="9615">
-			<visible>String.IsEqual(ListItemNoWrap(3).Overlay,OverlayWatched.png)</visible>
-		</control>
-		<control type="group" id="9616">
-			<visible>String.IsEqual(ListItemNoWrap(4).Overlay,OverlayWatched.png)</visible>
-		</control>
-		<control type="group" id="9617">
-			<visible>String.IsEqual(ListItemNoWrap(5).Overlay,OverlayWatched.png)</visible>
-		</control>
-		<control type="group" id="9618">
-			<visible>String.IsEqual(ListItemNoWrap(6).Overlay,OverlayWatched.png)</visible>
-		</control>
 	</include>
 
+	<!-- Widget -->
 
 	<include name="GridView_Display">
 		<param name="id" />
@@ -159,55 +104,26 @@
 		</definition>
 	</include>
 
-	<include name="Progress_Grid_Fanart">
-		<param name="id" />
-		<definition>
-			<include content="Progress_Grid">
-				<param name="id" value="$PARAM[id]" />
-				<param name="left" value="188" />
-				<param name="bottom" value="384" />
-				<param name="unwatched_indicator_background" value="$VAR[Accent_Color]" />
-				<param name="slides" value="Default" />
-			</include>
-		</definition>
-	</include>
-
-	<include name="Progress_Grid_Posters">
-		<param name="id" />
-		<definition>
-			<include content="Progress_Grid">
-				<param name="id" value="$PARAM[id]" />
-				<param name="left" value="120" />
-				<param name="bottom" value="281" />
-				<param name="width" value="240" />
-				<param name="unwatched_indicator_background" value="$VAR[Accent_Color]" />
-				<param name="slides" value="Narrow" />
-			</include>
-		</definition>
-	</include>
-
-	<include name="Progress_Grid_Square">
-		<param name="id" />
-		<definition>
-			<include content="Progress_Grid">
-				<param name="id" value="$PARAM[id]" />
-				<param name="left" value="120" />
-				<param name="bottom" value="371" />
-				<param name="width" value="240" />
-				<param name="unwatched_indicator_background" value="$VAR[Accent_Color]" />
-				<param name="slides" value="Narrow" />
-			</include>
-		</definition>
-	</include>
-
 	<include name="GridView_Details">
 		<param name="id" />
 		<param name="widget_position" />
 		<param name="widget_display" />
 		<definition>
-			<control type="group">
-				<visible>!$EXP[TransparentDialog_IsVisible]</visible>
-				<include content="Visible_Fade_Delayed_Animation" />
+			<include content="Viewtype_Details_Template">
+				<param name="visible" value="!$EXP[TransparentDialog_IsVisible]" />
+				<param name="viewtype_label" value="Grid" />
+				<include content="Progress_Grid_$PARAM[widget_display]" condition="Window.Is(movieinformation)">
+					<param name="id" value="$PARAM[id]" />
+				</include>
+				<include content="Progress_Grid_Posters" condition="Window.Is(home) + !Skin.HasSetting(Widget$PARAM[widget_position]_Display_Fanart) + !Skin.HasSetting(Widget$PARAM[widget_position]_Display_Square)">
+					<param name="id" value="$PARAM[id]" />
+				</include>
+				<include content="Progress_Grid_Fanart" condition="Window.Is(home) + Skin.HasSetting(Widget$PARAM[widget_position]_Display_Fanart)">
+					<param name="id" value="$PARAM[id]" />
+				</include>
+				<include content="Progress_Grid_Square" condition="Window.Is(home) + Skin.HasSetting(Widget$PARAM[widget_position]_Display_Square)">
+					<param name="id" value="$PARAM[id]" />
+				</include>
 				<include content="Breadcrumb_Label">
 					<param name="bar" value="false" />
 					<param name="title_label" value="$VAR[Title_Label]" />
@@ -221,19 +137,7 @@
 					<animation effect="slide" start="0" end="0,690" time="0" condition="String.IsEqual(Control.GetLabel(620$PARAM[widget_position]2),Square)">Conditional</animation>
 					<animation effect="slide" start="0" end="0,690" time="0" condition="Window.Is(home) + Skin.HasSetting(Widget$PARAM[widget_position]_Display_Square)">Conditional</animation>
 				</include>
-				<include condition="Window.Is(movieinformation)" content="Progress_Grid_$PARAM[widget_display]">
-					<param name="id" value="$PARAM[id]" />
-				</include>
-				<include condition="Window.Is(home) + !Skin.HasSetting(Widget$PARAM[widget_position]_Display_Fanart) + !Skin.HasSetting(Widget$PARAM[widget_position]_Display_Square)" content="Progress_Grid_Posters">
-					<param name="id" value="$PARAM[id]" />
-				</include>
-				<include condition="Window.Is(home) + Skin.HasSetting(Widget$PARAM[widget_position]_Display_Fanart)" content="Progress_Grid_Fanart">
-					<param name="id" value="$PARAM[id]" />
-				</include>
-				<include condition="Window.Is(home) + Skin.HasSetting(Widget$PARAM[widget_position]_Display_Square)" content="Progress_Grid_Square">
-					<param name="id" value="$PARAM[id]" />
-				</include>
-			</control>
+			</include>
 		</definition>
 	</include>
 

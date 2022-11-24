@@ -273,7 +273,7 @@
 	</variable>
 
 	<variable name="Info_Infoscreens_Label">
-		<value condition="Window.IsVisible(addoninformation)">[UPPERCASE]$INFO[ListItem.AddonType]$INFO[ListItem.AddonCreator, $LOCALIZE[31116] ]$INFO[ListItem.AddonVersion, $LOCALIZE[31116] Version ][/UPPERCASE]</value>
+		<value condition="Window.IsVisible(addoninformation)">[UPPERCASE]$INFO[ListItem.AddonType]$INFO[ListItem.AddonCreator, $LOCALIZE[31116] ]$INFO[ListItem.AddonVersion,[CR]Version ][/UPPERCASE]</value>
 		<!-- Movies
 		2019 / TODD PHILLIPS / 4K DOLBY VISION / ENG / 132 MINS
 		TODD PHILLIPS -->
@@ -410,18 +410,6 @@
 		<!-- Shuffle On / Off -->
 		<value condition="Playlist.IsRandom">$LOCALIZE[191] $LOCALIZE[34222]</value>
 		<value>$LOCALIZE[191] $LOCALIZE[591]</value>
-	</variable>
-
-	<variable name="Random_Button_Unfocused_Label">
-		<!-- Randomise On / Off -->
-		<value condition="String.Contains(Control.GetLabel(9),*)">$LOCALIZE[13319] $LOCALIZE[31116] $LOCALIZE[34222]</value>
-		<value>$LOCALIZE[13319] $LOCALIZE[31116] $LOCALIZE[591]</value>
-	</variable>
-
-	<variable name="Random_Button_Focused_Label">
-		<!-- On / Off -->
-		<value condition="String.Contains(Control.GetLabel(9),*)">$LOCALIZE[34222]</value>
-		<value>$LOCALIZE[591]</value>
 	</variable>
 
 	<variable name="Rating_Label">
@@ -606,18 +594,16 @@
 	</variable>
 
 	<variable name="Title_Label">
-		<!-- Fullscreeninfo -->
-		<value condition="VideoPlayer.IsFullscreen">$INFO[VideoPlayer.Title]</value>
+		<value condition="VideoPlayer.IsFullscreen + !String.IsEmpty(VideoPlayer.Title)">$INFO[VideoPlayer.Title]</value>
+		<value condition="Window.Is(addoninformation) + !String.IsEmpty(ListItem.AddonName)">$INFO[ListItem.AddonName]</value>
 		<value condition="$EXP[Infoscreen_Widget_HasFocus]">$VAR[Title_Label_Infoscreen_Widgets]</value>
 		<value condition="Window.Is(home) + String.IsEqual(ListItem.DBType,episode) + $EXP[GridView_Widget_IsVisible] + !String.IsEmpty(ListItem.TVShowTitle)">$INFO[ListItem.TVShowTitle]</value>
 		<value condition="Window.Is(home) + String.IsEqual(ListItem.DBType,episode) + Integer.IsGreater(ListItem.Episode,9)">$INFO[ListItem.Season]$INFO[ListItem.Episode,x,.]$INFO[ListItem.Title, ]</value>
 		<value condition="Window.Is(home) + String.IsEqual(ListItem.DBType,episode) + Integer.IsGreater(ListItem.Episode,0)">$INFO[ListItem.Season]$INFO[ListItem.Episode,x0,.]$INFO[ListItem.Title, ]</value>
 		<value condition="Window.Is(home) + !String.IsEmpty(ListItem.Title)">$INFO[ListItem.Title]</value>
-		<!-- SECONDARY LIST -->
-		<value condition="Control.HasFocus(3100) + String.IsEqual(Container(3100).ListItem.DBType,season)">$INFO[Container(3100).ListItem.Season,$LOCALIZE[20373] ]</value>
-		<value condition="Control.HasFocus(3100) + Container.Content(set)">$INFO[Container(3100).ListItem.Title]</value>
-		<value condition="Control.HasFocus(3100)">$INFO[Container(3100).ListItem.Label]</value>
-		<!-- PRIMARY LIST -->
+		<value condition="Control.HasFocus(3100) + String.IsEqual(Container(3100).ListItem.DBType,season) + !String.IsEmpty(Container(3100).ListItem.Season)">$INFO[Container(3100).ListItem.Season,$LOCALIZE[20373] ]</value>
+		<value condition="Control.HasFocus(3100) + Container.Content(set) + !String.IsEmpty(Container(3100).ListItem.Title)">$INFO[Container(3100).ListItem.Title]</value>
+		<value condition="Control.HasFocus(3100) + !String.IsEmpty(Container(3100).ListItem.Label)">$INFO[Container(3100).ListItem.Label]</value>
 		<value condition="String.IsEqual(ListItem.DBType,episode) + [$EXP[GridView_IsVisible] | [$EXP[ListView_IsVisible] + $EXP[ListView_Details_Info_IsVisible]] | [$EXP[BillboardView_IsVisible] + $EXP[BillboardView_Details_Info_IsVisible]] | [$EXP[ShowcaseView_IsVisible] + $EXP[ShowcaseView_Details_Info_IsVisible]] | [$EXP[StripView_IsVisible] + $EXP[StripView_Details_Info_IsVisible]]] + !String.IsEmpty(ListItem.Title)">$INFO[ListItem.Title]</value>
 		<value condition="String.IsEqual(ListItem.DBType,episode) + Integer.IsGreater(ListItem.Episode,9)">$INFO[ListItem.Season]$INFO[ListItem.Episode,x,.]$INFO[ListItem.Title, ]</value>
 		<value condition="String.IsEqual(ListItem.DBType,episode) + Integer.IsGreater(ListItem.Episode,0)">$INFO[ListItem.Season]$INFO[ListItem.Episode,x0,.]$INFO[ListItem.Title, ]</value>
@@ -630,18 +616,17 @@
 
 	<variable name="Title_Label_Infoscreen_Widgets">
 		<value condition="Control.HasFocus(50)">$INFO[Container(50).ListItem.Label]</value>
-		<value condition="Window.Is(addoninformation)">$INFO[ListItem.AddonName]</value>
 		<value condition="Control.HasFocus(3201) + Integer.IsGreater(Container(3201).ListItem.Episode,9)">$INFO[Container(3201).ListItem.Season]$INFO[Container(3201).ListItem.Episode,x,.]$INFO[Container(3201).ListItem.Title, ]</value>
 		<value condition="Control.HasFocus(3201) + Integer.IsGreater(Container(3201).ListItem.Episode,0)">$INFO[Container(3201).ListItem.Season]$INFO[Container(3201).ListItem.Episode,x0,.]$INFO[Container(3201).ListItem.Title, ]</value>
-		<value condition="Control.HasFocus(3201)">$INFO[Container(3201).ListItem.Label]</value>
-		<value condition="Control.HasFocus(3202)">$INFO[Container(3202).ListItem.Label]</value>
-		<value condition="Control.HasFocus(3203)">$INFO[Container(3203).ListItem.Label]</value>
-		<value condition="Control.HasFocus(3204)">$INFO[Container(3204).ListItem.Label]</value>
-		<value condition="Control.HasFocus(3205)">$INFO[Container(3205).ListItem.Label]</value>
-		<value condition="Control.HasFocus(3206)">$INFO[Container(3206).ListItem.Label]</value>
-		<value condition="Control.HasFocus(3207)">$INFO[Container(3207).ListItem.Label]</value>
-		<value condition="Control.HasFocus(3208)">$INFO[Container(3208).ListItem.Label]</value>
-		<value condition="Control.HasFocus(3209)">$INFO[Container(3209).ListItem.Label]</value>
+		<value condition="Control.HasFocus(3201) + !String.IsEmpty(Container(3201).ListItem.Label)">$INFO[Container(3201).ListItem.Label]</value>
+		<value condition="Control.HasFocus(3202) + !String.IsEmpty(Container(3202).ListItem.Label)">$INFO[Container(3202).ListItem.Label]</value>
+		<value condition="Control.HasFocus(3203) + !String.IsEmpty(Container(3203).ListItem.Label)">$INFO[Container(3203).ListItem.Label]</value>
+		<value condition="Control.HasFocus(3204) + !String.IsEmpty(Container(3204).ListItem.Label)">$INFO[Container(3204).ListItem.Label]</value>
+		<value condition="Control.HasFocus(3205) + !String.IsEmpty(Container(3205).ListItem.Label)">$INFO[Container(3205).ListItem.Label]</value>
+		<value condition="Control.HasFocus(3206) + !String.IsEmpty(Container(3206).ListItem.Label)">$INFO[Container(3206).ListItem.Label]</value>
+		<value condition="Control.HasFocus(3207) + !String.IsEmpty(Container(3207).ListItem.Label)">$INFO[Container(3207).ListItem.Label]</value>
+		<value condition="Control.HasFocus(3208) + !String.IsEmpty(Container(3208).ListItem.Label)">$INFO[Container(3208).ListItem.Label]</value>
+		<value condition="Control.HasFocus(3209) + !String.IsEmpty(Container(3209).ListItem.Label)">$INFO[Container(3209).ListItem.Label]</value>
 	</variable>
 
 	<variable name="Title_Breadcrumb_Label">

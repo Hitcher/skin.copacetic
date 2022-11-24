@@ -18,7 +18,7 @@
 			<description>Hide broken addons</description>
 			<visible allowhiddenfocus="true">false</visible>
 		</control>
-		<control type="button" id="9">
+		<control type="button" id="9">s
 			<description>Check for repo updates</description>
 			<visible allowhiddenfocus="true">false</visible>
 		</control>
@@ -53,16 +53,14 @@
 			<visible allowhiddenfocus="true">false</visible>
 		</control>
 		<control type="radiobutton" id="9">
-			<onup>SetFocus(3000)</onup>
-			<ondown>0</ondown>
-			<onback>4012</onback>
-			<onleft>4012</onleft>
-			<onright>4012</onright>
 			<description>Randomize the picture slideshow</description>
 			<visible allowhiddenfocus="true">false</visible>
-			<onfocus>ClearProperty(Scrollbars,home)</onfocus>
 			<onfocus>SetProperty(OptionsMenu,Active,home)</onfocus>
-			<onunfocus>ClearProperty(OptionsMenu,home)</onunfocus>
+			<onback>SetFocus(4012)</onback>
+			<onleft>SetFocus(4012)</onleft>
+			<onright>SetFocus(4012)</onright>
+			<onup>Control.Move(3000,-1)</onup>
+			<onup>SetFocus(3000)</onup>
 		</control>
 		<include content="Hidden_List">
 			<param name="visible" value="ListItem.IsFolder" />
@@ -176,8 +174,7 @@
 			<onfocus condition="Container.IsUpdating">SetFocus(6001)</onfocus>
 			<onfocus condition="!Container.IsUpdating">SetFocus(50)</onfocus>
 			<onfocus condition="!Container.IsUpdating">Action(Info)</onfocus>
-		</control>
-		<!-- Fix for audio stutter / Trailer autoplay -->
+		</control>	
 		<control type="videowindow">
 			<visible>String.IsEqual(Window(home).Property(Trailer_Autoplay),true)</visible>
 		</control>
@@ -244,48 +241,30 @@
 		<definition>
 			<include content="Scrollbars" />
 			<control type="group">
-				<visible>String.IsEqual(Window(home).Property(OptionsMenu),Active) | [Window.IsVisible(pictures) + Control.HasFocus(9)]</visible>
+				<visible>String.IsEqual(Window(home).Property(OptionsMenu),Active) | [Window.Is(pictures) + Control.HasFocus(9)]</visible>
 				<include content="Options_Menu_Fade_Animation" />
 				<control type="image">
 					<texture colordiffuse="$VAR[Transparent_Dialog_Mask]">views/white_100.png</texture>
 				</control>
 			</control>
 			<control type="group">
-				<visible>String.IsEqual(Window(home).Property(OptionsMenu),Active) | [Window.IsVisible(pictures) + Control.HasFocus(9)]</visible>
+				<visible>String.IsEqual(Window(home).Property(OptionsMenu),Active) | [Window.Is(pictures) + Control.HasFocus(9)]</visible>
 				<include content="VisibleHidden_Fade_Delayed_Animation" />
-				<left>$PARAM[left]</left>
-				<top>$PARAM[top]</top>
-				<control type="group">
-					<visible>!Window.IsVisible(shutdownmenu) + !Window.IsVisible(virtualkeyboard)</visible>
-					<include content="Visible_Fade_Animation" />
-					<!-- dummy labels for Random button on pictures -->
-					<control type="label">
-						<top>220</top>
-						<include>ContextMenuLabelFocused</include>
-						<label>$VAR[Random_Button_Focused_Label]</label>
-						<visible>Window.IsVisible(pictures) + !Control.HasFocus(3000)</visible>
-					</control>
-					<control type="label">
-						<top>220</top>
-						<include>ContextMenuLabelUnfocused</include>
-						<label>$VAR[Random_Button_Unfocused_Label]</label>
-						<visible>Window.IsVisible(pictures) + Control.HasFocus(3000)</visible>
-					</control>
-				</control>
 				<control type="fixedlist" id="3000">
 					<viewtype label="535">list</viewtype>
 					<visible allowhiddenfocus="true">!Window.IsVisible(shutdownmenu) + !Window.IsVisible(virtualkeyboard)</visible>
 					<include content="Visible_Fade_Animation" />
 					<description>Options menu</description>
+					<left>120</left>
 					<width>1080</width>
+					<centertop>50%</centertop>
 					<height>675</height>
 					<onup>0</onup>
+					<ondown>0</ondown>
 					<onback>4012</onback>
 					<onfocus>ClearProperty(Scrollbars,home)</onfocus>
 					<onfocus>SetProperty(OptionsMenu,Active,home)</onfocus>
 					<onunfocus>ClearProperty(OptionsMenu,home)</onunfocus>
-					<ondown condition="Window.Is(pictures)">SetFocus(9)</ondown>
-					<ondown condition="!Window.Is(pictures)">0</ondown>
 					<onleft condition="String.IsEmpty(Container(3000).ListItem.Property(ActionLeft))">4012</onleft>
 					<onright condition="String.IsEmpty(Container(3000).ListItem.Property(ActionRight))">4012</onright>
 					<onleft condition="!String.IsEmpty(Container(3000).ListItem.Property(ActionLeft))">$INFO[Container(3000).ListItem.Property(ActionLeft)]</onleft>

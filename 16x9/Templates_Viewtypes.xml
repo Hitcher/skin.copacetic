@@ -33,9 +33,6 @@
 		<param name="bottom" default="27" />
 		<definition>
 			<control type="group">
-				<visible>!$EXP[ContainerSwitching] + !$EXP[ContentSwitching] + !$EXP[TransparentDialog_IsVisible] + !$EXP[Scrollbar_HasFocus]</visible>
-				<visible>![Control.HasFocus(3100) + Window.IsVisible(1121)] + !$EXP[Secondary_List_ContainerSwitching] + !$EXP[Secondary_List_ContentSwitching]</visible>
-				<include content="Visible_Fade_Delayed_Animation" />
 				<nested />
 				<centerleft>50%</centerleft>
 				<bottom>$PARAM[bottom]</bottom>
@@ -60,7 +57,7 @@
 		<param name="slides" default="Narrow" />
 		<definition>
 			<control type="group">
-				<visible>!$EXP[ContainerSwitching] + !$EXP[ContentSwitching] + !$EXP[TransparentDialog_IsVisible] + !$EXP[Scrollbar_HasFocus]</visible>
+				<visible>!$EXP[ContentSwitching]</visible>
 				<include content="Visible_Fade_Delayed_Animation" />
 				<left>$PARAM[left]</left>
 				<bottom>$PARAM[bottom]</bottom>
@@ -76,15 +73,28 @@
 	</include>
 
 	<include name="Viewtype_Display_Template">
+		<param name="visible" default="!$EXP[ContainerSwitching] + !$EXP[OptionsSwitching]" />
 		<param name="viewtype_label" />
 		<param name="media_view" default="false"/>
 		<definition>
 			<control type="group">
-				<visible>$EXP[$PARAM[viewtype_label]View_IsVisible] + !$EXP[ContainerSwitching] + !$EXP[OptionsSwitching]</visible>
+				<visible>$EXP[$PARAM[viewtype_label]View_IsVisible] + $PARAM[visible]</visible>
 				<include condition="$PARAM[media_view]" content="Visible_Fade_Animation" />
 				<nested />
 			</control>
 		</definition>
 	</include>
 
+	<include name="Viewtype_Details_Template">
+		<param name="visible" default="!$EXP[ContainerSwitching] + !$EXP[ContentSwitching] + !$EXP[TransparentDialog_IsVisible] + !$EXP[Scrollbar_HasFocus] + !$EXP[Secondary_List_Taking_Focus] + !$EXP[Secondary_List_ContainerSwitching] + !$EXP[Secondary_List_ContentSwitching]" />
+		<param name="viewtype_label" />
+		<definition>
+			<control type="group">
+				<visible>$EXP[$PARAM[viewtype_label]View_IsVisible] + $PARAM[visible]</visible>
+				<include content="Visible_Fade_Delayed_Animation" />
+				<nested />
+			</control>
+		</definition>
+	</include>
+	
 </includes>
