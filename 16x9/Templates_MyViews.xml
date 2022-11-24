@@ -18,7 +18,7 @@
 			<description>Hide broken addons</description>
 			<visible allowhiddenfocus="true">false</visible>
 		</control>
-		<control type="button" id="9">s
+		<control type="button" id="9">
 			<description>Check for repo updates</description>
 			<visible allowhiddenfocus="true">false</visible>
 		</control>
@@ -55,12 +55,6 @@
 		<control type="radiobutton" id="9">
 			<description>Randomize the picture slideshow</description>
 			<visible allowhiddenfocus="true">false</visible>
-			<onfocus>SetProperty(OptionsMenu,Active,home)</onfocus>
-			<onback>SetFocus(4012)</onback>
-			<onleft>SetFocus(4012)</onleft>
-			<onright>SetFocus(4012)</onright>
-			<onup>Control.Move(3000,-1)</onup>
-			<onup>SetFocus(3000)</onup>
 		</control>
 		<include content="Hidden_List">
 			<param name="visible" value="ListItem.IsFolder" />
@@ -156,7 +150,7 @@
 			<onfocus>SetProperty(OptionsSwitching,Active,Home)</onfocus>
 			<onfocus>SetFocus(50)</onfocus>
 			<onfocus>SetFocus(3000)</onfocus>
-			<include condition="Skin.HasSetting(Multiart_Slideshow) + [Window.Is(videos) | Window.Is(music)]" content="Multiart_Setter" />
+			<include content="Set_Multiart_OnFocus_Conditions" condition="Skin.HasSetting(Multiart_Slideshow) + [Window.Is(videos) | Window.Is(music)]" />
 		</control>
 		<control type="group" id="5005">
 			<visible>Control.HasFocus(4014)</visible>
@@ -240,15 +234,12 @@
 		<param name="top" default="230" />
 		<definition>
 			<include content="Scrollbars" />
-			<control type="group">
-				<visible>String.IsEqual(Window(home).Property(OptionsMenu),Active) | [Window.Is(pictures) + Control.HasFocus(9)]</visible>
+			<include content="Transparent_Dialog_Background">
+				<param name="visible" value="String.IsEqual(Window(home).Property(OptionsMenu),Active)" />
 				<include content="Options_Menu_Fade_Animation" />
-				<control type="image">
-					<texture colordiffuse="$VAR[Transparent_Dialog_Mask]">views/white_100.png</texture>
-				</control>
-			</control>
+			</include>
 			<control type="group">
-				<visible>String.IsEqual(Window(home).Property(OptionsMenu),Active) | [Window.Is(pictures) + Control.HasFocus(9)]</visible>
+				<visible>String.IsEqual(Window(home).Property(OptionsMenu),Active)</visible>
 				<include content="VisibleHidden_Fade_Delayed_Animation" />
 				<control type="fixedlist" id="3000">
 					<viewtype label="535">list</viewtype>
@@ -271,6 +262,8 @@
 					<onright condition="!String.IsEmpty(Container(3000).ListItem.Property(ActionRight))">$INFO[Container(3000).ListItem.Property(ActionRight)]</onright>
 					<onleft condition="!String.IsEmpty(Container(3000).ListItem.Property(ActionLeft2))">$INFO[Container(3000).ListItem.Property(ActionLeft2)]</onleft>
 					<onright condition="!String.IsEmpty(Container(3000).ListItem.Property(ActionRight2))">$INFO[Container(3000).ListItem.Property(ActionRight2)]</onright>
+					<onleft condition="!String.IsEmpty(Container(3000).ListItem.Property(ActionLeft3))">$INFO[Container(3000).ListItem.Property(ActionLeft3)]</onleft>
+					<onright condition="!String.IsEmpty(Container(3000).ListItem.Property(ActionRight3))">$INFO[Container(3000).ListItem.Property(ActionRight3)]</onright>
 					<!-- Reset multiart on viewchange -->
 					<onleft condition="Container(3000).HasFocus(1)">SetFocus(4014)</onleft>
 					<onright condition="Container(3000).HasFocus(1)">SetFocus(4014)</onright>

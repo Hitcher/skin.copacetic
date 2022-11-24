@@ -18,19 +18,19 @@
 	</include>
 
 	<include name="Simple_ListIcon">
-		<param name="visible" default="true"/>
-		<param name="left" default="0"/>
-		<param name="top" default="0"/>
-		<param name="width" default="100%"/>
-		<param name="height" default="100%"/>
-		<param name="texture" default="$INFO[ListItem.Art(thumb)]"/>
-		<param name="fallback" default="flags/blank.png"/>
-		<param name="align" default="center"/>
-		<param name="aspectratio" default="scale"/>
-		<param name="fadetime" default="0"/>
+		<param name="visible" default="true" />
+		<param name="left" default="0" />
+		<param name="top" default="0" />
+		<param name="width" default="100%" />
+		<param name="height" default="100%" />
+		<param name="texture" default="$INFO[ListItem.Art(thumb)]" />
+		<param name="fallback" default="flags/blank.png" />
+		<param name="align" default="center" />
+		<param name="aspectratio" default="scale" />
+		<param name="fadetime" default="0" />
 		<definition>
 			<control type="image">
-				<nested/>
+				<nested />
 				<visible>$PARAM[visible]</visible>
 				<left>$PARAM[left]</left>
 				<top>$PARAM[top]</top>
@@ -44,60 +44,73 @@
 	</include>
 
 	<!-- Artwork -->
-	<include name="Icon_Art_Unfocused">
-		<param name="art_diffuse" default="false"/>
-		<param name="art_diffuse_fadein" default="false"/>
-		<param name="art_diffuse_fadeout_1" default="false"/>
-		<param name="art_diffuse_fadeout_2" default="false"/>
-		<param name="watched_diffuse" default="false"/>
-		<param name="now_playing" default="false"/>
+	<include name="Icon_Art">
+		<param name="visible" default="true" />
+		<param name="aspectratio" default="scale" />
+		<param name="fadetime" default="0" />
+		<param name="art_diffuse" default="false" />
+		<param name="art_diffuse_fadein" default="false" />
+		<param name="art_diffuse_fadeout_1" default="false" />
+		<param name="art_diffuse_fadeout_2" default="false" />
+		<param name="now_playing" default="false" />
 		<definition>
 			<control type="image">
+				<visible>$PARAM[visible]</visible>
 				<animation effect="fadediffuse" end="ff808080" time="0" condition="$PARAM[art_diffuse]">Conditional</animation>
-				<animation effect="fadediffuse" end="ff808080" time="360" tween="sine" easing="inout"  condition="$PARAM[art_diffuse_fadein]" reversible="false">Conditional</animation>
+				<animation effect="fadediffuse" end="ff808080" time="360" tween="sine" easing="inout" condition="$PARAM[art_diffuse_fadein]" reversible="false">Conditional</animation>
 				<animation effect="fadediffuse" end="ff808080" time="0" condition="$PARAM[art_diffuse_fadeout_1]" reversible="false">Conditional</animation>
-				<animation effect="fadediffuse" start="ff808080" end="ffffffff" time="360" tween="sine" easing="inout"  condition="$PARAM[art_diffuse_fadeout_2]" reversible="false">Conditional</animation>
-				<animation effect="fadediffuse" end="a9ffffff" time="0" condition="$PARAM[watched_diffuse] + Skin.String(Theme,Light)">Conditional</animation>
-				<animation effect="fadediffuse" end="80ffffff" time="0" condition="$PARAM[watched_diffuse] + !Skin.String(Theme,Light)">Conditional</animation>
+				<animation effect="fadediffuse" start="ff808080" end="ffffffff" time="360" tween="sine" easing="inout" condition="$PARAM[art_diffuse_fadeout_2]" reversible="false">Conditional</animation>
 				<animation effect="fadediffuse" end="ff555555" time="0" condition="$PARAM[now_playing]">Conditional</animation>
+				<nested />
 				<texture fallback="$PARAM[fallback]" background="true">$PARAM[texture]</texture>
 				<aspectratio align="center" aligny="center">$PARAM[aspectratio]</aspectratio>
-				<fadetime>0</fadetime>
+				<fadetime>$PARAM[fadetime]</fadetime>
 			</control>
+		</definition>
+	</include>
+
+	<include name="Icon_Art_Unfocused">
+		<param name="watched_diffuse" default="false" />
+		<definition>
+			<include content="Icon_Art">
+				<param name="texture" value="$PARAM[texture]" />
+				<param name="aspectratio" value="$PARAM[aspectratio]" />
+				<param name="fallback" value="$PARAM[fallback]" />
+				<param name="art_diffuse" value="$PARAM[art_diffuse]" />
+				<param name="art_diffuse_fadein" value="$PARAM[art_diffuse_fadein]" />
+				<param name="art_diffuse_fadeout_1" value="$PARAM[art_diffuse_fadeout_1]" />
+				<param name="art_diffuse_fadeout_2" value="$PARAM[art_diffuse_fadeout_2]" />
+				<param name="now_playing" value="$PARAM[now_playing]" />
+				<animation effect="fadediffuse" end="a9ffffff" time="0" condition="$PARAM[watched_diffuse] + Skin.String(Theme,Light)">Conditional</animation>
+				<animation effect="fadediffuse" end="80ffffff" time="0" condition="$PARAM[watched_diffuse] + !Skin.String(Theme,Light)">Conditional</animation>
+			</include>
 		</definition>
 	</include>
 
 	<include name="Icon_Art_Focused">
-		<param name="art_diffuse" default="false"/>
-		<param name="now_playing" default="false"/>
-		<param name="art_diffuse_fadein" default="false"/>
-		<param name="art_diffuse_fadeout_1" default="false"/>
-		<param name="art_diffuse_fadeout_2" default="false"/>
-		<definition>
-			<control type="image">
-				<include content="Secondary_List_Scroll_Animation"/>
-				<animation effect="fadediffuse" end="ff808080" time="0" condition="$PARAM[art_diffuse]">Conditional</animation>
-				<animation effect="fadediffuse" end="ff808080" time="360" tween="sine" easing="inout"  condition="$PARAM[art_diffuse_fadein]" reversible="false">Conditional</animation>
-				<animation effect="fadediffuse" end="ff808080" time="0" condition="$PARAM[art_diffuse_fadeout_1]" reversible="false">Conditional</animation>
-				<animation effect="fadediffuse" start="ff808080" end="ffffffff" time="360" tween="sine" easing="inout"  condition="$PARAM[art_diffuse_fadeout_2]" reversible="false">Conditional</animation>
-				<animation effect="fadediffuse" end="ff555555" time="0" condition="$PARAM[now_playing]">Conditional</animation>
-				<animation effect="fadediffuse" end="80000000" time="90" delay="3000" condition="Skin.HasSetting(Multiart_Slideshow) + ![$EXP[GridView_IsVisible] + $EXP[Scrollbar_HasFocus]] + !$EXP[Infoscreen_Widget_HasFocus] + !String.IsEqual(Control.GetLabel(6400),flags/blank.png) + !$EXP[ContentSwitching] + !String.IsEmpty(Window(home).Property(Multiart_1)) + ![$EXP[GridView_IsVisible] + $EXP[TransparentDialog_IsVisible]]" reversible="false">Conditional</animation>
-				<texture fallback="$PARAM[fallback]" background="true">$PARAM[texture]</texture>
-				<aspectratio align="center" aligny="center">$PARAM[aspectratio]</aspectratio>
-				<fadetime>0</fadetime>
-			</control>
-		</definition>
+		<include content="Icon_Art">
+			<param name="texture" value="$PARAM[texture]" />
+			<param name="aspectratio" value="$PARAM[aspectratio]" />
+			<param name="fallback" value="$PARAM[fallback]" />
+			<param name="art_diffuse" value="$PARAM[art_diffuse]" />
+			<param name="art_diffuse_fadein" value="$PARAM[art_diffuse_fadein]" />
+			<param name="art_diffuse_fadeout_1" value="$PARAM[art_diffuse_fadeout_1]" />
+			<param name="art_diffuse_fadeout_2" value="$PARAM[art_diffuse_fadeout_2]" />
+			<param name="now_playing" value="$PARAM[now_playing]" />
+			<include content="Secondary_List_Scroll_Animation" />
+			<animation effect="fadediffuse" end="80000000" time="90" delay="3500" condition="Skin.HasSetting(Multiart_Slideshow) + !String.IsEqual(Control.GetLabel(6400),flags/blank.png) + [!String.IsEmpty(Window(home).Property(Multiart_Fadeout)) | Control.HasFocus(3100)] + !$EXP[ContentSwitching] + !$EXP[MultiartContainerSwitching] + ![$EXP[GridView_IsVisible] + $EXP[Scrollbar_HasFocus]]" reversible="false">Conditional</animation>
+		</include>
 	</include>
 
 	<!-- Components-->
 	<include name="Icon_Component_Border">
-		<param name="visible" default="false"/>
-		<param name="protrusion" default="0"/>
+		<param name="visible" default="false" />
+		<param name="protrusion" default="0" />
 		<definition>
 			<control type="image">
 				<visible>$PARAM[visible]</visible>
 				<visible>!$EXP[TransparentDialog_IsVisible]</visible>
-				<include content="Visible_Fade_Animation"/>
+				<include content="Visible_Fade_Animation" />
 				<left>-$PARAM[protrusion]</left>
 				<top>-$PARAM[protrusion]</top>
 				<right>-$PARAM[protrusion]</right>
@@ -109,7 +122,7 @@
 	</include>
 
 	<include name="Icon_Component_Breadcrumb_Overlay">
-		<param name="visible" default="true"/>
+		<param name="visible" default="true" />
 		<definition>
 			<control type="image">
 				<visible>$PARAM[visible]</visible>
@@ -123,60 +136,48 @@
 	</include>
 
 	<include name="Icon_Component_Multiart_Static">
-		<param name="visible" default="!String.IsEqual(Control.GetLabel(6400),flags/blank.png) + !$EXP[ContentSwitching]"/>
-		<param name="art_diffuse" default="false"/>
-		<param name="now_playing" default="false"/>
-		<param name="aspectratio" default="scale"/>
-		<param name="fadetime" default="1000"/>
+		<param name="visible" default="!String.IsEqual(Control.GetLabel(6400),flags/blank.png) + [!String.IsEmpty(Window(home).Property(Multiart_Fadeout)) | Control.HasFocus(3100)] + !$EXP[ContentSwitching]" />
+		<param name="fadetime" default="1000" />
 		<definition>
-			<control type="image">
-				<visible>$PARAM[visible]</visible>
-				<visible>!$EXP[MultiartContainerSwitching] + ![$EXP[GridView_IsVisible] + $EXP[Scrollbar_HasFocus]]</visible>
-				<include content="Multiart_Fade_Animation"/>
-				<include content="Secondary_List_Scroll_Animation"/>
-				<animation effect="fadediffuse" end="ff808080" time="0" condition="$PARAM[art_diffuse]">Conditional</animation>
-				<animation effect="fadediffuse" end="ff555555" time="0" condition="$PARAM[now_playing]">Conditional</animation>
-				<texture fallback="$PARAM[fallback]" background="true">$PARAM[texture]</texture>
-				<aspectratio align="center" aligny="center">$PARAM[aspectratio]</aspectratio>
-				<fadetime>$PARAM[fadetime]</fadetime>
-			</control>
+			<include content="Icon_Art">
+				<param name="visible" value="$PARAM[visible] + !$EXP[MultiartContainerSwitching] + ![$EXP[GridView_IsVisible] + $EXP[Scrollbar_HasFocus]]" />
+				<param name="texture" value="$PARAM[texture]" />
+				<param name="aspectratio" value="$PARAM[aspectratio]" />
+				<param name="fadetime" value="$PARAM[fadetime]" />
+				<param name="art_diffuse" value="$PARAM[art_diffuse]" />
+				<param name="now_playing" value="$PARAM[now_playing]" />
+				<include content="Multiart_Fade_Animation" />
+				<include content="Secondary_List_Scroll_Animation" />
+			</include>
 		</definition>
 	</include>
 
 	<include name="Icon_Component_Multiart_Animated">
-		<param name="visible" default="false"/>
-		<param name="art_diffuse" default="false"/>
-		<param name="art_diffuse_fadein" default="false"/>
-		<param name="art_diffuse_fadeout_1" default="false"/>
-		<param name="art_diffuse_fadeout_2" default="false"/>
-		<param name="now_playing" default="false"/>
-		<param name="aspectratio" default="scale"/>
-		<param name="fadetime" default="0"/>
-		<param name="animationeffect" default="fade"/>
-		<param name="animationend" default="100"/>
-		<param name="animationdelay" default="0"/>
-		<param name="animationcondition" default="false"/>
-		<param name="animationtype" default="Conditional"/>
+		<param name="visible" default="false" />
+		<param name="fadetime" default="0" />
+		<param name="animationeffect" default="fade" />
+		<param name="animationend" default="100" />
+		<param name="animationdelay" default="0" />
+		<param name="animationcondition" default="false" />
+		<param name="animationtype" default="Conditional" />
 		<definition>
-			<control type="image">
-				<visible>$PARAM[visible]</visible>
-				<visible>!$EXP[MultiartContainerSwitching] + !$EXP[Scrollbar_HasFocus]</visible>
-				<animation effect="fadediffuse" end="ff808080" time="0" condition="$PARAM[art_diffuse]">Conditional</animation>
-				<animation effect="fadediffuse" end="ff808080" time="360" tween="sine" easing="inout"  condition="$PARAM[art_diffuse_fadein]" reversible="false">Conditional</animation>
-				<animation effect="fadediffuse" end="ff808080" time="0" condition="$PARAM[art_diffuse_fadeout_1]" reversible="false">Conditional</animation>
-				<animation effect="fadediffuse" start="ff808080" end="ffffffff" time="360" tween="sine" easing="inout"  condition="$PARAM[art_diffuse_fadeout_2]" reversible="false">Conditional</animation>
-				<animation effect="fadediffuse" end="ff555555" time="0" condition="$PARAM[now_playing]">Conditional</animation>
+			<include content="Icon_Art">
+				<param name="visible" value="$PARAM[visible] + !$EXP[MultiartContainerSwitching] + ![$EXP[GridView_IsVisible] + $EXP[Scrollbar_HasFocus]]" />
+				<param name="texture" value="$PARAM[texture]" />
+				<param name="aspectratio" value="$PARAM[aspectratio]" />
+				<param name="fadetime" value="$PARAM[fadetime]" />
+				<param name="art_diffuse" value="$PARAM[art_diffuse]" />
+				<param name="art_diffuse_fadein" value="$PARAM[art_diffuse_fadein]" />
+				<param name="art_diffuse_fadeout_1" value="$PARAM[art_diffuse_fadeout_1]" />
+				<param name="art_diffuse_fadeout_2" value="$PARAM[art_diffuse_fadeout_2]" />
+				<param name="now_playing" value="$PARAM[now_playing]" />
 				<animation effect="$PARAM[animationeffect]" end="$PARAM[animationend]" time="360" delay="$PARAM[animationdelay]" tween="sine" easing="inout" reversible="false" condition="$PARAM[animationcondition]">$PARAM[animationtype]</animation>
-				<texture fallback="$PARAM[fallback]" background="true">$PARAM[texture]</texture>
-				<aspectratio align="center" aligny="center">$PARAM[aspectratio]</aspectratio>
-				<fadetime>$PARAM[fadetime]</fadetime>
-			</control>
+			</include>
 		</definition>
 	</include>
 
-
 	<include name="Icon_Component_Progress_Overlay">
-		<param name="visible" default="true"/>
+		<param name="visible" default="true" />
 		<definition>
 			<control type="image">
 				<visible>$PARAM[visible]</visible>
@@ -215,18 +216,14 @@
 	</include>
 
 	<include name="ListIcon_Static_Unfocused">
-		<param name="visible" default="true"/>
-		<param name="position" default="0"/>
-		<param name="left" default="0"/>
-		<param name="top" default="0"/>
-		<param name="width" default="100%"/>
-		<param name="height" default="100%"/>
-		<param name="art_icon" default="Thumbnail"/>
-		<param name="art_diffuse" default="false"/>
-		<param name="watched_diffuse" default="false"/>
-		<param name="now_playing" default="false"/>
+		<param name="visible" default="true" />
+		<param name="position" default="0" />
+		<param name="left" default="0" />
+		<param name="top" default="0" />
+		<param name="width" default="100%" />
+		<param name="height" default="100%" />
+		<param name="art_icon" default="Thumbnail" />
 		<param name="now_playing_size" default="Large" />
-		<param name="aspectratio" default="scale"/>
 		<definition>
 			<control type="group">
 				<visible>$PARAM[visible]</visible>
@@ -236,39 +233,33 @@
 				<width>$PARAM[width]</width>
 				<height>$PARAM[height]</height>
 				<include content="Icon_Art_Unfocused">
-					<param name="texture" value="$VAR[$PARAM[art_icon]($PARAM[position])Content]"/>
-					<param name="art_diffuse" value="$PARAM[art_diffuse]"/>
-					<param name="watched_diffuse" value="$PARAM[watched_diffuse]"/>
-					<param name="now_playing" value="$PARAM[now_playing]"/>
-					<param name="aspectratio" value="$PARAM[aspectratio]"/>
-					<param name="fallback" value="$PARAM[fallback]"/>
+					<param name="texture" value="$VAR[$PARAM[art_icon]($PARAM[position])Content]" />
+					<param name="aspectratio" value="$PARAM[aspectratio]" />
+					<param name="fallback" value="$PARAM[fallback]" />
+					<param name="art_diffuse" value="$PARAM[art_diffuse]" />
+					<param name="watched_diffuse" value="$PARAM[watched_diffuse]" />
+					<param name="now_playing" value="$PARAM[now_playing]" />
 				</include>
-				<nested/>
+				<nested />
 				<!-- Now Playing icon -->
-				<include condition="!Window.Is(loginscreen) + !Window.Is(addoninformation) + !Window.Is(videobookmarks)" content="Now_Playing_Icon">
-					<param name="visible" value="$PARAM[now_playing]"/>
+				<include content="Now_Playing_Icon" condition="!Window.Is(loginscreen) + !Window.Is(addoninformation) + !Window.Is(videobookmarks)">
+					<param name="visible" value="$PARAM[now_playing]" />
 					<param name="size" value="$PARAM[now_playing_size]" />
-					<param name="color" value="$VAR[Light_Color]"/>
+					<param name="color" value="$VAR[Light_Color]" />
 				</include>
 			</control>
 		</definition>
 	</include>
 
 	<include name="ListIcon_Static_Focused">
-		<param name="visible" default="true"/>
-		<param name="position" default="0"/>
-		<param name="left" default="0"/>
-		<param name="top" default="0"/>
-		<param name="width" default="100%"/>
-		<param name="height" default="100%"/>
-		<param name="art_icon" default="Thumbnail"/>
-		<param name="art_diffuse" default="false"/>
-		<param name="art_diffuse_fadein" default="false"/>
-		<param name="art_diffuse_fadeout_1" default="false"/>
-		<param name="art_diffuse_fadeout_2" default="false"/>
-		<param name="now_playing" default="false"/>
+		<param name="visible" default="true" />
+		<param name="position" default="0" />
+		<param name="left" default="0" />
+		<param name="top" default="0" />
+		<param name="width" default="100%" />
+		<param name="height" default="100%" />
+		<param name="art_icon" default="Thumbnail" />
 		<param name="now_playing_size" default="Large" />
-		<param name="aspectratio" default="scale"/>
 		<definition>
 			<control type="group">
 				<visible>$PARAM[visible]</visible>
@@ -279,24 +270,23 @@
 				<height>$PARAM[height]</height>
 				<!-- Artwork -->
 				<include content="Icon_Art_Focused">
-					<param name="texture" value="$VAR[$PARAM[art_icon]($PARAM[position])Content]"/>
-					<param name="art_diffuse" value="$PARAM[art_diffuse]"/>
-					<param name="art_diffuse_fadein" value="$PARAM[art_diffuse_fadein]"/>
-					<param name="art_diffuse_fadeout_1" value="$PARAM[art_diffuse_fadeout_1]"/>
-					<param name="art_diffuse_fadeout_2" value="$PARAM[art_diffuse_fadeout_2]"/>
-					<param name="now_playing" value="$PARAM[now_playing]"/>
-					<param name="aspectratio" value="$PARAM[aspectratio]"/>
-					<param name="fallback" value="$PARAM[fallback]"/>
-					<param name="fadetime" value="0"/>
+					<param name="texture" value="$VAR[$PARAM[art_icon]($PARAM[position])Content]" />
+					<param name="aspectratio" value="$PARAM[aspectratio]" />
+					<param name="fallback" value="$PARAM[fallback]" />
+					<param name="art_diffuse" value="$PARAM[art_diffuse]" />
+					<param name="art_diffuse_fadein" value="$PARAM[art_diffuse_fadein]" />
+					<param name="art_diffuse_fadeout_1" value="$PARAM[art_diffuse_fadeout_1]" />
+					<param name="art_diffuse_fadeout_2" value="$PARAM[art_diffuse_fadeout_2]" />
+					<param name="now_playing" value="$PARAM[now_playing]" />
 				</include>
-				<nested/>
+				<nested />
 				<!-- Now Playing icon -->
 				<control type="group">
-					<include content="Secondary_List_Scroll_Animation"/>
-					<include condition="!Window.Is(loginscreen) + !Window.Is(addoninformation) + !Window.Is(videobookmarks)" content="Now_Playing_Icon">
-						<param name="visible" value="$PARAM[now_playing]"/>
+					<include content="Secondary_List_Scroll_Animation" />
+					<include content="Now_Playing_Icon" condition="!Window.Is(loginscreen) + !Window.Is(addoninformation) + !Window.Is(videobookmarks)">
+						<param name="visible" value="$PARAM[now_playing]" />
 						<param name="size" value="$PARAM[now_playing_size]" />
-						<param name="color" value="$VAR[Light_Color]"/>
+						<param name="color" value="$VAR[Light_Color]" />
 					</include>
 				</control>
 			</control>
@@ -304,25 +294,18 @@
 	</include>
 
 	<include name="ListIcon_Animated">
-		<param name="visible" default="true"/>
-		<param name="art_icon" default="Thumbnail"/>
-		<param name="art_diffuse" default="false"/>
-		<param name="art_diffuse_fadein" default="false"/>
-		<param name="art_diffuse_fadeout_1" default="false"/>
-		<param name="art_diffuse_fadeout_2" default="false"/>
-		<param name="now_playing" default="false"/>
-		<param name="position" default="0"/>
-		<param name="left" default="0"/>
-		<param name="top" default="0"/>
-		<param name="width" default="100%"/>
-		<param name="height" default="100%"/>
-		<param name="now_playing" default="false" />
+		<param name="visible" default="true" />
+		<param name="position" default="0" />
+		<param name="left" default="0" />
+		<param name="top" default="0" />
+		<param name="width" default="100%" />
+		<param name="height" default="100%" />
+		<param name="art_icon" default="Thumbnail" />
 		<param name="now_playing_size" default="Large" />
-		<param name="aspectratio" default="scale"/>
-		<param name="animationeffect" default="fade"/>
-		<param name="animationend" default="100"/>
-		<param name="animationcondition" default="false"/>
-		<param name="animationtype" default="Conditional"/>
+		<param name="animationeffect" default="fade" />
+		<param name="animationend" default="100" />
+		<param name="animationcondition" default="false" />
+		<param name="animationtype" default="Conditional" />
 		<definition>
 			<control type="group">
 				<visible>$PARAM[visible]</visible>
@@ -333,59 +316,59 @@
 				<width>$PARAM[width]</width>
 				<height>$PARAM[height]</height>
 				<include content="Icon_Art_Unfocused">
-					<param name="texture" value="$VAR[$PARAM[art_icon]($PARAM[position])Content]"/>
-					<param name="art_diffuse" value="$PARAM[art_diffuse]"/>
-					<param name="art_diffuse_fadein" value="$PARAM[art_diffuse_fadein]"/>
-					<param name="art_diffuse_fadeout_1" value="$PARAM[art_diffuse_fadeout_1]"/>
-					<param name="art_diffuse_fadeout_2" value="$PARAM[art_diffuse_fadeout_2]"/>
-					<param name="now_playing" value="$PARAM[now_playing]"/>
-					<param name="aspectratio" value="$PARAM[aspectratio]"/>
-					<param nam="fadetime" value="$PARAM[fadetime]"/>
-					<param name="fallback" value="$PARAM[fallback]"/>
+					<param name="texture" value="$VAR[$PARAM[art_icon]($PARAM[position])Content]" />
+					<param name="aspectratio" value="$PARAM[aspectratio]" />
+					<param nam="fadetime" value="$PARAM[fadetime]" />
+					<param name="fallback" value="$PARAM[fallback]" />
+					<param name="art_diffuse" value="$PARAM[art_diffuse]" />
+					<param name="art_diffuse_fadein" value="$PARAM[art_diffuse_fadein]" />
+					<param name="art_diffuse_fadeout_1" value="$PARAM[art_diffuse_fadeout_1]" />
+					<param name="art_diffuse_fadeout_2" value="$PARAM[art_diffuse_fadeout_2]" />
+					<param name="now_playing" value="$PARAM[now_playing]" />
 				</include>
-				<nested/>
-				<include condition="!Window.Is(loginscreen) + !Window.Is(addoninformation) + !Window.Is(videobookmarks)" content="Now_Playing_Icon">
-					<param name="visible" value="$PARAM[now_playing]"/>
-					<param name="size" value="$PARAM[now_playing_size]"/>
-					<param name="color" value="$VAR[Light_Color]"/>
+				<nested />
+				<include content="Now_Playing_Icon" condition="!Window.Is(loginscreen) + !Window.Is(addoninformation) + !Window.Is(videobookmarks)">
+					<param name="visible" value="$PARAM[now_playing]" />
+					<param name="size" value="$PARAM[now_playing_size]" />
+					<param name="color" value="$VAR[Light_Color]" />
 				</include>
 			</control>
 		</definition>
 	</include>
 
 	<include name="DropShadow">
-		<param name="visible" default="true"/>
-		<param name="left" default="0"/>
-		<param name="top" default="0"/>
-		<param name="width" default="120"/>
-		<param name="height" default="120"/>
-		<param name="flipx" default="false"/>
-		<param name="flipy" default="false"/>
-		<param name="texture" default="views/dropshadow_left_120.png"/>
-		<param name="colordiffuse" default="$VAR[Dropshadow_Diffuse]"/>
-		<param name="animationtype" default="Visible"/>
-		<param name="animationcondition" default="false"/>
-		<param name="animationeffect" default="fade"/>
-		<param name="animationend" default=""/>
-		<param name="animationtime" default="360"/>
-		<param name="animation2effect" default=""/>
-		<param name="animation2start" default=""/>
-		<param name="animation2end" default=""/>
-		<param name="animation2time" default=""/>
-		<param name="animation2delay" default=""/>
-		<param name="animation2center" default=""/>
-		<param name="animation3effect" default=""/>
-		<param name="animation3start" default=""/>
-		<param name="animation3end" default=""/>
-		<param name="animation3time" default=""/>
-		<param name="animation3delay" default=""/>
+		<param name="visible" default="true" />
+		<param name="left" default="0" />
+		<param name="top" default="0" />
+		<param name="width" default="120" />
+		<param name="height" default="120" />
+		<param name="flipx" default="false" />
+		<param name="flipy" default="false" />
+		<param name="texture" default="views/dropshadow_left_120.png" />
+		<param name="colordiffuse" default="$VAR[Dropshadow_Diffuse]" />
+		<param name="animationtype" default="Visible" />
+		<param name="animationcondition" default="false" />
+		<param name="animationeffect" default="fade" />
+		<param name="animationend" default="" />
+		<param name="animationtime" default="360" />
+		<param name="animation2effect" default="" />
+		<param name="animation2start" default="" />
+		<param name="animation2end" default="" />
+		<param name="animation2time" default="" />
+		<param name="animation2delay" default="" />
+		<param name="animation2center" default="" />
+		<param name="animation3effect" default="" />
+		<param name="animation3start" default="" />
+		<param name="animation3end" default="" />
+		<param name="animation3time" default="" />
+		<param name="animation3delay" default="" />
 		<definition>
 			<control type="image">
 				<visible>$PARAM[visible]</visible>
 				<animation type="$PARAM[animationtype]" condition="$PARAM[animationcondition]" reversible="false">
-					<effect type="$PARAM[animationeffect]" end="$PARAM[animationend]" time="$PARAM[animationtime]" tween="sine" easing="inout"/>
-					<effect type="$PARAM[animation2effect]" start="$PARAM[animation2start]" end="$PARAM[animation2end]" center="$PARAM[animation2center]" time="$PARAM[animation2time]" delay="$PARAM[animation2delay]" tween="sine" easing="inout"/>
-					<effect type="$PARAM[animation3effect]" start="$PARAM[animation3start]" end="$PARAM[animation3end]" time="$PARAM[animation3time]" delay="$PARAM[animation3delay]" tween="sine" easing="inout"/>
+					<effect type="$PARAM[animationeffect]" end="$PARAM[animationend]" time="$PARAM[animationtime]" tween="sine" easing="inout" />
+					<effect type="$PARAM[animation2effect]" start="$PARAM[animation2start]" end="$PARAM[animation2end]" center="$PARAM[animation2center]" time="$PARAM[animation2time]" delay="$PARAM[animation2delay]" tween="sine" easing="inout" />
+					<effect type="$PARAM[animation3effect]" start="$PARAM[animation3start]" end="$PARAM[animation3end]" time="$PARAM[animation3time]" delay="$PARAM[animation3delay]" tween="sine" easing="inout" />
 				</animation>
 				<left>$PARAM[left]</left>
 				<right>$PARAM[right]</right>
