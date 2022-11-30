@@ -12,9 +12,9 @@
 				<align>center</align>
 				<itemgap>0</itemgap>
 				<usecontrolcoords>true</usecontrolcoords>
-				<include condition="Window.Is(addoninformation)" content="addoninformation_Menu_Content" />
-				<include condition="Window.Is(movieinformation)" content="movieinformation_Menu_Content" />
-				<include condition="Window.Is(musicinformation) | Window.Is(songinformation)" content="musicinformation_Menu_Content" />
+				<include content="addoninformation_Menu_Content" condition="Window.Is(addoninformation)" />
+				<include content="movieinformation_Menu_Content" condition="Window.Is(movieinformation)" />
+				<include content="musicinformation_Menu_Content" condition="Window.Is(musicinformation) | Window.Is(songinformation)" />
 			</control>
 		</definition>
 	</include>
@@ -124,8 +124,8 @@
 				<include content="Infoscreen_Stars_Layout" condition="!Window.Is(addoninformation) + !String.IsEqual(ListItem.DBType,set) + !String.IsEqual(ListItem.DBType,artist)">
 					<param name="align" value="$PARAM[align]" />
 				</include>
-				<include condition="Window.Is(movieinformation)" content="Infoscreen_Flags_Layout" />
-				<include condition="Window.Is(addoninformation)" content="Infoscreen_Description_Layout" />
+				<include content="Infoscreen_Flags_Layout" condition="Window.Is(movieinformation)" />
+				<include content="Infoscreen_Description_Layout" condition="Window.Is(addoninformation)" />
 			</control>
 		</definition>
 	</include>
@@ -257,7 +257,7 @@
 					<texture background="true">$PARAM[texture]</texture>
 					<aspectratio>scale</aspectratio>
 				</control>
-				<include condition="$PARAM[dropshadow_condition]" content="DropShadow">
+				<include content="DropShadow" condition="$PARAM[dropshadow_condition]">
 					<param name="height" value="100%" />
 					<param name="flipx" value="true" />
 				</include>
@@ -276,21 +276,21 @@
 			<usecontrolcoords>true</usecontrolcoords>
 			<itemgap>0</itemgap>
 			<!-- Position 1 -->
-			<include condition="!String.IsEmpty(ListItem.Art(fanart))" content="Simple_ListIcon">
+			<include content="Simple_ListIcon" condition="!String.IsEmpty(ListItem.Art(fanart))">
 				<param name="width" value="1056" />
 				<param name="height" value="594" />
 				<param name="texture" value="$INFO[ListItem.Art(fanart)]" />
 				<param name="fallback" value="" />
 			</include>
 			<!-- Position 2 -->
-			<include condition="Window.Is(movieinformation) + !String.IsEmpty(ListItem.Art(poster))" content="Infoscreen_Artwork_Icon">
+			<include content="Infoscreen_Artwork_Icon" condition="Window.Is(movieinformation) + !String.IsEmpty(ListItem.Art(poster))">
 				<param name="width" value="320" />
 				<param name="top" value="57" />
 				<param name="height" value="480" />
 				<param name="texture" value="$INFO[ListItem.Art(poster)]" />
 				<param name="dropshadow_condition" value="!String.IsEmpty(ListItem.Art(fanart))" />
 			</include>
-			<include condition="!Window.Is(movieinformation) + !String.IsEmpty(ListItem.Art(thumb))" content="Infoscreen_Artwork_Icon">
+			<include content="Infoscreen_Artwork_Icon" condition="!Window.Is(movieinformation) + !String.IsEmpty(ListItem.Art(thumb))">
 				<param name="width" value="504" />
 				<param name="top" value="45" />
 				<param name="height" value="504" />
@@ -298,7 +298,7 @@
 				<param name="dropshadow_condition" value="!String.IsEmpty(ListItem.Art(fanart))" />
 			</include>
 			<!-- Position 3 -->
-			<include condition="Window.Is(movieinformation) + !String.IsEmpty(ListItem.Art(keyart))" content="Infoscreen_Artwork_Icon">
+			<include content="Infoscreen_Artwork_Icon" condition="Window.Is(movieinformation) + !String.IsEmpty(ListItem.Art(keyart))">
 				<param name="width" value="260" />
 				<param name="top" value="102" />
 				<param name="height" value="390" />
@@ -306,7 +306,7 @@
 				<param name="dropshadow_condition" value="!String.IsEmpty(ListItem.Art(fanart)) | !String.IsEmpty(ListItem.Art(poster))" />
 			</include>
 			<!-- Position 4 -->
-			<include condition="Window.Is(movieinformation) + !String.IsEmpty(ListItem.Art(square))" content="Infoscreen_Artwork_Icon">
+			<include content="Infoscreen_Artwork_Icon" condition="Window.Is(movieinformation) + !String.IsEmpty(ListItem.Art(square))">
 				<param name="width" value="284" />
 				<param name="top" value="155" />
 				<param name="height" value="284" />
@@ -322,14 +322,14 @@
 			<visible>![Window.IsVisible(selectdialog) | Window.IsVisible(filebrowser)]</visible>
 			<include content="Visible_Fade_Delayed_Animation" />
 			<include content="Transparent_Dialog_Panel" />
-			<include condition="String.IsEqual(ListItem.DBType,episode) | [String.IsEmpty(ListItem.Art(fanart)) + String.IsEmpty(ListItem.Art(poster))]" content="Simple_ListIcon">
+			<include content="Simple_ListIcon" condition="String.IsEqual(ListItem.DBType,episode) | [String.IsEmpty(ListItem.Art(fanart)) + String.IsEmpty(ListItem.Art(poster))]">
 				<param name="left" value="420" />
 				<param name="top" value="235" />
 				<param name="width" value="1080" />
 				<param name="height" value="610" />
 				<param name="fallback" value="" />
 			</include>
-			<include condition="!String.IsEqual(ListItem.DBType,episode) + ![String.IsEmpty(ListItem.Art(fanart)) + String.IsEmpty(ListItem.Art(poster))]" content="Infoscreen_Artwork_Layout" />
+			<include content="Infoscreen_Artwork_Layout" condition="!String.IsEqual(ListItem.DBType,episode) + ![String.IsEmpty(ListItem.Art(fanart)) + String.IsEmpty(ListItem.Art(poster))]" />
 		</control>
 	</include>
 
@@ -355,7 +355,7 @@
 				<itemgap>0</itemgap>
 				<usecontrolcoords>true</usecontrolcoords>
 				<include content="Common_Details_Logo" condition="$PARAM[show_logo]" />
-	  		<include content="Common_Details_Textbox" condition="!$PARAM[show_logo]">
+				<include content="Common_Details_Textbox" condition="!$PARAM[show_logo]">
 					<param name="font" value="Billboard_Title" />
 					<param name="color" value="$PARAM[color]" />
 					<param name="label" value="$VAR[Title_Label]" />
@@ -381,7 +381,7 @@
 				<include content="Infoscreen_Flags_Layout">
 					<top>90</top>
 				</include>
-				</control>
+			</control>
 		</definition>
 	</include>
 
