@@ -1,193 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <window>
 	<!-- playerprocessinfo -->
-	<defaultcontrol always="true">5552</defaultcontrol>
-	<include content="WindowOpenClose_Fade_Animation"/>
+	<defaultcontrol always="true">4000</defaultcontrol>
+	<include content="WindowOpenClose_Fade_Animation" />
 	<controls>
-		<control type="group">
-			<visible>![Window.IsVisible(shutdownmenu) | Window.IsVisible(sliderdialog)]</visible>
-			<include content="Visible_Fade_Delayed_Animation"/>
-
-			<include content="Transparent_Dialog_Panel">
-				<param name="left" value="0"/>
-				<param name="right" value="0"/>
-				<param name="top" value="540"/>
-				<param name="bottom" value="0"/>
+		<include content="Default_Dialog_Panel_Layout">
+			<param name="visible" value="!Window.IsVisible(shutdownmenu) | Window.IsVisible(sliderdialog)" />
+			<param name="panel_edge_top" value="540" />
+			<param name="panel_edge_bottom" value="0" />
+			<param name="panel_edge_left" value="0" />
+			<param name="panel_edge_right" value="0" />
+			<include content="playerprocessinfo_Grouplist">
+				<param name="description" value="Media process info" />
+				<param name="visible" value="Control.HasFocus(4002)" />
+				<include content="playerprocessinfo_Media_List_Content" />
 			</include>
-
-			<!-- Media -->
-			<control type="grouplist">
-				<include>playerprocessinfo_Grouplist</include>
-				<pagecontrol>60</pagecontrol>
-				<visible>Control.HasFocus(5552)</visible>
-				<control type="button">
-					<description>Video codec</description>
-					<include>playerprocessinfo_Button</include>
-					<label>$LOCALIZE[31604]</label>
-					<label2>$INFO[VideoPlayer.VideoCodec]</label2>
-					<visible>Player.HasVideo</visible>
-				</control>
-				<control type="button">
-					<description>Video resolution</description>
-					<include>playerprocessinfo_Button</include>
-					<label>$LOCALIZE[31607]</label>
-					<label2>$INFO[VideoPlayer.VideoResolution]$INFO[Player.Process(VideoScanType)]</label2>
-					<visible>Player.HasVideo</visible>
-				</control>
-				<control type="button">
-					<description>Video aspect ratio</description>
-					<include>playerprocessinfo_Button</include>
-					<label>$LOCALIZE[31608]</label>
-					<label2>$INFO[VideoPlayer.VideoAspect]</label2>
-					<visible>Player.HasVideo</visible>
-				</control>
-				<control type="button">
-					<description>Audio codec</description>
-					<include>playerprocessinfo_Button</include>
-					<label>$LOCALIZE[31609]</label>
-					<label2>$INFO[VideoPlayer.AudioCodec]</label2>
-					<visible>Player.HasVideo</visible>
-				</control>
-				<control type="button">
-					<description>Audio channels</description>
-					<include>playerprocessinfo_Button</include>
-					<label>$LOCALIZE[31605]</label>
-					<label2>$VAR[AudioChannels_Label]</label2>
-					<visible>Player.HasVideo</visible>
-				</control>
-				<control type="button">
-					<description>Audio bitrate</description>
-					<include>playerprocessinfo_Button</include>
-					<label>$LOCALIZE[31606]</label>
-					<label2>$INFO[VideoPlayer.AudioBitRate,, kbps]</label2>
-					<visible>Player.HasVideo</visible>
-				</control>
-			</control>
-
-			<!-- Player -->
-			<control type="grouplist">
-				<include>playerprocessinfo_Grouplist</include>
-				<pagecontrol>60</pagecontrol>
-				<visible>Control.HasFocus(5553)</visible>
-				<control type="button">
-					<description>Video stream</description>
-					<include>playerprocessinfo_Button</include>
-					<label>$LOCALIZE[38031]</label>
-					<label2>$INFO[Player.Process(VideoWidth),,x]$INFO[Player.Process(VideoHeight)]$INFO[Player.Process(VideoScanType)]$INFO[Player.Process(VideoDAR), $LOCALIZE[31116] , AR]$INFO[Player.Process(VideoFPS), $LOCALIZE[31116] , FPS]</label2>
-					<visible>Player.HasVideo</visible>
-				</control>
-				<control type="button">
-					<description>Audio stream</description>
-					<include>playerprocessinfo_Button</include>
-					<label>$LOCALIZE[460]</label>
-					<label2>$VAR[AudioChannels_Label]$INFO[Player.Process(AudioChannels), $LOCALIZE[31116] ]$INFO[Player.Process(AudioDecoder), $LOCALIZE[31116] ]$INFO[Player.Process(AudioBitsPerSample), $LOCALIZE[31116] , bits]$INFO[Player.Process(AudioSampleRate), $LOCALIZE[31116] , Hz]</label2>
-					<visible>Player.HasVideo</visible>
-				</control>
-				<control type="button">
-					<description>usage</description>
-					<include>playerprocessinfo_Button</include>
-					<label>$LOCALIZE[565]</label>
-					<label2>$INFO[System.Memory(used.percent),$LOCALIZE[31600] ]$INFO[System.CpuUsage, $LOCALIZE[31116] $LOCALIZE[31601] ]</label2>
-					<visible>System.SupportsCPUUsage</visible>
-				</control>
-				<control type="button">
-					<description>Video decoder</description>
-					<include>playerprocessinfo_Button</include>
-					<label>$LOCALIZE[31602]</label>
-					<label2>$INFO[Player.Process(videodecoder)]$VAR[Video_Decoder_Type_Label, $LOCALIZE[31116] ]</label2>
-					<visible>Player.HasVideo</visible>
-				</control>
-				<control type="button">
-					<description>Pixel format</description>
-					<include>playerprocessinfo_Button</include>
-					<label>$LOCALIZE[31603]</label>
-					<label2>$INFO[Player.Process(PixFormat)]</label2>
-					<visible>Player.HasVideo</visible>
-				</control>
-				<control type="button">
-					<description>Deinterlace method</description>
-					<include>playerprocessinfo_Button</include>
-					<label>$LOCALIZE[16038]</label>
-					<label2>$INFO[Player.Process(deintmethod)]</label2>
-					<visible>Player.HasVideo</visible>
-				</control>
-			</control>
-
-			<!-- System -->
-			<control type="grouplist">
-				<include>playerprocessinfo_Grouplist</include>
-				<pagecontrol>60</pagecontrol>
-				<visible>Control.HasFocus(5554)</visible>
-				<control type="button">
-					<description>Screen resolution</description>
-					<include>playerprocessinfo_Button</include>
-					<label>$LOCALIZE[31614]</label>
-					<label2>$INFO[System.ScreenResolution]</label2>
-					<visible>Player.HasVideo</visible>
-				</control>
-				<control type="button">
-					<description>System rendering speed</description>
-					<include>playerprocessinfo_Button</include>
-					<label>$LOCALIZE[31615]</label>
-					<label2>$INFO[System.FPS]</label2>
-					<visible>Player.HasVideo</visible>
-				</control>
-				<control type="button">
-					<description>System memory usage</description>
-					<include>playerprocessinfo_Button</include>
-					<label>$LOCALIZE[31616]</label>
-					<label2>$INFO[System.Memory(used.percent)]</label2>
-					<visible>Player.HasVideo</visible>
-				</control>
-				<control type="button">
-					<description>System CPU usage</description>
-					<include>playerprocessinfo_Button</include>
-					<label>$LOCALIZE[31617]</label>
-					<label2>$INFO[System.CpuUsage]</label2>
-					<visible>System.SupportsCPUUsage</visible>
-				</control>
-			</control>
-
-
-
+			<include content="playerprocessinfo_Grouplist">
+				<param name="description" value="Player process info" />
+				<param name="visible" value="Control.HasFocus(4003)" />
+				<include content="playerprocessinfo_Player_List_Content" />
+			</include>
+			<include content="playerprocessinfo_Grouplist">
+				<param name="description" value="System process info" />
+				<param name="visible" value="Control.HasFocus(4004)" />
+				<include content="playerprocessinfo_System_List_Content" />
+			</include>
 			<include content="Button_Group_Template">
-				<param name="id" value="5550"/>
-				<param name="right" value="360"/>
-				<param name="onleft" value="5550"/>
-				<param name="onright" value="5550"/>
-				<param name="onup" value="Close"/>
-				<param name="ondown" value="Close"/>
-				<param name="button1" value="VideoPlayer.Content(livetv)"/>
-				<param name="button1id" value="5551"/>
-				<param name="button1label" value="$LOCALIZE[31613]"/>
-				<param name="button2" value="true"/>
-				<param name="button2id" value="5552"/>
-				<param name="button2label" value="$LOCALIZE[31610]"/>
-				<param name="button3" value="true"/>
-				<param name="button3id" value="5553"/>
-				<param name="button3label" value="$LOCALIZE[31611]"/>
-				<param name="button4" value="true"/>
-				<param name="button4id" value="5554"/>
-				<param name="button4label" value="$LOCALIZE[31612]"/>
+				<param name="right" value="360" />
+				<param name="onleft" value="4000" />
+				<param name="onright" value="4000" />
+				<param name="onup" value="Close" />
+				<param name="ondown" value="Close" />
+				<param name="icons" value="false" />
+				<param name="button1" value="VideoPlayer.Content(livetv)" />
+				<param name="button1_label" value="$LOCALIZE[31613]" />
+				<param name="button2" value="true" />
+				<param name="button2_label" value="$LOCALIZE[31610]" />
+				<param name="button3" value="true" />
+				<param name="button3_label" value="$LOCALIZE[31611]" />
+				<param name="button4" value="true" />
+				<param name="button4_label" value="$LOCALIZE[31612]" />
 			</include>
-
-			<!--
-				$INFO[PVR.ActStreamServiceName]
-				$INFO[PVR.ActStreamProviderName]
-				$INFO[PVR.ActStreamClient]
-				$INFO[PVR.ActStreamDevice]
-				$INFO[PVR.ActStreamStatus]
-				$INFO[PVR.ActStreamEncryptionName]
-
-				$INFO[PVR.ActStreamBer]
-				$INFO[PVR.ActStreamUnc]
-				$INFO[PVR.ActStreamMux]
-				$INFO[PVR.ActStreamSignal
-				<info>PVR.ActStreamProgrSignal</info>
-				$INFO[PVR.ActStreamSNR]
-				<info>PVR.ActStreamProgrSNR</info>
-			-->
-
-		</control>
+		</include>
 	</controls>
 </window>

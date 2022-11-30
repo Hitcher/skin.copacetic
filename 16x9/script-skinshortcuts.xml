@@ -2,194 +2,61 @@
 <window>
 	<!-- script-skinshortcuts -->
 	<defaultcontrol always="true">304</defaultcontrol>
-	<backgroundcolor>$VAR[Secondary_Color]</backgroundcolor>
+	<backgroundcolor>$VAR[Fanart_Slideshow_Global_Background_Color]</backgroundcolor>
 	<include content="WindowOpenClose_Fade_Delayed_Animation" />
 	<controls>
-
-		<!-- Hidden controls -->
-		<control type="group">
-			<visible>false</visible>
-			<control type="label" id="101" />
-			<control type="list" id="111" />
-			<control type="button" id="306" />
-			<control type="button" id="312" />
-		</control>
-
-		<control type="button" id="304">
-			<include content="Hidden_Button_Template" />
-			<onleft>10</onleft>
-			<onright>303</onright>
-			<onup>Control.Move(211,-1)</onup>
-			<ondown>Control.Move(211,1)</ondown>
-		</control>
-		<control type="button" id="303">
-			<include content="Hidden_Button_Template" />
-			<onleft>304</onleft>
-			<onright>301</onright>
-			<onup>Control.Move(211,-1)</onup>
-			<ondown>Control.Move(211,1)</ondown>
-		</control>
-		<control type="button" id="301">
-			<include content="Hidden_Button_Template" />
-			<onleft>303</onleft>
-			<onright>302</onright>
-			<onup>Control.Move(211,-1)</onup>
-			<ondown>Control.Move(211,1)</ondown>
-		</control>
-		<control type="button" id="302">
-			<include content="Hidden_Button_Template" />
-			<onleft>301</onleft>
-			<onright>9001</onright>
-			<onup>Control.Move(211,-1)</onup>
-			<ondown>Control.Move(211,1)</ondown>
-		</control>
-
-		<control type="group">
-			<visible>!$EXP[TransparentDialog_IsVisible] + String.IsEmpty(Window.Property(additionalDialog))</visible>
-			<include content="Visible_Fade_Delayed_Animation" />
-
+		<include content="skinshortcuts_Hidden" />
+		<include condition="Skin.HasSetting(Fanart_Slideshow_Global_Disabled)" content="Light_Theme_Background" />
+		<include condition="!Skin.HasSetting(Fanart_Slideshow_Global_Disabled)" content="Fanart_Slideshow_Global" />
+		<include content="Default_Dialog_Panel_Layout">
+			<param name="visible" value="!$EXP[TransparentDialog_IsVisible] + String.IsEmpty(Window.Property(additionalDialog))" />
 			<include content="Breadcrumb_Label">
 				<param name="title_label_id" value="500" />
 			</include>
-
-			<include content="Transparent_Dialog_Panel" />
-
-			<!-- Left list -->
-			<control type="list" id="211">
-				<left>90</left>
-				<width>870</width>
-				<height>630</height>
-				<centertop>50%</centertop>
-				<itemgap>0</itemgap>
-				<orientation>vertical</orientation>
-				<onright>302</onright>
-				<onleft>10</onleft>
-				<onup>noop</onup>
-				<ondown>noop</ondown>
-				<pagecontrol>60</pagecontrol>
-				<scrolltime tween="sine" easing="inout">360</scrolltime>
-				<itemlayout width="870" height="90">
-					<control type="label">
-						<textoffsetx>60</textoffsetx>
-						<label>$INFO[ListItem.Label]</label>
-					</control>
-				</itemlayout>
-				<focusedlayout width="870" height="90">
-					<control type="label">
-						<textoffsetx>60</textoffsetx>
-						<textcolor>$VAR[Settings_Grouplist_Label_Color]</textcolor>
-						<label>$INFO[ListItem.Label]</label>
-					</control>
-					<control type="image">
-						<left>60</left>
-						<height>1</height>
-						<bottom>0</bottom>
-						<texture colordiffuse="$VAR[Unfocused_Color]">views/white_100.png</texture>
-					</control>
-					<control type="group">
-						<top>-15</top>
-						<height>120</height>
-						<right>60</right>
-						<width>300</width>
-						<include content="Button_Template">
-							<param name="buttonid" value="304" />
-							<param name="left" value="0" />
-							<param name="width" value="120" />
-							<param name="unfocusedcolor" value="$VAR[Unfocused_Color]" />
-							<param name="focusedcolor" value="$VAR[Light_Color]" />
-							<param name="texture" value="Down_Arrow" />
-						</include>
-						<include content="Button_Template">
-							<param name="buttonid" value="303" />
-							<param name="left" value="75" />
-							<param name="width" value="120" />
-							<param name="unfocusedcolor" value="$VAR[Unfocused_Color]" />
-							<param name="focusedcolor" value="$VAR[Light_Color]" />
-							<param name="texture" value="Up_Arrow" />
-						</include>
-						<include content="Button_Template">
-							<param name="buttonid" value="301" />
-							<param name="left" value="150" />
-							<param name="width" value="120" />
-							<param name="rotated" value="false" />
-							<param name="unfocusedcolor" value="$VAR[Unfocused_Color]" />
-							<param name="focusedcolor" value="$VAR[Light_Color]" />
-							<param name="texture" value="Plus" />
-						</include>
-						<include content="Button_Template">
-							<param name="buttonid" value="302" />
-							<param name="left" value="225" />
-							<param name="width" value="120" />
-							<param name="rotated" value="false" />
-							<param name="unfocusedcolor" value="$VAR[Unfocused_Color]" />
-							<param name="focusedcolor" value="$VAR[Light_Color]" />
-							<param name="texture" value="Cross" />
-						</include>
-					</control>
-				</focusedlayout>
-			</control>
-
-			<!-- Sub list scrollbar -->
-			<include content="Dialog_Divider_With_Scrollbar">
-				<param name="scrollbarvisible" value="Control.HasFocus(211) | Control.HasFocus(301) | Control.HasFocus(303) | Control.HasFocus(304) | Control.HasFocus(302)" />
+			<include content="Settings_List_Template">
+				<param name="id" value="211" />
+				<param name="window_name" value="skinshortcuts" />
+				<param name="side" value="left" />
+				<param name="left" value="90" />
+				<param name="width" value="870" />
+				<param name="top" value="225" />
+				<param name="height" value="630" />
+				<param name="onleft" value="10" />
+				<param name="onright" value="302" />
+				<param name="label2_visible" value="false" />
+				<param name="focus_border_margin_left" value="60" />
+				<param name="skinshortcuts" value="true" />
 			</include>
-
-			<!-- Right grouplist -->
-			<control type="grouplist" id="9001">
-				<right>90</right>
-				<width>870</width>
-				<height>630</height>
-				<centertop>50%</centertop>
-				<itemgap>0</itemgap>
-				<onleft>302</onleft>
-				<onright>308</onright>
-				<onup>9001</onup>
-				<ondown>9001</ondown>
-				<itemgap>0</itemgap>
-				<align>top</align>
-				<!-- Change shortcut -->
-				<control type="button" id="401">
-					<label>$ADDON[script.skinshortcuts 32048]</label>
-				</control>
-				<!-- Change label -->
-				<control type="button" id="305">
-					<label>$ADDON[script.skinshortcuts 32025]</label>
-					<label2>$INFO[Container(211).ListItem.Label]</label2>
-				</control>
-				<!-- Change action -->
-				<control type="button" id="307">
-					<label>$ADDON[script.skinshortcuts 32027]</label>
-					<label2>$INFO[Container(211).ListItem.Property(displaypath)]</label2>
-				</control>
-				<!-- Change background path -->
-				<control type="button" id="310">
-					<label>$ADDON[script.skinshortcuts 32045]</label>
-					<label2>$VAR[skinshortcuts_Background_Override_Label2]</label2>
-					<label2></label2>
-				</control>
-			</control>
-
+			<include content="Dialog_Divider_With_Scrollbar">
+				<param name="scrollbarvisible" value="Control.HasFocus(211) | Control.HasFocus(301) | Control.HasFocus(302) | Control.HasFocus(303) | Control.HasFocus(304)" />
+			</include>
+			<include content="Settings_Grouplist_Template">
+				<param name="id" value="9001" />
+				<param name="pagecontrol" value="61" />
+				<param name="left" value="960" />
+				<param name="width" value="870" />
+				<param name="onleft" value="302" />
+				<param name="onright" value="308" />
+				<param name="include_scrollbar" value="false" />
+				<include content="skinshortcuts_Right_List_Content"/>
+			</include>
 			<include content="Button_Group_Template">
 				<param name="onleft" value="9001" />
-				<param name="onright" value="302" />
+				<param name="onright" value="304" />
 				<param name="onup" value="310" />
 				<param name="ondown" value="401" />
-				<!-- Restore -->
 				<param name="button1" value="true" />
-				<param name="button1id" value="308" />
-				<param name="button1texture" value="Shift" />
-				<!-- Reset -->
+				<param name="button1_id" value="308" />
+				<param name="button1_texture" value="Shift" />
 				<param name="button2" value="true" />
-				<param name="button2id" value="999" />
-				<param name="button2onclick" value="RunScript(script.skinshortcuts,type=resetall)" />
-				<param name="button2texture" value="Refresh" />
-				<!-- Close -->
+				<param name="button2_id" value="999" />
+				<param name="button2_onclick" value="RunScript(script.skinshortcuts,type=resetall)" />
+				<param name="button2_texture" value="Refresh" />
 				<param name="button3" value="true" />
-				<param name="button3id" value="10" />
-				<param name="button3onclick" value="Close" />
-				<param name="button3texture" value="Check" />
+				<param name="button3_id" value="10" />
+				<param name="button3_onclick" value="Close" />
+				<param name="button3_texture" value="Check" />
 			</include>
-
-		</control>
+		</include>
 	</controls>
 </window>

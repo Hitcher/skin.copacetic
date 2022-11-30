@@ -4,14 +4,13 @@
 	<defaultcontrol always="true">4010</defaultcontrol>
 	<include content="WindowOpenClose_Fade_Delayed_Animation"/>
 	<controls>
-		<include content="DialogKeyboard_Hidden_Components"/>
+		<include content="DialogKeyboard_Hidden"/>
 		<include content="Default_Dialog_Panel_Layout">
 			<param name="visible" value="!Window.IsVisible(shutdownmenu) + !Window.IsVisible(numericinput)"/>
 			<param name="panel_edge_top" value="435"/>
 			<include content="Breadcrumb_Label">
 				<param name="title_label_id" value="311"/>
 			</include>
-			<!-- Keyboard -->
 			<control type="grouplist">
 				<top>495</top>
 				<height>450</height>
@@ -20,19 +19,19 @@
 				<itemgap>0</itemgap>
 				<scrolltime tween="sine" easing="inout">360</scrolltime>
 				<include content="Keyboard_Row_Layout">
-					<param name="id" value="2000"/>
+					<param name="id" value="3000"/>
 				</include>
 				<include content="Keyboard_Row_Layout">
-					<param name="id" value="2001"/>
+					<param name="id" value="3001"/>
 				</include>
 				<include content="Keyboard_Row_Layout">
-					<param name="id" value="2002"/>
+					<param name="id" value="3002"/>
 				</include>
 				<include content="Keyboard_Row_Layout">
-					<param name="id" value="2003"/>
+					<param name="id" value="3003"/>
 				</include>
 			</control>
-			<!-- Edit -->
+			<include condition="System.AddonIsEnabled(plugin.program.autocompletion)" content="DialogKeyboard_Autocomplete" />
 			<control type="edit" id="312">
 				<width>1200</width>
 				<centerleft>50%</centerleft>
@@ -42,8 +41,8 @@
 				<focusedcolor>$VAR[Dark_Color]</focusedcolor>
 				<texturenofocus colordiffuse="$VAR[Light_Color]">views/white_100.png</texturenofocus>
 				<texturefocus colordiffuse="$VAR[Light_Color]">views/white_100.png</texturefocus>
-				<onup>9005</onup>
-				<ondown>2000</ondown>
+				<onup>3100</onup>
+				<ondown>3000</ondown>
 				<onright>301</onright>
 			</control>
 			<control type="image">
@@ -54,95 +53,89 @@
 				<height>6</height>
 				<texture colordiffuse="$VAR[Accent_Color]">views/white_100.png</texture>
 			</control>
-			<!-- Autocomplete -->
-			<include condition="System.AddonIsEnabled(plugin.program.autocompletion)" content="DialogKeyboard_Autocomplete"/>
-			<!-- Bottom Controls-->
-			<control type="grouplist">
+			<include content="Button_Grouplist">
+				<param name="bottom" value="30" />
+				<param name="height" value="120" />
+				<param name="align" value="center" />
 				<animation effect="slide" end="-60,0" time="0" reversible="false" condition="Control.IsVisible(310)">Conditional</animation>
-				<left>120</left>
-				<right>120</right>
-				<height>120</height>
-				<bottom>30</bottom>
-				<orientation>horizontal</orientation>
-				<align>center</align>
-				<itemgap>0</itemgap>
 				<include content="Button_Template">
-					<param name="buttonid" value="309"/>
-					<param name="texture" value="Settings"/>
-					<param name="unfocusedcolor" value="$VAR[Common_Overlay_Label_Color]"/>
-					<param name="focusedcolor" value="$VAR[Common_Overlay_Label_Color]"/>
-				</include>
-				<include content="Button_Template_Toggle">
-					<param name="buttonid" value="310"/>
-					<param name="texture" value="Visible"/>
-					<param name="alttexture" value="Hidden"/>
-					<param name="usealttexture" value="String.IsEqual(Control.GetLabel(310),$LOCALIZE[12308])"/>
-					<param name="unfocusedcolor" value="$VAR[Common_Overlay_Label_Color]"/>
-					<param name="focusedcolor" value="$VAR[Common_Overlay_Label_Color]"/>
+					<param name="target_id" value="309" />
+					<param name="texture" value="Settings" />
+					<param name="unfocused_color" value="$VAR[Common_Overlay_Label_Color]" />
+					<param name="focused_color" value="$VAR[Common_Overlay_Label_Color]" />
 				</include>
 				<include content="Button_Template">
-					<param name="buttonid" value="307"/>
-					<param name="texture" value="IP"/>
-					<param name="unfocusedcolor" value="$VAR[Common_Overlay_Label_Color]"/>
-					<param name="focusedcolor" value="$VAR[Common_Overlay_Label_Color]"/>
+					<param name="toggle_button" value="true" />
+					<param name="target_id" value="310" />
+					<param name="texture" value="Visible" />
+					<param name="alt_texture" value="Hidden" />
+					<param name="use_alt_texture" value="String.IsEqual(Control.GetLabel(310),$LOCALIZE[12308])" />
+					<param name="unfocused_color" value="$VAR[Common_Overlay_Label_Color]" />
+					<param name="focused_color" value="$VAR[Common_Overlay_Label_Color]" />
+				</include>
+				<include content="Button_Template">
+					<param name="target_id" value="307" />
+					<param name="texture" value="IP" />
+					<param name="unfocused_color" value="$VAR[Common_Overlay_Label_Color]" />
+					<param name="focused_color" value="$VAR[Common_Overlay_Label_Color]" />
 				</include>
 				<include content="Button_Template_Special">
-					<param name="buttonid" value="304"/>
-					<param name="texture" value="Symbols"/>
-					<param name="unfocusedcolor" value="$VAR[Common_Overlay_Label_Color]"/>
-					<param name="focusedcolor" value="$VAR[Common_Overlay_Label_Color]"/>
-					<param name="border" value="true"/>
-					<param name="bordercolor" value="$VAR[Common_Overlay_Label_Color]"/>
+					<param name="target_id" value="304" />
+					<param name="texture" value="Symbols" />
+					<param name="unfocused_color" value="$VAR[Common_Overlay_Label_Color]" />
+					<param name="focused_color" value="$VAR[virtualkeyboard_Symbols_Key_Color]" />
+					<param name="border" value="true" />
+					<param name="border_color" value="$VAR[virtualkeyboard_Symbols_Key_Color]" />
 				</include>
 				<include content="Button_Template_Special">
-					<param name="buttonid" value="303"/>
-					<param name="texture" value="Caps"/>
-					<param name="unfocusedcolor" value="$VAR[Common_Overlay_Label_Color]"/>
-					<param name="focusedcolor" value="$VAR[Common_Overlay_Label_Color]"/>
-					<param name="border" value="true"/>
-					<param name="bordercolor" value="$VAR[VirtualKeyboard_Caps_Key_Color]"/>
+					<param name="target_id" value="303" />
+					<param name="texture" value="Caps" />
+					<param name="unfocused_color" value="$VAR[Common_Overlay_Label_Color]" />
+					<param name="focused_color" value="$VAR[virtualkeyboard_Caps_Key_Color]" />
+					<param name="border" value="true" />
+					<param name="border_color" value="$VAR[virtualkeyboard_Caps_Key_Color]" />
 				</include>
 				<include content="Button_Template">
-					<param name="buttonid" value="32"/>
-					<param name="texture" value="Space"/>
-					<param name="unfocusedcolor" value="$VAR[Common_Overlay_Label_Color]"/>
-					<param name="focusedcolor" value="$VAR[Common_Overlay_Label_Color]"/>
+					<param name="target_id" value="32" />
+					<param name="texture" value="Space" />
+					<param name="unfocused_color" value="$VAR[Common_Overlay_Label_Color]" />
+					<param name="focused_color" value="$VAR[Common_Overlay_Label_Color]" />
 				</include>
 				<include content="Button_Template_Special">
-					<param name="buttonid" value="302"/>
-					<param name="texture" value="Shift"/>
-					<param name="unfocusedcolor" value="$VAR[Common_Overlay_Label_Color]"/>
-					<param name="focusedcolor" value="$VAR[Common_Overlay_Label_Color]"/>
-					<param name="border" value="true"/>
-					<param name="bordercolor" value="$VAR[VirtualKeyboard_Shift_Key_Color]"/>
+					<param name="target_id" value="302" />
+					<param name="texture" value="Shift" />
+					<param name="unfocused_color" value="$VAR[Common_Overlay_Label_Color]" />
+					<param name="focused_color" value="$VAR[virtualkeyboard_Shift_Key_Color]" />
+					<param name="border" value="true" />
+					<param name="border_color" value="$VAR[virtualkeyboard_Shift_Key_Color]" />
 				</include>
 				<include content="Button_Template">
-					<param name="buttonid" value="305"/>
-					<param name="texture" value="Left_Arrow"/>
-					<param name="unfocusedcolor" value="$VAR[Common_Overlay_Label_Color]"/>
-					<param name="focusedcolor" value="$VAR[Common_Overlay_Label_Color]"/>
+					<param name="target_id" value="305" />
+					<param name="texture" value="Left_Arrow" />
+					<param name="unfocused_color" value="$VAR[Common_Overlay_Label_Color]" />
+					<param name="focused_color" value="$VAR[Common_Overlay_Label_Color]" />
 				</include>
 				<include content="Button_Template">
-					<param name="buttonid" value="306"/>
-					<param name="texture" value="Right_Arrow"/>
-					<param name="unfocusedcolor" value="$VAR[Common_Overlay_Label_Color]"/>
-					<param name="focusedcolor" value="$VAR[Common_Overlay_Label_Color]"/>
+					<param name="target_id" value="306" />
+					<param name="texture" value="Right_Arrow" />
+					<param name="unfocused_color" value="$VAR[Common_Overlay_Label_Color]" />
+					<param name="focused_color" value="$VAR[Common_Overlay_Label_Color]" />
 				</include>
 				<include content="Button_Template">
-					<param name="buttonid" value="8"/>
-					<param name="texture" value="Backspace"/>
-					<param name="unfocusedcolor" value="$VAR[Common_Overlay_Label_Color]"/>
-					<param name="focusedcolor" value="$VAR[Common_Overlay_Label_Color]"/>
+					<param name="target_id" value="8" />
+					<param name="texture" value="Backspace" />
+					<param name="unfocused_color" value="$VAR[Common_Overlay_Label_Color]" />
+					<param name="focused_color" value="$VAR[Common_Overlay_Label_Color]" />
 				</include>
-			</control>
+			</include>
 			<include content="Button_Group_Template">
-				<param name="onup" value="2003"/>
+				<param name="onup" value="3003"/>
 				<param name="onleft" value="8"/>
 				<param name="onright" value="309"/>
 				<param name="button1" value="true"/>
-				<param name="button1id" value="301"/>
+				<param name="button1_id" value="301"/>
 				<param name="button2" value="true"/>
-				<param name="button2id" value="300"/>
+				<param name="button2_id" value="300"/>
 			</include>
 		</include>
 	</controls>
