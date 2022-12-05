@@ -101,7 +101,7 @@
 				<viewtype label="$PARAM[viewtype_label]">$PARAM[viewtype]</viewtype>
 				<visible>$PARAM[visible]</visible>
 				<focusposition>0</focusposition>
-				<include>$PARAM[viewtype_label]_Navigation</include>
+				<include content="$PARAM[viewtype_label]_Navigation" />
 				<pagecontrol>60</pagecontrol>
 				<preloaditems>2</preloaditems>
 				<orientation>$PARAM[orientation]</orientation>
@@ -132,14 +132,30 @@
 		</control>
 	</include>
 
+	<include name="Music_Rating">
+		<include content="$PARAM[like_texture]" condition="Integer.IsGreater(Skin.Numeric(Music_Rating_Like_Threshold,0))">
+			<param name="visible" value="!String.IsEmpty(ListItem.UserRating) + Integer.IsGreaterOrEqual(ListItem.UserRating,Skin.Numeric(Music_Rating_Like_Threshold))" />
+			<param name="color" value="$PARAM[color]" />
+			<animation effect="slide" end="$PARAM[slide],0" time="0" condition="true">Conditional</animation>
+		</include>
+		<include content="$PARAM[dislike_texture]" condition="Integer.IsGreater(Skin.Numeric(Music_Rating_Dislike_Threshold,0))">
+			<param name="visible" value="!String.IsEmpty(ListItem.UserRating) + Integer.IsLessOrEqual(ListItem.UserRating,Skin.Numeric(Music_Rating_Dislike_Threshold))" />
+			<param name="color" value="$PARAM[color]" />
+			<animation effect="slide" end="$PARAM[slide],0" time="0" condition="true">Conditional</animation>
+		</include>
+		<nested />
+	</include>
+
 	<include name="Common_List_Layout">
 		<param name="visible" default="true" />
-		<param name="icon_slide" />
 		<param name="icon_color" default="$VAR[Common_List_Label_Color]" />
 		<param name="now_playing_icon" default="true" />
 		<param name="list_icon" default="String.IsEqual(ListItem.Overlay,OverlayWatched.png)" />
 		<param name="list_icon_texture" />
+		<param name="music_rating_like_texture" />
+		<param name="music_rating_dislike_texture" />
 		<param name="track_number" default="true" />
+		<param name="music_rating_color" default="$VAR[Light_Color]" />
 		<param name="font" default="List_Title_Unfocused" />
 		<param name="textcolor" default="$VAR[Common_List_Label_Color]" />
 		<param name="selectedcolor" default="$VAR[Common_List_Label_Color]" />
@@ -150,7 +166,8 @@
 		<definition>
 			<control type="group">
 				<visible>$PARAM[visible]</visible>
-				<include content="Now_Playing_Icon" condition="Window.IsMedia | Window.Is(musicplaylist) | Window.Is(videoplaylist) | Window.Is(musicinformation) | Window.Is(songinformation)">
+				<width>100%</width>
+				<include content="Now_Playing_Icon" condition="Window.IsMedia | Window.Is(musicplaylist) | Window.Is(videoplaylist) | Window.Is(musicinformation)">
 					<param name="visible" value="$PARAM[now_playing_icon] + $EXP[ListItem(0)_NowPlaying]" />
 					<param name="color" value="$PARAM[icon_color]" />
 					<animation effect="slide" end="$PARAM[icon_slide],0" time="0" condition="true">Conditional</animation>
@@ -160,11 +177,17 @@
 					<param name="color" value="$PARAM[icon_color]" />
 					<animation effect="slide" end="$PARAM[icon_slide],0" time="0" condition="true">Conditional</animation>
 				</include>
-				<include content="Track_Number_Label" condition="Window.Is(music) | Window.Is(musicplaylist) | Window.Is(musicinformation) | Window.Is(songinformation)">
+				<include content="Track_Number_Label" condition="Window.Is(music) | Window.Is(musicplaylist) | Window.Is(musicinformation)">
 					<param name="visible" value="$PARAM[track_number]" />
 					<param name="font" value="$PARAM[font]" />
 					<param name="textcolor" value="$PARAM[textcolor]" />
 					<param name="selectedcolor" value="$PARAM[selectedcolor]" />
+				</include>
+				<include content="Music_Rating" condition="Window.Is(music) | Window.Is(musicplaylist) | Window.Is(musicinformation)">
+					<param name="like_texture" value="$PARAM[music_rating_like_texture]" />
+					<param name="dislike_texture" value="$PARAM[music_rating_dislike_texture]" />
+					<param name="color" value="$PARAM[music_rating_color]" />
+					<param name="slide" value="$PARAM[music_rating_slide]" />
 				</include>
 				<control type="label">
 					<height>100%</height>
@@ -183,12 +206,19 @@
 	</include>
 
 	<include name="Common_List_Unfocused">
+		<param name="icon_slide" default="-540" />
+		<param name="music_rating_slide" default="480" />
+		<param name="music_rating_color" default="$VAR[Accent_Color]" />
 		<param name="selectedcolor" default="$VAR[Common_List_Label_Color]" />
 		<definition>
 			<param name="selectedcolor" />
 			<include content="Common_List_Layout">
-				<param name="icon_slide" value="-300" />
+				<param name="icon_slide" value="$PARAM[icon_slide]" />
 				<param name="list_icon_texture" value="Check_unfocused" />
+				<param name="music_rating_like_texture" value="Check_unfocused" />
+				<param name="music_rating_dislike_texture" value="Cross_unfocused" />
+				<param name="music_rating_color" value="$PARAM[music_rating_color]" />
+				<param name="music_rating_slide" value="$PARAM[music_rating_slide]" />
 				<param name="label" value="$VAR[Title_Unfocused_Label]" />
 				<param name="label_maxwidth" value="720" />
 				<param name="selectedcolor" value="$PARAM[selectedcolor]" />
@@ -197,16 +227,22 @@
 	</include>
 
 	<include name="Common_List_Focused">
-		<param name="label_maxwidth" />
-		<param name="icon_slide" />
+		<param name="icon_slide" default="-540" />
+		<param name="music_rating_slide" default="480" />
+		<param name="music_rating_color" default="$VAR[Accent_Color]" />
+		<param name="label_maxwidth" default="780" />
 		<param name="selectedcolor" default="$VAR[Common_List_Label_Color]" />
 		<definition>
-			<include>HiddenFocusButton</include>
+			<include content="HiddenFocusButton" />
 			<include content="Multiart_Resetter" condition="Skin.HasSetting(Multiart_Slideshow)" />
 			<include content="Multiart_Setter" condition="Skin.HasSetting(Multiart_Slideshow)" />
 			<include content="Common_List_Layout">
 				<param name="icon_slide" value="$PARAM[icon_slide]" />
 				<param name="list_icon_texture" value="Check_focused" />
+				<param name="music_rating_like_texture" value="Check_focused" />
+				<param name="music_rating_dislike_texture" value="Cross_focused" />
+				<param name="music_rating_color" value="$PARAM[music_rating_color]" />
+				<param name="music_rating_slide" value="$PARAM[music_rating_slide]" />
 				<param name="track_number_color" value="$VAR[Common_List_Label_Color]" />
 				<param name="label" value="$VAR[Title_Label]" />
 				<param name="label_maxwidth" value="$PARAM[label_maxwidth]" />
@@ -222,7 +258,7 @@
 		<param name="left" default="120" />
 		<param name="hiddenlabel" default="$VAR[Title_Label]" />
 		<param name="hiddenlabelmaxwidth" default="1200" />
-		<param name="infolabel" default="$VAR[Info_Label,$LOCALIZE[31115] ]" />
+		<param name="infolabel" default="$VAR[Info_Label,$LOCALIZE[31000] ]" />
 		<param name="infolabelwidth" default="180" />
 		<definition>
 			<control type="group">
@@ -324,12 +360,12 @@
 				<viewtype label="List">list</viewtype>
 				<visible allowhiddenfocus="true">$PARAM[visible]</visible>
 				<nested />
-				<include>$PARAM[animation]</include>
+				<include content="$PARAM[animation]" />
 				<left>$PARAM[left]</left>
 				<width>$PARAM[width]</width>
 				<centertop>50%</centertop>
 				<height>$PARAM[height]</height>
-				<include>Simple_List_Navigation</include>
+				<include content="Simple_List_Navigation" />
 				<onup>$PARAM[id]</onup>
 				<ondown>$PARAM[id]</ondown>
 				<onclick condition="Window.Is(musicinformation) + System.AddonIsEnabled(script.embuary.helper)">RunScript(script.embuary.helper,action=playall,id=3100,type=music,method=fromhere)</onclick>
@@ -342,6 +378,7 @@
 						<param name="icon_slide" value="$PARAM[icon_slide]" />
 						<param name="now_playing_icon" value="$PARAM[now_playing_icon]" />
 						<param name="list_icon" value="false" />
+						<param name="label_left" value="$PARAM[label_left]" />
 						<param name="textcolor" value="$PARAM[textcolor]" />
 						<param name="selectedcolor" value="$PARAM[selectedcolor]" />
 					</include>
@@ -601,7 +638,6 @@
 					<aligny>center</aligny>
 					<scroll>true</scroll>
 				</control>
-
 			</control>
 		</definition>
 	</include>
@@ -850,7 +886,7 @@
 			<control type="group">
 				<visible>$PARAM[visible]</visible>
 				<visible>!String.IsEqual(Control.GetLabel($PARAM[id]),flags/blank.png)</visible>
-				<animation effect="slide" end="-60" time="0" condition="$EXP[ListView_Display_IsThumbnails]">Conditional</animation>
+				<animation effect="slide" end="-60" time="0" condition="Window.IsMedia + $EXP[ListView_Display_IsThumbnails]">Conditional</animation>
 				<nested />
 				<width>180</width>
 				<height>180</height>
