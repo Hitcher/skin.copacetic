@@ -2,26 +2,19 @@
 <includes>
 
 	<include name="GridView_Icon_Unfocused">
-		<param name="displaytype_label" />
-		<param name="art_icon" />
-		<definition>
-			<include content="ListIcon_Static_Unfocused">
-				<param name="visible" value="$EXP[GridView_Display_Is$PARAM[displaytype_label]] + !$EXP[ContainerSwitching] + !$EXP[OptionsSwitching]" />
-				<param name="left" value="10" />
-				<param name="fallback" value="views/dark_grey_100.png" />
-				<param name="watched_diffuse" value="Skin.HasSetting(GridView_WatchedStatus_Enabled) + String.IsEqual(ListItem.Overlay,OverlayWatched.png)" />
-				<param name="now_playing" value="$EXP[ListItem(0)_NowPlaying]" />
-				<include content="Visible_Fade_Animation" />
-				<animation effect="slide" end="12,0" time="0" condition="$EXP[GridView_Display_IsFanart]" reversible="false">Conditional</animation>
-			</include>
-		</definition>
+		<include content="ListIcon_Static_Unfocused">
+			<param name="visible" value="$EXP[GridView_Display_Is$PARAM[displaytype_label]] + !$EXP[ContainerSwitching] + !$EXP[OptionsSwitching]" />
+			<param name="left" value="10" />
+			<param name="art_icon" value="$PARAM[art_icon]" />
+			<param name="fallback" value="views/dark_grey_100.png" />
+			<param name="watched_diffuse" value="Skin.HasSetting(GridView_WatchedStatus_Enabled) + String.IsEqual(ListItem.Overlay,OverlayWatched.png)" />
+			<param name="now_playing" value="$EXP[ListItem(0)_NowPlaying]" />
+			<include content="Visible_Fade_Animation" />
+			<animation effect="slide" end="12,0" time="0" condition="$EXP[GridView_Display_IsFanart]" reversible="false">Conditional</animation>
+		</include>
 	</include>
 
 	<include name="GridView_Icon_Focused">
-		<param name="displaytype_label" />
-		<param name="art_icon" />
-		<param name="progress_left" />
-		<param name="progress_bottom" />
 		<param name="progress_width" default="360" />
 		<param name="progress_slides" default="Narrow" />
 		<definition>
@@ -121,6 +114,7 @@
 					<include content="Focus_Zoom_Animation" />
 					<include content="ListIcon_Static_Focused">
 						<param name="visible" value="$EXP[GridView_Display_Is$PARAM[displaytype_label]]" />
+						<param name="art_icon" value="$PARAM[art_icon]" />
 						<param name="now_playing" value="$EXP[ListItem(0)_NowPlaying]" />
 						<param name="fallback" value="views/dark_grey_100.png" />
 						<!-- Multiart -->
@@ -187,65 +181,56 @@
 	</include>
 
 	<include name="GridView_Layout_Fanart">
-		<param name="art_icon" default="Thumbnail" />
-		<definition>
-			<itemlayout width="592" height="333" condition="$EXP[GridView_Display_IsFanart]">
-				<include content="GridView_Icon_Unfocused">
-					<param name="displaytype_label" value="Fanart" />
-					<param name="art_icon" value="$PARAM[art_icon]" />
-				</include>
-			</itemlayout>
-			<focusedlayout width="592" height="333" infoupdate="500" condition="$EXP[GridView_Display_IsFanart]">
-				<include content="GridView_Icon_Focused">
-					<param name="displaytype_label" value="Fanart" />
-					<param name="art_icon" value="$PARAM[art_icon]" />
-					<param name="progress_left" value="126" />
-					<param name="progress_slides" value="Default" />
-				</include>
-			</focusedlayout>
-		</definition>
+		<itemlayout width="592" height="333" condition="$EXP[GridView_Display_IsFanart]">
+			<include content="GridView_Icon_Unfocused">
+				<param name="displaytype_label" value="Fanart" />
+				<param name="art_icon" value="$PARAM[art_icon]" />
+			</include>
+		</itemlayout>
+		<focusedlayout width="592" height="333" infoupdate="500" condition="$EXP[GridView_Display_IsFanart]">
+			<include content="GridView_Icon_Focused">
+				<param name="displaytype_label" value="Fanart" />
+				<param name="art_icon" value="$PARAM[art_icon]" />
+				<param name="progress_left" value="126" />
+				<param name="progress_slides" value="Default" />
+			</include>
+		</focusedlayout>
 	</include>
 
 	<include name="GridView_Layout_Posters">
-		<param name="art_icon" default="Thumbnail" />
-		<definition>
-			<itemlayout width="360" height="540" condition="$EXP[GridView_Display_IsPosters]">
-				<include content="GridView_Icon_Unfocused">
-					<param name="displaytype_label" value="Posters" />
-					<param name="art_icon" value="$PARAM[art_icon]" />
-				</include>
-			</itemlayout>
-			<focusedlayout width="360" height="540" infoupdate="500" condition="$EXP[GridView_Display_IsPosters]">
-				<include content="GridView_Icon_Focused">
-					<param name="displaytype_label" value="Posters" />
-					<param name="art_icon" value="$PARAM[art_icon]" />
-					<param name="progress_width" value="240" />
-					<param name="progress_left" value="70" />
-					<param name="progress_slides" value="Narrow" />
-				</include>
-			</focusedlayout>
-		</definition>
+		<itemlayout width="360" height="540" condition="$EXP[GridView_Display_IsPosters]">
+			<include content="GridView_Icon_Unfocused">
+				<param name="displaytype_label" value="Posters" />
+				<param name="art_icon" value="$PARAM[art_icon]" />
+			</include>
+		</itemlayout>
+		<focusedlayout width="360" height="540" infoupdate="500" condition="$EXP[GridView_Display_IsPosters]">
+			<include content="GridView_Icon_Focused">
+				<param name="displaytype_label" value="Posters" />
+				<param name="art_icon" value="$PARAM[art_icon]" />
+				<param name="progress_width" value="240" />
+				<param name="progress_left" value="70" />
+				<param name="progress_slides" value="Narrow" />
+			</include>
+		</focusedlayout>
 	</include>
 
 	<include name="GridView_Layout_Square">
-		<param name="art_icon" default="Thumbnail" />
-		<definition>
-			<itemlayout width="360" height="360" condition="$EXP[GridView_Display_IsSquare]">
-				<include content="GridView_Icon_Unfocused">
-					<param name="displaytype_label" value="Square" />
-					<param name="art_icon" value="$PARAM[art_icon]" />
-				</include>
-			</itemlayout>
-			<focusedlayout width="360" height="360" infoupdate="500" condition="$EXP[GridView_Display_IsSquare]">
-				<include content="GridView_Icon_Focused">
-					<param name="displaytype_label" value="Square" />
-					<param name="art_icon" value="$PARAM[art_icon]" />
-					<param name="progress_width" value="240" />
-					<param name="progress_left" value="70" />
-					<param name="progress_slides" value="Narrow" />
-				</include>
-			</focusedlayout>
-		</definition>
+		<itemlayout width="360" height="360" condition="$EXP[GridView_Display_IsSquare]">
+			<include content="GridView_Icon_Unfocused">
+				<param name="displaytype_label" value="Square" />
+				<param name="art_icon" value="$PARAM[art_icon]" />
+			</include>
+		</itemlayout>
+		<focusedlayout width="360" height="360" infoupdate="500" condition="$EXP[GridView_Display_IsSquare]">
+			<include content="GridView_Icon_Focused">
+				<param name="displaytype_label" value="Square" />
+				<param name="art_icon" value="$PARAM[art_icon]" />
+				<param name="progress_width" value="240" />
+				<param name="progress_left" value="70" />
+				<param name="progress_slides" value="Narrow" />
+			</include>
+		</focusedlayout>
 	</include>
 
 	<include name="GridView_Slides_Fanart">
@@ -889,14 +874,14 @@
 						<include content="Visible_Fade_Animation" />
 						<!-- Dropshadow Left Side -->
 						<include content="DropShadow">
-							<param name="visible" value="![String.IsEmpty(Container($PARAM[target_id]).ListItemNoWrap(-1).Label) + String.IsEmpty(Container($PARAM[target_id]).ListItemNoWrap(-1).Art(thumb))]" />
+							<param name="visible" value="$PARAM[focus_border_visible] + ![String.IsEmpty(Container($PARAM[target_id]).ListItemNoWrap(-1).Label) + String.IsEmpty(Container($PARAM[target_id]).ListItemNoWrap(-1).Art(thumb))]" />
 							<param name="left" value="-120" />
 							<param name="top" value="$PARAM[item_top]" />
 							<param name="height" value="$PARAM[item_height]" />
 						</include>
 						<!-- Dropshadow Right Side -->
 						<include content="DropShadow">
-							<param name="visible" value="![String.IsEmpty(Container($PARAM[target_id]).ListItemNoWrap(1).Label) + String.IsEmpty(Container($PARAM[target_id]).ListItemNoWrap(1).Art(thumb))]" />
+							<param name="visible" value="$PARAM[focus_border_visible] + ![String.IsEmpty(Container($PARAM[target_id]).ListItemNoWrap(1).Label) + String.IsEmpty(Container($PARAM[target_id]).ListItemNoWrap(1).Art(thumb))]" />
 							<param name="left" value="$PARAM[item_width]" />
 							<param name="top" value="$PARAM[item_top]" />
 							<param name="height" value="$PARAM[item_height]" />
@@ -938,9 +923,11 @@
 		<param name="4x_item_width" />
 		<param name="5x_item_width" />
 		<param name="6x_item_width" />
+		<param name="focus_border_visible" default="true" />
 		<definition>
 			<control type="group">
 				<animation effect="slide" start="0,0" end="60,0" time="0" condition="true">Conditional</animation>
+				<nested />
 				<include content="GridView_Animated">
 					<param name="target_id" value="$PARAM[target_id]" />
 					<param name="viewtype_label" value="Grid" />
@@ -958,7 +945,7 @@
 					<param name="6x_item_width" value="$PARAM[6x_item_width]" />
 					<param name="art_icon" value="$PARAM[art_icon]" />
 					<param name="fallback" value="$PARAM[fallback]" />
-					<param name="focus_border_visible" value="true" />
+					<param name="focus_border_visible" value="$PARAM[focus_border_visible]" />
 					<param name="focus_border_protrusion" value="10" />
 					<param name="focus_border_size" value="11" />
 					<param name="focus_border_color" value="$VAR[Accent_Color]" />
@@ -978,7 +965,7 @@
 					<param name="5x_item_width" value="$PARAM[5x_item_width]" />
 					<param name="art_icon" value="$PARAM[art_icon]" />
 					<param name="fallback" value="$PARAM[fallback]" />
-					<param name="focus_border_visible" value="true" />
+					<param name="focus_border_visible" value="$PARAM[focus_border_visible]" />
 					<param name="focus_border_protrusion" value="10" />
 					<param name="focus_border_size" value="11" />
 					<param name="focus_border_color" value="$VAR[Accent_Color]" />
@@ -1029,6 +1016,8 @@
 				<param name="4x_item_width" value="2368" />
 				<param name="5x_item_width" value="2960" />
 				<param name="art_icon" value="$PARAM[art_icon]" />
+				<param name="focus_border_visible" value="$PARAM[focus_border_visible]" />
+				<nested />
 			</include>
 		</definition>
 	</include>
