@@ -120,7 +120,7 @@
 		<control type="label">
 			<height>100%</height>
 			<visible>!ListItem.IsPlaying</visible>
-			<visible>$PARAM[visible]</visible>
+			<include content="Visible_Fade_Delayed_Animation" />
 			<width>120</width>
 			<align>center</align>
 			<aligny>center</aligny>
@@ -133,31 +133,26 @@
 	</include>
 
 	<include name="Music_Rating">
-		<include content="$PARAM[like_texture]" condition="Integer.IsGreater(Skin.Numeric(Music_Rating_Like_Threshold,0))">
-			<param name="visible" value="!String.IsEmpty(ListItem.UserRating) + Integer.IsGreaterOrEqual(ListItem.UserRating,Skin.Numeric(Music_Rating_Like_Threshold))" />
-			<param name="color" value="$PARAM[color]" />
-			<animation effect="slide" end="$PARAM[slide],0" time="0" condition="true">Conditional</animation>
-		</include>
-		<!--		
-		<include content="$PARAM[dislike_texture]" condition="Integer.IsGreater(Skin.Numeric(Music_Rating_Dislike_Threshold,0))">
-			<param name="visible" value="!String.IsEmpty(ListItem.UserRating) + Integer.IsLessOrEqual(ListItem.UserRating,Skin.Numeric(Music_Rating_Dislike_Threshold))" />
-			<param name="color" value="$PARAM[color]" />
-			<animation effect="slide" end="$PARAM[slide],0" time="0" condition="true">Conditional</animation>
-		</include>
-		-->
-		<nested />
+		<param name="visible" default="!String.IsEmpty(ListItem.UserRating) + Integer.IsGreaterOrEqual(ListItem.UserRating,Skin.Numeric(Music_Rating_Like_Threshold))" />
+		<definition>
+			<include content="$PARAM[like_texture]" condition="Integer.IsGreater(Skin.Numeric(Music_Rating_Like_Threshold,0))">
+				<param name="visible" value="$PARAM[visible]" />
+				<param name="color" value="$PARAM[color]" />
+				<animation effect="slide" end="$PARAM[slide],0" time="0" condition="true">Conditional</animation>
+			</include>
+		</definition>
 	</include>
 
 	<include name="Common_List_Layout">
 		<param name="visible" default="true" />
+		<param name="icon_slide" default="-540" />
 		<param name="icon_color" default="$VAR[Common_List_Label_Color]" />
 		<param name="now_playing_icon" default="true" />
 		<param name="list_icon" default="String.IsEqual(ListItem.Overlay,OverlayWatched.png)" />
-		<param name="list_icon_texture" />
-		<param name="music_rating_like_texture" />
-		<param name="music_rating_dislike_texture" />
-		<param name="track_number" default="true" />
-		<param name="music_rating_color" default="$VAR[Light_Color]" />
+		<param name="list_icon_texture" default="Check_unfocused" />
+		<param name="music_rating_slide" default="480" />
+		<param name="music_rating_like_texture" default="Like_unfocused" />
+		<param name="music_rating_color" default="$VAR[Accent_Color]" />
 		<param name="font" default="List_Title_Unfocused" />
 		<param name="textcolor" default="$VAR[Common_List_Label_Color]" />
 		<param name="selectedcolor" default="$VAR[Common_List_Label_Color]" />
@@ -169,7 +164,7 @@
 			<control type="group">
 				<visible>$PARAM[visible]</visible>
 				<width>100%</width>
-				<include content="Now_Playing_Icon" condition="Window.IsMedia | Window.Is(musicplaylist) | Window.Is(videoplaylist) | Window.Is(musicinformation)">
+				<include content="Now_Playing_Icon" condition="Window.Is(videos) | Window.Is(music) | Window.Is(musicplaylist) | Window.Is(videoplaylist) | Window.Is(musicinformation)">
 					<param name="visible" value="$PARAM[now_playing_icon] + $EXP[ListItem(0)_NowPlaying]" />
 					<param name="color" value="$PARAM[icon_color]" />
 					<animation effect="slide" end="$PARAM[icon_slide],0" time="0" condition="true">Conditional</animation>
@@ -180,14 +175,12 @@
 					<animation effect="slide" end="$PARAM[icon_slide],0" time="0" condition="true">Conditional</animation>
 				</include>
 				<include content="Track_Number_Label" condition="Window.Is(music) | Window.Is(musicplaylist) | Window.Is(musicinformation)">
-					<param name="visible" value="$PARAM[track_number]" />
 					<param name="font" value="$PARAM[font]" />
 					<param name="textcolor" value="$PARAM[textcolor]" />
 					<param name="selectedcolor" value="$PARAM[selectedcolor]" />
 				</include>
 				<include content="Music_Rating" condition="Window.Is(music) | Window.Is(musicplaylist) | Window.Is(musicinformation)">
 					<param name="like_texture" value="$PARAM[music_rating_like_texture]" />
-					<param name="dislike_texture" value="$PARAM[music_rating_dislike_texture]" />
 					<param name="color" value="$PARAM[music_rating_color]" />
 					<param name="slide" value="$PARAM[music_rating_slide]" />
 				</include>
@@ -218,7 +211,6 @@
 				<param name="icon_slide" value="$PARAM[icon_slide]" />
 				<param name="list_icon_texture" value="Check_unfocused" />
 				<param name="music_rating_like_texture" value="Like_unfocused" />
-				<param name="music_rating_dislike_texture" value="Cross_unfocused" />
 				<param name="music_rating_color" value="$PARAM[music_rating_color]" />
 				<param name="music_rating_slide" value="$PARAM[music_rating_slide]" />
 				<param name="label" value="$VAR[Title_Unfocused_Label]" />
@@ -242,7 +234,6 @@
 				<param name="icon_slide" value="$PARAM[icon_slide]" />
 				<param name="list_icon_texture" value="Check_focused" />
 				<param name="music_rating_like_texture" value="Like_focused" />
-				<param name="music_rating_dislike_texture" value="Cross_focused" />
 				<param name="music_rating_color" value="$PARAM[music_rating_color]" />
 				<param name="music_rating_slide" value="$PARAM[music_rating_slide]" />
 				<param name="track_number_color" value="$VAR[Common_List_Label_Color]" />
@@ -263,26 +254,16 @@
 		<param name="infolabel" default="$VAR[Info_Label,$LOCALIZE[31000] ]" />
 		<param name="infolabelwidth" default="180" />
 		<definition>
-			<control type="group">
-				<animation effect="slide" start="0,0" end="-120,0" time="0" condition="true">Conditional</animation>
-				<visible>$PARAM[visible]</visible>
-				<visible>Control.HasFocus(3100)</visible>
-				<width>120</width>
-				<height>120</height>
-				<left>$PARAM[left]</left>
-				<centertop>50%</centertop>
-				<include content="Now_Playing_Icon">
-					<param name="visible" value="$EXP[ListItem(0)_NowPlaying]" />
-					<param name="color" default="$VAR[Common_List_Label_Color]" />
-				</include>
-				<control type="group">
-					<visible>!$EXP[ListItem(0)_NowPlaying]</visible>
-					<visible>String.IsEqual(Container(3100).ListItem.Overlay,OverlayWatched.png)</visible>
-					<include content="Check_focused">
-						<param name="color" value="$VAR[Common_List_Label_Color]" />
-					</include>
-				</control>
-			</control>
+			<include content="Secondary_List_Icons" condition="Skin.HasSetting(Secondary_List_Enabled)">
+				<param name="visible" value="$PARAM[visible]" />
+				<param name="left" value="$PARAM[left]" />
+			</include>
+			<include content="Music_Rating" condition="Window.Is(music) + Skin.HasSetting(Secondary_List_Enabled)">
+				<param name="visible" value="Control.HasFocus(3100) + !String.IsEmpty(Container(3100).ListItem.UserRating) + Integer.IsGreaterOrEqual(Container(3100).ListItem.UserRating,Skin.Numeric(Music_Rating_Like_Threshold))" />
+				<param name="like_texture" value="Like_focused" />
+				<param name="color" value="$VAR[Accent_Color]" />
+				<param name="slide" value="840" />
+			</include>
 			<control type="grouplist">
 				<visible>$PARAM[visible]</visible>
 				<left>$PARAM[left]</left>
@@ -346,12 +327,12 @@
 	<include name="Simple_List">
 		<param name="id" />
 		<param name="visible" default="true" />
+		<param name="layout" default="Simple" />
 		<param name="orientation" default="vertical" />
 		<param name="left" default="780" />
 		<param name="width" default="1020" />
 		<param name="height" default="500" />
 		<param name="focusposition" default="4" />
-		<param name="icon_slide" />
 		<param name="label_left" default="0" />
 		<param name="label" default="$INFO[ListItem.Label]" />
 		<param name="label_maxwidth" default="1020" />
@@ -359,10 +340,8 @@
 		<param name="selectedcolor" default="$VAR[Accent_Color]" />
 		<definition>
 			<control type="fixedlist" id="$PARAM[id]">
-				<viewtype label="List">list</viewtype>
 				<visible allowhiddenfocus="true">$PARAM[visible]</visible>
 				<nested />
-				<include content="$PARAM[animation]" />
 				<left>$PARAM[left]</left>
 				<width>$PARAM[width]</width>
 				<centertop>50%</centertop>
@@ -370,14 +349,14 @@
 				<include content="Simple_List_Navigation" />
 				<onup>$PARAM[id]</onup>
 				<ondown>$PARAM[id]</ondown>
-				<onclick condition="Window.Is(musicinformation) + System.AddonIsEnabled(script.embuary.helper)">RunScript(script.embuary.helper,action=playall,id=3100,type=music,method=fromhere)</onclick>
 				<preloaditems>2</preloaditems>
 				<focusposition>$PARAM[focusposition]</focusposition>
 				<orientation>vertical</orientation>
 				<scrolltime tween="sine" easing="inout">360</scrolltime>
 				<itemlayout height="55" width="$PARAM[width]">
-					<include content="Common_List_Layout">
+					<include content="$PARAM[layout]_List_Layout">
 						<param name="icon_slide" value="$PARAM[icon_slide]" />
+						<param name="music_rating_slide" value="$PARAM[music_rating_slide]" />
 						<param name="now_playing_icon" value="$PARAM[now_playing_icon]" />
 						<param name="list_icon" value="false" />
 						<param name="label_left" value="$PARAM[label_left]" />
@@ -385,10 +364,12 @@
 						<param name="selectedcolor" value="$PARAM[selectedcolor]" />
 					</include>
 				</itemlayout>
-				<focusedlayout height="60" width="$PARAM[width]" condition="Control.HasFocus($PARAM[id])">
-					<include content="Common_List_Layout">
+				<focusedlayout height="60" width="$PARAM[width]" condition="Control.HasFocus($PARAM[id]) | Window.Is(musicinformation)">
+					<include content="$PARAM[layout]_List_Layout">
 						<param name="icon_slide" value="$PARAM[icon_slide]" />
 						<param name="now_playing_icon" value="$PARAM[now_playing_icon]" />
+						<param name="music_rating_slide" value="$PARAM[music_rating_slide]" />
+						<param name="music_rating_like_texture" value="Like_focused" />
 						<param name="list_icon" value="false" />
 						<param name="label" value="$PARAM[label]" />
 						<param name="label_left" value="$PARAM[label_left]" />
@@ -398,13 +379,10 @@
 						<param name="selectedcolor" value="$PARAM[selectedcolor]" />
 					</include>
 				</focusedlayout>
-				<focusedlayout height="60" width="$PARAM[width]" condition="!Control.HasFocus($PARAM[id])">
+				<focusedlayout height="60" width="$PARAM[width]" condition="!Control.HasFocus($PARAM[id]) + !Window.Is(musicinformation)">
 					<control type="group">
 						<top>5</top>
-						<include content="Common_List_Layout">
-							<param name="icon_slide" value="$PARAM[icon_slide]" />
-							<param name="now_playing_icon" value="$PARAM[now_playing_icon]" />
-							<param name="list_icon" value="false" />
+						<include content="Simple_List_Layout" condition="!Window.Is(musicinformation)">
 							<param name="label" value="$PARAM[label]" />
 							<param name="label_left" value="$PARAM[label_left]" />
 							<param name="label_maxwidth" value="$PARAM[label_maxwidth]" />
@@ -734,14 +712,16 @@
 	</include>
 
 	<include name="Progress_Bar">
+		<param name="visible_during_music_player_focus" default="$EXP[Music_Player_HasFocus]" />
 		<param name="id" default="50" />
 		<param name="background_color" default="$VAR[Progress_Background_Color]" />
 		<param name="focus_color" default="$VAR[Progress_Focused_Color]" />
-		<param name="unwatched_indicator_background" default="$VAR[Unwatched_Indicator_Background_Color]" />
+		<param name="progress_indicator_background" default="$VAR[Progress_Indicator_Background_Color]" />
+		<param name="progress_indicator_textcolor" default="$VAR[Progress_Indicator_Label_Color]" />
 		<param name="slides" default="Default" />
 		<definition>
 			<control type="group">
-				<visible>Control.HasFocus($PARAM[id])</visible>
+				<visible>Control.HasFocus($PARAM[id]) | $PARAM[visible_during_music_player_focus]</visible>
 				<visible>!String.IsEqual(Container($PARAM[id]).ListItem.DBType,artist) + !String.IsEqual(Container($PARAM[id]).ListItem.DBType,album) + !String.IsEqual(Container($PARAM[id]).ListItem.DBType,song) + ![$EXP[Infoscreen_IsVisible] + Control.HasFocus(50)]</visible>
 				<!-- Movie/Episode Resumable -->
 				<control type="progress">
@@ -783,17 +763,18 @@
 						<overlaytexture></overlaytexture>
 					</control>
 					<!-- Unwatched Indicator -->
-					<include content="Progress_Unwatched_Indicator" condition="Skin.HasSetting(Unwatched_Indicator)">
+					<include content="Unwatched_Indicator" condition="Skin.HasSetting(Unwatched_Indicator)">
 						<param name="id" value="$PARAM[id]" />
 						<param name="slides" value="$PARAM[slides]" />
-						<param name="unwatched_indicator_background" value="$PARAM[unwatched_indicator_background]" />
+						<param name="background" value="$PARAM[progress_indicator_background]" />
+						<param name="textcolor" value="$PARAM[progress_indicator_textcolor]" />
 					</include>
 				</control>
 			</control>
 		</definition>
 	</include>
 
-	<include name="Progress_Unwatched_Indicator">
+	<include name="Unwatched_Indicator">
 		<control type="group">
 			<visible>!Integer.IsEqual(Container($PARAM[id]).ListItem.Property(UnWatchedEpisodes),0)</visible>
 			<include content="Progress_Slides_$PARAM[slides]">
@@ -804,7 +785,7 @@
 			<centertop>50%</centertop>
 			<left>0</left>
 			<control type="image">
-				<texture colordiffuse="$PARAM[unwatched_indicator_background]">views/white_100.png</texture>
+				<texture colordiffuse="$PARAM[background]">views/white_100.png</texture>
 			</control>
 			<control type="label">
 				<width>100%</width>
@@ -812,7 +793,7 @@
 				<align>center</align>
 				<aligny>center</aligny>
 				<font>Unwatched_Indicator</font>
-				<textcolor>$VAR[Unwatched_Indicator_Label_Color]</textcolor>
+				<textcolor>$PARAM[textcolor]</textcolor>
 				<label>$INFO[Container($PARAM[id]).ListItem.Property(UnWatchedEpisodes)]</label>
 			</control>
 		</control>

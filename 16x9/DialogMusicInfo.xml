@@ -11,26 +11,26 @@
 			<param name="visible" value="![Window.Is(songinformation) + Window.IsActive(musicinformation)]" />
 			<param name="default_control" value="SetFocus(97)" />
 			<include content="Infoscreen_Header" condition="String.IsEqual(ListItem.DBType,artist)">
-				<param name="visible" value="Control.HasFocus(97)" />
+				<param name="visible" value="ControlGroup(3000).HasFocus(97)" />
 				<param name="left" value="120" />
 				<param name="right" value="120" />
 				<param name="align" value="center" />
 			</include>
 			<include content="Infoscreen_Header" condition="!String.IsEqual(ListItem.DBType,artist)">
-				<param name="visible" value="Control.HasFocus(97)" />
+				<param name="visible" value="ControlGroup(3000).HasFocus(97)" />
 				<param name="left" value="780" />
 				<param name="right" value="120" />
 				<param name="align" value="left" />
 			</include>
 			<include content="Infoscreen_Plot" condition="String.IsEqual(ListItem.DBType,album)">
-				<param name="visible" value="String.IsEqual(Window($PARAM[windowname]).Property(Focused_Button),$LOCALIZE[183]) + !Control.HasFocus(3100)" />
+				<param name="visible" value="ControlGroup(3000).HasFocus(99)" />
 				<param name="left" value="780" />
 				<param name="right" value="120" />
 				<param name="align" value="left" />
 				<param name="font" value="Plot_Panel" />
 			</include>
 			<include content="Infoscreen_Plot" condition="String.IsEqual(ListItem.DBType,artist)">
-				<param name="visible" value="String.IsEqual(Window($PARAM[windowname]).Property(Focused_Button),$LOCALIZE[21887])" />
+				<param name="visible" value="ControlGroup(3000).HasFocus(99)" />
 				<param name="left" value="240" />
 				<param name="right" value="240" />
 				<param name="align" value="center" />
@@ -38,24 +38,28 @@
 			</include>
 			<include content="Simple_List" condition="String.IsEqual(ListItem.DBType,album)">
 				<param name="id" value="3100" />
-				<param name="visible" value="Control.HasFocus(3100)" />
+				<param name="visible" value="ControlGroup(3000).HasFocus(98)" />
+				<param name="layout" value="Common" />
 				<param name="left" value="720" />
 				<param name="width" value="1080" />
 				<param name="label_left" value="120" />
 				<param name="label_maxwidth" value="960" />
+				<param name="now_playing" value="true" />
 				<param name="icon_slide" value="-480" />
+				<param name="music_rating_slide" value="540" />
 				<param name="label" value="$INFO[ListItem.Label]" />
 				<param name="selectedcolor" value="$VAR[Light_Color]" />
 				<include content="Visible_Fade_Delayed_Animation" />
+				<onclick condition="System.AddonIsEnabled(script.embuary.helper)">RunScript(script.embuary.helper,action=playall,id=3100,type=music,method=fromhere)</onclick>
 				<content>musicdb://albums/$INFO[ListItem.DBID]/</content>
 			</include>
 			<include content="Infoscreen_Stars" condition="!String.IsEqual(ListItem.DBType,artist)">
-				<param name="visible" value="Control.HasFocus(7) | Control.HasFocus(4021) | Control.HasFocus(4022)" />
+				<param name="visible" value="ControlGroup(3000).HasFocus(7)" />
 				<param name="itemgap" value="30" />
 				<param name="starheight" value="60" />
 			</include>
 			<control type="textbox">
-				<visible>Control.HasFocus(12) + String.IsEqual(ListItem.DBType,album)</visible>
+				<visible>ControlGroup(3000).HasFocus(12) + String.IsEqual(ListItem.DBType,album)</visible>
 				<include content="Visible_Fade_Delayed_Animation" />
 				<width>1680</width>
 				<centerleft>50%</centerleft>
@@ -67,7 +71,7 @@
 				<align>left</align>
 			</control>
 			<control type="label">
-				<visible>Control.HasFocus(12) + String.IsEqual(ListItem.DBType,song)</visible>
+				<visible>ControlGroup(3000).HasFocus(12) + String.IsEqual(ListItem.DBType,song)</visible>
 				<width>1440</width>
 				<centerleft>50%</centerleft>
 				<height>52</height>

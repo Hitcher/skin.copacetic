@@ -74,6 +74,9 @@
 
 
 	<!-- Color diffuse brightness -->
+	<variable name="Brightness_0">
+		<value>$VAR[Alpha_100]000000</value>
+	</variable>
 	<variable name="Brightness_15">
 		<value>$VAR[Alpha_100]262626</value>
 	</variable>
@@ -170,17 +173,16 @@
 		<value>$VAR[Brightness_50]</value>
 	</variable>
 	<variable name="Dropshadow_Diffuse">
-		<value>$VAR[Alpha_100]$VAR[Dark_Hex]</value>
+		<value>$VAR[Brightness_0]</value>
 	</variable>
 	<variable name="Panel_Diffuse">
 		<value condition="Window.Is(selectdialog) | Window.Is(filebrowser) | Window.Is(virtualkeyboard) | Window.Is(numericinput)">$VAR[Alpha_75]$VAR[Dark_Grey_Hex]</value>
 		<value condition="$EXP[Fanart_Slideshow_Global_Windows] + Skin.HasSetting(Fanart_Slideshow_Global_Disabled)">$VAR[Dark_Grey_Color]</value>
-		<value condition="Window.Is(songinformation) | [Window.Is(musicinformation) + String.IsEqual(ListItem.DBType,album)] | Window.Is(addoninformation)">$VAR[Dark_Grey_Color]</value>
+		<value condition="Window.IsVisible(songinformation) | [Window.IsVisible(musicinformation) + String.IsEqual(ListItem.DBType,album)] | Window.IsVisible(addoninformation)">$VAR[Dark_Grey_Color]</value>
 		<value condition="Window.Is(addonbrowser) + Window.Is(filebrowser)">$VAR[Alpha_75]$VAR[Dark_Grey_Hex]</value>
 		<value condition="Window.Is(addonbrowser) + !Container.Content(addons)">$VAR[Dark_Grey_Color]</value>
 		<value condition="Window.Is(addonbrowser)">$VAR[Dark_Grey_Color]</value>
 		<value condition="Window.Is(playerprocessinfo)">$VAR[Dark_Grey_Color]</value>
-		<!--<value condition="Window.Is(loginscreen)">$VAR[Dark_Grey_Color]</value>-->
 		<value>$VAR[Alpha_75]$VAR[Dark_Grey_Hex]</value>
 	</variable>
 	<variable name="Transparent_Dialog_Mask">
@@ -194,7 +196,7 @@
 		<value condition="Window.IsActive(home) + Skin.HasSetting(Widget7_View_Billboard) + String.IsEqual(window(home).property(HomeWidget),3207)">$VAR[Alpha_32]$VAR[Dark_Hex]</value>
 		<value condition="Window.IsActive(home) + Skin.HasSetting(Widget8_View_Billboard) + String.IsEqual(window(home).property(HomeWidget),3208)">$VAR[Alpha_32]$VAR[Dark_Hex]</value>
 		<value condition="Window.IsActive(home) + Skin.HasSetting(Widget9_View_Billboard) + String.IsEqual(window(home).property(HomeWidget),3209)">$VAR[Alpha_32]$VAR[Dark_Hex]</value>
-		<value condition="$EXP[Background_IsFanart]">$VAR[Alpha_32]$VAR[Dark_Hex]</value>
+		<value condition="$EXP[Background_IsFanart] + !String.IsEqual(Window(home).Property(OptionsMenu),Active) + !$EXP[Infoscreen_IsVisible]">$VAR[Alpha_32]$VAR[Dark_Hex]</value>
 		<value>$VAR[Alpha_66]$VAR[Dark_Hex]</value>
 	</variable>
 
@@ -365,8 +367,6 @@
 	</variable>
 	<variable name="Notification_Widget_Icon_Color">
 		<value condition="Window.IsActive(addonbrowser) + !Container.Content(addons)">$VAR[Light_Color]</value>
-		<!-- Movie information visible / Light theme / Choose Art focused -->
-		<value condition="Skin.String(Theme,Light) + Window.IsVisible(movieinformation) + String.IsEqual(Window(movieinformation).Property(Focused_Button),$LOCALIZE[13511])">$VAR[Dark_Grey_Color]</value>
 		<!-- Movie information visible / main menu focused -->
 		<value condition="Window.IsVisible(movieinformation) + !String.IsEqual(Window(movieinformation).Property(Focused_Button),False)">$VAR[Light_Color]</value>
 		<!-- Artist information visible / Light theme / Choose Art focused -->
@@ -407,8 +407,6 @@
 	</variable>
 	<variable name="Notification_Widget_Label_Color">
 		<value condition="Window.IsActive(addonbrowser) + !Container.Content(addons)">$VAR[Light_Color]</value>
-		<!-- Movie information visible / Light theme / Choose Art focused -->
-		<value condition="Skin.String(Theme,Light) + Window.IsVisible(movieinformation) + String.IsEqual(Window(movieinformation).Property(Focused_Button),$LOCALIZE[13511])">$VAR[Dark_Grey_Color]</value>
 		<!-- Movie information visible / main menu focused -->
 		<value condition="Window.IsVisible(movieinformation) + !String.IsEqual(Window(movieinformation).Property(Focused_Button),False)">$VAR[Light_Color]</value>
 		<!-- Artist information visible / Light theme / Choose Art focused -->
@@ -448,20 +446,15 @@
 		<value>$VAR[Light_Color]</value>
 	</variable>
 	<variable name="Progress_Background_Color">
-		<value condition="Skin.String(Theme,Light) + Window.IsVisible(home) + Window.IsVisible(busydialog)">$VAR[Alpha_15]$VAR[Dark_Hex]</value>
 		<value condition="Skin.String(Theme,Light) + $EXP[StripView_IsVisible]">$VAR[Alpha_15]$VAR[Dark_Hex]</value>
 		<value condition="Skin.String(Theme,Light) + $EXP[ListView_Display_IsThumbnails] + !$EXP[Poster_Containers]">$VAR[Alpha_15]$VAR[Dark_Hex]</value>
 		<value condition="Skin.String(Theme,Light) + Window.Is(progressdialog)">$VAR[Alpha_15]$VAR[Dark_Hex]</value>
-		<value condition="Skin.String(Theme,Light) + Window.Is(visualisation)">$VAR[Alpha_15]$VAR[Dark_Hex]</value>
 		<value>$VAR[Progress_Light_Background_Color]</value>
 	</variable>
 	<variable name="Progress_Focused_Color">
-		<value condition="[Window.Is(videoosd) | Window.Is(musicosd)] + Control.HasFocus(60)">$VAR[Accent_Color]</value>
-		<value condition="Skin.String(Theme,Light) + Window.IsVisible(home) + Window.IsVisible(busydialog)">$VAR[Dark_Color]</value>
 		<value condition="Skin.String(Theme,Light) + $EXP[StripView_IsVisible]">$VAR[Dark_Color]</value>
 		<value condition="Skin.String(Theme,Light) + $EXP[ListView_Display_IsThumbnails] + !$EXP[Poster_Containers]">$VAR[Dark_Color]</value>
 		<value condition="Skin.String(Theme,Light) + Window.Is(progressdialog)">$VAR[Dark_Color]</value>
-		<value condition="Skin.String(Theme,Light) + Window.Is(visualisation)">$VAR[Dark_Color]</value>
 		<value>$VAR[Progress_Light_Focused_Color]</value>
 	</variable>
 	<variable name="Progress_Light_Background_Color">
@@ -743,18 +736,28 @@
 		<value condition="Control.HasFocus(3209) + Skin.HasSetting(Widget9_View_Grid) + Skin.HasSetting(Widget9_Display_Fanart) + !String.IsEmpty(Container(3209).ListItemNoWrap(3).Label)">$VAR[Light_Color]</value>
 		<value>$VAR[Primary_Color]</value>
 	</variable>
+	<variable name="Seekbar_Background_Color">
+		<value condition="Skin.String(Theme,Light) + Window.IsVisible(visualisation)">$VAR[Alpha_15]$VAR[Dark_Hex]</value>
+		<value>$VAR[Alpha_15]$VAR[Light_Hex]</value>
+	</variable>
+	<variable name="Seekbar_Focused_Color">
+		<value condition="Control.HasFocus(60)">$VAR[Accent_Color]</value>
+		<value condition="Skin.String(Theme,Light) + Window.IsVisible(visualisation)">$VAR[Dark_Color]</value>
+		<value>$VAR[Light_Color]</value>
+	</variable>
 	<variable name="Star_Color">
 		<value condition="!String.IsEmpty(ListItem.UserRating)">$VAR[User_Rating_Color]</value>
 		<value>$VAR[Accent_Color]</value>
 	</variable>
-	<variable name="Unwatched_Indicator_Background_Color">
-		<value condition="[$EXP[StripView_IsVisible] | [$EXP[ListView_IsVisible] + !$EXP[Poster_Containers]]] + Skin.String(Theme,Light)">$VAR[Dark_Color]</value>
-		<value>$VAR[Light_Color]</value>
+	<variable name="Progress_Indicator_Background_Color">
+		<value condition="$EXP[StripView_IsVisible]">$VAR[Primary_Color]</value>
+		<value condition="$EXP[ListView_IsVisible] + !$EXP[Poster_Containers]">$VAR[Primary_Color]</value>
+		<value>$VAR[Secondary_Color]</value>
 	</variable>
-	<variable name="Unwatched_Indicator_Label_Color">
-		<value condition="$EXP[GridView_IsVisible]">$VAR[Light_Color]</value>
-		<value condition="[$EXP[StripView_IsVisible] | [$EXP[ListView_IsVisible] + !$EXP[Poster_Containers]]] + Skin.String(Theme,Light)">$VAR[Light_Color]</value>
-		<value>$VAR[Dark_Color]</value>
+	<variable name="Progress_Indicator_Label_Color">
+		<value condition="$EXP[StripView_IsVisible]">$VAR[Secondary_Color]</value>
+		<value condition="$EXP[ListView_IsVisible] + !$EXP[Poster_Containers]">$VAR[Secondary_Color]</value>
+		<value>$VAR[Primary_Color]</value>
 	</variable>
 	<variable name="Volume_Background_Color">
 		<!-- Movie information visible / Light theme / Choose Art focused -->
@@ -794,8 +797,6 @@
 		<value>$VAR[Alpha_15]$VAR[Light_Hex]</value>
 	</variable>
 	<variable name="Volume_Focused_Color">
-		<!-- Movie information visible / Light theme / Choose Art focused -->
-		<value condition="Skin.String(Theme,Light) + Window.IsVisible(movieinformation) + String.IsEqual(Window(movieinformation).Property(Focused_Button),$LOCALIZE[13511])">$VAR[Dark_Grey_Color]</value>
 		<!-- Movie information visible / main menu focused -->
 		<value condition="Window.IsVisible(movieinformation) + !String.IsEqual(Window(movieinformation).Property(Focused_Button),False)">$VAR[Light_Color]</value>
 		<!-- Artist information visible / Light theme / Choose Art focused -->
