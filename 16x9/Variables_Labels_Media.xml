@@ -230,6 +230,9 @@
 		<value condition="Container.Content(images) + ListItem.IsFolder + !String.IsEqual(ListItem.Label,..) + Integer.IsEqual(Container(3100).NumItems,1)">[UPPERCASE]$INFO[Container(3100).NumItems,, $LOCALIZE[31116]][/UPPERCASE]</value>
 		<value condition="Container.Content(images) + ListItem.IsFolder + !String.IsEqual(ListItem.Label,..)">[UPPERCASE]$INFO[Container(3100).NumItems,, $LOCALIZE[31115]][/UPPERCASE]</value>
 		<value condition="Container.Content(images)">$INFO[ListItem.PictureResolution]</value>
+		<!-- Addons -->
+		<value condition="Container.Content(addons) + $EXP[GridView_IsVisible] + !String.IsEmpty(ListItem.AddonVersion)">$INFO[ListItem.AddonVersion]</value>
+		<value condition="Container.Content(addons) + !String.IsEmpty(ListItem.AddonType)">[UPPERCASE]$INFO[ListItem.AddonType]$INFO[ListItem.AddonVersion, $LOCALIZE[31000] ]$INFO[ListItem.AddonCreator, $LOCALIZE[31000] ][/UPPERCASE]</value>
 		<!-- Files -->
 		<!-- 23 mins / Ends 13:32 -->
 		<value condition="Container.Content(files) + $EXP[ListView_IsVisible] + !String.IsEmpty(ListItem.Duration)">[UPPERCASE]$INFO[ListItem.Duration(mins),, $LOCALIZE[31114]][/UPPERCASE]</value>
@@ -253,6 +256,7 @@
 		<value condition="String.IsEqual(ListItem.DBType,song) + !String.IsEmpty(ListItem.Year)">$INFO[ListItem.Year,$LOCALIZE[31001] ]</value>
 		<value condition="Container.Content(actors) + !String.IsEmpty(ListItem.Appearances)">$VAR[Appearances_Label2,$LOCALIZE[31001] ]$INFO[Container(3100).ListItem(-1).Title, ]</value>
 		<value condition="Container.Content(files) + String.IsEmpty(ListItem.Art(Poster))">$INFO[ListItem.Size,$LOCALIZE[31001] ]$INFO[ListItem.Duration(mins), $LOCALIZE[31001] , $LOCALIZE[31114]]$INFO[ListItem.EndTime, $LOCALIZE[31001] $LOCALIZE[31100] ]</value>
+		<value condition="Container.Content(addons)">$INFO[ListItem.AddonCreator,$LOCALIZE[31001] ]</value>
 		<value condition="Container.Content(images) + $EXP[GridView_IsVisible]">$INFO[ListItem.Label2,$LOCALIZE[31001] ]</value>
 		<value condition="Window.Is(programs)">$INFO[ListItem.AddonCreator,$LOCALIZE[31001] ]</value>
 		<value condition="Container.Content(addons)">$INFO[ListItem.AddonType,$LOCALIZE[31001] ]$INFO[ListItem.AddonCreator, $LOCALIZE[31001] ]</value>
@@ -339,12 +343,60 @@
 	</variable>
 
 	<variable name="MPAA_Description_Label">
-		<value condition="VideoPlayer.IsFullscreen + String.Contains(VideoPlayer.mpaa,U)">Suitable for all</value>
-		<value condition="VideoPlayer.IsFullscreen + String.Contains(VideoPlayer.mpaa,PG)">Parental guidance</value>
-		<value condition="VideoPlayer.IsFullscreen + String.Contains(VideoPlayer.mpaa,12)">Suitable for 12 years and over</value>
-		<value condition="VideoPlayer.IsFullscreen + String.Contains(VideoPlayer.mpaa,15)">Suitable for 15 years and over</value>
-		<value condition="VideoPlayer.IsFullscreen + [String.Contains(VideoPlayer.mpaa,18) | String.Contains(VideoPlayer.mpaa,UK:X)]">Suitable only for adults</value>
+		<value condition="Skin.HasSetting(Preferred_Rating_BBFC)">$VAR[Certification_BBFC_Description_Label]</value>
+		<value condition="Skin.HasSetting(Preferred_Rating_MPAA)">$VAR[Certification_MPAA_Description_Label]</value>
+		<value condition="Skin.HasSetting(Preferred_Rating_CHVRS)">$VAR[Certification_CHVRS_Description_Label]</value>
+		<!-- <value condition="Skin.HasSetting(Preferred_Rating_ACB)">$VAR[Certification_ACB_Description_Label]</value>
+		<value condition="Skin.HasSetting(Preferred_Rating_FSK)">$VAR[Certification_FSK_Description_Label]</value>
+		<value condition="Skin.HasSetting(Preferred_Rating_DJCTQ)">$VAR[Certification_DJCTQ_Description_Label]</value> -->
+		<value condition="Skin.HasSetting(Preferred_Rating_EIRIN)">$VAR[Certification_EIRIN_Description_Label]</value>
+		<!-- <value condition="Skin.HasSetting(Preferred_Rating_KIJKWIJZER)">$VAR[Certification_Description_Label]</value> -->
 	</variable>
+
+	<variable name="Certification_BBFC_Description_Label">
+		<value condition="String.Contains(VideoPlayer.mpaa,U)">Suitable for all</value>
+		<value condition="String.Contains(VideoPlayer.mpaa,PG)">Parental guidance</value>
+		<value condition="String.Contains(VideoPlayer.mpaa,12)">Suitable for 12 years and over</value>
+		<value condition="String.Contains(VideoPlayer.mpaa,15)">Suitable for 15 years and over</value>
+		<value condition="[String.Contains(VideoPlayer.mpaa,18) | String.Contains(VideoPlayer.mpaa,UK:X)]">Suitable only for adults</value>
+	</variable>
+
+	<variable name="Certification_MPAA_Description_Label">
+		<value condition="String.Contains(VideoPlayer.mpaa,TV-MA)">Mature audience only</value>
+		<value condition="String.Contains(VideoPlayer.mpaa,TV-14)">Parents strongly cautioned</value>
+		<value condition="String.Contains(VideoPlayer.mpaa,TV-PG)">Parental guidance suggested</value>
+		<value condition="String.Contains(VideoPlayer.mpaa,TV-G)">General audiences</value>
+		<value condition="String.Contains(VideoPlayer.mpaa,TV-Y7)">Directed to older children</value>
+		<value condition="String.Contains(VideoPlayer.mpaa,TV-Y)">All children</value>
+		<value condition="String.Contains(VideoPlayer.mpaa,NC-17)">Adults only, no one 17 and under admitted</value>
+		<value condition="String.Contains(VideoPlayer.mpaa,PG-13)">Parents strongly cautioned</value>
+		<value condition="String.Contains(VideoPlayer.mpaa,PG">Parental guidance suggested</value>
+		<value condition="String.Contains(VideoPlayer.mpaa,G)">General audiences. All ages admitted</value>
+		<value condition="String.Contains(VideoPlayer.mpaa,R)">Restricted</value>
+	</variable>
+
+	<variable name="Certification_CHVRS_Description_Label">
+		<value condition="String.IsEmpty(VideoPlayer.TvShowDBID) + String.Contains(VideoPlayer.mpaa,R)">Restricted to 18 years and over</value>
+		<value condition="String.IsEmpty(VideoPlayer.TvShowDBID) + String.Contains(VideoPlayer.mpaa,18A)">Suitable for people 18 years of age or older</value>
+		<value condition="String.IsEmpty(VideoPlayer.TvShowDBID) + String.Contains(VideoPlayer.mpaa,14A)">Suitable for people 14 years of age or older</value>
+		<value condition="String.IsEmpty(VideoPlayer.TvShowDBID) + String.Contains(VideoPlayer.mpaa,PG)">Parental guidance advised</value>
+		<value condition="String.IsEmpty(VideoPlayer.TvShowDBID) + String.Contains(VideoPlayer.mpaa,G)">Suitable for viewing by all ages</value>
+		<value condition="!String.IsEmpty(VideoPlayer.TvShowDBID) + String.Contains(VideoPlayer.mpaa,18)">Adults</value>
+		<value condition="!String.IsEmpty(VideoPlayer.TvShowDBID) + String.Contains(VideoPlayer.mpaa,14)">Over 14 years</value>
+		<value condition="!String.IsEmpty(VideoPlayer.TvShowDBID) + String.Contains(VideoPlayer.mpaa,PG)">Parental guidance</value>
+		<value condition="!String.IsEmpty(VideoPlayer.TvShowDBID) + String.Contains(VideoPlayer.mpaa,G)">General</value>
+		<value condition="!String.IsEmpty(VideoPlayer.TvShowDBID) + String.Contains(VideoPlayer.mpaa,C8)">Children over 8 years</value>
+		<value condition="!String.IsEmpty(VideoPlayer.TvShowDBID) + String.Contains(VideoPlayer.mpaa,C)">Children</value>
+	</variable>
+
+	<variable name="Certification_EIRIN_Description_Label">
+		<value condition="String.Contains(VideoPlayer.mpaa,18)">For persons aged 18 and above only</value>
+		<value condition="String.Contains(VideoPlayer.mpaa,15)">For persons aged 15 and above only</value>
+		<value condition="String.Contains(VideoPlayer.mpaa,PG)">Parental guidance requested for young people under 12 years</value>
+		<value condition="String.Contains(VideoPlayer.mpaa,G)">General audiences</value>
+	</variable>
+
+
 
 	<variable name="Multiart_Refresh_Interval_Label">
 		<value condition="Skin.HasSetting(3_Second_Slideshow)">$LOCALIZE[31436] / $LOCALIZE[31438]</value>
@@ -396,6 +448,8 @@
 		<value condition="!String.IsEmpty(ListItem.Property(Artist_Description))">$INFO[ListItem.Property(Artist_Description)]</value>
 		<value condition="!String.IsEmpty(ListItem.PlotOutline)">$INFO[ListItem.Plot]</value>
 		<value condition="!String.IsEmpty(ListItem.Plot)">$INFO[ListItem.Plot]</value>
+		<value condition="!String.IsEmpty(ListItem.AddonDescription)">$INFO[ListItem.AddonDescription]</value>
+		<value condition="!String.IsEmpty(ListItem.AddonSummary)">$INFO[ListItem.AddonSummary]</value>
 		<value/>
 	</variable>
 
@@ -655,6 +709,7 @@
 		<value condition="String.IsEqual(ListItem.DBType,song) + !String.IsEmpty(ListItem.Album)">$INFO[ListItem.Album]</value>
 		<value condition="Container.Content(actors) + !String.IsEmpty(ListItem.Appearances)">$INFO[ListItem.Appearances]$VAR[Appearances_Label, ]</value>
 		<value condition="Container.Content(files)">$INFO[ListItem.FolderName]</value>
+		<value condition="Container.Content(addons)">$INFO[ListItem.AddonType]</value>
 		<value condition="Container.Content(images) + $EXP[GridView_IsVisible]">$INFO[ListItem.Label]</value>
 		<value condition="Container.Content(addons)">$INFO[ListItem.Label]</value>
 		<value condition="Container.Content(playlists)">$LOCALIZE[136]</value>

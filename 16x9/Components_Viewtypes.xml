@@ -3,18 +3,19 @@
 
 	<include name="Hidden_List">
 		<param name="id" default="3100" />
-		<param name="visible" />
-		<param name="sortby" />
-		<param name="sortorder" />
+		<param name="visible" default="ListItem(0).IsFolder" />
+		<param name="content" default="$INFO[ListItem(0).FolderPath]" />
+		<param name="sortby" default="date" />
+		<param name="sortorder" default="descending" />
 		<definition>
 			<control type="list" id="$PARAM[id]">
-				<visible>ListItem.IsFolder</visible>
+				<visible>$PARAM[visible]</visible>
 				<width>0</width>
 				<height>0</height>
 				<orientation>vertical</orientation>
 				<itemlayout />
 				<focusedlayout />
-				<content sortby="date" sortorder="descending">$INFO[ListItem.FolderPath]</content>
+				<content sortby="$PARAM[sortby]" sortorder="$PARAM[sortorder]">$PARAM[content]</content>
 			</control>
 		</definition>
 	</include>
@@ -720,68 +721,76 @@
 			<control type="group">
 				<visible>Control.HasFocus($PARAM[id]) | $PARAM[visible_during_music_player_focus]</visible>
 				<visible>!String.IsEqual(Container($PARAM[id]).ListItem.DBType,artist) + !String.IsEqual(Container($PARAM[id]).ListItem.DBType,album) + !String.IsEqual(Container($PARAM[id]).ListItem.DBType,song) + ![$EXP[Infoscreen_IsVisible] + Control.HasFocus(50)]</visible>
-				<!-- Movie/Episode Resumable -->
-				<control type="progress">
+				<!-- 0 -->
+				<control type="image">
+					<visible>Integer.IsGreater(Container($PARAM[id]).ListItem.Property(UnwatchedEpisodes),0) + Skin.HasSetting(Unwatched_Indicator)</visible>
+					<visible>[!String.IsEmpty(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent)) + Integer.IsEqual(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),0)] | [!String.IsEmpty(Container($PARAM[id]).ListItem.Property(WatchedProgress)) + Integer.IsEqual(Container($PARAM[id]).ListItem.Property(WatchedProgress),0)]</visible>
 					<width>100%</width>
 					<height>100%</height>
+					<texture colordiffuse="$PARAM[background_color]">views/white_100.png</texture>
+				</control>
+				<!--- Progress Property(WatchedEpisodePercent) -->
+				<control type="progress">
+					<visible>Integer.IsGreater(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),0)</visible>
+					<width>100%</width>
+					<height>100%</height>
+					<texturebg colordiffuse="$PARAM[background_color]">views/white_100.png</texturebg>
+					<midtexture colordiffuse="$PARAM[focus_color]">views/white_100.png</midtexture>
+					<info>Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent)</info>
+				</control>
+				<!-- Progress Property(WatchedProgress) -->
+				<control type="progress">
+					<visible>Integer.IsGreater(Container($PARAM[id]).ListItem.Property(WatchedProgress),0)</visible>
+					<width>100%</width>
+					<height>100%</height>
+					<texturebg colordiffuse="$PARAM[background_color]">views/white_100.png</texturebg>
+					<midtexture colordiffuse="$PARAM[focus_color]">views/white_100.png</midtexture>
+					<info>Container($PARAM[id]).ListItem.Property(WatchedProgress)</info>
+				</control>
+				<!-- Progress ListItem.IsResumable -->
+				<control type="progress">
 					<visible>Container($PARAM[id]).ListItem.IsResumable</visible>
+					<width>100%</width>
+					<height>100%</height>
 					<texturebg colordiffuse="$PARAM[background_color]">views/white_100.png</texturebg>
 					<midtexture colordiffuse="$PARAM[focus_color]">views/white_100.png</midtexture>
 					<info>Container($PARAM[id]).ListItem.PercentPlayed</info>
 				</control>
-				<!-- ListItem Watched -->
+				<!-- 100% -->
 				<control type="image">
+					<visible>String.IsEqual(Container($PARAM[id]).ListItem.Overlay,OverlayWatched.png) | String.IsEqual(Container($PARAM[id]).ListItem.Overlay,1) | Integer.IsGreater(Container($PARAM[id]).ListItem.PlayCount,0)</visible>
+					<visible>![$EXP[ListView_IsVisible] + !$EXP[Infoscreen_IsVisible]]</visible>
 					<width>100%</width>
 					<height>100%</height>
-					<visible>!Container($PARAM[id]).ListItem.IsResumable + [String.IsEqual(Container($PARAM[id]).ListItem.Overlay,OverlayWatched.png) | Integer.IsGreater(Container($PARAM[id]).ListItem.PlayCount,0)] + ![$EXP[ListView_IsVisible] + !$EXP[Infoscreen_IsVisible]]</visible>
 					<texture colordiffuse="$PARAM[focus_color]">views/white_100.png</texture>
 				</control>
-				<!-- TV show / Season not watched -->
-				<control type="group">
+				<!-- Unwatched Indicator -->
+				<include content="Unwatched_Indicator" condition="Skin.HasSetting(Unwatched_Indicator)">
+					<param name="id" value="$PARAM[id]" />
+					<param name="slides" value="$PARAM[slides]" />
+					<param name="background" value="$PARAM[progress_indicator_background]" />
+					<param name="textcolor" value="$PARAM[progress_indicator_textcolor]" />
 					<animation effect="slide" start="0,0" end="0,6" time="0" condition="Skin.HasSetting(Unwatched_Indicator) + $EXP[ShowcaseView_IsVisible] + $EXP[ShowcaseView_Details_Off]">Conditional</animation>
-					<visible>[String.IsEqual(Container($PARAM[id]).ListItem.DBType,tvshow) | String.IsEqual(Container($PARAM[id]).ListItem.DBType,season)] + !String.IsEqual(Container($PARAM[id]).ListItem.Overlay,OverlayWatched.png) + !Integer.IsGreater(Container($PARAM[id]).ListItem.PlayCount,0)</visible>
-					<!-- 0 -->
-					<control type="image">
-						<visible>Integer.IsEqual(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),0) + Integer.IsGreater(Container($PARAM[id]).ListItem.Property(UnwatchedEpisodes),0)</visible>
-						<width>100%</width>
-						<height>100%</height>
-						<texture colordiffuse="$PARAM[background_color]">views/white_100.png</texture>
-					</control>
-					<!--- Greater than 0 -->
-					<control type="progress">
-						<visible>Integer.IsGreater(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),0)</visible>
-						<info>Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent)</info>
-						<width>100%</width>
-						<height>100%</height>
-						<texturebg colordiffuse="$PARAM[background_color]">views/white_100.png</texturebg>
-						<lefttexture></lefttexture>
-						<midtexture colordiffuse="$PARAM[focus_color]">views/white_100.png</midtexture>
-						<righttexture></righttexture>
-						<overlaytexture></overlaytexture>
-					</control>
-					<!-- Unwatched Indicator -->
-					<include content="Unwatched_Indicator" condition="Skin.HasSetting(Unwatched_Indicator)">
-						<param name="id" value="$PARAM[id]" />
-						<param name="slides" value="$PARAM[slides]" />
-						<param name="background" value="$PARAM[progress_indicator_background]" />
-						<param name="textcolor" value="$PARAM[progress_indicator_textcolor]" />
-					</include>
-				</control>
+				</include>
 			</control>
 		</definition>
 	</include>
 
 	<include name="Unwatched_Indicator">
 		<control type="group">
-			<visible>!Integer.IsEqual(Container($PARAM[id]).ListItem.Property(UnWatchedEpisodes),0)</visible>
+			<visible>Integer.IsGreater(Container($PARAM[id]).ListItem.Property(UnwatchedEpisodes),0)</visible>
 			<include content="Progress_Slides_$PARAM[slides]">
 				<param name="id" value="$PARAM[id]" />
 			</include>
-			<width>30</width>
+			<nested />
+			<width>60</width>
 			<height>30</height>
 			<centertop>50%</centertop>
 			<left>0</left>
 			<control type="image">
+				<centerleft>50%</centerleft>
+				<width>30</width>
+				<animation effect="zoom" end="200,100" time="0" center="auto" condition="Integer.IsGreater(Container($PARAM[id]).ListItem.Property(UnwatchedEpisodes),99)">Conditional</animation>
 				<texture colordiffuse="$PARAM[background]">views/white_100.png</texture>
 			</control>
 			<control type="label">
@@ -791,63 +800,96 @@
 				<aligny>center</aligny>
 				<font>Unwatched_Indicator</font>
 				<textcolor>$PARAM[textcolor]</textcolor>
-				<label>$INFO[Container($PARAM[id]).ListItem.Property(UnWatchedEpisodes)]</label>
+				<label>$INFO[Container($PARAM[id]).ListItem.Property(UnwatchedEpisodes)]</label>
 			</control>
 		</control>
 	</include>
 
+	<include name="Progress_Slides_Template">
+		<animation effect="slide" end="$PARAM[0]" time="0" condition="[!String.IsEmpty(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent)) + Integer.IsLess(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),5)] | [!String.IsEmpty(Container($PARAM[id]).ListItem.Property(WatchedProgress)) + Integer.IsLess(Container($PARAM[id]).ListItem.Property(WatchedProgress),5)]">Conditional</animation>
+		<animation effect="slide" end="$PARAM[5]" time="0" condition="[Integer.IsGreaterOrEqual(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),5) + Integer.IsLess(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),10)] | [Integer.IsGreaterOrEqual(Container($PARAM[id]).ListItem.Property(WatchedProgress),5) + Integer.IsLess(Container($PARAM[id]).ListItem.Property(WatchedProgress),10)]">Conditional</animation>
+		<animation effect="slide" end="$PARAM[10]" time="0" condition="[Integer.IsGreaterOrEqual(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),10) + Integer.IsLess(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),15)] | [Integer.IsGreaterOrEqual(Container($PARAM[id]).ListItem.Property(WatchedProgress),10) + Integer.IsLess(Container($PARAM[id]).ListItem.Property(WatchedProgress),15)]">Conditional</animation>
+		<animation effect="slide" end="$PARAM[15]" time="0" condition="[Integer.IsGreaterOrEqual(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),15) + Integer.IsLess(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),20)] | [Integer.IsGreaterOrEqual(Container($PARAM[id]).ListItem.Property(WatchedProgress),15) + Integer.IsLess(Container($PARAM[id]).ListItem.Property(WatchedProgress),20)]">Conditional</animation>
+		<animation effect="slide" end="$PARAM[20]" time="0" condition="[Integer.IsGreaterOrEqual(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),20) + Integer.IsLess(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),25)] | [Integer.IsGreaterOrEqual(Container($PARAM[id]).ListItem.Property(WatchedProgress),20) + Integer.IsLess(Container($PARAM[id]).ListItem.Property(WatchedProgress),25)]">Conditional</animation>
+		<animation effect="slide" end="$PARAM[25]" time="0" condition="[Integer.IsGreaterOrEqual(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),25) + Integer.IsLess(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),30)] | [Integer.IsGreaterOrEqual(Container($PARAM[id]).ListItem.Property(WatchedProgress),25) + Integer.IsLess(Container($PARAM[id]).ListItem.Property(WatchedProgress),30)]">Conditional</animation>
+		<animation effect="slide" end="$PARAM[30]" time="0" condition="[Integer.IsGreaterOrEqual(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),30) + Integer.IsLess(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),35)] | [Integer.IsGreaterOrEqual(Container($PARAM[id]).ListItem.Property(WatchedProgress),30) + Integer.IsLess(Container($PARAM[id]).ListItem.Property(WatchedProgress),35)]">Conditional</animation>
+		<animation effect="slide" end="$PARAM[35]" time="0" condition="[Integer.IsGreaterOrEqual(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),35) + Integer.IsLess(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),40)] | [Integer.IsGreaterOrEqual(Container($PARAM[id]).ListItem.Property(WatchedProgress),35) + Integer.IsLess(Container($PARAM[id]).ListItem.Property(WatchedProgress),40)]">Conditional</animation>
+		<animation effect="slide" end="$PARAM[40]" time="0" condition="[Integer.IsGreaterOrEqual(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),40) + Integer.IsLess(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),45)] | [Integer.IsGreaterOrEqual(Container($PARAM[id]).ListItem.Property(WatchedProgress),40) + Integer.IsLess(Container($PARAM[id]).ListItem.Property(WatchedProgress),45)]">Conditional</animation>
+		<animation effect="slide" end="$PARAM[45]" time="0" condition="[Integer.IsGreaterOrEqual(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),45) + Integer.IsLess(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),50)] | [Integer.IsGreaterOrEqual(Container($PARAM[id]).ListItem.Property(WatchedProgress),45) + Integer.IsLess(Container($PARAM[id]).ListItem.Property(WatchedProgress),50)]">Conditional</animation>
+		<animation effect="slide" end="$PARAM[50]" time="0" condition="[Integer.IsGreaterOrEqual(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),50) + Integer.IsLess(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),55)] | [Integer.IsGreaterOrEqual(Container($PARAM[id]).ListItem.Property(WatchedProgress),50) + Integer.IsLess(Container($PARAM[id]).ListItem.Property(WatchedProgress),55)]">Conditional</animation>
+		<animation effect="slide" end="$PARAM[55]" time="0" condition="[Integer.IsGreaterOrEqual(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),55) + Integer.IsLess(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),60)] | [Integer.IsGreaterOrEqual(Container($PARAM[id]).ListItem.Property(WatchedProgress),55) + Integer.IsLess(Container($PARAM[id]).ListItem.Property(WatchedProgress),60)]">Conditional</animation>
+		<animation effect="slide" end="$PARAM[60]" time="0" condition="[Integer.IsGreaterOrEqual(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),60) + Integer.IsLess(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),65)] | [Integer.IsGreaterOrEqual(Container($PARAM[id]).ListItem.Property(WatchedProgress),60) + Integer.IsLess(Container($PARAM[id]).ListItem.Property(WatchedProgress),65)]">Conditional</animation>
+		<animation effect="slide" end="$PARAM[65]" time="0" condition="[Integer.IsGreaterOrEqual(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),65) + Integer.IsLess(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),70)] | [Integer.IsGreaterOrEqual(Container($PARAM[id]).ListItem.Property(WatchedProgress),65) + Integer.IsLess(Container($PARAM[id]).ListItem.Property(WatchedProgress),70)]">Conditional</animation>
+		<animation effect="slide" end="$PARAM[70]" time="0" condition="[Integer.IsGreaterOrEqual(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),70) + Integer.IsLess(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),75)] | [Integer.IsGreaterOrEqual(Container($PARAM[id]).ListItem.Property(WatchedProgress),70) + Integer.IsLess(Container($PARAM[id]).ListItem.Property(WatchedProgress),75)]">Conditional</animation>
+		<animation effect="slide" end="$PARAM[75]" time="0" condition="[Integer.IsGreaterOrEqual(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),75) + Integer.IsLess(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),80)] | [Integer.IsGreaterOrEqual(Container($PARAM[id]).ListItem.Property(WatchedProgress),75) + Integer.IsLess(Container($PARAM[id]).ListItem.Property(WatchedProgress),80)]">Conditional</animation>
+		<animation effect="slide" end="$PARAM[80_30]" time="0" condition="!Integer.IsGreater(Container($PARAM[id]).ListItem.Property(UnwatchedEpisodes),99) + [Integer.IsGreaterOrEqual(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),80) + Integer.IsLess(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),85)] | [Integer.IsGreaterOrEqual(Container($PARAM[id]).ListItem.Property(WatchedProgress),80) + Integer.IsLess(Container($PARAM[id]).ListItem.Property(WatchedProgress),85)]">Conditional</animation>
+		<animation effect="slide" end="$PARAM[85_30]" time="0" condition="!Integer.IsGreater(Container($PARAM[id]).ListItem.Property(UnwatchedEpisodes),99) + [Integer.IsGreaterOrEqual(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),85) + Integer.IsLess(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),90)] | [Integer.IsGreaterOrEqual(Container($PARAM[id]).ListItem.Property(WatchedProgress),85) + Integer.IsLess(Container($PARAM[id]).ListItem.Property(WatchedProgress),90)]">Conditional</animation>
+		<animation effect="slide" end="$PARAM[90_30]" time="0" condition="!Integer.IsGreater(Container($PARAM[id]).ListItem.Property(UnwatchedEpisodes),99) + [Integer.IsGreaterOrEqual(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),90) + Integer.IsLess(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),95)] | [Integer.IsGreaterOrEqual(Container($PARAM[id]).ListItem.Property(WatchedProgress),90) + Integer.IsLess(Container($PARAM[id]).ListItem.Property(WatchedProgress),95)]">Conditional</animation>
+		<animation effect="slide" end="$PARAM[95_30]" time="0" condition="!Integer.IsGreater(Container($PARAM[id]).ListItem.Property(UnwatchedEpisodes),99) + Integer.IsGreaterOrEqual(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),95) | Integer.IsGreaterOrEqual(Container($PARAM[id]).ListItem.Property(WatchedProgress),95)">Conditional</animation>
+		<animation effect="slide" end="$PARAM[80_60]" time="0" condition="Integer.IsGreater(Container($PARAM[id]).ListItem.Property(UnwatchedEpisodes),99) + [Integer.IsGreaterOrEqual(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),80) + Integer.IsLess(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),85)] | [Integer.IsGreaterOrEqual(Container($PARAM[id]).ListItem.Property(WatchedProgress),80) + Integer.IsLess(Container($PARAM[id]).ListItem.Property(WatchedProgress),85)]">Conditional</animation>
+		<animation effect="slide" end="$PARAM[85_60]" time="0" condition="Integer.IsGreater(Container($PARAM[id]).ListItem.Property(UnwatchedEpisodes),99) + [Integer.IsGreaterOrEqual(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),85) + Integer.IsLess(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),90)] | [Integer.IsGreaterOrEqual(Container($PARAM[id]).ListItem.Property(WatchedProgress),85) + Integer.IsLess(Container($PARAM[id]).ListItem.Property(WatchedProgress),90)]">Conditional</animation>
+		<animation effect="slide" end="$PARAM[90_60]" time="0" condition="Integer.IsGreater(Container($PARAM[id]).ListItem.Property(UnwatchedEpisodes),99) + [Integer.IsGreaterOrEqual(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),90) + Integer.IsLess(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),95)] | [Integer.IsGreaterOrEqual(Container($PARAM[id]).ListItem.Property(WatchedProgress),90) + Integer.IsLess(Container($PARAM[id]).ListItem.Property(WatchedProgress),95)]">Conditional</animation>
+		<animation effect="slide" end="$PARAM[95_60]" time="0" condition="Integer.IsGreater(Container($PARAM[id]).ListItem.Property(UnwatchedEpisodes),99) + Integer.IsGreaterOrEqual(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),95) | Integer.IsGreaterOrEqual(Container($PARAM[id]).ListItem.Property(WatchedProgress),95)">Conditional</animation>
+	</include>
+
 	<include name="Progress_Slides_Default">
-		<param name="id" />
-		<definition>
-			<animation effect="slide" end="165" time="0" condition="Integer.IsEqual(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),0)">Conditional</animation>
-			<animation effect="slide" end="174" time="0" condition="Integer.IsGreater(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),0) + Integer.IsLessOrEqual(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),5)">Conditional</animation>
-			<animation effect="slide" end="183" time="0" condition="Integer.IsGreater(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),5) + Integer.IsLessOrEqual(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),10)">Conditional</animation>
-			<animation effect="slide" end="192" time="0" condition="Integer.IsGreater(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),10) + Integer.IsLessOrEqual(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),15)">Conditional</animation>
-			<animation effect="slide" end="201" time="0" condition="Integer.IsGreater(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),15) + Integer.IsLessOrEqual(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),20)">Conditional</animation>
-			<animation effect="slide" end="210" time="0" condition="Integer.IsGreater(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),20) + Integer.IsLessOrEqual(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),25)">Conditional</animation>
-			<animation effect="slide" end="219" time="0" condition="Integer.IsGreater(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),25) + Integer.IsLessOrEqual(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),30)">Conditional</animation>
-			<animation effect="slide" end="228" time="0" condition="Integer.IsGreater(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),30) + Integer.IsLessOrEqual(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),35)">Conditional</animation>
-			<animation effect="slide" end="237" time="0" condition="Integer.IsGreater(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),35) + Integer.IsLessOrEqual(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),40)">Conditional</animation>
-			<animation effect="slide" end="246" time="0" condition="Integer.IsGreater(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),40) + Integer.IsLessOrEqual(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),45)">Conditional</animation>
-			<animation effect="slide" end="255" time="0" condition="Integer.IsGreater(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),45) + Integer.IsLessOrEqual(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),50)">Conditional</animation>
-			<animation effect="slide" end="264" time="0" condition="Integer.IsGreater(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),50) + Integer.IsLessOrEqual(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),55)">Conditional</animation>
-			<animation effect="slide" end="273" time="0" condition="Integer.IsGreater(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),55) + Integer.IsLessOrEqual(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),60)">Conditional</animation>
-			<animation effect="slide" end="282" time="0" condition="Integer.IsGreater(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),60) + Integer.IsLessOrEqual(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),65)">Conditional</animation>
-			<animation effect="slide" end="291" time="0" condition="Integer.IsGreater(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),65) + Integer.IsLessOrEqual(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),70)">Conditional</animation>
-			<animation effect="slide" end="300" time="0" condition="Integer.IsGreater(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),70) + Integer.IsLessOrEqual(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),75)">Conditional</animation>
-			<animation effect="slide" end="309" time="0" condition="Integer.IsGreater(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),75) + Integer.IsLessOrEqual(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),80)">Conditional</animation>
-			<animation effect="slide" end="318" time="0" condition="Integer.IsGreater(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),80) + Integer.IsLessOrEqual(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),85)">Conditional</animation>
-			<animation effect="slide" end="327" time="0" condition="Integer.IsGreater(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),85) + Integer.IsLessOrEqual(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),90)">Conditional</animation>
-			<animation effect="slide" end="336" time="0" condition="Integer.IsGreater(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),90) + Integer.IsLessOrEqual(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),95)">Conditional</animation>
-			<animation effect="slide" end="345" time="0" condition="Integer.IsGreater(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),95) + Integer.IsLess(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),100)">Conditional</animation>
-		</definition>
+		<include content="Progress_Slides_Template">
+			<param name="id" value="$PARAM[id]" />
+			<param name="0" value="150" />
+			<param name="5" value="159" />
+			<param name="10" value="168" />
+			<param name="15" value="177" />
+			<param name="20" value="186" />
+			<param name="25" value="195" />
+			<param name="30" value="204" />
+			<param name="35" value="213" />
+			<param name="40" value="222" />
+			<param name="45" value="231" />
+			<param name="50" value="240" />
+			<param name="55" value="249" />
+			<param name="60" value="258" />
+			<param name="65" value="267" />
+			<param name="70" value="276" />
+			<param name="75" value="285" />
+			<param name="80_30" value="294" />
+			<param name="85_30" value="303" />
+			<param name="90_30" value="312" />
+			<param name="95_30" value="315" />
+			<param name="80_60" value="294" />
+			<param name="85_60" value="300" />
+			<param name="90_60" value="300" />
+			<param name="95_60" value="300" />
+		</include>
 	</include>
 
 	<include name="Progress_Slides_Narrow">
-		<param name="id" />
-		<definition>
-			<animation effect="slide" end="105" time="0" condition="Integer.IsEqual(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),0)">Conditional</animation>
-			<animation effect="slide" end="111" time="0" condition="Integer.IsGreater(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),0) + Integer.IsLessOrEqual(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),5)">Conditional</animation>
-			<animation effect="slide" end="117" time="0" condition="Integer.IsGreater(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),5) + Integer.IsLessOrEqual(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),10)">Conditional</animation>
-			<animation effect="slide" end="123" time="0" condition="Integer.IsGreater(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),10) + Integer.IsLessOrEqual(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),15)">Conditional</animation>
-			<animation effect="slide" end="129" time="0" condition="Integer.IsGreater(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),15) + Integer.IsLessOrEqual(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),20)">Conditional</animation>
-			<animation effect="slide" end="135" time="0" condition="Integer.IsGreater(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),20) + Integer.IsLessOrEqual(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),25)">Conditional</animation>
-			<animation effect="slide" end="141" time="0" condition="Integer.IsGreater(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),25) + Integer.IsLessOrEqual(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),30)">Conditional</animation>
-			<animation effect="slide" end="147" time="0" condition="Integer.IsGreater(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),30) + Integer.IsLessOrEqual(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),35)">Conditional</animation>
-			<animation effect="slide" end="153" time="0" condition="Integer.IsGreater(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),35) + Integer.IsLessOrEqual(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),40)">Conditional</animation>
-			<animation effect="slide" end="159" time="0" condition="Integer.IsGreater(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),40) + Integer.IsLessOrEqual(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),45)">Conditional</animation>
-			<animation effect="slide" end="165" time="0" condition="Integer.IsGreater(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),45) + Integer.IsLessOrEqual(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),50)">Conditional</animation>
-			<animation effect="slide" end="171" time="0" condition="Integer.IsGreater(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),50) + Integer.IsLessOrEqual(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),55)">Conditional</animation>
-			<animation effect="slide" end="177" time="0" condition="Integer.IsGreater(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),55) + Integer.IsLessOrEqual(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),60)">Conditional</animation>
-			<animation effect="slide" end="183" time="0" condition="Integer.IsGreater(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),60) + Integer.IsLessOrEqual(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),65)">Conditional</animation>
-			<animation effect="slide" end="189" time="0" condition="Integer.IsGreater(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),65) + Integer.IsLessOrEqual(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),70)">Conditional</animation>
-			<animation effect="slide" end="195" time="0" condition="Integer.IsGreater(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),70) + Integer.IsLessOrEqual(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),75)">Conditional</animation>
-			<animation effect="slide" end="201" time="0" condition="Integer.IsGreater(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),75) + Integer.IsLessOrEqual(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),80)">Conditional</animation>
-			<animation effect="slide" end="207" time="0" condition="Integer.IsGreater(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),80) + Integer.IsLessOrEqual(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),85)">Conditional</animation>
-			<animation effect="slide" end="213" time="0" condition="Integer.IsGreater(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),85) + Integer.IsLessOrEqual(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),90)">Conditional</animation>
-			<animation effect="slide" end="219" time="0" condition="Integer.IsGreater(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),90) + Integer.IsLessOrEqual(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),95)">Conditional</animation>
-			<animation effect="slide" end="225" time="0" condition="Integer.IsGreater(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),95) + Integer.IsLess(Container($PARAM[id]).ListItem.Property(WatchedEpisodePercent),100)">Conditional</animation>
-		</definition>
+		<include content="Progress_Slides_Template">
+			<param name="id" value="$PARAM[id]" />
+			<param name="0" value="90" />
+			<param name="5" value="96" />
+			<param name="10" value="102" />
+			<param name="15" value="108" />
+			<param name="20" value="114" />
+			<param name="25" value="120" />
+			<param name="30" value="126" />
+			<param name="35" value="132" />
+			<param name="40" value="138" />
+			<param name="45" value="144" />
+			<param name="50" value="150" />
+			<param name="55" value="156" />
+			<param name="60" value="162" />
+			<param name="65" value="168" />
+			<param name="70" value="174" />
+			<param name="75" value="180" />
+			<param name="80_30" value="186" />
+			<param name="85_30" value="192" />
+			<param name="90_30" value="195" />
+			<param name="95_30" value="195" />
+			<param name="80_60" value="180" />
+			<param name="85_60" value="180" />
+			<param name="90_60" value="180" />
+			<param name="95_60" value="180" />
+		</include>
 	</include>
 
 	<include name="Flag_Checker">
