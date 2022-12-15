@@ -68,7 +68,7 @@
 		<value condition="ListItem.IsCollection">$VAR[Info_Label_DBType_Sets]</value>
 		<value condition="String.IsEqual(ListItem.DBType,movie)">$VAR[Info_Label_DBType_Movies]</value>
 		<value condition="String.IsEqual(ListItem.DBType,tvshow)">$VAR[Info_Label_DBType_TVShows]</value>
-		<value condition="String.IsEqual(ListItem.DBType,seasons)">$VAR[Info_Label_DBType_Seasons]</value>
+		<value condition="String.IsEqual(ListItem.DBType,season)">$VAR[Info_Label_DBType_Seasons]</value>
 		<value condition="String.IsEqual(ListItem.DBType,episode)">$VAR[Info_Label_DBType_Episodes]</value>
 		<value>$VAR[Info_Label_DBType_Other]</value>
 	</variable>
@@ -152,29 +152,22 @@
 	</variable>
 
 	<variable name="Info_Label_DBType_Sets">
-		<!-- Listview/Thumbnails: 3 Movies -->
-		<!-- Others: 2005-2012 / 3 Movies -->
-		<value condition="Skin.HasSetting(Secondary_List_Enabled) + !$EXP[ListView_Display_IsThumbnails] + !$EXP[GridView_IsVisible] + !String.IsEmpty(Container(3100).ListItem(0).Year)">[UPPERCASE]$INFO[Container(3100).ListItem(0).Year]$INFO[Container(3100).ListItem(-1).Year,-]$INFO[Container(3100).NumItems, $LOCALIZE[31000] , $LOCALIZE[342]][/UPPERCASE]</value>
-		<value condition="Skin.HasSetting(Secondary_List_Enabled) + !$EXP[GridView_IsVisible] + !String.IsEmpty(Container(3100).NumItems)">[UPPERCASE]$INFO[Container(3100).NumItems,, $LOCALIZE[342]][/UPPERCASE]</value>
-		<value condition="!$EXP[ListView_Display_IsThumbnails] + !String.IsEmpty(Container(3100).ListItem(0).Year)">[UPPERCASE]$INFO[Container(3100).ListItem(0).Year]$INFO[Container(3100).ListItem(-1).Year,-]$INFO[Container(3100).NumItems, $LOCALIZE[31000] , $LOCALIZE[342]][/UPPERCASE]</value>
+		<!-- 2005-2012 / 3 Movies -->
+		<value condition="!String.IsEmpty(Container(3100).ListItem(0).Year)">[UPPERCASE]$INFO[Container(3100).ListItem(0).Year]$INFO[Container(3100).ListItem(-1).Year,-]$INFO[Container(3100).NumItems, $LOCALIZE[31000] , $LOCALIZE[342]][/UPPERCASE]</value>
 		<value condition="!String.IsEmpty(Container(3100).NumItems)">[UPPERCASE]$INFO[Container(3100).NumItems,, $LOCALIZE[342]][/UPPERCASE]</value>
 	</variable>
 
 	<variable name="Info_Label_DBType_Movies">
-		<!-- ListView/Thumbnails: 2019 -->
-		<!-- Gridview: 2019 / 152 mins -->
-		<!-- Others: 2019 / 152 mins / 4KHDR  -->
-		<value condition="$EXP[ListView_Display_IsThumbnails] + !String.IsEmpty(ListItem.Year)">[UPPERCASE]$INFO[ListItem.Year][/UPPERCASE]</value>
+		<!-- 2019 / 152 mins / 4KHDR  -->
+		<!-- List/Grid: 2019 / 152 mins -->
 		<value condition="!$EXP[ListView_IsVisible] + !$EXP[GridView_IsVisible] + !String.IsEmpty(ListItem.Year)">[UPPERCASE]$INFO[ListItem.Year]$INFO[ListItem.Duration(mins), $LOCALIZE[31000] , $LOCALIZE[31114]]$VAR[Resolution_Label, $LOCALIZE[31000] ][/UPPERCASE]</value>
 		<value condition="!String.IsEmpty(ListItem.Year)">[UPPERCASE]$INFO[ListItem.Year]$INFO[ListItem.Duration(mins), $LOCALIZE[31000] , $LOCALIZE[31114]][/UPPERCASE]</value>
 		<value condition="!String.IsEmpty(ListItem.Duration)">[UPPERCASE]$INFO[ListItem.Duration(mins),, $LOCALIZE[31114]][/UPPERCASE]</value>
 	</variable>
 
 	<variable name="Info_Label_DBType_TVShows">
-		<!-- ListView/Thumbnails: 2019 -->
-		<!-- ListView/GridView: 2019 / 5 Seasons -->
-		<!-- Others: 2019 / 5 Seasons / 7/8 Watched -->
-		<value condition="$EXP[ListView_Display_IsThumbnails] + !String.IsEmpty(ListItem.Year)">[UPPERCASE]$INFO[ListItem.Year][/UPPERCASE]</value>
+		<!-- 2019 / 5 Seasons / 7/8 Watched -->
+		<!-- List/Grid: 2019 / 5 Seasons -->
 		<value condition="[$EXP[ListView_IsVisible] | $EXP[GridView_IsVisible]] + !String.IsEmpty(ListItem.Year)">[UPPERCASE]$INFO[ListItem.Year]$INFO[ListItem.Property(TotalSeasons), $LOCALIZE[31000] , ]$VAR[Seasons_Label][/UPPERCASE]</value>
 		<value condition="[$EXP[ListView_IsVisible] | $EXP[GridView_IsVisible]] + !String.IsEmpty(ListItem.Property(TotalSeasons))">[UPPERCASE]$INFO[ListItem.Property(TotalSeasons),, ]$VAR[Seasons_Label][/UPPERCASE]</value>
 		<value condition="[Skin.HasSetting(Unwatched_Info) | String.IsEmpty(ListItem.Property(WatchedEpisodes))] + !String.IsEmpty(ListItem.Year)">[UPPERCASE]$INFO[ListItem.Year]$INFO[ListItem.Property(TotalSeasons), $LOCALIZE[31000] , ]$VAR[Seasons_Label]$INFO[ListItem.Property(UnWatchedEpisodes), $LOCALIZE[31000] ,/]$INFO[ListItem.Property(TotalEpisodes),, $LOCALIZE[16101]][/UPPERCASE]</value>
@@ -186,22 +179,17 @@
 	</variable>
 
 	<variable name="Info_Label_DBType_Seasons">
-		<!-- ListView/Thumbnails: 2019 -->
-		<!-- Others: 2019 / 0/9 Watched -->
-		<value condition="$EXP[ListView_Display_IsThumbnails] + !String.IsEmpty(ListItem.Year)">[UPPERCASE]$INFO[ListItem.Year][/UPPERCASE]</value>
+		<!-- 2019 / 0/9 Watched -->
 		<value condition="[Skin.HasSetting(Unwatched_Info) | String.IsEmpty(ListItem.Property(WatchedEpisodes))] + !String.IsEmpty(ListItem.Property(UnWatchedEpisodes)) + !String.IsEmpty(ListItem.Year)">[UPPERCASE]$INFO[ListItem.Year]$INFO[ListItem.Property(UnWatchedEpisodes), $LOCALIZE[31000] ,/]$INFO[ListItem.Property(TotalEpisodes),, ]$LOCALIZE[16101][/UPPERCASE]</value>
 		<value condition="[Skin.HasSetting(Unwatched_Info) | String.IsEmpty(ListItem.Property(WatchedEpisodes))] + !String.IsEmpty(ListItem.Property(UnWatchedEpisodes))">[UPPERCASE]$INFO[ListItem.Property(UnWatchedEpisodes),,/]$INFO[ListItem.Property(TotalEpisodes),, ]$LOCALIZE[16101][/UPPERCASE]</value>
-		<value condition="!String.IsEmpty(ListItem.Year) + !String.IsEmpty(ListItem.Property(WatchedEpisodes)) + !String.IsEmpty(ListItem.Year)">[UPPERCASE]$INFO[ListItem.Year]$INFO[ListItem.Property(WatchedEpisodes), $LOCALIZE[31000] ,/]$INFO[ListItem.Property(TotalEpisodes),, ]$LOCALIZE[16102][/UPPERCASE]</value>
+		<value condition="!String.IsEmpty(ListItem.Year) + !String.IsEmpty(ListItem.Property(WatchedEpisodes))">[UPPERCASE]$INFO[ListItem.Year]$INFO[ListItem.Property(WatchedEpisodes), $LOCALIZE[31000] ,/]$INFO[ListItem.Property(TotalEpisodes),, ]$LOCALIZE[16102][/UPPERCASE]</value>
 		<value condition="!String.IsEmpty(ListItem.Property(WatchedEpisodes))">[UPPERCASE]$INFO[ListItem.Property(WatchedEpisodes),,/]$INFO[ListItem.Property(TotalEpisodes),, ]$LOCALIZE[16102][/UPPERCASE]</value>
 		<value condition="!String.IsEmpty(ListItem.Year)">[UPPERCASE]$INFO[ListItem.Year]$INFO[ListItem.Property(TotalEpisodes), $LOCALIZE[31000] , $LOCALIZE[20360]][/UPPERCASE]</value>
 	</variable>
 	
 	<variable name="Info_Label_DBType_Episodes">
-		<!-- ListView Thumbnails: 1x01 -->
 		<!-- ListView and Gridview: 1x01 / 42 mins -->
 		<!-- Episodes: 1x01 / Legion / 42 mins / -->
-		<value condition="$EXP[ListView_Display_IsThumbnails] + !String.IsEmpty(ListItem.TVShowTitle) + Integer.IsGreater(ListItem.Episode,9)">$INFO[ListItem.Season]$INFO[ListItem.Episode,x]</value>
-		<value condition="$EXP[ListView_Display_IsThumbnails] + !String.IsEmpty(ListItem.TVShowTitle) + Integer.IsGreater(ListItem.Episode,0)">$INFO[ListItem.Season]$INFO[ListItem.Episode,x0]</value>
 		<value condition="[$EXP[ListView_IsVisible] | $EXP[GridView_IsVisible]] + !String.IsEmpty(ListItem.TVShowTitle) + Integer.IsGreater(ListItem.Episode,9)">$INFO[ListItem.Season]$INFO[ListItem.Episode,x][UPPERCASE]$INFO[ListItem.Duration(mins), $LOCALIZE[31000] , $LOCALIZE[31114]][/UPPERCASE]</value>
 		<value condition="[$EXP[ListView_IsVisible] | $EXP[GridView_IsVisible]] + !String.IsEmpty(ListItem.TVShowTitle) + Integer.IsGreater(ListItem.Episode,0)">$INFO[ListItem.Season]$INFO[ListItem.Episode,x0][UPPERCASE]$INFO[ListItem.Duration(mins), $LOCALIZE[31000] , $LOCALIZE[31114]][/UPPERCASE]</value>
 		<value condition="[$EXP[ListView_IsVisible] | $EXP[GridView_IsVisible]] + !String.IsEmpty(ListItem.Duration)">[UPPERCASE]$INFO[ListItem.Duration(mins),, $LOCALIZE[31114]][/UPPERCASE]</value>
@@ -214,22 +202,22 @@
 	<variable name="Info_Label_DBType_Other">
 		<!-- Artists -->
 		<!-- Jazz  -->
-		<value condition="String.IsEqual(ListItem.DBType,artist) + ![$EXP[ListView_Display_IsThumbnails]] + !String.IsEmpty(ListItem.Property(Artist_Genre))">[UPPERCASE]$INFO[ListItem.Property(Artist_Genre)][/UPPERCASE]</value>
+		<value condition="String.IsEqual(ListItem.DBType,artist) + !String.IsEmpty(ListItem.Property(Artist_Genre))">[UPPERCASE]$INFO[ListItem.Property(Artist_Genre)][/UPPERCASE]</value>
 		<!-- Albums -->
-		<!-- ListView/GridView: 2014 -->
 		<!-- Others: FKA Twigs / 2014 -->
-		<value condition="String.IsEqual(ListItem.DBType,album) + $EXP[GridView_IsVisible] + $EXP[GridView_Details_Info] + !String.IsEmpty(ListItem.Year)">[UPPERCASE]$INFO[ListItem.Year][/UPPERCASE]</value>
+		<!-- List/Grid: 2014 -->
+		<value condition="String.IsEqual(ListItem.DBType,album) + $EXP[GridView_IsVisible] + $EXP[GridView_Details_Info_Albums] + !String.IsEmpty(ListItem.Year)">[UPPERCASE]$INFO[ListItem.Year][/UPPERCASE]</value>
 		<value condition="String.IsEqual(ListItem.DBType,album) + !$EXP[ListView_IsVisible] + !String.IsEmpty(ListItem.AlbumArtist)">[UPPERCASE]$INFO[ListItem.AlbumArtist]$INFO[ListItem.Year, $LOCALIZE[31000] ][/UPPERCASE]</value>
 		<value condition="String.IsEqual(ListItem.DBType,album) + !$EXP[ListView_IsVisible] + !String.IsEmpty(ListItem.Artist)">[UPPERCASE]$INFO[ListItem.Artist]$INFO[ListItem.Year, $LOCALIZE[31000] ][/UPPERCASE]</value>
-		<value condition="String.IsEqual(ListItem.DBType,album) + !String.IsEmpty(ListItem.Year)">[UPPERCASE]$INFO[ListItem.Year][/UPPERCASE]</value>
 		<!-- Songs -->
-		<!-- ListView: 4:32 -->
+		<!-- 4:32 -->
 		<value condition="String.IsEqual(ListItem.DBType,song) + !String.IsEmpty(ListItem.Duration)">[UPPERCASE]$INFO[ListItem.Duration(mm:ss)][/UPPERCASE]</value>
 		<!-- Pictures -->
 		<!-- 1.9 MB -->
-		<value condition="Container.Content(images) + ListItem.IsFolder + !String.IsEqual(ListItem.Label,..) + Integer.IsEqual(Container(3100).NumItems,1)">[UPPERCASE]$INFO[Container(3100).NumItems,, $LOCALIZE[31116]][/UPPERCASE]</value>
-		<value condition="Container.Content(images) + ListItem.IsFolder + !String.IsEqual(ListItem.Label,..)">[UPPERCASE]$INFO[Container(3100).NumItems,, $LOCALIZE[31115]][/UPPERCASE]</value>
-		<value condition="Container.Content(images)">$INFO[ListItem.PictureResolution]</value>
+		<value condition="Container.Content(images) + !$EXP[ListView_IsVisible] + ListItem.IsFolder + !String.IsEqual(ListItem.Label,..) + Integer.IsEqual(Container(3100).NumItems,1)">[UPPERCASE]$INFO[Container(3100).NumItems,, $LOCALIZE[31116]][/UPPERCASE]</value>
+		<value condition="Container.Content(images) + !$EXP[ListView_IsVisible] + ListItem.IsFolder + !String.IsEqual(ListItem.Label,..)">[UPPERCASE]$INFO[Container(3100).NumItems,, $LOCALIZE[31115]][/UPPERCASE]</value>
+		<value condition="Container.Content(images) + !$EXP[ListView_IsVisible] + !String.IsEmpty(ListItem.PictureByline)">[UPPERCASE]$INFO[ListItem.PictureByline][/UPPERCASE]$INFO[ListItem.PictureResolution, $LOCALIZE[31000] ][UPPERCASE]$INFO[ListItem.Size, $LOCALIZE[31000] ][/UPPERCASE]</value>
+		<value condition="Container.Content(images) + !$EXP[ListView_IsVisible] + !String.IsEmpty(ListItem.PictureResolution)">$INFO[ListItem.PictureResolution][UPPERCASE]$INFO[ListItem.Size, $LOCALIZE[31000] ][/UPPERCASE]</value>
 		<!-- Addons -->
 		<value condition="Container.Content(addons) + $EXP[GridView_IsVisible] + !String.IsEmpty(ListItem.AddonVersion)">$INFO[ListItem.AddonVersion]</value>
 		<value condition="Container.Content(addons) + !String.IsEmpty(ListItem.AddonType)">[UPPERCASE]$INFO[ListItem.AddonType]$INFO[ListItem.AddonVersion, $LOCALIZE[31000] ]$INFO[ListItem.AddonCreator, $LOCALIZE[31000] ][/UPPERCASE]</value>
@@ -241,25 +229,30 @@
 	</variable>
 
 	<variable name="Info_Breadcrumb_Label">
-		<value condition="Window.IsActive(musicplaylist)">$INFO[ListItem.Year,$LOCALIZE[31001] ]$INFO[ListItem.Album, $LOCALIZE[31001] ]</value>
-		<value condition="String.IsEqual(ListItem.DBType,movie) + $EXP[GridView_IsVisible] + $EXP[GridView_Details_Breadcrumb] + !String.IsEmpty(ListItem.Year)">$INFO[Listitem.Year,$LOCALIZE[31001] ]</value>
-		<value condition="String.IsEqual(ListItem.DBType,tvshow) + $EXP[GridView_IsVisible] + $EXP[GridView_Details_Breadcrumb] + !String.IsEmpty(ListItem.Year)">$INFO[Listitem.Year,$LOCALIZE[31001] ]$INFO[ListItem.Property(TotalSeasons), $LOCALIZE[31001] , ]$VAR[Seasons_Label]</value>
-		<value condition="String.IsEqual(ListItem.DBType,season) + $EXP[GridView_IsVisible] + $EXP[GridView_Details_Breadcrumb] + !String.IsEmpty(ListItem.Season)">$INFO[ListItem.Season,$LOCALIZE[31001] $LOCALIZE[20373] ]$INFO[ListItem.Year, $LOCALIZE[31001] ]</value>
-		<value condition="String.IsEqual(ListItem.DBType,season) + $EXP[GridView_IsVisible] + $EXP[GridView_Details_Title] + !String.IsEmpty(ListItem.Year)">$INFO[ListItem.Year,$LOCALIZE[31001] ]</value>
-		<value condition="String.IsEqual(ListItem.DBType,episode) + $EXP[GridView_IsVisible] + !$EXP[GridView_Details_Info] + !String.IsEmpty(ListItem.Year) + Integer.IsGreater(ListItem.Episode,9)">$INFO[ListItem.Year,$LOCALIZE[31001] ]$INFO[ListItem.Season, $LOCALIZE[31001] ]$INFO[ListItem.Episode,x]</value>
-		<value condition="String.IsEqual(ListItem.DBType,episode) + $EXP[GridView_IsVisible] + !$EXP[GridView_Details_Info] + !String.IsEmpty(ListItem.Year) + Integer.IsGreater(ListItem.Episode,0)">$INFO[ListItem.Year,$LOCALIZE[31001] ]$INFO[ListItem.Season, $LOCALIZE[31001] ]$INFO[ListItem.Episode,x0,]</value>
+		<value condition="String.IsEqual(ListItem.DBType,movie) + $EXP[GridView_IsVisible] + $EXP[GridView_Details_Breadcrumb_Movies] + !String.IsEmpty(ListItem.Year)">$INFO[Listitem.Year,$LOCALIZE[31001] ]</value>
+		<value condition="String.IsEqual(ListItem.DBType,set) + $EXP[GridView_IsVisible] + $EXP[GridView_Details_Breadcrumb_Sets] + !String.IsEmpty(Container(3100).ListItem(0).Year))">$INFO[Container(3100).ListItem(0).Year,$LOCALIZE[31001] ]$INFO[Container(3100).ListItem(-1).Year,-]$INFO[Container(3100).NumItems, $LOCALIZE[31001] , $LOCALIZE[342]]</value>
+		<value condition="String.IsEqual(ListItem.DBType,set) + $EXP[GridView_IsVisible] + $EXP[GridView_Details_Breadcrumb_Sets] + !String.IsEmpty(Container(3100).NumItems)">$INFO[Container(3100).NumItems,$LOCALIZE[31001] , $LOCALIZE[342]]</value>
+		<value condition="String.IsEqual(ListItem.DBType,tvshow) + $EXP[GridView_IsVisible] + $EXP[GridView_Details_Breadcrumb_TVShows] + !String.IsEmpty(ListItem.Year)">$INFO[Listitem.Year,$LOCALIZE[31001] ]$INFO[ListItem.Property(TotalSeasons), $LOCALIZE[31001] , ]$VAR[Seasons_Label]</value>
+		<value condition="String.IsEqual(ListItem.DBType,season) + $EXP[GridView_IsVisible] + $EXP[GridView_Details_Breadcrumb_Seasons] + !String.IsEmpty(ListItem.Season)">$INFO[ListItem.Season,$LOCALIZE[31001] $LOCALIZE[20373] ]$INFO[ListItem.Year, $LOCALIZE[31001] ]</value>
+		<value condition="String.IsEqual(ListItem.DBType,season) + $EXP[GridView_IsVisible] + $EXP[GridView_Details_Title_Seasons] + !String.IsEmpty(ListItem.Year)">$INFO[ListItem.Year,$LOCALIZE[31001] ]</value>
+		<value condition="String.IsEqual(ListItem.DBType,episode) + ![$EXP[GridView_IsVisible] + $EXP[GridView_Details_Info_Episodes]] + !String.IsEmpty(ListItem.Year) + Integer.IsGreater(ListItem.Episode,9)">$INFO[ListItem.Year,$LOCALIZE[31001] ]$INFO[ListItem.Season, $LOCALIZE[31001] ]$INFO[ListItem.Episode,x]</value>
+		<value condition="String.IsEqual(ListItem.DBType,episode) + ![$EXP[GridView_IsVisible] + $EXP[GridView_Details_Info_Episodes]] + !String.IsEmpty(ListItem.Year) + Integer.IsGreater(ListItem.Episode,0)">$INFO[ListItem.Year,$LOCALIZE[31001] ]$INFO[ListItem.Season, $LOCALIZE[31001] ]$INFO[ListItem.Episode,x0,]</value>
 		<value condition="String.IsEqual(ListItem.DBType,episode) + !String.IsEmpty(ListItem.Year)">$INFO[ListItem.Year,$LOCALIZE[31001] ]</value>
-		<value condition="String.IsEqual(ListItem.DBType,album) + $EXP[GridView_IsVisible] + $EXP[GridView_Details_Breadcrumb] + !String.IsEmpty(ListItem.Album)">$INFO[ListItem.Album,$LOCALIZE[31001] ]$INFO[ListItem.Year, $LOCALIZE[31001] ]</value>
-		<value condition="String.IsEqual(ListItem.DBType,album) + $EXP[GridView_IsVisible] + $EXP[GridView_Details_Breadcrumb] + !String.IsEmpty(ListItem.Year)">$INFO[ListItem.Year,$LOCALIZE[31001] ]</value>
-		<value condition="String.IsEqual(ListItem.DBType,album) + $EXP[GridView_IsVisible] + $EXP[GridView_Details_Title] + !String.IsEmpty(ListItem.Year)">$INFO[ListItem.Year,$LOCALIZE[31001] ]</value>
+		<value condition="String.IsEqual(ListItem.DBType,album) + $EXP[GridView_IsVisible] + $EXP[GridView_Details_Breadcrumb_Albums] + !String.IsEmpty(ListItem.Album)">$INFO[ListItem.Album,$LOCALIZE[31001] ]$INFO[ListItem.Year, $LOCALIZE[31001] ]</value>
+		<value condition="String.IsEqual(ListItem.DBType,album) + $EXP[GridView_IsVisible] + $EXP[GridView_Details_Breadcrumb_Albums] + !String.IsEmpty(ListItem.Year)">$INFO[ListItem.Year,$LOCALIZE[31001] ]</value>
+		<value condition="String.IsEqual(ListItem.DBType,album) + ![$EXP[GridView_IsVisible] + $EXP[GridView_Details_Info_Albums]] + !String.IsEmpty(ListItem.Year)">$INFO[ListItem.Year,$LOCALIZE[31001] ]</value>
 		<value condition="String.IsEqual(ListItem.DBType,song) + !String.IsEmpty(ListItem.Artist)">$INFO[ListItem.Artist,$LOCALIZE[31001] ]$INFO[ListItem.Year, $LOCALIZE[31001] ]</value>
 		<value condition="String.IsEqual(ListItem.DBType,song) + !String.IsEmpty(ListItem.Year)">$INFO[ListItem.Year,$LOCALIZE[31001] ]</value>
-		<value condition="Container.Content(actors) + !String.IsEmpty(ListItem.Appearances)">$VAR[Appearances_Label2,$LOCALIZE[31001] ]$INFO[Container(3100).ListItem(-1).Title, ]</value>
-		<value condition="Container.Content(files) + String.IsEmpty(ListItem.Art(Poster))">$INFO[ListItem.Size,$LOCALIZE[31001] ]$INFO[ListItem.Duration(mins), $LOCALIZE[31001] , $LOCALIZE[31114]]$INFO[ListItem.EndTime, $LOCALIZE[31001] $LOCALIZE[31100] ]</value>
+		<value condition="Container.Content(images) + ![$EXP[GridView_IsVisible] + $EXP[GridView_Details_Info_Images]] + ListItem.IsFolder + !String.IsEqual(ListItem.Label,..) + Integer.IsEqual(Container(3100).NumItems,1)">$INFO[Container(3100).NumItems,$LOCALIZE[31001] , $LOCALIZE[31116]]</value>
+		<value condition="Container.Content(images) + ![$EXP[GridView_IsVisible] + $EXP[GridView_Details_Info_Images]] + ListItem.IsFolder + !String.IsEqual(ListItem.Label,..)">$INFO[Container(3100).NumItems,$LOCALIZE[31001] , $LOCALIZE[31115]]</value>
+		<value condition="Container.Content(images) + ![$EXP[GridView_IsVisible] + $EXP[GridView_Details_Info_Images]] + !String.IsEmpty(ListItem.PictureByline)">$INFO[ListItem.PictureByline,$LOCALIZE[31001] ]$INFO[ListItem.PictureResolution, $LOCALIZE[31001] ]$INFO[ListItem.Size, $LOCALIZE[31001] ]</value>
+		<value condition="Container.Content(images) + ![$EXP[GridView_IsVisible] + $EXP[GridView_Details_Info_Images]] + !String.IsEmpty(ListItem.PictureResolution)">$INFO[ListItem.PictureResolution,$LOCALIZE[31001] ]$INFO[ListItem.Size, $LOCALIZE[31001] ]</value>
+		<value condition="Container.Content(addons) + $EXP[GridView_IsVisible] + $EXP[GridView_Details_Breadcrumb_Addons]">$INFO[ListItem.AddonType,$LOCALIZE[31001] ]$INFO[ListItem.AddonVersion, $LOCALIZE[31001] ]$INFO[ListItem.AddonCreator, $LOCALIZE[31001] ]</value>
+		<value condition="Container.Content(addons) + $EXP[GridView_IsVisible] + $EXP[GridView_Details_Title_Addons]">$INFO[ListItem.AddonVersion,$LOCALIZE[31001] ]$INFO[ListItem.AddonCreator, $LOCALIZE[31001] ]</value>
 		<value condition="Container.Content(addons)">$INFO[ListItem.AddonCreator,$LOCALIZE[31001] ]</value>
-		<value condition="Container.Content(images) + $EXP[GridView_IsVisible]">$INFO[ListItem.Label2,$LOCALIZE[31001] ]</value>
+		<value condition="Container.Content(files) + !String.IsEmpty(ListItem.Duration)">$INFO[ListItem.Duration(mins),$LOCALIZE[31001] , $LOCALIZE[31114]]$INFO[ListItem.EndTime, $LOCALIZE[31001] $LOCALIZE[31100] ]</value>
+		<value condition="Window.Is(musicplaylist)">$INFO[ListItem.Year,$LOCALIZE[31001] ]$INFO[ListItem.Album, $LOCALIZE[31001] ]</value>
 		<value condition="Window.Is(programs)">$INFO[ListItem.AddonCreator,$LOCALIZE[31001] ]</value>
-		<value condition="Container.Content(addons)">$INFO[ListItem.AddonType,$LOCALIZE[31001] ]$INFO[ListItem.AddonCreator, $LOCALIZE[31001] ]</value>
 		<value/>
 	</variable>
 
@@ -658,7 +651,7 @@
 		<value condition="Control.HasFocus(3100) + String.IsEqual(Container(3100).ListItem.DBType,season) + !String.IsEmpty(Container(3100).ListItem.Season)">$INFO[Container(3100).ListItem.Season,$LOCALIZE[20373] ]</value>
 		<value condition="Control.HasFocus(3100) + Container.Content(set) + !String.IsEmpty(Container(3100).ListItem.Title)">$INFO[Container(3100).ListItem.Title]</value>
 		<value condition="Control.HasFocus(3100) + !String.IsEmpty(Container(3100).ListItem.Label)">$INFO[Container(3100).ListItem.Label]</value>
-		<value condition="String.IsEqual(ListItem.DBType,episode) + [$EXP[GridView_IsVisible] | [$EXP[ListView_IsVisible] + $EXP[ListView_Details_Info_IsVisible]] | [$EXP[BillboardView_IsVisible] + $EXP[BillboardView_Details_Info_IsVisible]] | [$EXP[ShowcaseView_IsVisible] + $EXP[ShowcaseView_Details_Info_IsVisible]] | [$EXP[StripView_IsVisible] + $EXP[StripView_Details_Info_IsVisible]]] + !String.IsEmpty(ListItem.Title)">$INFO[ListItem.Title]</value>
+		<value condition="String.IsEqual(ListItem.DBType,episode) + [$EXP[GridView_IsVisible] | [$EXP[BillboardView_IsVisible] + $EXP[BillboardView_Details_Info_IsVisible]] | [$EXP[ShowcaseView_IsVisible] + $EXP[ShowcaseView_Details_Info_IsVisible]] | [$EXP[StripView_IsVisible] + $EXP[StripView_Details_Info_IsVisible]] | $EXP[Infoscreen_IsVisible]] + !String.IsEmpty(ListItem.Title)">$INFO[ListItem.Title]</value>
 		<value condition="String.IsEqual(ListItem.DBType,episode) + Integer.IsGreater(ListItem.Episode,9)">$INFO[ListItem.Season]$INFO[ListItem.Episode,x,.]$INFO[ListItem.Title, ]</value>
 		<value condition="String.IsEqual(ListItem.DBType,episode) + Integer.IsGreater(ListItem.Episode,0)">$INFO[ListItem.Season]$INFO[ListItem.Episode,x0,.]$INFO[ListItem.Title, ]</value>
 		<value condition="String.IsEqual(ListItem.DBType,album) + !String.IsEmpty(ListItem.Album)">$INFO[ListItem.Album]</value>
@@ -684,6 +677,26 @@
 	</variable>
 
 	<variable name="Title_Breadcrumb_Label">
+		<value condition="VideoPlayer.IsFullscreen + Window.Is(seekbar) + !String.IsEmpty(VideoPlayer.TVShowTitle)">$INFO[VideoPlayer.TVShowTitle]</value>
+		<value condition="VideoPlayer.IsFullscreen + Window.Is(seekbar)">$INFO[VideoPlayer.Title]</value>
+		<value condition="Window.Is(musicplaylist)">$INFO[ListItem.Artist]</value>
+		<value condition="$EXP[GridView_IsVisible] + [$EXP[GridView_Details_Breadcrumb_Movies] | $EXP[GridView_Details_Breadcrumb_Sets]] + !String.IsEmpty(ListItem.Title)">$INFO[ListItem.Title]</value>
+		<value condition="String.IsEqual(ListItem.DBType,tvshow) + $EXP[GridView_IsVisible] + $EXP[GridView_Details_Breadcrumb_TVShows] + !String.IsEmpty(ListItem.TVShowTitle)">$INFO[ListItem.TVShowTitle]</value>
+		<value condition="String.IsEqual(ListItem.DBType,season) + ![$EXP[ListView_IsVisible] + $EXP[ListView_Display_IsThumbnails_Seasons]] + !String.IsEmpty(ListItem.TVShowTitle)">$INFO[ListItem.TVShowTitle]</value>
+		<value condition="String.IsEqual(ListItem.DBType,episode) + !String.IsEmpty(ListItem.TVShowTitle)">$INFO[ListItem.TVShowTitle]</value>
+
+		<value condition="String.IsEqual(ListItem.DBType,artist) + $EXP[GridView_IsVisible] + $EXP[GridView_Details_Breadcrumb_Artists] + !String.IsEmpty(ListItem.Artist)">$INFO[ListItem.Artist]</value>
+		<value condition="String.IsEqual(ListItem.DBType,artist) + $EXP[ListView_IsVisible] + !String.IsEmpty(ListItem.Genre)">$INFO[ListItem.Genre]</value>
+		<value condition="String.IsEqual(ListItem.DBType,album) + !String.IsEmpty(ListItem.Artist)">$INFO[ListItem.Artist]</value>
+		<value condition="String.IsEqual(ListItem.DBType,song) + !String.IsEmpty(ListItem.Album)">$INFO[ListItem.Album]</value>
+		
+		<value condition="Container.Content(images) + $EXP[GridView_IsVisible] + $EXP[GridView_Details_Breadcrumb_Images]">$INFO[ListItem.Label]</value>
+		<value condition="Container.Content(images)">$INFO[ListItem.FolderName]</value>
+		<value condition="Container.Content(addons) + $EXP[GridView_IsVisible] + $EXP[GridView_Details_Breadcrumb_Addons]">$INFO[ListItem.Label]</value>
+		<value condition="Container.Content(addons)">$INFO[ListItem.AddonType]</value>
+		<value condition="Container.Content(playlists)">$LOCALIZE[136]</value>
+		<value condition="Container.Content(actors) + !String.IsEmpty(ListItem.Appearances)">$INFO[ListItem.Appearances]$VAR[Appearances_Label, ]</value>
+		<value condition="Container.Content(files)">$INFO[ListItem.FolderName]</value>
 		<value condition="Window.Is(skinsettings)">$LOCALIZE[31447]</value>
 		<value condition="Window.Is(interfacesettings)">$LOCALIZE[14206]</value>
 		<value condition="Window.Is(mediasettings)">$LOCALIZE[14211]</value>
@@ -697,23 +710,6 @@
 		<value condition="Window.Is(filemanager)">$LOCALIZE[10003]</value>
 		<value condition="Window.Is(smartplaylisteditor)">$LOCALIZE[10136]</value>
 		<value condition="Window.Is(smartplaylistrule)">$LOCALIZE[21421]</value>
-		<value condition="Window.Is(musicplaylist)">$INFO[ListItem.Artist]</value>
-		<value condition="VideoPlayer.IsFullscreen + Window.Is(seekbar) + !String.IsEmpty(VideoPlayer.TVShowTitle)">$INFO[VideoPlayer.TVShowTitle]</value>
-		<value condition="VideoPlayer.IsFullscreen + Window.Is(seekbar)">$INFO[VideoPlayer.Title]</value>
-		<value condition="$EXP[GridView_IsVisible] + $EXP[GridView_Details_Breadcrumb] + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,set)] + !String.IsEmpty(ListItem.Title)">$INFO[ListItem.Title]</value>
-		<value condition="$EXP[GridView_IsVisible] + $EXP[GridView_Details_Breadcrumb] + String.IsEqual(ListItem.DBType,tvshow) + !String.IsEmpty(ListItem.TVShowTitle)">$INFO[ListItem.TVShowTitle]</value>
-		<value condition="$EXP[GridView_IsVisible] + $EXP[GridView_Details_Breadcrumb] + String.IsEqual(ListItem.DBType,artist) + !String.IsEmpty(ListItem.Artist)">$INFO[ListItem.Artist]</value>
-		<value condition="!$EXP[ListView_Display_IsThumbnails] + String.IsEqual(ListItem.DBType,season) + !String.IsEmpty(ListItem.TVShowTitle)">$INFO[ListItem.TVShowTitle]</value>
-		<value condition="$EXP[Breadcrumb_Enabled_View] + String.IsEqual(ListItem.DBType,album) + !String.IsEmpty(ListItem.Artist)">$INFO[ListItem.Artist]</value>
-		<value condition="String.IsEqual(ListItem.DBType,episode) + !String.IsEmpty(ListItem.TVShowTitle)">$INFO[ListItem.TVShowTitle]</value>
-		<value condition="String.IsEqual(ListItem.DBType,song) + !String.IsEmpty(ListItem.Album)">$INFO[ListItem.Album]</value>
-		<value condition="Container.Content(actors) + !String.IsEmpty(ListItem.Appearances)">$INFO[ListItem.Appearances]$VAR[Appearances_Label, ]</value>
-		<value condition="Container.Content(files)">$INFO[ListItem.FolderName]</value>
-		<value condition="Container.Content(addons)">$INFO[ListItem.AddonType]</value>
-		<value condition="Container.Content(images) + $EXP[GridView_IsVisible]">$INFO[ListItem.Label]</value>
-		<value condition="Container.Content(addons)">$INFO[ListItem.Label]</value>
-		<value condition="Container.Content(playlists)">$LOCALIZE[136]</value>
-		<value/>
 	</variable>
 
 	<variable name="Title_Unfocused_Label">

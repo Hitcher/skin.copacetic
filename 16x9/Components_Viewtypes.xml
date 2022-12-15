@@ -121,8 +121,8 @@
 		<control type="label">
 			<height>100%</height>
 			<visible>!ListItem.IsPlaying</visible>
-			<include content="Visible_Fade_Delayed_Animation" />
-			<width>120</width>
+			<include content="Visible_Fade_Animation" />
+			<width>$PARAM[width]</width>
 			<align>center</align>
 			<aligny>center</aligny>
 			<font>$PARAM[font]</font>
@@ -137,7 +137,7 @@
 		<param name="visible" default="!String.IsEmpty(ListItem.UserRating) + Integer.IsGreaterOrEqual(ListItem.UserRating,Skin.Numeric(Music_Rating_Like_Threshold))" />
 		<definition>
 			<include content="$PARAM[like_texture]" condition="Integer.IsGreater(Skin.Numeric(Music_Rating_Like_Threshold,0))">
-				<param name="visible" value="$PARAM[visible]" />
+				<param name="visible" value="String.IsEqual(ListItem.DBType,song) + $PARAM[visible]" />
 				<param name="color" value="$PARAM[color]" />
 				<animation effect="slide" end="$PARAM[slide],0" time="0" condition="true">Conditional</animation>
 			</include>
@@ -146,21 +146,17 @@
 
 	<include name="Common_List_Layout">
 		<param name="visible" default="true" />
-		<param name="icon_slide" default="-540" />
 		<param name="icon_color" default="$VAR[Common_List_Label_Color]" />
 		<param name="now_playing_icon" default="true" />
 		<param name="list_icon" default="String.IsEqual(ListItem.Overlay,OverlayWatched.png)" />
 		<param name="list_icon_texture" default="Check_unfocused" />
-		<param name="music_rating_slide" default="480" />
 		<param name="music_rating_like_texture" default="Like_unfocused" />
 		<param name="music_rating_color" default="$VAR[Accent_Color]" />
-		<param name="font" default="List_Title_Unfocused" />
+		<param name="font" default="List_Unfocused" />
 		<param name="textcolor" default="$VAR[Common_List_Label_Color]" />
 		<param name="selectedcolor" default="$VAR[Common_List_Label_Color]" />
 		<param name="scroll" default="false" />
 		<param name="label" default="$VAR[Title_Label]" />
-		<param name="label_left" default="120" />
-		<param name="label_maxwidth" default="720" />
 		<definition>
 			<control type="group">
 				<visible>$PARAM[visible]</visible>
@@ -169,6 +165,7 @@
 					<param name="visible" value="$PARAM[now_playing_icon] + $EXP[ListItem(0)_NowPlaying]" />
 					<param name="color" value="$PARAM[icon_color]" />
 					<animation effect="slide" end="$PARAM[icon_slide],0" time="0" condition="true">Conditional</animation>
+					<animation effect="slide" end="0,5" time="0" condition="Player.Paused">Conditional</animation>
 				</include>
 				<include content="$PARAM[list_icon_texture]" condition="Window.Is(videos) | Window.Is(videoplaylist)">
 					<param name="visible" value="$PARAM[list_icon] + !$EXP[ListItem(0)_NowPlaying]" />
@@ -176,6 +173,7 @@
 					<animation effect="slide" end="$PARAM[icon_slide],0" time="0" condition="true">Conditional</animation>
 				</include>
 				<include content="Track_Number_Label" condition="Window.Is(music) | Window.Is(musicplaylist) | Window.Is(musicinformation)">
+					<param name="width" value="$PARAM[label_left]" />
 					<param name="font" value="$PARAM[font]" />
 					<param name="textcolor" value="$PARAM[textcolor]" />
 					<param name="selectedcolor" value="$PARAM[selectedcolor]" />
@@ -202,9 +200,11 @@
 	</include>
 
 	<include name="Common_List_Unfocused">
-		<param name="icon_slide" default="-540" />
-		<param name="music_rating_slide" default="480" />
+		<param name="icon_slide" default="-525" />
+		<param name="music_rating_slide" default="525" />
 		<param name="music_rating_color" default="$VAR[Accent_Color]" />
+		<param name="label_left" default="90" />
+		<param name="label_maxwidth" default="840" />
 		<param name="selectedcolor" default="$VAR[Common_List_Label_Color]" />
 		<definition>
 			<param name="selectedcolor" />
@@ -215,17 +215,19 @@
 				<param name="music_rating_color" value="$PARAM[music_rating_color]" />
 				<param name="music_rating_slide" value="$PARAM[music_rating_slide]" />
 				<param name="label" value="$VAR[Title_Unfocused_Label]" />
-				<param name="label_maxwidth" value="720" />
+				<param name="label_left" value="$PARAM[label_left]" />
+				<param name="label_maxwidth" value="$PARAM[label_maxwidth]" />
 				<param name="selectedcolor" value="$PARAM[selectedcolor]" />
 			</include>
 		</definition>
 	</include>
 
 	<include name="Common_List_Focused">
-		<param name="icon_slide" default="-540" />
-		<param name="music_rating_slide" default="480" />
+		<param name="icon_slide" default="-525" />
+		<param name="music_rating_slide" default="525" />
 		<param name="music_rating_color" default="$VAR[Accent_Color]" />
-		<param name="label_maxwidth" default="780" />
+		<param name="label_left" default="90" />
+		<param name="label_maxwidth" default="990" />
 		<param name="selectedcolor" default="$VAR[Common_List_Label_Color]" />
 		<definition>
 			<include content="HiddenFocusButton" />
@@ -239,8 +241,9 @@
 				<param name="music_rating_slide" value="$PARAM[music_rating_slide]" />
 				<param name="track_number_color" value="$VAR[Common_List_Label_Color]" />
 				<param name="label" value="$VAR[Title_Label]" />
+				<param name="label_left" value="$PARAM[label_left]" />
 				<param name="label_maxwidth" value="$PARAM[label_maxwidth]" />
-				<param name="font" value="List_Title_Focused" />
+				<param name="font" value="List_Focused" />
 				<param name="selectedcolor" value="$PARAM[selectedcolor]" />
 			</include>
 		</definition>
@@ -271,7 +274,7 @@
 				<top>500</top>
 				<width>$PARAM[width]</width>
 				<height>80</height>
-				<itemgap>12</itemgap>
+				<itemgap>10</itemgap>
 				<orientation>horizontal</orientation>
 				<usecontrolcoords>true</usecontrolcoords>
 				<!-- Title Gap -->
@@ -279,7 +282,7 @@
 					<width max="$PARAM[hiddenlabelmaxwidth]">auto</width>
 					<height>80</height>
 					<aligny>center</aligny>
-					<font>List_Title_Focused</font>
+					<font>List_Focused</font>
 					<textcolor>$VAR[Common_List_Info_Label_Color]</textcolor>
 					<label>$PARAM[hiddenlabel]</label>
 				</control>
@@ -299,13 +302,13 @@
 
 	<include name="Simple_List_Layout">
 		<param name="visible" default="true" />
-		<param name="font" default="List_Title_Unfocused" />
+		<param name="font" default="Main_Menu_Unfocused" />
 		<param name="textcolor" default="$VAR[Common_List_Label_Color]" />
 		<param name="selectedcolor" default="$VAR[Common_List_Label_Color]" />
 		<param name="scroll" default="false" />
 		<param name="label" default="$VAR[Title_Label]" />
 		<param name="label_left" default="120" />
-		<param name="label_maxwidth" />
+		<param name="label_maxwidth" default="720" />
 		<definition>
 			<control type="group">
 				<visible>$PARAM[visible]</visible>
@@ -375,7 +378,7 @@
 						<param name="label" value="$PARAM[label]" />
 						<param name="label_left" value="$PARAM[label_left]" />
 						<param name="label_maxwidth" value="$PARAM[label_maxwidth]" />
-						<param name="font" value="List_Title_Focused" />
+						<param name="font" value="Main_Menu_Focused" />
 						<param name="textcolor" value="$PARAM[textcolor]" />
 						<param name="selectedcolor" value="$PARAM[selectedcolor]" />
 					</include>
@@ -622,6 +625,7 @@
 
 	<include name="Breadcrumb_Label">
 		<param name="visible" default="true" />
+		<param name="animation" default="Visible_Fade_Animation" />
 		<param name="bar" default="true" />
 		<param name="left" default="60" />
 		<param name="right" default="60" />
@@ -638,7 +642,7 @@
 		<definition>
 			<control type="group">
 				<visible>$PARAM[visible]</visible>
-				<include content="Visible_Fade_Animation" />
+				<include content="$PARAM[animation]" />
 				<nested />
 				<control type="grouplist">
 					<left>$PARAM[left]</left>
