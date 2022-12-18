@@ -5,30 +5,30 @@
 		<param name="art_icon" default="Grid" />
 		<definition>
 			<include content="Hidden_Components">
-				<control type="label" id="6351">
-					<label>$INFO[ListItemNoWrap(1).Label]</label>
+				<control type="group" id="6351">
+					<visible>!String.IsEmpty(ListItemNoWrap(1).Label)</visible>
 				</control>
-				<control type="label" id="6352">
-					<label>$INFO[ListItemNoWrap(2).Label]</label>
+				<control type="group" id="6352">
+					<visible>!String.IsEmpty(ListItemNoWrap(2).Label)</visible>
 				</control>
-				<control type="label" id="6353">
-					<label>$INFO[ListItemNoWrap(3).Label]</label>
+				<control type="group" id="6353">
+					<visible>!String.IsEmpty(ListItemNoWrap(3).Label)</visible>
 				</control>
-				<control type="label" id="6354">
-					<label>$INFO[ListItemNoWrap(4).Label]</label>
+				<control type="group" id="6354">
+					<visible>!String.IsEmpty(ListItemNoWrap(4).Label)</visible>
 				</control>
-				<control type="label" id="6355">
-					<label>$INFO[ListItemNoWrap(5).Label]</label>
+				<control type="group" id="6355">
+					<visible>!String.IsEmpty(ListItemNoWrap(5).Label)</visible>
 				</control>
-				<control type="label" id="6356">
-					<label>$INFO[ListItemNoWrap(6).Label]</label>
+				<control type="group" id="6356">
+					<visible>!String.IsEmpty(ListItemNoWrap(6).Label)</visible>
 				</control>
 			</include>
 			<control type="group">
-				<visible>Control.IsVisible(505) + !$EXP[OptionsSwitching]</visible>
+				<visible>Control.IsVisible(505) + !$EXP[Options_Switching]</visible>
 				<include content="Visible_Fade_Animation" />
 				<control type="group">
-					<visible>!$EXP[ContainerSwitching] + !$EXP[TransparentDialog_IsVisible] + !$EXP[Scrollbar_HasFocus] + !$EXP[Infoscreen_IsVisible] + !$EXP[Music_Player_HasFocus]</visible>
+					<visible>!$EXP[Container_Switching] + !$EXP[TransparentDialog_IsVisible] + !$EXP[Scrollbar_HasFocus] + !$EXP[Infoscreen_IsVisible] + !$EXP[Music_Player_HasFocus]</visible>
 					<include content="Visible_Fade_Delayed_Animation" />
 					<include content="Breadcrumb_Label">
 						<param name="bar" value="$EXP[GridView_Details_Breadcrumb] | [!$EXP[GridView_Details_Off] + !Container.Content(movies) + !Container.Content(sets) + !Container.Content(tvshows) + !Container.Content(artists)]" />
@@ -79,7 +79,7 @@
 				</control>
 				<!-- Details -->
 				<control type="group">
-					<visible>!$EXP[ContainerSwitching] + !$EXP[ContentSwitching] + !$EXP[TransparentDialog_IsVisible] + !Window.IsVisible(pictureinfo) + !$EXP[Scrollbar_HasFocus] + !$EXP[Music_Player_HasFocus]</visible>
+					<visible>!$EXP[Container_Switching] + !$EXP[Content_Switching] + !$EXP[TransparentDialog_IsVisible] + !Window.IsVisible(pictureinfo) + !$EXP[Scrollbar_HasFocus] + !$EXP[Music_Player_HasFocus]</visible>
 					<include content="Visible_Fade_Delayed_Long_Animation" />
 					<control type="label" id="6004">
 						<include content="Hidden_Control" />
@@ -139,8 +139,8 @@
 		<param name="widget_position" />
 		<param name="widget_display" />
 		<definition>
-			<include content="Viewtype_Details_Template">
-				<param name="visible" value="!$EXP[TransparentDialog_IsVisible]" />
+			<include content="Viewtype_Details_Including_Content_Switching_Template">
+				<param name="visible" value="$PARAM[visible]" />
 				<param name="viewtype_label" value="Grid" />
 				<include content="Progress_Grid_$PARAM[widget_display]" condition="Window.Is(movieinformation)">
 					<param name="id" value="$PARAM[id]" />
@@ -157,6 +157,7 @@
 				<include content="Breadcrumb_Label">
 					<param name="bar" value="false" />
 					<param name="title_label" value="$VAR[Title_Label]" />
+					<param name="title_label_id" value="$PARAM[id]4" />
 					<param name="info_label_visible" value="true" />
 					<param name="info_label" value="$VAR[Info_Label,$LOCALIZE[31001] ]" />
 					<param name="label_color" value="$VAR[Primary_Color]" />
@@ -167,6 +168,7 @@
 					<animation effect="slide" start="0" end="0,690" time="0" condition="String.IsEqual(Control.GetLabel(620$PARAM[widget_position]2),Square)">Conditional</animation>
 					<animation effect="slide" start="0" end="0,690" time="0" condition="Window.Is(home) + Skin.HasSetting(Widget$PARAM[widget_position]_Display_Square)">Conditional</animation>
 				</include>
+				<nested />
 			</include>
 		</definition>
 	</include>
