@@ -229,6 +229,7 @@
 	</variable>
 
 	<variable name="Info_Breadcrumb_Label">
+		<value condition="Window.Is(musicplaylist)">$INFO[ListItem.Year,$LOCALIZE[31001] ]$INFO[ListItem.Album, $LOCALIZE[31001] ]</value>
 		<value condition="String.IsEqual(ListItem.DBType,movie) + $EXP[GridView_IsVisible] + $EXP[GridView_Details_Breadcrumb_Movies] + !String.IsEmpty(ListItem.Year)">$INFO[Listitem.Year,$LOCALIZE[31001] ]</value>
 		<value condition="String.IsEqual(ListItem.DBType,set) + $EXP[GridView_IsVisible] + $EXP[GridView_Details_Breadcrumb_Sets] + !String.IsEmpty(Container(3100).ListItem(0).Year)">$INFO[Container(3100).ListItem(0).Year,$LOCALIZE[31001] ]$INFO[Container(3100).ListItem(-1).Year,-]$INFO[Container(3100).NumItems, $LOCALIZE[31001] , $LOCALIZE[342]]</value>
 		<value condition="String.IsEqual(ListItem.DBType,set) + $EXP[GridView_IsVisible] + $EXP[GridView_Details_Breadcrumb_Sets] + !String.IsEmpty(Container(3100).NumItems)">$INFO[Container(3100).NumItems,$LOCALIZE[31001] , $LOCALIZE[342]]</value>
@@ -251,9 +252,6 @@
 		<value condition="Container.Content(addons) + $EXP[GridView_IsVisible] + $EXP[GridView_Details_Title_Addons]">$INFO[ListItem.AddonVersion,$LOCALIZE[31001] ]$INFO[ListItem.AddonCreator, $LOCALIZE[31001] ]</value>
 		<value condition="Container.Content(addons)">$INFO[ListItem.AddonCreator,$LOCALIZE[31001] ]</value>
 		<value condition="Container.Content(files) + !String.IsEmpty(ListItem.Duration)">$INFO[ListItem.Duration(mins),$LOCALIZE[31001] , $LOCALIZE[31114]]$INFO[ListItem.EndTime, $LOCALIZE[31001] $LOCALIZE[31100] ]</value>
-		<value condition="Window.Is(musicplaylist)">$INFO[ListItem.Year,$LOCALIZE[31001] ]$INFO[ListItem.Album, $LOCALIZE[31001] ]</value>
-		<value condition="Window.Is(programs)">$INFO[ListItem.AddonCreator,$LOCALIZE[31001] ]</value>
-		<value/>
 	</variable>
 
 	<variable name="Info_Fullscreen_Label">
@@ -339,54 +337,91 @@
 		<value condition="Skin.HasSetting(Preferred_Rating_BBFC)">$VAR[Certification_BBFC_Description_Label]</value>
 		<value condition="Skin.HasSetting(Preferred_Rating_MPAA)">$VAR[Certification_MPAA_Description_Label]</value>
 		<value condition="Skin.HasSetting(Preferred_Rating_CHVRS)">$VAR[Certification_CHVRS_Description_Label]</value>
-		<!-- <value condition="Skin.HasSetting(Preferred_Rating_ACB)">$VAR[Certification_ACB_Description_Label]</value>
+		<value condition="Skin.HasSetting(Preferred_Rating_ACB)">$VAR[Certification_ACB_Description_Label]</value>
 		<value condition="Skin.HasSetting(Preferred_Rating_FSK)">$VAR[Certification_FSK_Description_Label]</value>
-		<value condition="Skin.HasSetting(Preferred_Rating_DJCTQ)">$VAR[Certification_DJCTQ_Description_Label]</value> -->
+		<value condition="Skin.HasSetting(Preferred_Rating_DJCTQ)">$VAR[Certification_DJCTQ_Description_Label]</value>
 		<value condition="Skin.HasSetting(Preferred_Rating_EIRIN)">$VAR[Certification_EIRIN_Description_Label]</value>
-		<!-- <value condition="Skin.HasSetting(Preferred_Rating_KIJKWIJZER)">$VAR[Certification_Description_Label]</value> -->
+		<value condition="Skin.HasSetting(Preferred_Rating_KIJKWIJZER)">$VAR[Certification_Description_Label]</value>
+	</variable>
+
+	<variable name="Certification_ACB_Description_Label">
+		<value condition="String.Contains(VideoPlayer.mpaa,R18)">restricted to 18 years and over</value>
+		<value condition="String.Contains(VideoPlayer.mpaa,MA15)">recommended for mature audiences</value>
+		<value condition="String.Contains(VideoPlayer.mpaa,M)">not suitable for people under 15</value>
+		<value condition="String.Contains(VideoPlayer.mpaa,PG)">parental guidance recommended</value>
+		<value condition="String.Contains(VideoPlayer.mpaa,G)">general</value>
+		<value condition="String.Contains(VideoPlayer.mpaa,E)">exempt from classification</value>
 	</variable>
 
 	<variable name="Certification_BBFC_Description_Label">
-		<value condition="String.Contains(VideoPlayer.mpaa,U)">Suitable for all</value>
-		<value condition="String.Contains(VideoPlayer.mpaa,PG)">Parental guidance</value>
-		<value condition="String.Contains(VideoPlayer.mpaa,12)">Suitable for 12 years and over</value>
-		<value condition="String.Contains(VideoPlayer.mpaa,15)">Suitable for 15 years and over</value>
-		<value condition="[String.Contains(VideoPlayer.mpaa,18) | String.Contains(VideoPlayer.mpaa,UK:X)]">Suitable only for adults</value>
-	</variable>
-
-	<variable name="Certification_MPAA_Description_Label">
-		<value condition="String.Contains(VideoPlayer.mpaa,TV-MA)">Mature audience only</value>
-		<value condition="String.Contains(VideoPlayer.mpaa,TV-14)">Parents strongly cautioned</value>
-		<value condition="String.Contains(VideoPlayer.mpaa,TV-PG)">Parental guidance suggested</value>
-		<value condition="String.Contains(VideoPlayer.mpaa,TV-G)">General audiences</value>
-		<value condition="String.Contains(VideoPlayer.mpaa,TV-Y7)">Directed to older children</value>
-		<value condition="String.Contains(VideoPlayer.mpaa,TV-Y)">All children</value>
-		<value condition="String.Contains(VideoPlayer.mpaa,NC-17)">Adults only, no one 17 and under admitted</value>
-		<value condition="String.Contains(VideoPlayer.mpaa,PG-13)">Parents strongly cautioned</value>
-		<value condition="String.Contains(VideoPlayer.mpaa,PG">Parental guidance suggested</value>
-		<value condition="String.Contains(VideoPlayer.mpaa,G)">General audiences. All ages admitted</value>
-		<value condition="String.Contains(VideoPlayer.mpaa,R)">Restricted</value>
+		<value condition="String.Contains(VideoPlayer.mpaa,U)">suitable for all</value>
+		<value condition="String.Contains(VideoPlayer.mpaa,PG)">parental guidance</value>
+		<value condition="String.Contains(VideoPlayer.mpaa,12)">suitable for 12 years and over</value>
+		<value condition="String.Contains(VideoPlayer.mpaa,15)">suitable for 15 years and over</value>
+		<value condition="[String.Contains(VideoPlayer.mpaa,18) | String.Contains(VideoPlayer.mpaa,UK:X)]">suitable only for adults</value>
 	</variable>
 
 	<variable name="Certification_CHVRS_Description_Label">
-		<value condition="String.IsEmpty(VideoPlayer.TvShowDBID) + String.Contains(VideoPlayer.mpaa,R)">Restricted to 18 years and over</value>
-		<value condition="String.IsEmpty(VideoPlayer.TvShowDBID) + String.Contains(VideoPlayer.mpaa,18A)">Suitable for people 18 years of age or older</value>
-		<value condition="String.IsEmpty(VideoPlayer.TvShowDBID) + String.Contains(VideoPlayer.mpaa,14A)">Suitable for people 14 years of age or older</value>
-		<value condition="String.IsEmpty(VideoPlayer.TvShowDBID) + String.Contains(VideoPlayer.mpaa,PG)">Parental guidance advised</value>
-		<value condition="String.IsEmpty(VideoPlayer.TvShowDBID) + String.Contains(VideoPlayer.mpaa,G)">Suitable for viewing by all ages</value>
-		<value condition="!String.IsEmpty(VideoPlayer.TvShowDBID) + String.Contains(VideoPlayer.mpaa,18)">Adults</value>
-		<value condition="!String.IsEmpty(VideoPlayer.TvShowDBID) + String.Contains(VideoPlayer.mpaa,14)">Over 14 years</value>
-		<value condition="!String.IsEmpty(VideoPlayer.TvShowDBID) + String.Contains(VideoPlayer.mpaa,PG)">Parental guidance</value>
-		<value condition="!String.IsEmpty(VideoPlayer.TvShowDBID) + String.Contains(VideoPlayer.mpaa,G)">General</value>
-		<value condition="!String.IsEmpty(VideoPlayer.TvShowDBID) + String.Contains(VideoPlayer.mpaa,C8)">Children over 8 years</value>
-		<value condition="!String.IsEmpty(VideoPlayer.TvShowDBID) + String.Contains(VideoPlayer.mpaa,C)">Children</value>
+		<value condition="String.IsEmpty(VideoPlayer.TvShowDBID) + String.Contains(VideoPlayer.mpaa,R)">restricted to 18 years and over</value>
+		<value condition="String.IsEmpty(VideoPlayer.TvShowDBID) + String.Contains(VideoPlayer.mpaa,18A)">suitable for people 18 years of age or older</value>
+		<value condition="String.IsEmpty(VideoPlayer.TvShowDBID) + String.Contains(VideoPlayer.mpaa,14A)">suitable for people 14 years of age or older</value>
+		<value condition="String.IsEmpty(VideoPlayer.TvShowDBID) + String.Contains(VideoPlayer.mpaa,PG)">parental guidance advised</value>
+		<value condition="String.IsEmpty(VideoPlayer.TvShowDBID) + String.Contains(VideoPlayer.mpaa,G)">suitable for viewing by all ages</value>
+		<value condition="!String.IsEmpty(VideoPlayer.TvShowDBID) + String.Contains(VideoPlayer.mpaa,18)">adults</value>
+		<value condition="!String.IsEmpty(VideoPlayer.TvShowDBID) + String.Contains(VideoPlayer.mpaa,14)">over 14 years</value>
+		<value condition="!String.IsEmpty(VideoPlayer.TvShowDBID) + String.Contains(VideoPlayer.mpaa,PG)">parental guidance</value>
+		<value condition="!String.IsEmpty(VideoPlayer.TvShowDBID) + String.Contains(VideoPlayer.mpaa,G)">general</value>
+		<value condition="!String.IsEmpty(VideoPlayer.TvShowDBID) + String.Contains(VideoPlayer.mpaa,C8)">children over 8 years</value>
+		<value condition="!String.IsEmpty(VideoPlayer.TvShowDBID) + String.Contains(VideoPlayer.mpaa,C)">children</value>
+	</variable>
+
+	<variable name="Certification_DJCTQ_Description_Label">
+		<value condition="String.Contains(VideoPlayer.mpaa,18)">not recommended for ages under 18</value>
+		<value condition="String.Contains(VideoPlayer.mpaa,16)">not recommended for ages under 16</value>
+		<value condition="String.Contains(VideoPlayer.mpaa,14)">not recommended for ages under 14</value>
+		<value condition="String.Contains(VideoPlayer.mpaa,12)">not recommended for ages under 12</value>
+		<value condition="String.Contains(VideoPlayer.mpaa,10)">not recommended for ages under 10</value>
+		<value condition="String.Contains(VideoPlayer.mpaa,L)">general audiances</value>
+		<value condition="String.Contains(VideoPlayer.mpaa,ER)">general audiences</value>
 	</variable>
 
 	<variable name="Certification_EIRIN_Description_Label">
-		<value condition="String.Contains(VideoPlayer.mpaa,18)">For persons aged 18 and above only</value>
-		<value condition="String.Contains(VideoPlayer.mpaa,15)">For persons aged 15 and above only</value>
-		<value condition="String.Contains(VideoPlayer.mpaa,PG)">Parental guidance requested for young people under 12 years</value>
-		<value condition="String.Contains(VideoPlayer.mpaa,G)">General audiences</value>
+		<value condition="String.Contains(VideoPlayer.mpaa,18)">for persons aged 18 and above only</value>
+		<value condition="String.Contains(VideoPlayer.mpaa,15)">for persons aged 15 and above only</value>
+		<value condition="String.Contains(VideoPlayer.mpaa,PG)">parental guidance requested for young people under 12 years</value>
+		<value condition="String.Contains(VideoPlayer.mpaa,G)">general audiences</value>
+	</variable>
+
+	<variable name="Certification_FSK_Description_Label">
+		<value condition="String.Contains(VideoPlayer.mpaa,18)">adults only</value>
+		<value condition="String.Contains(VideoPlayer.mpaa,16)">suitable for 16 years and over</value>
+		<value condition="String.Contains(VideoPlayer.mpaa,12)">suitable for those above 12</value>
+		<value condition="String.Contains(VideoPlayer.mpaa,6)">no children younger than 6 years</value>
+		<value condition="String.Contains(VideoPlayer.mpaa,0)">no age restriction</value>
+	</variable>
+
+	<variable name="Certification_KIJKWIJZER_Description_Label">
+		<value condition="String.Contains(VideoPlayer.mpaa,18)">not allowed for children younger than 18 years</value>
+		<value condition="String.Contains(VideoPlayer.mpaa,16)">not allowed for children younger than 16 years</value>
+		<value condition="String.Contains(VideoPlayer.mpaa,14)">not recommended for children younger than 14 years</value>
+		<value condition="String.Contains(VideoPlayer.mpaa,12)">not recommended for children younger than 12 years</value>
+		<value condition="String.Contains(VideoPlayer.mpaa,9)">not recommended for children younger than 9 years</value>
+		<value condition="String.Contains(VideoPlayer.mpaa,6)">not recommended for children younger than 6 years</value>
+		<value condition="String.Contains(VideoPlayer.mpaa,AL)">suitable for all ages</value>
+	</variable>
+
+	<variable name="Certification_MPAA_Description_Label">
+		<value condition="String.Contains(VideoPlayer.mpaa,TV-MA)">mature audience only</value>
+		<value condition="String.Contains(VideoPlayer.mpaa,TV-14)">parents strongly cautioned</value>
+		<value condition="String.Contains(VideoPlayer.mpaa,TV-PG)">parental guidance suggested</value>
+		<value condition="String.Contains(VideoPlayer.mpaa,TV-G)">general audiences</value>
+		<value condition="String.Contains(VideoPlayer.mpaa,TV-Y7)">directed to older children</value>
+		<value condition="String.Contains(VideoPlayer.mpaa,TV-Y)">all children</value>
+		<value condition="String.Contains(VideoPlayer.mpaa,NC-17)">adults only, no one 17 and under admitted</value>
+		<value condition="String.Contains(VideoPlayer.mpaa,PG-13)">parents strongly cautioned</value>
+		<value condition="String.Contains(VideoPlayer.mpaa,PG">parental guidance suggested</value>
+		<value condition="String.Contains(VideoPlayer.mpaa,G)">general audiences, all ages admitted</value>
+		<value condition="String.Contains(VideoPlayer.mpaa,R)">restricted</value>
 	</variable>
 
 
