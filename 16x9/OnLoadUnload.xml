@@ -7,9 +7,10 @@
 		<onload condition="!String.IsEmpty(Window(home).Property(Infoscreen_Transition))">ClearProperty(Infoscreen_Transition,home)</onload>
 		<onload condition="!String.Contains(ListItem.Path,themoviedb.helper)">SetProperty(SelectedItem,$INFO[ListItem.DBID],movieinformation)</onload>
 		<onload condition="String.Contains(ListItem.Path,themoviedb.helper)">SetProperty(SelectedItem,$INFO[ListItem.Property(tmdb_id)],movieinformation)</onload>
-		<onload condition="System.AddonIsEnabled(plugin.video.themoviedb.helper)">RunScript(plugin.video.themoviedb.helper,split_value=$INFO[ListItem.Genre],separator=' ',property=GenreSplit)</onload>
-		<onload condition="System.AddonIsEnabled(plugin.video.themoviedb.helper) + String.IsEqual(ListItem.DBType,episode)">RunScript(plugin.video.themoviedb.helper,split_value=$INFO[ListItem.Writer],property=WriterSplit)</onload>
-		<onload condition="System.AddonIsEnabled(plugin.video.themoviedb.helper) + String.Contains(ListItem.Path,themoviedb.helper)">RunScript(plugin.video.themoviedb.helper,split_value=$INFO[ListItem.Studio],property=StudioSplit)</onload>
+		<onload condition="System.AddonIsEnabled(script.copacetic.helper)">RunScript(script.copacetic.helper,action=split_random_return,string=$INFO[ListItem.Genre],name=RandomGenre)</onload>
+		<onload condition="System.AddonIsEnabled(script.copacetic.helper)">RunScript(script.copacetic.helper,action=split_random_return,string=$INFO[ListItem.Director],name=RandomDirector)</onload>
+		<onload condition="System.AddonIsEnabled(script.copacetic.helper) + String.IsEqual(ListItem.DBType,episode)">RunScript(script.copacetic.helper,split,string=$INFO[ListItem.Writer],name=WriterSplit)</onload>
+		<onload condition="System.AddonIsEnabled(script.copacetic.helper) + String.Contains(ListItem.Path,themoviedb.helper)">RunScript(script.copacetic.helper,split,string=$INFO[ListItem.Studio],name=StudioSplit)</onload>
 		<onload>SetProperty(ResetScroll," ")</onload>
 		<onload condition="!String.IsEqual(window(movieinformation).property(Breadcrumb_GoToNext),true) + !String.IsEqual(window(movieinformation).property(Breadcrumb_GoToPrevious),true) + !String.IsEqual(window(movieinformation).property(SentFromInfo),true)">SetProperty(Breadcrumb_Level,1,movieinformation)</onload>
 		<onload condition="!String.IsEqual(window(movieinformation).property(Breadcrumb_GoToNext),true) + !String.IsEqual(window(movieinformation).property(Breadcrumb_GoToPrevious),true) + !String.IsEqual(window(movieinformation).property(SentFromInfo),true) + Window.IsVisible(videos)">SetProperty(ContainerPath_1,$INFO[Container.FolderPath],movieinformation)</onload>
@@ -69,14 +70,14 @@
 		<onload condition="String.IsEqual(window(movieinformation).property(Breadcrumb_GoToNext),true)">ClearProperty(Breadcrumb_GoToNext,movieinformation)</onload>
 		<onload condition="String.IsEqual(ListItem.DBType,tvshow) + String.IsEmpty(window(movieinformation).property(TVShowPath))">SetProperty(TVShowPath,videodb://tvshows/titles/$INFO[ListItem.DBID]/,movieinformation)</onload>
 		<onunload condition="!String.IsEmpty(window(movieinformation).property(TVShowPath))">ClearProperty(TVShowPath,movieinformation)</onunload>
-		<onunload>ClearProperty(GenreSplit.0,home)</onunload>
+		<onunload>ClearProperty(RandomGenre,home)</onunload>
+		<onunload>ClearProperty(RandomDirector,home)</onunload>
 		<onunload>ClearProperty(WriterSplit.0,home)</onunload>
-		<onunload>ClearProperty(WriterSplit.1,home)</onunload>
 		<onunload>ClearProperty(StudioSplit.0,home)</onunload>
 	</include>
 
 	<include name="musicinformation_OnLoadUnload">
-		<onload condition="System.AddonIsEnabled(plugin.video.themoviedb.helper)">RunScript(plugin.video.themoviedb.helper,split_value=$INFO[ListItem.Genre],separator='/',property=GenreSplit)</onload>
+		<onload condition="System.AddonIsEnabled(script.copacetic.helper)">RunScript(script.copacetic.helper,action=split_random_return,string=$INFO[ListItem.Genre],separator=/,name=RandomGenre)</onload>
 		<onload condition="String.IsEqual(ListItem.DBType,artist)">SetProperty(Info_Type,artist,musicinformation)</onload>
 		<onload condition="String.IsEqual(ListItem.DBType,album)">SetProperty(Info_Type,album,musicinformation)</onload>
 		<onload>SetProperty(ArtistDBID,$INFO[ListItem.DBID],musicinformation)</onload>
@@ -103,7 +104,7 @@
 		<onload condition="Integer.IsGreater(Container(3208).CurrentItem,1)">Control.Move(8080,1)</onload>
 		<onload condition="Integer.IsGreater(Container(3209).CurrentItem,1)">Control.Move(3209,$INFO[Container(3209).CurrentItem,-])</onload>
 		<onload condition="Integer.IsGreater(Container(3209).CurrentItem,1)">Control.Move(3209,1)</onload>
-		<onunload>ClearProperty(GenreSplit.0,home)</onunload>
+		<onunload>ClearProperty(RandomGenre,home)</onunload>
 	</include>
 
 	<include name="skinsettings_OnLoadUnload">
