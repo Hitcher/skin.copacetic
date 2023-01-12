@@ -2,18 +2,19 @@
 <includes>
 
 	<include name="Secondary_List">
+		<param name="visible" default="false" />
 		<param name="left" default="0" />
 		<param name="top" default="1080" />
 		<param name="width" default="720" />
 		<param name="height" default="1080" />
-		<param name="visible" default="false" />
 		<param name="layout" default="720x1080" />
+		<param name="autoscroll" default="false" />
 		<definition>
 			<control type="fixedlist" id="3100">
 				<animation effect="slide" start="0" end="0,-$PARAM[height]" reversible="true" time="360" tween="sine" easing="inout" condition="Control.HasFocus(3100) + [[$EXP[ListView_Display_IsThumbnails] + !Container.Content(artists)] | $EXP[BillboardView_IsVisible] | $EXP[ShowcaseView_IsVisible] | $EXP[StripView_IsVisible]]">Conditional</animation>
 				<visible>$PARAM[visible]</visible>
 				<visible>Skin.HasSetting(Secondary_List_Enabled) + !$EXP[Content_Switching] + !$EXP[Scrollbar_HasFocus]</visible>
-				<visible>String.Contains(ListItem.FolderPath,videodb://) | String.Contains(ListItem.FolderPath,musicdb://)</visible>
+				<visible>String.Contains(ListItem.FolderPath,videodb://) | String.Contains(ListItem.FolderPath,musicdb://) | String.Contains(ListItem.FolderPath,special://)</visible>
 				<include content="Secondary_List_Navigation" />
 				<nested />
 				<preloaditems>2</preloaditems>
@@ -22,6 +23,7 @@
 				<width>$PARAM[width]</width>
 				<height>$PARAM[height]</height>
 				<orientation>vertical</orientation>
+				<autoscroll time="7000">$PARAM[autoscroll]</autoscroll>
 				<scrolltime tween="sine" easing="inout">360</scrolltime>
 				<include content="$PARAM[layout]_Layout" />
 				<content target="$VAR[Secondary_List_Target]" sortby="$VAR[Secondary_List_Sort]" sortorder="$VAR[Secondary_List_Sort_Order]">$INFO[ListItem.FolderPath]</content>
@@ -170,10 +172,6 @@
 			<include content="Visible_Fade_Animation" />
 			<include content="Secondary_List_Hidden_Controls" />
 			<include content="Secondary_List" condition="Window.Is(videos)">
-				<param name="visible" value="Control.HasFocus(505) + Container.Content(sets)" />
-				<param name="layout" value="Hidden" />
-			</include>
-			<include content="Secondary_List" condition="Window.Is(videos)">
 				<param name="visible" value="[$EXP[ListView_Display_IsThumbnails] | $EXP[ShowcaseView_Display_IsPosters]] + $EXP[Secondary_List_Video_Conditions]" />
 				<animation effect="slide" start="0,0" end="360,0" time="360" tween="sine" easing="inout" reversible="true" condition="$EXP[ShowcaseView_Display_IsPosters] + !$EXP[ShowcaseView_Details_Off] + Skin.HasSetting(Music_Player_Enabled) + Player.HasAudio">Conditional</animation>
 			</include>
@@ -227,10 +225,15 @@
 				<animation effect="slide" start="0,0" end="75,0" time="0" condition="!$EXP[StripView_Details_Off]">Conditional</animation>
 			</include>
 			<include content="Secondary_List" condition="Window.Is(videos)">
-				<param name="visible" value="$EXP[GridView_IsVisible]" />
+				<param name="visible" value="Control.HasFocus(505) + Container.Content(sets)" />
 				<param name="layout" value="Hidden" />
 			</include>
-		</control>
+			<!-- <include content="Secondary_List" condition="Window.Is(videos)">
+				<param name="visible" value="Container.Content(playlists)" />
+				<param name="layout" value="Hidden" />
+				<param name="autoscroll" value="true" />
+			</include> -->
+		</control> 
 	</include>
 
 	<include name="Secondary_List_Icons">
