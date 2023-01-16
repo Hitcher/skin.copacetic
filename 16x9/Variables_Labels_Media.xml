@@ -224,10 +224,12 @@
 		<!-- Programs -->
 		<value condition="Window.IsVisible(programs) + $EXP[GridView_IsVisible] + !String.IsEmpty(ListItem.Year)">$INFO[ListItem.Year]</value>
 		<value condition="Window.IsVisible(programs) + !String.IsEmpty(ListItem.Year)">[UPPERCASE]$INFO[ListItem.Year]$INFO[ListItem.Studio, $LOCALIZE[31000] ]$INFO[ListItem.Property(nplayers), $LOCALIZE[31000] ,P][/UPPERCASE]</value>
+		<!-- Actors: 23 Appearances inc xxx -->
+		<value condition="Container.Content(actors) + !String.IsEmpty(ListItem.Appearances)">[UPPERCASE]$INFO[ListItem.Appearances]$VAR[Appearances_Label, ][/UPPERCASE]</value>
 		<!-- Files -->
 		<!-- 23 mins / Ends 13:32 -->
 		<value condition="Container.Content(files) + $EXP[ListView_IsVisible] + !String.IsEmpty(ListItem.Duration)">[UPPERCASE]$INFO[ListItem.Duration(mins),, $LOCALIZE[31114]][/UPPERCASE]</value>
-		<value condition="Container.Content(files) + !String.IsEmpty(ListItem.Duration)">[UPPERCASE]$INFO[ListItem.Duration(mins),, $LOCALIZE[31114]]$INFO[ListItem.EndTime, $LOCALIZE[31000] $LOCALIZE[31100] ][/UPPERCASE]</value>
+		<value condition="Container.Content(files) + !String.IsEmpty(ListItem.Duration)">[UPPERCASE]$INFO[ListItem.Duration(mins),, $LOCALIZE[31114]]$INFO[ListItem.EndTime, $LOCALIZE[31000] $LOCALIZE[31100] ][/UPPERCASE]</value>		
 		<value/>
 	</variable>
 
@@ -254,6 +256,8 @@
 		<value condition="Container.Content(addons) + $EXP[GridView_IsVisible] + $EXP[GridView_Details_Breadcrumb_Addons]">$INFO[ListItem.AddonType,$LOCALIZE[31001] ]$INFO[ListItem.AddonVersion, $LOCALIZE[31001] ]$INFO[ListItem.AddonCreator, $LOCALIZE[31001] ]</value>
 		<value condition="Container.Content(addons) + $EXP[GridView_IsVisible] + $EXP[GridView_Details_Title_Addons]">$INFO[ListItem.AddonVersion,$LOCALIZE[31001] ]$INFO[ListItem.AddonCreator, $LOCALIZE[31001] ]</value>
 		<value condition="Container.Content(addons)">$INFO[ListItem.AddonCreator,$LOCALIZE[31001] ]</value>
+		<value condition="Container.Content(actors) + $EXP[GridView_IsVisible] + String.IsEqual(Container.SortMethod,$LOCALIZE[551])">$INFO[ListItem.SortLetter,$LOCALIZE[31001] ]</value>
+		<value condition="Container.Content(actors) + $EXP[GridView_IsVisible] + String.IsEqual(Container.SortMethod,$LOCALIZE[38026])">$INFO[ListItem.Appearances,$LOCALIZE[31001] ]$VAR[Appearances_Label, ]</value>
 		<value condition="Window.IsVisible(programs) + $EXP[GridView_IsVisible] + $EXP[GridView_Details_Breadcrumb_Programs_Files] + !String.IsEmpty(ListItem.Year)">$INFO[ListItem.Year]$INFO[ListItem.Studio, $LOCALIZE[31001] ]$INFO[ListItem.Property(nplayers), $LOCALIZE[31001] ,p]</value>
 		<value condition="Container.Content(files) + !String.IsEmpty(ListItem.Duration)">$INFO[ListItem.Duration(mins),$LOCALIZE[31001] , $LOCALIZE[31114]]$INFO[ListItem.EndTime, $LOCALIZE[31001] $LOCALIZE[31100] ]</value>
 	</variable>
@@ -330,10 +334,6 @@
 		<value condition="String.IsEqual(ListItem.DBType,song) + String.Contains(Container.FolderPath,musicdb://songs) + !String.IsEmpty(ListItem.Year)">[UPPERCASE]$INFO[ListItem.Year]$INFO[ListItem.TrackNumber, $LOCALIZE[31001] ]$INFO[ListItem.Duration(mm:ss), $LOCALIZE[31001] ][/UPPERCASE]</value>
 		<value condition="String.IsEqual(ListItem.DBType,song) + String.Contains(Container.FolderPath,musicdb://songs) + !String.IsEmpty(ListItem.TrackNumber)">[UPPERCASE]$INFO[ListItem.TrackNumber]$INFO[ListItem.Duration(mm:ss), $LOCALIZE[31001] ][/UPPERCASE]</value>
 		<value condition="String.IsEqual(ListItem.DBType,song) + String.Contains(Container.FolderPath,musicdb://songs) + !String.IsEmpty(ListItem.Duration)">[UPPERCASE]$INFO[ListItem.Duration(mm:ss)][/UPPERCASE]</value>
-		<!-- Actors: 23 Appearances inc xxx -->
-		<value condition="Container.Content(actors) + !String.IsEmpty(ListItem.Appearances)">[UPPERCASE]$INFO[ListItem.Appearances]$VAR[Appearances_Label, ]$INFO[Container(3100).ListItem(-1).Title, ][/UPPERCASE]</value>
-		<!-- File views: 23 mins / Ends 13:32 -->
-		<value condition="Container.Content(files) + !String.IsEmpty(ListItem.Duration)">[UPPERCASE]$INFO[ListItem.Duration(mins),, $LOCALIZE[31114]]$INFO[ListItem.EndTime, $LOCALIZE[31001] $LOCALIZE[31100] ][/UPPERCASE]</value>
 		<value/>
 	</variable>
 
@@ -637,7 +637,7 @@
 		<value condition="[String.StartsWith(Container(3100).ListItem.VideoResolution,720) | String.Contains(Container(3100).ListItem.FileNameAndPath,720p)]">$LOCALIZE[31111]</value>
 		<value condition="String.StartsWith(Container(3100).ListItem.VideoResolution,576)">$LOCALIZE[31112]</value>
 		<value condition="String.StartsWith(Container(3100).ListItem.VideoResolution,540)">$LOCALIZE[31112]</value>
-		<value condition="String.StartsWith(Container(3100).ListItem.VideoResolution,480)">$LOCALIZE[31112]</value>	
+		<value condition="String.StartsWith(Container(3100).ListItem.VideoResolution,480)">$LOCALIZE[31112]</value>
 	</variable>
 
 	<variable name="Seasons_Label">
@@ -660,6 +660,8 @@
 		<value condition="String.IsEqual(Container.SortMethod,$LOCALIZE[38077])">0</value>
 		<value condition="String.IsEqual(Container.SortMethod,$LOCALIZE[567]) + !String.IsEmpty(ListItem.Playcount)">$INFO[ListItem.Playcount]</value>
 		<value condition="String.IsEqual(Container.SortMethod,$LOCALIZE[567])">0</value>
+		<value condition="String.IsEqual(Container.SortMethod,$LOCALIZE[38026]) + Integer.IsGreater(ListItem.Appearances,10)">10+</value>
+		<value condition="String.IsEqual(Container.SortMethod,$LOCALIZE[38026]) + !String.IsEmpty(ListItem.Appearances)">$INFO[ListItem.Appearances]</value>
 		<value condition="[String.IsEqual(Container.SortMethod,$LOCALIZE[563]) + String.IsEqual(ListItem.SortLetter,1) + Integer.IsGreater(ListItem.Rating,9)] | [String.IsEqual(Container.SortMethod,$LOCALIZE[38018]) + String.IsEqual(ListItem.SortLetter,1) + Integer.IsGreater(ListItem.UserRating,9)]">10</value>
 		<value condition="[String.IsEqual(Container.SortMethod,$LOCALIZE[563]) | String.IsEqual(Container.SortMethod,$LOCALIZE[38018])] + String.IsEqual(ListItem.SortLetter,0)">N/A</value>
 		<value condition="!$EXP[SortNumber_Enabled] + [String.StartsWith(ListItem.Label,90) | String.StartsWith(ListItem.Label,91) | String.StartsWith(ListItem.Label,92) | String.StartsWith(ListItem.Label,93) | String.StartsWith(ListItem.Label,94) | String.StartsWith(ListItem.Label,95) | String.StartsWith(ListItem.Label,96) | String.StartsWith(ListItem.Label,97) | String.StartsWith(ListItem.Label,98) | String.StartsWith(ListItem.Label,99)]">90</value>
@@ -732,6 +734,7 @@
 		<value condition="Container.Content(addons) + $EXP[GridView_IsVisible] + $EXP[GridView_Details_Breadcrumb_Addons]">$INFO[ListItem.Label]</value>
 		<value condition="Container.Content(addons)">$INFO[ListItem.AddonType]</value>
 		<value condition="Container.Content(playlists)">$LOCALIZE[136]</value>
+		<value condition="Container.Content(actors) + $EXP[GridView_IsVisible]">$LOCALIZE[344]</value>
 		<value condition="Container.Content(actors) + !String.IsEmpty(ListItem.Appearances)">$INFO[ListItem.Appearances]$VAR[Appearances_Label, ]</value>
 		<value condition="Container.Content(files)">$INFO[ListItem.FolderName]</value>
 		<value condition="Window.Is(skinsettings)">$LOCALIZE[31447]</value>
