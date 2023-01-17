@@ -4,18 +4,23 @@
 	<include name="Grid_Check">
 		<param name="width" default="30" />
 		<param name="left" default="0" />
+		<param name="backing_visible" default="true" />
+		<param name="color" default="$VAR[Progress_Grid_Text_Color]" />
 		<definition>
 			<control type="group">
 				<visible>!ListItem.IsResumable + String.IsEqual(ListItem.Overlay,OverlayWatched.png)</visible>
+				<visible>!$EXP[TransparentDialog_IsVisible] + !$EXP[Scrollbar_HasFocus]</visible>
+				<include content="Visible_Fade_Animation" />
 				<height>$PARAM[width]</height>
 				<bottom>0</bottom>
 				<width>$PARAM[width]</width>
 				<centerleft>50%</centerleft>
 				<control type="image">
 					<texture colordiffuse="$VAR[Accent_Color]">views/white_100.png</texture>
+					<visible>$PARAM[backing_visible]</visible>
 				</control>
 				<include content="Check_unfocused">
-					<param name="color" value="$VAR[Light_Color]" />
+					<param name="color" value="$PARAM[color]" />
 					<param name="width" value="$PARAM[width]" />
 				</include>
 			</control>
@@ -32,7 +37,10 @@
 			<param name="now_playing" value="$EXP[ListItem(0)_NowPlaying]" />
 			<include content="Visible_Fade_Animation" />
 			<animation effect="slide" end="12,0" time="0" condition="$EXP[GridView_Display_IsFanart]" reversible="false">Conditional</animation>
-			<include content="Grid_Check" condition="Skin.HasSetting(GridView_AltWatchedStatus_Enabled)" />
+			<include content="Grid_Check" condition="Skin.HasSetting(GridView_AltWatchedStatus_Enabled)">
+				<param name="backing_visible" value="false" />
+				<param name="color" value="$VAR[Light_Color]" />
+			</include>
 		</include>
 	</include>
 
