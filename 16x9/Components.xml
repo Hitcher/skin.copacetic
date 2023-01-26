@@ -108,33 +108,6 @@
 		</control>
 	</include>
 
-	<include name="Fanart_Slideshow_Playlists">
-		<control type="list" id="3300">
-			<include content="Hidden_Control" />
-			<visible>$EXP[Background_Containers]</visible>
-			<content sortby="random">$INFO[ListItem.FolderPath]</content>
-			<autoscroll time="7000">true</autoscroll> <!-- Time to show each image, in milliseconds -->
-			<itemlayout />
-			<focusedlayout />
-		</control>
-		<control type="group">
-			<visible>$EXP[Background_Containers]</visible>
-			<include content="Visible_Fade_Delayed_Animation" />
-			<control type="image">
-				<animation effect="fade" start="0" end="100" time="360" delay="1800" tween="sine" easing="inout" reversible="true">Visible</animation>
-				<texture colordiffuse="$VAR[Dark_Color]">views/white_100.png</texture>
-			</control>
-			<control type="multiimage">
-				<include content="Ken_Burns_Effect_Animation" />
-				<imagepath colordiffuse="$VAR[Home_Artwork_Diffuse]" background="true">$INFO[Container(3300).ListItem.Art(fanart)]</imagepath>
-				<aspectratio>scale</aspectratio>
-				<timeperimage>7000</timeperimage>
-				<fadetime>360</fadetime>
-				<randomize>true</randomize>
-			</control>
-		</control>
-	</include>
-
 	<include name="Home_Clearlogo">
 		<control type="button" id="4300">
 			<visible allowhiddenfocus="true">false</visible>
@@ -160,28 +133,34 @@
 		</control>
 	</include>
 
+	<include name="Fanart_Slideshow_List">
+		<control type="list" id="3300">
+			<include content="Hidden_Control" />
+			<include content="Fanart_Slideshow_$PARAM[content_source]_Path" />
+			<autoscroll time="7000">true</autoscroll>
+			<itemlayout />
+			<focusedlayout />
+		</control>
+	</include>
+
 	<include name="Fanart_Slideshow_Global">
 		<param name="visible" default="true" />
+		<param name="local_list_content" default="false" />
 		<param name="content_source" default="Global" />
 		<param name="texture_path" default="$VAR[Fanart_Slideshow_Global_Texture]" />
+		<param name="animate_slideshow" default="true" />
 		<definition>
 			<control type="group">
 				<visible>!VideoPlayer.IsFullscreen + !Skin.HasSetting(Fanart_Slideshow_Global_Disabled)</visible>
 				<visible>$PARAM[visible]</visible>
 				<include content="VisibleHidden_Fade_Animation" />
-				<control type="list" id="3300">
-					<include content="Hidden_Control" />
-					<include content="Fanart_Slideshow_$PARAM[content_source]_Path" />
-					<autoscroll time="7000">true</autoscroll>
-					<itemlayout />
-					<focusedlayout />
-				</control>
+				<include content="Fanart_Slideshow_List" condition="$PARAM[local_list_content]">
+					<param name="content_source" value="$PARAM[content_source]" />
+				</include>
 				<control type="videowindow">
 					<include content="Hidden_Control" />
 				</control>
-				<include content="Fanart_Slideshow_Backing" condition="Skin.String(Theme,Light)">
-					<param name="visible" value="Integer.IsGreater(Container(3300).NumItems,0)" />
-				</include>
+				<include content="Fanart_Slideshow_Backing" />
 				<include content="Fanart_Slideshow_Multiart" condition="$EXP[Settings_IsVisible] + !Skin.HasSetting(Fanart_Slideshow_Global_Disabled)">
 					<param name="colordiffuse" value="$VAR[Dialogs_Artwork_Diffuse]" />
 					<param name="texture_path" value="$PARAM[texture_path]" />
@@ -191,9 +170,18 @@
 					<param name="colordiffuse" value="$VAR[Dialogs_Artwork_Diffuse]" />
 					<param name="texture_path" value="$PARAM[texture_path]" />
 					<param name="fadetime" value="360" />
+					<param name="animate_slideshow" value="$PARAM[animate_slideshow]" />
 				</include>
 			</control>
 		</definition>
+	</include>
+
+	<include name="Fanart_Slideshow_Media">
+		<include content="Fanart_Slideshow_Global">
+			<param name="visible" value="$EXP[Background_Containers] | Container.Content()" />
+			<param name="local_list_content" value="true" />
+			<param name="content_source" value="Media" />
+		</include>
 	</include>
 
 </includes>
