@@ -38,6 +38,12 @@
 		<value condition="String.IsEqual(ListItem.DBType,episode) + Integer.IsGreater(ListItem.DBID,0)">videodb://tvshows/titles/$INFO[ListItem.TVShowDBID]/</value>
 	</variable>
 
+	<variable name="Path_MusicVideos">
+		<value condition="String.IsEqual(ListItem.DBType,artist) + !String.IsEmpty(ListItem.Artist)">videodb://musicvideos/titles/?xsp=%7B%22rules%22%3A%7B%22and%22%3A%5B%7B%22field%22%3A%22artist%22%2C%22operator%22%3A%22is%22%2C%22value%22%3A%5B$ESCINFO[ListItem.Artist]%5D%7D%5D%7D%2C%22type%22%3A%22musicvideos%22%7D</value>
+		<value condition="String.IsEqual(ListItem.DBType,album) + !String.IsEmpty(ListItem.Artist) + !String.IsEmpty(ListItem.Album)">videodb://musicvideos/titles/?xsp=%7B%22rules%22%3A%7B%22and%22%3A%5B%7B%22field%22%3A%22artist%22%2C%22operator%22%3A%22is%22%2C%22value%22%3A%5B$ESCINFO[ListItem.Artist]%5D%7D%2C%7B%22field%22%3A%22album%22%2C%22operator%22%3A%22contains%22%2C%22value%22%3A%5B$ESCINFO[ListItem.Album]%5D%7D%5D%7D%2C%22type%22%3A%22musicvideos%22%7D</value>
+		<value condition="String.IsEqual(ListItem.DBType,song) + !String.IsEmpty(ListItem.Artist) + !String.IsEmpty(ListItem.Album) + !String.IsEmpty(ListItem.Title)">videodb://musicvideos/titles/?xsp=%7B%22rules%22%3A%7B%22and%22%3A%5B%7B%22field%22%3A%22artist%22%2C%22operator%22%3A%22is%22%2C%22value%22%3A%5B$ESCINFO[ListItem.Artist]%5D%7D%2C%7B%22field%22%3A%22title%22%2C%22operator%22%3A%22contains%22%2C%22value%22%3A%5B$ESCINFO[ListItem.Title]%5D%7D%5D%7D%2C%22type%22%3A%22musicvideos%22%7D</value>
+	</variable>
+
 	<variable name="Path_ActorCredits">
 		<value condition="System.AddonIsEnabled(plugin.video.themoviedb.helper) + String.Contains(ListItem.Path,themoviedb.helper) + String.IsEqual(ListItem.DBType,movie) + !String.IsEmpty(Container(50).ListItem.Label)">plugin://plugin.video.themoviedb.helper?info=stars_in_movies&amp;type=person&amp;query=$INFO[Container(50).ListItem.Label]&amp;exclude_key=title&amp;exclude_value=$INFO[ListItem.Title]&amp;$VAR[TMDBHelper_Default_Params]</value>
 		<value condition="System.AddonIsEnabled(plugin.video.themoviedb.helper) + String.Contains(ListItem.Path,themoviedb.helper) + String.IsEqual(ListItem.DBType,tvshow) + !String.IsEmpty(Container(50).ListItem.Label)">plugin://plugin.video.themoviedb.helper?info=stars_in_tvshows&amp;type=person&amp;query=$INFO[Container(50).ListItem.Label]&amp;exclude_key=title&amp;exclude_value=$INFO[ListItem.Title]&amp;$VAR[TMDBHelper_Default_Params]</value>
@@ -50,6 +56,8 @@
 
 	<variable name="Path_DirectorCredits">
 		<value condition="System.AddonIsEnabled(plugin.video.themoviedb.helper) + String.Contains(ListItem.Path,themoviedb.helper) + !String.IsEmpty(ListItem.Property(Director.1.Name))">plugin://plugin.video.themoviedb.helper?info=crew_in_movies&amp;type=person&amp;query='$ESCINFO[ListItem.Property(Director.1.Name)]'&amp;filter_key=job&amp;filter_value=Director&amp;exclude_key=title&amp;exclude_value=$INFO[ListItem.Title]&amp;$VAR[TMDBHelper_Default_Params]</value>
+		<!-- Path for combined movie / musicvideo credits -->
+		<value condition="Library.HasContent(MusicVideos)">plugin://script.copacetic.helper/?info=getdirector&amp;label=$INFO[Window(home).Property(RandomDirector)]&amp;exclude_key=title&amp;exclude_value=$INFO[ListItem.Title]</value>
 		<value>videodb://movies/titles/?xsp=%7B%22rules%22%3A%7B%22and%22%3A%5B%7B%22field%22%3A%22director%22%2C%22operator%22%3A%22contains%22%2C%22value%22%3A%5B$ESCINFO[Window(home).Property(RandomDirector)]%5D%7D%2C%7B%22field%22%3A%22title%22%2C%22operator%22%3A%22isnot%22%2C%22value%22%3A%5B$ESCINFO[ListItem.Title]%5D%7D%5D%7D%2C%22type%22%3A%22movies%22%7D</value>
 	</variable>
 

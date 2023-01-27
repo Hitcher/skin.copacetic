@@ -90,7 +90,7 @@
 			<include content="Hidden_Button_Template" />
 			<ondown condition="Container(4).HasNext | Container(4).HasPrevious">SetFocus(60)</ondown>
 			<onunfocus>SetProperty(ResetScroll,"")</onunfocus>
-			<onfocus>SetProperty(Focused_Button,$LOCALIZE[207],movieinformation)</onfocus>
+			<onfocus>SetProperty(Focused_Button,$VAR[PlotType_Label],movieinformation)</onfocus>
 		</control>
 		<control type="button" id="11">
 			<description>Trailer</description>
@@ -130,13 +130,14 @@
 		<control type="button" id="97">
 			<description>Play</description>
 			<include content="Hidden_Button_Template" />
-			<onfocus>SetProperty(Focused_Button,$LOCALIZE[208],musicinformation)</onfocus>
+			<onfocus condition="!String.IsEqual(ListItem.DBtype,artist">SetProperty(Focused_Button,$LOCALIZE[208],musicinformation)</onfocus>
+			<onfocus condition="String.IsEqual(ListItem.DBtype,artist">SetProperty(Focused_Button,$LOCALIZE[191],musicinformation)</onfocus>
 			<onfocus>SetProperty(ResetScroll," ")</onfocus>
-			<onclick condition="String.IsEqual(ListItem.DBType,artist) + Integer.IsGreater(Container(3201).NumItems,0)">RunScript(script.copacetic.helper,action=play_music,id=3201,method=from_here)</onclick>
+			<onclick condition="String.IsEqual(ListItem.DBType,artist)">RunScript(script.copacetic.helper,action=shuffle_artist,id=$INFO[ListItem.DBID])</onclick>
 			<onclick condition="String.IsEqual(ListItem.DBType,album)">RunScript(script.copacetic.helper,action=play_album,id=$INFO[ListItem.DBID])</onclick>
 			<onclick condition="String.IsEqual(ListItem.DBType,song)">RunScript(script.copacetic.helper,action=play_album_from_song,id=$INFO[ListItem.DBID],track=$INFO[ListItem.TrackNumber])</onclick>
 			<onclick condition="String.IsEmpty(ListItem.DBID)">PlayMedia($INFO[ListItem.FilenameAndPath])</onclick>
-			<onclick>Action(close)</onclick>
+			<!-- <onclick>Action(close)</onclick> -->
 			<include content="MusicInfo_Dialog_Menu_Navigation" />
 		</control>
 		<control type="button" id="99">
