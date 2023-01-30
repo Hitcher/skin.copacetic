@@ -101,6 +101,9 @@
 				<itemgap>0</itemgap>
 				<align>center</align>
 				<include content="Default_ContextMenu_Label">
+					<param name="id" value="4015" />
+				</include>
+				<include content="Default_ContextMenu_Label">
 					<param name="id" value="1001" />
 				</include>
 				<include content="Default_ContextMenu_Label">
@@ -153,9 +156,23 @@
 			<ondown>0</ondown>
 			<onleft>Close</onleft>
 			<onright>Close</onright>
-		</control>
-		<control type="button" id="1000">
-			<texturefocus />
+			<!-- Like/Unlike song -->
+			<control type="button" id="4015">
+				<texturefocus />
+				<label>$LOCALIZE[31032]</label>
+				<onclick>RunScript(script.copacetic.helper,action=rate_song,id=$INFO[ListItem.DBID],rating=$INFO[Skin.String(Music_Rating_Like_Threshold)])</onclick>
+				<visible>String.IsEqual(ListItem.DBType,song) + !String.IsEmpty(Skin.String(Music_Rating_Like_Threshold)) + Integer.IsLess(ListItem.UserRating,Skin.String(Music_Rating_Like_Threshold))</visible>
+			</control>
+			<control type="button" id="4015">
+				<texturefocus />
+				<label>$LOCALIZE[31032]</label>
+				<onclick>RunScript(script.copacetic.helper,action=rate_song,id=$INFO[ListItem.DBID],rating=0)</onclick>
+				<visible>String.IsEqual(ListItem.DBType,song) + Integer.IsGreaterOrEqual(ListItem.UserRating,Skin.String(Music_Rating_Like_Threshold))</visible>
+			</control>
+			<!-- Default button -->
+			<control type="button" id="1000">
+				<texturefocus />
+			</control>
 		</control>
 	</include>
 
@@ -182,6 +199,10 @@
 					<itemgap>0</itemgap>
 					<scrolltime tween="sine" easing="inout">360</scrolltime>
 					<pagecontrol>60</pagecontrol>
+					<!-- Default button -->
+					<control type="button" id="1000">
+						<texturefocus />
+					</control>
 				</control>
 				<!-- Underline -->
 				<control type="image">
@@ -206,10 +227,6 @@
 					<param name="scrollbarvisible" value="Window.IsVisible(filemanager) | Window.IsVisible(musicplaylisteditor)" />
 					<param name="dividervisible" value="false" />
 				</include>
-			</control>
-			<!-- Default button -->
-			<control type="button" id="1000">
-				<texturefocus />
 			</control>
 		</control>
 	</include>

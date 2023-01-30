@@ -181,32 +181,40 @@
 	</include>
 
 	<include name="MyViews_Addons">
-		<include content="Fanart_Slideshow_Global" condition="!Skin.HasSetting(Fanart_Slideshow_Global_Disabled)">
-			<param name="visible" value="!Container.Content(addons)" />
-		</include>
-		<control type="group">
-			<visible>!$EXP[Infoscreen_IsVisible] + !Window.IsVisible(addonsettings) + ![Window.Is(addonbrowser) + Window.IsVisible(selectdialog)]</visible>
-			<include content="Visible_Fade_Delayed_Animation" />
-			<include content="ListView_Display">
-				<param name="art_icon" value="addonbrowser" />
+		<param name="visible" default="!$EXP[Infoscreen_IsVisible] + !Window.IsVisible(addonsettings) + ![Window.Is(addonbrowser) + Window.IsVisible(selectdialog)]" />
+		<definition>
+			<include content="Fanart_Slideshow_Global" condition="!Skin.HasSetting(Fanart_Slideshow_Global_Disabled)">
+				<param name="visible" value="!Container.Content(addons)" />
 			</include>
-			<include content="ListView_Container" />
-			<include content="ShowcaseView_Container" condition="$EXP[ShowcaseView_Enabled]" />
-			<include content="ShowcaseView_Display" condition="$EXP[ShowcaseView_Enabled]">
-				<param name="art_icon" value="addonbrowser" />
-			</include>
-			<include content="ShowcaseView_Details" condition="$EXP[ShowcaseView_Enabled]" />
-			<include content="StripView_Container" condition="$EXP[StripView_Enabled]" />
-			<include content="StripView_Display" condition="$EXP[StripView_Enabled]">
-				<param name="art_icon" value="addonbrowser" />
-			</include>
-			<include content="StripView_Details" condition="$EXP[StripView_Enabled]" />
-			<include content="Shared_Dialog_Layouts" condition="Skin.HasSetting(Music_Player_Enabled)" />
-			<include content="GridView_Container" condition="Skin.HasSetting(GridView_Enabled)">
-				<param name="art_icon" value="addonbrowser" />
-			</include>
-			<include content="GridView_Overlay_Details" condition="$EXP[GridView_Enabled]" />
-		</control>
+			<control type="group">
+				<visible>$PARAM[visible]</visible>
+				<include content="Visible_Fade_Delayed_Animation" />
+				<include content="ListView_Display">
+					<param name="art_icon" value="addonbrowser" />
+				</include>
+				<include content="ShowcaseView_Container" condition="$EXP[ShowcaseView_Enabled]" />
+				<include content="ShowcaseView_Display" condition="$EXP[ShowcaseView_Enabled]">
+					<param name="art_icon" value="addonbrowser" />
+				</include>
+				<include content="StripView_Container" condition="$EXP[StripView_Enabled]" />
+				<include content="StripView_Display" condition="$EXP[StripView_Enabled]">
+					<param name="art_icon" value="addonbrowser" />
+				</include>
+				<include content="Shared_Dialog_Layouts" condition="Skin.HasSetting(Music_Player_Enabled)" />
+				<include content="GridView_Container" condition="Skin.HasSetting(GridView_Enabled)">
+					<param name="art_icon" value="addonbrowser" />
+				</include>
+			</control>
+			<control type="group">
+				<visible>$PARAM[visible]</visible>
+				<include content="Visible_Fade_Delayed_Long_Animation" />
+				<include content="ListView_Container" />
+				<include content="ListView_Details" />
+				<include content="ShowcaseView_Details" condition="$EXP[ShowcaseView_Enabled]" />
+				<include content="StripView_Details" condition="$EXP[StripView_Enabled]" />
+				<include content="GridView_Overlay_Details" condition="$EXP[GridView_Enabled]" />
+			</control>
+		</definition>
 	</include>
 
 	<include name="MyViews_ListOnly">
@@ -225,6 +233,7 @@
 				<visible>$PARAM[visible]</visible>
 				<include content="Visible_Fade_Delayed_Long_Animation" />
 				<include content="ListView_Container" />
+				<include content="ListView_Details" />
 			</control>
 		</definition>
 	</include>
@@ -252,6 +261,7 @@
 				<visible>$PARAM[visible]</visible>
 				<include content="Visible_Fade_Delayed_Long_Animation" />
 				<include content="ListView_Container" />
+				<include content="ListView_Details" />
 				<include content="BillboardView_Details" condition="$EXP[BillboardView_Enabled]" />
 				<include content="ShowcaseView_Details" condition="$EXP[ShowcaseView_Enabled]" />
 				<include content="StripView_Details" condition="$EXP[StripView_Enabled]" />
@@ -283,8 +293,9 @@
 			</control>
 			<control type="group">
 				<visible>$PARAM[visible]</visible>
-				<include content="ListView_Container" />
 				<include content="Visible_Fade_Delayed_Long_Animation" />
+				<include content="ListView_Container" />
+				<include content="ListView_Details" />
 				<include content="BillboardView_Details" condition="$EXP[BillboardView_Enabled]" />
 				<include content="ShowcaseView_Details" condition="$EXP[ShowcaseView_Enabled]" />
 				<include content="StripView_Details" condition="$EXP[StripView_Enabled]" />
@@ -320,11 +331,27 @@
 				<visible>$PARAM[visible]</visible>
 				<include content="Visible_Fade_Delayed_Long_Animation" />
 				<include content="ListView_Container" />
+				<include content="ListView_Details" />
 				<include content="ShowcaseView_Details" condition="$EXP[ShowcaseView_Enabled]" />
 				<include content="StripView_Details" condition="$EXP[StripView_Enabled]" />
 				<include content="GridView_Overlay_Details" condition="$EXP[GridView_Enabled]" />
 			</control>
 		</definition>
+	</include>
+
+	<include name="OptionsMenu_Slides">
+		<animation effect="slide" start="0" end="0,45" time="0" condition="Window.Is(music) + Integer.IsGreater(Container.ViewCount,1)">Conditional</animation>
+		<animation effect="slide" start="0" end="0,30" time="0" condition="Integer.IsLessOrEqual(Container(3000).NumItems,11) + !Integer.IsGreater(Container.ViewCount,1)">Conditional</animation>
+		<animation effect="slide" start="0" end="0,30" time="0" condition="Integer.IsLessOrEqual(Container(3000).NumItems,10) + !Integer.IsGreater(Container.ViewCount,1)">Conditional</animation>
+		<animation effect="slide" start="0" end="0,30" time="0" condition="Integer.IsLessOrEqual(Container(3000).NumItems,9) + !Integer.IsGreater(Container.ViewCount,1)">Conditional</animation>
+		<animation effect="slide" start="0" end="0,30" time="0" condition="Integer.IsLessOrEqual(Container(3000).NumItems,8) + !Integer.IsGreater(Container.ViewCount,1)">Conditional</animation>
+		<animation effect="slide" start="0" end="0,30" time="0" condition="Integer.IsLessOrEqual(Container(3000).NumItems,7) + !Integer.IsGreater(Container.ViewCount,1)">Conditional</animation>
+		<animation effect="slide" start="0" end="0,30" time="0" condition="Integer.IsLessOrEqual(Container(3000).NumItems,6) + !Integer.IsGreater(Container.ViewCount,1)">Conditional</animation>
+		<animation effect="slide" start="0" end="0,30" time="0" condition="Integer.IsLessOrEqual(Container(3000).NumItems,5) + !Integer.IsGreater(Container.ViewCount,1)">Conditional</animation>
+		<animation effect="slide" start="0" end="0,30" time="0" condition="Integer.IsLessOrEqual(Container(3000).NumItems,4) + !Integer.IsGreater(Container.ViewCount,1)">Conditional</animation>
+		<animation effect="slide" start="0" end="0,30" time="0" condition="Integer.IsLessOrEqual(Container(3000).NumItems,3) + !Integer.IsGreater(Container.ViewCount,1)">Conditional</animation>
+		<animation effect="slide" start="0" end="0,30" time="0" condition="Integer.IsLessOrEqual(Container(3000).NumItems,2) + !Integer.IsGreater(Container.ViewCount,1)">Conditional</animation>
+		<animation effect="slide" start="0" end="0,30" time="0" condition="Integer.IsLessOrEqual(Container(3000).NumItems,1) + !Integer.IsGreater(Container.ViewCount,1)">Conditional</animation>
 	</include>
 
 	<include name="MyViews_Menu_and_Scrollbars">
@@ -336,118 +363,115 @@
 				<param name="visible" value="String.IsEqual(Window(home).Property(OptionsMenu),Active)" />
 				<include content="Options_Menu_Fade_Animation" />
 			</include>
-			<control type="group">
-				<visible>String.IsEqual(Window(home).Property(OptionsMenu),Active)</visible>
+			<control type="fixedlist" id="3000">
+				<viewtype label="535">list</viewtype>
+				<visible allowhiddenfocus="true">String.IsEqual(Window(home).Property(OptionsMenu),Active) + !Window.IsVisible(shutdownmenu) + !Window.IsVisible(virtualkeyboard)</visible>
 				<include content="VisibleHidden_Fade_Delayed_Animation" />
-				<control type="fixedlist" id="3000">
-					<viewtype label="535">list</viewtype>
-					<visible allowhiddenfocus="true">!Window.IsVisible(shutdownmenu) + !Window.IsVisible(virtualkeyboard)</visible>
-					<include content="Visible_Fade_Animation" />
-					<description>Options menu</description>
-					<left>120</left>
-					<width>1080</width>
-					<centertop>50%</centertop>
-					<height>720</height>
-					<onup>0</onup>
-					<ondown>0</ondown>
-					<onback>4012</onback>
-					<onfocus>ClearProperty(Scrollbars,home)</onfocus>
-					<onfocus>SetProperty(OptionsMenu,Active,home)</onfocus>
-					<onunfocus>ClearProperty(OptionsMenu,home)</onunfocus>
-					<onleft condition="String.IsEmpty(Container(3000).ListItem.Property(ActionLeft))">4012</onleft>
-					<onright condition="String.IsEmpty(Container(3000).ListItem.Property(ActionRight))">4012</onright>
-					<onleft condition="!String.IsEmpty(Container(3000).ListItem.Property(ActionLeft))">$INFO[Container(3000).ListItem.Property(ActionLeft)]</onleft>
-					<onright condition="!String.IsEmpty(Container(3000).ListItem.Property(ActionRight))">$INFO[Container(3000).ListItem.Property(ActionRight)]</onright>
-					<onleft condition="!String.IsEmpty(Container(3000).ListItem.Property(ActionLeft2))">$INFO[Container(3000).ListItem.Property(ActionLeft2)]</onleft>
-					<onright condition="!String.IsEmpty(Container(3000).ListItem.Property(ActionRight2))">$INFO[Container(3000).ListItem.Property(ActionRight2)]</onright>
-					<onleft condition="!String.IsEmpty(Container(3000).ListItem.Property(ActionLeft3))">$INFO[Container(3000).ListItem.Property(ActionLeft3)]</onleft>
-					<onright condition="!String.IsEmpty(Container(3000).ListItem.Property(ActionRight3))">$INFO[Container(3000).ListItem.Property(ActionRight3)]</onright>
-					<!-- Reset multiart on viewchange -->
-					<onleft condition="Container(3000).HasFocus(1)">SetFocus(4014)</onleft>
-					<onright condition="Container(3000).HasFocus(1)">SetFocus(4014)</onright>
-					<!-- Transition on left or right -->
-					<onleft condition="Container(3000).HasFocus(2)">SetFocus(4014)</onleft>
-					<onright condition="Container(3000).HasFocus(2)">SetFocus(4014)</onright>
-					<!-- Transition on left only -->
-					<onleft condition="Container(3000).HasFocus(3)">SetFocus(4014)</onleft>
-					<!-- Transition on right only -->
-					<onright condition="Container(3000).HasFocus(4)">SetFocus(4014)</onright>
-					<!-- Showcase: Turn off Logos & transition on left only -->
-					<onleft condition="Container(3000).HasFocus(5) + Container.Content(movies)">Skin.SetString(ShowcaseView_Logo_Movies,Off)</onleft>
-					<onleft condition="Container(3000).HasFocus(5) + Container.Content(sets)">Skin.SetString(ShowcaseView_Logo_Sets,Off)</onleft>
-					<onleft condition="Container(3000).HasFocus(5) + Container.Content(tvshows)">Skin.SetString(ShowcaseView_Logo_TVShows,Off)</onleft>
-					<onleft condition="Container(3000).HasFocus(5) + Container.Content(artists)">Skin.SetString(ShowcaseView_Logo_Artists,Off)</onleft>
-					<onleft condition="Container(3000).HasFocus(5)">SetFocus(4014)</onleft>
-					<!-- Showcase: Turn off Logos & transition on right only -->
-					<onright condition="Container(3000).HasFocus(6) + Container.Content(movies)">Skin.SetString(ShowcaseView_Logo_Movies,Off)</onright>
-					<onright condition="Container(3000).HasFocus(6) + Container.Content(sets)">Skin.SetString(ShowcaseView_Logo_Sets,Off)</onright>
-					<onright condition="Container(3000).HasFocus(6) + Container.Content(tvshows)">Skin.SetString(ShowcaseView_Logo_TVShows,Off)</onright>
-					<onright condition="Container(3000).HasFocus(6) + Container.Content(artists)">Skin.SetString(ShowcaseView_Logo_Artists,Off)</onright>
-					<onright condition="Container(3000).HasFocus(6)">SetFocus(4014)</onright>
-					<!-- Strip: Turn off Logos & transition on right only -->
-					<onright condition="Container(3000).HasFocus(7) + Container.Content(movies)">Skin.SetString(StripView_Logo_Movies,Off)</onright>
-					<onright condition="Container(3000).HasFocus(7) + Container.Content(sets)">Skin.SetString(StripView_Logo_Sets,Off)</onright>
-					<onright condition="Container(3000).HasFocus(7) + Container.Content(tvshows)">Skin.SetString(StripView_Logo_TVShows,Off)</onright>
-					<onright condition="Container(3000).HasFocus(7) + Container.Content(artists)">Skin.SetString(StripView_Logo_Artists,Off)</onright>
-					<onright condition="Container(3000).HasFocus(7)">SetFocus(4014)</onright>
-					<!-- Strip: Turn off Logos & transition on left only -->
-					<onleft condition="Container(3000).HasFocus(8) + Container.Content(movies)">Skin.SetString(StripView_Logo_Movies,Off)</onleft>
-					<onleft condition="Container(3000).HasFocus(8) + Container.Content(sets)">Skin.SetString(StripView_Logo_Sets,Off)</onleft>
-					<onleft condition="Container(3000).HasFocus(8) + Container.Content(tvshows)">Skin.SetString(StripView_Logo_TVShows,Off)</onleft>
-					<onright condition="Container(3000).HasFocus(8) + Container.Content(artists)">Skin.SetString(StripView_Logo_Artists,Off)</onright>
-					<onleft condition="Container(3000).HasFocus(8)">SetFocus(4014)</onleft>
-					<!-- Strip: Turn off Logos on left only -->
-					<onleft condition="Container(3000).HasFocus(9) + Container.Content(movies)">Skin.SetString(StripView_Logo_Movies,Off)</onleft>
-					<onleft condition="Container(3000).HasFocus(9) + Container.Content(sets)">Skin.SetString(StripView_Logo_Sets,Off)</onleft>
-					<onleft condition="Container(3000).HasFocus(9) + Container.Content(tvshows)">Skin.SetString(StripView_Logo_TVShows,Off)</onleft>
-					<onleft condition="Container(3000).HasFocus(9) + Container.Content(artists)">Skin.SetString(StripView_Logo_Artists,Off)</onleft>
-					<!-- Strip: Turn off Logos on right only -->
-					<onright condition="Container(3000).HasFocus(10) + Container.Content(movies)">Skin.SetString(StripView_Logo_Movies,Off)</onright>
-					<onright condition="Container(3000).HasFocus(10) + Container.Content(sets)">Skin.SetString(StripView_Logo_Sets,Off)</onright>
-					<onright condition="Container(3000).HasFocus(10) + Container.Content(tvshows)">Skin.SetString(StripView_Logo_TVShows,Off)</onright>
-					<onright condition="Container(3000).HasFocus(10) + Container.Content(artists)">Skin.SetString(StripView_Logo_Artists,Off)</onright>
-					<!--Grid: Transition from keyart to poster -->
-					<onleft condition="Container(3000).HasFocus(11)">SetFocus(505)</onleft>
-					<onleft condition="Container(3000).HasFocus(11)">SetFocus(4014)</onleft>
-					<onright condition="Container(3000).HasFocus(12)">SetFocus(505)</onright>
-					<onright condition="Container(3000).HasFocus(12)">SetFocus(4014)</onright>
-					<orientation>vertical</orientation>
-					<focusposition>0</focusposition>
-					<movement>12</movement>
-					<defaultcontrol>1</defaultcontrol>
-					<scrolltime tween="sine" easing="inout">380</scrolltime>
-					<itemlayout height="55" width="1080">
-						<include content="Simple_List_Layout">
-							<param name="textcolor" value="$VAR[Light_Color]" />
-							<param name="label" value="$INFO[ListItem.Label2]" />
-							<param name="label_left" value="0" />
-							<param name="label_maxwidth" value="1080" />
-						</include>
-					</itemlayout>
-					<focusedlayout height="60" width="1080">
-						<include content="Simple_List_Layout">
-							<param name="font" value="Main_Menu_Focused" />
-							<param name="textcolor" value="$VAR[Light_Color]" />
-							<param name="label" value="$INFO[ListItem.Label]" />
-							<param name="label_left" value="0" />
-							<param name="label_maxwidth" value="1080" />
-						</include>
-					</focusedlayout>
-					<content>
-						<include content="ListView_Menu_Options" />
-						<include content="BillboardView_Menu_Options" condition="$EXP[BillboardView_Enabled]" />
-						<include content="ShowcaseView_Menu_Options" condition="$EXP[ShowcaseView_Enabled]" />
-						<include content="StripView_Menu_Options" condition="$EXP[StripView_Enabled]" />
-						<include content="GridView_Menu_Options" condition="$EXP[GridView_Enabled]" />
-						<include content="Trailer_Autoplay_Menu_Options" condition="Window.Is(videos) + Skin.HasSetting(Trailer_Autoplay)" />
-						<include content="Common_Menu_Options" />
-						<include content="Video_Menu_Options" condition="Window.Is(videos)" />
-						<include content="MusicVideo_Menu_Options" condition="Window.Is(videos) | Window.Is(music)" />
-						<include content="AddonBrowser_Menu_Options" condition="Window.Is(addonbrowser)" />
-						<include content="Pictures_Menu_Options" condition="Window.Is(pictures)" />
-						<include content="Playlist_Menu_Options" condition="Window.Is(musicplaylist) | Window.Is(videoplaylist)" />
-					</content>
-				</control>
+				<include content="OptionsMenu_Slides" />
+				<description>Options menu</description>
+				<left>120</left>
+				<width>1080</width>
+				<centertop>50%</centertop>
+				<height>720</height>
+				<onup>0</onup>
+				<ondown>0</ondown>
+				<onback>4012</onback>
+				<onfocus>ClearProperty(Scrollbars,home)</onfocus>
+				<onfocus>SetProperty(OptionsMenu,Active,home)</onfocus>
+				<onunfocus>ClearProperty(OptionsMenu,home)</onunfocus>
+				<onleft condition="String.IsEmpty(Container(3000).ListItem.Property(ActionLeft))">4012</onleft>
+				<onright condition="String.IsEmpty(Container(3000).ListItem.Property(ActionRight))">4012</onright>
+				<onleft condition="!String.IsEmpty(Container(3000).ListItem.Property(ActionLeft))">$INFO[Container(3000).ListItem.Property(ActionLeft)]</onleft>
+				<onright condition="!String.IsEmpty(Container(3000).ListItem.Property(ActionRight))">$INFO[Container(3000).ListItem.Property(ActionRight)]</onright>
+				<onleft condition="!String.IsEmpty(Container(3000).ListItem.Property(ActionLeft2))">$INFO[Container(3000).ListItem.Property(ActionLeft2)]</onleft>
+				<onright condition="!String.IsEmpty(Container(3000).ListItem.Property(ActionRight2))">$INFO[Container(3000).ListItem.Property(ActionRight2)]</onright>
+				<onleft condition="!String.IsEmpty(Container(3000).ListItem.Property(ActionLeft3))">$INFO[Container(3000).ListItem.Property(ActionLeft3)]</onleft>
+				<onright condition="!String.IsEmpty(Container(3000).ListItem.Property(ActionRight3))">$INFO[Container(3000).ListItem.Property(ActionRight3)]</onright>
+				<!-- Reset multiart on viewchange -->
+				<onleft condition="Container(3000).HasFocus(1)">SetFocus(4014)</onleft>
+				<onright condition="Container(3000).HasFocus(1)">SetFocus(4014)</onright>
+				<!-- Transition on left or right -->
+				<onleft condition="Container(3000).HasFocus(2)">SetFocus(4014)</onleft>
+				<onright condition="Container(3000).HasFocus(2)">SetFocus(4014)</onright>
+				<!-- Transition on left only -->
+				<onleft condition="Container(3000).HasFocus(3)">SetFocus(4014)</onleft>
+				<!-- Transition on right only -->
+				<onright condition="Container(3000).HasFocus(4)">SetFocus(4014)</onright>
+				<!-- Showcase: Turn off Logos & transition on left only -->
+				<onleft condition="Container(3000).HasFocus(5) + Container.Content(movies)">Skin.SetString(ShowcaseView_Logo_Movies,Off)</onleft>
+				<onleft condition="Container(3000).HasFocus(5) + Container.Content(sets)">Skin.SetString(ShowcaseView_Logo_Sets,Off)</onleft>
+				<onleft condition="Container(3000).HasFocus(5) + Container.Content(tvshows)">Skin.SetString(ShowcaseView_Logo_TVShows,Off)</onleft>
+				<onleft condition="Container(3000).HasFocus(5) + Container.Content(artists)">Skin.SetString(ShowcaseView_Logo_Artists,Off)</onleft>
+				<onleft condition="Container(3000).HasFocus(5)">SetFocus(4014)</onleft>
+				<!-- Showcase: Turn off Logos & transition on right only -->
+				<onright condition="Container(3000).HasFocus(6) + Container.Content(movies)">Skin.SetString(ShowcaseView_Logo_Movies,Off)</onright>
+				<onright condition="Container(3000).HasFocus(6) + Container.Content(sets)">Skin.SetString(ShowcaseView_Logo_Sets,Off)</onright>
+				<onright condition="Container(3000).HasFocus(6) + Container.Content(tvshows)">Skin.SetString(ShowcaseView_Logo_TVShows,Off)</onright>
+				<onright condition="Container(3000).HasFocus(6) + Container.Content(artists)">Skin.SetString(ShowcaseView_Logo_Artists,Off)</onright>
+				<onright condition="Container(3000).HasFocus(6)">SetFocus(4014)</onright>
+				<!-- Strip: Turn off Logos & transition on right only -->
+				<onright condition="Container(3000).HasFocus(7) + Container.Content(movies)">Skin.SetString(StripView_Logo_Movies,Off)</onright>
+				<onright condition="Container(3000).HasFocus(7) + Container.Content(sets)">Skin.SetString(StripView_Logo_Sets,Off)</onright>
+				<onright condition="Container(3000).HasFocus(7) + Container.Content(tvshows)">Skin.SetString(StripView_Logo_TVShows,Off)</onright>
+				<onright condition="Container(3000).HasFocus(7) + Container.Content(artists)">Skin.SetString(StripView_Logo_Artists,Off)</onright>
+				<onright condition="Container(3000).HasFocus(7)">SetFocus(4014)</onright>
+				<!-- Strip: Turn off Logos & transition on left only -->
+				<onleft condition="Container(3000).HasFocus(8) + Container.Content(movies)">Skin.SetString(StripView_Logo_Movies,Off)</onleft>
+				<onleft condition="Container(3000).HasFocus(8) + Container.Content(sets)">Skin.SetString(StripView_Logo_Sets,Off)</onleft>
+				<onleft condition="Container(3000).HasFocus(8) + Container.Content(tvshows)">Skin.SetString(StripView_Logo_TVShows,Off)</onleft>
+				<onright condition="Container(3000).HasFocus(8) + Container.Content(artists)">Skin.SetString(StripView_Logo_Artists,Off)</onright>
+				<onleft condition="Container(3000).HasFocus(8)">SetFocus(4014)</onleft>
+				<!-- Strip: Turn off Logos on left only -->
+				<onleft condition="Container(3000).HasFocus(9) + Container.Content(movies)">Skin.SetString(StripView_Logo_Movies,Off)</onleft>
+				<onleft condition="Container(3000).HasFocus(9) + Container.Content(sets)">Skin.SetString(StripView_Logo_Sets,Off)</onleft>
+				<onleft condition="Container(3000).HasFocus(9) + Container.Content(tvshows)">Skin.SetString(StripView_Logo_TVShows,Off)</onleft>
+				<onleft condition="Container(3000).HasFocus(9) + Container.Content(artists)">Skin.SetString(StripView_Logo_Artists,Off)</onleft>
+				<!-- Strip: Turn off Logos on right only -->
+				<onright condition="Container(3000).HasFocus(10) + Container.Content(movies)">Skin.SetString(StripView_Logo_Movies,Off)</onright>
+				<onright condition="Container(3000).HasFocus(10) + Container.Content(sets)">Skin.SetString(StripView_Logo_Sets,Off)</onright>
+				<onright condition="Container(3000).HasFocus(10) + Container.Content(tvshows)">Skin.SetString(StripView_Logo_TVShows,Off)</onright>
+				<onright condition="Container(3000).HasFocus(10) + Container.Content(artists)">Skin.SetString(StripView_Logo_Artists,Off)</onright>
+				<!--Grid: Transition from keyart to poster -->
+				<onleft condition="Container(3000).HasFocus(11)">SetFocus(505)</onleft>
+				<onleft condition="Container(3000).HasFocus(11)">SetFocus(4014)</onleft>
+				<onright condition="Container(3000).HasFocus(12)">SetFocus(505)</onright>
+				<onright condition="Container(3000).HasFocus(12)">SetFocus(4014)</onright>
+				<orientation>vertical</orientation>
+				<focusposition>0</focusposition>
+				<movement>12</movement>
+				<defaultcontrol>1</defaultcontrol>
+				<scrolltime tween="sine" easing="inout">380</scrolltime>
+				<itemlayout height="60" width="1080">
+					<include content="Simple_List_Layout">
+						<param name="textcolor" value="$VAR[Light_Color]" />
+						<param name="label" value="$INFO[ListItem.Label2]" />
+						<param name="label_left" value="0" />
+						<param name="label_maxwidth" value="1080" />
+					</include>
+				</itemlayout>
+				<focusedlayout height="60" width="1080">
+					<include content="Simple_List_Layout">
+						<param name="font" value="Main_Menu_Focused" />
+						<param name="textcolor" value="$VAR[Light_Color]" />
+						<param name="label" value="$INFO[ListItem.Label]" />
+						<param name="label_left" value="0" />
+						<param name="label_maxwidth" value="1080" />
+					</include>
+				</focusedlayout>
+				<content>
+					<include content="ListView_Menu_Options" />
+					<include content="BillboardView_Menu_Options" condition="$EXP[BillboardView_Enabled]" />
+					<include content="ShowcaseView_Menu_Options" condition="$EXP[ShowcaseView_Enabled]" />
+					<include content="StripView_Menu_Options" condition="$EXP[StripView_Enabled]" />
+					<include content="GridView_Menu_Options" condition="$EXP[GridView_Enabled]" />
+					<include content="Trailer_Autoplay_Menu_Options" condition="Window.Is(videos) + Skin.HasSetting(Trailer_Autoplay)" />
+					<include content="Common_Menu_Options" />
+					<include content="Video_Menu_Options" condition="Window.Is(videos)" />
+					<include content="MusicVideo_Menu_Options" condition="Window.Is(videos) | Window.Is(music)" />
+					<include content="AddonBrowser_Menu_Options" condition="Window.Is(addonbrowser)" />
+					<include content="Pictures_Menu_Options" condition="Window.Is(pictures)" />
+					<include content="Playlist_Menu_Options" condition="Window.Is(musicplaylist) | Window.Is(videoplaylist)" />
+				</content>
 			</control>
 		</definition>
 	</include>
