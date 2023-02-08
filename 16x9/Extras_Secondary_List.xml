@@ -69,15 +69,18 @@
 	</include>
 
 	<include name="Secondary_List_Icon">
-		<control type="group">
-			<control type="image">
-				<animation effect="fadediffuse" end="ff808080" time="0" condition="$EXP[ListView_Display_IsBackground] | $EXP[BillboardView_IsVisible] | [$EXP[ShowcaseView_IsVisible] + $EXP[ShowcaseView_Details_Overlay_IsVisible] + !$EXP[Secondary_List_NowPlaying]]">Conditional</animation>
-				<animation effect="fadediffuse" end="ff555555" time="0" condition="$EXP[Secondary_List_NowPlaying] + [$EXP[ShowcaseView_IsVisible] | $EXP[StripView_IsVisible]]">Conditional</animation>
-				<texture background="true">$VAR[Thumbnail(0)Content]</texture>
-				<aspectratio>scale</aspectratio>
+		<param name="artwork" default="Thumbnail" />
+		<definition>
+			<control type="group">
+				<control type="image">
+					<animation effect="fadediffuse" end="ff808080" time="0" condition="$EXP[ListView_Display_IsBackground] | $EXP[BillboardView_IsVisible] | [$EXP[ShowcaseView_IsVisible] + $EXP[ShowcaseView_Details_Overlay_IsVisible] + !$EXP[Secondary_List_NowPlaying]]">Conditional</animation>
+					<animation effect="fadediffuse" end="ff555555" time="0" condition="$EXP[Secondary_List_NowPlaying] + [$EXP[ShowcaseView_IsVisible] | $EXP[StripView_IsVisible]]">Conditional</animation>
+					<texture background="true">$VAR[$PARAM[artwork](0)Content]</texture>
+					<aspectratio>scale</aspectratio>
+				</control>
+				<include content="Secondary_List_Now_Playing" />
 			</control>
-			<include content="Secondary_List_Now_Playing" />
-		</control>
+		</definition>
 	</include>
 
 	<include name="Secondary_List_Layout">
@@ -85,7 +88,9 @@
 		<param name="height" default="720" />
 		<definition>
 			<itemlayout width="$PARAM[width]" height="$PARAM[height]">
-				<include content="Secondary_List_Icon" />
+				<include content="Secondary_List_Icon">
+					<param name="artwork" value="$PARAM[artwork]" />
+				</include>
 			</itemlayout>
 			<focusedlayout width="$PARAM[width]" height="$PARAM[height]">
 				<control type="group">
@@ -93,7 +98,9 @@
 					<control type="group">
 						<visible>![Control.HasFocus(50) | Control.HasFocus(501) | Control.HasFocus(502) | Control.HasFocus(504)]</visible>
 						<include content="HiddenFocusButton" />
-						<include content="Secondary_List_Icon" />
+						<include content="Secondary_List_Icon">
+							<param name="artwork" value="$PARAM[artwork]" />
+						</include>
 					</control>
 				</control>
 			</focusedlayout>
@@ -115,20 +122,6 @@
 		<focusedlayout />
 	</include>
 
-	<include name="720x1080_Layout">
-		<include content="Secondary_List_Layout">
-			<param name="width" value="720" />
-			<param name="height" value="1080" />
-		</include>
-	</include>
-
-	<include name="1080x1080_Layout">
-		<include content="Secondary_List_Layout">
-			<param name="width" value="1080" />
-			<param name="height" value="1080" />
-		</include>
-	</include>
-
 	<include name="1920x1080_Layout">
 		<include content="Secondary_List_Layout">
 			<param name="width" value="1920" />
@@ -142,11 +135,27 @@
 			<param name="height" value="720" />
 		</include>
 	</include>
+	<include name="720x1080_Layout">
+		<include content="Secondary_List_Layout">
+			<param name="width" value="720" />
+			<param name="height" value="1080" />
+			<param name="artwork" value="Showcase" />
+		</include>
+	</include>
+
+	<include name="1080x1080_Layout">
+		<include content="Secondary_List_Layout">
+			<param name="width" value="1080" />
+			<param name="height" value="1080" />
+			<param name="artwork" value="Showcase" />
+		</include>
+	</include>
 
 	<include name="480x720_Layout">
 		<include content="Secondary_List_Layout">
 			<param name="width" value="480" />
 			<param name="height" value="720" />
+			<param name="artwork" value="Strip" />
 		</include>
 	</include>
 
@@ -154,6 +163,7 @@
 		<include content="Secondary_List_Layout">
 			<param name="width" value="1120" />
 			<param name="height" value="630" />
+			<param name="artwork" value="Strip" />
 		</include>
 	</include>
 
@@ -161,6 +171,7 @@
 		<include content="Secondary_List_Layout">
 			<param name="width" value="630" />
 			<param name="height" value="630" />
+			<param name="artwork" value="Strip" />
 		</include>
 	</include>
 
@@ -226,7 +237,7 @@
 				<param name="visible" value="Control.HasFocus(505) + Container.Content(sets)" />
 				<param name="layout" value="Hidden" />
 			</include>
-		</control> 
+		</control>
 	</include>
 
 	<include name="Secondary_List_Icons">
@@ -251,5 +262,5 @@
 			</control>
 		</control>
 	</include>
-	
+
 </includes>

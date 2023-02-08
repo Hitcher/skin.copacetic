@@ -40,11 +40,13 @@
 	<include name="HiddenFocusButton">
 		<control type="button">
 			<visible allowhiddenfocus="true">false</visible>
-			<onfocus>SetProperty(Next_Art,$INFO[Container.ListItemNoWrap(1).Label],home)</onfocus>
-			<onfocus condition="Container.Content(files)">RunScript(script.copacetic.helper,action=return_label,label=$INFO[ListItem.Label],find=.,replace=%20)</onfocus>
+			<!-- Change viewmode if only one episode -->
 			<onfocus condition="$EXP[Set_BillboardView]">Container.SetViewMode(501)</onfocus>
-			<onfocus condition="$EXP[GridView_IsVisible]">SetProperty(GridView_Column,$INFO[Container.Column],home)</onfocus>
-			<onfocus condition="$EXP[GridView_IsVisible]">SetProperty(GridView_Row,$INFO[Container.Row],home)</onfocus>
+			<!-- Viewtype properties -->
+			<onfocus condition="Control.HasFocus(505) + Container.Content(files) + !ListItem.IsFolder">RunScript(script.copacetic.helper,action=return_label,label=$INFO[ListItem.Label])</onfocus>
+			<onfocus condition="Control.Hasfocus(505)">SetProperty(GridView_Column,$INFO[Container.Column],home)</onfocus>
+			<onfocus condition="Control.Hasfocus(505)">SetProperty(GridView_Row,$INFO[Container.Row],home)</onfocus>
+			<!-- Multiart -->
 			<onfocus condition="Skin.HasSetting(Multiart_Slideshow) + !Window.IsVisible(1120)">ClearProperty(Multiart_Fadeout,home)</onfocus>
 			<onfocus condition="Skin.HasSetting(Multiart_Slideshow) + !Window.IsVisible(1120) + String.IsEqual(Control.GetLabel(6400),thumb) + !String.IsEmpty(ListItem.Art(thumb))">SetProperty(Multiart_0,$ESCINFO[Container.ListItem.Art(thumb)],home)</onfocus>
 			<onfocus condition="Skin.HasSetting(Multiart_Slideshow) + !Window.IsVisible(1120) + String.IsEqual(Control.GetLabel(6400),keyart) + !String.IsEmpty(ListItem.Art(keyart))">SetProperty(Multiart_0,$ESCINFO[Container.ListItem.Art(keyart)],home)</onfocus>
@@ -416,7 +418,7 @@
 	<include name="Common_Details_Textbox">
 		<param name="visible" default="true" />
 		<param name="gap" default="0" />
-		<param name="maxheight" default="146" />
+		<param name="maxheight" default="210" />
 		<param name="font" />
 		<param name="color" />
 		<param name="label" />
@@ -468,7 +470,7 @@
 		<param name="align" default="center" />
 		<param name="itemgap" default="0" />
 		<param name="title_label" default="$VAR[Title_Label]" />
-		<param name="title_color" default="$VAR[Common_List_Label_Color]" />
+		<param name="title_color" default="$VAR[Light_Color]" />
 		<param name="title_maxheight" default="146" />
 		<param name="info_label" default="$VAR[Info_Label]" />
 		<param name="info_maxheight" default="35" />

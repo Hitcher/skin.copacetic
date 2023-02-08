@@ -152,6 +152,7 @@
 		</definition>
 	</include>
 
+	
 	<include name="Music_Player_Navigation">
 		<onup condition="$EXP[Infoscreen_IsVisible] + Control.IsVisible(3209)">3209</onup>
 		<onup condition="$EXP[Infoscreen_IsVisible] + !Control.IsVisible(3209) + Control.IsVisible(3208)">3208</onup>
@@ -248,35 +249,6 @@
 		<onfocus condition="!String.IsEqual(Container(3209).CurrentItem,1)">Control.Move(3209,$INFO[Container(3209).CurrentItem,-])</onfocus>
 		<onfocus condition="!String.IsEqual(Container(3209).CurrentItem,1)">Control.Move(3209,1)</onfocus>
 	</include>
-
-	<include name="InfoWidget_Reset">
-		<onfocus condition="Integer.IsGreater(Container(50).CurrentItem,1)">Control.Move(50,$INFO[Container(50).CurrentItem,-])</onfocus>
-		<onfocus condition="Integer.IsGreater(Container(50).CurrentItem,1)">Control.Move(50,1)</onfocus>
-		<onfocus condition="Integer.IsGreater(Container(3201).CurrentItem,1)">Control.Move(3201,$INFO[Container(3201).CurrentItem,-])</onfocus>
-		<onfocus condition="Integer.IsGreater(Container(3201).CurrentItem,1)">Control.Move(3201,1)</onfocus>
-		<onfocus condition="Integer.IsGreater(Container(3202).CurrentItem,1)">Control.Move(3202,$INFO[Container(3202).CurrentItem,-])</onfocus>
-		<onfocus condition="Integer.IsGreater(Container(3202).CurrentItem,1)">Control.Move(3202,1)</onfocus>
-		<onfocus condition="Integer.IsGreater(Container(3203).CurrentItem,1)">Control.Move(3203,$INFO[Container(3203).CurrentItem,-])</onfocus>
-		<onfocus condition="Integer.IsGreater(Container(3203).CurrentItem,1)">Control.Move(3203,1)</onfocus>
-		<onfocus condition="Integer.IsGreater(Container(3204).CurrentItem,1)">Control.Move(3204,$INFO[Container(3204).CurrentItem,-])</onfocus>
-		<onfocus condition="Integer.IsGreater(Container(3204).CurrentItem,1)">Control.Move(3204,1)</onfocus>
-		<onfocus condition="Integer.IsGreater(Container(3205).CurrentItem,1)">Control.Move(3205,$INFO[Container(3205).CurrentItem,-])</onfocus>
-		<onfocus condition="Integer.IsGreater(Container(3205).CurrentItem,1)">Control.Move(3205,1)</onfocus>
-		<onfocus condition="Integer.IsGreater(Container(3206).CurrentItem,1)">Control.Move(3206,$INFO[Container(3206).CurrentItem,-])</onfocus>
-		<onfocus condition="Integer.IsGreater(Container(3206).CurrentItem,1)">Control.Move(3206,1)</onfocus>
-		<onfocus condition="Integer.IsGreater(Container(3207).CurrentItem,1)">Control.Move(3208,$INFO[Container(3207).CurrentItem,-])</onfocus>
-		<onfocus condition="Integer.IsGreater(Container(3207).CurrentItem,1)">Control.Move(3208,1)</onfocus>
-		<onfocus condition="Integer.IsGreater(Container(3208).CurrentItem,1)">Control.Move(8080,$INFO[Container(3208).CurrentItem,-])</onfocus>
-		<onfocus condition="Integer.IsGreater(Container(3208).CurrentItem,1)">Control.Move(8080,1)</onfocus>
-		<onfocus condition="Integer.IsGreater(Container(3209).CurrentItem,1)">Control.Move(3209,$INFO[Container(3209).CurrentItem,-])</onfocus>
-		<onfocus condition="Integer.IsGreater(Container(3209).CurrentItem,1)">Control.Move(3209,1)</onfocus>
-	</include>
-
-
-	<onup condition="$EXP[Music_Player_IsVisible]">SetFocus(3500,1)</onup>
-	<onup condition="!$EXP[Music_Player_IsVisible] + $EXP[Trailer_Autoplay_IsVisible]">PlayerControl(Stop)</onup>
-	<onup condition="!$EXP[Music_Player_IsVisible] + !$EXP[Trailer_Autoplay_IsVisible]">SetFocus(3000,0,absolute)</onup>
-	<ondown condition="$EXP[Trailer_Autoplay_IsVisible]">PlayerControl(Stop)</ondown>
 
 	<include name="Widget_Navigation">
 		<onback>SetFocus(3000)</onback>
@@ -378,6 +350,7 @@
 	</include>
 
 	<include name="MovieInfo_Dialog_Menu_Navigation">
+		<onback condition="!String.IsEqual(Window.Property(Breadcrumb_Level),1)">SetProperty(Infoscreen_Transition,true,home)</onback>
 		<onback>SetFocus(4020)</onback>
 		<ondown condition="Control.IsVisible(3201)">3201</ondown>
 		<ondown condition="!Control.IsVisible(3201) + Control.IsVisible(3202)">3202</ondown>
@@ -400,7 +373,7 @@
 		<onup condition="!$EXP[Music_Player_IsVisible] + !Control.IsVisible(3209) + !Control.IsVisible(3208) + !Control.IsVisible(3207) + !Control.IsVisible(3206) + !Control.IsVisible(3205) + !Control.IsVisible(3204) + ![Control.IsVisible(3203) + Integer.IsGreater(Container(3203).NumItems,1)] + Control.IsVisible(50)">50</onup>
 		<onup condition="!$EXP[Music_Player_IsVisible] + !Control.IsVisible(3209) + !Control.IsVisible(3208) + !Control.IsVisible(3207) + !Control.IsVisible(3206) + !Control.IsVisible(3205) + !Control.IsVisible(3204) + ![Control.IsVisible(3203) + Integer.IsGreater(Container(3203).NumItems,1)] + !Control.IsVisible(50) + Control.IsVisible(3202)">3202</onup>
 		<onup condition="!$EXP[Music_Player_IsVisible] + !Control.IsVisible(3209) + !Control.IsVisible(3208) + !Control.IsVisible(3207) + !Control.IsVisible(3206) + !Control.IsVisible(3205) + !Control.IsVisible(3204) + ![Control.IsVisible(3203) + Integer.IsGreater(Container(3203).NumItems,1)] + !Control.IsVisible(50) + !Control.IsVisible(3202) + Control.IsVisible(3201)">3201</onup>
-		<include content="InfoWidget_Reset" />
+		<include content="Widget_Position_Reset_OnFocus" />
 	</include>
 
 	<include name="MusicInfo_Dialog_Menu_Navigation">
@@ -409,10 +382,10 @@
 
 	<include name="AddonInfo_Dialog_Menu_Navigation">
 		<ondown condition="Control.IsVisible(50)">SetFocus(50)</ondown>
-		<include content="InfoWidget_Reset" />
+		<include content="Widget_Position_Reset_OnFocus" />
 	</include>
 
-	<include name="Info_Widget_Navigation">
+	<include name="Infoscreen_Widget_Navigation">
 		<onback>SetFocus(4020)</onback>
 		<onleft>0</onleft>
 		<onright>0</onright>
@@ -507,6 +480,54 @@
 		<onload condition="Skin.HasSetting(Multiart_Slideshow)">ClearProperty(Multiart_13,home)</onload>
 		<onload condition="Skin.HasSetting(Multiart_Slideshow)">ClearProperty(Multiart_14,home)</onload>
 		<onload condition="Skin.HasSetting(Multiart_Slideshow)">ClearProperty(Multiart_15,home)</onload>
+	</include>
+
+	<include name="Widget_Position_Reset_OnLoad">
+		<onload condition="Integer.IsGreater(Container(3000).CurrentItem,1)">Control.Move(3000,$INFO[Container(3000).CurrentItem,-])</onload>
+		<onload condition="Integer.IsGreater(Container(3000).CurrentItem,1)">Control.Move(3000,1)</onload>
+		<onload condition="Integer.IsGreater(Container(50).CurrentItem,1)">Control.Move(50,$INFO[Container(50).CurrentItem,-])</onload>
+		<onload condition="Integer.IsGreater(Container(50).CurrentItem,1)">Control.Move(50,1)</onload>
+		<onload condition="Integer.IsGreater(Container(3201).CurrentItem,1)">Control.Move(3201,$INFO[Container(3201).CurrentItem,-])</onload>
+		<onload condition="Integer.IsGreater(Container(3201).CurrentItem,1)">Control.Move(3201,1)</onload>
+		<onload condition="Integer.IsGreater(Container(3202).CurrentItem,1)">Control.Move(3202,$INFO[Container(3202).CurrentItem,-])</onload>
+		<onload condition="Integer.IsGreater(Container(3202).CurrentItem,1)">Control.Move(3202,1)</onload>
+		<onload condition="Integer.IsGreater(Container(3203).CurrentItem,1)">Control.Move(3203,$INFO[Container(3203).CurrentItem,-])</onload>
+		<onload condition="Integer.IsGreater(Container(3203).CurrentItem,1)">Control.Move(3203,1)</onload>
+		<onload condition="Integer.IsGreater(Container(3204).CurrentItem,1)">Control.Move(3204,$INFO[Container(3204).CurrentItem,-])</onload>
+		<onload condition="Integer.IsGreater(Container(3204).CurrentItem,1)">Control.Move(3204,1)</onload>
+		<onload condition="Integer.IsGreater(Container(3205).CurrentItem,1)">Control.Move(3205,$INFO[Container(3205).CurrentItem,-])</onload>
+		<onload condition="Integer.IsGreater(Container(3205).CurrentItem,1)">Control.Move(3205,1)</onload>
+		<onload condition="Integer.IsGreater(Container(3206).CurrentItem,1)">Control.Move(3206,$INFO[Container(3206).CurrentItem,-])</onload>
+		<onload condition="Integer.IsGreater(Container(3206).CurrentItem,1)">Control.Move(3206,1)</onload>
+		<onload condition="Integer.IsGreater(Container(3207).CurrentItem,1)">Control.Move(3207,$INFO[Container(3207).CurrentItem,-])</onload>
+		<onload condition="Integer.IsGreater(Container(3207).CurrentItem,1)">Control.Move(3207,1)</onload>
+		<onload condition="Integer.IsGreater(Container(3208).CurrentItem,1)">Control.Move(3208,$INFO[Container(3208).CurrentItem,-])</onload>
+		<onload condition="Integer.IsGreater(Container(3208).CurrentItem,1)">Control.Move(3208,1)</onload>
+		<onload condition="Integer.IsGreater(Container(3209).CurrentItem,1)">Control.Move(3209,$INFO[Container(3209).CurrentItem,-])</onload>
+		<onload condition="Integer.IsGreater(Container(3209).CurrentItem,1)">Control.Move(3209,1)</onload>
+	</include>
+
+	<include name="Widget_Position_Reset_OnFocus">
+		<onfocus condition="Integer.IsGreater(Container(50).CurrentItem,1)">Control.Move(50,$INFO[Container(50).CurrentItem,-])</onfocus>
+		<onfocus condition="Integer.IsGreater(Container(50).CurrentItem,1)">Control.Move(50,1)</onfocus>
+		<onfocus condition="Integer.IsGreater(Container(3201).CurrentItem,1)">Control.Move(3201,$INFO[Container(3201).CurrentItem,-])</onfocus>
+		<onfocus condition="Integer.IsGreater(Container(3201).CurrentItem,1)">Control.Move(3201,1)</onfocus>
+		<onfocus condition="Integer.IsGreater(Container(3202).CurrentItem,1)">Control.Move(3202,$INFO[Container(3202).CurrentItem,-])</onfocus>
+		<onfocus condition="Integer.IsGreater(Container(3202).CurrentItem,1)">Control.Move(3202,1)</onfocus>
+		<onfocus condition="Integer.IsGreater(Container(3203).CurrentItem,1)">Control.Move(3203,$INFO[Container(3203).CurrentItem,-])</onfocus>
+		<onfocus condition="Integer.IsGreater(Container(3203).CurrentItem,1)">Control.Move(3203,1)</onfocus>
+		<onfocus condition="Integer.IsGreater(Container(3204).CurrentItem,1)">Control.Move(3204,$INFO[Container(3204).CurrentItem,-])</onfocus>
+		<onfocus condition="Integer.IsGreater(Container(3204).CurrentItem,1)">Control.Move(3204,1)</onfocus>
+		<onfocus condition="Integer.IsGreater(Container(3205).CurrentItem,1)">Control.Move(3205,$INFO[Container(3205).CurrentItem,-])</onfocus>
+		<onfocus condition="Integer.IsGreater(Container(3205).CurrentItem,1)">Control.Move(3205,1)</onfocus>
+		<onfocus condition="Integer.IsGreater(Container(3206).CurrentItem,1)">Control.Move(3206,$INFO[Container(3206).CurrentItem,-])</onfocus>
+		<onfocus condition="Integer.IsGreater(Container(3206).CurrentItem,1)">Control.Move(3206,1)</onfocus>
+		<onfocus condition="Integer.IsGreater(Container(3207).CurrentItem,1)">Control.Move(3207,$INFO[Container(3207).CurrentItem,-])</onfocus>
+		<onfocus condition="Integer.IsGreater(Container(3207).CurrentItem,1)">Control.Move(3207,1)</onfocus>
+		<onfocus condition="Integer.IsGreater(Container(3208).CurrentItem,1)">Control.Move(3208,$INFO[Container(3208).CurrentItem,-])</onfocus>
+		<onfocus condition="Integer.IsGreater(Container(3208).CurrentItem,1)">Control.Move(3208,1)</onfocus>
+		<onfocus condition="Integer.IsGreater(Container(3209).CurrentItem,1)">Control.Move(3209,$INFO[Container(3209).CurrentItem,-])</onfocus>
+		<onfocus condition="Integer.IsGreater(Container(3209).CurrentItem,1)">Control.Move(3209,1)</onfocus>
 	</include>
 
 </includes>

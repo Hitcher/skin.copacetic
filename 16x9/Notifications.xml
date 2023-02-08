@@ -2,108 +2,115 @@
 <includes>
 
 	<include name="Music_Player_Controls">
-		<control type="panel" id="3500">
-			<width>180</width>
-			<height>120</height>
-			<include content="Music_Player_Navigation" />
-			<scrolltime>0</scrolltime>
-			<itemlayout width="60" height="60" />
-			<focusedlayout width="60" height="60"></focusedlayout>
-			<content>
-				<item>
-					<description>Previous</description>
-					<label>$LOCALIZE[210]</label>
-					<onclick>PlayerControl(Previous)</onclick>
-				</item>
-				<item>
-					<description>Pause</description>
-					<onclick>PlayerControl(Play)</onclick>
-				</item>
-				<item>
-					<description>Next</description>
-					<label>$LOCALIZE[209]</label>
-					<onclick>PlayerControl(Next)</onclick>
-				</item>
-				<item>
-					<description>Artist</description>
-					<label>$LOCALIZE[557]</label>
-					<onclick>Dialog.Close(all)</onclick>
-					<onclick>ActivateWindow(music,musicdb://albums/?xsp=%7b%22rules%22%3a%7b%22and%22%3a%5b%7b%22field%22%3a%22artist%22%2c%22operator%22%3a%22is%22%2c%22value%22%3a%5b$ESCINFO[MusicPlayer.Artist]%5d%7d%5d%7d%2c%22type%22%3a%22albums%22%7d,return)</onclick>
-				</item>
-				<item>
-					<description>Stop</description>
-					<label>$LOCALIZE[31300]</label>
-					<onclick>PlayerControl(Stop)</onclick>
-					<onclick condition="Window.Is(home)">SetFocus(3000)</onclick>
-					<onclick condition="Window.Is(favourites)">SetFocus(450)</onclick>
-					<onclick condition="$EXP[ListView_IsVisible]">SetFocus(50)</onclick>
-					<onclick condition="$EXP[BillboardView_IsVisible]">SetFocus(501)</onclick>
-					<onclick condition="$EXP[ShowcaseView_IsVisible]">SetFocus(502)</onclick>
-					<onclick condition="$EXP[StripView_IsVisible]">SetFocus(504)</onclick>
-					<onclick condition="$EXP[GridView_IsVisible]">SetFocus(505)</onclick>
-				</item>
-				<item>
-					<description>Go to music visualisation</description>
-					<label>$LOCALIZE[31305]</label>
-					<onclick>ActivateWindow(visualisation)</onclick>
-				</item>
-			</content>
-		</control>
+		<param name="id" default="3500" />
+		<definition>
+			<control type="panel" id="$PARAM[id]">
+				<width>180</width>
+				<height>120</height>
+				<include content="Music_Player_Navigation" />
+				<scrolltime>0</scrolltime>
+				<itemlayout width="60" height="60" />
+				<focusedlayout width="60" height="60" />
+				<content>
+					<item>
+						<description>Previous</description>
+						<label>$LOCALIZE[210]</label>
+						<onclick>PlayerControl(Previous)</onclick>
+					</item>
+					<item>
+						<description>Pause</description>
+						<onclick>PlayerControl(Play)</onclick>
+					</item>
+					<item>
+						<description>Next</description>
+						<label>$LOCALIZE[209]</label>
+						<onclick>PlayerControl(Next)</onclick>
+					</item>
+					<item>
+						<description>Artist</description>
+						<label>$LOCALIZE[557]</label>
+						<onclick>Dialog.Close(all)</onclick>
+						<onclick>ActivateWindow(music,musicdb://albums/?xsp=%7b%22rules%22%3a%7b%22and%22%3a%5b%7b%22field%22%3a%22artist%22%2c%22operator%22%3a%22is%22%2c%22value%22%3a%5b$ESCINFO[MusicPlayer.Artist]%5d%7d%5d%7d%2c%22type%22%3a%22albums%22%7d,return)</onclick>
+					</item>
+					<item>
+						<description>Stop</description>
+						<label>$LOCALIZE[31300]</label>
+						<onclick>PlayerControl(Stop)</onclick>
+						<onclick condition="Window.Is(home)">SetFocus(3000)</onclick>
+						<onclick condition="Window.Is(favourites)">SetFocus(450)</onclick>
+						<onclick condition="$EXP[ListView_IsVisible]">SetFocus(50)</onclick>
+						<onclick condition="$EXP[BillboardView_IsVisible]">SetFocus(501)</onclick>
+						<onclick condition="$EXP[ShowcaseView_IsVisible]">SetFocus(502)</onclick>
+						<onclick condition="$EXP[StripView_IsVisible]">SetFocus(504)</onclick>
+						<onclick condition="$EXP[GridView_IsVisible]">SetFocus(505)</onclick>
+					</item>
+					<item>
+						<description>Go to music visualisation</description>
+						<label>$LOCALIZE[31305]</label>
+						<onclick>ActivateWindow(visualisation)</onclick>
+					</item>
+				</content>
+			</control>
+		</definition>
 	</include>
 
+
 	<include name="Music_Player_Buttons">
-		<control type="group">
-			<visible>$EXP[Music_Player_HasFocus]</visible>
-			<include content="Visible_Fade_Delayed_Animation" />
-			<width>180</width>
-			<height>120</height>
-			<centerleft>50%</centerleft>
-			<centertop>50%</centertop>
-			<include content="Music_Player_Button_Template">
-				<param name="focused" value="String.IsEqual(Container(3500).Position,0)" />
-				<param name="icon" value="Previous" />
-				<param name="left" value="0" />
-				<param name="top" value="0" />
-			</include>
-			<include content="Music_Player_Button_Template">
-				<param name="visible" value="!Player.Paused" />
-				<param name="focused" value="String.IsEqual(Container(3500).Position,1) + !Player.Paused" />
-				<param name="icon" value="Pause" />
-				<param name="left" value="60" />
-				<param name="top" value="0" />
-			</include>
-			<include content="Music_Player_Button_Template">
-				<param name="visible" value="Player.Paused" />
-				<param name="focused" value="String.IsEqual(Container(3500).Position,1) + Player.Paused" />
-				<param name="icon" value="Play" />
-				<param name="left" value="60" />
-				<param name="top" value="0" />
-			</include>
-			<include content="Music_Player_Button_Template">
-				<param name="focused" value="String.IsEqual(Container(3500).Position,2)" />
-				<param name="icon" value="Next" />
-				<param name="left" value="120" />
-				<param name="top" value="0" />
-			</include>
-			<include content="Music_Player_Button_Template">
-				<param name="focused" value="String.IsEqual(Container(3500).Position,3)" />
-				<param name="icon" value="Artist" />
-				<param name="left" value="0" />
-				<param name="top" value="60" />
-			</include>
-			<include content="Music_Player_Button_Template">
-				<param name="focused" value="String.IsEqual(Container(3500).Position,4)" />
-				<param name="icon" value="Stop" />
-				<param name="left" value="60" />
-				<param name="top" value="60" />
-			</include>
-			<include content="Music_Player_Button_Template">
-				<param name="focused" value="String.IsEqual(Container(3500).Position,5)" />
-				<param name="icon" value="Fullscreen" />
-				<param name="left" value="120" />
-				<param name="top" value="60" />
-			</include>
-		</control>
+		<param name="id" default="3500" />
+		<definition>
+			<control type="group">
+				<visible>$EXP[Music_Player_HasFocus]</visible>
+				<include content="Visible_Fade_Delayed_Animation" />
+				<width>180</width>
+				<height>120</height>
+				<centerleft>50%</centerleft>
+				<centertop>50%</centertop>
+				<include content="Music_Player_Button_Template">
+					<param name="focused" value="String.IsEqual(Container($PARAM[id]).Position,0)" />
+					<param name="icon" value="Previous" />
+					<param name="left" value="0" />
+					<param name="top" value="0" />
+				</include>
+				<include content="Music_Player_Button_Template">
+					<param name="visible" value="!Player.Paused" />
+					<param name="focused" value="String.IsEqual(Container($PARAM[id]).Position,1) + !Player.Paused" />
+					<param name="icon" value="Pause" />
+					<param name="left" value="60" />
+					<param name="top" value="0" />
+				</include>
+				<include content="Music_Player_Button_Template">
+					<param name="visible" value="Player.Paused" />
+					<param name="focused" value="String.IsEqual(Container($PARAM[id]).Position,1) + Player.Paused" />
+					<param name="icon" value="Play" />
+					<param name="left" value="60" />
+					<param name="top" value="0" />
+				</include>
+				<include content="Music_Player_Button_Template">
+					<param name="focused" value="String.IsEqual(Container($PARAM[id]).Position,2)" />
+					<param name="icon" value="Next" />
+					<param name="left" value="120" />
+					<param name="top" value="0" />
+				</include>
+				<include content="Music_Player_Button_Template">
+					<param name="focused" value="String.IsEqual(Container($PARAM[id]).Position,3)" />
+					<param name="icon" value="Artist" />
+					<param name="left" value="0" />
+					<param name="top" value="60" />
+				</include>
+				<include content="Music_Player_Button_Template">
+					<param name="focused" value="String.IsEqual(Container($PARAM[id]).Position,4)" />
+					<param name="icon" value="Stop" />
+					<param name="left" value="60" />
+					<param name="top" value="60" />
+				</include>
+				<include content="Music_Player_Button_Template">
+					<param name="focused" value="String.IsEqual(Container($PARAM[id]).Position,5)" />
+					<param name="icon" value="Fullscreen" />
+					<param name="left" value="120" />
+					<param name="top" value="60" />
+				</include>
+			</control>
+		</definition>
 	</include>
 
 	<include name="Music_Player_Progress">
@@ -165,6 +172,7 @@
 		<param name="padding" default="30" />
 		<param name="group_align" default="center" />
 		<param name="label_align" default="left" />
+		<param name="label_shift" default="true" />
 		<param name="label1" default="$INFO[MusicPlayer.Title]" />
 		<param name="label2" default="$INFO[MusicPlayer.Artist]" />
 		<param name="title_label_scroll" default="false" />
@@ -178,8 +186,8 @@
 				<height>$PARAM[height]</height>
 				<bottom>$PARAM[bottom]</bottom>
 				<control type="grouplist">
-					<animation effect="fade" start="0" end="100" time="360" delay="540" reversible="false" tween="sine" easing="inout" condition="$EXP[Music_Player_HasFocus]">Conditional</animation>
-					<animation effect="fade" start="0" end="100" time="360" delay="540" reversible="false" tween="sine" easing="inout" condition="!$EXP[Music_Player_HasFocus]">Conditional</animation>
+					<animation effect="fade" start="0" end="100" time="360" delay="540" reversible="false" tween="sine" easing="inout" condition="$EXP[Music_Player_HasFocus] + $PARAM[label_shift]">Conditional</animation>
+					<animation effect="fade" start="0" end="100" time="360" delay="540" reversible="false" tween="sine" easing="inout" condition="!$EXP[Music_Player_HasFocus] + $PARAM[label_shift]">Conditional</animation>
 					<!-- <visible>!$EXP[Music_Player_HasFocus]</visible>
 					<include content="Visible_Fade_Delayed_Animation" /> -->
 					<left>$PARAM[padding]</left>
@@ -229,7 +237,7 @@
 
 	<include name="Notification_Gridview_Shadow">
 		<control type="image">
-			<visible>!$EXP[Music_Player_HasFocus] + String.IsEqual(Container.Row,0) +  [[$EXP[GridView_Display_IsFanart] + String.IsEqual(Container.Column,2)] | [[$EXP[GridView_Display_IsPosters] | $EXP[GridView_Display_IsSquare]] + String.IsEqual(Container.Column,4)]]</visible>
+			<visible>!$EXP[Music_Player_HasFocus] + String.IsEqual(Container.Row,0) + [[$EXP[GridView_Display_IsFanart] + String.IsEqual(Container.Column,2)] | [[$EXP[GridView_Display_IsPosters] | $EXP[GridView_Display_IsSquare]] + String.IsEqual(Container.Column,4)]]</visible>
 			<bottom>0</bottom>
 			<height>120</height>
 			<texture colordiffuse="$VAR[Dropshadow_Diffuse]">views/dropshadow_top_120.png</texture>
@@ -312,6 +320,7 @@
 		<param name="height" default="180" />
 		<param name="label_padding" default="-30" />
 		<param name="label_width" default="600" />
+		<param name="label_shift" default="true" />
 		<param name="align" default="right" />
 		<param name="progress_top" default="0" />
 		<param name="title_label_scroll" default="false" />
@@ -340,10 +349,11 @@
 						<param name="padding" value="$PARAM[label_padding]" />
 						<param name="group_align" value="center" />
 						<param name="label_align" value="right" />
+						<param name="label_shift" value="$PARAM[label_shift]" />
 						<param name="label1" value="$PARAM[label1]" />
 						<param name="label2" value="$PARAM[label2]" />
 						<param name="title_label_scroll" value="$PARAM[title_label_scroll]" />
-						<animation effect="slide" end="-60,0" time="0" condition="$EXP[Music_Player_HasFocus] + [Window.IsVisible(Home) | $EXP[Background_IsFanart] | [$EXP[ShowcaseView_Display_IsSquare] + !$EXP[ShowcaseView_Details_Off]]  | $EXP[Infoscreen_IsVisible]]">Conditional</animation>
+						<animation effect="slide" end="-60,0" time="0" condition="$EXP[Music_Player_HasFocus] + $PARAM[label_shift]">Conditional</animation>
 					</include>
 					<control type="group">
 						<width>$PARAM[height]</width>
@@ -359,6 +369,7 @@
 							<param name="bottom" value="20" />
 							<param name="group_align" value="right" />
 							<param name="label_align" value="left" />
+							<param name="label_shift" value="false" />
 							<param name="title_label_scroll" value="true" />
 							<param name="label1" value="$PARAM[label1]" />
 							<param name="label2" value="$PARAM[label2]" />
@@ -371,6 +382,7 @@
 						<param name="padding" value="$PARAM[label_padding]" />
 						<param name="group_align" value="center" />
 						<param name="label_align" value="left" />
+						<param name="label_shift" value="$PARAM[label_shift]" />
 						<param name="label1" value="$PARAM[label1]" />
 						<param name="label2" value="$PARAM[label2]" />
 						<param name="title_label_scroll" value="$PARAM[title_label_scroll]" />
@@ -389,6 +401,7 @@
 		<param name="height" default="180" />
 		<param name="label_padding" default="-30" />
 		<param name="label_width" default="600" />
+		<param name="label_shift" default="true" />
 		<param name="align" default="right" />
 		<param name="progress_top" default="0" />
 		<param name="title_label_scroll" default="false" />
@@ -410,6 +423,7 @@
 				<param name="height" value="$PARAM[height]" />
 				<param name="label_padding" value="$PARAM[label_padding]" />
 				<param name="label_width" value="$PARAM[label_width]" />
+				<param name="label_shift" value="$PARAM[label_shift]" />
 				<param name="align" value="$PARAM[align]" />
 				<param name="progress_top" value="$PARAM[progress_top]" />
 				<param name="title_label_scroll" value="$PARAM[title_label_scroll]" />
@@ -495,6 +509,7 @@
 					<param name="progress_top" value="174" />
 					<param name="label_padding" value="30" />
 					<param name="label_width" value="960" />
+					<param name="label_shift" value="false" />
 					<param name="label1" value="$PARAM[label1]" />
 					<param name="label2" value="$PARAM[label2]" />
 					<param name="left_label_visible" value="true" />
@@ -509,6 +524,7 @@
 					<param name="height" value="360" />
 					<param name="align" value="left" />
 					<param name="label_padding" value="30" />
+					<param name="label_shift" value="false" />
 					<param name="label1" value="$PARAM[label1]" />
 					<param name="label2" value="$PARAM[label2]" />
 					<param name="center_label_visible" value="true" />
@@ -522,6 +538,7 @@
 					<param name="height" value="240" />
 					<param name="label_padding" value="30" />
 					<param name="label_width" value="1035" />
+					<param name="label_shift" value="false" />
 					<param name="label1" value="$PARAM[label1]" />
 					<param name="label2" value="$PARAM[label2]" />
 					<param name="left_label_visible" value="true" />
@@ -538,6 +555,7 @@
 					<param name="height" value="180" />
 					<param name="label_padding" value="30" />
 					<param name="label_width" value="900" />
+					<param name="label_shift" value="false" />
 					<param name="label1" value="$PARAM[label1]" />
 					<param name="label2" value="$PARAM[label2]" />
 					<param name="left_label_visible" value="true" />
