@@ -108,6 +108,15 @@
 					<param name="id" value="4015" />
 				</include>
 				<include content="Default_ContextMenu_Label">
+					<param name="id" value="4016" />
+				</include>
+				<include content="Default_ContextMenu_Label">
+					<param name="id" value="4017" />
+				</include>
+				<include content="Default_ContextMenu_Label">
+					<param name="id" value="4018" />
+				</include>
+				<include content="Default_ContextMenu_Label">
 					<param name="id" value="1001" />
 				</include>
 				<include content="Default_ContextMenu_Label">
@@ -162,23 +171,34 @@
 			<onright>Close</onright>
 			<!-- Shuffle artist -->
 			<control type="button" id="4015">
+				<visible>String.IsEqual(ListItem.DBType,artist)</visible>
 				<texturefocus />
 				<label>$LOCALIZE[191]</label>
-				<onclick>RunScript(script.copacetic.helper,action=shuffle_artist,id=$INFO[ListItem.DBID])</onclick>
-				<visible>String.IsEqual(ListItem.DBType,artist)</visible>
+				<onclick condition="!String.IsEmpty(Window(home).Property(Widget_DBID))">RunScript(script.copacetic.helper,action=shuffle_artist,id=$INFO[Window(home).Property(Widget_DBID)])</onclick>
+				<onclick condition="String.IsEmpty(Window(home).Property(Widget_DBID))">RunScript(script.copacetic.helper,action=shuffle_artist,id=$INFO[ListItem.DBID])</onclick>
+			</control>
+			<!-- Create radiostation -->
+			<control type="button" id="4016">
+				<visible>[String.IsEqual(ListItem.DBType,song) + !String.IsEmpty(ListItem.Genre)] | [String.IsEqual(Window(home).Property(Widget_DBType),song) + !String.IsEmpty(Window(home).Property(Widget_Genre))]</visible>
+				<texturefocus />
+				<label>$LOCALIZE[31034]</label>
+				<onclick condition="!String.IsEmpty(Window(home).Property(Widget_DBID))">RunScript(script.copacetic.helper,action=play_radio,id=$INFO[Window(home).Property(Widget_DBID)])</onclick>
+				<onclick condition="String.IsEmpty(Window(home).Property(Widget_DBID))">RunScript(script.copacetic.helper,action=play_radio)</onclick>
 			</control>
 			<!-- Like/Unlike song -->
-			<control type="button" id="4015">
+			<control type="button" id="4017">
+				<visible>!String.IsEmpty(Skin.String(Music_Rating_Like_Threshold)) + !Window.IsVisible(musicplaylist)</visible>
+				<visible>String.IsEqual(ListItem.DBType,song) + Integer.IsLess(ListItem.UserRating,Skin.String(Music_Rating_Like_Threshold))</visible>
 				<texturefocus />
 				<label>$LOCALIZE[31032]</label>
 				<onclick>RunScript(script.copacetic.helper,action=rate_song,id=$INFO[ListItem.DBID],rating=$INFO[Skin.String(Music_Rating_Like_Threshold)])</onclick>
-				<visible>String.IsEqual(ListItem.DBType,song) + !String.IsEmpty(Skin.String(Music_Rating_Like_Threshold)) + Integer.IsLess(ListItem.UserRating,Skin.String(Music_Rating_Like_Threshold))</visible>
 			</control>
-			<control type="button" id="4015">
+			<control type="button" id="4018">
+				<visible>!String.IsEmpty(Skin.String(Music_Rating_Like_Threshold)) + !Window.IsVisible(musicplaylist)</visible>
+				<visible>String.IsEqual(ListItem.DBType,song) + !Integer.IsLess(ListItem.UserRating,Skin.String(Music_Rating_Like_Threshold))</visible>
 				<texturefocus />
-				<label>$LOCALIZE[31032]</label>
+				<label>$LOCALIZE[31033]</label>
 				<onclick>RunScript(script.copacetic.helper,action=rate_song,id=$INFO[ListItem.DBID],rating=0)</onclick>
-				<visible>String.IsEqual(ListItem.DBType,song) + Integer.IsGreaterOrEqual(ListItem.UserRating,Skin.String(Music_Rating_Like_Threshold))</visible>
 			</control>
 			<!-- Default button -->
 			<control type="button" id="1000">

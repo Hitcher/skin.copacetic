@@ -24,7 +24,7 @@
 					<item>
 						<description>Next</description>
 						<label>$LOCALIZE[209]</label>
-						<onclick>PlayerControl(Next)</onclick>
+						<onclick condition="MusicPlayer.HasNext">PlayerControl(Next)</onclick>
 					</item>
 					<item>
 						<description>Artist</description>
@@ -46,14 +46,26 @@
 					</item>
 					<item>
 						<description>Go to music visualisation</description>
+						<visible>String.IsEmpty(Skin.String(Music_Rating_Like_Threshold))</visible>
 						<label>$LOCALIZE[31305]</label>
 						<onclick>ActivateWindow(visualisation)</onclick>
+					</item>
+					<item>
+						<description>Like song</description>
+						<visible>!String.IsEmpty(Skin.String(Music_Rating_Like_Threshold)) + Integer.IsLess(Window(home).Property(MusicPlayer_UserRating),Skin.String(Music_Rating_Like_Threshold))</visible>
+						<label>$LOCALIZE[31032]</label>
+						<onclick>RunScript(script.copacetic.helper,action=rate_song,id=$INFO[MusicPlayer.DBID],rating=$INFO[Skin.String(Music_Rating_Like_Threshold)])</onclick>
+					</item>
+					<item>
+						<description>Unlike song</description>
+						<visible>!String.IsEmpty(Skin.String(Music_Rating_Like_Threshold)) + !Integer.IsLess(Window(home).Property(MusicPlayer_UserRating),Skin.String(Music_Rating_Like_Threshold))</visible>
+						<label>$LOCALIZE[31033]</label>
+						<onclick>RunScript(script.copacetic.helper,action=rate_song,id=$INFO[MusicPlayer.DBID],rating=0)</onclick>
 					</item>
 				</content>
 			</control>
 		</definition>
 	</include>
-
 
 	<include name="Music_Player_Buttons">
 		<param name="id" default="3500" />
@@ -86,8 +98,16 @@
 					<param name="top" value="0" />
 				</include>
 				<include content="Music_Player_Button_Template">
+					<param name="visible" value="MusicPlayer.HasNext" />
 					<param name="focused" value="String.IsEqual(Container($PARAM[id]).Position,2)" />
 					<param name="icon" value="Next" />
+					<param name="left" value="120" />
+					<param name="top" value="0" />
+				</include>
+				<include content="Music_Player_Button_Template">
+					<param name="visible" value="!MusicPlayer.HasNext" />
+					<param name="focused" value="String.IsEqual(Container($PARAM[id]).Position,2)" />
+					<param name="icon" value="NoNext" />
 					<param name="left" value="120" />
 					<param name="top" value="0" />
 				</include>
@@ -105,10 +125,27 @@
 				</include>
 				<include content="Music_Player_Button_Template">
 					<param name="focused" value="String.IsEqual(Container($PARAM[id]).Position,5)" />
+					<param name="visible" value="String.IsEmpty(Skin.String(Music_Rating_Like_Threshold))" />
 					<param name="icon" value="Fullscreen" />
 					<param name="left" value="120" />
 					<param name="top" value="60" />
 				</include>
+				<include content="Music_Player_Button_Template">
+					<param name="focused" value="String.IsEqual(Container($PARAM[id]).Position,5)" />
+					<param name="visible" value="!String.IsEmpty(Skin.String(Music_Rating_Like_Threshold)) + Integer.IsLess(Window(home).Property(MusicPlayer_UserRating),Skin.String(Music_Rating_Like_Threshold))" />
+					<param name="icon" value="Like" />
+					<param name="left" value="120" />
+					<param name="top" value="60" />
+				</include>
+				<include content="Music_Player_Button_Template">
+					<param name="focused" value="String.IsEqual(Container($PARAM[id]).Position,5)" />
+					<param name="visible" value="!String.IsEmpty(Skin.String(Music_Rating_Like_Threshold)) + !Integer.IsLess(Window(home).Property(MusicPlayer_UserRating),Skin.String(Music_Rating_Like_Threshold))" />
+					<param name="icon" value="Unlike" />
+					<param name="color" value="$VAR[Accent_Color]" />
+					<param name="left" value="120" />
+					<param name="top" value="60" />
+				</include>
+
 			</control>
 		</definition>
 	</include>
@@ -188,8 +225,6 @@
 				<control type="grouplist">
 					<animation effect="fade" start="0" end="100" time="360" delay="540" reversible="false" tween="sine" easing="inout" condition="$EXP[Music_Player_HasFocus] + $PARAM[label_shift]">Conditional</animation>
 					<animation effect="fade" start="0" end="100" time="360" delay="540" reversible="false" tween="sine" easing="inout" condition="!$EXP[Music_Player_HasFocus] + $PARAM[label_shift]">Conditional</animation>
-					<!-- <visible>!$EXP[Music_Player_HasFocus]</visible>
-					<include content="Visible_Fade_Delayed_Animation" /> -->
 					<left>$PARAM[padding]</left>
 					<right>$PARAM[padding]</right>
 					<orientation>vertical</orientation>
@@ -337,7 +372,7 @@
 				<height>$PARAM[height]</height>
 				<nested />
 				<control type="grouplist">
-					<visible>!$EXP[Container_Switching] + !$EXP[OpaqueDialog_IsVisible] + !$EXP[TransparentDialog_IsVisible]</visible>
+					<visible>!$EXP[Container_Switching] + !$EXP[TransparentDialog_IsVisible]</visible>
 					<include content="Visible_Fade_Delayed_Animation" />
 					<itemgap>0</itemgap>
 					<orientation>horizontal</orientation>
@@ -448,8 +483,8 @@
 		<param name="label_padding" default="-30" />
 		<param name="align" default="right" />
 		<param name="label_scroll" default="false" />
-		<param name="label1" default="$INFO[Control.GetLabel(401)]" />
-		<param name="label2" default="$INFO[Control.GetLabel(402)]" />
+		<param name="label1" default="$VAR[Notification_Widget_Title_Label]" />
+		<param name="label2" default="$VAR[Notification_Widget_Info_Label]" />
 		<param name="center_label_visible" default="false" />
 		<param name="left_label_visible" default="false" />
 		<param name="right_label_visible" default="false" />
@@ -572,8 +607,8 @@
 		<param name="content_visible" default="!Window.IsVisible(extendedprogressdialog)" />
 		<param name="background_visible" default="false" />
 		<param name="label_padding" default="-30" />
-		<param name="label1" default="$INFO[Control.GetLabel(401)]" />
-		<param name="label2" default="$INFO[Control.GetLabel(402)]" />
+		<param name="label1" default="$VAR[Notification_Widget_Title_Label]" />
+		<param name="label2" default="$VAR[Notification_Widget_Info_Label]" />
 		<definition>
 			<control type="group">
 				<visible>$PARAM[visible]</visible>
