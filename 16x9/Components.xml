@@ -78,26 +78,142 @@
 		</definition>
 	</include>
 
-	<include name="Fanart_Slideshow_Home">
-		<control type="list" id="3300">
-			<include content="Hidden_Control" />
-			<content sortby="random">$VAR[Fanart_Slideshow_Home_Path]</content>
-			<autoscroll time="7000">true</autoscroll> <!-- Time to show each image, in milliseconds -->
-			<itemlayout />
-			<focusedlayout />
+	<include name="Background_List">
+		<param name="time" default="10000" />
+		<definition>
+			<control type="list" id="3300">
+				<include content="Hidden_Control" />
+				<include content="Background_$PARAM[content_source]_Content" />
+				<autoscroll time="$PARAM[time]">true</autoscroll>
+				<itemlayout />
+				<focusedlayout />
+			</control>
+		</definition>
+	</include>
+
+	<include name="Background_List_Home">
+		<include content="Background_List">
+			<param name="content_source" value="Home" />
+			<param name="time" value="$PARAM[time]" />
+		</include>
+	</include>
+
+	<include name="Background_Backing">
+		<control type="image">
+			<visible>Skin.String(Theme,Light)</visible>
+			<animation effect="fade" start="0" end="100" time="360" delay="1800" tween="sine" easing="inout" reversible="true">Visible</animation>
+			<texture colordiffuse="$VAR[Dark_Color]">views/white_100.png</texture>
 		</control>
+	</include>
+
+	<include name="Background_Multiart">
+		<param name="animate_slideshow" default="false" />
+		<param name="time" default="10000" />
+		<definition>
+			<control type="multiimage">
+				<include content="Ken_Burns_Effect_Animation" condition="$PARAM[animate_slideshow]" />
+				<imagepath colordiffuse="$PARAM[colordiffuse]" background="true">$PARAM[texture_path]</imagepath>
+				<aspectratio>scale</aspectratio>
+				<fadetime>$PARAM[fadetime]</fadetime>
+				<timeperimage>$PARAM[time]</timeperimage>
+				<randomize>true</randomize>
+			</control>
+		</definition>
+	</include>
+
+	<include name="Background_Multiart_Home">
+		<include content="Background_Multiart">
+			<param name="animate_slideshow" value="true" />
+			<param name="colordiffuse" value="$VAR[Home_Artwork_Diffuse]" />
+			<param name="texture_path" value="$VAR[Background_Home_Texture]" />
+			<param name="fadetime" value="360" />
+			<param name="time" value="$PARAM[time]" />
+		</include>
+	</include>
+
+
+	<include name="Background_Home">
+		<include content="Background_List_Home" condition="String.IsEqual(Window(home).Property(Background_Interval),5) | String.IsEmpty(Window(home).Property(Background_Interval))">
+			<param name="time" value="5000" />
+		</include>
+		<include content="Background_List_Home" condition="String.IsEqual(Window(home).Property(Background_Interval),10)">
+			<param name="time" value="10000" />
+		</include>
+		<include content="Background_List_Home" condition="String.IsEqual(Window(home).Property(Background_Interval),15)">
+			<param name="time" value="15000" />
+		</include>
+		<include content="Background_List_Home" condition="String.IsEqual(Window(home).Property(Background_Interval),20)">
+			<param name="time" value="20000" />
+		</include>
+		<include content="Background_List_Home" condition="String.IsEqual(Window(home).Property(Background_Interval),25)">
+			<param name="time" value="25000" />
+		</include>
+		<include content="Background_List_Home" condition="String.IsEqual(Window(home).Property(Background_Interval),30)">
+			<param name="time" value="30000" />
+		</include>
 		<control type="image">
 			<animation effect="fade" start="0" end="100" time="360" delay="1800" tween="sine" easing="inout" reversible="true">Visible</animation>
 			<texture colordiffuse="$VAR[Dark_Color]">views/white_100.png</texture>
 		</control>
-		<control type="multiimage">
-			<include content="Ken_Burns_Effect_Animation" />
-			<imagepath colordiffuse="$VAR[Home_Artwork_Diffuse]" background="true">$VAR[Fanart_Slideshow_Home_Texture]</imagepath>
-			<aspectratio>scale</aspectratio>
-			<timeperimage>7000</timeperimage>
-			<fadetime>360</fadetime>
-			<randomize>true</randomize>
-		</control>
+		<include content="Background_Multiart_Home" condition="String.IsEqual(Window(home).Property(Background_Interval),5) | String.IsEmpty(Window(home).Property(Background_Interval))">
+			<param name="time" value="5000" />
+		</include>
+		<include content="Background_Multiart_Home" condition="String.IsEqual(Window(home).Property(Background_Interval),10)">
+			<param name="time" value="10000" />
+		</include>
+		<include content="Background_Multiart_Home" condition="String.IsEqual(Window(home).Property(Background_Interval),15)">
+			<param name="time" value="15000" />
+		</include>
+		<include content="Background_Multiart_Home" condition="String.IsEqual(Window(home).Property(Background_Interval),20)">
+			<param name="time" value="20000" />
+		</include>
+		<include content="Background_Multiart_Home" condition="String.IsEqual(Window(home).Property(Background_Interval),25)">
+			<param name="time" value="25000" />
+		</include>
+		<include content="Background_Multiart_Home" condition="String.IsEqual(Window(home).Property(Background_Interval),30)">
+			<param name="time" value="30000" />
+		</include>
+	</include>
+
+	<include name="Background_Global">
+		<param name="visible" default="true" />
+		<param name="local_list_content" default="false" />
+		<param name="content_source" default="Global" />
+		<param name="texture_path" default="$VAR[Background_Global_Texture]" />
+		<param name="animate_slideshow" default="true" />
+		<definition>
+			<control type="group">
+				<visible>!VideoPlayer.IsFullscreen + !Skin.HasSetting(Background_Disabled)</visible>
+				<visible>$PARAM[visible]</visible>
+				<include content="VisibleHidden_Fade_Animation" />
+				<include content="Background_List" condition="$PARAM[local_list_content]">
+					<param name="content_source" value="$PARAM[content_source]" />
+				</include>
+				<control type="videowindow">
+					<include content="Hidden_Control" />
+				</control>
+				<include content="Background_Backing" />
+				<include content="Background_Multiart" condition="$EXP[Settings_IsVisible] + !Skin.HasSetting(Background_Disabled)">
+					<param name="colordiffuse" value="$VAR[Dialogs_Artwork_Diffuse]" />
+					<param name="texture_path" value="$PARAM[texture_path]" />
+					<param name="fadetime" value="0" />
+				</include>
+				<include content="Background_Multiart">
+					<param name="colordiffuse" value="$VAR[Dialogs_Artwork_Diffuse]" />
+					<param name="texture_path" value="$PARAM[texture_path]" />
+					<param name="fadetime" value="360" />
+					<param name="animate_slideshow" value="$PARAM[animate_slideshow]" />
+				</include>
+			</control>
+		</definition>
+	</include>
+
+	<include name="Background_Media">
+		<include content="Background_Global">
+			<param name="visible" value="$EXP[Background_Containers] | Container.Content()" />
+			<param name="local_list_content" value="true" />
+			<param name="content_source" value="Media" />
+		</include>
 	</include>
 
 	<include name="Home_Clearlogo">
@@ -112,7 +228,7 @@
 		</control>
 		<control type="image">
 			<visible>Skin.HasSetting(Home_Screensaver_Clearlogo_Enabled)</visible>
-			<visible>[String.IsEmpty(Container(3000).ListItem.Property(background)) | [Skin.HasSetting(Home_Background_Override_Enabled) + Skin.String(Home_Background_Override)]]</visible>
+			<visible>[String.IsEmpty(Container(3000).ListItem.Property(background)) | [Skin.HasSetting(Home_Background_Override_Enabled) + Skin.String(Home_Background_Override_Path)]]</visible>
 			<visible>Control.HasFocus(4300) + !$EXP[TransparentDialog_IsVisible]</visible>
 			<include content="WindowOpenClose_Fade_Delayed_Animation" />
 			<left>60</left>
@@ -125,55 +241,5 @@
 		</control>
 	</include>
 
-	<include name="Fanart_Slideshow_List">
-		<control type="list" id="3300">
-			<include content="Hidden_Control" />
-			<include content="Fanart_Slideshow_$PARAM[content_source]_Path" />
-			<autoscroll time="7000">true</autoscroll>
-			<itemlayout />
-			<focusedlayout />
-		</control>
-	</include>
-
-	<include name="Fanart_Slideshow_Global">
-		<param name="visible" default="true" />
-		<param name="local_list_content" default="false" />
-		<param name="content_source" default="Global" />
-		<param name="texture_path" default="$VAR[Fanart_Slideshow_Global_Texture]" />
-		<param name="animate_slideshow" default="true" />
-		<definition>
-			<control type="group">
-				<visible>!VideoPlayer.IsFullscreen + !Skin.HasSetting(Fanart_Slideshow_Global_Disabled)</visible>
-				<visible>$PARAM[visible]</visible>
-				<include content="VisibleHidden_Fade_Animation" />
-				<include content="Fanart_Slideshow_List" condition="$PARAM[local_list_content]">
-					<param name="content_source" value="$PARAM[content_source]" />
-				</include>
-				<control type="videowindow">
-					<include content="Hidden_Control" />
-				</control>
-				<include content="Fanart_Slideshow_Backing" />
-				<include content="Fanart_Slideshow_Multiart" condition="$EXP[Settings_IsVisible] + !Skin.HasSetting(Fanart_Slideshow_Global_Disabled)">
-					<param name="colordiffuse" value="$VAR[Dialogs_Artwork_Diffuse]" />
-					<param name="texture_path" value="$PARAM[texture_path]" />
-					<param name="fadetime" value="0" />
-				</include>
-				<include content="Fanart_Slideshow_Multiart">
-					<param name="colordiffuse" value="$VAR[Dialogs_Artwork_Diffuse]" />
-					<param name="texture_path" value="$PARAM[texture_path]" />
-					<param name="fadetime" value="360" />
-					<param name="animate_slideshow" value="$PARAM[animate_slideshow]" />
-				</include>
-			</control>
-		</definition>
-	</include>
-
-	<include name="Fanart_Slideshow_Media">
-		<include content="Fanart_Slideshow_Global">
-			<param name="visible" value="$EXP[Background_Containers] | Container.Content()" />
-			<param name="local_list_content" value="true" />
-			<param name="content_source" value="Media" />
-		</include>
-	</include>
 
 </includes>
