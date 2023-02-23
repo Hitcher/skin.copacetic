@@ -42,9 +42,7 @@
 		<definition>
 			<control type="button">
 				<visible allowhiddenfocus="true">false</visible>
-				<!-- Change viewmode if only one episode -->
-				<onfocus condition="$EXP[Set_BillboardView]">Container.SetViewMode(501)</onfocus>
-				<!-- Viewtype properties -->
+				<!-- Grid position -->
 				<onfocus condition="Control.HasFocus(505) + Container.Content(files) + !ListItem.IsFolder">RunScript(script.copacetic.helper,action=clean_filename,label=$INFO[ListItem.Label])</onfocus>
 				<onfocus condition="Control.Hasfocus(505)">SetProperty(GridView_Column,$INFO[Container.Column],home)</onfocus>
 				<onfocus condition="Control.Hasfocus(505)">SetProperty(GridView_Row,$INFO[Container.Row],home)</onfocus>
@@ -64,6 +62,18 @@
 				<onunfocus condition="String.IsEqual(Window(home).Property(Trailer_Autoplay),true)">ClearProperty(Trailer_Autoplay,home)</onunfocus>
 			</control>
 		</definition>
+	</include>
+
+	<include name="Clearlogo_Cropper">
+		<control type="button">
+			<animation effect="slide" end="0,0" time="180" reversible="false">Focus</animation>
+			<visible allowhiddenfocus="true">false</visible>
+			<onfocus condition="!Control.HasFocus(3100) + [$EXP[BillboardView_Logo_IsVisible] | $EXP[ShowcaseView_Logo_IsVisible] | $EXP[StripView_Logo_IsVisible]]">RunScript(script.copacetic.helper,action=get_cropped_clearlogo)</onfocus>
+			<onfocus condition="Control.HasFocus(3100)">RunScript(script.copacetic.helper,action=get_cropped_clearlogo,type=3100)</onfocus>
+			<onunfocus>ClearProperty(clearlogo_cropped,home)</onunfocus>
+			<onunfocus>ClearProperty(clearlogo-alt_cropped,home)</onunfocus>
+			<onunfocus>ClearProperty(clearlogo-billboard_cropped,home)</onunfocus>
+		</control>
 	</include>
 
 	<include name="Multiart_Resetter">
@@ -118,6 +128,7 @@
 				<scrolltime tween="sine" easing="inout">360</scrolltime>
 				<focusedlayout width="480">
 					<include content="HiddenFocusButton" />
+					<include content="Clearlogo_Cropper" />
 					<include content="Multiart_Resetter" condition="Skin.HasSetting(Multiart_Slideshow)" />
 					<include content="Multiart_Setter" condition="Skin.HasSetting(Multiart_Slideshow)" />
 				</focusedlayout>
@@ -411,10 +422,11 @@
 		<definition>
 			<control type="image">
 				<visible>$PARAM[visible]</visible>
-				<width>560</width>
-				<height>237</height>
-				<aspectratio>keep</aspectratio>
-				<texture background="true">$VAR[Clearlogo_Texture]</texture>
+				<width>100%</width>
+				<height max="232">auto</height>
+				<aspectratio align="center" aligny="center">keep</aspectratio>
+				<texture background="true">$VAR[Cropped_Clearlogo]</texture>
+				<bordertexture colordiffuse="$VAR[Dark_Grey_Color]">views/white_100.png</bordertexture>
 				<nested />
 			</control>
 		</definition>
@@ -505,9 +517,6 @@
 						<usecontrolcoords>true</usecontrolcoords>
 						<include content="Common_Details_Logo" condition="Window.Is(videos) | Window.Is(music) | Window.Is(programs)">
 							<param name="visible" value="$EXP[$PARAM[viewtype_label]View_Logo_IsVisible]" />
-							<animation effect="slide" start="0,0" end="20,0" time="0" condition="$EXP[StripView_IsVisible] + !$EXP[StripView_Details_Info] + !$EXP[StripView_Details_Plot] + !$EXP[StripView_Details_All]">Conditional</animation>
-							<animation effect="slide" start="0,0" end="-60,371" time="0" condition="$EXP[BillboardView_IsVisible] + !$EXP[BillboardView_Details_Info] + !$EXP[BillboardView_Details_Plot] + !$EXP[BillboardView_Details_All]">Conditional</animation>
-							<animation effect="slide" start="0,0" end="0,-10" time="0" condition="$EXP[$PARAM[viewtype_label]View_Details_Info] | $EXP[$PARAM[viewtype_label]View_Details_Plot] | $EXP[$PARAM[viewtype_label]View_Details_All]">Conditional</animation>
 						</include>
 						<include content="Common_Details_Textbox">
 							<param name="visible" value="[!$EXP[$PARAM[viewtype_label]View_Logo_IsVisible] + ![$EXP[ShowcaseView_IsVisible] + $EXP[ShowcaseView_Details_Overlay_IsVisible]]] | $EXP[Infoscreen_Widget_HasFocus] | Window.Is(home)" />

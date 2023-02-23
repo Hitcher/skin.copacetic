@@ -389,4 +389,241 @@
 		</definition>
 	</include>
 
+	<include name="defaultsettings_Radio_Button">
+		<control type="radiobutton" id="$PARAM[id]">
+			<description>$PARAM[info]</description>
+			<label>$PARAM[label]</label>
+			<label2>$PARAM[label2]</label2>
+			<onclick>Skin.ToggleSetting($PARAM[info])</onclick>
+			<selected>Skin.HasSetting($PARAM[info])</selected>
+			<visible>!String.IsEmpty(Window(home).Property($PARAM[info]))</visible>
+			<textcolor>$VAR[defaultsettings_$PARAM[info]_Text_Color]</textcolor>
+			<focusedcolor>$VAR[defaultsettings_$PARAM[info]_Focused_Color]</focusedcolor>
+			<textureradioonfocus colordiffuse="$VAR[defaultsettings_$PARAM[info]_Focused_Color]">dialogs/Radio_On_Focused.png</textureradioonfocus>
+			<textureradioofffocus colordiffuse="$VAR[defaultsettings_$PARAM[info]_Focused_Color]">dialogs/Radio_Off_Focused.png</textureradioofffocus>
+			<textureradioonnofocus colordiffuse="$VAR[defaultsettings_$PARAM[info]_Text_Color]">dialogs/Radio_On_Unfocused.png</textureradioonnofocus>
+			<textureradiooffnofocus colordiffuse="$VAR[defaultsettings_$PARAM[info]_Text_Color]">dialogs/Radio_Off_Unfocused.png</textureradiooffnofocus>
+		</control>
+	</include>
+
+	<include name="defaultsettings_Radio_Button_NoTexture">
+		<control type="radiobutton" id="$PARAM[id]">
+			<description>$PARAM[info]</description>
+			<label>$PARAM[label]</label>
+			<label2>$PARAM[label2]</label2>
+			<onclick>Skin.ToggleSetting($PARAM[info])</onclick>
+			<selected>Skin.HasSetting($PARAM[info])</selected>
+			<visible>!String.IsEmpty(Window(home).Property($PARAM[info]))</visible>
+			<textcolor>$VAR[defaultsettings_$PARAM[info]_Text_Color]</textcolor>
+			<focusedcolor>$VAR[defaultsettings_$PARAM[info]_Focused_Color]</focusedcolor>
+			<textureradioonfocus />
+			<textureradioofffocus />
+			<textureradioonnofocus />
+			<textureradiooffnofocus />
+		</control>
+	</include>
+
+	<include name="skinsettings_Slider_Button">
+		<param name="visible" default="true" />
+		<param name="category" />
+		<param name="id" />
+		<param name="left" default="9" />
+		<param name="right" default="3000" />
+		<param name="previous" />
+		<param name="next" />
+		<param name="label" />
+		<param name="label2" />
+		<param name="info" />
+		<param name="textcolor" />
+		<definition>
+			<control type="group" id="$PARAM[id]">
+				<visible>ControlGroup($PARAM[left]).HasFocus($PARAM[category]) + $PARAM[visible]</visible>
+				<height>90</height>
+				<defaultcontrol>$PARAM[id]0</defaultcontrol>
+				<control type="button" id="$PARAM[id]0">
+					<onclick>SetFocus($PARAM[id]1)</onclick>
+					<onup>$PARAM[previous]</onup>
+					<ondown>$PARAM[next]</ondown>
+					<onleft>$PARAM[left]</onleft>
+					<onright>$PARAM[right]</onright>
+					<label>$PARAM[label]</label>
+					<textcolor>$VAR[skinsettings_$PARAM[info]_Button_Textcolor]</textcolor>
+				</control>
+				<control type="button" id="$PARAM[id]1">
+					<include content="skinsettings_$PARAM[info]_Button_Conditions" />
+					<onclick>SetFocus($PARAM[id]0)</onclick>
+					<onup>$PARAM[previous]</onup>
+					<ondown>$PARAM[next]</ondown>
+					<align>right</align>
+					<label>$PARAM[label2]</label>
+					<textcolor>$VAR[skinsettings_$PARAM[info]_Button_Textcolor]</textcolor>
+					<textoffsetx>240</textoffsetx>
+				</control>
+				<control type="group">
+					<height>30</height>
+					<centertop>50%</centertop>
+					<width>120</width>
+					<right>60</right>
+					<control type="image">
+						<height>1</height>
+						<centertop>50%</centertop>
+						<width>100%</width>
+						<texture colordiffuse="$VAR[Unfocused_Color]">views/white_100.png</texture>
+					</control>
+					<control type="image">
+						<visible>!Control.HasFocus($PARAM[id]1)</visible>
+						<include content="skinsettings_$PARAM[info]_Unfocused_Slides" />
+						<width>1</width>
+						<texture colordiffuse="$VAR[Unfocused_Color]">views/white_100.png</texture>
+					</control>
+					<control type="image">
+						<visible>Control.HasFocus($PARAM[id]1)</visible>
+						<include content="skinsettings_$PARAM[info]_Focused_Slides" />
+						<width>10</width>
+						<texture colordiffuse="$VAR[Light_Color]">views/white_100.png</texture>
+					</control>
+				</control>
+			</control>
+		</definition>
+	</include>
+
+	<include name="skinsettings_Background_Interval_Button_Conditions">
+		<onleft condition="Skin.String(Background_Interval,30)">Skin.SetString(Background_Interval,25)</onleft>
+		<onleft condition="Skin.String(Background_Interval,25)">Skin.SetString(Background_Interval,20)</onleft>
+		<onleft condition="Skin.String(Background_Interval,20)">Skin.SetString(Background_Interval,15)</onleft>
+		<onleft condition="Skin.String(Background_Interval,15)">Skin.SetString(Background_Interval,10)</onleft>
+		<onleft condition="Skin.String(Background_Interval,10) | !Skin.String(Background_Interval)">Skin.SetString(Background_Interval,5)</onleft>
+		<onright condition="Skin.String(Background_Interval,5)">Skin.SetString(Background_Interval,10)</onright>
+		<onright condition="Skin.String(Background_Interval,10) | !Skin.String(Background_Interval)">Skin.SetString(Background_Interval,15)</onright>
+		<onright condition="Skin.String(Background_Interval,15)">Skin.SetString(Background_Interval,20)</onright>
+		<onright condition="Skin.String(Background_Interval,20)">Skin.SetString(Background_Interval,25)</onright>
+		<onright condition="Skin.String(Background_Interval,25)">Skin.SetString(Background_Interval,30)</onright>
+	</include>
+	<include name="skinsettings_Background_Interval_Unfocused_Slides">
+		<animation effect="slide" end="24" time="0" condition="Integer.IsGreater(Skin.String(Background_Interval),5)">Conditional</animation>
+		<animation effect="slide" end="24" time="0" condition="Integer.IsGreater(Skin.String(Background_Interval),10)">Conditional</animation>
+		<animation effect="slide" end="24" time="0" condition="Integer.IsGreater(Skin.String(Background_Interval),15)">Conditional</animation>
+		<animation effect="slide" end="24" time="0" condition="Integer.IsGreater(Skin.String(Background_Interval),20)">Conditional</animation>
+		<animation effect="slide" end="24" time="0" condition="Integer.IsGreater(Skin.String(Background_Interval),25)">Conditional</animation>
+	</include>
+	<include name="skinsettings_Background_Interval_Focused_Slides">
+		<animation effect="slide" end="22" time="0" condition="Integer.IsGreater(Skin.String(Background_Interval),5)">Conditional</animation>
+		<animation effect="slide" end="22" time="0" condition="Integer.IsGreater(Skin.String(Background_Interval),10)">Conditional</animation>
+		<animation effect="slide" end="22" time="0" condition="Integer.IsGreater(Skin.String(Background_Interval),15)">Conditional</animation>
+		<animation effect="slide" end="22" time="0" condition="Integer.IsGreater(Skin.String(Background_Interval),20)">Conditional</animation>
+		<animation effect="slide" end="22" time="0" condition="Integer.IsGreater(Skin.String(Background_Interval),25)">Conditional</animation>
+	</include>
+
+	<include name="skinsettings_Home_Background_Brightness_Button_Conditions">
+		<onleft condition="Skin.String(Home_Background_Brightness,25)">Skin.SetString(Home_Background_Brightness,33)</onleft>
+		<onleft condition="Skin.String(Home_Background_Brightness,33) | !Skin.String(Home_Background_Brightness)">Skin.SetString(Home_Background_Brightness,50)</onleft>
+		<onright condition="Skin.String(Home_Background_Brightness,50)">Skin.SetString(Home_Background_Brightness,33)</onright>
+		<onright condition="Skin.String(Home_Background_Brightness,33) | !Skin.String(Home_Background_Brightness)">Skin.SetString(Home_Background_Brightness,25)</onright>
+	</include>
+	<include name="skinsettings_Home_Background_Brightness_Unfocused_Slides">
+		<animation effect="slide" end="60" time="0" condition="Integer.IsLess(Skin.String(Home_Background_Brightness),33)">Conditional</animation>
+		<animation effect="slide" end="60" time="0" condition="Integer.IsLess(Skin.String(Home_Background_Brightness),50)">Conditional</animation>
+	</include>
+	<include name="skinsettings_Home_Background_Brightness_Focused_Slides">
+		<animation effect="slide" end="55" time="0" condition="Integer.IsLess(Skin.String(Home_Background_Brightness),33)">Conditional</animation>
+		<animation effect="slide" end="55" time="0" condition="Integer.IsLess(Skin.String(Home_Background_Brightness),50)">Conditional</animation>
+	</include>
+
+	<include name="skinsettings_Home_Background_Override_Source_Button_Conditions">
+		<onleft condition="Skin.String(Home_Background_Override_Source,Custom)">Skin.SetString(Home_Background_Override_Source,Artists)</onleft>
+		<onleft condition="Skin.String(Home_Background_Override_Source,Artists)">Skin.SetString(Home_Background_Override_Source,TVShows)</onleft>
+		<onleft condition="Skin.String(Home_Background_Override_Source,TVShows)">Skin.SetString(Home_Background_Override_Source,Movies)</onleft>
+		<onleft condition="Skin.String(Home_Background_Override_Source,Movies)">Skin.SetString(Home_Background_Override_Source,Videos)</onleft>
+		<onleft condition="Skin.String(Home_Background_Override_Source,Videos)">Skin.SetString(Home_Background_Override_Source,Global)</onleft>
+		<onright condition="Skin.String(Home_Background_Override_Source,Global) | !Skin.String(Home_Background_Override_Source)">Skin.SetString(Home_Background_Override_Source,Videos)</onright>
+		<onright condition="Skin.String(Home_Background_Override_Source,Videos)">Skin.SetString(Home_Background_Override_Source,Movies)</onright>
+		<onright condition="Skin.String(Home_Background_Override_Source,Movies)">Skin.SetString(Home_Background_Override_Source,TVShows)</onright>
+		<onright condition="Skin.String(Home_Background_Override_Source,TVShows)">Skin.SetString(Home_Background_Override_Source,Artists)</onright>
+		<onright condition="Skin.String(Home_Background_Override_Source,Artists)">Skin.SetString(Home_Background_Override_Source,Custom)</onright>
+	</include>
+	<include name="skinsettings_Home_Background_Override_Source_Unfocused_Slides">
+		<animation effect="slide" end="24" time="0" condition="String.IsEqual(Skin.String(Home_Background_Override_Source),Videos)">Conditional</animation>
+		<animation effect="slide" end="48" time="0" condition="String.IsEqual(Skin.String(Home_Background_Override_Source),Movies)">Conditional</animation>
+		<animation effect="slide" end="72" time="0" condition="String.IsEqual(Skin.String(Home_Background_Override_Source),TVShows)">Conditional</animation>
+		<animation effect="slide" end="96" time="0" condition="String.IsEqual(Skin.String(Home_Background_Override_Source),Artists)">Conditional</animation>
+		<animation effect="slide" end="120" time="0" condition="String.IsEqual(Skin.String(Home_Background_Override_Source),Custom)">Conditional</animation>
+	</include>
+	<include name="skinsettings_Home_Background_Override_Source_Focused_Slides">
+		<animation effect="slide" end="22" time="0" condition="String.IsEqual(Skin.String(Home_Background_Override_Source),Videos)">Conditional</animation>
+		<animation effect="slide" end="44" time="0" condition="String.IsEqual(Skin.String(Home_Background_Override_Source),Movies)">Conditional</animation>
+		<animation effect="slide" end="66" time="0" condition="String.IsEqual(Skin.String(Home_Background_Override_Source),TVShows)">Conditional</animation>
+		<animation effect="slide" end="88" time="0" condition="String.IsEqual(Skin.String(Home_Background_Override_Source),Artists)">Conditional</animation>
+		<animation effect="slide" end="110" time="0" condition="String.IsEqual(Skin.String(Home_Background_Override_Source),Custom)">Conditional</animation>
+	</include>
+
+	<include name="skinsettings_Multiart_Interval_Button_Conditions">
+		<onleft condition="Skin.String(Multiart_Interval,10)">Skin.SetString(Multiart_Interval,7)</onleft>
+		<onleft condition="Skin.String(Multiart_Interval,7)">Skin.SetString(Multiart_Interval,5)</onleft>
+		<onleft condition="Skin.String(Multiart_Interval,5)">Skin.SetString(Multiart_Interval,4)</onleft>
+		<onleft condition="Skin.String(Multiart_Interval,4) | !Skin.String(Multiart_Interval)">Skin.SetString(Multiart_Interval,3)</onleft>
+		<onright condition="Skin.String(Multiart_Interval,3)">Skin.SetString(Multiart_Interval,4)</onright>
+		<onright condition="Skin.String(Multiart_Interval,4) | !Skin.String(Multiart_Interval)">Skin.SetString(Multiart_Interval,5)</onright>
+		<onright condition="Skin.String(Multiart_Interval,5)">Skin.SetString(Multiart_Interval,7)</onright>
+		<onright condition="Skin.String(Multiart_Interval,7)">Skin.SetString(Multiart_Interval,10)</onright>
+	</include>
+	<include name="skinsettings_Multiart_Interval_Unfocused_Slides">
+		<animation effect="slide" end="30" time="0" condition="Integer.IsGreater(Skin.String(Multiart_Interval),3)">Conditional</animation>
+		<animation effect="slide" end="30" time="0" condition="Integer.IsGreater(Skin.String(Multiart_Interval),4)">Conditional</animation>
+		<animation effect="slide" end="30" time="0" condition="Integer.IsGreater(Skin.String(Multiart_Interval),5)">Conditional</animation>
+		<animation effect="slide" end="30" time="0" condition="Integer.IsGreater(Skin.String(Multiart_Interval),7)">Conditional</animation>
+	</include>
+	<include name="skinsettings_Multiart_Interval_Focused_Slides">
+		<animation effect="slide" end="27" time="0" condition="Integer.IsGreater(Skin.String(Multiart_Interval),3)">Conditional</animation>
+		<animation effect="slide" end="28" time="0" condition="Integer.IsGreater(Skin.String(Multiart_Interval),4)">Conditional</animation>
+		<animation effect="slide" end="27" time="0" condition="Integer.IsGreater(Skin.String(Multiart_Interval),5)">Conditional</animation>
+		<animation effect="slide" end="28" time="0" condition="Integer.IsGreater(Skin.String(Multiart_Interval),7)">Conditional</animation>
+	</include>
+
+	<include name="skinsettings_Music_Rating_Like_Threshold_Button_Conditions">
+		<onleft condition="Skin.String(Music_Rating_Like_Threshold,10)">Skin.SetString(Music_Rating_Like_Threshold,9)</onleft>
+		<onleft condition="Skin.String(Music_Rating_Like_Threshold,9)">Skin.SetString(Music_Rating_Like_Threshold,8)</onleft>
+		<onleft condition="Skin.String(Music_Rating_Like_Threshold,8)">Skin.SetString(Music_Rating_Like_Threshold,7)</onleft>
+		<onleft condition="Skin.String(Music_Rating_Like_Threshold,7)">Skin.SetString(Music_Rating_Like_Threshold,6)</onleft>
+		<onleft condition="Skin.String(Music_Rating_Like_Threshold,6)">Skin.SetString(Music_Rating_Like_Threshold,5)</onleft>
+		<onleft condition="Skin.String(Music_Rating_Like_Threshold,5)">Skin.SetString(Music_Rating_Like_Threshold,4)</onleft>
+		<onleft condition="Skin.String(Music_Rating_Like_Threshold,4)">Skin.SetString(Music_Rating_Like_Threshold,3)</onleft>
+		<onleft condition="Skin.String(Music_Rating_Like_Threshold,3)">Skin.SetString(Music_Rating_Like_Threshold,2)</onleft>
+		<onleft condition="Skin.String(Music_Rating_Like_Threshold,2)">Skin.SetString(Music_Rating_Like_Threshold,1)</onleft>
+		<onleft condition="Skin.String(Music_Rating_Like_Threshold,1)">Skin.SetString(Music_Rating_Like_Threshold,)</onleft>
+		<onright condition="!Skin.String(Music_Rating_Like_Threshold)">Skin.SetString(Music_Rating_Like_Threshold,1)</onright>
+		<onright condition="Skin.String(Music_Rating_Like_Threshold,1)">Skin.SetString(Music_Rating_Like_Threshold,2)</onright>
+		<onright condition="Skin.String(Music_Rating_Like_Threshold,2)">Skin.SetString(Music_Rating_Like_Threshold,3)</onright>
+		<onright condition="Skin.String(Music_Rating_Like_Threshold,3)">Skin.SetString(Music_Rating_Like_Threshold,4)</onright>
+		<onright condition="Skin.String(Music_Rating_Like_Threshold,4)">Skin.SetString(Music_Rating_Like_Threshold,5)</onright>
+		<onright condition="Skin.String(Music_Rating_Like_Threshold,5)">Skin.SetString(Music_Rating_Like_Threshold,6)</onright>
+		<onright condition="Skin.String(Music_Rating_Like_Threshold,6)">Skin.SetString(Music_Rating_Like_Threshold,7)</onright>
+		<onright condition="Skin.String(Music_Rating_Like_Threshold,7)">Skin.SetString(Music_Rating_Like_Threshold,8)</onright>
+		<onright condition="Skin.String(Music_Rating_Like_Threshold,8)">Skin.SetString(Music_Rating_Like_Threshold,9)</onright>
+		<onright condition="Skin.String(Music_Rating_Like_Threshold,9)">Skin.SetString(Music_Rating_Like_Threshold,10)</onright>
+	</include>
+	<include name="skinsettings_Music_Rating_Like_Threshold_Unfocused_Slides">
+		<animation effect="slide" end="12" time="0" condition="Integer.IsGreater(Skin.String(Music_Rating_Like_Threshold),0)">Conditional</animation>
+		<animation effect="slide" end="12" time="0" condition="Integer.IsGreater(Skin.String(Music_Rating_Like_Threshold),1)">Conditional</animation>
+		<animation effect="slide" end="12" time="0" condition="Integer.IsGreater(Skin.String(Music_Rating_Like_Threshold),2)">Conditional</animation>
+		<animation effect="slide" end="12" time="0" condition="Integer.IsGreater(Skin.String(Music_Rating_Like_Threshold),3)">Conditional</animation>
+		<animation effect="slide" end="12" time="0" condition="Integer.IsGreater(Skin.String(Music_Rating_Like_Threshold),4)">Conditional</animation>
+		<animation effect="slide" end="12" time="0" condition="Integer.IsGreater(Skin.String(Music_Rating_Like_Threshold),5)">Conditional</animation>
+		<animation effect="slide" end="12" time="0" condition="Integer.IsGreater(Skin.String(Music_Rating_Like_Threshold),6)">Conditional</animation>
+		<animation effect="slide" end="12" time="0" condition="Integer.IsGreater(Skin.String(Music_Rating_Like_Threshold),7)">Conditional</animation>
+		<animation effect="slide" end="12" time="0" condition="Integer.IsGreater(Skin.String(Music_Rating_Like_Threshold),8)">Conditional</animation>
+		<animation effect="slide" end="12" time="0" condition="Integer.IsGreater(Skin.String(Music_Rating_Like_Threshold),9)">Conditional</animation>
+	</include>
+	<include name="skinsettings_Music_Rating_Like_Threshold_Focused_Slides">
+		<animation effect="slide" end="11" time="0" condition="Integer.IsGreater(Skin.String(Music_Rating_Like_Threshold),0)">Conditional</animation>
+		<animation effect="slide" end="11" time="0" condition="Integer.IsGreater(Skin.String(Music_Rating_Like_Threshold),1)">Conditional</animation>
+		<animation effect="slide" end="11" time="0" condition="Integer.IsGreater(Skin.String(Music_Rating_Like_Threshold),2)">Conditional</animation>
+		<animation effect="slide" end="11" time="0" condition="Integer.IsGreater(Skin.String(Music_Rating_Like_Threshold),3)">Conditional</animation>
+		<animation effect="slide" end="11" time="0" condition="Integer.IsGreater(Skin.String(Music_Rating_Like_Threshold),4)">Conditional</animation>
+		<animation effect="slide" end="11" time="0" condition="Integer.IsGreater(Skin.String(Music_Rating_Like_Threshold),5)">Conditional</animation>
+		<animation effect="slide" end="11" time="0" condition="Integer.IsGreater(Skin.String(Music_Rating_Like_Threshold),6)">Conditional</animation>
+		<animation effect="slide" end="11" time="0" condition="Integer.IsGreater(Skin.String(Music_Rating_Like_Threshold),7)">Conditional</animation>
+		<animation effect="slide" end="11" time="0" condition="Integer.IsGreater(Skin.String(Music_Rating_Like_Threshold),8)">Conditional</animation>
+		<animation effect="slide" end="11" time="0" condition="Integer.IsGreater(Skin.String(Music_Rating_Like_Threshold),9)">Conditional</animation>
+	</include>
+
 </includes>
