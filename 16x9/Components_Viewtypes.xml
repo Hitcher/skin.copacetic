@@ -419,14 +419,17 @@
 
 	<include name="Common_Details_Logo">
 		<param name="visible" />
+		<param name="width" default="640" />
+		<param name="maxheight" default="240" />
+		<param name="align" default="left" />
+		<param name="aligny" default="bottom" />
 		<definition>
 			<control type="image">
 				<visible>$PARAM[visible]</visible>
-				<width>100%</width>
-				<height max="232">auto</height>
-				<aspectratio align="center" aligny="center">keep</aspectratio>
+				<width>$PARAM[width]</width>
+				<height max="$PARAM[maxheight]">auto</height>
+				<aspectratio align="$PARAM[align]" aligny="$PARAM[aligny]">keep</aspectratio>
 				<texture background="true">$VAR[Cropped_Clearlogo]</texture>
-				<bordertexture colordiffuse="$VAR[Dark_Grey_Color]">views/white_100.png</bordertexture>
 				<nested />
 			</control>
 		</definition>
@@ -484,8 +487,8 @@
 		<param name="bottom" default="0" />
 		<param name="width" default="1680" />
 		<param name="height" default="100%" />
-		<param name="align" default="center" />
 		<param name="itemgap" default="0" />
+		<param name="logo_width" default="640" />
 		<param name="title_label" default="$VAR[Title_Label]" />
 		<param name="title_color" default="$VAR[Light_Color]" />
 		<param name="title_maxheight" default="146" />
@@ -510,13 +513,25 @@
 				<control type="group">
 					<visible>![Control.HasFocus(3100) + $EXP[Secondary_List_Content_Switching]]</visible>
 					<include content="Visible_Fade_Delayed_Animation" />
+					<!-- Logos -->
+					<include content="Common_Details_Logo" condition="Window.Is(videos) | Window.Is(music) | Window.Is(programs)">
+						<param name="visible" value="[$EXP[ShowcaseView_Logo_IsVisible] + $EXP[ShowcaseView_Details_Title]] | [$EXP[StripView_Logo_IsVisible] + $EXP[StripView_Details_Title]]" />
+						<param name="align" value="center" />
+						<param name="aligny" value="center" />
+						<centertop>50%</centertop>
+					</include>
 					<control type="grouplist">
 						<orientation>vertical</orientation>
-						<align>$PARAM[align]</align>
+						<align>center</align>
 						<itemgap>$PARAM[itemgap]</itemgap>
 						<usecontrolcoords>true</usecontrolcoords>
 						<include content="Common_Details_Logo" condition="Window.Is(videos) | Window.Is(music) | Window.Is(programs)">
-							<param name="visible" value="$EXP[$PARAM[viewtype_label]View_Logo_IsVisible]" />
+							<param name="visible" value="$EXP[$PARAM[viewtype_label]View_Logo_IsVisible] + [!$EXP[$PARAM[viewtype_label]View_Details_Title] | $EXP[BillboardView_Details_Title]]" />
+							<param name="align" value="left" />
+							<param name="aligny" value="bottom" />
+							<param name="width" value="$PARAM[logo_width]" />
+							<animation effect="slide" start="0,0" end="0,-10" time="0" condition="true">Conditional</animation>
+							<animation effect="slide" start="0,0" end="-60,366" time="0" condition="$EXP[BillboardView_Logo_IsVisible] + $EXP[BillboardView_Details_Title]">Conditional</animation>
 						</include>
 						<include content="Common_Details_Textbox">
 							<param name="visible" value="[!$EXP[$PARAM[viewtype_label]View_Logo_IsVisible] + ![$EXP[ShowcaseView_IsVisible] + $EXP[ShowcaseView_Details_Overlay_IsVisible]]] | $EXP[Infoscreen_Widget_HasFocus] | Window.Is(home)" />
