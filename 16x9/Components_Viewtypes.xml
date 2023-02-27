@@ -69,7 +69,7 @@
 			<animation effect="slide" end="0,0" time="180" reversible="false">Focus</animation>
 			<visible allowhiddenfocus="true">false</visible>
 			<onfocus condition="!Control.HasFocus(3100) + [$EXP[BillboardView_Logo_IsVisible] | $EXP[ShowcaseView_Logo_IsVisible] | $EXP[StripView_Logo_IsVisible]]">RunScript(script.copacetic.helper,action=get_cropped_clearlogo)</onfocus>
-			<onfocus condition="Control.HasFocus(3100)">RunScript(script.copacetic.helper,action=get_cropped_clearlogo,type=3100)</onfocus>
+			<onfocus condition="Control.HasFocus(3100)">RunScript(script.copacetic.helper,action=get_cropped_clearlogo,key=3100)</onfocus>
 			<onunfocus>ClearProperty(clearlogo_cropped,home)</onunfocus>
 			<onunfocus>ClearProperty(clearlogo-alt_cropped,home)</onunfocus>
 			<onunfocus>ClearProperty(clearlogo-billboard_cropped,home)</onunfocus>
@@ -419,6 +419,7 @@
 
 	<include name="Common_Details_Logo">
 		<param name="visible" />
+		<param name="texture" default="$VAR[Cropped_Clearlogo]" />
 		<param name="width" default="640" />
 		<param name="maxheight" default="240" />
 		<param name="align" default="left" />
@@ -429,7 +430,7 @@
 				<width>$PARAM[width]</width>
 				<height max="$PARAM[maxheight]">auto</height>
 				<aspectratio align="$PARAM[align]" aligny="$PARAM[aligny]">keep</aspectratio>
-				<texture background="true">$VAR[Cropped_Clearlogo]</texture>
+				<texture background="true">$PARAM[texture]</texture>
 				<nested />
 			</control>
 		</definition>
@@ -453,7 +454,6 @@
 				<textcolor>$PARAM[color]</textcolor>
 				<label>$PARAM[label]</label>
 				<align>$PARAM[align]</align>
-				<autoscroll delay="5000" time="1500" repeat="2000">$PARAM[scroll]</autoscroll>
 			</control>
 		</definition>
 	</include>
@@ -516,6 +516,7 @@
 					<!-- Logos -->
 					<include content="Common_Details_Logo" condition="Window.Is(videos) | Window.Is(music) | Window.Is(programs)">
 						<param name="visible" value="[$EXP[ShowcaseView_Logo_IsVisible] + $EXP[ShowcaseView_Details_Title]] | [$EXP[StripView_Logo_IsVisible] + $EXP[StripView_Details_Title]]" />
+						<param name="width" value="$PARAM[logo_width]" />
 						<param name="align" value="center" />
 						<param name="aligny" value="center" />
 						<centertop>50%</centertop>
