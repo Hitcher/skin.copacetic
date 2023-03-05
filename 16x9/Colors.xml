@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <includes>
 
-
 	<!-- Hexes - RGB -->
 	<variable name="Dark_Hex">
 		<value>000000</value>
@@ -30,7 +29,6 @@
 	<variable name="User_Rating_Hex">
 		<value>ffed78</value>
 	</variable>
-
 
 	<!-- Hexes - Alpha -->
 	<variable name="Alpha_100">
@@ -79,7 +77,6 @@
 		<value>01</value>
 	</variable>
 
-
 	<!-- Color diffuse brightness -->
 	<variable name="Brightness_0">
 		<value>$VAR[Alpha_100]000000</value>
@@ -117,7 +114,6 @@
 		<value>$VAR[Alpha_60]$VAR[White_Hex]</value>
 	</variable>
 
-
 	<!-- Color palette -->
 	<variable name="Blank_Color">
 		<value>$VAR[Alpha_0]$VAR[Dark_Hex]</value>
@@ -151,7 +147,6 @@
 		<value>$VAR[Alpha_50]$VAR[Accent_Hex]</value>
 	</variable>
 
-
 	<!-- Theme -->
 	<variable name="Primary_Color">
 		<value condition="Skin.String(Theme,Light)">$VAR[Dark_Color]</value>
@@ -162,9 +157,12 @@
 		<value>$VAR[Dark_Color]</value>
 	</variable>
 	<variable name="Dominant_Color">
-		<value condition="$EXP[BillboardView_IsVisible] + Skin.String(clearlogo-billboard_cropped-color)">$INFO[Skin.String(clearlogo-billboard_cropped-color)]</value>
-		<value condition="!$EXP[BillboardView_IsVisible] + Skin.String(Theme,Light) + Skin.String(clearlogo-alt_cropped-color)">$INFO[Skin.String(clearlogo-alt_cropped-color)]</value>
-		<value condition="Skin.String(clearlogo_cropped-color)">$INFO[Skin.String(clearlogo_cropped-color)]</value>
+		<value condition="$EXP[BillboardView_IsVisible] + Skin.String(clearlogo-billboard_cropped-color) + Integer.IsGreaterOrEqual(Skin.String(clearlogo-billboard_cropped-luminosity),Skin.String(Background_Low_Threshold))">$INFO[Skin.String(clearlogo-billboard_cropped-color)]</value>
+		<value condition="!$EXP[BillboardView_IsVisible] + Skin.String(Theme,Light) + Skin.String(clearlogo-alt_cropped-color) + Integer.IsLessOrEqual(Skin.String(clearlogo-alt_cropped-luminosity),Skin.String(Background_High_Threshold))">$INFO[Skin.String(clearlogo-alt_cropped-color)]</value>
+		<value condition="!$EXP[BillboardView_IsVisible] + Skin.String(Theme,Light) + Skin.String(clearlogo_cropped-color) + Integer.IsLessOrEqual(Skin.String(clearlogo_cropped-luminosity),Skin.String(Background_High_Threshold))">$INFO[Skin.String(clearlogo_cropped-color)]</value>
+		<value condition="!Skin.String(Theme,Light) + Skin.String(clearlogo_cropped-color) + Integer.IsGreaterOrEqual(Skin.String(clearlogo_cropped-luminosity),Skin.String(Background_Low_Threshold))">$INFO[Skin.String(clearlogo_cropped-color)]</value>
+		<value condition="$EXP[Background_IsFanart]">$VAR[Light_Color]</value>
+		<value>$VAR[Primary_Color]</value>
 	</variable>
 	<variable name="Unfocused_Color">
 		<value>$VAR[Unfocused_Grey_Color]</value>
@@ -299,7 +297,7 @@
 		<value>$VAR[Blank_Color]</value>
 	</variable>
 	<variable name="Flag_Color">
-		<value condition="Skin.HasSetting(Crop_Clearlogos) +  Skin.String(clearlogo_cropped-color)">$VAR[Dominant_Color]</value>
+		<value condition="Skin.HasSetting(Crop_Clearlogos) + Skin.HasSetting(Colorise_Flags) + [$EXP[BillboardView_IsVisible] | $EXP[ShowcaseView_IsVisible] | $EXP[StripView_IsVisible]]">$VAR[Dominant_Color]</value>
 		<value condition="$EXP[Background_IsFanart]">$VAR[Light_Color]</value>
 		<value>$VAR[Primary_Color]</value>
 	</variable>
@@ -411,7 +409,7 @@
 	</variable>  
 	
 	<variable name="skinsettings_Background_Interval_Button_Textcolor">
-		<value condition="Control.HasFocus(14050) | Control.HasFocus(14051)">$VAR[Light_Color]</value>
+		<value condition="Control.HasFocus(10160) | Control.HasFocus(10161)">$VAR[Light_Color]</value>
 		<value>$VAR[Unfocused_Color]</value>
 	</variable>
 	<variable name="skinsettings_Home_Background_Override_Source_Button_Textcolor">
@@ -428,6 +426,10 @@
 	</variable> 
 	<variable name="skinsettings_Multiart_Interval_Button_Textcolor">
 		<value condition="Control.HasFocus(15040) | Control.HasFocus(15041)">$VAR[Light_Color]</value>
+		<value>$VAR[Unfocused_Color]</value>
+	</variable>
+	<variable name="skinsettings_Background_Low_Threshold_Button_Textcolor">
+		<value condition="Control.HasFocus(10130) | Control.HasFocus(10131) | Control.HasFocus(10132)">$VAR[Light_Color]</value>
 		<value>$VAR[Unfocused_Color]</value>
 	</variable>
 	<variable name="skinsettings_Music_Rating_Like_Threshold_Button_Textcolor">
