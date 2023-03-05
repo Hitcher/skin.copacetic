@@ -143,8 +143,9 @@
 			<label>$LOCALIZE[24997]</label>
 		</control>
 		<control type="button" id="1001">
+			<description>Recommended Kodi settings</description>
 			<visible>!ControlGroup(9).HasFocus(11) + !ControlGroup(9).HasFocus(12) + !ControlGroup(9).HasFocus(13) + !ControlGroup(9).HasFocus(14) + !ControlGroup(9).HasFocus(15) + !ControlGroup(9).HasFocus(16)</visible>
-			<label>Recommended Kodi settings</label>
+			<label>$LOCALIZE[31473]</label>
 			<onclick>ActivateWindow(1100)</onclick>
 		</control>
 		<control type="radiobutton" id="1002">
@@ -175,7 +176,7 @@
 			<visible>!Skin.String(User_Defined_Accent_Color,copacetic_accent_color)</visible>
 			<label>- $LOCALIZE[31460]</label>
 			<onclick>Skin.SetString(User_Defined_Accent_Color,copacetic_accent_color)</onclick>
-			<onclick>SetFocus(1002)</onclick>
+			<onclick>SetFocus(1003)</onclick>
 		</control>
 		<control type="label" id="1005">
 			<description>Menus</description>
@@ -211,19 +212,26 @@
 		</control>
 		<control type="radiobutton" id="1010">
 			<description>Crop clearlogos</description>
-			<label>Crop clearlogos (a copy will be made)</label>
+			<label>$LOCALIZE[31479]</label>
 			<onclick>Skin.ToggleSetting(Crop_Clearlogos)</onclick>
 			<selected>Skin.HasSetting(Crop_Clearlogos)</selected>
 			<visible>!ControlGroup(9).HasFocus(11) + !ControlGroup(9).HasFocus(12) + !ControlGroup(9).HasFocus(13) + !ControlGroup(9).HasFocus(14) + !ControlGroup(9).HasFocus(15) + !ControlGroup(9).HasFocus(16)</visible>
 		</control>
-		<control type="radiobutton" id="1011">
+		<control type="button" id="1011">
+			<description>Clear cache</description>
+			<label>- $LOCALIZE[31481]</label>
+			<label2>$INFO[Window(home).Property(Addon_Data_Folder_Size)]</label2>
+			<onclick condition="!String.Contains(Window(home).Property(Addon_Data_Folder_Size),bytes)">RunScript(script.copacetic.helper,action=clear_cache)</onclick>
+			<visible>!ControlGroup(9).HasFocus(11) + !ControlGroup(9).HasFocus(12) + !ControlGroup(9).HasFocus(13) + !ControlGroup(9).HasFocus(14) + !ControlGroup(9).HasFocus(15) + !ControlGroup(9).HasFocus(16)</visible>
+		</control>
+		<control type="radiobutton" id="1012">
 			<description>Prefer keyart for poster views</description>
 			<label>$LOCALIZE[31426]</label>
 			<onclick>Skin.ToggleSetting(Prefer_Keyart)</onclick>
 			<selected>Skin.HasSetting(Prefer_Keyart)</selected>
 			<visible>!ControlGroup(9).HasFocus(11) + !ControlGroup(9).HasFocus(12) + !ControlGroup(9).HasFocus(13) + !ControlGroup(9).HasFocus(14) + !ControlGroup(9).HasFocus(15) + !ControlGroup(9).HasFocus(16)</visible>
 		</control>
-		<control type="radiobutton" id="1012">
+		<control type="radiobutton" id="1013">
 			<description>Enable background fanart slideshow</description>
 			<label>$LOCALIZE[31425]</label>
 			<onclick>Skin.ToggleSetting(Background_Disabled)</onclick>
@@ -236,9 +244,9 @@
 			<param name="label" value="- $LOCALIZE[31437]" />
 			<param name="label2" value="$INFO[Skin.String(Background_Interval)]" />
 			<param name="category" value="10" />
-			<param name="previous" value="1012" />
-			<param name="id" value="1013" />
-			<param name="next" value="100" />
+			<param name="previous" value="1013" />
+			<param name="id" value="1014" />
+			<param name="next" value="1000" />
 		</include>
 		<!--Home-->
 		<control type="label" id="1100">
@@ -277,7 +285,7 @@
 		</control>
 		<include content="skinsettings_Slider_Button">
 			<param name="info" value="Home_Background_Override_Source" />
-			<param name="visible" value="Skin.HasSetting(Home_Background_Override_Enabled)" />
+			<param name="visible" value="Skin.HasSetting(Home_Background_Override_Enabled) + !Skin.HasSetting(Background_Disabled)" />
 			<param name="label" value="- $LOCALIZE[31465]" />
 			<param name="label2" value="$VAR[skinsettings_Home_Background_Override_Source_Label]" />
 			<param name="category" value="11" />
@@ -289,7 +297,7 @@
 			<description>- Choose a custom path</description>
 			<label>$VAR[skinsettings_Home_Background_Override_Path_Label,- ]</label>
 			<onclick>RunScript(script.skinshortcuts,type=shortcuts&amp;custom=True&amp;showNone=False&amp;skinList=Home_Background_Override_Path)</onclick>
-			<visible>ControlGroup(9).HasFocus(11) + Skin.HasSetting(Home_Background_Override_Enabled) + Skin.String(Home_Background_Override_Source,Custom)</visible>
+			<visible>ControlGroup(9).HasFocus(11) + Skin.HasSetting(Home_Background_Override_Enabled) + [Skin.String(Home_Background_Override_Source,Custom) | Skin.HasSetting(Background_Disabled)]</visible>
 		</control>
 		<include content="skinsettings_Slider_Button">
 			<param name="info" value="Home_Background_Brightness" />
