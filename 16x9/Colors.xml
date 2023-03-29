@@ -159,13 +159,6 @@
 		<value condition="Skin.String(Theme,Light)">$VAR[Light_Background_Color]</value>
 		<value>$VAR[Dark_Color]</value>
 	</variable>
-	<variable name="Dominant_Color">
-		<value condition="!$EXP[BillboardView_IsVisible] + Skin.String(Theme,Light) + !String.IsEmpty(Window(home).Property(clearlogo-alt_cropped-color)) + Integer.IsLessOrEqual(Window(home).Property(clearlogo-alt_cropped-luminosity),Skin.String(Background_High_Threshold))">$INFO[Window(home).Property(clearlogo-alt_cropped-color)]</value>
-		<value condition="!$EXP[BillboardView_IsVisible] + Skin.String(Theme,Light) + !String.IsEmpty(Window(home).Property(clearlogo_cropped-color)) + Integer.IsLessOrEqual(Window(home).Property(clearlogo_cropped-luminosity),Skin.String(Background_High_Threshold))">$INFO[Window(home).Property(clearlogo_cropped-color)]</value>
-		<value condition="!Skin.String(Theme,Light) + !String.IsEmpty(Window(home).Property(clearlogo_cropped-color)) + Integer.IsGreaterOrEqual(Window(home).Property(clearlogo_cropped-luminosity),Skin.String(Background_Low_Threshold))">$INFO[Window(home).Property(clearlogo_cropped-color)]</value>
-		<value condition="$EXP[Background_IsFanart]">$VAR[Light_Color]</value>
-		<value>$VAR[Primary_Color]</value>
-	</variable>
 	<variable name="Unfocused_Color">
 		<value>$VAR[Unfocused_Grey_Color]</value>
 	</variable>
@@ -176,10 +169,9 @@
 		<value>$VAR[Alpha_40]$VAR[Unfocused_Grey_Hex]</value>
 	</variable>
 
-
-	<!-- Masks and Diffuses  -->
+	<!-- Diffuses  -->
+	<!-- Use solid alpha for dimmed artwork to improve performance -->
 	<variable name="Home_Artwork_Diffuse">
-		<value>ff808080</value>
 		<value condition="Skin.String(Home_Background_Brightness,50)">$VAR[Brightness_50]</value>
 		<value condition="Skin.String(Home_Background_Brightness,25)">$VAR[Brightness_25]</value>
 		<value>$VAR[Brightness_33]</value>
@@ -191,7 +183,8 @@
 	<variable name="Dropshadow_Diffuse">
 		<value>$VAR[Brightness_0]</value>
 	</variable>
-	<variable name="Panel_Diffuse">
+	<!-- Alpha overlay masks -->
+	<variable name="Panel_Mask">
 		<value condition="$EXP[Background_Global_Windows] + Skin.HasSetting(Background_Disabled)">$VAR[Dark_Grey_Color]</value>
 		<value condition="Window.IsVisible(songinformation) | [Window.IsVisible(musicinformation) + String.IsEqual(Window(musicinformation).Property(Info_Type),album)] | Window.IsVisible(addoninformation)">$VAR[Dark_Grey_Color]</value>
 		<value condition="Window.IsVisible(pictureinfo)">$VAR[Alpha_90]$VAR[Dark_Grey_Hex]</value>
@@ -202,18 +195,7 @@
 		<value>$VAR[Alpha_75]$VAR[Dark_Grey_Hex]</value>
 	</variable>
 	<variable name="Transparent_Dialog_Mask">
-		<value condition="VideoPlayer.IsFullscreen">$VAR[Alpha_50]$VAR[Dark_Hex]</value>
-		<value condition="Window.IsActive(home) + Skin.String(Widget1_View,Billboard) + String.IsEqual(window(home).property(Home_Widget),3201)">$VAR[Alpha_32]$VAR[Dark_Hex]</value>
-		<value condition="Window.IsActive(home) + Skin.String(Widget2_View,Billboard) + String.IsEqual(window(home).property(Home_Widget),3202)">$VAR[Alpha_32]$VAR[Dark_Hex]</value>
-		<value condition="Window.IsActive(home) + Skin.String(Widget3_View,Billboard) + String.IsEqual(window(home).property(Home_Widget),3203)">$VAR[Alpha_32]$VAR[Dark_Hex]</value>
-		<value condition="Window.IsActive(home) + Skin.String(Widget4_View,Billboard) + String.IsEqual(window(home).property(Home_Widget),3204)">$VAR[Alpha_32]$VAR[Dark_Hex]</value>
-		<value condition="Window.IsActive(home) + Skin.String(Widget5_View,Billboard) + String.IsEqual(window(home).property(Home_Widget),3205)">$VAR[Alpha_32]$VAR[Dark_Hex]</value>
-		<value condition="Window.IsActive(home) + Skin.String(Widget6_View,Billboard) + String.IsEqual(window(home).property(Home_Widget),3206)">$VAR[Alpha_32]$VAR[Dark_Hex]</value>
-		<value condition="Window.IsActive(home) + Skin.String(Widget7_View,Billboard) + String.IsEqual(window(home).property(Home_Widget),3207)">$VAR[Alpha_32]$VAR[Dark_Hex]</value>
-		<value condition="Window.IsActive(home) + Skin.String(Widget8_View,Billboard) + String.IsEqual(window(home).property(Home_Widget),3208)">$VAR[Alpha_32]$VAR[Dark_Hex]</value>
-		<value condition="Window.IsActive(home) + Skin.String(Widget9_View,Billboard) + String.IsEqual(window(home).property(Home_Widget),3209)">$VAR[Alpha_32]$VAR[Dark_Hex]</value>
-		<value condition="$EXP[Background_IsFanart] + !String.IsEqual(Window(home).Property(OptionsMenu),Active) + !$EXP[Infoscreen_IsVisible]">$VAR[Alpha_32]$VAR[Dark_Hex]</value>
-		<value>$VAR[Alpha_66]$VAR[Dark_Hex]</value>
+		<value>$VAR[Alpha_50]$VAR[Dark_Hex]</value>
 	</variable>
 
 	<!-- Labels -->
@@ -248,7 +230,7 @@
 		<value>$VAR[Dark_Grey_Color]</value>
 	</variable>
 	<variable name="Notification_Widget_Icon_Color">
-		<value condition="[Window.IsVisible(volumebar) | $EXP[Music_Player_IsVisible]] + $EXP[ShowcaseView_Display,IsPosters] + !$EXP[ShowcaseView_Details_Off]">$VAR[Light_Color]</value>
+		<value condition="[Window.IsVisible(volumebar) | $EXP[Music_Player_IsVisible]] + $EXP[ShowcaseView_Display_IsPosters] + !$EXP[ShowcaseView_Details_Off]">$VAR[Light_Color]</value>
 		<value condition="[Window.IsVisible(volumebar) | $EXP[Music_Player_IsVisible]] + [$EXP[ListView_IsVisible] | $EXP[StripView_IsVisible] | $EXP[GridView_IsVisible]]">$VAR[Light_Color]</value>
 		<value>$VAR[Notification_Widget_Label_Color]</value>
 	</variable>
@@ -256,7 +238,7 @@
 		<value>$VAR[Breadcrumb_Label_Color]</value>
 	</variable>
 	<variable name="Volume_Focused_Color">
-		<value condition="$EXP[StripView_Media_IsVisible] | $EXP[ListView_Display,IsThumbnails]">$VAR[Light_Color]</value>
+		<value condition="$EXP[Music_Player_HasArt]">$VAR[Light_Color]</value>
 		<value>$VAR[Notification_Widget_Label_Color]</value>
 	</variable>
 	<variable name="Common_List_Label_Color">
@@ -269,7 +251,9 @@
 		<value>$VAR[Blank_Color]</value>
 	</variable>
 	<variable name="Flag_Color">
-		<value condition="Skin.HasSetting(Crop_Clearlogos) + Skin.HasSetting(Colorise_Flags) + [$EXP[ShowcaseView_IsVisible] | $EXP[StripView_IsVisible]]">$VAR[Dominant_Color]</value>
+		<value condition="$EXP[Dominant_Color_View_Conditions] + Skin.String(Theme,Light) + !String.IsEmpty(Window(home).Property(clearlogo-alt_cropped-color)) + !String.IsEqual(Window(home).Property(clearlogo-alt_cropped-color),ff000000) + Integer.IsLessOrEqual(Window(home).Property(clearlogo-alt_cropped-luminosity),Skin.String(Background_High_Threshold))">$INFO[Window(home).Property(clearlogo-alt_cropped-color)]</value>
+		<value condition="$EXP[Dominant_Color_View_Conditions] + Skin.String(Theme,Light) + !String.IsEmpty(Window(home).Property(clearlogo_cropped-color)) + !String.IsEqual(Window(home).Property(clearlogo_cropped-color),ff000000) + Integer.IsLessOrEqual(Window(home).Property(clearlogo_cropped-luminosity),Skin.String(Background_High_Threshold))">$INFO[Window(home).Property(clearlogo_cropped-color)]</value>
+		<value condition="$EXP[Dominant_Color_View_Conditions] + !Skin.String(Theme,Light) + !String.IsEmpty(Window(home).Property(clearlogo_cropped-color)) + !String.IsEqual(Window(home).Property(clearlogo_cropped-color),ffffffff) + Integer.IsGreaterOrEqual(Window(home).Property(clearlogo_cropped-luminosity),Skin.String(Background_Low_Threshold))">$INFO[Window(home).Property(clearlogo_cropped-color)]</value>
 		<value condition="$EXP[Background_IsFanart]">$VAR[Light_Color]</value>
 		<value>$VAR[Primary_Color]</value>
 	</variable>
@@ -477,7 +461,6 @@
 		<value condition="Control.HasFocus(12910) | Control.HasFocus(12911)">$VAR[Light_Color]</value>
 		<value>$VAR[Unfocused_Color]</value>
 	</variable>
-
 	<variable name="skinsettings_Widget1_Display_Button_Textcolor">
 		<value condition="Control.HasFocus(12120) | Control.HasFocus(12121)">$VAR[Light_Color]</value>
 		<value>$VAR[Unfocused_Color]</value>
@@ -514,13 +497,16 @@
 		<value condition="Control.HasFocus(12920) | Control.HasFocus(12921)">$VAR[Light_Color]</value>
 		<value>$VAR[Unfocused_Color]</value>
 	</variable>
-
 	<variable name="skinsettings_Music_Rating_Like_Threshold_Button_Textcolor">
 		<value condition="Control.HasFocus(14050) | Control.HasFocus(14051)">$VAR[Light_Color]</value>
 		<value>$VAR[Unfocused_Color]</value>
 	</variable>
 	<variable name="skinsettings_Multiart_Interval_Button_Textcolor">
-		<value condition="Control.HasFocus(15040) | Control.HasFocus(15041)">$VAR[Light_Color]</value>
+		<value condition="Control.HasFocus(15220) | Control.HasFocus(15221)">$VAR[Light_Color]</value>
+		<value>$VAR[Unfocused_Color]</value>
+	</variable>
+	<variable name="skinsettings_Trailer_Autoplay_Interval_Button_Textcolor">
+		<value condition="Control.HasFocus(15320) | Control.HasFocus(15321)">$VAR[Light_Color]</value>
 		<value>$VAR[Unfocused_Color]</value>
 	</variable>
 
@@ -578,13 +564,13 @@
 
 	<variable name="Progress_Background_Color">
 		<value condition="Skin.String(Theme,Light) + $EXP[StripView_IsVisible]">$VAR[Alpha_15]$VAR[Dark_Hex]</value>
-		<value condition="Skin.String(Theme,Light) + $EXP[ListView_Display,IsThumbnails] + !$EXP[Containers_Posters]">$VAR[Alpha_15]$VAR[Dark_Hex]</value>
+		<value condition="Skin.String(Theme,Light) + $EXP[ListView_Display_IsThumbnails] + !$EXP[Containers_Posters]">$VAR[Alpha_15]$VAR[Dark_Hex]</value>
 		<value condition="Skin.String(Theme,Light) + Window.Is(progressdialog)">$VAR[Alpha_15]$VAR[Dark_Hex]</value>
 		<value>$VAR[Progress_Light_Background_Color]</value>
 	</variable>
 	<variable name="Progress_Focused_Color">
 		<value condition="Skin.String(Theme,Light) + $EXP[StripView_IsVisible]">$VAR[Dark_Color]</value>
-		<value condition="Skin.String(Theme,Light) + $EXP[ListView_Display,IsThumbnails] + !$EXP[Containers_Posters]">$VAR[Dark_Color]</value>
+		<value condition="Skin.String(Theme,Light) + $EXP[ListView_Display_IsThumbnails] + !$EXP[Containers_Posters]">$VAR[Dark_Color]</value>
 		<value condition="Skin.String(Theme,Light) + Window.Is(progressdialog)">$VAR[Dark_Color]</value>
 		<value>$VAR[Progress_Light_Focused_Color]</value>
 	</variable>
@@ -619,67 +605,67 @@
 		<value condition="ControlGroup(3000).HasFocus + [Window.Is(movieinformation) | String.IsEqual(ListItem.DBType,artist)] + !Control.HasFocus(10)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
 		<value condition="ControlGroup(3000).HasFocus + String.IsEqual(ListItem.DBType,album) + Control.HasFocus(12)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
 		<value condition="$EXP[Infoscreen_IsVisible] + Control.HasFocus(60) + !String.IsEqual(ListItem.DBType,album) + !String.IsEqual(ListItem.DBType,song)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
-		<value condition="Control.HasFocus(3201) + $EXP[StripView_Display,IsPosters_Widget_Infoscreen] + !String.IsEmpty(Container(3201).ListItemNoWrap(2).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
-		<value condition="Control.HasFocus(3201) + $EXP[StripView_Display,IsSquare_Widget_Infoscreen] + !String.IsEmpty(Container(3201).ListItemNoWrap(2).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
-		<value condition="Control.HasFocus(3201) + $EXP[StripView_Display,IsFanart_Widget_Infoscreen] + !String.IsEmpty(Container(3201).ListItemNoWrap(1).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
-		<value condition="Control.HasFocus(3201) + $EXP[GridView_Display,IsPosters_Widget_Infoscreen] + !String.IsEmpty(Container(3201).ListItemNoWrap(5).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
-		<value condition="Control.HasFocus(3201) + $EXP[GridView_Display,IsSquare_Widget_Infoscreen] + !String.IsEmpty(Container(3201).ListItemNoWrap(5).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
-		<value condition="Control.HasFocus(3201) + $EXP[GridView_Display,IsFanart_Widget_Infoscreen] + !String.IsEmpty(Container(3201).ListItemNoWrap(3).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
-		<value condition="Control.HasFocus(3202) + $EXP[StripView_Display,IsPosters_Widget_Infoscreen] + !String.IsEmpty(Container(3202).ListItemNoWrap(2).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
-		<value condition="Control.HasFocus(3202) + $EXP[StripView_Display,IsSquare_Widget_Infoscreen] + !String.IsEmpty(Container(3202).ListItemNoWrap(2).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
-		<value condition="Control.HasFocus(3202) + $EXP[StripView_Display,IsFanart_Widget_Infoscreen] + !String.IsEmpty(Container(3202).ListItemNoWrap(1).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
-		<value condition="Control.HasFocus(3202) + $EXP[GridView_Display,IsPosters_Widget_Infoscreen] + !String.IsEmpty(Container(3202).ListItemNoWrap(5).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
-		<value condition="Control.HasFocus(3202) + $EXP[GridView_Display,IsSquare_Widget_Infoscreen] + !String.IsEmpty(Container(3202).ListItemNoWrap(5).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
-		<value condition="Control.HasFocus(3202) + $EXP[GridView_Display,IsFanart_Widget_Infoscreen] + !String.IsEmpty(Container(3202).ListItemNoWrap(3).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
-		<value condition="Control.HasFocus(50) + $EXP[StripView_Display,IsPosters_Widget_Infoscreen] + !String.IsEmpty(Container(50).ListItemNoWrap(2).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
-		<value condition="Control.HasFocus(50) + $EXP[StripView_Display,IsSquare_Widget_Infoscreen] + !String.IsEmpty(Container(50).ListItemNoWrap(2).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
-		<value condition="Control.HasFocus(50) + $EXP[StripView_Display,IsFanart_Widget_Infoscreen] + !String.IsEmpty(Container(50).ListItemNoWrap(1).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
+		<value condition="Control.HasFocus(3201) + $EXP[StripView_Display_IsPosters_Widget_Infoscreen] + !String.IsEmpty(Container(3201).ListItemNoWrap(2).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
+		<value condition="Control.HasFocus(3201) + $EXP[StripView_Display_IsSquare_Widget_Infoscreen] + !String.IsEmpty(Container(3201).ListItemNoWrap(2).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
+		<value condition="Control.HasFocus(3201) + $EXP[StripView_Display_IsFanart_Widget_Infoscreen] + !String.IsEmpty(Container(3201).ListItemNoWrap(1).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
+		<value condition="Control.HasFocus(3201) + $EXP[GridView_Display_IsPosters_Widget_Infoscreen] + !String.IsEmpty(Container(3201).ListItemNoWrap(5).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
+		<value condition="Control.HasFocus(3201) + $EXP[GridView_Display_IsSquare_Widget_Infoscreen] + !String.IsEmpty(Container(3201).ListItemNoWrap(5).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
+		<value condition="Control.HasFocus(3201) + $EXP[GridView_Display_IsFanart_Widget_Infoscreen] + !String.IsEmpty(Container(3201).ListItemNoWrap(3).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
+		<value condition="Control.HasFocus(3202) + $EXP[StripView_Display_IsPosters_Widget_Infoscreen] + !String.IsEmpty(Container(3202).ListItemNoWrap(2).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
+		<value condition="Control.HasFocus(3202) + $EXP[StripView_Display_IsSquare_Widget_Infoscreen] + !String.IsEmpty(Container(3202).ListItemNoWrap(2).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
+		<value condition="Control.HasFocus(3202) + $EXP[StripView_Display_IsFanart_Widget_Infoscreen] + !String.IsEmpty(Container(3202).ListItemNoWrap(1).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
+		<value condition="Control.HasFocus(3202) + $EXP[GridView_Display_IsPosters_Widget_Infoscreen] + !String.IsEmpty(Container(3202).ListItemNoWrap(5).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
+		<value condition="Control.HasFocus(3202) + $EXP[GridView_Display_IsSquare_Widget_Infoscreen] + !String.IsEmpty(Container(3202).ListItemNoWrap(5).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
+		<value condition="Control.HasFocus(3202) + $EXP[GridView_Display_IsFanart_Widget_Infoscreen] + !String.IsEmpty(Container(3202).ListItemNoWrap(3).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
+		<value condition="Control.HasFocus(50) + $EXP[StripView_Display_IsPosters_Widget_Infoscreen] + !String.IsEmpty(Container(50).ListItemNoWrap(2).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
+		<value condition="Control.HasFocus(50) + $EXP[StripView_Display_IsSquare_Widget_Infoscreen] + !String.IsEmpty(Container(50).ListItemNoWrap(2).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
+		<value condition="Control.HasFocus(50) + $EXP[StripView_Display_IsFanart_Widget_Infoscreen] + !String.IsEmpty(Container(50).ListItemNoWrap(1).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
 		<value condition="Window.IsVisible(addoninformation) + Control.HasFocus(50) + !String.IsEmpty(Container(50).ListItemNoWrap(1).Art(thumb))">$VAR[Alpha_15]$VAR[Light_Hex]</value>
-		<value condition="Control.HasFocus(50) + $EXP[GridView_Display,IsPosters_Widget_Infoscreen] + !String.IsEmpty(Container(50).ListItemNoWrap(5).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
-		<value condition="Control.HasFocus(50) + $EXP[GridView_Display,IsSquare_Widget_Infoscreen] + !String.IsEmpty(Container(50).ListItemNoWrap(5).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
-		<value condition="Control.HasFocus(50) + $EXP[GridView_Display,IsFanart_Widget_Infoscreen] + !String.IsEmpty(Container(50).ListItemNoWrap(3).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
-		<value condition="Control.HasFocus(3203) + $EXP[StripView_Display,IsPosters_Widget_Infoscreen] + !String.IsEmpty(Container(3203).ListItemNoWrap(2).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
-		<value condition="Control.HasFocus(3203) + $EXP[StripView_Display,IsSquare_Widget_Infoscreen] + !String.IsEmpty(Container(3203).ListItemNoWrap(2).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
-		<value condition="Control.HasFocus(3203) + $EXP[StripView_Display,IsFanart_Widget_Infoscreen] + !String.IsEmpty(Container(3203).ListItemNoWrap(1).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
-		<value condition="Control.HasFocus(3203) + $EXP[GridView_Display,IsPosters_Widget_Infoscreen] + !String.IsEmpty(Container(3203).ListItemNoWrap(5).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
-		<value condition="Control.HasFocus(3203) + $EXP[GridView_Display,IsSquare_Widget_Infoscreen] + !String.IsEmpty(Container(3203).ListItemNoWrap(5).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
-		<value condition="Control.HasFocus(3203) + $EXP[GridView_Display,IsFanart_Widget_Infoscreen] + !String.IsEmpty(Container(3203).ListItemNoWrap(3).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
-		<value condition="Control.HasFocus(3204) + $EXP[StripView_Display,IsPosters_Widget_Infoscreen] + !String.IsEmpty(Container(3204).ListItemNoWrap(2).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
-		<value condition="Control.HasFocus(3204) + $EXP[StripView_Display,IsSquare_Widget_Infoscreen] + !String.IsEmpty(Container(3204).ListItemNoWrap(2).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
-		<value condition="Control.HasFocus(3204) + $EXP[StripView_Display,IsFanart_Widget_Infoscreen] + !String.IsEmpty(Container(3204).ListItemNoWrap(1).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
-		<value condition="Control.HasFocus(3204) + $EXP[GridView_Display,IsPosters_Widget_Infoscreen] + !String.IsEmpty(Container(3204).ListItemNoWrap(5).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
-		<value condition="Control.HasFocus(3204) + $EXP[GridView_Display,IsSquare_Widget_Infoscreen] + !String.IsEmpty(Container(3204).ListItemNoWrap(5).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
-		<value condition="Control.HasFocus(3204) + $EXP[GridView_Display,IsFanart_Widget_Infoscreen] + !String.IsEmpty(Container(3204).ListItemNoWrap(3).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
-		<value condition="Control.HasFocus(3205) + $EXP[StripView_Display,IsPosters_Widget_Infoscreen] + !String.IsEmpty(Container(3205).ListItemNoWrap(2).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
-		<value condition="Control.HasFocus(3205) + $EXP[StripView_Display,IsSquare_Widget_Infoscreen] + !String.IsEmpty(Container(3205).ListItemNoWrap(2).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
-		<value condition="Control.HasFocus(3205) + $EXP[StripView_Display,IsFanart_Widget_Infoscreen] + !String.IsEmpty(Container(3205).ListItemNoWrap(1).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
-		<value condition="Control.HasFocus(3205) + $EXP[GridView_Display,IsPosters_Widget_Infoscreen] + !String.IsEmpty(Container(3205).ListItemNoWrap(5).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
-		<value condition="Control.HasFocus(3205) + $EXP[GridView_Display,IsSquare_Widget_Infoscreen] + !String.IsEmpty(Container(3205).ListItemNoWrap(5).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
-		<value condition="Control.HasFocus(3205) + $EXP[GridView_Display,IsFanart_Widget_Infoscreen] + !String.IsEmpty(Container(3205).ListItemNoWrap(3).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
-		<value condition="Control.HasFocus(3206) + $EXP[StripView_Display,IsPosters_Widget_Infoscreen] + !String.IsEmpty(Container(3206).ListItemNoWrap(2).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
-		<value condition="Control.HasFocus(3206) + $EXP[StripView_Display,IsSquare_Widget_Infoscreen] + !String.IsEmpty(Container(3206).ListItemNoWrap(2).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
-		<value condition="Control.HasFocus(3206) + $EXP[StripView_Display,IsFanart_Widget_Infoscreen] + !String.IsEmpty(Container(3206).ListItemNoWrap(1).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
-		<value condition="Control.HasFocus(3206) + $EXP[GridView_Display,IsPosters_Widget_Infoscreen] + !String.IsEmpty(Container(3206).ListItemNoWrap(5).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
-		<value condition="Control.HasFocus(3206) + $EXP[GridView_Display,IsSquare_Widget_Infoscreen] + !String.IsEmpty(Container(3206).ListItemNoWrap(5).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
-		<value condition="Control.HasFocus(3206) + $EXP[GridView_Display,IsFanart_Widget_Infoscreen] + !String.IsEmpty(Container(3206).ListItemNoWrap(3).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
-		<value condition="Control.HasFocus(3207) + $EXP[StripView_Display,IsPosters_Widget_Infoscreen] + !String.IsEmpty(Container(3207).ListItemNoWrap(2).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
-		<value condition="Control.HasFocus(3207) + $EXP[StripView_Display,IsSquare_Widget_Infoscreen] + !String.IsEmpty(Container(3207).ListItemNoWrap(2).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
-		<value condition="Control.HasFocus(3207) + $EXP[StripView_Display,IsFanart_Widget_Infoscreen] + !String.IsEmpty(Container(3207).ListItemNoWrap(1).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
-		<value condition="Control.HasFocus(3207) + $EXP[GridView_Display,IsPosters_Widget_Infoscreen] + !String.IsEmpty(Container(3207).ListItemNoWrap(5).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
-		<value condition="Control.HasFocus(3207) + $EXP[GridView_Display,IsSquare_Widget_Infoscreen] + !String.IsEmpty(Container(3207).ListItemNoWrap(5).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
-		<value condition="Control.HasFocus(3207) + $EXP[GridView_Display,IsFanart_Widget_Infoscreen] + !String.IsEmpty(Container(3207).ListItemNoWrap(3).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
-		<value condition="Control.HasFocus(3208) + $EXP[StripView_Display,IsPosters_Widget_Infoscreen] + !String.IsEmpty(Container(3208).ListItemNoWrap(2).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
-		<value condition="Control.HasFocus(3208) + $EXP[StripView_Display,IsSquare_Widget_Infoscreen] + !String.IsEmpty(Container(3208).ListItemNoWrap(2).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
-		<value condition="Control.HasFocus(3208) + $EXP[StripView_Display,IsFanart_Widget_Infoscreen] + !String.IsEmpty(Container(3208).ListItemNoWrap(1).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
-		<value condition="Control.HasFocus(3208) + $EXP[GridView_Display,IsPosters_Widget_Infoscreen] + !String.IsEmpty(Container(3208).ListItemNoWrap(5).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
-		<value condition="Control.HasFocus(3208) + $EXP[GridView_Display,IsSquare_Widget_Infoscreen] + !String.IsEmpty(Container(3208).ListItemNoWrap(5).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
-		<value condition="Control.HasFocus(3208) + $EXP[GridView_Display,IsFanart_Widget_Infoscreen] + !String.IsEmpty(Container(3208).ListItemNoWrap(3).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
-		<value condition="Control.HasFocus(3209) + $EXP[StripView_Display,IsPosters_Widget_Infoscreen] + !String.IsEmpty(Container(3209).ListItemNoWrap(2).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
-		<value condition="Control.HasFocus(3209) + $EXP[StripView_Display,IsSquare_Widget_Infoscreen] + !String.IsEmpty(Container(3209).ListItemNoWrap(2).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
-		<value condition="Control.HasFocus(3209) + $EXP[StripView_Display,IsFanart_Widget_Infoscreen] + !String.IsEmpty(Container(3209).ListItemNoWrap(1).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
-		<value condition="Control.HasFocus(3209) + $EXP[GridView_Display,IsPosters_Widget_Infoscreen] + !String.IsEmpty(Container(3209).ListItemNoWrap(5).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
-		<value condition="Control.HasFocus(3209) + $EXP[GridView_Display,IsSquare_Widget_Infoscreen] + !String.IsEmpty(Container(3209).ListItemNoWrap(5).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
-		<value condition="Control.HasFocus(3209) + $EXP[GridView_Display,IsFanart_Widget_Infoscreen] + !String.IsEmpty(Container(3209).ListItemNoWrap(3).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
+		<value condition="Control.HasFocus(50) + $EXP[GridView_Display_IsPosters_Widget_Infoscreen] + !String.IsEmpty(Container(50).ListItemNoWrap(5).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
+		<value condition="Control.HasFocus(50) + $EXP[GridView_Display_IsSquare_Widget_Infoscreen] + !String.IsEmpty(Container(50).ListItemNoWrap(5).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
+		<value condition="Control.HasFocus(50) + $EXP[GridView_Display_IsFanart_Widget_Infoscreen] + !String.IsEmpty(Container(50).ListItemNoWrap(3).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
+		<value condition="Control.HasFocus(3203) + $EXP[StripView_Display_IsPosters_Widget_Infoscreen] + !String.IsEmpty(Container(3203).ListItemNoWrap(2).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
+		<value condition="Control.HasFocus(3203) + $EXP[StripView_Display_IsSquare_Widget_Infoscreen] + !String.IsEmpty(Container(3203).ListItemNoWrap(2).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
+		<value condition="Control.HasFocus(3203) + $EXP[StripView_Display_IsFanart_Widget_Infoscreen] + !String.IsEmpty(Container(3203).ListItemNoWrap(1).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
+		<value condition="Control.HasFocus(3203) + $EXP[GridView_Display_IsPosters_Widget_Infoscreen] + !String.IsEmpty(Container(3203).ListItemNoWrap(5).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
+		<value condition="Control.HasFocus(3203) + $EXP[GridView_Display_IsSquare_Widget_Infoscreen] + !String.IsEmpty(Container(3203).ListItemNoWrap(5).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
+		<value condition="Control.HasFocus(3203) + $EXP[GridView_Display_IsFanart_Widget_Infoscreen] + !String.IsEmpty(Container(3203).ListItemNoWrap(3).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
+		<value condition="Control.HasFocus(3204) + $EXP[StripView_Display_IsPosters_Widget_Infoscreen] + !String.IsEmpty(Container(3204).ListItemNoWrap(2).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
+		<value condition="Control.HasFocus(3204) + $EXP[StripView_Display_IsSquare_Widget_Infoscreen] + !String.IsEmpty(Container(3204).ListItemNoWrap(2).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
+		<value condition="Control.HasFocus(3204) + $EXP[StripView_Display_IsFanart_Widget_Infoscreen] + !String.IsEmpty(Container(3204).ListItemNoWrap(1).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
+		<value condition="Control.HasFocus(3204) + $EXP[GridView_Display_IsPosters_Widget_Infoscreen] + !String.IsEmpty(Container(3204).ListItemNoWrap(5).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
+		<value condition="Control.HasFocus(3204) + $EXP[GridView_Display_IsSquare_Widget_Infoscreen] + !String.IsEmpty(Container(3204).ListItemNoWrap(5).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
+		<value condition="Control.HasFocus(3204) + $EXP[GridView_Display_IsFanart_Widget_Infoscreen] + !String.IsEmpty(Container(3204).ListItemNoWrap(3).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
+		<value condition="Control.HasFocus(3205) + $EXP[StripView_Display_IsPosters_Widget_Infoscreen] + !String.IsEmpty(Container(3205).ListItemNoWrap(2).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
+		<value condition="Control.HasFocus(3205) + $EXP[StripView_Display_IsSquare_Widget_Infoscreen] + !String.IsEmpty(Container(3205).ListItemNoWrap(2).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
+		<value condition="Control.HasFocus(3205) + $EXP[StripView_Display_IsFanart_Widget_Infoscreen] + !String.IsEmpty(Container(3205).ListItemNoWrap(1).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
+		<value condition="Control.HasFocus(3205) + $EXP[GridView_Display_IsPosters_Widget_Infoscreen] + !String.IsEmpty(Container(3205).ListItemNoWrap(5).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
+		<value condition="Control.HasFocus(3205) + $EXP[GridView_Display_IsSquare_Widget_Infoscreen] + !String.IsEmpty(Container(3205).ListItemNoWrap(5).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
+		<value condition="Control.HasFocus(3205) + $EXP[GridView_Display_IsFanart_Widget_Infoscreen] + !String.IsEmpty(Container(3205).ListItemNoWrap(3).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
+		<value condition="Control.HasFocus(3206) + $EXP[StripView_Display_IsPosters_Widget_Infoscreen] + !String.IsEmpty(Container(3206).ListItemNoWrap(2).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
+		<value condition="Control.HasFocus(3206) + $EXP[StripView_Display_IsSquare_Widget_Infoscreen] + !String.IsEmpty(Container(3206).ListItemNoWrap(2).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
+		<value condition="Control.HasFocus(3206) + $EXP[StripView_Display_IsFanart_Widget_Infoscreen] + !String.IsEmpty(Container(3206).ListItemNoWrap(1).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
+		<value condition="Control.HasFocus(3206) + $EXP[GridView_Display_IsPosters_Widget_Infoscreen] + !String.IsEmpty(Container(3206).ListItemNoWrap(5).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
+		<value condition="Control.HasFocus(3206) + $EXP[GridView_Display_IsSquare_Widget_Infoscreen] + !String.IsEmpty(Container(3206).ListItemNoWrap(5).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
+		<value condition="Control.HasFocus(3206) + $EXP[GridView_Display_IsFanart_Widget_Infoscreen] + !String.IsEmpty(Container(3206).ListItemNoWrap(3).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
+		<value condition="Control.HasFocus(3207) + $EXP[StripView_Display_IsPosters_Widget_Infoscreen] + !String.IsEmpty(Container(3207).ListItemNoWrap(2).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
+		<value condition="Control.HasFocus(3207) + $EXP[StripView_Display_IsSquare_Widget_Infoscreen] + !String.IsEmpty(Container(3207).ListItemNoWrap(2).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
+		<value condition="Control.HasFocus(3207) + $EXP[StripView_Display_IsFanart_Widget_Infoscreen] + !String.IsEmpty(Container(3207).ListItemNoWrap(1).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
+		<value condition="Control.HasFocus(3207) + $EXP[GridView_Display_IsPosters_Widget_Infoscreen] + !String.IsEmpty(Container(3207).ListItemNoWrap(5).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
+		<value condition="Control.HasFocus(3207) + $EXP[GridView_Display_IsSquare_Widget_Infoscreen] + !String.IsEmpty(Container(3207).ListItemNoWrap(5).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
+		<value condition="Control.HasFocus(3207) + $EXP[GridView_Display_IsFanart_Widget_Infoscreen] + !String.IsEmpty(Container(3207).ListItemNoWrap(3).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
+		<value condition="Control.HasFocus(3208) + $EXP[StripView_Display_IsPosters_Widget_Infoscreen] + !String.IsEmpty(Container(3208).ListItemNoWrap(2).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
+		<value condition="Control.HasFocus(3208) + $EXP[StripView_Display_IsSquare_Widget_Infoscreen] + !String.IsEmpty(Container(3208).ListItemNoWrap(2).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
+		<value condition="Control.HasFocus(3208) + $EXP[StripView_Display_IsFanart_Widget_Infoscreen] + !String.IsEmpty(Container(3208).ListItemNoWrap(1).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
+		<value condition="Control.HasFocus(3208) + $EXP[GridView_Display_IsPosters_Widget_Infoscreen] + !String.IsEmpty(Container(3208).ListItemNoWrap(5).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
+		<value condition="Control.HasFocus(3208) + $EXP[GridView_Display_IsSquare_Widget_Infoscreen] + !String.IsEmpty(Container(3208).ListItemNoWrap(5).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
+		<value condition="Control.HasFocus(3208) + $EXP[GridView_Display_IsFanart_Widget_Infoscreen] + !String.IsEmpty(Container(3208).ListItemNoWrap(3).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
+		<value condition="Control.HasFocus(3209) + $EXP[StripView_Display_IsPosters_Widget_Infoscreen] + !String.IsEmpty(Container(3209).ListItemNoWrap(2).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
+		<value condition="Control.HasFocus(3209) + $EXP[StripView_Display_IsSquare_Widget_Infoscreen] + !String.IsEmpty(Container(3209).ListItemNoWrap(2).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
+		<value condition="Control.HasFocus(3209) + $EXP[StripView_Display_IsFanart_Widget_Infoscreen] + !String.IsEmpty(Container(3209).ListItemNoWrap(1).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
+		<value condition="Control.HasFocus(3209) + $EXP[GridView_Display_IsPosters_Widget_Infoscreen] + !String.IsEmpty(Container(3209).ListItemNoWrap(5).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
+		<value condition="Control.HasFocus(3209) + $EXP[GridView_Display_IsSquare_Widget_Infoscreen] + !String.IsEmpty(Container(3209).ListItemNoWrap(5).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
+		<value condition="Control.HasFocus(3209) + $EXP[GridView_Display_IsFanart_Widget_Infoscreen] + !String.IsEmpty(Container(3209).ListItemNoWrap(3).Label)">$VAR[Alpha_15]$VAR[Light_Hex]</value>
 		<value condition="[Control.HasFocus(3000) | $EXP[Music_Player_HasFocus]] + [Window.Is(movieinformation) | [Window.Is(musicinformation) + String.IsEqual(ListItem.DBType,artist)]]">$VAR[Alpha_15]$VAR[Light_Hex]</value>
 		<value condition="Skin.String(Theme,Light)">$VAR[Alpha_15]$VAR[Dark_Hex]</value>
 		<value>$VAR[Alpha_15]$VAR[Light_Hex]</value>
@@ -688,67 +674,67 @@
 		<value condition="ControlGroup(3000).HasFocus + [Window.Is(movieinformation) | String.IsEqual(ListItem.DBType,artist)] + !Control.HasFocus(10)">$VAR[Light_Color]</value>
 		<value condition="ControlGroup(3000).HasFocus + String.IsEqual(ListItem.DBType,album) + Control.HasFocus(12)">$VAR[Light_Color]</value>
 		<value condition="$EXP[Infoscreen_IsVisible] + Control.HasFocus(60) + !String.IsEqual(ListItem.DBType,album) + !String.IsEqual(ListItem.DBType,song)">$VAR[Light_Color]</value>
-		<value condition="Control.HasFocus(3201) + $EXP[StripView_Display,IsPosters_Widget_Infoscreen] + !String.IsEmpty(Container(3201).ListItemNoWrap(2).Label)">$VAR[Light_Color]</value>
-		<value condition="Control.HasFocus(3201) + $EXP[StripView_Display,IsSquare_Widget_Infoscreen] + !String.IsEmpty(Container(3201).ListItemNoWrap(2).Label)">$VAR[Light_Color]</value>
-		<value condition="Control.HasFocus(3201) + $EXP[StripView_Display,IsFanart_Widget_Infoscreen] + !String.IsEmpty(Container(3201).ListItemNoWrap(1).Label)">$VAR[Light_Color]</value>
-		<value condition="Control.HasFocus(3201) + $EXP[GridView_Display,IsPosters_Widget_Infoscreen] + !String.IsEmpty(Container(3201).ListItemNoWrap(5).Label)">$VAR[Light_Color]</value>
-		<value condition="Control.HasFocus(3201) + $EXP[GridView_Display,IsSquare_Widget_Infoscreen] + !String.IsEmpty(Container(3201).ListItemNoWrap(5).Label)">$VAR[Light_Color]</value>
-		<value condition="Control.HasFocus(3201) + $EXP[GridView_Display,IsFanart_Widget_Infoscreen] + !String.IsEmpty(Container(3201).ListItemNoWrap(3).Label)">$VAR[Light_Color]</value>
-		<value condition="Control.HasFocus(3202) + $EXP[StripView_Display,IsPosters_Widget_Infoscreen] + !String.IsEmpty(Container(3202).ListItemNoWrap(2).Label)">$VAR[Light_Color]</value>
-		<value condition="Control.HasFocus(3202) + $EXP[StripView_Display,IsSquare_Widget_Infoscreen] + !String.IsEmpty(Container(3202).ListItemNoWrap(2).Label)">$VAR[Light_Color]</value>
-		<value condition="Control.HasFocus(3202) + $EXP[StripView_Display,IsFanart_Widget_Infoscreen] + !String.IsEmpty(Container(3202).ListItemNoWrap(1).Label)">$VAR[Light_Color]</value>
-		<value condition="Control.HasFocus(3202) + $EXP[GridView_Display,IsPosters_Widget_Infoscreen] + !String.IsEmpty(Container(3202).ListItemNoWrap(5).Label)">$VAR[Light_Color]</value>
-		<value condition="Control.HasFocus(3202) + $EXP[GridView_Display,IsSquare_Widget_Infoscreen] + !String.IsEmpty(Container(3202).ListItemNoWrap(5).Label)">$VAR[Light_Color]</value>
-		<value condition="Control.HasFocus(3202) + $EXP[GridView_Display,IsFanart_Widget_Infoscreen] + !String.IsEmpty(Container(3202).ListItemNoWrap(3).Label)">$VAR[Light_Color]</value>
-		<value condition="Control.HasFocus(50) + $EXP[StripView_Display,IsPosters_Widget_Infoscreen] + !String.IsEmpty(Container(50).ListItemNoWrap(2).Label)">$VAR[Light_Color]</value>
-		<value condition="Control.HasFocus(50) + $EXP[StripView_Display,IsSquare_Widget_Infoscreen] + !String.IsEmpty(Container(50).ListItemNoWrap(2).Label)">$VAR[Light_Color]</value>
-		<value condition="Control.HasFocus(50) + $EXP[StripView_Display,IsFanart_Widget_Infoscreen] + !String.IsEmpty(Container(50).ListItemNoWrap(1).Label)">$VAR[Light_Color]</value>
+		<value condition="Control.HasFocus(3201) + $EXP[StripView_Display_IsPosters_Widget_Infoscreen] + !String.IsEmpty(Container(3201).ListItemNoWrap(2).Label)">$VAR[Light_Color]</value>
+		<value condition="Control.HasFocus(3201) + $EXP[StripView_Display_IsSquare_Widget_Infoscreen] + !String.IsEmpty(Container(3201).ListItemNoWrap(2).Label)">$VAR[Light_Color]</value>
+		<value condition="Control.HasFocus(3201) + $EXP[StripView_Display_IsFanart_Widget_Infoscreen] + !String.IsEmpty(Container(3201).ListItemNoWrap(1).Label)">$VAR[Light_Color]</value>
+		<value condition="Control.HasFocus(3201) + $EXP[GridView_Display_IsPosters_Widget_Infoscreen] + !String.IsEmpty(Container(3201).ListItemNoWrap(5).Label)">$VAR[Light_Color]</value>
+		<value condition="Control.HasFocus(3201) + $EXP[GridView_Display_IsSquare_Widget_Infoscreen] + !String.IsEmpty(Container(3201).ListItemNoWrap(5).Label)">$VAR[Light_Color]</value>
+		<value condition="Control.HasFocus(3201) + $EXP[GridView_Display_IsFanart_Widget_Infoscreen] + !String.IsEmpty(Container(3201).ListItemNoWrap(3).Label)">$VAR[Light_Color]</value>
+		<value condition="Control.HasFocus(3202) + $EXP[StripView_Display_IsPosters_Widget_Infoscreen] + !String.IsEmpty(Container(3202).ListItemNoWrap(2).Label)">$VAR[Light_Color]</value>
+		<value condition="Control.HasFocus(3202) + $EXP[StripView_Display_IsSquare_Widget_Infoscreen] + !String.IsEmpty(Container(3202).ListItemNoWrap(2).Label)">$VAR[Light_Color]</value>
+		<value condition="Control.HasFocus(3202) + $EXP[StripView_Display_IsFanart_Widget_Infoscreen] + !String.IsEmpty(Container(3202).ListItemNoWrap(1).Label)">$VAR[Light_Color]</value>
+		<value condition="Control.HasFocus(3202) + $EXP[GridView_Display_IsPosters_Widget_Infoscreen] + !String.IsEmpty(Container(3202).ListItemNoWrap(5).Label)">$VAR[Light_Color]</value>
+		<value condition="Control.HasFocus(3202) + $EXP[GridView_Display_IsSquare_Widget_Infoscreen] + !String.IsEmpty(Container(3202).ListItemNoWrap(5).Label)">$VAR[Light_Color]</value>
+		<value condition="Control.HasFocus(3202) + $EXP[GridView_Display_IsFanart_Widget_Infoscreen] + !String.IsEmpty(Container(3202).ListItemNoWrap(3).Label)">$VAR[Light_Color]</value>
+		<value condition="Control.HasFocus(50) + $EXP[StripView_Display_IsPosters_Widget_Infoscreen] + !String.IsEmpty(Container(50).ListItemNoWrap(2).Label)">$VAR[Light_Color]</value>
+		<value condition="Control.HasFocus(50) + $EXP[StripView_Display_IsSquare_Widget_Infoscreen] + !String.IsEmpty(Container(50).ListItemNoWrap(2).Label)">$VAR[Light_Color]</value>
+		<value condition="Control.HasFocus(50) + $EXP[StripView_Display_IsFanart_Widget_Infoscreen] + !String.IsEmpty(Container(50).ListItemNoWrap(1).Label)">$VAR[Light_Color]</value>
 		<value condition="Window.IsVisible(addoninformation) + Control.HasFocus(50) + !String.IsEmpty(Container(50).ListItemNoWrap(1).Art(thumb))">$VAR[Light_Color]</value>
-		<value condition="Control.HasFocus(50) + $EXP[GridView_Display,IsPosters_Widget_Infoscreen] + !String.IsEmpty(Container(50).ListItemNoWrap(5).Label)">$VAR[Light_Color]</value>
-		<value condition="Control.HasFocus(50) + $EXP[GridView_Display,IsSquare_Widget_Infoscreen] + !String.IsEmpty(Container(50).ListItemNoWrap(5).Label)">$VAR[Light_Color]</value>
-		<value condition="Control.HasFocus(50) + $EXP[GridView_Display,IsFanart_Widget_Infoscreen] + !String.IsEmpty(Container(50).ListItemNoWrap(3).Label)">$VAR[Light_Color]</value>
-		<value condition="Control.HasFocus(3203) + $EXP[StripView_Display,IsPosters_Widget_Infoscreen] + !String.IsEmpty(Container(3203).ListItemNoWrap(2).Label)">$VAR[Light_Color]</value>
-		<value condition="Control.HasFocus(3203) + $EXP[StripView_Display,IsSquare_Widget_Infoscreen] + !String.IsEmpty(Container(3203).ListItemNoWrap(2).Label)">$VAR[Light_Color]</value>
-		<value condition="Control.HasFocus(3203) + $EXP[StripView_Display,IsFanart_Widget_Infoscreen] + !String.IsEmpty(Container(3203).ListItemNoWrap(1).Label)">$VAR[Light_Color]</value>
-		<value condition="Control.HasFocus(3203) + $EXP[GridView_Display,IsPosters_Widget_Infoscreen] + !String.IsEmpty(Container(3203).ListItemNoWrap(5).Label)">$VAR[Light_Color]</value>
-		<value condition="Control.HasFocus(3203) + $EXP[GridView_Display,IsSquare_Widget_Infoscreen] + !String.IsEmpty(Container(3203).ListItemNoWrap(5).Label)">$VAR[Light_Color]</value>
-		<value condition="Control.HasFocus(3203) + $EXP[GridView_Display,IsFanart_Widget_Infoscreen] + !String.IsEmpty(Container(3203).ListItemNoWrap(3).Label)">$VAR[Light_Color]</value>
-		<value condition="Control.HasFocus(3204) + $EXP[StripView_Display,IsPosters_Widget_Infoscreen] + !String.IsEmpty(Container(3204).ListItemNoWrap(2).Label)">$VAR[Light_Color]</value>
-		<value condition="Control.HasFocus(3204) + $EXP[StripView_Display,IsSquare_Widget_Infoscreen] + !String.IsEmpty(Container(3204).ListItemNoWrap(2).Label)">$VAR[Light_Color]</value>
-		<value condition="Control.HasFocus(3204) + $EXP[StripView_Display,IsFanart_Widget_Infoscreen] + !String.IsEmpty(Container(3204).ListItemNoWrap(1).Label)">$VAR[Light_Color]</value>
-		<value condition="Control.HasFocus(3204) + $EXP[GridView_Display,IsPosters_Widget_Infoscreen] + !String.IsEmpty(Container(3204).ListItemNoWrap(5).Label)">$VAR[Light_Color]</value>
-		<value condition="Control.HasFocus(3204) + $EXP[GridView_Display,IsSquare_Widget_Infoscreen] + !String.IsEmpty(Container(3204).ListItemNoWrap(5).Label)">$VAR[Light_Color]</value>
-		<value condition="Control.HasFocus(3204) + $EXP[GridView_Display,IsFanart_Widget_Infoscreen] + !String.IsEmpty(Container(3204).ListItemNoWrap(3).Label)">$VAR[Light_Color]</value>
-		<value condition="Control.HasFocus(3205) + $EXP[StripView_Display,IsPosters_Widget_Infoscreen] + !String.IsEmpty(Container(3205).ListItemNoWrap(2).Label)">$VAR[Light_Color]</value>
-		<value condition="Control.HasFocus(3205) + $EXP[StripView_Display,IsSquare_Widget_Infoscreen] + !String.IsEmpty(Container(3205).ListItemNoWrap(2).Label)">$VAR[Light_Color]</value>
-		<value condition="Control.HasFocus(3205) + $EXP[StripView_Display,IsFanart_Widget_Infoscreen] + !String.IsEmpty(Container(3205).ListItemNoWrap(1).Label)">$VAR[Light_Color]</value>
-		<value condition="Control.HasFocus(3205) + $EXP[GridView_Display,IsPosters_Widget_Infoscreen] + !String.IsEmpty(Container(3205).ListItemNoWrap(5).Label)">$VAR[Light_Color]</value>
-		<value condition="Control.HasFocus(3205) + $EXP[GridView_Display,IsSquare_Widget_Infoscreen] + !String.IsEmpty(Container(3205).ListItemNoWrap(5).Label)">$VAR[Light_Color]</value>
-		<value condition="Control.HasFocus(3205) + $EXP[GridView_Display,IsFanart_Widget_Infoscreen] + !String.IsEmpty(Container(3205).ListItemNoWrap(3).Label)">$VAR[Light_Color]</value>
-		<value condition="Control.HasFocus(3206) + $EXP[StripView_Display,IsPosters_Widget_Infoscreen] + !String.IsEmpty(Container(3206).ListItemNoWrap(2).Label)">$VAR[Light_Color]</value>
-		<value condition="Control.HasFocus(3206) + $EXP[StripView_Display,IsSquare_Widget_Infoscreen] + !String.IsEmpty(Container(3206).ListItemNoWrap(2).Label)">$VAR[Light_Color]</value>
-		<value condition="Control.HasFocus(3206) + $EXP[StripView_Display,IsFanart_Widget_Infoscreen] + !String.IsEmpty(Container(3206).ListItemNoWrap(1).Label)">$VAR[Light_Color]</value>
-		<value condition="Control.HasFocus(3206) + $EXP[GridView_Display,IsPosters_Widget_Infoscreen] + !String.IsEmpty(Container(3206).ListItemNoWrap(5).Label)">$VAR[Light_Color]</value>
-		<value condition="Control.HasFocus(3206) + $EXP[GridView_Display,IsSquare_Widget_Infoscreen] + !String.IsEmpty(Container(3206).ListItemNoWrap(5).Label)">$VAR[Light_Color]</value>
-		<value condition="Control.HasFocus(3206) + $EXP[GridView_Display,IsFanart_Widget_Infoscreen] + !String.IsEmpty(Container(3206).ListItemNoWrap(3).Label)">$VAR[Light_Color]</value>
-		<value condition="Control.HasFocus(3207) + $EXP[StripView_Display,IsPosters_Widget_Infoscreen] + !String.IsEmpty(Container(3207).ListItemNoWrap(2).Label)">$VAR[Light_Color]</value>
-		<value condition="Control.HasFocus(3207) + $EXP[StripView_Display,IsSquare_Widget_Infoscreen] + !String.IsEmpty(Container(3207).ListItemNoWrap(2).Label)">$VAR[Light_Color]</value>
-		<value condition="Control.HasFocus(3207) + $EXP[StripView_Display,IsFanart_Widget_Infoscreen] + !String.IsEmpty(Container(3207).ListItemNoWrap(1).Label)">$VAR[Light_Color]</value>
-		<value condition="Control.HasFocus(3207) + $EXP[GridView_Display,IsPosters_Widget_Infoscreen] + !String.IsEmpty(Container(3207).ListItemNoWrap(5).Label)">$VAR[Light_Color]</value>
-		<value condition="Control.HasFocus(3207) + $EXP[GridView_Display,IsSquare_Widget_Infoscreen] + !String.IsEmpty(Container(3207).ListItemNoWrap(5).Label)">$VAR[Light_Color]</value>
-		<value condition="Control.HasFocus(3207) + $EXP[GridView_Display,IsFanart_Widget_Infoscreen] + !String.IsEmpty(Container(3207).ListItemNoWrap(3).Label)">$VAR[Light_Color]</value>
-		<value condition="Control.HasFocus(3208) + $EXP[StripView_Display,IsPosters_Widget_Infoscreen] + !String.IsEmpty(Container(3208).ListItemNoWrap(2).Label)">$VAR[Light_Color]</value>
-		<value condition="Control.HasFocus(3208) + $EXP[StripView_Display,IsSquare_Widget_Infoscreen] + !String.IsEmpty(Container(3208).ListItemNoWrap(2).Label)">$VAR[Light_Color]</value>
-		<value condition="Control.HasFocus(3208) + $EXP[StripView_Display,IsFanart_Widget_Infoscreen] + !String.IsEmpty(Container(3208).ListItemNoWrap(1).Label)">$VAR[Light_Color]</value>
-		<value condition="Control.HasFocus(3208) + $EXP[GridView_Display,IsPosters_Widget_Infoscreen] + !String.IsEmpty(Container(3208).ListItemNoWrap(5).Label)">$VAR[Light_Color]</value>
-		<value condition="Control.HasFocus(3208) + $EXP[GridView_Display,IsSquare_Widget_Infoscreen] + !String.IsEmpty(Container(3208).ListItemNoWrap(5).Label)">$VAR[Light_Color]</value>
-		<value condition="Control.HasFocus(3208) + $EXP[GridView_Display,IsFanart_Widget_Infoscreen] + !String.IsEmpty(Container(3208).ListItemNoWrap(3).Label)">$VAR[Light_Color]</value>
-		<value condition="Control.HasFocus(3209) + $EXP[StripView_Display,IsPosters_Widget_Infoscreen] + !String.IsEmpty(Container(3209).ListItemNoWrap(2).Label)">$VAR[Light_Color]</value>
-		<value condition="Control.HasFocus(3209) + $EXP[StripView_Display,IsSquare_Widget_Infoscreen] + !String.IsEmpty(Container(3209).ListItemNoWrap(2).Label)">$VAR[Light_Color]</value>
-		<value condition="Control.HasFocus(3209) + $EXP[StripView_Display,IsFanart_Widget_Infoscreen] + !String.IsEmpty(Container(3209).ListItemNoWrap(1).Label)">$VAR[Light_Color]</value>
-		<value condition="Control.HasFocus(3209) + $EXP[GridView_Display,IsPosters_Widget_Infoscreen] + !String.IsEmpty(Container(3209).ListItemNoWrap(5).Label)">$VAR[Light_Color]</value>
-		<value condition="Control.HasFocus(3209) + $EXP[GridView_Display,IsSquare_Widget_Infoscreen] + !String.IsEmpty(Container(3209).ListItemNoWrap(5).Label)">$VAR[Light_Color]</value>
-		<value condition="Control.HasFocus(3209) + $EXP[GridView_Display,IsFanart_Widget_Infoscreen] + !String.IsEmpty(Container(3209).ListItemNoWrap(3).Label)">$VAR[Light_Color]</value>
+		<value condition="Control.HasFocus(50) + $EXP[GridView_Display_IsPosters_Widget_Infoscreen] + !String.IsEmpty(Container(50).ListItemNoWrap(5).Label)">$VAR[Light_Color]</value>
+		<value condition="Control.HasFocus(50) + $EXP[GridView_Display_IsSquare_Widget_Infoscreen] + !String.IsEmpty(Container(50).ListItemNoWrap(5).Label)">$VAR[Light_Color]</value>
+		<value condition="Control.HasFocus(50) + $EXP[GridView_Display_IsFanart_Widget_Infoscreen] + !String.IsEmpty(Container(50).ListItemNoWrap(3).Label)">$VAR[Light_Color]</value>
+		<value condition="Control.HasFocus(3203) + $EXP[StripView_Display_IsPosters_Widget_Infoscreen] + !String.IsEmpty(Container(3203).ListItemNoWrap(2).Label)">$VAR[Light_Color]</value>
+		<value condition="Control.HasFocus(3203) + $EXP[StripView_Display_IsSquare_Widget_Infoscreen] + !String.IsEmpty(Container(3203).ListItemNoWrap(2).Label)">$VAR[Light_Color]</value>
+		<value condition="Control.HasFocus(3203) + $EXP[StripView_Display_IsFanart_Widget_Infoscreen] + !String.IsEmpty(Container(3203).ListItemNoWrap(1).Label)">$VAR[Light_Color]</value>
+		<value condition="Control.HasFocus(3203) + $EXP[GridView_Display_IsPosters_Widget_Infoscreen] + !String.IsEmpty(Container(3203).ListItemNoWrap(5).Label)">$VAR[Light_Color]</value>
+		<value condition="Control.HasFocus(3203) + $EXP[GridView_Display_IsSquare_Widget_Infoscreen] + !String.IsEmpty(Container(3203).ListItemNoWrap(5).Label)">$VAR[Light_Color]</value>
+		<value condition="Control.HasFocus(3203) + $EXP[GridView_Display_IsFanart_Widget_Infoscreen] + !String.IsEmpty(Container(3203).ListItemNoWrap(3).Label)">$VAR[Light_Color]</value>
+		<value condition="Control.HasFocus(3204) + $EXP[StripView_Display_IsPosters_Widget_Infoscreen] + !String.IsEmpty(Container(3204).ListItemNoWrap(2).Label)">$VAR[Light_Color]</value>
+		<value condition="Control.HasFocus(3204) + $EXP[StripView_Display_IsSquare_Widget_Infoscreen] + !String.IsEmpty(Container(3204).ListItemNoWrap(2).Label)">$VAR[Light_Color]</value>
+		<value condition="Control.HasFocus(3204) + $EXP[StripView_Display_IsFanart_Widget_Infoscreen] + !String.IsEmpty(Container(3204).ListItemNoWrap(1).Label)">$VAR[Light_Color]</value>
+		<value condition="Control.HasFocus(3204) + $EXP[GridView_Display_IsPosters_Widget_Infoscreen] + !String.IsEmpty(Container(3204).ListItemNoWrap(5).Label)">$VAR[Light_Color]</value>
+		<value condition="Control.HasFocus(3204) + $EXP[GridView_Display_IsSquare_Widget_Infoscreen] + !String.IsEmpty(Container(3204).ListItemNoWrap(5).Label)">$VAR[Light_Color]</value>
+		<value condition="Control.HasFocus(3204) + $EXP[GridView_Display_IsFanart_Widget_Infoscreen] + !String.IsEmpty(Container(3204).ListItemNoWrap(3).Label)">$VAR[Light_Color]</value>
+		<value condition="Control.HasFocus(3205) + $EXP[StripView_Display_IsPosters_Widget_Infoscreen] + !String.IsEmpty(Container(3205).ListItemNoWrap(2).Label)">$VAR[Light_Color]</value>
+		<value condition="Control.HasFocus(3205) + $EXP[StripView_Display_IsSquare_Widget_Infoscreen] + !String.IsEmpty(Container(3205).ListItemNoWrap(2).Label)">$VAR[Light_Color]</value>
+		<value condition="Control.HasFocus(3205) + $EXP[StripView_Display_IsFanart_Widget_Infoscreen] + !String.IsEmpty(Container(3205).ListItemNoWrap(1).Label)">$VAR[Light_Color]</value>
+		<value condition="Control.HasFocus(3205) + $EXP[GridView_Display_IsPosters_Widget_Infoscreen] + !String.IsEmpty(Container(3205).ListItemNoWrap(5).Label)">$VAR[Light_Color]</value>
+		<value condition="Control.HasFocus(3205) + $EXP[GridView_Display_IsSquare_Widget_Infoscreen] + !String.IsEmpty(Container(3205).ListItemNoWrap(5).Label)">$VAR[Light_Color]</value>
+		<value condition="Control.HasFocus(3205) + $EXP[GridView_Display_IsFanart_Widget_Infoscreen] + !String.IsEmpty(Container(3205).ListItemNoWrap(3).Label)">$VAR[Light_Color]</value>
+		<value condition="Control.HasFocus(3206) + $EXP[StripView_Display_IsPosters_Widget_Infoscreen] + !String.IsEmpty(Container(3206).ListItemNoWrap(2).Label)">$VAR[Light_Color]</value>
+		<value condition="Control.HasFocus(3206) + $EXP[StripView_Display_IsSquare_Widget_Infoscreen] + !String.IsEmpty(Container(3206).ListItemNoWrap(2).Label)">$VAR[Light_Color]</value>
+		<value condition="Control.HasFocus(3206) + $EXP[StripView_Display_IsFanart_Widget_Infoscreen] + !String.IsEmpty(Container(3206).ListItemNoWrap(1).Label)">$VAR[Light_Color]</value>
+		<value condition="Control.HasFocus(3206) + $EXP[GridView_Display_IsPosters_Widget_Infoscreen] + !String.IsEmpty(Container(3206).ListItemNoWrap(5).Label)">$VAR[Light_Color]</value>
+		<value condition="Control.HasFocus(3206) + $EXP[GridView_Display_IsSquare_Widget_Infoscreen] + !String.IsEmpty(Container(3206).ListItemNoWrap(5).Label)">$VAR[Light_Color]</value>
+		<value condition="Control.HasFocus(3206) + $EXP[GridView_Display_IsFanart_Widget_Infoscreen] + !String.IsEmpty(Container(3206).ListItemNoWrap(3).Label)">$VAR[Light_Color]</value>
+		<value condition="Control.HasFocus(3207) + $EXP[StripView_Display_IsPosters_Widget_Infoscreen] + !String.IsEmpty(Container(3207).ListItemNoWrap(2).Label)">$VAR[Light_Color]</value>
+		<value condition="Control.HasFocus(3207) + $EXP[StripView_Display_IsSquare_Widget_Infoscreen] + !String.IsEmpty(Container(3207).ListItemNoWrap(2).Label)">$VAR[Light_Color]</value>
+		<value condition="Control.HasFocus(3207) + $EXP[StripView_Display_IsFanart_Widget_Infoscreen] + !String.IsEmpty(Container(3207).ListItemNoWrap(1).Label)">$VAR[Light_Color]</value>
+		<value condition="Control.HasFocus(3207) + $EXP[GridView_Display_IsPosters_Widget_Infoscreen] + !String.IsEmpty(Container(3207).ListItemNoWrap(5).Label)">$VAR[Light_Color]</value>
+		<value condition="Control.HasFocus(3207) + $EXP[GridView_Display_IsSquare_Widget_Infoscreen] + !String.IsEmpty(Container(3207).ListItemNoWrap(5).Label)">$VAR[Light_Color]</value>
+		<value condition="Control.HasFocus(3207) + $EXP[GridView_Display_IsFanart_Widget_Infoscreen] + !String.IsEmpty(Container(3207).ListItemNoWrap(3).Label)">$VAR[Light_Color]</value>
+		<value condition="Control.HasFocus(3208) + $EXP[StripView_Display_IsPosters_Widget_Infoscreen] + !String.IsEmpty(Container(3208).ListItemNoWrap(2).Label)">$VAR[Light_Color]</value>
+		<value condition="Control.HasFocus(3208) + $EXP[StripView_Display_IsSquare_Widget_Infoscreen] + !String.IsEmpty(Container(3208).ListItemNoWrap(2).Label)">$VAR[Light_Color]</value>
+		<value condition="Control.HasFocus(3208) + $EXP[StripView_Display_IsFanart_Widget_Infoscreen] + !String.IsEmpty(Container(3208).ListItemNoWrap(1).Label)">$VAR[Light_Color]</value>
+		<value condition="Control.HasFocus(3208) + $EXP[GridView_Display_IsPosters_Widget_Infoscreen] + !String.IsEmpty(Container(3208).ListItemNoWrap(5).Label)">$VAR[Light_Color]</value>
+		<value condition="Control.HasFocus(3208) + $EXP[GridView_Display_IsSquare_Widget_Infoscreen] + !String.IsEmpty(Container(3208).ListItemNoWrap(5).Label)">$VAR[Light_Color]</value>
+		<value condition="Control.HasFocus(3208) + $EXP[GridView_Display_IsFanart_Widget_Infoscreen] + !String.IsEmpty(Container(3208).ListItemNoWrap(3).Label)">$VAR[Light_Color]</value>
+		<value condition="Control.HasFocus(3209) + $EXP[StripView_Display_IsPosters_Widget_Infoscreen] + !String.IsEmpty(Container(3209).ListItemNoWrap(2).Label)">$VAR[Light_Color]</value>
+		<value condition="Control.HasFocus(3209) + $EXP[StripView_Display_IsSquare_Widget_Infoscreen] + !String.IsEmpty(Container(3209).ListItemNoWrap(2).Label)">$VAR[Light_Color]</value>
+		<value condition="Control.HasFocus(3209) + $EXP[StripView_Display_IsFanart_Widget_Infoscreen] + !String.IsEmpty(Container(3209).ListItemNoWrap(1).Label)">$VAR[Light_Color]</value>
+		<value condition="Control.HasFocus(3209) + $EXP[GridView_Display_IsPosters_Widget_Infoscreen] + !String.IsEmpty(Container(3209).ListItemNoWrap(5).Label)">$VAR[Light_Color]</value>
+		<value condition="Control.HasFocus(3209) + $EXP[GridView_Display_IsSquare_Widget_Infoscreen] + !String.IsEmpty(Container(3209).ListItemNoWrap(5).Label)">$VAR[Light_Color]</value>
+		<value condition="Control.HasFocus(3209) + $EXP[GridView_Display_IsFanart_Widget_Infoscreen] + !String.IsEmpty(Container(3209).ListItemNoWrap(3).Label)">$VAR[Light_Color]</value>
 		<value condition="[Control.HasFocus(3000) | $EXP[Music_Player_HasFocus]] + [Window.Is(movieinformation) | [Window.Is(musicinformation) + String.IsEqual(ListItem.DBType,artist)]]">$VAR[Light_Color]</value>
 		<value>$VAR[Primary_Color]</value>
 	</variable>
