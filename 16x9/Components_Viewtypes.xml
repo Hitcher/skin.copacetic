@@ -47,7 +47,8 @@
 				<onfocus condition="Control.Hasfocus(505)">SetProperty(GridView_Column,$INFO[Container.Column],home)</onfocus>
 				<onfocus condition="Control.Hasfocus(505)">SetProperty(GridView_Row,$INFO[Container.Row],home)</onfocus>
 				<!-- Multiart -->
-				<onfocus condition="Skin.HasSetting(Multiart_Slideshow)">ClearProperty(Multiart_Fadeout,home)</onfocus>
+				<onfocus condition="Skin.HasSetting(Multiart_Slideshow) + String.IsEqual(Window(home).Property(Multiart_Fadeout),true) + !Control.HasFocus(3100)">ClearProperty(Multiart_Fadeout,home)</onfocus>
+				<onfocus condition="Skin.HasSetting(Multiart_Slideshow) + String.IsEqual(Window(home).Property(Multiart_Fadeout),delayed) + !Control.HasFocus(3100)">SetProperty(Multiart_Fadeout,true,home)</onfocus>
 				<onfocus condition="Skin.HasSetting(Multiart_Slideshow) + String.IsEqual(Control.GetLabel(6400),thumb) + !String.IsEmpty(ListItem.Art(thumb))">SetProperty(Multiart_0,$ESCINFO[Container.ListItem.Art(thumb)],home)</onfocus>
 				<onfocus condition="Skin.HasSetting(Multiart_Slideshow) + String.IsEqual(Control.GetLabel(6400),keyart) + !String.IsEmpty(ListItem.Art(keyart))">SetProperty(Multiart_0,$ESCINFO[Container.ListItem.Art(keyart)],home)</onfocus>
 				<onfocus condition="Skin.HasSetting(Multiart_Slideshow) + String.IsEqual(Control.GetLabel(6400),poster) + !String.IsEmpty(ListItem.Art(poster))">SetProperty(Multiart_0,$ESCINFO[Container.ListItem.Art(poster)],home)</onfocus>
@@ -299,6 +300,7 @@
 		<param name="hiddenlabel" default="$VAR[Title_Label]" />
 		<param name="hiddenlabelmaxwidth" default="1200" />
 		<param name="infolabel" default="$VAR[ListView_Info_Label_Divider,, ]$VAR[Info_Label]" />
+		<param name="infolabel_visible" default="true" />
 		<param name="infolabelwidth" default="180" />
 		<definition>
 			<include content="Secondary_List_Icons" condition="Skin.HasSetting(Secondary_List_Enabled)">
@@ -331,6 +333,7 @@
 				</control>
 				<!-- Abbreviated Details -->
 				<control type="label">
+					<visible>$PARAM[infolabel_visible]</visible>
 					<width max="$PARAM[infolabelwidth]">auto</width>
 					<top>30</top>
 					<height>35</height>
@@ -472,7 +475,7 @@
 			<control type="textbox">
 				<visible>$PARAM[visible]</visible>
 				<top>$PARAM[gap]</top>
-				<height max="$PARAM[maxheight]">auto</height>
+				<height min="105" max="$PARAM[maxheight]">auto</height>
 				<font>$PARAM[font]</font>
 				<textcolor>$PARAM[color]</textcolor>
 				<label>$PARAM[label]</label>
@@ -493,7 +496,7 @@
 			<control type="textbox">
 				<visible>$PARAM[visible]</visible>
 				<top>$PARAM[gap]</top>
-				<height max="$PARAM[maxheight]">auto</height>
+				<height min = "35" max="$PARAM[maxheight]">auto</height>
 				<font>$PARAM[font]</font>
 				<textcolor>$PARAM[color]</textcolor>
 				<label>$PARAM[label]</label>
@@ -762,7 +765,7 @@
 						<height>48</height>
 						<width>6</width>
 						<texture colordiffuse="$VAR[Accent_Color]">views/white_100.png</texture>
-						</control>
+					</control>
 					<control type="label" id="$PARAM[title_label_id]">
 						<height>60</height>
 						<width max="$PARAM[maxtitlelabelwidth]">auto</width>
@@ -770,7 +773,7 @@
 						<font>Title_Breadcrumb_Label</font>
 						<textcolor>$PARAM[label_color]</textcolor>
 						<haspath>$PARAM[haspath]</haspath>
-						</control>
+					</control>
 					<control type="label">
 						<width max="$PARAM[maxinfolabelwidth]">auto</width>
 						<height>35</height>
@@ -780,7 +783,7 @@
 						<textcolor>$PARAM[label_color]</textcolor>
 						<visible>$PARAM[info_label_visible]</visible>
 						<visible>!String.IsEmpty(Control.GetLabel($PARAM[title_label_id]))</visible>
-						</control>
+					</control>
 				</control>
 			</control>
 		</definition>
